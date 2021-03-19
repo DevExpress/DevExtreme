@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -31,7 +31,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((itemData: { date?: Date, view?: string, text?: string }, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    cellTemplate?: template | ((itemData: { date?: Date, view?: string, text?: string }, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default undefined
@@ -144,19 +144,9 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @public
  */
 export default class dxCalendar extends Editor {
-    constructor(element: Element, options?: dxCalendarOptions)
-    constructor(element: JQuery, options?: dxCalendarOptions)
+    constructor(element: TElement, options?: dxCalendarOptions)
 }
 
-declare global {
-interface JQuery {
-    dxCalendar(): JQuery;
-    dxCalendar(options: "instance"): dxCalendar;
-    dxCalendar(options: string): any;
-    dxCalendar(options: string, ...params: any[]): any;
-    dxCalendar(options: dxCalendarOptions): JQuery;
-}
-}
 export type Options = dxCalendarOptions;
 
 /** @deprecated use Options instead */

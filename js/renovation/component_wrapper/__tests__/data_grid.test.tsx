@@ -16,7 +16,7 @@ jest.mock('../component', () => class {
 
 it('beginUpdate', () => {
   const beginUpdate = jest.fn();
-  const component = new DataGridComponent({} as Element) as any;
+  const component = new DataGridComponent({} as HTMLElement) as any;
 
   component.viewRef = {
     getComponentInstance: () => ({
@@ -31,7 +31,7 @@ it('beginUpdate', () => {
 
 it('endUpdate', () => {
   const endUpdate = jest.fn();
-  const component = new DataGridComponent({} as Element) as any;
+  const component = new DataGridComponent({} as HTMLElement) as any;
 
   component.viewRef = {
     getComponentInstance: () => ({

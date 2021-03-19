@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import dxTextEditor, {
     dxTextEditorButton,
     dxTextEditorOptions
@@ -93,19 +97,9 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
  * @public
  */
 export default class dxNumberBox extends dxTextEditor {
-    constructor(element: Element, options?: dxNumberBoxOptions)
-    constructor(element: JQuery, options?: dxNumberBoxOptions)
+    constructor(element: TElement, options?: dxNumberBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxNumberBox(): JQuery;
-    dxNumberBox(options: "instance"): dxNumberBox;
-    dxNumberBox(options: string): any;
-    dxNumberBox(options: string, ...params: any[]): any;
-    dxNumberBox(options: dxNumberBoxOptions): JQuery;
-}
-}
 export type Options = dxNumberBoxOptions;
 
 /** @deprecated use Options instead */

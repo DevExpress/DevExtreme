@@ -20,3 +20,11 @@ declare class DeferredObj<T> {
 }
 
 export function Deferred<T>(): DeferredObj<T>;
+
+export interface PromiseType<T> { }
+/**
+ * @docid
+ * @type Promise<void>
+ * @prevFileNamespace DevExpress.core.utils
+ */
+export type TPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>

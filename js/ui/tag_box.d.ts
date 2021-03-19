@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -52,7 +52,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: dxElement, model?: any, multiTagElement?: dxElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => any);
+    onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: TElement, model?: any, multiTagElement?: TElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => any);
     /**
      * @docid
      * @extends Action
@@ -62,7 +62,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: dxElement, model?: any, value?: boolean }) => any);
+    onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: TElement, model?: any, value?: boolean }) => any);
     /**
      * @docid
      * @extends Action
@@ -73,7 +73,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxTagBox, element?: dxElement, model?: any, addedItems?: Array<string | number | any>, removedItems?: Array<string | number | any> }) => any);
+    onSelectionChanged?: ((e: { component?: dxTagBox, element?: TElement, model?: any, addedItems?: Array<string | number | any>, removedItems?: Array<string | number | any> }) => any);
     /**
      * @docid
      * @type Enums.SelectAllMode
@@ -119,7 +119,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tagTemplate?: template | ((itemData: any, itemElement: dxElement) => string | Element | JQuery);
+    tagTemplate?: template | ((itemData: any, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default []
@@ -138,19 +138,9 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
  * @public
  */
 export default class dxTagBox extends dxSelectBox {
-    constructor(element: Element, options?: dxTagBoxOptions)
-    constructor(element: JQuery, options?: dxTagBoxOptions)
+    constructor(element: TElement, options?: dxTagBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxTagBox(): JQuery;
-    dxTagBox(options: "instance"): dxTagBox;
-    dxTagBox(options: string): any;
-    dxTagBox(options: string, ...params: any[]): any;
-    dxTagBox(options: dxTagBoxOptions): JQuery;
-}
-}
 export type Options = dxTagBoxOptions;
 
 /** @deprecated use Options instead */

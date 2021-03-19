@@ -1,19 +1,21 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
     template
 } from '../core/templates/template';
 
+import {
+    TPromise
+} from '../core/utils/deferred';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import CollectionWidget, {
@@ -83,7 +85,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default "title"
@@ -94,7 +96,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @fires dxAccordionOptions.onOptionChanged
@@ -121,7 +123,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemTitleClick?: ((e: { component?: dxAccordion, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any) | string;
+    onItemTitleClick?: ((e: { component?: dxAccordion, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @default false
@@ -146,8 +148,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @public
  */
 export default class dxAccordion extends CollectionWidget {
-    constructor(element: Element, options?: dxAccordionOptions)
-    constructor(element: JQuery, options?: dxAccordionOptions)
+    constructor(element: TElement, options?: dxAccordionOptions)
     /**
      * @docid
      * @publicName collapseItem(index)
@@ -156,7 +157,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(index: number): Promise<void> & JQueryPromise<void>;
+    collapseItem(index: number): TPromise<void>;
     /**
      * @docid
      * @publicName expandItem(index)
@@ -165,7 +166,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(index: number): Promise<void> & JQueryPromise<void>;
+    expandItem(index: number): TPromise<void>;
     /**
      * @docid
      * @publicName updateDimensions()
@@ -173,7 +174,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): Promise<void> & JQueryPromise<void>;
+    updateDimensions(): TPromise<void>;
 }
 
 /**
@@ -196,15 +197,6 @@ export interface dxAccordionItem extends CollectionWidgetItem {
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxAccordion(): JQuery;
-    dxAccordion(options: "instance"): dxAccordion;
-    dxAccordion(options: string): any;
-    dxAccordion(options: string, ...params: any[]): any;
-    dxAccordion(options: dxAccordionOptions): JQuery;
-}
-}
 export type Options = dxAccordionOptions;
 
 /** @deprecated use Options instead */

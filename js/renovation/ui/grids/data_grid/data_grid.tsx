@@ -13,6 +13,8 @@ import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
+import { TPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
+import { TElement, TElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
 
@@ -79,7 +81,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  byKey(key: any | string | number): Promise<any> & JQueryPromise<any> {
+  byKey(key: any | string | number): TPromise<any> {
     return this.instance?.byKey(key);
   }
 
@@ -139,12 +141,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  deselectAll(): Promise<void> & JQueryPromise<void> {
+  deselectAll(): TPromise {
     return this.instance?.deselectAll();
   }
 
   @Method()
-  deselectRows(keys: any[]): Promise<any> & JQueryPromise<any> {
+  deselectRows(keys: any[]): TPromise<any> {
     return this.instance?.deselectRows(keys);
   }
 
@@ -174,8 +176,8 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  focus(element?: Element | JQuery): void {
-    return this.instance?.focus(element as Element);
+  focus(element?: TElement): void {
+    return this.instance?.focus(element as HTMLElement);
   }
 
   @Method()
@@ -201,7 +203,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getRowElement(rowIndex: number): Element[] & JQuery | undefined {
+  getRowElement(rowIndex: number): TElementsArray | undefined {
     return this.instance?.getRowElement(rowIndex);
   }
 
@@ -263,7 +265,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   pageIndex(
     newIndex?: number,
-  ): Promise<void> & JQueryPromise<void> | number {
+  ): TPromise | number {
     return this.instance?.pageIndex(newIndex as number);
   }
 
@@ -275,7 +277,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   refresh(
     changesOnly?: boolean,
-  ): Promise<void> & JQueryPromise<void> {
+  ): TPromise {
     return this.instance?.refresh(changesOnly as boolean);
   }
 
@@ -285,7 +287,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  saveEditData(): Promise<void> & JQueryPromise<void> {
+  saveEditData(): TPromise {
     return this.instance?.saveEditData();
   }
 
@@ -295,19 +297,19 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  selectAll(): Promise<void> & JQueryPromise<void> {
+  selectAll(): TPromise {
     return this.instance?.selectAll();
   }
 
   @Method()
   selectRows(
     keys: any[], preserve: boolean,
-  ): Promise<any> & JQueryPromise<any> {
+  ): TPromise<any> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
-  selectRowsByIndexes(indexes: number[]): Promise<any> & JQueryPromise<any> {
+  selectRowsByIndexes(indexes: number[]): TPromise<any> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
 
@@ -338,7 +340,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  addRow(): Promise<void> & JQueryPromise<void> {
+  addRow(): TPromise {
     return this.instance?.addRow();
   }
 
@@ -353,7 +355,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  collapseRow(key: any): Promise<void> & JQueryPromise<void> {
+  collapseRow(key: any): TPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -363,7 +365,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  expandRow(key: any): Promise<void> & JQueryPromise<void> {
+  expandRow(key: any): TPromise {
     return this.instance?.expandRow(key);
   }
 
@@ -373,12 +375,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getSelectedRowKeys(): any[] & Promise<any> & JQueryPromise<any> {
+  getSelectedRowKeys(): any[] & TPromise<any> {
     return this.instance?.getSelectedRowKeys();
   }
 
   @Method()
-  getSelectedRowsData(): any[] & Promise<any> & JQueryPromise<any> {
+  getSelectedRowsData(): any[] & TPromise<any> {
     return this.instance?.getSelectedRowsData();
   }
 

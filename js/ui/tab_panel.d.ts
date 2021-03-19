@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -11,7 +11,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxMultiView, {
@@ -52,7 +52,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @fires dxTabPanelOptions.onOptionChanged
@@ -71,7 +71,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleClick?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: event }) => any) | string;
+    onTitleClick?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -83,7 +83,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleHold?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: event }) => any);
+    onTitleHold?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action
@@ -94,7 +94,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement }) => any);
+    onTitleRendered?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement }) => any);
     /**
      * @docid
      * @default false
@@ -140,8 +140,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @public
  */
 export default class dxTabPanel extends dxMultiView {
-    constructor(element: Element, options?: dxTabPanelOptions)
-    constructor(element: JQuery, options?: dxTabPanelOptions)
+    constructor(element: TElement, options?: dxTabPanelOptions)
 }
 
 /**
@@ -168,7 +167,7 @@ export interface dxTabPanelItem extends dxMultiViewItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tabTemplate?: template | (() => string | Element | JQuery);
+    tabTemplate?: template | (() => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -177,15 +176,6 @@ export interface dxTabPanelItem extends dxMultiViewItem {
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTabPanel(): JQuery;
-    dxTabPanel(options: "instance"): dxTabPanel;
-    dxTabPanel(options: string): any;
-    dxTabPanel(options: string, ...params: any[]): any;
-    dxTabPanel(options: dxTabPanelOptions): JQuery;
-}
-}
 export type Options = dxTabPanelOptions;
 
 /** @deprecated use Options instead */

@@ -1,11 +1,9 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxTrackBar, {
@@ -22,7 +20,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, event?: event }) => any);
+    onComplete?: ((e: { component?: dxProgressBar, element?: TElement, model?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @default true
@@ -57,19 +55,9 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
  * @public
  */
 export default class dxProgressBar extends dxTrackBar {
-    constructor(element: Element, options?: dxProgressBarOptions)
-    constructor(element: JQuery, options?: dxProgressBarOptions)
+    constructor(element: TElement, options?: dxProgressBarOptions)
 }
 
-declare global {
-interface JQuery {
-    dxProgressBar(): JQuery;
-    dxProgressBar(options: "instance"): dxProgressBar;
-    dxProgressBar(options: string): any;
-    dxProgressBar(options: string, ...params: any[]): any;
-    dxProgressBar(options: dxProgressBarOptions): JQuery;
-}
-}
 export type Options = dxProgressBarOptions;
 
 /** @deprecated use Options instead */

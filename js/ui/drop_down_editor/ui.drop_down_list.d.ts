@@ -1,7 +1,5 @@
-import '../../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
@@ -11,7 +9,7 @@ import {
 import DataSource from '../../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../../events/index';
 
 import {
@@ -42,7 +40,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default false
@@ -76,7 +74,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: event }) => any);
+    onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action
@@ -86,7 +84,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: dxElement, model?: any, selectedItem?: any }) => any);
+    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, selectedItem?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -98,7 +96,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @default false
@@ -183,7 +181,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxDropDownList extends dxDropDownEditor {
-    constructor(element: Element, options?: dxDropDownListOptions)
-    constructor(element: JQuery, options?: dxDropDownListOptions)
+    constructor(element: TElement, options?: dxDropDownListOptions)
     getDataSource(): DataSource;
 }

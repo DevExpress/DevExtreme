@@ -1,19 +1,21 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
     template
 } from '../core/templates/template';
 
+import {
+    TPromise
+} from '../core/utils/deferred';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import CollectionWidget, {
@@ -92,7 +94,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: dxElement) => string | Element | JQuery);
+    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: TElement) => string | TElement);
     /**
      * @docid
      * @default false
@@ -150,7 +152,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
       * @type_function_param1 itemElement:dxElement
       * @type_function_param2 itemData:object
       */
-      action?: ((itemElement: dxElement, itemData: any) => any),
+      action?: ((itemElement: TElement, itemData: any) => any),
       /**
       * @docid
       * @prevFileNamespace DevExpress.ui
@@ -184,7 +186,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onGroupRendered?: ((e: { component?: dxList, element?: dxElement, model?: any, groupData?: any, groupElement?: dxElement, groupIndex?: number }) => any);
+    onGroupRendered?: ((e: { component?: dxList, element?: TElement, model?: any, groupData?: any, groupElement?: TElement, groupIndex?: number }) => any);
     /**
      * @docid
      * @extends Action
@@ -197,7 +199,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event }) => any) | string;
+    onItemClick?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -210,7 +212,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event }) => any);
+    onItemContextMenu?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action
@@ -223,7 +225,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDeleted?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any }) => any);
+    onItemDeleted?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any }) => any);
     /**
      * @docid
      * @extends Action
@@ -237,7 +239,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDeleting?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
+    onItemDeleting?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, cancel?: boolean | TPromise<void> }) => any);
     /**
      * @docid
      * @extends Action
@@ -250,7 +252,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event }) => any);
+    onItemHold?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action
@@ -265,7 +267,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemReordered?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number }) => any);
+    onItemReordered?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number }) => any);
     /**
      * @docid
      * @extends Action
@@ -279,7 +281,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemSwipe?: ((e: { component?: dxList, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, direction?: string }) => any);
+    onItemSwipe?: ((e: { component?: dxList, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, itemIndex?: number | any, direction?: string }) => any);
     /**
      * @docid
      * @extends Action
@@ -287,7 +289,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPageLoading?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
+    onPageLoading?: ((e: { component?: dxList, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -295,7 +297,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullRefresh?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
+    onPullRefresh?: ((e: { component?: dxList, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -310,7 +312,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: dxList, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: dxList, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
      * @docid
      * @extends Action
@@ -320,7 +322,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: { component?: dxList, element?: dxElement, model?: any, value?: boolean }) => any);
+    onSelectAllValueChanged?: ((e: { component?: dxList, element?: TElement, model?: any, value?: boolean }) => any);
     /**
      * @docid
      * @type Enums.ListPageLoadMode
@@ -449,8 +451,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
  * @public
  */
 export default class dxList extends CollectionWidget {
-    constructor(element: Element, options?: dxListOptions)
-    constructor(element: JQuery, options?: dxListOptions)
+    constructor(element: TElement, options?: dxListOptions)
     /**
      * @docid
      * @publicName clientHeight()
@@ -467,7 +468,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
+    collapseGroup(groupIndex: number): TPromise<void>;
     /**
      * @docid
      * @publicName deleteItem(itemElement)
@@ -476,7 +477,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deleteItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
+    deleteItem(itemElement: Element): TPromise<void>;
     /**
      * @docid
      * @publicName deleteItem(itemIndex)
@@ -485,7 +486,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deleteItem(itemIndex: number | any): Promise<void> & JQueryPromise<void>;
+    deleteItem(itemIndex: number | any): TPromise<void>;
     /**
      * @docid
      * @publicName expandGroup(groupIndex)
@@ -494,7 +495,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
+    expandGroup(groupIndex: number): TPromise<void>;
     /**
      * @docid
      * @publicName isItemSelected(itemElement)
@@ -529,7 +530,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reorderItem(itemElement: Element, toItemElement: Element): Promise<void> & JQueryPromise<void>;
+    reorderItem(itemElement: Element, toItemElement: Element): TPromise<void>;
     /**
      * @docid
      * @publicName reorderItem(itemIndex, toItemIndex)
@@ -539,7 +540,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reorderItem(itemIndex: number | any, toItemIndex: number | any): Promise<void> & JQueryPromise<void>;
+    reorderItem(itemIndex: number | any, toItemIndex: number | any): TPromise<void>;
     /**
      * @docid
      * @publicName scrollBy(distance)
@@ -641,7 +642,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): Promise<void> & JQueryPromise<void>;
+    updateDimensions(): TPromise<void>;
 }
 
 /**
@@ -676,15 +677,6 @@ export interface dxListItem extends CollectionWidgetItem {
     showChevron?: boolean;
 }
 
-declare global {
-interface JQuery {
-    dxList(): JQuery;
-    dxList(options: "instance"): dxList;
-    dxList(options: string): any;
-    dxList(options: string, ...params: any[]): any;
-    dxList(options: dxListOptions): JQuery;
-}
-}
 export type Options = dxListOptions;
 
 /** @deprecated use Options instead */

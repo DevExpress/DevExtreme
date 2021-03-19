@@ -1,4 +1,8 @@
 import {
+    TElement
+} from '../core/element';
+
+import {
     animationConfig
 } from '../animation/fx';
 
@@ -26,7 +30,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | TElement;
     /**
      * @docid
      * @default 0
@@ -145,19 +149,9 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxLoadPanel extends dxOverlay {
-    constructor(element: Element, options?: dxLoadPanelOptions)
-    constructor(element: JQuery, options?: dxLoadPanelOptions)
+    constructor(element: TElement, options?: dxLoadPanelOptions)
 }
 
-declare global {
-interface JQuery {
-    dxLoadPanel(): JQuery;
-    dxLoadPanel(options: "instance"): dxLoadPanel;
-    dxLoadPanel(options: string): any;
-    dxLoadPanel(options: string, ...params: any[]): any;
-    dxLoadPanel(options: dxLoadPanelOptions): JQuery;
-}
-}
 export type Options = dxLoadPanelOptions;
 
 /** @deprecated use Options instead */

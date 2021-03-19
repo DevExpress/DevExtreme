@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -16,7 +16,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import BaseWidget, {
@@ -449,7 +449,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkClick?: ((e: { component?: dxSankey, element?: dxElement, model?: any, event?: event, target?: dxSankeyLink }) => any) | string;
+    onLinkClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyLink }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -460,7 +460,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkHoverChanged?: ((e: { component?: dxSankey, element?: dxElement, model?: any, target?: dxSankeyLink }) => any);
+    onLinkHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyLink }) => any);
     /**
      * @docid
      * @extends Action
@@ -472,7 +472,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeClick?: ((e: { component?: dxSankey, element?: dxElement, model?: any, event?: event, target?: dxSankeyNode }) => any) | string;
+    onNodeClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyNode }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -483,7 +483,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeHoverChanged?: ((e: { component?: dxSankey, element?: dxElement, model?: any, target?: dxSankeyNode }) => any);
+    onNodeHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyNode }) => any);
     /**
      * @docid
      * @extends CommonVizPalette
@@ -581,7 +581,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: dxElement) => string | Element | JQuery);
+    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: TElement) => string | TElement);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
      * @type_function_param1 info:object
@@ -594,7 +594,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: dxElement) => string | Element | JQuery);
+    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: TElement) => string | TElement);
 }
 /**
  * @docid
@@ -605,8 +605,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxSankey extends BaseWidget {
-    constructor(element: Element, options?: dxSankeyOptions)
-    constructor(element: JQuery, options?: dxSankeyOptions)
+    constructor(element: TElement, options?: dxSankeyOptions)
     /**
      * @docid
      * @publicName getAllLinks()
@@ -764,15 +763,6 @@ export interface dxSankeyNode {
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxSankey(): JQuery;
-    dxSankey(options: "instance"): dxSankey;
-    dxSankey(options: string): any;
-    dxSankey(options: string, ...params: any[]): any;
-    dxSankey(options: dxSankeyOptions): JQuery;
-}
-}
 export type Options = dxSankeyOptions;
 
 /** @deprecated use Options instead */

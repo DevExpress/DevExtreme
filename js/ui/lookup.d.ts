@@ -6,10 +6,8 @@ import {
     positionConfig
 } from '../animation/position';
 
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -17,7 +15,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxDropDownList, {
@@ -97,7 +95,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -107,7 +105,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: dxElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: TElement) => string | TElement);
     /**
      * @docid
      * @default false
@@ -135,7 +133,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default false
@@ -157,7 +155,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPageLoading?: ((e: { component?: dxLookup, element?: dxElement, model?: any }) => any);
+    onPageLoading?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -165,7 +163,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullRefresh?: ((e: { component?: dxLookup, element?: dxElement, model?: any }) => any);
+    onPullRefresh?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -180,7 +178,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: dxLookup, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: dxLookup, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
      * @docid
      * @extends Action
@@ -191,7 +189,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    onTitleRendered?: ((e: { component?: dxLookup, element?: dxElement, model?: any, titleElement?: dxElement }) => any);
+    onTitleRendered?: ((e: { component?: dxLookup, element?: TElement, model?: any, titleElement?: TElement }) => any);
     /**
      * @docid
      * @extends Action
@@ -203,7 +201,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxLookup, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    onValueChanged?: ((e: { component?: dxLookup, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @type Enums.ListPageLoadMode
@@ -352,7 +350,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    titleTemplate?: template | ((titleElement: dxElement) => string | Element | JQuery);
+    titleTemplate?: template | ((titleElement: TElement) => string | TElement);
     /**
      * @docid
      * @default true
@@ -395,19 +393,9 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
  * @public
  */
 export default class dxLookup extends dxDropDownList {
-    constructor(element: Element, options?: dxLookupOptions)
-    constructor(element: JQuery, options?: dxLookupOptions)
+    constructor(element: TElement, options?: dxLookupOptions)
 }
 
-declare global {
-interface JQuery {
-    dxLookup(): JQuery;
-    dxLookup(options: "instance"): dxLookup;
-    dxLookup(options: string): any;
-    dxLookup(options: string, ...params: any[]): any;
-    dxLookup(options: dxLookupOptions): JQuery;
-}
-}
 export type Options = dxLookupOptions;
 
 /** @deprecated use Options instead */

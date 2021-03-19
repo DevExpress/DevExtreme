@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../../core/element';
+
 import CollectionWidget, {
     CollectionWidgetOptions
 } from '../collection/ui.collection_widget.base';
@@ -64,6 +68,5 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
  * @prevFileNamespace DevExpress.ui
  */
 export default class HierarchicalCollectionWidget extends CollectionWidget {
-    constructor(element: Element, options?: HierarchicalCollectionWidgetOptions)
-    constructor(element: JQuery, options?: HierarchicalCollectionWidgetOptions)
+    constructor(element: TElement, options?: HierarchicalCollectionWidgetOptions)
 }

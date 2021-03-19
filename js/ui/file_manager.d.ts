@@ -1,11 +1,13 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
-    event
+    TPromise
+} from '../core/utils/deferred';
+
+import {
+    TEvent
 } from '../events/index';
 
 import FileSystemItem from '../file_management/file_system_item';
@@ -129,7 +131,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, fileSystemItem?: FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);
+    onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent, fileSystemItem?: FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);
     /**
      * @docid
      * @extends Action
@@ -143,7 +145,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuShowing?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, fileSystemItem?: FileSystemItem, targetElement?: dxElement, cancel?: boolean, event?: event, viewArea?: 'navPane' | 'itemView' }) => any);
+    onContextMenuShowing?: ((e: { component?: dxFileManager, element?: TElement, model?: any, fileSystemItem?: FileSystemItem, targetElement?: TElement, cancel?: boolean, event?: TEvent, viewArea?: 'navPane' | 'itemView' }) => any);
     /**
      * @docid
      * @extends Action
@@ -154,7 +156,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, directory?: FileSystemItem }) => any);
+    onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: TElement, model?: any, directory?: FileSystemItem }) => any);
     /**
      * @docid
      * @extends Action
@@ -165,7 +167,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, file?: FileSystemItem }) => any);
+    onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: TElement, model?: any, file?: FileSystemItem }) => any);
     /**
      * @docid
      * @extends Action
@@ -179,7 +181,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, currentSelectedItemKeys?: Array<string>, currentDeselectedItemKeys?: Array<string>, selectedItems?: Array<FileSystemItem>, selectedItemKeys?: Array<string>}) => any);
+    onSelectionChanged?: ((e: { component?: dxFileManager, element?: TElement, model?: any, currentSelectedItemKeys?: Array<string>, currentDeselectedItemKeys?: Array<string>, selectedItems?: Array<FileSystemItem>, selectedItemKeys?: Array<string>}) => any);
     /**
      * @docid
      * @extends Action
@@ -192,7 +194,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onToolbarItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    onToolbarItemClick?: ((e: { component?: dxFileManager, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action
@@ -204,7 +206,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedItemChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, item?: FileSystemItem, itemElement?: dxElement }) => any);
+    onFocusedItemChanged?: ((e: { component?: dxFileManager, element?: TElement, model?: any, item?: FileSystemItem, itemElement?: TElement }) => any);
     /**
      * @docid
      * @extends Action
@@ -217,7 +219,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onErrorOccurred?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, errorCode?: number, errorText?: string, fileSystemItem?: FileSystemItem }) => any);
+    onErrorOccurred?: ((e: { component?: dxFileManager, element?: TElement, model?: any, errorCode?: number, errorText?: string, fileSystemItem?: FileSystemItem }) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -331,8 +333,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
  * @public
  */
 export default class dxFileManager extends Widget {
-    constructor(element: Element, options?: dxFileManagerOptions)
-    constructor(element: JQuery, options?: dxFileManagerOptions)
+    constructor(element: TElement, options?: dxFileManagerOptions)
     /**
      * @docid
      * @publicName getCurrentDirectory()
@@ -356,7 +357,7 @@ export default class dxFileManager extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(): Promise<any> & JQueryPromise<any>;
+    refresh(): TPromise<any>;
 }
 
 /**
@@ -403,7 +404,7 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | Element | JQuery);
+    template?: template | (() => string | TElement);
 }
 
 /**
@@ -475,13 +476,13 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | Element | JQuery);
+    template?: template | (() => string | TElement);
      /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    menuItemTemplate?: template | (() => string | Element | JQuery);
+    menuItemTemplate?: template | (() => string | TElement);
 }
 
 
@@ -574,15 +575,6 @@ export interface dxFileManagerDetailsColumn {
     width?: number | string;
 }
 
-declare global {
-interface JQuery {
-    dxFileManager(): JQuery;
-    dxFileManager(options: "instance"): dxFileManager;
-    dxFileManager(options: string): any;
-    dxFileManager(options: string, ...params: any[]): any;
-    dxFileManager(options: dxFileManagerOptions): JQuery;
-}
-}
 export type Options = dxFileManagerOptions;
 
 /** @deprecated use Options instead */

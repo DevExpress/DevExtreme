@@ -3,7 +3,7 @@ import DOMComponent, {
 } from '../../core/dom_component';
 
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
@@ -56,7 +56,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onContentReady?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @default 0
@@ -81,8 +81,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class Widget extends DOMComponent {
-    constructor(element: Element, options?: WidgetOptions)
-    constructor(element: JQuery, options?: WidgetOptions)
+    constructor(element: TElement, options?: WidgetOptions)
     /**
      * @docid
      * @publicName focus()

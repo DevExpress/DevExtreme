@@ -1,4 +1,10 @@
-import '../jquery_augmentation';
+import {
+    TElementsArray
+} from '../core/element';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     animationConfig
@@ -21,7 +27,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    enter(elements: JQuery, animation: animationConfig | string): void;
+    enter(elements: TElementsArray, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName leave(elements, animation)
@@ -30,7 +36,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    leave(elements: JQuery, animation: animationConfig | string): void;
+    leave(elements: TElementsArray, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName reset()
@@ -45,7 +51,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    start(): Promise<void> & JQueryPromise<void>;
+    start(): TPromise<void>;
     /**
      * @docid
      * @publicName stop()

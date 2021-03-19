@@ -1,8 +1,14 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     AsyncRule,
@@ -28,8 +34,7 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @public
  */
 export default class dxValidationGroup extends DOMComponent {
-    constructor(element: Element, options?: dxValidationGroupOptions)
-    constructor(element: JQuery, options?: dxValidationGroupOptions)
+    constructor(element: TElement, options?: dxValidationGroupOptions)
     /**
      * @docid
      * @publicName reset()
@@ -64,7 +69,7 @@ export interface dxValidationGroupResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: Promise<dxValidationGroupResult> | JQueryPromise<dxValidationGroupResult>;
+    complete?: TPromise<dxValidationGroupResult>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -86,15 +91,6 @@ export interface dxValidationGroupResult {
     validators?: Array<any>;
 }
 
-declare global {
-interface JQuery {
-    dxValidationGroup(): JQuery;
-    dxValidationGroup(options: "instance"): dxValidationGroup;
-    dxValidationGroup(options: string): any;
-    dxValidationGroup(options: string, ...params: any[]): any;
-    dxValidationGroup(options: dxValidationGroupOptions): JQuery;
-}
-}
 export type Options = dxValidationGroupOptions;
 
 /** @deprecated use Options instead */

@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import CollectionWidget, {
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
@@ -20,19 +24,9 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
  * @public
  */
 export default class dxValidationSummary extends CollectionWidget {
-    constructor(element: Element, options?: dxValidationSummaryOptions)
-    constructor(element: JQuery, options?: dxValidationSummaryOptions)
+    constructor(element: TElement, options?: dxValidationSummaryOptions)
 }
 
-declare global {
-interface JQuery {
-    dxValidationSummary(): JQuery;
-    dxValidationSummary(options: "instance"): dxValidationSummary;
-    dxValidationSummary(options: string): any;
-    dxValidationSummary(options: string, ...params: any[]): any;
-    dxValidationSummary(options: dxValidationSummaryOptions): JQuery;
-}
-}
 export type Options = dxValidationSummaryOptions;
 
 /** @deprecated use Options instead */

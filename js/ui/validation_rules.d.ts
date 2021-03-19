@@ -1,3 +1,7 @@
+import {
+    TPromise
+} from '../core/utils/deferred';
+
 /**
  * @docid
  * @section dxValidator
@@ -45,7 +49,7 @@ export interface AsyncRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => Promise<any> | JQueryPromise<any>);
+    validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => TPromise<any>);
 }
 
 /**
