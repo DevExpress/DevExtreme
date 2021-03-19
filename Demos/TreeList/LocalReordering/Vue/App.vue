@@ -93,7 +93,8 @@ export default {
     onReorder(e) {
       let visibleRows = e.component.getVisibleRows(),
         sourceData = e.itemData,
-        targetData = visibleRows[e.toIndex].data;
+        targetData = visibleRows[e.toIndex].data,
+        employees = [...this.employees];
 
       if (e.dropInsideItem) {
         e.itemData.Head_ID = targetData.ID;
@@ -111,6 +112,7 @@ export default {
 
         employees.splice(sourceIndex, 1);
         employees.splice(targetIndex, 0, sourceData);
+        this.employees = employees;
       }
     }
   },
