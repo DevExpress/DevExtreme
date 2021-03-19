@@ -12,7 +12,6 @@ import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 
 import timeZoneUtils from '../utils.timeZone';
 
-import dxrTimelineDateTableLayout from '../../../renovation/ui/scheduler/workspaces/timeline/date_table/layout.j';
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
@@ -630,15 +629,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
-
-    renderRDateTable() {
-        this.renderRComponent(
-            this._$dateTable,
-            dxrTimelineDateTableLayout,
-            'renovatedDateTable',
-            this._getRDateTableProps(),
-        );
-    }
 
     generateRenderOptions() {
         const options = super.generateRenderOptions();
