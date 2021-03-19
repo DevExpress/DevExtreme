@@ -1,10 +1,6 @@
 import { mount } from 'enzyme';
 import { DataGridViews, viewFunction } from '../data_grid_views';
-import { DataGridViewWrapper } from '../data_grid_view_wrapper';
-
-jest.mock('../data_grid_view_wrapper', () => ({ DataGridViewWrapper: () => null }));
-
-const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
+import { GridBaseViews } from '../../grid_core/grid_base_views';
 
 describe('DataGridViews', () => {
   describe('View', () => {
@@ -17,13 +13,7 @@ describe('DataGridViews', () => {
       } as any;
       const tree = mount(viewFunction(props));
 
-      expect(tree.hasClass(GRIDBASE_CONTAINER_CLASS)).toBe(true);
-      expect(tree.children().length).toBe(2);
-      expect(tree.find(DataGridViewWrapper).length).toBe(2);
-      expect(tree.find(DataGridViewWrapper).get(0).key).toBe('view1');
-      expect(tree.find(DataGridViewWrapper).get(0).props.view).toBe('viewComponent1');
-      expect(tree.find(DataGridViewWrapper).get(1).key).toBe('view2');
-      expect(tree.find(DataGridViewWrapper).get(1).props.view).toBe('viewComponent2');
+      expect(tree.find(GridBaseViews).length).toBe(1);
     });
   });
 

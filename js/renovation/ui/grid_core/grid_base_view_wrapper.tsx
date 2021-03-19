@@ -2,19 +2,19 @@ import {
   JSXComponent, Component, Ref, OneWay, ComponentBindings, Effect, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import $ from '../../../core/renderer';
-import type { DataGridView } from './common/types';
+import type { GridBaseView } from './common/types';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ widgetRef }: DataGridViewWrapper) => (
+export const viewFunction = ({ widgetRef }: GridBaseViewWrapper) => (
   <div ref={widgetRef} />
 );
 @ComponentBindings()
-export class DataGridViewWrapperProps {
-  @OneWay() view!: DataGridView;
+export class GridBaseViewWrapperProps {
+  @OneWay() view!: GridBaseView;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class DataGridViewWrapper extends JSXComponent<DataGridViewWrapperProps, 'view'>() {
+export class GridBaseViewWrapper extends JSXComponent<GridBaseViewWrapperProps, 'view'>() {
   @Ref()
   widgetRef!: RefObject<HTMLDivElement>;
 

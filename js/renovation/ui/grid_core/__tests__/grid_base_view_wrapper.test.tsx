@@ -1,6 +1,6 @@
 import { createRef } from 'react';
 import { mount } from 'enzyme';
-import { DataGridViewWrapper, viewFunction } from '../data_grid_view_wrapper';
+import { GridBaseViewWrapper, viewFunction } from '../grid_base_view_wrapper';
 import $ from '../../../../core/renderer';
 
 describe('DataGridViews', () => {
@@ -25,7 +25,7 @@ describe('DataGridViews', () => {
       const props = {
         view,
       } as any;
-      const component = new DataGridViewWrapper(props);
+      const component = new GridBaseViewWrapper(props);
       component.widgetRef = widgetRef;
 
       component.renderView();

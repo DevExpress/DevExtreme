@@ -21,6 +21,7 @@ module.exports = {
     coveragePathIgnorePatterns: [
         './js/renovation/ui/data_grid/datagrid_component.ts',
         './js/renovation/ui/data_grid/common/data_grid_view_props.ts',
+        './js/renovation/ui/grid_core/common/grid_base_view_props.ts',
         './js/renovation/ui/data_grid/utils/get_updated_options.ts',
         './js/renovation/ui/scheduler/workspaces/utils.ts',
         './js/renovation/ui/scroll_view/scrollable_simulated_props.ts',
