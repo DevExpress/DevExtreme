@@ -20,12 +20,15 @@ class TimeZoneCache {
     get(id) {
         if(!this.map.get(id)) {
             const config = timeZoneDataUtils.getTimezoneById(id);
+            if(!config) {
+                return [false];
+            }
             const { offsets, offsetIndices, untils } = config;
 
             this.map.set(id, [offsets, offsetIndices, getConvertedUntils(untils)]);
         }
 
-        return this.map.get(id);
+        return [true, ...this.map.get(id)];
     }
 }
 
@@ -88,15 +91,15 @@ const timeZoneDataUtils = {
     },
 
     getTimeZoneOffsetById: function(id, timestamp) {
-        const [offsets, offsetIndices, untils] = tzCache.get(id);
+        const [isSuccess, offsets, offsetIndices, untils] = tzCache.get(id);
 
-        return this.getUtcOffset(offsets, offsetIndices, untils, timestamp);
+        return isSuccess ? this.getUtcOffset(offsets, offsetIndices, untils, timestamp) : undefined;
     },
 
     getTimeZoneDeclarationTuple: function(id, year) {
-        const [offsets, offsetIndices, untils] = tzCache.get(id);
+        const [isSuccess, offsets, offsetIndices, untils] = tzCache.get(id);
 
-        return this.getTimeZoneDeclarationTupleCore(offsets, offsetIndices, untils, year);
+        return isSuccess ? this.getTimeZoneDeclarationTupleCore(offsets, offsetIndices, untils, year) : [];
     },
 
     getTimeZoneDeclarationTupleCore: function(offsets, offsetIndices, untilsList, year) {
