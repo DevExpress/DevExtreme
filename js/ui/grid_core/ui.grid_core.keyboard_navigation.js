@@ -1978,7 +1978,10 @@ module.exports = {
                     this.callBase(rowIndex);
                 },
                 addRow: function(parentKey) {
-                    this.getController('keyboardNavigation').setupFocusedView();
+                    const keyboardController = this.getController('keyboardNavigation');
+
+                    keyboardController.setupFocusedView();
+                    keyboardController.setCellFocusType();
 
                     return this.callBase.apply(this, arguments);
                 },
