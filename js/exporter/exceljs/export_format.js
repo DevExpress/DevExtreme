@@ -86,7 +86,7 @@ function _getLanguageInfo(defaultPattern) {
 }
 
 function _convertDateFormatToOpenXml(format) {
-    return format.replace(SLASH_REGEXP, '\\/').split('\'').map(function(datePart, index) {
+    return format.replace(SLASH_REGEXP, '\\\/').split('\'').map(function(datePart, index) {
         if(index % 2 === 0) {
             return datePart
                 .replace(PERIOD_REGEXP, 'AM/PM')
@@ -94,8 +94,8 @@ function _convertDateFormatToOpenXml(format) {
                 .replace(DAY_REGEXP, 'd')
                 .replace(STANDALONE_MONTH_REGEXP, 'M')
                 .replace(HOUR_REGEXP, 'H')
-                .replace(SQUARE_OPEN_BRACKET_REGEXP, '\\[')
-                .replace(SQUARE_CLOSE_BRACKET_REGEXP, '\\]');
+                .replace(SQUARE_OPEN_BRACKET_REGEXP, '\\\[')
+                .replace(SQUARE_CLOSE_BRACKET_REGEXP, '\\\]');
         } if(datePart) {
             return datePart.replace(ANY_REGEXP, '\\$&');
         }
