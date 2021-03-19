@@ -1,7 +1,7 @@
 import {
   JSXComponent, Component, Ref, OneWay, ComponentBindings, Effect, RefObject,
 } from 'devextreme-generator/component_declaration/common';
-import $ from '../../../core/renderer';
+import $ from '../../../../core/renderer';
 import type { GridBaseView } from './common/types';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

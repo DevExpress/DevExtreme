@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import { DataGridViews, viewFunction } from '../data_grid_views';
-import { GridBaseViews } from '../../grid_core/grid_base_views';
+import { GridBaseViews } from '../../grid_base/grid_base_views';
 
 describe('DataGridViews', () => {
   describe('View', () => {

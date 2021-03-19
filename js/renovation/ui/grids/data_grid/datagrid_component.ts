@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-underscore-dangle */
-import DataGridBase from '../../../ui/data_grid/ui.data_grid.base';
-import $ from '../../../core/renderer';
+import DataGridBase from '../../../../ui/data_grid/ui.data_grid.base';
+import $ from '../../../../core/renderer';
 
 const DATA_GRID_NAME = 'dxDataGrid';
 

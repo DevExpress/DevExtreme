@@ -1,10 +1,10 @@
 import {
   JSXComponent, Component,
 } from 'devextreme-generator/component_declaration/common';
-import { GridBaseViews } from '../grid_core/grid_base_views';
-import { GridBaseView } from '../grid_core/common/types';
+import { GridBaseViews } from '../grid_base/grid_base_views';
+import { GridBaseView } from '../grid_base/common/types';
 import { DataGridViewProps } from './common/data_grid_view_props';
-import { gridViewModule } from '../../../ui/grid_core/ui.grid_core.grid_view';
+import { gridViewModule } from '../../../../ui/grid_core/ui.grid_core.grid_view';
 
 const { VIEW_NAMES } = gridViewModule;
 
