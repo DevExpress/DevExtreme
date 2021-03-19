@@ -3,8 +3,7 @@
 	 width="200px" height="200px" viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
-	.st1{fill:#7A7A7A;}
-	.st2{fill:#03A9F4;}
+ 	.st1{fill:#7A7A7A;}
 </style>
 <circle class="st0" cx="100" cy="100" r="100"/>
 <g>
@@ -77,5 +76,5 @@
 		c0,0.6,0.1,1,0.4,1.4s0.6,0.5,0.9,0.5c0.4,0,0.6-0.1,0.8-0.5c0.2-0.3,0.3-0.7,0.3-1.1c0-0.4-0.1-0.8-0.3-1
 		C101.1,183.5,100.8,183.4,100.4,183.4z"/>
 </g>
-<circle class="st2" cx="100" cy="100" r="6"/>
+<circle cx="100" cy="100" r="6" fill="currentColor"/>
 </svg>

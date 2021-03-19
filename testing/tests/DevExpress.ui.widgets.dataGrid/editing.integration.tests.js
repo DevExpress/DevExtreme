@@ -1403,6 +1403,63 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             assert.strictEqual($(cell).css('overflow'), 'hidden', 'overflow hidden');
         });
     });
+
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        [null, 'left', 'right'].forEach(fixedPosition => {
+            const fixedPositionText = fixedPosition === null ? 'not specified' : fixedPosition;
+            QUnit.testInActiveWindow(`${editMode} - Cells should be modified properly when fixedPosition is ${fixedPositionText} of a grouped column with showWhenGrouped enabled (T980535)`, function(assert) {
+                // act
+                const columns = [
+                    'field1',
+                    {
+                        dataField: 'field2',
+                        showWhenGrouped: true,
+                        groupIndex: 0
+                    },
+                    'field3'
+                ];
+
+                if(fixedPosition !== null) {
+                    columns[1].fixed = true;
+                    columns[1].fixedPosition = fixedPosition;
+                }
+
+                const dataGrid = createDataGrid({
+                    dataSource: [{ id: 1, field1: 'test1', field2: 'test2', field3: 'test3' }],
+                    keyExpr: 'id',
+                    columns,
+                    editing: {
+                        mode: editMode.toLowerCase(),
+                        allowUpdating: true
+                    },
+                    columnFixing: { enabled: true }
+                });
+
+                this.clock.tick();
+
+                for(let i = 1; i <= 3; i++) {
+                    // act
+                    let $cellElement = $(dataGrid.getCellElement(1, i));
+                    $cellElement.trigger('dxclick');
+                    this.clock.tick();
+                    $cellElement = $(dataGrid.getCellElement(1, i));
+
+                    // assert
+                    assert.ok($cellElement.hasClass('dx-focused'), `cell ${i} is focused after click`);
+                    assert.ok($cellElement.hasClass('dx-editor-cell'), `cell ${i} has an editor after click`);
+
+                    // act
+                    $cellElement.find('.dx-texteditor-input').val(i).trigger('change');
+                    dataGrid.closeEditCell();
+                    this.clock.tick();
+
+                    // assert
+                    assert.strictEqual(dataGrid.cellValue(1, i), `${i}`, `cell ${i} has modified value`);
+                }
+            });
+        });
+    });
 });
 
 QUnit.module('Editing', baseModuleConfig, () => {

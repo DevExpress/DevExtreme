@@ -157,6 +157,10 @@ export class FileManagerWrapper {
         return result;
     }
 
+    getTreeViewScrollableContainer() {
+        return this.getDirsTree().find(`.${Consts.SCROLLABLE_CONTAINER_ClASS}`);
+    }
+
     getFocusedItemText() {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOCUSED_ITEM_CLASS} span`).text();
     }

@@ -44,6 +44,7 @@ export const viewFunction = ({
     )}
     {isRenderDateHeader && (
       <DateHeader
+        groupByDate={groupByDate}
         dateHeaderMap={dateHeaderMap}
         groupOrientation={groupOrientation}
         groups={groups}

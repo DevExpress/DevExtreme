@@ -496,6 +496,16 @@ describe('templates and slots', () => {
     expect($('#component')[0].innerHTML).toBe('<span>Update slot</span>');
   });
 
+  it('change option when anonymous template exists', () => {
+    const slotContent = $('<span>').html('Default slot');
+    $('#component').append(slotContent);
+    $('#component').dxTemplatedTestWidget({});
+
+    expect(() => $('#component')
+      .dxTemplatedTestWidget('instance')
+      .option('someOption', 'newValue')).not.toThrow();
+  });
+
   describe('template function parameters', () => {
     it('template without index', () => {
       const template = jest.fn();

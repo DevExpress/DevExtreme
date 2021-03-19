@@ -29,10 +29,10 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
-    "devexpress-diagram": "2.1.7",
-    "devexpress-gantt": "2.1.11",
+    "devexpress-diagram": "2.1.8",
+    "devexpress-gantt": "2.1.12",
     "devextreme-generator": "1.0.148",
-    "devextreme-quill": "~0.10.2",
+    "devextreme-quill": "~0.10.3",
     "jszip": "^2.0.0 || ^3.0.0",
     "inferno": "^7.4.6",
     "inferno-compat": "^7.4.6",

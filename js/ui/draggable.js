@@ -1,12 +1,12 @@
 import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
+import { getElementsFromPoint, getBoundingRect } from '../core/utils/position';
 const window = getWindow();
 import eventsEngine from '../events/core/events_engine';
 import { quadToObject } from '../core/utils/string';
 import registerComponent from '../core/component_registrator';
 import { locate, move } from '../animation/translator';
 import Animator from './scroll_view/animator';
-import browser from '../core/utils/browser';
 import { dasherize } from '../core/utils/inflector';
 import { extend } from '../core/utils/extend';
 import DOMComponent from '../core/dom_component';
@@ -26,7 +26,7 @@ import { noop, splitPair } from '../core/utils/common';
 import { value as viewPort } from '../core/utils/view_port';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import { when, fromPromise, Deferred } from '../core/utils/deferred';
-import { getBoundingRect } from '../core/utils/position';
+
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
 const DRAG_EVENT_NAME = addNamespace(dragEventMove, DRAGGABLE);
@@ -716,27 +716,11 @@ const Draggable = DOMComponent.inherit({
 
         if(that.option('autoScroll')) {
             const mousePosition = getMousePosition(e);
-            const allObjects = that.getElementsFromPoint(mousePosition);
+            const allObjects = getElementsFromPoint(mousePosition.x, mousePosition.y);
 
             that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
             that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
         }
-    },
-
-    getElementsFromPoint: function(position, dragElement) {
-        const ownerDocument = (dragElement || this._$dragElement.get(0)).ownerDocument;
-
-        if(browser.msie) {
-            const msElements = ownerDocument.msElementsFromPoint(position.x, position.y);
-
-            if(msElements) {
-                return Array.prototype.slice.call(msElements);
-            }
-
-            return [];
-        }
-
-        return ownerDocument.elementsFromPoint(position.x, position.y);
     },
 
     _getScrollable: function($element) {
@@ -856,7 +840,7 @@ const Draggable = DOMComponent.inherit({
         const $targetDraggableElement = this.$element();
 
         const mousePosition = getMousePosition(e);
-        const elements = this.getElementsFromPoint(mousePosition, e.target);
+        const elements = getElementsFromPoint(mousePosition.x, mousePosition.y);
         const firstWidgetElement = elements.filter((element) => {
             const $element = $(element);
 

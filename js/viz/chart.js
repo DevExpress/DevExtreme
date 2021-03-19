@@ -9,7 +9,8 @@ import {
     map as _map, getLog, getCategoriesInfo,
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
     normalizePanesHeight,
-    rangesAreEqual
+    rangesAreEqual,
+    isRelativeHeightPane
 } from './core/utils';
 import { type, isDefined as _isDefined } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
@@ -233,8 +234,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
             return space;
         }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - canvases[paneNames[paneNames.length - 1]][getOriginalField(startMargin)]) - PANE_PADDING * (paneNames.length - 1);
 
-        const totalCustomSpace = Object.keys(sizes).reduce((prev, key) => prev + (sizes[key].unit ? sizes[key].height : 0), 0);
-        emptySpace -= totalCustomSpace;
+        emptySpace -= Object.keys(sizes).reduce((prev, key) => prev + (!isRelativeHeightPane(sizes[key]) ? sizes[key].height : 0), 0);
 
         paneNames.reduce((offset, pane) => {
             const canvas = canvases[pane];
@@ -242,7 +242,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
 
             offset -= getMaxMargin(endMargin, verticalMargins, horizontalMargins, pane);
             canvas[endMargin] = firstPane[sizeField] - offset;
-            offset -= paneSize.unit ? paneSize.height : Math.floor(emptySpace * paneSize.height);
+            offset -= !isRelativeHeightPane(paneSize) ? paneSize.height : Math.floor(emptySpace * paneSize.height);
             canvas[startMargin] = offset;
             offset -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, pane) + PANE_PADDING;
 
