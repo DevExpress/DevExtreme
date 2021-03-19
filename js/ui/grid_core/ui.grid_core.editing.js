@@ -714,10 +714,11 @@ const EditingController = modules.ViewController.inherit((function() {
             const pageIndex = dataSource.pageIndex();
             const beginPageIndex = dataSource.beginPageIndex ? dataSource.beginPageIndex() : pageIndex;
             const endPageIndex = dataSource.endPageIndex ? dataSource.endPageIndex() : pageIndex;
-            const needInsertOnLastPosition = !isDefined(change.pageIndex) && change.index === -1;
             const isLastPage = endPageIndex === dataSource.pageCount() - 1;
 
             if(scrollingMode !== 'standard') {
+                const needInsertOnLastPosition = !isDefined(change.pageIndex) && change.index === -1;
+
                 switch(changeType) {
                     case 'append':
                         return change.pageIndex === endPageIndex || needInsertOnLastPosition && isLastPage;
@@ -728,7 +729,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             }
 
-            return change.pageIndex === pageIndex || (needInsertOnLastPosition || change.pageIndex === -1) && isLastPage;
+            return change.pageIndex === pageIndex || change.pageIndex === -1 && isLastPage;
         },
 
         _generateNewItem: function(key) {
