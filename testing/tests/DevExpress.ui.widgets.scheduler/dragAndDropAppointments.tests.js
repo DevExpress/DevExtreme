@@ -2969,6 +2969,11 @@ supportedScrollingModes.forEach(scrollingMode => {
         });
 
         test('Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)', function(assert) {
+            if(isIE11) {
+                assert.ok('This test is not for IE11');
+                return;
+            }
+
             this.createInstance({
                 currentDate: new Date(2015, 4, 25),
                 editing: true,
@@ -2996,13 +3001,13 @@ supportedScrollingModes.forEach(scrollingMode => {
                 onAppointmentUpdating: function(e) {
                     e.cancel = true;
                 },
-                width: 800,
-                height: 2000,
+                width: 800
             });
             const $appointment = this.scheduler.appointments.getAppointment(0);
             const oldAppointmentCoords = translator.locate($appointment);
-
-            this.scheduler.appointmentList[0].drag.toCell(7);
+            $appointment.trigger(dragEvents.start);
+            this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
+            $appointment.trigger(dragEvents.end);
 
             this.scheduler.appointmentForm.clickFormDialogButton(1);
 
