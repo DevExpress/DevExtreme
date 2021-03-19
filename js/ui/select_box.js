@@ -52,7 +52,7 @@ const SelectBox = DropDownList.inherit({
         return extend({}, parent, {
             tab: function() {
                 if(this.option('opened') && this.option('applyValueMode') === 'instantly') {
-                    this._cleanInputSelection();
+                    this._resetCaretPosition(true);
                 }
 
                 parent.tab && parent.tab.apply(this, arguments);
@@ -625,10 +625,6 @@ const SelectBox = DropDownList.inherit({
         }
     },
 
-    _isEditable: function() {
-        return this.option('acceptCustomValue') || this.option('searchEnabled');
-    },
-
     _fieldRenderData: function() {
         const $listFocused = this._list && this.option('opened') && $(this._list.option('focusedElement'));
 
@@ -637,10 +633,6 @@ const SelectBox = DropDownList.inherit({
         }
 
         return this.option('selectedItem');
-    },
-
-    _readOnlyPropValue: function() {
-        return !this._isEditable() || this.option('readOnly');
     },
 
     _isSelectedValue: function(value) {
@@ -847,13 +839,6 @@ const SelectBox = DropDownList.inherit({
 
         inputElement.value = displayValue;
         this._caret({ start: valueLength, end: displayValue.length });
-    },
-
-    _cleanInputSelection: function() {
-        const inputElement = this._input().get(0);
-        const endPosition = inputElement.value.length;
-        inputElement.selectionStart = endPosition;
-        inputElement.selectionEnd = endPosition;
     },
 
     _dispose: function() {

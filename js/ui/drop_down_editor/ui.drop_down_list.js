@@ -203,6 +203,10 @@ const DropDownList = DropDownEditor.inherit({
         });
     },
 
+    _isEditable: function() {
+        return this.callBase() || this.option('searchEnabled');
+    },
+
     _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption('focusStateEnabled')) {
             this._focusInput();
