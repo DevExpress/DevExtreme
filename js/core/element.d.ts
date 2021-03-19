@@ -7,7 +7,9 @@ export interface ElementWrapper<T extends Element> { }
  * @prevFileNamespace DevExpress.core
  */
 export type TElement<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>
-export type TElementWrapper<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? dxElementWrapper : ElementWrapper<T>
+
+export interface InternalElementWrapper<T extends Element> { }
+export type TInternalElement<T extends Element = HTMLElement> = {} extends InternalElementWrapper<T> ? dxElementWrapper : InternalElementWrapper<T>
 
 export interface ElementsArrayWrapper<T extends Element> { }
 export type TElementsArray<T extends Element = HTMLElement> = {} extends ElementsArrayWrapper<T> ? Array<T> : ElementsArrayWrapper<T>
@@ -30,5 +32,5 @@ export type dxElement = TElement<HTMLElement>;
  */
 export type dxSVGElement = TElement<SVGElement>;
 
-export function getPublicElement(element: TElementWrapper): TElement;
-export function setPublicElementWrapper(newStrategy: (element: TElementWrapper) => TElement): void;
+export function getPublicElement(element: TInternalElement): TElement;
+export function setPublicElementWrapper(newStrategy: (element: TInternalElement) => TElement): void;

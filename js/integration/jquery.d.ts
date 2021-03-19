@@ -83,6 +83,7 @@ import dxVectorMap, { dxVectorMapOptions } from '../viz/vector_map';
 declare module '../core/element' {
     interface ElementWrapper<T extends Element> extends JQuery<T> { }
     interface ElementsArrayWrapper<T extends Element> extends JQuery<T> { }
+    interface InternalElementWrapper<T extends Element> extends JQuery<T> { }
 }
 
 declare module '../core/utils/deferred' {
