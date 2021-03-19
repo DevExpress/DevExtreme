@@ -12,6 +12,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     event
 } from '../events/index';
@@ -40,7 +42,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<dxContextMenuItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

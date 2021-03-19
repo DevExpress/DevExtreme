@@ -17,6 +17,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     event
 } from '../events/index';
@@ -97,7 +99,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz

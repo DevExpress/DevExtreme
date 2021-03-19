@@ -10,6 +10,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     event
 } from '../events/index';
@@ -342,7 +344,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: Array<string> | DataSource | DataSourceOptions;
+    dataSource?: Array<string> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default "this"
@@ -480,7 +482,7 @@ export interface dxHtmlEditorVariables {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default ""

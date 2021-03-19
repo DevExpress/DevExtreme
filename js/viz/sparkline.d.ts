@@ -2,6 +2,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import BaseSparkline, {
     BaseSparklineOptions
 } from './sparklines/base_sparkline';
@@ -34,7 +36,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
      * @default '#666666'

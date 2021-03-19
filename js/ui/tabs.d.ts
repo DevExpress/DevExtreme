@@ -2,6 +2,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from './abstract_store';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions
@@ -14,7 +16,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxTabsItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true [for](desktop)

@@ -17,6 +17,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     event
 } from '../events/index';
@@ -108,7 +110,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
      * @default true

@@ -12,6 +12,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     event
 } from '../events/index';
@@ -35,7 +37,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<dxDropDownButtonItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true

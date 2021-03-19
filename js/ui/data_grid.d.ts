@@ -251,7 +251,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -2510,7 +2510,7 @@ export interface GridBaseColumn {
        * @type_function_param1_field2 dataSource:DataSourceOptions
      * @default undefined
        */
-      dataSource?: Array<any> | ((options: { component?: any, dataSource?: DataSourceOptions }) => any) | DataSourceOptions,
+      dataSource?: Array<any> | Store | ((options: { component?: any, dataSource?: DataSourceOptions }) => any) | DataSourceOptions,
       /**
        * @docid
      * @prevFileNamespace DevExpress.ui

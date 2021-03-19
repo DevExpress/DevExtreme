@@ -6,6 +6,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     CollectionWidgetItem
 } from './collection/ui.collection_widget.base';
@@ -28,7 +30,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<dxMenuItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default false

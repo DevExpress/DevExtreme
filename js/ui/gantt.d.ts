@@ -10,6 +10,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     dxTreeListColumn
 } from './tree_list';
@@ -57,7 +59,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       * @prevFileNamespace DevExpress.ui
       * @default null
       */
-      dataSource?: Array<any> | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
       * @docid
       * @prevFileNamespace DevExpress.ui
@@ -472,7 +474,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       * @prevFileNamespace DevExpress.ui
       * @default null
       */
-      dataSource?: Array<any> | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
       * @docid
       * @prevFileNamespace DevExpress.ui
@@ -510,7 +512,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       * @prevFileNamespace DevExpress.ui
       * @default null
       */
-      dataSource?: Array<any> | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
       * @docid
       * @prevFileNamespace DevExpress.ui
@@ -594,7 +596,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       * @prevFileNamespace DevExpress.ui
       * @default null
       */
-      dataSource?: Array<any> | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
       * @docid
       * @prevFileNamespace DevExpress.ui

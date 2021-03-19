@@ -10,6 +10,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import dxDropDownEditor, {
     dxDropDownEditorOptions
 } from './drop_down_editor/ui.drop_down_editor';
@@ -48,7 +50,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type_function_param1 value:string|Array<any>

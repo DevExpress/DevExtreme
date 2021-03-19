@@ -1,6 +1,12 @@
+import {
+    TElement
+} from '../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
+
+import Store from '../data/abstract_store';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -30,7 +36,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxBoxItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.BoxDirection
@@ -56,8 +62,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
  * @public
  */
 export default class dxBox extends CollectionWidget {
-    constructor(element: Element, options?: dxBoxOptions)
-    constructor(element: JQuery, options?: dxBoxOptions)
+    constructor(element: TElement, options?: dxBoxOptions)
 }
 
 /**
@@ -97,15 +102,6 @@ export interface dxBoxItem extends CollectionWidgetItem {
     shrink?: number;
 }
 
-declare global {
-interface JQuery {
-    dxBox(): JQuery;
-    dxBox(options: "instance"): dxBox;
-    dxBox(options: string): any;
-    dxBox(options: string, ...params: any[]): any;
-    dxBox(options: dxBoxOptions): JQuery;
-}
-}
 export type Options = dxBoxOptions;
 
 /** @deprecated use Options instead */

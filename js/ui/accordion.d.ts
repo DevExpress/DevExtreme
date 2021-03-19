@@ -12,6 +12,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     event
 } from '../events/index';
@@ -43,7 +45,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxAccordionItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true

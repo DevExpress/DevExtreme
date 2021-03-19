@@ -4,6 +4,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions
@@ -30,7 +32,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxGalleryItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxGalleryItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true [for](desktop)

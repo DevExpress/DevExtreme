@@ -12,6 +12,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     event
 } from '../events/index';
@@ -65,7 +67,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxListItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxListItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default undefined

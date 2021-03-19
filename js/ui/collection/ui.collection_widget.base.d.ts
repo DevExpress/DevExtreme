@@ -12,6 +12,8 @@ import DataSource, {
     DataSourceOptions
 } from '../../data/data_source';
 
+import Store from '../../data/abstract_store';
+
 import {
     event
 } from '../../events/index';
@@ -27,7 +29,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | CollectionWidgetItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | CollectionWidgetItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default 750

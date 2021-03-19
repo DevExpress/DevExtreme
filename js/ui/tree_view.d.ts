@@ -8,6 +8,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     event
 } from '../events/index';
@@ -46,7 +48,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<dxTreeViewItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure

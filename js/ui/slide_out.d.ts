@@ -12,6 +12,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions
@@ -40,7 +42,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxSlideOutItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxSlideOutItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @fires dxSlideOutOptions.onOptionChanged

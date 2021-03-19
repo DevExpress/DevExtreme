@@ -2,6 +2,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions
@@ -46,7 +48,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxResponsiveBoxItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type_function_return number|string

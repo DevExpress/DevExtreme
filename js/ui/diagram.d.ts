@@ -10,6 +10,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
@@ -477,7 +479,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       * @prevFileNamespace DevExpress.ui
       * @default null
       */
-      dataSource?: Array<any> | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
       * @docid
       * @prevFileNamespace DevExpress.ui
@@ -680,7 +682,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @prevFileNamespace DevExpress.ui
        * @default null
        */
-      dataSource?: Array<any> | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
       * @docid
       * @prevFileNamespace DevExpress.ui

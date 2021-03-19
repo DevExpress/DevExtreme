@@ -10,6 +10,8 @@ import DataSource, {
     DataSourceOptions
 } from '../../data/data_source';
 
+import Store from '../../data/abstract_store';
+
 import {
     CollectionWidgetItem
 } from '../collection/ui.collection_widget.base';
@@ -21,7 +23,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<CollectionWidgetItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default undefined

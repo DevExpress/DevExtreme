@@ -434,7 +434,7 @@ export interface dxFilterBuilderField {
        * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
-      dataSource?: Array<any> | DataSourceOptions | Store,
+      dataSource?: Array<any> | Store | DataSourceOptions,
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui

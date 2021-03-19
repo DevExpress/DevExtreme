@@ -8,6 +8,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     event
 } from '../events/index';
@@ -31,7 +33,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxActionSheetItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxActionSheetItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @fires dxActionSheetOptions.onOptionChanged
