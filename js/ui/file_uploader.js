@@ -1061,7 +1061,7 @@ class FileUploader extends Editor {
                     return true;
                 }
             } else {
-                allowedType = allowedType.replace('*', '');
+                allowedType = allowedType.replace(new RegExp('\\*', 'g'), '');
 
                 if(file.type.match(new RegExp(allowedType, 'i'))) {
                     return true;

@@ -199,7 +199,7 @@ namespace Runner.Controllers
             m.NoTryCatch = q.ContainsKey("notrycatch");
             m.NoJQuery = q.ContainsKey("nojquery");
             m.WorkerInWindow = q.ContainsKey("workerinwindow");
-            m.Renovation = q.ContainsKey("renovation") || false;
+            m.NoRenovation = q.ContainsKey("norenovation") || false;
         }
 
         string JQueryVersion()

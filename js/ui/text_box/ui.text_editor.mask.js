@@ -451,7 +451,7 @@ const TextEditorMask = TextEditorBase.inherit({
         this._caret({ start: caret, end: caret });
     },
 
-    _caret: function(position) {
+    _caret: function(position, force) {
         const $input = this._input();
 
         if(!$input.length) {
@@ -461,7 +461,7 @@ const TextEditorMask = TextEditorBase.inherit({
         if(!arguments.length) {
             return caret($input);
         }
-        caret($input, position);
+        caret($input, position, force);
     },
 
     _hasSelection: function() {

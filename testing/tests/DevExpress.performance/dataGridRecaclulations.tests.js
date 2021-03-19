@@ -5,6 +5,7 @@ require('../../content/orders.js');
 
 require('generic_light.css!');
 require('ui/data_grid/ui.data_grid');
+const Pager = require('ui/pager');
 
 const createDataGridMeasureFunction = function(options) {
     return function() {
@@ -130,7 +131,7 @@ QUnit.performanceTest('refresh with columnAutoWidth', function(assert) {
 
     const measureFunction = createDataGridMeasureFunction('refresh');
 
-    assert.measureStyleRecalculation(measureFunction, 3);
+    assert.measureStyleRecalculation(measureFunction, Pager.IS_RENOVATED_WIDGET ? 4 : 3);
 });
 
 QUnit.performanceTest('refresh with columnFixing', function(assert) {
@@ -144,7 +145,7 @@ QUnit.performanceTest('refresh with columnFixing', function(assert) {
 
     const measureFunction = createDataGridMeasureFunction('refresh');
 
-    assert.measureStyleRecalculation(measureFunction, 4);
+    assert.measureStyleRecalculation(measureFunction, Pager.IS_RENOVATED_WIDGET ? 5 : 4);
 });
 
 QUnit.performanceTest('refresh with virtual scrolling', function(assert) {

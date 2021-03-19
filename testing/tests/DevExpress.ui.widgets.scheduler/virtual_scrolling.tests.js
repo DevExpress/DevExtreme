@@ -22,7 +22,7 @@ const test = (description, callback) => {
 
 module('Virtual Scrolling', {
     beforeEach: function() {
-        this.prepareInstance = function(settings) {
+        this.prepareInstance = function(settings, workspaceSettings) {
             settings = settings || {};
             settings = $.extend(true, {
                 height: 300,
@@ -34,12 +34,14 @@ module('Virtual Scrolling', {
                 }
             }, settings);
 
-            this.workspaceMock = {
+            workspaceSettings = workspaceSettings || {};
+            this.workspaceMock = $.extend(true, {
                 _getGroupCount: () => 0,
                 _getTotalRowCount: () => settings.totalRowCount,
                 _getTotalCellCount: () => settings.totalCellCount,
                 _getDateTableCellClass: () => 'fake-cell-class',
                 _getDateTableRowClass: () => 'fake-row-class',
+                _isRTL: () => false,
                 _options: {
                     dataCellTemplate: noop,
                     groupByDate: false,
@@ -75,7 +77,7 @@ module('Virtual Scrolling', {
                     return false;
                 },
                 updateAppointments: () => {},
-            };
+            }, workspaceSettings);
 
             this.scrollableMock = {
                 _options: {
@@ -196,6 +198,21 @@ module('Virtual Scrolling', {
                 assert.equal(state.virtualItemCountBefore, 0, 'Virtual item count before viewport');
                 assert.equal(state.itemCount, 6, 'Item count');
                 assert.equal(state.virtualItemCountAfter, 194, 'Virtual item count after viewport');
+            });
+
+            test('Init with RTL', function(assert) {
+                this.prepareInstance(
+                    { },
+                    { _isRTL: () => true }
+                );
+
+                const { horizontalVirtualScrolling } = this;
+                const { state } = horizontalVirtualScrolling;
+
+                assert.equal(horizontalVirtualScrolling.pageSize, 4, 'PageSize');
+                assert.equal(state.virtualItemSizeBefore, 29100, 'Virtual item size before viewport');
+                assert.equal(state.itemCount, 6, 'Item count');
+                assert.equal(state.virtualItemSizeAfter, 0, 'Virtual item size after viewport');
             });
 
             test('Viewport width should be correct if the "width" option is undefined', function(assert) {
@@ -506,6 +523,12 @@ module('Virtual Scrolling', {
             assert.equal(this.virtualScrollingDispatcher.getCellHeight(), 101, 'Cell height is correct');
             assert.equal(this.virtualScrollingDispatcher.getCellWidth(), 201, 'Cell width is correct');
         });
+
+        test('it should return correct leftVirtualCellsCount if RTL', function(assert) {
+            this.prepareInstance({}, { _isRTL: () => true });
+
+            assert.equal(this.virtualScrollingDispatcher.leftVirtualCellsCount, 1, 'leftVirtualCellsCount is correct');
+        });
     });
 
     module('API', () => {
@@ -556,6 +579,60 @@ module('Virtual Scrolling', {
                     virtualItemCountBefore: 0,
                     virtualItemSizeAfter: 78400,
                     virtualItemSizeBefore: 0
+                },
+                'Horizontal scrolling state is correct'
+            );
+        });
+
+        test('reinitState if RTL', function(assert) {
+            this.prepareInstance({
+                scrolling: { orientation: 'both' }
+            }, {
+                _isRTL: () => true
+            });
+
+            this.verticalVirtualScrolling.position = 200;
+            this.verticalVirtualScrolling.reinitState(300);
+
+            assert.equal(this.verticalVirtualScrolling.itemSize, 300, 'Vertical scrolling item size is correct');
+            assert.equal(this.verticalVirtualScrolling.position, 200, 'Vertical scrolling position is correct');
+            assert.deepEqual(
+                this.verticalVirtualScrolling.state,
+                {
+                    prevPosition: 0,
+                    startIndex: 0,
+                    itemCount: 1,
+                    virtualItemCountBefore: 0,
+                    virtualItemCountAfter: 99,
+                    outlineCountBefore: 0,
+                    outlineCountAfter: 0,
+                    virtualItemSizeBefore: 0,
+                    virtualItemSizeAfter: 29700,
+                    outlineSizeBefore: 0,
+                    outlineSizeAfter: 0
+                },
+                'Vertical scrolling state is correct'
+            );
+
+            this.horizontalVirtualScrolling.position = 500;
+            this.horizontalVirtualScrolling.reinitState(400);
+
+            assert.equal(this.horizontalVirtualScrolling.itemSize, 400, 'Horizontal scrolling item size is correct');
+            assert.equal(this.horizontalVirtualScrolling.position, 500, 'Horizontal scrolling position is correct');
+            assert.deepEqual(
+                this.horizontalVirtualScrolling.state,
+                {
+                    itemCount: 4,
+                    outlineCountAfter: 1,
+                    outlineCountBefore: 1,
+                    outlineSizeAfter: 0,
+                    outlineSizeBefore: 0,
+                    prevPosition: 400,
+                    startIndex: 0,
+                    virtualItemCountAfter: 196,
+                    virtualItemCountBefore: 0,
+                    virtualItemSizeAfter: 0,
+                    virtualItemSizeBefore: 78400
                 },
                 'Horizontal scrolling state is correct'
             );
