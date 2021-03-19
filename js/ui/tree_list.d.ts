@@ -32,6 +32,298 @@ import {
 import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
+
+/**
+ * @public
+ */
+export interface CellClickEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    event?: TEvent;
+    data?: any;
+    key?: any;
+    value?: any;
+    displayValue?: any;
+    text?: string;
+    columnIndex?: number;
+    column?: any;
+    rowIndex?: number;
+    rowType?: string;
+    cellElement?: TElement;
+    row?: RowObject;
+}
+
+/**
+ * @public
+ */
+export interface CellDblClick {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    event?: TEvent;
+    data?: any;
+    key?: any;
+    value?: any;
+    displayValue?: any;
+    text?: string;
+    columnIndex?: number;
+    column?: Column;
+    rowIndex?: number;
+    rowType?: string;
+    cellElement?: TElement;
+    row?: RowObject;
+}
+
+/**
+ * @public
+ */
+export interface CellHoverChangedEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    eventType?: string;
+    data?: any;
+    key?: any;
+    value?: any;
+    text?: string;
+    displayValue?: any;
+    columnIndex?: number;
+    rowIndex?: number;
+    column?: Column;
+    rowType?: string;
+    cellElement?: TElement;
+    row?: RowObject;
+}
+
+/**
+ * @public
+ */
+export interface CellPreparedEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    data?: any;
+    key?: any;
+    value?: any;
+    displayValue?: any;
+    text?: string;
+    columnIndex?: number;
+    column?: Column;
+    rowIndex?: number;
+    rowType?: string;
+    row?: RowObject;
+    isSelected?: boolean;
+    isExpanded?: boolean;
+    isNewRow?: boolean;
+    cellElement?: TElement;
+    watch?: Function;
+    oldValue?: any;
+}
+
+/**
+ * @public
+ */
+export interface ContextMenuPreparingEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    items?: Array<any>;
+    target?: string;
+    targetElement?: TElement;
+    columnIndex?: number;
+    column?: Column;
+    rowIndex?: number;
+    row?: RowObject;
+}
+
+/**
+ * @public
+ */
+export interface EditingStartEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    data?: any;
+    key?: any;
+    cancel?: boolean;
+    column?: any;
+}
+
+/**
+ * @public
+ */
+export interface EditorPreparedEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    parentType?: string;
+    value?: any;
+    setValue?: any;
+    updateValueTimeout?: number;
+    width?: number;
+    disabled?: boolean;
+    rtlEnabled?: boolean;
+    editorElement?: TElement;
+    readOnly?: boolean;
+    dataField?: string;
+    row?: RowObject;
+}
+
+/**
+ * @public
+ */
+export interface EditorPreparingEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    parentType?: string;
+    value?: any;
+    setValue?: any;
+    updateValueTimeout?: number;
+    width?: number;
+    disabled?: boolean;
+    rtlEnabled?: boolean;
+    cancel?: boolean;
+    editorElement?: TElement;
+    readOnly?: boolean;
+    editorName?: string;
+    editorOptions?: any;
+    dataField?: string;
+    row?: RowObject;
+}
+
+/**
+ * @public
+ */
+export interface FocusedCellChangedEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    cellElement?: TElement;
+    columnIndex?: number;
+    rowIndex?: number;
+    row?: RowObject;
+    column?: Column;
+}
+
+/**
+ * @public
+ */
+export interface FocusedCellChangingEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    cellElement?: TElement;
+    prevColumnIndex?: number;
+    prevRowIndex?: number;
+    newColumnIndex?: number;
+    newRowIndex?: number;
+    event?: TEvent;
+    rows?: Array<RowObject>;
+    columns?: Array<Column>;
+    cancel?: boolean;
+    isHighlighted?: boolean;
+}
+
+/**
+ * @public
+ */
+export interface FocusedRowChangedEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    rowElement?: TElement;
+    rowIndex?: number;
+    row?: RowObject;
+}
+
+interface FocusedRowChangingEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    rowElement?: TElement;
+    prevRowIndex?: number;
+    newRowIndex?: number;
+    event?: TEvent;
+    rows?: Array<RowObject>;
+    cancel?: boolean;
+}
+
+/**
+ * @public
+ */
+export interface NodesInitializedEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    root?: Node;
+}
+
+/**
+ * @public
+ */
+export interface RowClickEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    event?: TEvent;
+    data?: any;
+    key?: any;
+    values?: Array<any>;
+    columns?: Array<any>;
+    rowIndex?: number;
+    rowType?: string;
+    isSelected?: boolean;
+    isExpanded?: boolean;
+    isNewRow?: boolean;
+    rowElement?: TElement;
+    handled?: boolean;
+    node?: Node;
+    level?: number;
+}
+
+/**
+ * @public
+ */
+export interface RowDblClickEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    event?: TEvent;
+    data?: any;
+    key?: any;
+    values?: Array<any>;
+    columns?: Array<Column>;
+    rowIndex?: number;
+    rowType?: string;
+    isSelected?: boolean;
+    isExpanded?: boolean;
+    isNewRow?: boolean;
+    rowElement?: TElement;
+}
+
+/**
+ * @public
+ */
+export interface RowPreparedEvent {
+    component?: dxTreeList;
+    element?: TElement;
+    model?: any;
+    data?: any;
+    key?: any;
+    values?: Array<any>;
+    columns?: Array<Column>;
+    rowIndex?: number;
+    rowType?: string;
+    isSelected?: boolean;
+    isExpanded?: boolean;
+    isNewRow?: boolean;
+    rowElement?: TElement;
+    node?: Node;
+    level?: number;
+}
+
 export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
      * @docid
@@ -132,7 +424,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxTreeList, element?: TElement, model?: any, event?: TEvent, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: TElement, row?: RowObject }) => any) | string;
+    onCellClick?: ((e: CellClickEvent) => any) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -153,7 +445,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellDblClick?: ((e: { component?: dxTreeList, element?: TElement, model?: any, event?: TEvent, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: Column, rowIndex?: number, rowType?: string, cellElement?: TElement, row?: RowObject }) => any);
+    onCellDblClick?: ((e: CellDblClick) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -174,7 +466,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellHoverChanged?: ((e: { component?: dxTreeList, element?: TElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: Column, rowType?: string, cellElement?: TElement, row?: RowObject }) => any);
+    onCellHoverChanged?: ((e: CellHoverChangedEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -199,7 +491,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellPrepared?: ((e: { component?: dxTreeList, element?: TElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: Column, rowIndex?: number, rowType?: string, row?: RowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: TElement, watch?: Function, oldValue?: any }) => any);
+    onCellPrepared?: ((e: CellPreparedEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:Object
@@ -215,7 +507,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: TElement, model?: any, items?: Array<any>, target?: string, targetElement?: TElement, columnIndex?: number, column?: Column, rowIndex?: number, row?: RowObject }) => any);
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -228,7 +520,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditingStart?: ((e: { component?: dxTreeList, element?: TElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => void);
+    onEditingStart?: ((e: EditingStartEvent) => any);
     /**
      * @docid
      * @type_function_param1 options:object
@@ -248,7 +540,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPrepared?: ((options: { component?: dxTreeList, element?: TElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: TElement, readOnly?: boolean, dataField?: string, row?: RowObject }) => any);
+    onEditorPrepared?: ((options: EditorPreparedEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -271,7 +563,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPreparing?: ((e: { component?: dxTreeList, element?: TElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: TElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: RowObject }) => any);
+    onEditorPreparing?: ((e: EditorPreparingEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -285,7 +577,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedCellChanged?: ((e: { component?: dxTreeList, element?: TElement, model?: any, cellElement?: TElement, columnIndex?: number, rowIndex?: number, row?: RowObject, column?: Column }) => any);
+    onFocusedCellChanged?: ((e: FocusedCellChangedEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -304,7 +596,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: TElement, model?: any, cellElement?: TElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: TEvent, rows?: Array<RowObject>, columns?: Array<Column>, cancel?: boolean, isHighlighted?: boolean }) => any);
+    onFocusedCellChanging?: ((e: FocusedCellChangingEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -316,7 +608,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedRowChanged?: ((e: { component?: dxTreeList, element?: TElement, model?: any, rowElement?: TElement, rowIndex?: number, row?: RowObject }) => any);
+    onFocusedRowChanged?: ((e: FocusedRowChangedEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -331,7 +623,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedRowChanging?: ((e: { component?: dxTreeList, element?: TElement, model?: any, rowElement?: TElement, prevRowIndex?: number, newRowIndex?: number, event?: TEvent, rows?: Array<RowObject>, cancel?: boolean }) => any);
+    onFocusedRowChanging?: ((e: FocusedRowChangingEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -341,7 +633,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onNodesInitialized?: ((e: { component?: dxTreeList, element?: TElement, model?: any, root?: Node }) => any);
+    onNodesInitialized?: ((e: NodesInitializedEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -364,7 +656,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowClick?: ((e: { component?: dxTreeList, element?: TElement, model?: any, event?: TEvent, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: TElement, handled?: boolean, node?: Node, level?: number }) => any) | string;
+    onRowClick?: ((e: RowClickEvent) => any) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -384,7 +676,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowDblClick?: ((e: { component?: dxTreeList, element?: TElement, model?: any, event?: TEvent, data?: any, key?: any, values?: Array<any>, columns?: Array<Column>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: TElement }) => any);
+    onRowDblClick?: ((e: RowDblClickEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -405,7 +697,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowPrepared?: ((e: { component?: dxTreeList, element?: TElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<Column>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: TElement, node?: Node, level?: number }) => any);
+    onRowPrepared?: ((e: RowPreparedEvent) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
