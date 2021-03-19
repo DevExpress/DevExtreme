@@ -95,7 +95,7 @@ export class ListProps extends WidgetProps {
   // @Event()onItemDeleting?: ((e: {
   //   component?: dxList, element?: TElement, model?: any, itemData?: any,
   //   itemElement?: TElement, itemIndex?: number | any,
-  //   cancel?: boolean | TPromise<void>
+  //   cancel?: boolean | TPromise
   // }) => any);
 
   // @Event()onItemHold?: ((e: {

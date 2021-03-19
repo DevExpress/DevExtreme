@@ -12,8 +12,8 @@ import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../..
 import { BaseWidgetProps } from '../../../utils/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
-import { TPromise } from '../../../../core/index';
-import type { TElement } from '../../../../core/element';
+import { TPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
+import type { TElement } from '../../../../core/element'; // eslint-disable-line import/named
 import type { template } from '../../../../core/templates/template';
 import type { EventExtension, TEvent } from '../../../../events/index';
 import DataSource from '../../../../data/data_source';
@@ -285,7 +285,7 @@ export class DataGridColumn {
     newData: any,
     value: any,
     currentRowData: any,
-  ) => void | TPromise<void>;
+  ) => void | TPromise;
 
   @OneWay()
   showEditorAlways?: boolean;
@@ -901,7 +901,7 @@ export class DataGridRowDragging {
     fromData?: any;
     toData?: any;
     dropInsideItem?: boolean;
-    promise?: TPromise<void>;
+    promise?: TPromise;
   }) => any;
 
   @OneWay()
@@ -1593,7 +1593,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     element?: TElement;
     model?: any;
     data?: any;
-    promise?: TPromise<void>;
+    promise?: TPromise;
   }) => any;
 
   @Event() onKeyDown?: (e: {
@@ -1648,7 +1648,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     element?: TElement;
     model?: any;
     data?: any;
-    cancel?: boolean | TPromise<void>;
+    cancel?: boolean | TPromise;
   }) => any;
 
   @Event() onRowRemoved?: (e: {
@@ -1666,7 +1666,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     model?: any;
     data?: any;
     key?: any;
-    cancel?: boolean | TPromise<void>;
+    cancel?: boolean | TPromise;
   }) => any;
 
   @Event() onRowUpdated?: (e: {
@@ -1685,7 +1685,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     oldData?: any;
     newData?: any;
     key?: any;
-    cancel?: boolean | TPromise<void>;
+    cancel?: boolean | TPromise;
   }) => any;
 
   @Event() onRowValidating?: (e: {
@@ -1706,7 +1706,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     newData?: any;
     oldData?: any;
     errorText?: string;
-    promise?: TPromise<void>;
+    promise?: TPromise;
   }) => any;
 
   @Event() onSelectionChanged?: (e: {

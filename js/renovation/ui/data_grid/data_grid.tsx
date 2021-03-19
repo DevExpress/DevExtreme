@@ -14,7 +14,7 @@ import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
 import { TPromise } from '../../../core/utils/deferred'; // eslint-disable-line import/named
-import { TElementsArray } from '../../../core/element'; // eslint-disable-line import/named
+import { TElement, TElementsArray } from '../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../utils/effect_return';
 
@@ -141,7 +141,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  deselectAll(): TPromise<void> {
+  deselectAll(): TPromise {
     return this.instance?.deselectAll();
   }
 
@@ -177,7 +177,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   @Method()
   focus(element?: TElement): void {
-    return this.instance?.focus(element as Element);
+    return this.instance?.focus(element as HTMLElement);
   }
 
   @Method()
@@ -265,7 +265,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   pageIndex(
     newIndex?: number,
-  ): TPromise<void> | number {
+  ): TPromise | number {
     return this.instance?.pageIndex(newIndex as number);
   }
 
@@ -277,7 +277,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   refresh(
     changesOnly?: boolean,
-  ): TPromise<void> {
+  ): TPromise {
     return this.instance?.refresh(changesOnly as boolean);
   }
 
@@ -287,7 +287,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  saveEditData(): TPromise<void> {
+  saveEditData(): TPromise {
     return this.instance?.saveEditData();
   }
 
@@ -297,7 +297,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  selectAll(): TPromise<void> {
+  selectAll(): TPromise {
     return this.instance?.selectAll();
   }
 
@@ -340,7 +340,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  addRow(): TPromise<void> {
+  addRow(): TPromise {
     return this.instance?.addRow();
   }
 
@@ -355,7 +355,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  collapseRow(key: any): TPromise<void> {
+  collapseRow(key: any): TPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -365,7 +365,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  expandRow(key: any): TPromise<void> {
+  expandRow(key: any): TPromise {
     return this.instance?.expandRow(key);
   }
 
