@@ -53,6 +53,7 @@ describe('HeaderPanelLayoutLayout', () => {
           timeCellTemplate,
           groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
           groups: [],
+          groupByDate: false,
         });
     });
 

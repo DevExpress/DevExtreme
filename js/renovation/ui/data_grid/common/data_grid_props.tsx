@@ -8,7 +8,7 @@ import {
   Template,
 } from 'devextreme-generator/component_declaration/common';
 import DxDataGrid from '../../../../ui/data_grid';
-import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../../../ui/data_grid';
+import type { Options, dxDataGridColumn, dxDataGridRowObject } from '../../../../ui/data_grid';
 import { BaseWidgetProps } from '../../../utils/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
@@ -1177,7 +1177,7 @@ export class DataGridExport {
 }
 
 @ComponentBindings()
-export class DataGridProps extends BaseWidgetProps /* implements Options */ {
+export class DataGridProps extends BaseWidgetProps implements Options {
   @Nested() columns?: (DataGridColumn | string)[];
 
   @Nested() editing?: DataGridEditing;
@@ -1303,7 +1303,8 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() wordWrapEnabled?: boolean;
 
-  @TwoWay() filterValue: string | any[] | ((...args: any[]) => any) | null = null;
+  // TODO Vitik: Default should be null, but declaration doesnt support it
+  @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) = [];
 
   @TwoWay() focusedColumnIndex = -1;
 
@@ -1389,7 +1390,8 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     isExpanded?: boolean;
     isNewRow?: boolean;
     cellElement?: TElement;
-    watch?: ((...args: any[]) => any);
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    watch?: Function;
     oldValue?: any;
   }) => any;
 

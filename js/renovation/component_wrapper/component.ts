@@ -276,13 +276,15 @@ export default class ComponentWrapper extends DOMComponent {
       const dummyDivRefCallback: (ref: any) => void = (dummyDivRef) => {
         if (dummyDivRef) {
           const { parentNode } = dummyDivRef;
-          parentNode.removeChild(dummyDivRef);
-          this._getTemplate(this._templateManager.anonymousTemplateName).render(
-            {
-              container: getPublicElement($(parentNode)),
-              transclude: true,
-            }
-          );
+          if (parentNode) {
+            parentNode.removeChild(dummyDivRef);
+            this._getTemplate(this._templateManager.anonymousTemplateName).render(
+              {
+                container: getPublicElement($(parentNode)),
+                transclude: true,
+              }
+            );
+          }
         }
       };
 

@@ -10,6 +10,12 @@ export const addAttributes = ($element, attributes): void => {
   });
 };
 
+export function getAriaName(name: string): string {
+  return (name === 'role' || name === 'id')
+    ? name
+    : `aria-${name}`;
+}
+
 // NOTE: function for jQuery templates
 export const wrapElement = ($element, $wrapper): any => {
   const { attributes } = $wrapper.get(0);

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Editor from './editor';
-import { addAttributes } from './utils';
+import { addAttributes, getAriaName } from './utils';
 
 export default class CheckBox extends Editor {
   _optionChanged(option): void {
@@ -30,7 +30,7 @@ export default class CheckBox extends Editor {
   }
 
   setAria(name: string, value: string): void {
-    const attrName = this._getAriaName(name);
+    const attrName = getAriaName(name);
     addAttributes(this.$element(), [{ name: attrName, value }]);
   }
 }
