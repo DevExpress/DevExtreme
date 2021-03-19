@@ -22,6 +22,10 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+import {
+    template
+} from '../core/templates/template';
+
 export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.allowedFileExtensions
@@ -308,6 +312,14 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid dxFileManagerContextMenuItem.template
+     * @type template|function
+     * @type_function_return string|Element|jQuery
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    template?: template | (() => string | Element | JQuery);
 }
 
 export interface dxFileManagerToolbar {
@@ -359,6 +371,29 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid dxFileManagerToolbarItem.html
+     * @type String
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    html?: string;
+    /**
+     * @docid dxFileManagerToolbarItem.template
+     * @type template|function
+     * @type_function_return string|Element|jQuery
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    template?: template | (() => string | Element | JQuery);
+    /**
+     * @docid dxFileManagerToolbarItem.menuItemTemplate
+     * @type template|function
+     * @type_function_return string|Element|jQuery
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    menuItemTemplate?: template | (() => string | Element | JQuery);
 }
 
 export interface dxFileManagerDetailsColumn {

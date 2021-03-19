@@ -114,8 +114,10 @@ registerDecorator(
             return false;
         },
 
-        handleEnterPressing: function() {
+        handleEnterPressing: function(e) {
             if(this._$selectAll && this._$selectAll.hasClass(FOCUSED_STATE_CLASS)) {
+                e.target = this._$selectAll.get(0);
+                this._list._saveSelectionChangeEvent(e);
                 this._selectAllCheckBox.option('value', !this._selectAllCheckBox.option('value'));
                 return true;
             }

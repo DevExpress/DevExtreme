@@ -146,6 +146,11 @@ const dxVectorMap = {
         */
         paletteSize: 0,
         /**
+        * @name dxVectorMapOptions.layers.paletteIndex
+        * @type number
+        */
+        paletteIndex: undefined,
+        /**
         * @name dxVectorMapOptions.layers.colorGroups
         * @type Array<number>
         * @default undefined

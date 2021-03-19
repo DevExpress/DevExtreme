@@ -86,7 +86,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _unwrappedValue: function(value) {
-        value = isDefined(value) ? value : this._getCurrentValue();
+        value = value ?? this._getCurrentValue();
 
         if(value && this._dataSource && this._valueGetterExpr() === 'this') {
             value = this._getItemKey(value);

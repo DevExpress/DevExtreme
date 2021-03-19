@@ -1,6 +1,5 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import { Consts, getHistoryToolbarInstance } from '../../../helpers/diagramHelpers.js';

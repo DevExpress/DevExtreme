@@ -9,7 +9,6 @@ QUnit.testStart(function() {
 
 import $ from 'jquery';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';

@@ -3,7 +3,6 @@ import support from 'core/utils/support';
 
 import 'ui/load_indicator';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

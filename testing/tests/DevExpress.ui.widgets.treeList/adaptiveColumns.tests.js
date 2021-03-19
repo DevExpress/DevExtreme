@@ -6,7 +6,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 

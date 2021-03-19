@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot,
+  Component, ComponentBindings, JSXComponent, OneWay, Slot, Fragment,
 } from 'devextreme-generator/component_declaration/common';
 import { addHeightToStyle } from '../utils';
 import { VirtualRow } from './virtual-row';
@@ -24,13 +24,64 @@ export const viewFunction = ({
     style={style}
   >
     <tbody>
-      {hasTopVirtualRow && (
-        <VirtualRow height={topVirtualRowHeight} cellsCount={virtualCellsCount} />
+      {/*
+        This is a workaround for https://github.com/preactjs/preact/issues/2987
+        TODO: remove once we start using inferno
+      */}
+      {hasTopVirtualRow && hasBottomVirtualRow && (
+        <Fragment>
+          <VirtualRow
+            height={topVirtualRowHeight}
+            cellsCount={virtualCellsCount}
+          />
+          {children}
+          <VirtualRow
+            height={bottomVirtualRowHeight}
+            cellsCount={virtualCellsCount}
+          />
+        </Fragment>
+      )}
+      {hasTopVirtualRow && !hasBottomVirtualRow && (
+        <Fragment>
+          <VirtualRow
+            height={topVirtualRowHeight}
+            cellsCount={virtualCellsCount}
+          />
+          {children}
+        </Fragment>
+      )}
+      {!hasTopVirtualRow && hasBottomVirtualRow && (
+        <Fragment>
+          {children}
+          <VirtualRow
+            height={bottomVirtualRowHeight}
+            cellsCount={virtualCellsCount}
+          />
+        </Fragment>
+      )}
+      {!hasTopVirtualRow && !hasBottomVirtualRow && (
+        <Fragment>
+          {children}
+        </Fragment>
+      )}
+
+      {/* {hasTopVirtualRow && (
+        <VirtualRow
+          height={topVirtualRowHeight}
+          cellsCount={virtualCellsCount}
+          leftVirtualCellWidth={leftVirtualCellWidth}
+          rightVirtualCellWidth={rightVirtualCellWidth}
+        />
       )}
       {children}
       {hasBottomVirtualRow && (
-        <VirtualRow height={bottomVirtualRowHeight} cellsCount={virtualCellsCount} />
-      )}
+        <VirtualRow
+          height={bottomVirtualRowHeight}
+          cellsCount={virtualCellsCount}
+          leftVirtualCellWidth={leftVirtualCellWidth}
+          rightVirtualCellWidth={rightVirtualCellWidth}
+        />
+      )} */}
     </tbody>
   </table>
 );

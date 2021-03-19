@@ -1,4 +1,3 @@
-import 'common.css!';
 import config from 'core/config';
 import { noop } from 'core/utils/common';
 import dateUtils from 'core/utils/date';

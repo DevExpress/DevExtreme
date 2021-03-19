@@ -10,7 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
@@ -506,9 +505,12 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
 
         // assert
-        assert.equal(treeList.$element().find('.dx-data-row').length, 1, 'one filtered row is rendered');
-        assert.equal(treeList.$element().find('.dx-toolbar .dx-searchbox').length, 1, 'searchPanel is rendered');
-        assert.equal(treeList.$element().find('.dx-toolbar .dx-searchbox').dxTextBox('instance').option('value'), 'Name 1', 'searchPanel text is applied');
+        const $element = treeList.$element();
+        const $searchBox = $element.find('.dx-toolbar .dx-searchbox');
+        assert.equal($element.find('.dx-data-row').length, 1, 'one filtered row is rendered');
+        assert.equal($searchBox.length, 1, 'searchPanel is rendered');
+        assert.equal($searchBox.dxTextBox('instance').option('value'), 'Name 1', 'searchPanel text is applied');
+        assert.equal($searchBox.find('input').attr('aria-label'), 'Search in the tree list', 'aria-label');
     });
 
     QUnit.test('Selectable treeList should have right default options', function(assert) {
@@ -828,6 +830,26 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         assert.strictEqual($treeListElement.find('.dx-page').length, 2, 'number of containers for page');
         assert.ok($treeListElement.find('.dx-page').first().hasClass('dx-selection'), 'current page - first');
         assert.strictEqual($treeListElement.find('.dx-page-size').length, 3, 'number of containers for page sizes');
+    });
+
+    // T969977
+    QUnit.test('HeaderPanel should not have bottom border', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            dataSource: [],
+            columnChooser: {
+                enabled: true
+            },
+            showBorders: true,
+            columns: ['test']
+        });
+
+        this.clock.tick();
+        const $treeList = $(treeList.$element());
+        const $headerPanel = $treeList.find('.dx-treelist-header-panel');
+
+        // assert
+        assert.equal($headerPanel.css('border-bottom-width'), '0px', 'bottom border width');
     });
 });
 
@@ -1198,10 +1220,11 @@ QUnit.module('Expand/Collapse rows', () => {
             ]
         });
         const scrollable = treeList.getScrollable();
+        const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         try {
             scrollable.scrollTo({ y: 300 }); // scroll to the last page
-            devices.real().deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
+            isNativeScrolling && $(scrollable._container()).trigger('scroll');
             clock.tick();
 
             const topVisibleRowData = treeList.getTopVisibleRowData();
@@ -1513,6 +1536,33 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         assert.deepEqual(treeList.option('expandedRowKeys'), [1], 'parent node is expanded');
         assert.equal(treeList.pageIndex(), 0, 'page is not changed');
         assert.ok(treeList.getRowIndexByKey(2) >= 0, 'key is visible');
+    });
+
+    // T969796
+    QUnit.test('TreeList navigateTo to the collapsed child row when scrolling is standard', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            height: 100,
+            dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, {
+                id: 5,
+                parent_id: 4
+            }],
+            scrolling: {
+                mode: 'standard',
+            },
+            keyExpr: 'id',
+            parentIdExpr: 'parent_id',
+            columns: ['id']
+        });
+
+        this.clock.tick();
+
+        treeList.navigateToRow(5);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(treeList.option('expandedRowKeys'), [4], 'parent node is expanded');
+        assert.ok(treeList.getRowIndexByKey(5) >= 0, 'key is visible');
     });
 
     // T697860

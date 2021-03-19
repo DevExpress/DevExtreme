@@ -114,11 +114,8 @@ class BaseRenderingStrategy {
     }
 
     _getItemPosition(appointment) {
-        const adapter = this.instance.createAppointmentAdapter(appointment);
-
         const position = this._getAppointmentCoordinates(appointment);
         const allDay = this.isAllDay(appointment);
-        const startDate = new Date(adapter.startDate);
 
         let result = [];
 
@@ -153,7 +150,7 @@ class BaseRenderingStrategy {
                         sourceAppointmentWidth: width,
                         reducedWidth: resultWidth,
                         height: height
-                    }, position[j], startDate);
+                    }, position[j]);
 
 
                     if(this._isRtl()) {
@@ -535,18 +532,23 @@ class BaseRenderingStrategy {
         });
     }
 
-    _markAppointmentAsVirtual(coordinates, isAllDay) {
+    _markAppointmentAsVirtual(coordinates, isAllDay = false) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
+            const { top, left } = coordinates;
             coordinates.virtual = {
-                top: coordinates.top,
-                left: coordinates.left,
-                index: coordinates.appointmentReduced === 'tail' ?
-                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex :
-                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex + '-tail',
-                isAllDay: isAllDay
+                top,
+                left,
+                index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
+                isAllDay,
             };
         }
+    }
+
+    _generateAppointmentCollectorIndex({
+        groupIndex, rowIndex, cellIndex,
+    }, isAllDay) {
+        return `${groupIndex}-${rowIndex}-${cellIndex}-${isAllDay}`;
     }
 
     _getMaxAppointmentCountPerCellByType(isAllDay) {

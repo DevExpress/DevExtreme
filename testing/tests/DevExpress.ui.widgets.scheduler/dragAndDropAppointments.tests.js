@@ -10,7 +10,6 @@ import {
     CLASSES,
 } from '../../helpers/scheduler/helpers.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 

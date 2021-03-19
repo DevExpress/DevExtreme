@@ -244,16 +244,15 @@ const baseFixedColumns = {
     },
 
     _getCellElementsCore: function(rowIndex) {
-        const that = this;
-        const cellElements = that.callBase(rowIndex);
+        const cellElements = this.callBase.apply(this, arguments);
         const isGroupRow = cellElements.parent().hasClass(GROUP_ROW_CLASS);
-        const index = that.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
+        const index = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
 
-        if(that._fixedTableElement && cellElements) {
-            const fixedColumns = that.getFixedColumns(index);
-            const fixedCellElements = that._getRowElements(that._fixedTableElement).eq(rowIndex).children('td');
+        if(this._fixedTableElement && cellElements) {
+            const fixedColumns = this.getFixedColumns(index);
+            const fixedCellElements = this._getRowElements(this._fixedTableElement).eq(rowIndex).children('td');
 
-            each(fixedCellElements, function(columnIndex, cell) {
+            each(fixedCellElements, (columnIndex, cell) => {
                 if(isGroupRow) {
                     if(cellElements[columnIndex] && cell.style.visibility !== 'hidden') {
                         cellElements[columnIndex] = cell;
@@ -267,7 +266,7 @@ const baseFixedColumns = {
                                 cellElements[columnIndex] = cell || cellElements[columnIndex];
                             }
                         } else {
-                            const fixedColumnIndex = that._columnsController.getVisibleIndex(fixedColumn.index, index);
+                            const fixedColumnIndex = this._columnsController.getVisibleIndexByColumn(fixedColumn, rowIndex);
                             cellElements[fixedColumnIndex] = cell || cellElements[fixedColumnIndex];
                         }
                     }
@@ -291,13 +290,13 @@ const baseFixedColumns = {
         return normalizeColumnWidths(fixedColumns, result, fixedWidths);
     },
 
-    _getTableElement: function() {
+    getTableElement: function() {
         const tableElement = this._isFixedTableRendering ? this._fixedTableElement : this.callBase();
 
         return tableElement;
     },
 
-    _setTableElement: function(tableElement) {
+    setTableElement: function(tableElement) {
         if(this._isFixedTableRendering) {
             this._fixedTableElement = tableElement.addClass(POINTER_EVENTS_NONE_CLASS);
         } else {
@@ -306,7 +305,7 @@ const baseFixedColumns = {
     },
 
     getColumns: function(rowIndex, $tableElement) {
-        $tableElement = $tableElement || this._getTableElement();
+        $tableElement = $tableElement || this.getTableElement();
 
         if(this._isFixedTableRendering || $tableElement && $tableElement.closest('table').parent('.' + this.addWidgetPrefix(CONTENT_FIXED_CLASS)).length) {
             return this.getFixedColumns(rowIndex);
@@ -950,8 +949,8 @@ export default {
 
                     _pointCreated: function(point, columns, location, sourceColumn) {
                         const result = this.callBase.apply(this, arguments);
+                        const targetColumn = columns[point.columnIndex];
                         const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
-
 
                         if(!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
                             const boundingRect = getBoundingRect($transparentColumn.get(0));
@@ -959,6 +958,10 @@ export default {
                             if(sourceColumn && sourceColumn.fixed) {
                                 return sourceColumn.fixedPosition === 'right' ? point.x < boundingRect.right : point.x > boundingRect.left;
                             } else {
+                                if(targetColumn && targetColumn.fixed && targetColumn.fixedPosition !== 'right') {
+                                    return true;
+                                }
+
                                 return point.x < boundingRect.left || point.x > boundingRect.right;
                             }
                         }

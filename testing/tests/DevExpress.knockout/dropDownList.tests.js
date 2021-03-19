@@ -5,7 +5,7 @@ const ko = require('knockout');
 require('integration/knockout');
 require('ui/drop_down_editor/ui.drop_down_list');
 
-require('common.css!');
+require('generic_light.css!');
 
 QUnit.testStart(function() {
     const markup =

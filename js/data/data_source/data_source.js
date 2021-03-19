@@ -48,30 +48,47 @@ export const DataSource = Class.inherit({
     */
     ctor(options) {
         options = normalizeDataSourceOptions(options);
-        this._eventsStrategy = new EventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this, {
+            syncStrategy: true
+        });
 
         /**
         * @name DataSourceOptions.store.type
         * @type Enums.DataSourceStoreType
         */
 
-        const onPushHandler = options.pushAggregationTimeout !== 0
-            ? dataUtils.throttleChanges(this._onPush, () =>
-                options.pushAggregationTimeout === undefined
-                    ? this._changedTime * 5
-                    : options.pushAggregationTimeout
-            )
-            : this._onPush;
-
+        this._store = options.store;
         this._changedTime = 0;
 
-        this._onPushHandler = (changes) => {
-            this._aggregationTimeoutId = onPushHandler.call(this, changes);
-        };
+        const needThrottling = options.pushAggregationTimeout !== 0;
 
-        this._store = options.store;
-        this._store.on('push', this._onPushHandler);
+        if(needThrottling) {
+            const throttlingTimeout = options.pushAggregationTimeout === undefined
+                ? () => this._changedTime * 5
+                : options.pushAggregationTimeout;
 
+            let pushDeferred;
+
+            const throttlingPushHandler = dataUtils.throttleChanges((changes) => {
+                pushDeferred.resolve();
+                pushDeferred.done(() => this._onPush(changes));
+                pushDeferred = undefined;
+            }, throttlingTimeout);
+
+            this._onPushHandler = (args) => {
+                this._aggregationTimeoutId = throttlingPushHandler(args.changes);
+
+                if(!pushDeferred) {
+                    pushDeferred = new Deferred();
+                }
+
+                args.waitFor.push(pushDeferred.promise());
+            };
+            this._store.on('beforePush', this._onPushHandler);
+        } else {
+            this._onPushHandler = (changes) => this._onPush(changes);
+            this._store.on('push', this._onPushHandler);
+        }
 
         this._storeLoadOptions = this._extractLoadOptions(options);
 
@@ -131,6 +148,7 @@ export const DataSource = Class.inherit({
     },
 
     dispose() {
+        this._store.off('beforePush', this._onPushHandler);
         this._store.off('push', this._onPushHandler);
         this._eventsStrategy.dispose();
         clearTimeout(this._aggregationTimeoutId);

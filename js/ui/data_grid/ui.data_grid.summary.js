@@ -93,7 +93,7 @@ export const FooterView = ColumnsView.inherit((function() {
 
         _updateContent: function($newTable, change) {
             if(change && change.changeType === 'update' && change.columnIndices) {
-                const $row = this._getTableElement().find('.dx-row');
+                const $row = this.getTableElement().find('.dx-row');
                 const $newRow = $newTable.find('.dx-row');
 
                 this._updateCells($row, $newRow, change.columnIndices[0]);

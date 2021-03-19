@@ -25,6 +25,7 @@ const CLASS = {
   toolbar: 'dx-toolbar',
   fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
+  revertButton: 'dx-revert-button',
 };
 
 export default class DataGrid extends Widget {
@@ -154,6 +155,10 @@ export default class DataGrid extends Widget {
 
   getHeaderPanel(): HeaderPanel {
     return new HeaderPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.headerPanel)}`), this.name);
+  }
+
+  getRevertButton(): Selector {
+    return this.element.find(`.${CLASS.revertButton}`);
   }
 
   apiOption(name: any, value = 'undefined'): Promise<any> {

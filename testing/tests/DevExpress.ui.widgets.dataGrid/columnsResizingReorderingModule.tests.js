@@ -26,7 +26,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -3306,7 +3305,7 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'));
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView.getTableElement().find('td'));
         assert.deepEqual(roundPoints(points),
             [{ x: -10000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -9000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points');
     });
@@ -3319,7 +3318,7 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'), null, null, 5);
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView.getTableElement().find('td'), null, null, 5);
         assert.deepEqual(roundPoints(points),
             [{ x: -10000, y: -10000, columnIndex: 5, index: 5 }, { x: -9500, y: -10000, columnIndex: 6, index: 6 }, { x: -9000, y: -10000, columnIndex: 7, index: 7 }], 'dragging points');
     });
@@ -3338,7 +3337,7 @@ QUnit.module('Headers reordering', {
         $('#container').addClass('dx-rtl');
 
         // assert
-        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'));
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView.getTableElement().find('td'));
         assert.deepEqual(
             roundPoints(points),
             [

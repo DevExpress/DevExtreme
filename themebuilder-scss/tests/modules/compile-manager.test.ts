@@ -22,8 +22,6 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   metadata,
 }));
 
-jest.mock('fibers', () => undefined);
-
 PostCompiler.addInfoHeader = (css: string): string => css;
 
 describe('Compile manager - integration test on test sass', () => {
@@ -116,10 +114,10 @@ describe('Compile manager - integration test on test sass', () => {
     return manager.compile({
       isBootstrap: true,
       bootstrapVersion: 4,
-      data: '$primary: red;',
+      data: '$primary: red;$font-family-sans-serif: sans-serif;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  background-color: sans-serif;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -129,7 +127,7 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+        '$base-font-family': 'sans-serif',
         '$base-accent': 'red',
         '$accordion-title-color': 'red',
         '$accordion-item-title-opened-bg': 'transparent',

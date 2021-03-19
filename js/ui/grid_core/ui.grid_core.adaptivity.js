@@ -14,6 +14,7 @@ import { equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { Deferred, when } from '../../core/utils/deferred';
+import messageLocalization from '../../localization/message';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 const ROWS_VIEW = 'rowsView';
@@ -43,6 +44,9 @@ const EDIT_MODE_POPUP = 'popup';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const GROUP_CELL_CLASS = 'dx-group-cell';
 const GROUP_ROW_CLASS = 'dx-group-row';
+
+const EXPAND_ARIA_NAME = 'dxDataGrid-ariaAdaptiveExpand';
+const COLLAPSE_ARIA_NAME = 'dxDataGrid-ariaAdaptiveCollapse';
 
 function getColumnId(that, column) {
     return that._columnsController.getColumnId(column);
@@ -139,7 +143,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
         return function(options, container) {
             const $container = $(container);
-            const columnIndex = that._columnsController.getVisibleIndex(column.visibleIndex);
+            const columnIndex = that._columnsController.getVisibleIndex(column.index);
             const templateOptions = extend({}, cellOptions);
 
             const renderFormTemplate = function() {
@@ -708,6 +712,23 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         if(this.hasAdaptiveDetailRowExpanded()) {
             this.toggleExpandAdaptiveDetailRow();
         }
+    },
+
+    updateCommandAdaptiveAriaLabel: function(key, label) {
+        const rowIndex = this._dataController.getRowIndexByKey(key);
+
+        if(rowIndex === -1) {
+            return;
+        }
+
+        const $row = $(this.component.getRowElement(rowIndex));
+
+        this.setCommandAdaptiveAriaLabel($row, label);
+    },
+
+    setCommandAdaptiveAriaLabel: function($row, labelName) {
+        const $adaptiveCommand = $row.find('.dx-command-adaptive');
+        $adaptiveCommand.attr('aria-label', messageLocalization.format(labelName));
     }
 });
 
@@ -748,11 +769,16 @@ export default {
                 _renderCells: function($row, options) {
                     this.callBase($row, options);
 
-                    const hidingColumnsQueueLength = this._adaptiveColumnsController.getHidingColumnsQueue().length;
-                    const hiddenColumnsLength = this._adaptiveColumnsController.getHiddenColumns().length;
+                    const adaptiveColumnsController = this._adaptiveColumnsController;
+                    const hidingColumnsQueueLength = adaptiveColumnsController.getHidingColumnsQueue().length;
+                    const hiddenColumnsLength = adaptiveColumnsController.getHiddenColumns().length;
 
                     if(hidingColumnsQueueLength && !hiddenColumnsLength) {
                         getDataCellElements($row).last().addClass(LAST_DATA_CELL_CLASS);
+                    }
+
+                    if(options.row.rowType === 'data') {
+                        adaptiveColumnsController.setCommandAdaptiveAriaLabel($row, EXPAND_ARIA_NAME);
                     }
                 },
 
@@ -780,7 +806,7 @@ export default {
                     if(item && item.rowType === ADAPTIVE_ROW_TYPE) {
                         return this._adaptiveColumnsController.getItemContentByColumnIndex(columnIdentifier);
                     } else {
-                        return this.callBase(rowIndex, columnIdentifier);
+                        return this.callBase.apply(this, arguments);
                     }
                 },
 
@@ -1091,6 +1117,7 @@ export default {
                         newExpandLoadedRowIndex = -1;
                     }
 
+                    const oldKey = that._adaptiveExpandedKey;
                     that._adaptiveExpandedKey = key;
 
                     if(oldExpandLoadedRowIndex >= 0) {
@@ -1107,6 +1134,11 @@ export default {
                         changeType: 'update',
                         rowIndices: [oldExpandLoadedRowIndex - rowIndexDelta, newExpandLoadedRowIndex - rowIndexDelta]
                     });
+
+                    const adaptiveColumnsController = this.getController('adaptiveColumns');
+
+                    adaptiveColumnsController.updateCommandAdaptiveAriaLabel(key, COLLAPSE_ARIA_NAME);
+                    adaptiveColumnsController.updateCommandAdaptiveAriaLabel(oldKey, EXPAND_ARIA_NAME);
                 },
 
                 init: function() {

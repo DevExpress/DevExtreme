@@ -273,7 +273,6 @@ const DateView = Editor.inherit({
         let startValue = componentInfo.startValue;
         let endValue = componentInfo.endValue;
 
-        // TODO: think about these exceptions for 'year' and 'day'
         if(componentName === ROLLER_TYPE.year) {
             startValue = minDate.getFullYear();
             endValue = maxDate.getFullYear();

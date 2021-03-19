@@ -4,7 +4,7 @@ import dxCheckBox from 'ui/check_box';
 import dxrCheckBox from 'renovation/ui/check_box.j.js';
 import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js';
 
-import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =

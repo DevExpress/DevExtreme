@@ -131,7 +131,7 @@ QUnit.test('Correct values if each value is zero', function(assert) {
         return item.value;
     });
 
-    assert.deepEqual(values, [1, 1]);
+    assert.deepEqual(values, []);
 });
 
 QUnit.test('Data source with invalid value fields and items are not created, warning is fired', function(assert) {

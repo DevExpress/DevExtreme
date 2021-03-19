@@ -1,12 +1,6 @@
 import ConverterController from '../converterController';
-import { getQuill } from '../quill_importer';
 
 class DeltaConverter {
-
-    constructor() {
-        this.TextBlot = getQuill().import('blots/text');
-        this.BreakBlot = getQuill().import('blots/break');
-    }
 
     setQuillInstance(quillInstance) {
         this.quillInstance = quillInstance;

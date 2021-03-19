@@ -1,6 +1,5 @@
 import animationFrame from 'animation/frame';
 import translator from 'animation/translator';
-import 'common.css!';
 import 'generic_light.css!';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';

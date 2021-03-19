@@ -5,7 +5,6 @@ import 'ui/select_box';
 import { extend } from 'core/utils/extend';
 import { value as viewPort } from 'core/utils/view_port';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const TOOLBAR_ITEM_HEIGHT = 36;

@@ -45,7 +45,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
             getTooltipText: this._getTooltipText.bind(this),
             onSelectionChanged: this._onItemListSelectionChanged.bind(this),
-            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this)
+            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this),
+            onContentReady: () => this._refreshDeferred?.resolve()
         });
     }
 
@@ -163,6 +164,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
 
         this._itemList.option(actualOptions);
+
+        this._refreshDeferred = new Deferred();
+        return this._refreshDeferred.promise();
     }
 
     _deselectItem(item) {

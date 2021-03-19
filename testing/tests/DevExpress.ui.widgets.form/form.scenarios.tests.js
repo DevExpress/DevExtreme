@@ -3,7 +3,6 @@ import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
 import browser from 'core/utils/browser';
 import 'ui/form/ui.form';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

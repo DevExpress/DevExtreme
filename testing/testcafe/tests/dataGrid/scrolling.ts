@@ -14,10 +14,10 @@ async function getRightScrollOffset(dataGrid: DataGrid): Promise<number> {
   return maxHorizontalOffset - scrollLeft;
 }
 
-function getData(rowCount, colCount): any[] {
-  const items = [];
+function getData(rowCount, colCount): Record<string, string>[] {
+  const items: Record<string, string>[] = [];
   for (let i = 0; i < rowCount; i += 1) {
-    const item = {};
+    const item: Record<string, string> = {};
     for (let j = 0; j < colCount; j += 1) {
       item[`field_${i}_${j}`] = `val_${i}_${j}`;
     }
@@ -170,5 +170,38 @@ test('DataGrid should not reset its right scroll position on window resize when 
     columns[1].fixed = true;
     columns[48].fixed = true;
     columns[49].fixed = true;
+  },
+}));
+
+test('DataGrid should not reset its top scroll position after cell modification with master-detail', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(0).element);
+  await dataGrid.scrollTo({ y: 220 });
+  const scrollTop = await dataGrid.getScrollTop();
+  await t
+    .click(dataGrid.getDataRow(1).getCommandCell(0).element)
+    .click(dataGrid.getDataCell(2, 1).element)
+    .typeText(dataGrid.getDataCell(2, 1).element, 'new_value')
+    .pressKey('Tab');
+  // assert
+  const newScrollTop = await dataGrid.getScrollTop();
+  await t.expect(Math.abs(scrollTop - newScrollTop) < 2).ok(`ScrollTop ${scrollTop} changes after editing to ${newScrollTop}`);
+}).before(() => createWidget('dxDataGrid', {
+  height: 300,
+  dataSource: [{ FirstName: 'A', LastName: 'B' }, { FirstName: 'C', LastName: 'D' }],
+  editing: {
+    allowUpdating: true,
+    mode: 'cell',
+  },
+  masterDetail: {
+    enabled: true,
+    template: (container): void => {
+      $('<div>')
+        .css('height', '200px')
+        .appendTo(container);
+    },
   },
 }));

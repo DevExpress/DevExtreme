@@ -13,7 +13,6 @@ import { deferUpdate } from 'core/utils/common';
 
 import 'ui/button_group';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/button';
 import 'ui/tabs';
@@ -1558,6 +1557,35 @@ QUnit.module('default template', {
 
         assert.ok(!dropDown.option('opened'), 'dropdown is closed');
         assert.equal(onClickActionStub.callCount, 1, 'onClick was fired');
+    });
+
+    ['single', 'multiple'].forEach(selectionMode => {
+        QUnit.test(`Click on buttonGroup item inside menu (T977105). selectionMode: ${selectionMode}`, function(assert) {
+            const onClickActionStub = sinon.stub();
+
+            const $element = $('#widget').dxToolbar({
+                items: [ {
+                    location: 'center',
+                    locateInMenu: 'always',
+                    onClick: onClickActionStub,
+                    widget: 'dxButtonGroup',
+                    options: {
+                        items: [ { text: 'left' }, { text: 'center' } ],
+                        selectionMode,
+                    }
+                }]
+            });
+
+            const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
+
+            dropDown.open();
+            const $items = $('.dx-dropdownmenu-list .dx-buttongroup-item');
+
+            $($items.eq(0)).trigger('dxclick');
+
+            assert.ok(!dropDown.option('opened'), 'dropdown is closed');
+            assert.equal(onClickActionStub.callCount, 1, 'onClick was fired');
+        });
     });
 });
 

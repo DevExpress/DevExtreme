@@ -3376,6 +3376,24 @@ QUnit.module('Datetime scale breaks. Weekends and holidays', $.extend({}, enviro
     afterEach: environment2DTranslator.afterEach
 }));
 
+// T976735
+QUnit.test('Breaks generation on empty range', function(assert) {
+    this.range.min = undefined;
+    this.range.max = undefined;
+
+    const axis = this.createSimpleAxis({});
+    axis.updateOptions({
+        label: {},
+        workWeek: [1, 2, 3, 4, 5],
+        dataType: 'datetime',
+        workdaysOnly: true
+    });
+    // act
+    axis.setBusinessRange({});
+
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].userBreaks, []);
+});
+
 QUnit.test('Generate weekend breaks', function(assert) {
     this.updateOptions({
         breakStyle: { width: 10 }

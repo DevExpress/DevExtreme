@@ -3,7 +3,6 @@ import windowUtils from 'core/utils/window';
 
 import 'ui/data_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 

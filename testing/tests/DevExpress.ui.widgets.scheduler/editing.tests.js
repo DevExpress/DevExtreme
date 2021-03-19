@@ -5,7 +5,6 @@ const fx = require('animation/fx');
 const keyboardMock = require('../../helpers/keyboardMock.js');
 const dataUtils = require('core/element_data');
 
-require('common.css!');
 require('generic_light.css!');
 require('ui/scheduler/ui.scheduler');
 

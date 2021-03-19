@@ -139,9 +139,3 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 
   border: 1px solid $border-color;
 }
-
-@mixin dx-button-styling-clear() {
-  box-shadow: none;
-  background: transparent;
-  border-color: transparent;
-}

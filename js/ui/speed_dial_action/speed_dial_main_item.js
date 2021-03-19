@@ -240,7 +240,10 @@ class SpeedDialMainItem extends SpeedDialItem {
         if(this._isShadingShown) {
             const isShadingClick = $(e.target)[0] === this._$wrapper[0];
 
-            if(isShadingClick) this._clickHandler();
+            if(isShadingClick) {
+                e.preventDefault();
+                this._clickHandler();
+            }
         }
     }
 

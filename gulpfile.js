@@ -14,13 +14,13 @@ require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
+require('./build/gulp/styles/themebuilder-npm');
+require('./build/gulp/styles/style-compiler');
 require('./build/gulp/npm');
-require('./build/gulp/themebuilder-npm');
 require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
-require('./build/gulp/style-compiler');
 require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
 

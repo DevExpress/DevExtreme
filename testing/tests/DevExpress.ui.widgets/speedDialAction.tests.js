@@ -4,7 +4,6 @@ import fx from 'animation/fx';
 import SpeedDialItem from 'ui/speed_dial_action/speed_dial_item';
 
 import 'ui/speed_dial_action';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -988,7 +987,7 @@ QUnit.module('check action buttons events', {
 });
 
 
-QUnit.module('T850271', {}, () => {
+QUnit.module('T850271 (one action)', {}, () => {
     QUnit.test('check peventDefault in _outsideClickHandler method', function(assert) {
         const instance = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
 
@@ -1001,6 +1000,43 @@ QUnit.module('T850271', {}, () => {
         });
 
         speedDialItem._outsideClickHandler(event);
+
+        assert.equal(preventDefaultStub.callCount, 1, 'there is peventDefault in outsideClickHandler when shading is true');
+
+        instance.dispose();
+    });
+});
+
+QUnit.module('T959764 (multiple actions)', {
+    beforeEach: function() {
+        fx.off = true;
+    },
+
+    afterEach: function() {
+        fx.off = false;
+    },
+}, () => {
+    QUnit.test('check peventDefault in _outsideClickHandler method', function(assert) {
+
+        config({
+            floatingActionButtonConfig: {
+                shading: true
+            }
+        });
+
+        const preventDefaultStub = sinon.stub();
+        const event = $.Event('dxpointerdown');
+
+        event.preventDefault = preventDefaultStub;
+
+        $('#fab-one').dxSpeedDialAction({ icon: 'add' }).dxSpeedDialAction('instance');
+        $('#fab-two').dxSpeedDialAction({ icon: 'remove' }).dxSpeedDialAction('instance');
+
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content');
+
+        $fabMainContent.trigger('dxclick');
+
+        $fabMainContent.closest('.dx-overlay-shader').trigger(event);
 
         assert.equal(preventDefaultStub.callCount, 1, 'there is peventDefault in outsideClickHandler when shading is true');
     });

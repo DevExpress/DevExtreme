@@ -620,10 +620,8 @@ class AppointmentModel {
         return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 
-    add(data) {
-        return this._dataSource.store().insert(data).done((() => {
-            this._dataSource.load();
-        }).bind(this));
+    add(rawAppointment) {
+        return this._dataSource.store().insert(rawAppointment).done(() => this._dataSource.load());
     }
 
     update(target, data) {
@@ -631,22 +629,18 @@ class AppointmentModel {
         const d = new Deferred();
 
         this._dataSource.store().update(key, data)
-            .done(() => {
+            .done(result =>
                 this._dataSource.load()
-                    .done(d.resolve)
-                    .fail(d.reject);
-            })
+                    .done(() => d.resolve(result))
+                    .fail(d.reject))
             .fail(d.reject);
 
         return d.promise();
     }
 
-    remove(target) {
-        const key = this._getStoreKey(target);
-
-        return this._dataSource.store().remove(key).done((() => {
-            this._dataSource.load();
-        }).bind(this));
+    remove(rawAppointment) {
+        const key = this._getStoreKey(rawAppointment);
+        return this._dataSource.store().remove(key).done(() => this._dataSource.load());
     }
 }
 

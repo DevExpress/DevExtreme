@@ -1,11 +1,11 @@
 import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import { locate } from 'animation/translator';
-import 'common.css!';
 import 'generic_light.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import { Template } from 'core/templates/template';
+import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { value as viewPort } from 'core/utils/view_port';
@@ -20,6 +20,7 @@ import selectors from 'ui/widget/selectors';
 import swatch from 'ui/widget/swatch_container';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import nativePointerMock from '../../helpers/nativePointerMock.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -3294,6 +3295,11 @@ testModule('keyboard navigation', {
     });
 
     test('overlay have focus on show click', function(assert) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+            return;
+        }
+
         const $overlayContent = this.$overlayContent;
 
         this.overlay.option('animation', {
@@ -3338,6 +3344,11 @@ testModule('focus policy', {
     }
 }, () => {
     test('elements under overlay with shader have not to get focus by tab', function(assert) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+            return;
+        }
+
         const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
             visible: true,
             shading: true,
@@ -3726,6 +3737,31 @@ testModule('scrollable interaction', {
             .lastEvent();
 
         assert.ok(e._cancelPreventDefault, 'overlay should set special flag for prevent default cancelling');
+    });
+
+    ['ctrlKey', 'metaKey'].forEach((commandKey) => {
+        test(`scroll event should not prevent zooming (${commandKey} pressed)`, function(assert) {
+            assert.expect(1);
+
+            const $overlay = $('#overlay').dxOverlay({
+                shading: true,
+                visible: true
+            });
+            const handler = () => {
+                assert.ok(true, 'event popped up');
+            };
+
+            $('#qunit-fixture').on('wheel', handler);
+
+            const $content = $overlay.dxOverlay('$content');
+            const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
+
+            nativePointerMock($shader)
+                .start()
+                .wheel(10, { [commandKey]: true });
+
+            $('#qunit-fixture').off('wheel', handler);
+        });
     });
 });
 

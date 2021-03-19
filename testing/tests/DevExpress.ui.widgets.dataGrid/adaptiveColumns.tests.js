@@ -9,7 +9,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/data_grid/ui.data_grid';
 
@@ -1991,16 +1990,58 @@ QUnit.module('API', {
         this.resizingController.updateDimensions();
         this.clock.tick();
 
+        // assert
+        const $adaptiveCommand = $(this.getRowElement(0)).find('.dx-command-adaptive');
+        assert.equal($adaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
         this.clock.tick();
 
+        // assert
         assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
+        assert.equal($adaptiveCommand.attr('aria-label'), 'Hide additional data', 'command cell aria-label'); // T947070
 
+        // act
         this.adaptiveColumnsController.collapseAdaptiveDetailRow();
         this.clock.tick();
 
+        // assert
         assert.ok(!$('.dx-adaptive-detail-row').length, 'there is no field items');
+        assert.equal($adaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+    });
+
+    QUnit.test('Collapse adaptive row when expanding another one', function(assert) {
+        // arrange
+        $('.dx-datagrid').width(200);
+
+        setupDataGrid(this);
+        this.rowsView.render($('#container'));
+        this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        // assert
+        const $firstAdaptiveCommand = $(this.getRowElement(0)).find('.dx-command-adaptive');
+        const $secondAdaptiveCommand = $(this.getRowElement(1)).find('.dx-command-adaptive');
+        assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+        assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+
+        // act
+        $firstAdaptiveCommand.find('.dx-datagrid-adaptive-more').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Hide additional data', 'command cell aria-label'); // T947070
+        assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+
+        // act
+        $secondAdaptiveCommand.find('.dx-datagrid-adaptive-more').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Display additional data', 'command cell aria-label'); // T947070
+        assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Hide additional data', 'command cell aria-label'); // T947070
     });
 
     QUnit.test('Is adaptive row expanded', function(assert) {

@@ -332,7 +332,7 @@ Tooltip.prototype = {
             that._textHtml.css({
                 left: -left, top: -top
             });
-            that._textGroupHtml.css({ width: that._textHtml.width() });
+            that._textGroupHtml.css({ width: mathCeil(that._textHtml.width()) });
         }
     },
 

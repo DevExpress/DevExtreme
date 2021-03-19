@@ -19,7 +19,13 @@ module('Time zone utils', {}, () => {
     });
 
     test('isEqualLocalTimeZone', function(assert) {
-        const result = timeZoneUtils.isEqualLocalTimeZone('Brazil/Acre');
+        const result = timeZoneUtils.isEqualLocalTimeZone('Brazil/Acre', new Date(2021, 6, 6));
+
+        assert.notOk(result, 'local time zone shouldn\'t equal to \'Brazil/Acre\'');
+    });
+
+    test('isEqualLocalTimeZoneByDeclaration', function(assert) {
+        const result = timeZoneUtils.isEqualLocalTimeZoneByDeclaration('Brazil/Acre', new Date(2021, 6, 6));
 
         assert.notOk(result, 'local time zone shouldn\'t equal to \'Brazil/Acre\'');
     });

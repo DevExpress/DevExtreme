@@ -40,6 +40,7 @@ class Gantt extends Widget {
     _init() {
         super._init();
         this._cache = new GanttDataCache();
+        this._isGanttRendered = false;
     }
     _initMarkup() {
         super._initMarkup();
@@ -77,10 +78,18 @@ class Gantt extends Widget {
         this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
 
+    _refresh() {
+        this._isGanttRendered = false;
+        super._refresh();
+    }
     _renderContent() {
-        this._renderBars();
-        this._renderTreeList();
-        this._renderSplitter();
+        this._isMainElementVisible = this.$element().is(':visible');
+        if(this._isMainElementVisible && !this._isGanttRendered) {
+            this._isGanttRendered = true;
+            this._renderBars();
+            this._renderTreeList();
+            this._renderSplitter();
+        }
     }
     _renderTreeList() {
         const { keyExpr, parentIdExpr } = this.option(GANTT_TASKS);
@@ -107,7 +116,7 @@ class Gantt extends Widget {
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); },
             onContextMenuPreparing: (e) => { this._onTreeListContextMenuPreparing(e); },
             onRowClick: (e) => { this._onTreeListRowClick(e); },
-            onRowDblClick: (e) => { this._onTreeListRowDblClick(e); }
+            onRowDblClick: (e) => { this._onTreeListRowDblClick(e); },
         });
     }
     _renderSplitter() {
@@ -163,17 +172,25 @@ class Gantt extends Widget {
             modelChangesListener: this._createModelChangesListener(),
             taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
             onTaskClick: (e) => { this._onTreeListRowClick(e); },
-            onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); }
+            onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); },
+            onAdjustControl: () => { this._onAdjustControl(); }
         });
         this._fireContentReadyAction();
     }
 
+    _onAdjustControl() {
+        const toolbarHeight = this._$toolbarWrapper.get(0).offsetHeight;
+        this._setTreeListOption('height', '100%');
+        this._setTreeListOption('height', this._$treeList.height() - toolbarHeight);
+        this._adjustHeight();
+        this._ganttView?._ganttViewCore.resetAndUpdate();
+        this._splitter.option('initialLeftPanelWidth', this._$treeListWrapper.width());
+    }
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
         const rowHeight = this._getTreeListRowHeight();
         this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
     }
-
     _onTreeListContentReady(e) {
         if(e.component.getDataSource()) {
             this._initGanttView();
@@ -211,7 +228,7 @@ class Gantt extends Widget {
     _onTreeListSelectionChanged(e) {
         const selectedRowKey = e.currentSelectedRowKeys[0];
         this._setGanttViewOption('selectedRowKey', selectedRowKey);
-        this.option('selectedRowKey', selectedRowKey);
+        this._setOptionWithoutOptionChange('selectedRowKey', selectedRowKey);
         this._raiseSelectionChangedAction(selectedRowKey);
     }
     _onTreeListRowCollapsed(e) {
@@ -309,7 +326,6 @@ class Gantt extends Widget {
         return getBoundingRect(this._treeList._$element.find('.dx-treelist-headers').get(0)).height;
     }
 
-
     _setInnerElementsWidth(widths) {
         if(!hasWindow()) {
             return;
@@ -322,9 +338,8 @@ class Gantt extends Widget {
         const rightPanelWidth = widths.rightPanelWidth;
 
         this._$treeListWrapper.width(leftPanelWidth);
-
         const isPercentage = isString(leftPanelWidth) && leftPanelWidth.slice(-1) === '%';
-        this._$treeList.width(isPercentage ? '100%' : leftPanelWidth);
+        this._setTreeListOption('width', isPercentage ? '100%' : leftPanelWidth);
 
         this._$ganttView.width(rightPanelWidth);
         this._setGanttViewOption('width', this._$ganttView.width());
@@ -448,7 +463,7 @@ class Gantt extends Widget {
             NotifyTaskStartChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
             NotifyTaskEndChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
             NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
-
+            NotifyTaskColorChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'color', newValue); },
             NotifyDependencyInserted: (dependency, callback, errorCallback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
             NotifyDependencyRemoved: (dependencyId, errorCallback, dependency) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId, dependency); },
 
@@ -495,7 +510,7 @@ class Gantt extends Widget {
                             this._treeList.option('expandedRowKeys', expandedRowKeys);
                         }
                     }
-                    this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(insertedId));
+                    this._selectTreeListRows(this._getArrayFromOneElement(insertedId));
                     this._setTreeListOption('focusedRowKey', insertedId);
                 }
                 this._raiseInsertedAction(optionName, data, insertedId);
@@ -545,8 +560,10 @@ class Gantt extends Widget {
     _appendCustomFields(data) {
         const modelData = this._tasksOption && this._tasksOption._getItems();
         const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+        const invertedData = this.getInvertedData(modelData, keyGetter);
         return data.reduce((previous, item) => {
-            const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === keyGetter(item))[0];
+            const key = keyGetter(item);
+            const modelItem = invertedData[key];
             if(!modelItem) {
                 previous.push(item);
             } else {
@@ -559,6 +576,17 @@ class Gantt extends Widget {
             return previous;
         }, []);
     }
+    getInvertedData(data, keyGetter) {
+        const inverted = { };
+        if(data) {
+            for(let i = 0; i < data.length; i++) {
+                const dataItem = data[i];
+                const key = keyGetter(dataItem);
+                inverted[key] = dataItem;
+            }
+        }
+        return inverted;
+    }
     _updateTreeListDataSource() {
         if(!this._skipUpdateTreeListDataSource()) {
             const dataSource = this.option('tasks.dataSource');
@@ -568,6 +596,9 @@ class Gantt extends Widget {
     }
     _skipUpdateTreeListDataSource() {
         return this.option('validation.autoUpdateParentTasks');
+    }
+    _selectTreeListRows(keys) {
+        this._treeList?.selectRows(keys);
     }
     // custom fields cache updating
     _addCustomFieldsDataFromCache(key, data) {
@@ -643,7 +674,7 @@ class Gantt extends Widget {
             coreArgs.cancel = args.cancel;
             coreArgs.values = this._convertMappedToCoreData(optionName, args.values);
             if(optionName === GANTT_TASKS) {
-                this._saveCustomFieldsDataToCache(GANTT_NEW_TASK_CACHE_KEY, args.newValues);
+                this._saveCustomFieldsDataToCache(GANTT_NEW_TASK_CACHE_KEY, args.values);
             }
         }
     }
@@ -1146,6 +1177,7 @@ class Gantt extends Widget {
     }
 
     _clean() {
+        this._ganttView?._ganttViewCore.cleanMarkup();
         delete this._ganttView;
         delete this._dialogInstance;
         super._clean();
@@ -1532,7 +1564,6 @@ class Gantt extends Widget {
         // eslint-disable-next-line spellcheck/spell-checker
         this._ganttView._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
     }
-
     updateDimensions() {
         this._setInnerElementsWidth();
     }
@@ -1567,7 +1598,7 @@ class Gantt extends Widget {
                 this._setGanttViewOption('firstDayOfWeek', args.value);
                 break;
             case 'selectedRowKey':
-                this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(args.value));
+                this._selectTreeListRows(this._getArrayFromOneElement(args.value));
                 break;
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();

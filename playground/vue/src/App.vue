@@ -29,7 +29,6 @@ export default {
 
 
 <style lang="scss">
-@import url(./artifacts/css/dx.common.css);
 @import url(./artifacts/css/dx.light.css);
 </style>
 

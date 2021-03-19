@@ -7,7 +7,6 @@ QUnit.testStart(() => {
             </div>');
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import translator from 'animation/translator';

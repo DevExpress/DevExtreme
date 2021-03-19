@@ -4,7 +4,7 @@ import fx from 'animation/fx';
 import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
 
-import 'common.css!';
+import 'generic_light.css!';
 
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';

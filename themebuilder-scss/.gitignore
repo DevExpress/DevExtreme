@@ -9,3 +9,4 @@ dart-compiler/pubspec.lock
 dart-compiler/compiler
 dart-compiler/compiler.exe
 dart-compiler/metadata
+src/dart-compiler/metadata

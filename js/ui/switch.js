@@ -38,6 +38,7 @@ const Switch = Editor.inherit({
         const move = function(value, e) {
             e.preventDefault();
             e.stopPropagation();
+            this._saveValueChangeEvent(e);
             this._animateValue(value);
         };
         return extend(this.callBase(), {

@@ -2,7 +2,6 @@ import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 
-import 'common.css!';
 import 'generic_light.css!';
 import Pager from 'ui/pager';
 import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js';
@@ -584,6 +583,28 @@ function() {
         assert.equal(instance._pages.length, 6, 'length 6');
         assert.equal(instance._pages[0].value(), 1, 'first page value');
         assert.equal(instance._pages[1].value(), 2, 'second page value');
+    });
+
+    // T966318
+    QUnit.test('Pager does not display duplicated page numbers', function(assert) {
+        const $pager = $('#container').dxPager({
+            pageSizes: [10, 20, 50],
+            pageSize: 50,
+            pageCount: 2000,
+        });
+        const instance = $pager.dxPager('instance');
+        instance.option('pageIndex', 1999);
+
+        instance.option('pageCount', 10000);
+        instance.option('pageSize', 10);
+
+        instance.option('pageCount', 2000);
+        instance.option('pageSize', 50);
+
+        assert.equal(instance.selectedPage.index, 3, '3 index selected page');
+        assert.equal(instance._pages.length, 5, 'length 5');
+        assert.equal(instance._pages[3].value(), 1999, 'second last page value');
+        assert.equal(instance._pages[4].value(), 2000, 'lastpage page value');
     });
 
     QUnit.test('Selected page is not reset_B237051', function(assert) {
@@ -1253,6 +1274,33 @@ function() {
         pager._dimensionChanged();
 
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
+    });
+
+    // T962160
+    QUnit.test('Show info after pagesizes change', function(assert) {
+        const $pager = $('#container').dxPager({
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 200,
+            infoText: 'Page {0} of {1} ({2} items)',
+        });
+
+        const pager = $pager.dxPager('instance');
+
+        const optimalPagerWidth = pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() + 20;
+        $('#container').width(optimalPagerWidth);
+        pager._dimensionChanged();
+        assert.ok(pager._$info.length === 1 && pager._$info.css('display') !== 'none', 'info element is visible');
+
+        $(pager._pages[4]._$page).trigger('dxclick');
+        pager._dimensionChanged();
+        assert.ok(pager._$info.length === 0 || pager._$info.css('display') === 'none', 'info element is hidden');
+
+        $(pager._pages[0]._$page).trigger('dxclick');
+        pager._dimensionChanged();
+        assert.ok(pager._$info.length === 1 && pager._$info.css('display') !== 'none', 'info element is visible');
     });
 
     QUnit.test('Apply light mode when pager is first rendered', function(assert) {

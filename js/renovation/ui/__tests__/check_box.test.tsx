@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
-import themes from '../../../ui/themes';
+import { current } from '../../../ui/themes';
 import {
   clear as clearEventHandlers,
 } from '../../test_utils/events_mock';
@@ -605,7 +605,7 @@ describe('CheckBox', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (devices as any).isSimulator.mockImplementation(() => false);
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-        ((themes as any).current as Mock).mockImplementation(() => 'generic');
+        (current as Mock).mockImplementation(() => 'generic');
       });
 
       afterEach(() => jest.resetAllMocks());
@@ -613,13 +613,13 @@ describe('CheckBox', () => {
       describe('useInkRiple', () => {
         it('should be true if material theme', () => {
           // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-          ((themes as any).current as Mock).mockImplementation(() => 'material');
+          (current as Mock).mockImplementation(() => 'material');
           expect(getDefaultOptions().useInkRipple).toBe(true);
         });
 
         it('should be false if theme is not material', () => {
           // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-          ((themes as any).current as Mock).mockImplementation(() => 'generic');
+          (current as Mock).mockImplementation(() => 'generic');
           expect(getDefaultOptions().useInkRipple).toBe(false);
         });
       });

@@ -45,6 +45,8 @@ const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
 
 const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
 
+const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
+
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
@@ -284,6 +286,7 @@ const Popup = Overlay.inherit({
             this._$title = this._renderTemplateByType('titleTemplate', items, $title).addClass(POPUP_TITLE_CLASS);
             this._renderDrag();
             this._executeTitleRenderAction(this._$title);
+            this._$title.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
         } else if(this._$title) {
             this._$title.detach();
         }
@@ -354,6 +357,7 @@ const Popup = Overlay.inherit({
             this._createComponent($button, Button, {
                 icon: 'close',
                 onClick: this._createToolbarItemAction(undefined),
+                stylingMode: 'text',
                 integrationOptions: {}
             });
             $(container).append($button);
@@ -397,11 +401,15 @@ const Popup = Overlay.inherit({
             }
         });
 
-        if(toolbar === 'top' && this.option('showCloseButton') && this.option('showTitle')) {
+        if(toolbar === 'top' && this._hasCloseButton()) {
             toolbarsItems.push(this._getCloseButton());
         }
 
         return toolbarsItems;
+    },
+
+    _hasCloseButton() {
+        return this.option('showCloseButton') && this.option('showTitle');
     },
 
     _getLocalizationKey(itemType) {

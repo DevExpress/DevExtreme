@@ -6,7 +6,6 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 
 import 'ui/pivot_grid/ui.pivot_grid';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

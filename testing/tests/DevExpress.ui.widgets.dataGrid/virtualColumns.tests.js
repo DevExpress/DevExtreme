@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import 'ui/data_grid/ui.data_grid';
-import 'common.css!';
 import 'generic_light.css!';
 import { DataSource } from 'data/data_source/data_source';
 import dataSourceAdapter from 'ui/data_grid/ui.data_grid.data_source_adapter';

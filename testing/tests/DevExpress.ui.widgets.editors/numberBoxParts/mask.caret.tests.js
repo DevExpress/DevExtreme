@@ -78,6 +78,8 @@ QUnit.module('format caret', () => {
         assert.deepEqual(maskCaret.getCaretAfterFormat('12.34 mil', '12.34 mil', 2, customFormat), { start: 2, end: 2 }, 'enter 2 before separator');
         assert.deepEqual(maskCaret.getCaretAfterFormat('12.34 mil', '12.34 mil', 4, customFormat), { start: 4, end: 4 }, 'enter 3 after separator');
         assert.deepEqual(maskCaret.getCaretAfterFormat('12.34 mil', '12.34 mil', 5, customFormat), { start: 5, end: 5 }, 'enter 4 in the the end of expression');
+
+        assert.deepEqual(maskCaret.getCaretAfterFormat('. 1.50', '. 1.350', 5, '\'.\' 0.00'), { start: 5, end: 5 }, 'enter 3 after separator');
     });
 });
 

@@ -480,7 +480,7 @@ QUnit.test('dxscrollwheel did not prevent event', function(assert) {
     QUnit.module('wheel locker', moduleConfig);
 
     const wheelMove = function($element, shiftKey) {
-        pointerMock($element).start().wheel(20, shiftKey);
+        pointerMock($element).start().wheel(20, { shiftKey });
     };
 
     const WHEEL_UNLOCK_TIMEOUT = 400;

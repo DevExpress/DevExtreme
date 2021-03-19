@@ -6,7 +6,6 @@ import GestureEmitter from 'events/gesture/emitter.gesture.js';
 import animationFrame from 'animation/frame';
 import translator from 'animation/translator';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/draggable';
 import 'ui/scroll_view';

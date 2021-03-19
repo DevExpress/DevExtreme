@@ -324,6 +324,35 @@ QUnit.module('Events', function() {
         assert.strictEqual(spy.callCount, 3, 'onValueChanged is called'); // group is valid
     });
 
+    // T978958
+    QUnit.test('onValueChanged after change group operation from negative to positive and remove child', function(assert) {
+        // arrange
+        const container = $('#container');
+        const onValueChangedSpy = sinon.spy();
+
+
+        const filterBuilder = container.dxFilterBuilder({
+            value: ['!', [['Zipcode', '=', 1], 'or', ['Zipcode', '=', 2]]],
+            fields: fields,
+            onValueChanged: onValueChangedSpy
+        }).dxFilterBuilder('instance');
+
+        // act
+        const $groupButton = container.find('.' + FILTER_BUILDER_GROUP_OPERATION_CLASS);
+        clickByButtonAndSelectMenuItem($groupButton, 0);
+
+        // assert
+        assert.strictEqual(onValueChangedSpy.callCount, 1, 'onValueChanged is called');
+
+        // act
+        const $removeButton = $('.' + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0);
+        $removeButton.trigger('dxclick');
+
+        // assert
+        assert.strictEqual(onValueChangedSpy.callCount, 2, 'onValueChanged is called');
+        assert.deepEqual(filterBuilder.option('value'), ['Zipcode', '=', 2], 'value');
+    });
+
     QUnit.test('onInitialized', function(assert) {
         assert.expect(1);
         $('#container').dxFilterBuilder({

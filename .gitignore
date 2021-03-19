@@ -6,6 +6,7 @@
 /js/localization/cldr-data
 /js/renovation/**/*.j.tsx
 /js/renovation/code_coverage
+/scss/bundles/*.scss
 bin
 node_modules
 obj

@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import CollectionWidget from './ui.collection_widget.edit';
 import { extend } from '../../core/utils/extend';
-import { isDefined } from '../../core/utils/type';
 import { update, insert, indexByKey } from '../../data/array_utils';
 import dataUtils from '../../data/utils';
 import { when } from '../../core/utils/deferred';
@@ -143,7 +142,7 @@ export default CollectionWidget.inherit({
     _insertByChange: function(keyInfo, items, change, isPartialRefresh) {
         when(isPartialRefresh || insert(keyInfo, items, change.data, change.index)).done(() => {
             this._beforeItemElementInserted(change);
-            this._renderItem(isDefined(change.index) ? change.index : items.length, change.data);
+            this._renderItem(change.index ?? items.length, change.data);
             this._afterItemElementInserted();
             this._correctionIndex++;
         });

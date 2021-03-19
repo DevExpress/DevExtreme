@@ -5,7 +5,6 @@ import { value as setViewPort } from 'core/utils/view_port';
 import Toast from 'ui/toast';
 import devices from 'core/devices.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const TOAST_CLASS = 'dx-toast';

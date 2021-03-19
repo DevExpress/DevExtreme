@@ -4,9 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/colors" as *;
+@use "../../base/buttonGroup";
 
 // adduse
-
 
 .dx-button-mode-contained {
   &.dx-buttongroup-item {

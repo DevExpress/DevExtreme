@@ -4,8 +4,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/mixins" as *;
+@use "../../base/widget";
 
 // adduse
+
 .dx-widget {
   @include dx-base-typography();
 }

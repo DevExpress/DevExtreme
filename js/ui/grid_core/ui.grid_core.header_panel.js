@@ -4,10 +4,13 @@ import { ColumnsView } from './ui.grid_core.columns_view';
 import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import { triggerResizeEvent } from '../../events/visibility_change';
+import messageLocalization from '../../localization/message';
 
 import '../drop_down_menu';
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
+
+const TOOLBAR_ARIA_LABEL = '-ariaToolbar';
 
 const HeaderPanel = ColumnsView.inherit({
     _getToolbarItems: function() {
@@ -50,8 +53,11 @@ const HeaderPanel = ColumnsView.inherit({
 
     _renderCore: function() {
         if(!this._toolbar) {
-            this.element().addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
-            this._toolbar = this._createComponent($('<div>').appendTo(this.element()), Toolbar, this._toolbarOptions);
+            const $headerPanel = this.element();
+            $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
+            const label = messageLocalization.format(this.component.NAME + TOOLBAR_ARIA_LABEL);
+            const $toolbar = $('<div>').attr('aria-label', label).appendTo($headerPanel);
+            this._toolbar = this._createComponent($toolbar, Toolbar, this._toolbarOptions);
         } else {
             this._toolbar.option(this._toolbarOptions);
         }

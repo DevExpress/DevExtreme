@@ -39,6 +39,12 @@ export const intersection = function(a, b) {
     return result;
 };
 
+export const uniqueValues = function(data) {
+    return data.filter(function(item, position) {
+        return data.indexOf(item) === position;
+    });
+};
+
 export const removeDuplicates = function(from, what) {
     if(!Array.isArray(from) || from.length === 0) {
         return [];

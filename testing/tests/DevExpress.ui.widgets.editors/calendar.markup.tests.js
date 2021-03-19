@@ -4,7 +4,6 @@ import { isDefined, isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import windowUtils from 'core/utils/window';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/calendar';
 

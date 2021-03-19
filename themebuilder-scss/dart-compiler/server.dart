@@ -19,9 +19,34 @@ class Server {
   void handleConnection(Socket client) async {
     Logger.log('connection from ${client.remoteAddress.address}:${client.remotePort}');
 
-    var request = await utf8.decoder.bind(client).join('');
-    var options = json.decode(request);
+    CompilerResult result;
 
+    try {
+      var request = await utf8.decoder.bind(client).join('');
+      var options = json.decode(request);
+      var keepAlive = options['keepAlive'] ?? false;
+      result = keepAlive ?
+        CompilerResult(null, null, 'keepAlive') :
+        CompileWithOptions(options);
+    } catch(e) {
+      Logger.log('the following error occured ${e.toString()}');
+      result = GetErroredCompilerResult(e);
+    }
+
+    try {
+      Logger.log('writing result');
+      client.write(json.encode(result)); 
+    } finally {
+      Logger.log('connection ${client.remoteAddress.address}:${client.remotePort} closed');
+      client.close();
+    }
+  }
+
+  CompilerResult GetErroredCompilerResult(dynamic e) {
+    return CompilerResult(null, null, e.toString());
+  }
+
+  CompilerResult CompileWithOptions(options) {
     var indexFileContent = options['index'].toString();
 
     var items = (options['items'] as List<dynamic>)
@@ -42,22 +67,10 @@ class Server {
       }
     }
 
-    CompilerResult result;
     Logger.log('compile with items: ${items.toString()}, file: ${file}');
-    try {
-      result = Compiler().compile(items, indexFileContent, SassOptions(file, data));
-      Logger.log('compiled successfully');
-    } catch(e) {
-      result = CompilerResult(null, null, e.toString());
-      Logger.log('compiled with error ${e.toString()}');
-    }
+    var result = Compiler().compile(items, indexFileContent, SassOptions(file, data));
+    Logger.log('compiled successfully');
 
-    try {
-      Logger.log('writing result');
-      client.write(json.encode(result)); 
-    } finally {
-      Logger.log('connection ${client.remoteAddress.address}:${client.remotePort} closed');
-      client.close();
-    }
+    return result;
   }
 }

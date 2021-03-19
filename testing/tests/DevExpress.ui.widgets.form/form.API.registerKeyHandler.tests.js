@@ -2,7 +2,6 @@ import $ from 'jquery';
 
 import 'ui/form/ui.form';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

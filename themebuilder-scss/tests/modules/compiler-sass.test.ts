@@ -2,8 +2,6 @@ import sass from 'sass';
 
 import Compiler from '../../src/modules/compiler';
 
-jest.mock('fibers', () => undefined);
-
 jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   __esModule: true,
   metadata: {

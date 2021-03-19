@@ -18,9 +18,9 @@ export const viewFunction = ({ props, cell: Cell }: DateTableBody): JSX.Element 
   return (
     <Fragment>
       {viewData
-        .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
+        .groupedData.map(({ dateTable, allDayPanel, groupIndex }, index) => (
           <Fragment key={getKeyByGroup(groupIndex)}>
-            {getIsGroupedAllDayPanel(viewData, groupIndex) && (
+            {getIsGroupedAllDayPanel(viewData, index) && (
               <AllDayPanelTableBody
                 viewData={allDayPanel}
                 dataCellTemplate={dataCellTemplate}
@@ -37,7 +37,7 @@ export const viewFunction = ({ props, cell: Cell }: DateTableBody): JSX.Element 
                   endDate,
                   groups,
                   groupIndex: cellGroupIndex,
-                  index,
+                  index: cellIndex,
                   isFirstGroupCell,
                   isLastGroupCell,
                   key,
@@ -49,7 +49,7 @@ export const viewFunction = ({ props, cell: Cell }: DateTableBody): JSX.Element 
                     endDate={endDate}
                     groups={groups}
                     groupIndex={cellGroupIndex}
-                    index={index}
+                    index={cellIndex}
                     dataCellTemplate={dataCellTemplate}
                     key={key}
                   />

@@ -2,7 +2,6 @@ import $ from 'jquery';
 
 import { getWindow } from 'core/utils/window';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import {

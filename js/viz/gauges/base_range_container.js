@@ -3,7 +3,6 @@ import { BaseElement } from './base_indicators';
 import { isString } from '../../core/utils/type';
 
 const _Number = Number;
-const _abs = Math.abs;
 const _isArray = Array.isArray;
 const _isFinite = isFinite;
 
@@ -29,12 +28,11 @@ const BaseRangeContainer = BaseElement.inherit({
         const totalStart = translator.getDomain()[0];
         const totalEnd = translator.getDomain()[1];
         const totalDelta = totalEnd - totalStart;
-        const isNotEmptySegment = totalDelta >= 0 ? isNotEmptySegmentAsc : isNotEmptySegmentDesc;
+        const isValidSegment = totalDelta >= 0 ? isValidSegmentAsc : isValidSegmentDesc;
         const subtractSegment = totalDelta >= 0 ? subtractSegmentAsc : subtractSegmentDesc;
         let list = [];
         let ranges = [];
         let backgroundRanges = [{ start: totalStart, end: totalEnd }];
-        const threshold = _abs(totalDelta) / 1E4;
         const backgroundColor = isString(options.backgroundColor) ? options.backgroundColor : 'none';
         const width = options.width || {};
         const startWidth = _Number(width > 0 ? width : width.start);
@@ -51,7 +49,7 @@ const BaseRangeContainer = BaseElement.inherit({
             rangeOptions = rangeOptions || {};
             const start = translator.adjust(rangeOptions.startValue);
             const end = translator.adjust(rangeOptions.endValue);
-            if(_isFinite(start) && _isFinite(end) && isNotEmptySegment(start, end, threshold)) {
+            if(_isFinite(start) && _isFinite(end) && isValidSegment(start, end, rangeOptions)) {
                 result.push({ start: start, end: end, color: rangeOptions.color, classIndex: i });
             }
             return result;
@@ -182,12 +180,16 @@ function subtractSegmentDesc(segmentStart, segmentEnd, otherStart, otherEnd) {
     return result;
 }
 
-function isNotEmptySegmentAsc(start, end, threshold) {
-    return end - start >= threshold;
+function areEqualValues(start, end, { startValue, endValue }) {
+    return (endValue === startValue && startValue === start && end === start);
 }
 
-function isNotEmptySegmentDesc(start, end, threshold) {
-    return start - end >= threshold;
+function isValidSegmentAsc(start, end, options) {
+    return end - start > 0 || areEqualValues(start, end, options);
+}
+
+function isValidSegmentDesc(start, end, options) {
+    return start - end > 0 || areEqualValues(start, end, options);
 }
 
 export default BaseRangeContainer;

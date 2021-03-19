@@ -2,7 +2,6 @@ import $ from 'jquery';
 import 'ui/form/ui.form';
 import 'ui/form/ui.form.layout_manager';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';

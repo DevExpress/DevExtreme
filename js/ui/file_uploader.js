@@ -1061,7 +1061,7 @@ class FileUploader extends Editor {
                     return true;
                 }
             } else {
-                allowedType = allowedType.replace('*', '');
+                allowedType = allowedType.replace(new RegExp('\\*', 'g'), '');
 
                 if(file.type.match(new RegExp(allowedType, 'i'))) {
                     return true;
@@ -1442,7 +1442,7 @@ class FileUploadStrategyBase {
     }
 
     abortUpload(file) {
-        if(file._isError || file._isLoaded || file.isAborted) {
+        if(file._isError || file._isLoaded || file.isAborted || !file.uploadStarted) {
             return;
         }
 

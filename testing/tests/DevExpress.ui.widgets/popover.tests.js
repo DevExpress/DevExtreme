@@ -6,7 +6,6 @@ import positionUtils from 'animation/position';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 $('<style>.dx-popup-content { padding: 10px; }</style>').appendTo($('head'));

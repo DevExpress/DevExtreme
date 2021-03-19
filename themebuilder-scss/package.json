@@ -14,11 +14,9 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@types/clean-css": "^4.2.2",
-    "@types/fibers": "^3.1.0",
     "autoprefixer": "^9.8.0",
     "bootstrap": "^4.3.1",
     "clean-css": "^4.2.3",
-    "fibers": "^5.0.0",
     "less": "^3.9.0",
     "postcss": "^7.0.31",
     "sass": "^1.26.3",
@@ -26,8 +24,10 @@
   },
   "scripts": {
     "test": "jest --coverage --verbose --runInBand",
+    "test-dart": "npm run dart && jest --verbose --runInBand --config=jest-dart.config.js",
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
+    "dart": "ts-node --files=true tests/run-dart.ts",
     "build-ts": "tsc",
     "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
   },

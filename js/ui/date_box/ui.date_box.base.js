@@ -1,7 +1,7 @@
 import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
 import registerComponent from '../../core/component_registrator';
-import { isDefined, isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
+import { isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
 import { createTextElementHiddenCopy } from '../../core/utils/dom';
 import { each } from '../../core/utils/iterator';
 import { compare as compareVersions } from '../../core/utils/version';
@@ -487,7 +487,7 @@ const DateBox = DropDownEditor.inherit({
         }
 
         const parsedDate = this._getParsedDate(text);
-        const value = currentValue || this._getDateByDefault();
+        const value = currentValue ?? this._getDateByDefault();
         const type = this.option('type');
         const newValue = uiDateUtils.mergeDates(value, parsedDate, type);
         const date = parsedDate && type === 'time' ? newValue : parsedDate;
@@ -511,7 +511,7 @@ const DateBox = DropDownEditor.inherit({
         const displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
         const parsedText = this._strategy.getParsedText(text, displayFormat);
 
-        return isDefined(parsedText) ? parsedText : undefined;
+        return parsedText ?? undefined;
     },
 
     _applyInternalValidation(value) {
@@ -723,7 +723,7 @@ const DateBox = DropDownEditor.inherit({
 
     _updateValue: function(value) {
         this.callBase();
-        this._applyInternalValidation(value || this.dateOption('value'));
+        this._applyInternalValidation(value ?? this.dateOption('value'));
     },
 
     dateValue: function(value, dxEvent) {

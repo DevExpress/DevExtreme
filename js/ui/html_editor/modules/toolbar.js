@@ -136,9 +136,10 @@ if(Quill) {
 
         _getFormatHandlers() {
             return {
-                clear: (e) => {
+                clear: ({ event }) => {
                     const range = this.quill.getSelection();
                     if(range) {
+                        this._editorInstance._saveValueChangeEvent(event);
                         this.quill.removeFormat(range);
                         this.updateFormatWidgets();
                     }
@@ -389,7 +390,7 @@ if(Quill) {
 
         get _defaultPasteIndex() {
             const selection = this.quill.getSelection();
-            return isDefined(selection?.index) ? selection.index : this.quill.getLength();
+            return selection?.index ?? this.quill.getLength();
         }
 
         get _imageFormItems() {

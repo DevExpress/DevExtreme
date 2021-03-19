@@ -39,7 +39,6 @@ import 'ui/slider';
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
 
-import 'common.css!';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 

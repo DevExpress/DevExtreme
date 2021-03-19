@@ -9,6 +9,10 @@
 
   &.dx-dropdowneditor-field-clickable {
     cursor: pointer;
+
+    .dx-texteditor-input {
+      cursor: pointer;
+    }
   }
 }
 

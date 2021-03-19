@@ -15,7 +15,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -298,8 +297,8 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.ok($draggableElement.find('.dx-data-row').children().first().hasClass('my-cell'), 'cell with custom class');
     });
 
-    QUnit.test('\'rowDragging\' option changing', function(assert) {
-    // arrange
+    QUnit.test('\'rowDragging.allowReordering\' option changing (false -> true)', function(assert) {
+        // arrange
         const $testElement = $('#container');
 
         this.options.rowDragging = {
@@ -331,6 +330,43 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         // assert
         assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 1, 'there is placeholder');
         assert.strictEqual($('body').children('.dx-sortable-dragging').length, 1, 'there is dragging element');
+    });
+
+    // T972509
+    QUnit.test('\'rowDragging.allowReordering\' option changing (true -> false)', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.rowDragging = {
+            allowReordering: true
+        };
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+
+        // assert
+        assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 1, 'there is placeholder');
+        assert.strictEqual($('body').children('.dx-sortable-dragging').length, 1, 'there is dragging element');
+
+        // arrange
+        pointer.up();
+
+        this.options.rowDragging = {
+            allowReordering: false
+        };
+
+        rowsView.optionChanged({ name: 'rowDragging' });
+
+        // act
+        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+
+        // assert
+        assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 0, 'there is not placeholder');
+        assert.strictEqual($('body').children('.dx-sortable-dragging').length, 0, 'there is not dragging element');
+        assert.notStrictEqual($(rowsView.getRowElement(0)).children().first().css('cursor'), 'pointer', 'cursor is not pointer');
     });
 
     QUnit.test('Dragging row to the last position - row should be before the freespace row', function(assert) {

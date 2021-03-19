@@ -4,9 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+@use "../../base/slideOut";
 
 // adduse
-
 
 $material-slideout-menu-icon-size: $material-base-icon-size + $material-slideout-menu-icon-oversize;
 

@@ -84,7 +84,7 @@ export default class MetadataGenerator {
   }
 
   static getBundleContent(content: string): string {
-    return content.replace(/(..\/widgets\/(material|generic))/, '$1/tb_index');
+    return content.replace(/(..\/widgets\/(material|generic))"/, '$1/tb_index"');
   }
 
   static getMainColorsFileContent(content: string, theme: string): string {

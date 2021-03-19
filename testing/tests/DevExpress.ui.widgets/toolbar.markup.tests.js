@@ -6,7 +6,6 @@ import $ from 'jquery';
 import Toolbar from 'ui/toolbar';
 import themes from 'ui/themes';
 
-import 'common.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id=\'toolbar\'></div>';

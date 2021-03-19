@@ -1,4 +1,3 @@
-@use "../widgets/generic/tb_index" with (
-$color: "light",
-$size: "default"
-);
+@use "../widgets/generic/colors" with ($color: "light");
+@use "../widgets/generic/sizes" with ($size: "default");
+@use "../widgets/generic/tb_index";

@@ -9,8 +9,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
+import { normalizeKeyName } from 'events/utils/index';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/select_box';
 
@@ -45,6 +45,7 @@ QUnit.testStart(() => {
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
+const CLEAR_BUTTON_AREA_SELECTOR = '.dx-clear-button-area';
 const FOCUSED_STATE_SELECTOR = '.dx-state-focused';
 const KEY_DOWN = 'ArrowDown';
 const KEY_UP = 'ArrowUp';
@@ -993,57 +994,6 @@ QUnit.module('ContentReady event', {
         this.clock.restore();
     }
 }, () => {
-    QUnit.skip('ContentReady should be raised when widget non-dropdown part is rendered (deferRendering is true)', function(assert) {
-        assert.expect(4);
-
-        $('#autocomplete').dxAutocomplete({
-            value: 'text',
-            focusStateEnabled: true,
-            deferRendering: true,
-            onContentReady: (e) => {
-                assert.ok(true, 'ContentReady is raised');
-                assert.ok(e.component, 'Component info should be passed');
-                assert.ok(e.element, 'Element info should be passed');
-                assert.strictEqual($(e.element).text(), 'text', 'Text is correct');
-            }
-        });
-    });
-
-    QUnit.test('ContentReady should be raised when list is rendered after its first opening (deferRendering is true)', function(assert) {
-        assert.expect(3);
-
-        const autocomplete = $('#autocomplete').dxAutocomplete({
-            dataSource: ['item 1', 'item 2', 'item 3'],
-            searchTimeout: 0,
-            focusStateEnabled: true,
-            deferRendering: true
-        }).dxAutocomplete('instance');
-
-        autocomplete.on('contentReady', (e) => {
-            assert.ok(true, 'ContentReady is raised');
-            assert.ok(e.component, 'Component info should be passed');
-            assert.ok(e.element, 'Element info should be passed');
-        });
-
-        autocomplete.open();
-    });
-
-    QUnit.skip('ContentReady should be raised when list is rendered after its first opening (deferRendering is false)', function(assert) {
-        assert.expect(6);
-
-        $('#autocomplete').dxAutocomplete({
-            dataSource: ['item 1', 'item 2', 'item 3'],
-            searchTimeout: 0,
-            focusStateEnabled: true,
-            deferRendering: false,
-            onContentReady: (e) => {
-                assert.ok(true, 'ContentReady is raised');
-                assert.ok(e.component, 'Component info should be passed');
-                assert.ok(e.element, 'Element info should be passed');
-            }
-        }).dxAutocomplete('instance');
-    });
-
     QUnit.test('ContentReady should be raised after items loading', function(assert) {
         assert.expect(5);
 
@@ -1519,23 +1469,6 @@ QUnit.module('regressions', {
         assert.strictEqual(selectionChangedStub.lastCall.args[0].selectedItem, null);
     });
 
-    QUnit.test('clear button should save valueChangeEvent', function(assert) {
-        const valueChangedHandler = sinon.spy();
-
-        this.instance.option({
-            items: ['item 1'],
-            value: 'item 1',
-            onValueChanged: valueChangedHandler,
-            showClearButton: true
-        });
-
-        const $clearButton = this.element.find('.dx-clear-button-area');
-        $clearButton.trigger('dxclick');
-
-        assert.equal(valueChangedHandler.callCount, 1, 'valueChangedHandler has been called');
-        assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
-    });
-
     QUnit.test('item initialization scenario', function(assert) {
         const instance = $('#autocomplete').dxAutocomplete({
             items: ['a', 'b', 'c']
@@ -1636,3 +1569,109 @@ QUnit.module('widget sizing render', {
     });
 });
 
+QUnit.module('valueChanged should receive correct event', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        this.valueChangedHandler = sinon.stub();
+        const initialOptions = {
+            items: ['11', '22'],
+            searchTimeout: 0,
+            onValueChanged: this.valueChangedHandler,
+            valueChangeEvent: ''
+        };
+        this.init = (options) => {
+            this.$element = $('#widget').dxAutocomplete(options);
+            this.instance = this.$element.dxAutocomplete('instance');
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+            this.getListItems = () => $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, initialOptions, options));
+        };
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', 'new value');
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+
+        this.init(initialOptions);
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('on program change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on item select using click (T963574)', function(assert) {
+        this.keyboard.type('1');
+
+        const $listItems = this.getListItems();
+        const $firstItem = $listItems.eq(0);
+        $firstItem.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $firstItem);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on item select using enter', function(assert) {
+        this.keyboard
+            .type('1')
+            .press('down')
+            .press('enter');
+
+        const $listItems = this.getListItems();
+        const $firstItem = $listItems.eq(0);
+
+        this.checkEvent(assert, 'keydown', $firstItem, 'enter');
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on item select using tab', function(assert) {
+        this.keyboard
+            .type('1')
+            .press('down')
+            .press('tab');
+
+        this.checkEvent(assert, 'keydown', this.$input, 'tab');
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on input', function(assert) {
+        this.instance.option('valueChangeEvent', 'input');
+
+        this.keyboard.type('a');
+
+        this.checkEvent(assert, 'input', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on clear button', function(assert) {
+        this.reinit({
+            value: '11',
+            showClearButton: true
+        });
+
+        const $clearButton = this.$element.find(CLEAR_BUTTON_AREA_SELECTOR);
+        $clearButton.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $clearButton);
+        this.testProgramChange(assert);
+    });
+});

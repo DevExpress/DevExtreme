@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import NumberBox from 'ui/number_box';
 
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

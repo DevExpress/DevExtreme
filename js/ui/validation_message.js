@@ -32,6 +32,7 @@ const ValidationMessage = Overlay.inherit({
             mode: 'auto',
             validationErrors: undefined,
             positionRequest: undefined,
+            describedElement: undefined,
             boundary: undefined,
             offset: { h: 0, v: 0 }
         });
@@ -53,7 +54,8 @@ const ValidationMessage = Overlay.inherit({
     },
 
     _updateContentId() {
-        const contentId = $(this.option('container')).attr('aria-describedby');
+        const describedElement = this.option('describedElement') || this.option('container');
+        const contentId = $(describedElement).attr('aria-describedby');
 
         this.$content()
             .addClass(INVALID_MESSAGE_CONTENT)

@@ -97,21 +97,22 @@ function calculateParams(barsArea, count, percentWidth, fixedBarWidth) {
     let width;
 
     if(fixedBarWidth) {
-        width = _min(fixedBarWidth, round(barsArea / count));
-        spacing = count > 1 ? round((barsArea - width * count) / (count - 1)) : 0;
+        width = _min(fixedBarWidth, barsArea / count);
+        spacing = count > 1 ? round((barsArea - round(width) * count) / (count - 1)) : 0;
     } else if(isDefined(percentWidth)) {
-        width = round(barsArea * percentWidth / count);
-        spacing = round(count > 1 ? (barsArea - barsArea * percentWidth) / (count - 1) : 0);
+        width = barsArea * percentWidth / count;
+        spacing = count > 1 ? round((barsArea - barsArea * percentWidth) / (count - 1)) : 0;
     } else {
         spacing = round(barsArea / count * 0.2);
-        width = round((barsArea - spacing * (count - 1)) / count);
+        width = (barsArea - spacing * (count - 1)) / count;
     }
 
-    return { width: width > 1 ? width : 1, spacing: spacing, middleIndex: count / 2 };
+    return { width: width > 1 ? round(width) : 1, spacing: spacing, middleIndex: count / 2, rawWidth: width };
 }
 
 function getOffset(stackIndex, parameters) {
-    return ((stackIndex - parameters.middleIndex) + 0.5) * parameters.width - (((parameters.middleIndex - stackIndex) - 0.5) * parameters.spacing);
+    const width = parameters.rawWidth < 1 ? parameters.rawWidth : parameters.width;
+    return ((stackIndex - parameters.middleIndex) + 0.5) * width - (((parameters.middleIndex - stackIndex) - 0.5) * parameters.spacing);
 }
 
 function correctPointCoordinates(points, width, offset) {

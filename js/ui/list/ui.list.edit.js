@@ -49,13 +49,13 @@ const ListEdit = ListBase.inherit({
         };
 
         const enter = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.enter.apply(this, arguments);
             }
         };
 
         const space = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.space.apply(this, arguments);
             }
         };
@@ -356,12 +356,9 @@ const ListEdit = ListBase.inherit({
     * @return object
     * @hidden
     */
-    // TODO: rename & rework because method return itemData but named as itemElement
     getItemByIndex(index) {
         return this._editStrategy.getItemDataByIndex(index);
     }
-
-
 });
 
 export default ListEdit;

@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 
 import { runThemesSharedTests } from './pivotGrid.themes.sharedTests.js';

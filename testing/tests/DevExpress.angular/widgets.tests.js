@@ -10,7 +10,6 @@ import positionUtils from 'animation/position';
 import ValidationGroup from 'ui/validation_group';
 import eventsEngine from 'events/core/events_engine';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'integration/angular';
 

@@ -1,4 +1,3 @@
-import 'common.css!';
 import '../../helpers/ignoreQuillTimers.js';
 import './htmlEditorParts/initFixture.js';
 

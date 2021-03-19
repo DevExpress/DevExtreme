@@ -1,6 +1,5 @@
 require('../../helpers/qunitPerformanceExtension.js');
 
-require('common.css!');
 require('generic_light.css!');
 
 const $ = require('jquery');

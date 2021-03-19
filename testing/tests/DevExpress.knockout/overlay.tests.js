@@ -6,7 +6,6 @@ require('ui/overlay');
 require('ui/slider');
 require('integration/knockout');
 
-require('common.css!');
 require('generic_light.css!');
 
 QUnit.testStart(function() {

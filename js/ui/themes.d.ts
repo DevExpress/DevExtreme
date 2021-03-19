@@ -45,3 +45,6 @@ export default class themes {
     static initialized(callback: Function): void;
     static isMaterial(theme: string): boolean;
 }
+
+export function current(): string;
+export function isMaterial(theme: string): boolean;

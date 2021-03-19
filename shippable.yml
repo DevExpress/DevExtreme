@@ -16,6 +16,7 @@ env:
     - TARGET=test CONSTEL=ui.editors TZ='Japan'
     - TARGET=test CONSTEL=ui.editors TZ='Australia/ACT'
     - TARGET=test CONSTEL=ui.grid
+    - TARGET=test CONSTEL=ui.grid TZ='PST8PDT'
     - TARGET=test CONSTEL=ui.scheduler
     - TARGET=test CONSTEL=ui.scheduler TZ='PST8PDT'
     - TARGET=test CONSTEL=ui.scheduler TZ='Japan'
@@ -43,8 +44,7 @@ env:
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=renovation
     - TARGET=test_jest
     - TARGET=native_components
-    - TARGET=test_scss
-    - TARGET=font_icons_test
+    - TARGET=test_styles
 
 build:
 

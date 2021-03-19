@@ -11,7 +11,6 @@ import 'ui/lookup';
 import 'ui/text_area';
 import 'ui/radio_group';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

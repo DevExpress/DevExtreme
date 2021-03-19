@@ -1003,7 +1003,7 @@ function setEllipsis(text, ellipsisMaxWidth, options) {
     }
 }
 
-function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
+function wordWrap(text, maxWidth, ellipsisMaxWidth, options, lastStepBreakIndex) {
     const wholeText = text.value;
     let breakIndex;
     if(options.wordWrap !== 'none') {
@@ -1013,7 +1013,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     let restLines = [];
     let restText;
 
-    if(isFinite(breakIndex)) {
+    if(isFinite(breakIndex) && !(lastStepBreakIndex === 0 && breakIndex === 0)) {
         setNewText(text, breakIndex, '');
 
         const newTextOffset = wholeText[breakIndex] === ' ' ? 1 : 0;
@@ -1038,7 +1038,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
             restText.stroke && (restText.stroke.textContent = restString);
 
             if(restText.endBox > maxWidth) {
-                restLines = wordWrap(restText, maxWidth, ellipsisMaxWidth, options);
+                restLines = wordWrap(restText, maxWidth, ellipsisMaxWidth, options, breakIndex);
                 if(!restLines.length) {
                     return [];
                 }

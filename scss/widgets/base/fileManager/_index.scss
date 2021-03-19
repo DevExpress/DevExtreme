@@ -152,8 +152,9 @@
     }
   }
 
-  .dx-splitter-wrapper.dx-splitter-initial {
-    right: 3.5px;  // Half of dx-splitter-border width
+  .dx-splitter-wrapper.dx-splitter-initial,
+  .dx-splitter-wrapper.dx-splitter-inactive {
+    right: 3px;  // (dx-splitter-border width - dx-splitter width) / 2
   }
 
   .dx-filemanager-container {

@@ -47,6 +47,8 @@ const getMousePosition = (event) => ({
     y: event.pageY - $(window).scrollTop()
 });
 
+const GESTURE_COVER_CLASS = 'dx-gesture-cover';
+
 class ScrollHelper {
     constructor(orientation, component) {
         this._preventScroll = true;
@@ -152,8 +154,6 @@ class ScrollHelper {
 
     scrollByStep() {
         const that = this;
-        let nextScrollPosition;
-        let maxScrollPosition;
 
         if(that._$scrollableAtPointer && that._scrollSpeed) {
             if(that._$scrollableAtPointer.hasClass('dx-scrollable-container')) {
@@ -161,31 +161,19 @@ class ScrollHelper {
                 const scrollableInstance = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
 
                 if(scrollableInstance) {
-                    nextScrollPosition = scrollableInstance.scrollOffset()[that._limitProps.start];
-                    maxScrollPosition = scrollableInstance[this._scrollSizeProp]() - scrollableInstance[this._clientSizeProp]();
-
-                    nextScrollPosition += that._scrollSpeed;
+                    const nextScrollPosition = scrollableInstance.scrollOffset()[that._limitProps.start] + that._scrollSpeed;
 
                     scrollableInstance.scrollTo({ [that._limitProps.start]: nextScrollPosition });
                 }
             } else {
-                nextScrollPosition = that._$scrollableAtPointer[that._scrollValue]() + that._scrollSpeed;
-                maxScrollPosition = that._$scrollableAtPointer[0][this._scrollSizeProp] - that._$scrollableAtPointer[0][this._clientSizeProp];
+                const nextScrollPosition = that._$scrollableAtPointer[that._scrollValue]() + that._scrollSpeed;
 
                 that._$scrollableAtPointer[that._scrollValue](nextScrollPosition);
             }
 
             const dragMoveArgs = that._component._dragMoveArgs;
             if(dragMoveArgs) {
-                let scrollBy = this._scrollSpeed;
-
-                if(nextScrollPosition < 0) {
-                    scrollBy -= nextScrollPosition;
-                } else if(nextScrollPosition > maxScrollPosition) {
-                    scrollBy -= (nextScrollPosition - maxScrollPosition);
-                }
-
-                that._component._dragMoveHandler(dragMoveArgs, scrollBy);
+                that._component._dragMoveHandler(dragMoveArgs);
             }
         }
     }
@@ -624,6 +612,7 @@ const Draggable = DOMComponent.inherit({
 
         this._toggleDraggingClass(true);
         this._toggleDragSourceClass(true);
+        this._setGestureCoverCursor($dragElement.children());
         const isFixedPosition = $dragElement.css('position') === 'fixed';
 
         this._initPosition(extend({}, dragStartArgs, {
@@ -667,6 +656,10 @@ const Draggable = DOMComponent.inherit({
     _toggleDragSourceClass: function(value, $element) {
         const $sourceElement = $element || this._$sourceElement;
         $sourceElement && $sourceElement.toggleClass(this._addWidgetPrefix('source'), value);
+    },
+
+    _setGestureCoverCursor: function($element) {
+        $(`.${GESTURE_COVER_CLASS}`).css('cursor', $element.css('cursor'));
     },
 
     _getBoundOffset: function() {

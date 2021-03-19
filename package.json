@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "20.2.4",
+  "version": "20.2.6",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -28,13 +28,13 @@
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "devexpress-diagram": "2.0.10",
-    "devexpress-gantt": "2.0.18",
+    "devexpress-diagram": "2.0.18",
+    "devexpress-gantt": "2.0.25",
     "jszip": "^2.0.0 || ^3.0.0",
-    "devextreme-quill": "~0.9.8",
+    "devextreme-quill": "~0.10.3",
     "rrule": "2.6.6",
     "showdown": "^1.8.6",
-    "turndown": "^6.0.0",
+    "turndown": "^7.0.0",
     "preact": "^10.4.5"
   },
   "devDependencies": {
@@ -66,12 +66,12 @@
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
     "devextreme-generator": "1.0.132",
-    "devextreme-internal-tools": "^3.0.0",
+    "devextreme-internal-tools": "3.3.5",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^7.3.1",
     "eslint-config-airbnb-typescript": "^7.2.1",
-    "eslint-config-devextreme": "^0.1.14",
+    "eslint-config-devextreme": "^0.1.17",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jest": "^23.6.0",
     "eslint-plugin-jest-formatting": "^1.2.0",

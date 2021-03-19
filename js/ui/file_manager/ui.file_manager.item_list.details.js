@@ -8,6 +8,7 @@ import DataGrid from '../data_grid/ui.data_grid';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
+import { Deferred } from '../../core/utils/deferred';
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = 'dx-filemanager-details';
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-details-item-thumbnail';
@@ -91,14 +92,15 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             },
             showColumnLines: false,
             showRowLines: false,
-            columnHidingEnabled: true,
+            columnHidingEnabled: false,
             columns: this._createColumns(),
             onEditorPreparing: this._onEditorPreparing.bind(this),
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this),
             onFocusedRowChanged: this._onFilesViewFocusedRowChanged.bind(this),
-            onOptionChanged: this._onFilesViewOptionChanged.bind(this)
+            onOptionChanged: this._onFilesViewOptionChanged.bind(this),
+            onContentReady: () => this._refreshDeferred?.resolve()
         });
     }
 
@@ -131,15 +133,25 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         if(this._isDefaultColumn(columnOptions.dataField)) {
             const defaultConfig = extend(true, {}, DEFAULT_COLUMN_CONFIGS[columnOptions.dataField]);
             resultCssClass = defaultConfig.cssClass || '';
-            if(columnOptions.dataField === 'thumbnail') {
-                defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
-                defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
-            }
-            if(columnOptions.dataField === 'name') {
-                defaultConfig.cellTemplate = this._createNameColumnCell.bind(this);
-            }
-            if(columnOptions.dataField === 'size') {
-                defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
+            switch(columnOptions.dataField) {
+                case 'thumbnail':
+                    defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
+                    defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
+                    break;
+                case 'name':
+                    defaultConfig.cellTemplate = this._createNameColumnCell.bind(this);
+                    defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionName');
+                    break;
+                case 'size':
+                    defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
+                    defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionFileSize');
+                    defaultConfig.calculateSortValue = rowData => rowData.fileItem.isDirectory ? -1 : rowData.fileItem.size;
+                    break;
+                case 'dateModified':
+                    defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionDateModified');
+                    break;
+                default:
+                    break;
             }
             extend(true, result, defaultConfig);
         }
@@ -158,7 +170,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         ]);
 
         if(columnOptions.cssClass) {
-            resultCssClass = resultCssClass ? `${resultCssClass} ${columnOptions.cssClass}` : columnOptions.cssClass;
+            resultCssClass = `${resultCssClass} ${columnOptions.cssClass}`;
         }
 
         if(resultCssClass) {
@@ -426,6 +438,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         this._filesView.option(actualOptions);
+
+        this._refreshDeferred = new Deferred();
+        return this._refreshDeferred.promise();
     }
 
     getSelectedItems() {

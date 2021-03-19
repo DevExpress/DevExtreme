@@ -5,8 +5,6 @@ import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js'
 import dxrButton from 'renovation/ui/button.j';
 import dxButton from 'ui/button';
 
-import 'common.css!';
-
 QUnit.testStart(function() {
     const markup =
         '<div id="button"></div>\
@@ -113,15 +111,17 @@ QUnit.module('Button markup', createRenovationModuleConfig(dxButton, dxrButton),
         assert.ok($element.hasClass('test'));
     });
 
-    QUnit.test('previous type class is removed after type changed', function(assert) {
-        const $element = $('#button').dxButton({});
+    ['back', 'danger', 'default', 'normal', 'success'].forEach(type => {
+        QUnit.test(`previous type=${type} class is removed after type changed`, function(assert) {
+            const $element = $('#button').dxButton({});
 
-        $element.dxButton('option', 'type', 'custom-1');
-        assert.ok($element.hasClass('dx-button-custom-1'));
+            $element.dxButton('option', 'type', type);
+            assert.ok($element.hasClass(`dx-button-${type}`));
 
-        $element.dxButton('option', 'type', 'custom-2');
-        assert.ok($element.hasClass('dx-button-custom-2'));
-        assert.ok(!$element.hasClass('dx-button-custom-1'));
+            $element.dxButton('option', 'type', 'custom');
+            assert.ok($element.hasClass('dx-button-custom'));
+            assert.ok(!$element.hasClass(`dx-button-${type}`));
+        });
     });
 
     QUnit.test('icon', function(assert) {

@@ -5,7 +5,6 @@ import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import '../../helpers/xmlHttpRequestMock.js';
-import 'common.css!';
 import 'generic_light.css!';
 
 const { test } = QUnit;
@@ -1011,6 +1010,22 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
 
         this.clock.tick();
         assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
+    });
+    test('abortUpload callback should not rise for not uploading files', function(assert) {
+        const abortUploadSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            chunkSize: 20000,
+            abortUpload: abortUploadSpy
+        });
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(200);
+
+        $fileUploader.dxFileUploader('instance').reset();
+        this.clock.tick(200);
+
+        assert.strictEqual(abortUploadSpy.callCount, 0, '\'abortUpload\' callback was not rised');
     });
 });
 

@@ -1,6 +1,5 @@
 import $ from 'jquery';
 
-import 'common.css!';
 import '../../helpers/ignoreQuillTimers.js';
 
 QUnit.testStart(() => {

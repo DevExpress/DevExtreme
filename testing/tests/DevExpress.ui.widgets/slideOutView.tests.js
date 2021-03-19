@@ -8,13 +8,16 @@ import typeUtils from 'core/utils/type';
 import { animation } from 'ui/slide_out_view/ui.slide_out_view.animation';
 import pointerMock from '../../helpers/pointerMock.js';
 
-import 'common.css!';
 import 'ui/slide_out_view';
+
+import 'generic_light.css!';
 
 const SLIDEOUTVIEW_CLASS = 'dx-slideoutview';
 const SLIDEOUTVIEW_MENU_CONTENT_CLASS = 'dx-slideoutview-menu-content';
 const SLIDEOUTVIEW_CONTENT_CLASS = 'dx-slideoutview-content';
 const SLIDEOUTVIEW_SHIELD_CLASS = 'dx-slideoutview-shield';
+
+const GENERIC_BASE_BORDER_WIDTH = 1;
 
 const position = function($element) {
     return $element.position().left;
@@ -427,7 +430,7 @@ QUnit.module('shield', () => {
         const $content = $(instance.content());
         const $shield = $element.find('.' + SLIDEOUTVIEW_SHIELD_CLASS);
 
-        assert.equal($shield.offset().left, $content.offset().left, 'shield has correct position');
+        assert.equal($shield.offset().left, $content.offset().left + GENERIC_BASE_BORDER_WIDTH, 'shield has correct position');
     });
 
     QUnit.test('shield should have correct position after widget resize', function(assert) {
@@ -443,7 +446,7 @@ QUnit.module('shield', () => {
         $('#slideOutViewContainer').width(menuWidth * 2);
         resizeCallbacks.fire();
 
-        assert.equal($shield.offset().left, $content.offset().left, 'shield has correct position');
+        assert.equal($shield.offset().left, $content.offset().left + GENERIC_BASE_BORDER_WIDTH, 'shield has correct position');
     });
 });
 
@@ -457,7 +460,7 @@ QUnit.module('rtl', () => {
         const $content = $(instance.content());
         const $menu = $(instance.menuContent());
 
-        assert.equal(position($content), -$menu.width(), 'container rendered at correct position');
+        assert.equal(position($content) + GENERIC_BASE_BORDER_WIDTH, -$menu.width(), 'container rendered at correct position');
     });
 
     QUnit.test('content should be moved by swipe in rtl', function(assert) {
@@ -471,7 +474,7 @@ QUnit.module('rtl', () => {
         const pointer = pointerMock($content).start();
 
         pointer.swipeStart().swipe(-0.1);
-        assert.equal(position($content), -$menu.width() / 10, 'container moved');
+        assert.equal(position($content) + GENERIC_BASE_BORDER_WIDTH, -$menu.width() / 10, 'container moved');
     });
 
     QUnit.test('content should be moved by swipe in rtl with inverted position', function(assert) {
@@ -486,7 +489,7 @@ QUnit.module('rtl', () => {
         const pointer = pointerMock($content).start();
 
         pointer.swipeStart().swipe(0.1);
-        assert.equal(position($content), $menu.width() / 10, 'container moved');
+        assert.equal(position($content) + GENERIC_BASE_BORDER_WIDTH, $menu.width() / 10, 'container moved');
     });
 
     QUnit.test('menu position classes in rtl', function(assert) {

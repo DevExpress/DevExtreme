@@ -19,7 +19,6 @@ import ArrayStore from 'data/array_store';
 
 import 'ui/action_sheet';
 import 'ui/list';
-import 'common.css!';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';

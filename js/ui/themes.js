@@ -103,7 +103,7 @@ export function waitForThemeLoad(themeName) {
     }
 }
 
-function isPendingThemeLoaded() {
+export function isPendingThemeLoaded() {
     if(!pendingThemeName) {
         return true;
     }
@@ -248,7 +248,10 @@ export function current(options) {
         }
     } else {
         if(isAutoInit) {
-            waitForThemeLoad(ANY_THEME);
+            if(hasWindow()) {
+                waitForThemeLoad(ANY_THEME);
+            }
+
             themeReadyCallback.fire();
             themeReadyCallback.empty();
         } else {
@@ -428,3 +431,23 @@ export function setDefaultTimeout(timeout) {
     defaultTimeout = timeout;
 }
 
+/**
+ * Added default export according to our documentation
+ * https://js.devexpress.com/Documentation/ApiReference/Common/Utils/ui/themes/
+ * */
+export default {
+    setDefaultTimeout,
+    initialized,
+    resetTheme,
+    ready: themeReady,
+    waitWebFont,
+    isWebFontLoaded,
+    isDark,
+    isGeneric,
+    isMaterial,
+    detachCssClasses,
+    attachCssClasses,
+    current,
+    waitForThemeLoad,
+    isPendingThemeLoaded,
+};

@@ -178,16 +178,9 @@ function run_native_components {
     npx gulp react-compilation-check
 }
 
-function run_test_scss {
+function run_test_styles {
     npm i
-    npm run build-themes
-    cd themebuilder-scss
-    npm i && npm run build && npm run test
-}
-
-function run_font_icons_test {
-    npm i
-    npm run test-jest -- content.test.ts --coverage false --testPathPattern ./testing/FontIcons/content.test.ts
+    npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false
 }
 
 function start_runner_watchdog {

@@ -22,7 +22,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -2016,7 +2015,7 @@ QUnit.module('Rows view', {
         $testElement.height(300);
         const oldFunc = rowsView._renderScrollable;
         rowsView._renderScrollable = function() {
-            oldTableHeight = this._getTableElement().height();
+            oldTableHeight = this.getTableElement().height();
             oldFunc.call(rowsView);
         };
 
@@ -3988,8 +3987,8 @@ QUnit.module('Rows view with real dataController and columnController', {
             scrolling: {}
         };
 
-        this.setupDataGridModules = function() {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'grouping', 'virtualScrolling', 'pager', 'summary', 'masterDetail'], {
+        this.setupDataGridModules = function(modules) {
+            setupDataGridModules(this, modules || ['data', 'columns', 'rows', 'grouping', 'virtualScrolling', 'pager', 'summary', 'masterDetail'], {
                 initViews: true
             });
         };
@@ -5495,6 +5494,46 @@ QUnit.module('Rows view with real dataController and columnController', {
 
         clock.restore();
     });
+
+    // T969363
+    ['form', 'popup'].forEach(editMode => {
+        QUnit.test(`Column name should not be highlighted in form (${editMode} edit mode)`, function(assert) {
+            const clock = sinon.useFakeTimers();
+            const $testElement = $('#container');
+
+            // arrange
+            this.options = {
+                dataSource: [{ test: 'test' }],
+                searchPanel: {
+                    highlightSearchText: true,
+                    text: 'test'
+                },
+                editing: {
+                    mode: editMode,
+                    allowUpdating: true
+                }
+            };
+
+            this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editorFactory', 'masterDetail', 'search']);
+            this.rowsView.render($testElement);
+            clock.tick();
+
+            this.$element = () => {
+                return $testElement;
+            };
+
+            // act
+            this.editRow(0);
+            clock.tick();
+
+            // assert
+            const $form = $('.dx-form');
+            assert.ok($form.length, 'form was rendered');
+            assert.notOk($form.find('.dx-datagrid-search-text').length, 'no search text');
+
+            clock.restore();
+        });
+    });
 });
 
 QUnit.module('Virtual scrolling', {
@@ -6842,7 +6881,7 @@ QUnit.module('Scrollbar', {
         rowsView.render($('#container').css({ width: 100, height: 100 }));
 
         // arrange
-        if(devices.real().deviceType === 'desktop') {
+        if(devices.real().deviceType === 'desktop' && !devices.real().mac) {
             assert.ok(rowsView.getScrollbarWidth() > 0, 'scrollbar width more 0 for desktop');
         } else {
             assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');

@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 
-import 'common.css!';
 import 'ui/color_box/color_view';
 
 QUnit.testStart(function() {

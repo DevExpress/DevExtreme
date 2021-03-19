@@ -4,7 +4,6 @@ import $ from 'jquery';
 import CustomStore from 'data/custom_store';
 import ArrayStore from 'data/array_store';
 
-import 'common.css!';
 import 'ui/tree_view';
 
 const { testStart } = QUnit;

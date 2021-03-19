@@ -15,18 +15,9 @@
 @use "../overlay";
 
 
-$generic-popup-closebutton-offset: ($generic-popup-closebutton-size - $generic-popup-closebutton-icon-size) / 2;
-
 $generic-popup-toolbar-height: $generic-base-inline-widget-height;
 $generic-popup-toolbar-label-font-size: $generic-m-font-size;
 
-$generic-popup-closebutton-border-weight: $generic-base-border-width;
-$generic-popup-closebutton-icon-container-size: $generic-popup-closebutton-size - $generic-popup-closebutton-border-weight * 2;
-
-$generic-mobile-popup-closebutton-size: 37px;
-$generic-mobile-popup-closebutton-icon-size: 15px;
-$generic-mobile-popup-closebutton-offset: ($generic-mobile-popup-closebutton-size - $generic-mobile-popup-closebutton-icon-size) / 2;
-$generic-mobile-popup-closebutton-icon-container-size: $generic-mobile-popup-closebutton-size - $generic-popup-closebutton-border-weight * 2;
 
 .dx-popup-wrapper {
   & > .dx-overlay-content {
@@ -53,13 +44,28 @@ $generic-mobile-popup-closebutton-icon-container-size: $generic-mobile-popup-clo
     @include dx-toolbar-sizing($generic-popup-toolbar-height, $generic-popup-toolbartop-padding, $generic-popup-toolbar-label-font-size, $generic-popup-toolbar-item-spacing );
 
     box-shadow: none;
+
+    &.dx-has-close-button {
+      .dx-toolbar-after {
+        .dx-toolbar-button:nth-last-child(2) {
+          padding-right: 0;
+
+          .dx-rtl & {
+            padding-left: 0;
+          }
+        }
+      }
+    }
   }
 
   .dx-closebutton {
     display: block;
+    position: relative;
+    left: $generic-popup-closebutton-offset;
 
-    .dx-button-content {
-      padding: 0;
+    .dx-rtl & {
+      left: 0;
+      right: $generic-popup-closebutton-offset;
     }
 
     .dx-icon {
@@ -67,37 +73,6 @@ $generic-mobile-popup-closebutton-icon-container-size: $generic-mobile-popup-clo
     }
 
     @include dx-button-styling();
-    @include dx-button-styling-clear();
-
-    @mixin dx-closebutton-sizing($size, $offset, $icon-size, $icon-container-size) {
-      width: $size;
-      height: $size;
-      margin: 0 (-$offset) 0 $offset;
-
-      .dx-rtl & {
-        margin: 0 $offset 0 (-$offset);
-      }
-
-      .dx-icon {
-        @include dx-icon-sizing($icon-size, $icon-container-size);
-      }
-    }
-
-    @include dx-closebutton-sizing(
-      $generic-popup-closebutton-size,
-      $generic-popup-closebutton-offset,
-      $generic-popup-closebutton-icon-size,
-      $generic-popup-closebutton-icon-container-size
-    );
-
-    .dx-device-mobile & {
-      @include dx-closebutton-sizing(
-        $generic-mobile-popup-closebutton-size,
-        $generic-mobile-popup-closebutton-offset,
-        $generic-mobile-popup-closebutton-icon-size,
-        $generic-mobile-popup-closebutton-icon-container-size
-      );
-    }
   }
 }
 

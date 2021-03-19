@@ -3,9 +3,10 @@ import { each } from './utils/iterator';
 import { isFunction, isPlainObject } from './utils/type';
 
 export class EventsStrategy {
-    constructor(owner) {
+    constructor(owner, options = {}) {
         this._events = {};
         this._owner = owner;
+        this._options = options;
     }
     static create(owner, strategy) {
         if(strategy) {
@@ -37,7 +38,9 @@ export class EventsStrategy {
             let callbacks = this._events[eventName];
 
             if(!callbacks) {
-                callbacks = Callbacks();
+                callbacks = Callbacks({
+                    syncStrategy: this._options.syncStrategy
+                });
                 this._events[eventName] = callbacks;
             }
 

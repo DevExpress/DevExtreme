@@ -10,7 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
@@ -281,6 +280,31 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         // assert
         assert.equal($gridCell.find('.dx-select-checkbox').length, 1, 'Select checkbox was rendered in right place');
         assert.ok($gridCell.find('.dx-select-checkbox').parent().hasClass('dx-treelist-icon-container'), 'Checkbox inside icon container');
+    });
+
+    // T972125
+    QUnit.test('The Select All checkbox should have correct position when first defined column has no dataField and showColumnLines is false', function(assert) {
+    // arrange
+        const $testElement = $('#treeList');
+
+        this.options.showColumnHeaders = true;
+        this.options.showColumnLines = false;
+        this.options.columns = [ { caption: 'Test' } ];
+        this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always', allowSelectAll: true };
+
+        this.setupTreeList();
+        this.columnHeadersView.render($testElement);
+
+        const $headerCell = $testElement.find('.dx-treelist-select-all').eq(0);
+        const $headerTextContent = $headerCell.children('.dx-treelist-text-content');
+        const $selectAll = $headerCell.children('.dx-select-checkbox');
+
+        // assert
+        assert.strictEqual($headerCell.length, 1, 'the header with select all checkbox is rendered');
+        assert.strictEqual($headerTextContent.length, 1, 'the header text content is rendered');
+        assert.strictEqual($selectAll.length, 1, 'the Select All checkbox is rendered');
+        assert.roughEqual($selectAll.offset().top, $headerTextContent.offset().top, 1.1, 'the Select All checkbox position is roughly equal to the header text content position');
+        assert.strictEqual($headerTextContent.css('display'), 'inline-block', 'the display style of the header text content');
     });
 
     QUnit.test('Checkboxes should not be rendered if selection is not multiple', function(assert) {
@@ -619,6 +643,80 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         assert.deepEqual(this.getSelectedRowsData(), [{ id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) }], 'getSelectedRowsData');
 
         clock.restore();
+    });
+
+    // T978760
+    QUnit.test('focusedItemIndex should be reset to -1 after select all nodes', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        /* eslint-disable indent */
+        const array = [
+            { id: 1, field1: 'test1', field2: 1 },
+                { id: 2, parentId: 1, field1: 'test2', field2: 2 },
+            { id: 3, field1: 'test3', field2: 3 },
+                { id: 4, parentId: 3, field1: 'test4', field2: 4 }
+        ];
+        /* eslint-enable indent */
+
+        this.options.autoExpandAll = true;
+        this.options.dataSource = array;
+        this.options.selection = { mode: 'multiple' };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectionController.changeItemSelection(0, { shift: true });
+        this.selectionController.changeItemSelection(2, { shift: true });
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 3, 2], 'selected row keys');
+        assert.equal(this.selectionController._selection._focusedItemIndex, 2, '_focusedItemIndex corrected');
+
+        // act
+        this.selectionController.selectAll();
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 3, 2, 4], 'selected row keys');
+        assert.equal(this.selectionController._selection._focusedItemIndex, -1, '_focusedItemIndex corrected');
+    });
+
+    // T978760
+    QUnit.test('focusedItemIndex should be reset to -1 after deselect all nodes', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        /* eslint-disable indent */
+        const array = [
+            { id: 1, field1: 'test1', field2: 1 },
+                { id: 2, parentId: 1, field1: 'test2', field2: 2 },
+            { id: 3, field1: 'test3', field2: 3 },
+                { id: 4, parentId: 3, field1: 'test4', field2: 4 }
+        ];
+        /* eslint-enable indent */
+
+        this.options.autoExpandAll = true;
+        this.options.dataSource = array;
+        this.options.selection = { mode: 'multiple' };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectionController.changeItemSelection(0, { shift: true });
+        this.selectionController.changeItemSelection(3, { shift: true });
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 4, 3, 2], 'selected row keys');
+        assert.equal(this.selectionController._selection._focusedItemIndex, 3, '_focusedItemIndex corrected');
+
+        // act
+        this.selectionController.deselectAll();
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [], 'selected row keys');
+        assert.equal(this.selectionController._selection._focusedItemIndex, -1, '_focusedItemIndex corrected');
     });
 });
 
@@ -962,7 +1060,7 @@ QUnit.module('Recursive selection', {
     });
 
     QUnit.test('getSelectedRowKeys with \'all\' parameter', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -979,6 +1077,70 @@ QUnit.module('Recursive selection', {
 
         // act, assert
         assert.deepEqual(this.getSelectedRowKeys('all'), [1, 2, 3, 4, 5], 'all selected items');
+    });
+
+    ['withAncestors', 'matchOnly', 'fullBranch'].forEach((filterMode) => {
+        // T968435
+        QUnit.test(`getSelectedRowKeys with 'all' parameter and filterMode is '${filterMode}' when filtered nodes are at different levels`, function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
+
+            /* eslint-disable indent */
+            this.options.dataSource = [
+                { id: 1, field1: 'field1', field2: 1, field3: new Date(2001, 0, 1) },
+                    { id: 2, parentId: 1, field1: 'field2', field2: 2, field3: new Date(2002, 1, 2) },
+                        { id: 3, parentId: 2, field1: 'test1', field2: 3, field3: new Date(2002, 1, 3) },
+                        { id: 4, parentId: 2, field1: 'test2', field2: 4, field3: new Date(2002, 1, 4) },
+                    { id: 5, parentId: 1, field1: 'field2', field2: 5, field3: new Date(2002, 1, 5) },
+                { id: 6, field1: 'field3', field2: 6, field3: new Date(2002, 1, 6) },
+                { id: 7, field1: 'test3', field2: 7, field3: new Date(2002, 1, 7) }
+            ];
+            /* eslint-enable indent */
+            this.options.searchPanel = { text: 'test' };
+            this.options.expandNodesOnFiltering = true;
+            this.options.filterMode = filterMode;
+
+            this.setupTreeList();
+            this.rowsView.render($testElement);
+
+            // act
+            this.selectAll();
+
+            // assert
+            assert.deepEqual(this.getSelectedRowKeys('all'), [1, 2, 3, 4, 5, 6, 7], 'all selected items');
+        });
+
+        // T968433
+        QUnit.test(`getSelectedRowKeys with 'all' parameter and filterMode is '${filterMode}' when filtered nodes are at the same level`, function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
+
+            /* eslint-disable indent */
+            this.options.dataSource = [
+                { id: 1, field1: 'field1', field2: 1, field3: new Date(2001, 0, 1) },
+                    { id: 2, parentId: 1, field1: 'field2', field2: 2, field3: new Date(2002, 1, 2) },
+                        { id: 3, parentId: 2, field1: 'field3', field2: 3, field3: new Date(2002, 1, 3) },
+                            { id: 4, parentId: 3, field1: 'test1', field2: 4, field3: new Date(2002, 1, 4) },
+                            { id: 5, parentId: 3, field1: 'test2', field2: 5, field3: new Date(2002, 1, 5) },
+                    { id: 6, parentId: 1, field1: 'field4', field2: 6, field3: new Date(2002, 1, 6) },
+                        { id: 7, parentId: 6, field1: 'field5', field2: 7, field3: new Date(2002, 1, 7) },
+                    { id: 8, parentId: 1, field1: 'field6', field2: 8, field3: new Date(2002, 1, 8) },
+                        { id: 9, parentId: 8, field1: 'field7', field2: 9, field3: new Date(2002, 1, 9) }
+            ];
+            /* eslint-enable indent */
+            this.options.searchPanel = { text: 'test' };
+            this.options.expandNodesOnFiltering = true;
+            this.options.filterMode = filterMode;
+
+            this.setupTreeList();
+            this.rowsView.render($testElement);
+
+            // act
+            this.selectAll();
+
+            // assert
+            assert.deepEqual(this.getSelectedRowKeys('all'), [1, 2, 3, 4, 5, 6, 7, 8, 9], 'all selected items');
+        });
     });
 
     QUnit.test('getSelectedRowKeys with \'excludeRecursive\' parameter', function(assert) {

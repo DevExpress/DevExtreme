@@ -21,7 +21,6 @@ QUnit.testStart(function() {
 });
 
 
-import 'common.css!';
 import devices from 'core/devices';
 import visibilityChange from 'events/visibility_change';
 import 'generic_light.css!';
@@ -554,7 +553,7 @@ QUnit.module('Grid view', {
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
         const device = devices.real();
 
-        if(device.ios || device.android || (device.deviceType !== 'desktop')) {
+        if(device.ios || device.mac || device.android || (device.deviceType !== 'desktop')) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
@@ -808,7 +807,7 @@ QUnit.module('Grid view', {
         const headersTable = gridView.getView('columnHeadersView')._tableElement;
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
 
-        if(device.ios || device.android || (device.deviceType !== 'desktop')) {
+        if(device.ios || device.mac || device.android || (device.deviceType !== 'desktop')) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
@@ -1375,7 +1374,7 @@ QUnit.module('Synchronize columns', {
         gridView.update();
 
         // assert
-        assert.ok(that.rowsView._getTableElement().find('td').eq(1).outerWidth(true) > 30, 'width second column');
+        assert.ok(that.rowsView.getTableElement().find('td').eq(1).outerWidth(true) > 30, 'width second column');
     });
 
     QUnit.test('Columns synchronize with groupPanel', function(assert) {
@@ -2117,12 +2116,16 @@ QUnit.module('Fixed columns', {
         this.createGridView = createGridView;
     },
     afterEach: function() {
-        this.dispose();
+        this.dispose && this.dispose();
     }
 }, () => {
 
     if(devices.real().deviceType === 'desktop') {
         QUnit.test('Draw grid view with a native scrolling', function(assert) {
+            if(devices.real().mac) {
+                assert.ok(true, 'test is not actual for mac');
+                return;
+            }
             // arrange
             this.defaultOptions.columnsController = new MockColumnsController([
                 { caption: 'Column 1', width: 100, fixed: true },

@@ -21,7 +21,7 @@ import devices from '../../core/devices';
 import Form from '../form';
 import holdEvent from '../../events/hold';
 import { when, Deferred, fromPromise } from '../../core/utils/deferred';
-import { deferRender } from '../../core/utils/common';
+import { deferRender, equalByValue } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
 import Scrollable from '../scroll_view/ui.scrollable';
 
@@ -1332,11 +1332,15 @@ const EditingController = modules.ViewController.inherit((function() {
         _removeChange: function(index) {
             if(index >= 0) {
                 const changes = [...this.getChanges()];
+                const key = changes[index].key;
 
-                this._removeInternalData(changes[index].key);
+                this._removeInternalData(key);
 
                 changes.splice(index, 1);
                 this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
+                if(equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key)) {
+                    this._resetEditIndices();
+                }
             }
         },
 
@@ -1467,22 +1471,20 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _repaintEditCell: function(column, oldColumn, oldEditRowIndex) {
-            const that = this;
-
             this._needFocusEditor = true;
             if(!column || !column.showEditorAlways || oldColumn && !oldColumn.showEditorAlways) {
-                that._editCellInProgress = true;
+                this._editCellInProgress = true;
 
                 // T316439
-                that.getController('editorFactory').loseFocus();
+                this.getController('editorFactory').loseFocus();
 
-                that._dataController.updateItems({
+                this._dataController.updateItems({
                     changeType: 'update',
-                    rowIndices: [oldEditRowIndex, that._getVisibleEditRowIndex()]
+                    rowIndices: [oldEditRowIndex, this._getVisibleEditRowIndex()]
                 });
-            } else {
+            } else if(column !== oldColumn) {
                 // TODO check this necessity T816039
-                that._dataController.updateItems({
+                this._dataController.updateItems({
                     changeType: 'update',
                     rowIndices: []
                 });
@@ -1532,9 +1534,11 @@ const EditingController = modules.ViewController.inherit((function() {
         deleteRow: function(rowIndex) {
             if(this.option('editing.mode') === 'cell' && this.isEditing()) {
                 const isNewRow = this._dataController.items()[rowIndex].isNewRow;
+                const rowKey = this._dataController.getKeyByRowIndex(rowIndex);
 
                 // T850905
                 this.closeEditCell(null, isNewRow).always(() => {
+                    rowIndex = this._dataController.getRowIndexByKey(rowKey);
                     this._checkAndDeleteRow(rowIndex);
                 });
             } else {
@@ -1811,11 +1815,11 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                     this._saving = true;
                     this._saveEditDataInner()
-                        .done(deferred.resolve)
-                        .fail(deferred.reject)
                         .always(() => {
                             this._saving = false;
-                        });
+                        })
+                        .done(deferred.resolve)
+                        .fail(deferred.reject);
                 }).fail(deferred.reject);
             }).fail(deferred.reject);
             return deferred.promise();
@@ -2071,35 +2075,40 @@ const EditingController = modules.ViewController.inherit((function() {
             const oldEditRowIndex = that._getVisibleEditRowIndex();
 
             if(!isRowEditMode(that)) {
-                result = Deferred();
-                this.executeOperation(result, () => {
-                    this._closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData);
-                    result.resolve();
+                const deferred = new Deferred();
+                result = new Deferred();
+                this.executeOperation(deferred, () => {
+                    this._closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData).always(result.resolve);
                 });
             }
+
             return result.promise();
         },
 
         _closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData) {
-            const that = this;
-            const editMode = getEditMode(that);
-            const dataController = that._dataController;
+            const editMode = getEditMode(this);
+            const dataController = this._dataController;
+            const deferred = new Deferred();
+            const promise = deferred.promise();
 
-            if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
+            if(editMode === EDIT_MODE_CELL && this.hasChanges()) {
                 if(!withoutSaveEditData) {
-                    that.saveEditData().done(function(error) {
-                        if(!that.hasChanges()) {
-                            that.closeEditCell(!!error);
+                    this.saveEditData().done((error) => {
+                        if(!this.hasChanges()) {
+                            this.closeEditCell(!!error).always(deferred.resolve);
+                            return;
                         }
+                        deferred.resolve();
                     });
+                    return promise;
                 }
             } else if(oldEditRowIndex >= 0) {
                 const rowIndices = [oldEditRowIndex];
 
                 this._resetEditRowKey();
-                that._resetEditColumnName();
+                this._resetEditColumnName();
 
-                that._beforeCloseEditCellInBatchMode(rowIndices);
+                this._beforeCloseEditCellInBatchMode(rowIndices);
                 if(!isError) {
                     dataController.updateItems({
                         changeType: 'update',
@@ -2107,6 +2116,9 @@ const EditingController = modules.ViewController.inherit((function() {
                     });
                 }
             }
+
+            deferred.resolve();
+            return promise;
         },
 
         update: function(changeType) {

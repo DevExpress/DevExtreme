@@ -339,8 +339,8 @@ const DropDownButton = Widget.inherit({
             position: {
                 of: this.$element(),
                 collision: 'flipfit',
-                my: 'top ' + horizontalAlignment,
-                at: 'bottom ' + horizontalAlignment
+                my: horizontalAlignment + ' top',
+                at: horizontalAlignment + ' bottom'
             }
         }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
     },

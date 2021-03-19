@@ -736,11 +736,11 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     disabled?: boolean;
     /**
      * @docid dxSchedulerAppointment.endDate
-     * @type Date
+     * @type Date|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    endDate?: Date;
+    endDate?: Date | string;
     /**
      * @docid dxSchedulerAppointment.endDateTimeZone
      * @type String
@@ -771,11 +771,11 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     recurrenceRule?: string;
     /**
      * @docid dxSchedulerAppointment.startDate
-     * @type Date
+     * @type Date|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    startDate?: Date;
+    startDate?: Date | string;
     /**
      * @docid dxSchedulerAppointment.startDateTimeZone
      * @type String

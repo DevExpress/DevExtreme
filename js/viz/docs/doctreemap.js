@@ -145,6 +145,12 @@ const dxTreeMap = {
         */
         headerHeight: undefined,
         /**
+        * @name dxTreeMapOptions.group.padding
+        * @type number
+        * @default 4
+        */
+        padding: 4,
+        /**
         * @name dxTreeMapOptions.group.border
         * @type object
         */

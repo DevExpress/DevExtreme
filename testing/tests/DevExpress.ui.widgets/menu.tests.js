@@ -15,7 +15,6 @@ import eventsEngine from 'events/core/events_engine';
 import { DataSource } from 'data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

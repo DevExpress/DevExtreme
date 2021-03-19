@@ -319,7 +319,7 @@ class RadioGroup extends Editor {
     }
 
     _setSubmitValue(value) {
-        value = value || this.option('value');
+        value = value ?? this.option('value');
 
         const submitValue = this.option('valueExpr') === 'this' ? this._displayGetter(value) : value;
 

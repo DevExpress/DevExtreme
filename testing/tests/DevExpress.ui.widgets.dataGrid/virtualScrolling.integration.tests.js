@@ -8,6 +8,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
 
+
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
 const createLargeDataSource = function(count) {
@@ -20,6 +21,14 @@ const createLargeDataSource = function(count) {
             return $.Deferred().resolve({ data: items, totalCount: count });
         }
     };
+};
+
+const generateDataSource = function(count) {
+    const result = [];
+    for(let i = 0; i < count; ++i) {
+        result.push({ id: i + 1, name: `Name ${i + 1}` });
+    }
+    return result;
 };
 
 QUnit.testStart(function() {
@@ -1364,7 +1373,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             showBorders: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual'
+                rowRenderingMode: 'virtual',
+                useNative: false
             },
             columns: [{
                 cellTemplate: function(element, info) {
@@ -2276,10 +2286,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const instance = dataGrid.dxDataGrid('instance');
         const rowsView = instance.getView('rowsView');
         const scrollable = instance.getScrollable();
-        const deviceType = devices.real().deviceType;
+        const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         scrollable.scrollTo({ y: 1440 });
-        deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
+        isNativeScrolling && $(scrollable._container()).trigger('scroll');
 
         // assert
         const rowHeight = rowsView._rowHeight;
@@ -2306,7 +2316,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 data: resizeController
             }
         });
-        deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
+        isNativeScrolling && $(scrollable._container()).trigger('scroll');
 
         // assert
         assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
@@ -2966,18 +2976,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     QUnit.test('DataGrid should not paginate to the already loaded page if it is not in the viewport and it\'s row was focused (T726994)', function(assert) {
         // arrange
-        const generateDataSource = function(count) {
-            const result = [];
-            for(let i = 0; i < count; ++i) {
-                result.push({ firstName: 'name_' + i, lastName: 'lastName_' + i });
-            }
-            return result;
-        };
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             height: 200,
             dataSource: generateDataSource(100),
-            keyExpr: 'firstName',
+            keyExpr: 'id',
             focusedRowEnabled: true,
             scrolling: {
                 mode: 'virtual'
@@ -2986,7 +2989,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 pageSize: 4,
                 pageIndex: 2
             },
-            columns: ['firstName', 'lastName']
+            columns: ['id', 'name']
         });
 
         // act
@@ -3044,6 +3047,172 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 assert.deepEqual(dataGrid.getTopVisibleRowData().id, 5, 'top visible row id');
             });
         });
+    });
+
+    QUnit.test('DataGrid should not display virtual rows on data source changing when rowRenderingMode is set to \'virtual\' (T966221)', function(assert) {
+        // arrange
+        const dataSource1 = generateDataSource(40);
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: dataSource1,
+            keyExpr: 'id',
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+        const dataSource2 = generateDataSource(18);
+        dataGrid.option('dataSource', dataSource2);
+        this.clock.tick(300);
+        const $gridElement = $(dataGrid.element());
+        const $virtualRows = $gridElement.find('.dx-datagrid-rowsview .dx-row.dx-virtual-row');
+        const $renderedRows = $gridElement.find('.dx-datagrid-rowsview .dx-row.dx-data-row');
+
+        // assert
+        assert.equal($renderedRows.length, 18, 'rendered data rows');
+        assert.equal($virtualRows.length, 0, 'no virtual rows');
+    });
+
+    QUnit.test('DataGrid should display rows from a particular page when dataSource is set initially (rowRenderingMode = \'virtual\') (T971067)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: generateDataSource(100),
+            keyExpr: 'id',
+            columns: ['id', 'name'],
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                pageIndex: 2
+            }
+        });
+
+        // act
+        this.clock.tick();
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 20, 'rendered data rows');
+        assert.equal(visibleRows[0].key, 41, 'the first row key');
+    });
+
+    QUnit.test('DataGrid should display rows from a particular page when dataSource is set at runtime (rowRenderingMode = \'virtual\') (T971067)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: [],
+            columns: ['id', 'name'],
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                pageIndex: 2
+            }
+        });
+
+        // act
+        this.clock.tick();
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 0, 'rows are not rendered');
+
+        // act
+        dataGrid.option('dataSource', {
+            store: {
+                type: 'array',
+                data: generateDataSource(100),
+                key: 'id'
+            }
+        });
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 20, 'rendered data rows');
+        assert.equal(visibleRows[0].key, 41, 'the first row key');
+    });
+
+    QUnit.test('DataGrid should scroll to the required page when data source is set at runtime (T968361)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            height: 500,
+            keyExpr: 'id',
+            paging: {
+                pageIndex: 5
+            },
+            scrolling: {
+                mode: 'virtual'
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.option('dataSource', generateDataSource(500));
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(dataGrid.pageIndex(), 5, 'correct page index');
+        assert.equal(dataGrid.getScrollable().scrollTop(), 3400, 'top scroll position');
+    });
+
+    QUnit.test('DataGrid should show data if change filter twice (T978539)', function(assert) {
+        // arrange
+        const items = generateDataSource(20);
+
+        const dataGrid = createDataGrid({
+            height: 100,
+            dataSource: {
+                load: function(options) {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve({
+                            data: items.slice(options.skip, options.skip + options.take),
+                            totalCount: items.length
+                        });
+                    }, 1000);
+                    return d;
+                }
+            },
+            remoteOperations: true,
+            paging: {
+                pageIndex: 1,
+                pageSize: 5
+            },
+            scrolling: {
+                mode: 'virtual',
+                useNative: true
+            }
+        });
+
+        this.clock.tick(1000);
+        $(dataGrid.getScrollable()._container()).trigger('scroll');
+
+        assert.equal(dataGrid.getTopVisibleRowData().id, 6, 'data is scrolled');
+
+        // act
+        dataGrid.columnOption(0, 'filterValue', '1');
+        dataGrid.columnOption(1, 'filterValue', '1');
+        this.clock.tick(2000);
+        $(dataGrid.getScrollable()._container()).trigger('scroll');
+
+        // assert
+        assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first page is rendered');
     });
 });
 

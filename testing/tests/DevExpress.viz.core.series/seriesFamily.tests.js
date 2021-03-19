@@ -739,6 +739,22 @@ QUnit.test('Set five series', function(assert) {
     checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
 });
 
+QUnit.test('Set five series, not fit in the interval (T969297)', function(assert) {
+    const series = [];
+    for(let i = 0; i < 5; i++) {
+        series.push(createSeries({ points: pointsForStacking.points1() }, undefined, undefined, 4));
+    }
+    const expectedWidth = 1;
+
+    createSeriesFamily('bar', series, { });
+
+    checkSeries(assert, series[0], expectedWidth, -1.11);
+    checkSeries(assert, series[1], expectedWidth, -0.55);
+    checkSeries(assert, series[2], expectedWidth, 0);
+    checkSeries(assert, series[3], expectedWidth, 0.55);
+    checkSeries(assert, series[4], expectedWidth, 1.11);
+});
+
 QUnit.test('Set five series, barGroupWidth is specified', function(assert) {
     const series1 = createSeries({ points: pointsForStacking.points1() });
     const series2 = createSeries({ points: pointsForStacking.points2() });
@@ -838,8 +854,8 @@ QUnit.test('Set two series, barPadding is 1', function(assert) {
 
     createSeriesFamily('bar', series);
 
-    checkSeries(assert, series1, 1, -35.5);
-    checkSeries(assert, series2, 1, 35.5);
+    checkSeries(assert, series1, 1, -35);
+    checkSeries(assert, series2, 1, 35);
 });
 
 QUnit.test('Set three series, all of them in one group', function(assert) {

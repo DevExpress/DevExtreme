@@ -148,4 +148,22 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDrawerPanelContent().css('margin-left'), '0px', 'Dirs panel has correct left margin');
     });
 
+    test('splitter should follow left pane edge on other elements width change', function(assert) {
+        this.wrapper.getInstance().option('width', '100%');
+        this.clock.tick(400);
+
+        this.wrapper.moveSplitter(50);
+        this.clock.tick(400);
+
+        this.currentWidth = 900;
+        resizeCallbacks.fire();
+        this.clock.tick(400);
+
+        this.wrapper.getInstance().option('width', '50%');
+        this.clock.tick(400);
+
+        const contentPane = this.wrapper.getDrawerPanelContent();
+        assert.roughEqual(this.wrapper.getSplitterPosition(), contentPane.outerWidth(), 0.2, 'Splitter is on the correct position');
+    });
+
 });

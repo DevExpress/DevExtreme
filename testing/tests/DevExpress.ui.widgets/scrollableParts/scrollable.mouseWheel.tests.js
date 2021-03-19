@@ -3,7 +3,6 @@ import animationFrame from 'animation/frame';
 import devices from 'core/devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import {
@@ -178,7 +177,7 @@ QUnit.test('mousewheel for horizontal direction', function(assert) {
 
     pointerMock($container)
         .start()
-        .wheel(-distance, true);
+        .wheel(-distance, { shiftKey: true });
 
     assert.equal(scrollable.scrollOffset().left, distance, 'scrolled horizontally');
 });
@@ -418,7 +417,7 @@ if(devices.current().deviceType === 'desktop') {
             triggerWheelEvent(delta) {
                 pointerMock(this.getScrollableContainer())
                     .start()
-                    .wheel(delta, this._direction === 'horizontal');
+                    .wheel(delta, { shiftKey: this._direction === 'horizontal' });
             }
 
             getScrollableContainer() {

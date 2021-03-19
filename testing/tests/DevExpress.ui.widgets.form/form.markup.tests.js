@@ -17,7 +17,6 @@ import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/text_area';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';

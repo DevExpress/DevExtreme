@@ -1,4 +1,3 @@
-import 'common.css!';
 import devices from 'core/devices';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';

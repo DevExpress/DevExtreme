@@ -1,6 +1,7 @@
 import { noop } from '../core/utils/common';
 import { extend as _extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
+import { hasWindow } from '../core/utils/window';
 import { each as _each } from '../core/utils/iterator';
 import registerComponent from '../core/component_registrator';
 import { prepareSegmentRectPoints } from './utils';
@@ -8,8 +9,8 @@ import {
     map as _map, getLog, getCategoriesInfo,
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
     normalizePanesHeight,
-    checkElementHasPropertyFromStyleSheet,
-    rangesAreEqual
+    rangesAreEqual,
+    isRelativeHeightPane
 } from './core/utils';
 import { type, isDefined as _isDefined } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
@@ -233,8 +234,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
             return space;
         }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - canvases[paneNames[paneNames.length - 1]][getOriginalField(startMargin)]) - PANE_PADDING * (paneNames.length - 1);
 
-        const totalCustomSpace = Object.keys(sizes).reduce((prev, key) => prev + (sizes[key].unit ? sizes[key].height : 0), 0);
-        emptySpace -= totalCustomSpace;
+        emptySpace -= Object.keys(sizes).reduce((prev, key) => prev + (!isRelativeHeightPane(sizes[key]) ? sizes[key].height : 0), 0);
 
         paneNames.reduce((offset, pane) => {
             const canvas = canvases[pane];
@@ -242,7 +242,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
 
             offset -= getMaxMargin(endMargin, verticalMargins, horizontalMargins, pane);
             canvas[endMargin] = firstPane[sizeField] - offset;
-            offset -= paneSize.unit ? paneSize.height : Math.floor(emptySpace * paneSize.height);
+            offset -= !isRelativeHeightPane(paneSize) ? paneSize.height : Math.floor(emptySpace * paneSize.height);
             canvas[startMargin] = offset;
             offset -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, pane) + PANE_PADDING;
 
@@ -450,6 +450,11 @@ const dxChart = AdvancedChart.inherit({
 
     _initCore: function() {
         this.paneAxis = {};
+        this.callBase();
+    },
+
+    _init() {
+        this._containerInitialHeight = hasWindow() ? this._$element.height() : 0;
         this.callBase();
     },
 
@@ -1068,7 +1073,7 @@ const dxChart = AdvancedChart.inherit({
                 const realSize = that.getSize();
                 const customSize = that.option('size');
                 const container = that._$element[0];
-                const containerHasStyledHeight = !!container.style.height || checkElementHasPropertyFromStyleSheet(container, 'height');
+                const containerHasStyledHeight = !!parseInt(container.style.height) || that._containerInitialHeight !== 0;
 
                 if(!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
                     that._forceResize(realSize.width, realSize.height + needVerticalSpace);

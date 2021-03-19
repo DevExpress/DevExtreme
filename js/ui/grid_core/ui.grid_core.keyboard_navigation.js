@@ -101,6 +101,11 @@ function isFixedColumnIndexOffsetRequired(that, column) {
     return result;
 }
 
+function shouldPreventScroll(that) {
+    const keyboardController = that.getController('keyboardNavigation');
+    return keyboardController._isVirtualScrolling() ? that.option('focusedRowIndex') === keyboardController.getRowIndex() : false;
+}
+
 const KeyboardNavigationController = core.ViewController.inherit({
     // #region Initialization
     init: function() {
@@ -144,7 +149,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const isRelatedTargetInRowsView = $(event.relatedTarget).closest(rowsView.element()).length;
             const isCommandButton = $element.hasClass('dx-link');
 
-            if(isCommandButton && !isRelatedTargetInRowsView) {
+            if(isCommandButton && !isRelatedTargetInRowsView && this._isEventInCurrentGrid(event)) {
                 let $focusedCell = this._getFocusedCell();
 
                 $focusedCell = !isElementDefined($focusedCell) ? rowsView.getCellElements(0).filter('[tabindex]').eq(0) : $focusedCell;
@@ -189,6 +194,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const columnsResizerController = this.getController('columnsResizer');
             const isColumnResizing = !!columnsResizerController && columnsResizerController.isResizing();
             if(!isCurrentRowsViewClick && !isEditorOverlay && !isColumnResizing) {
+                const targetInsideFocusedView = this._focusedView ? $target.parents().filter(this._focusedView.element()).length > 0 : false;
+
+                !targetInsideFocusedView && this._resetFocusedCell(true);
                 this._resetFocusedView();
             }
         });
@@ -505,6 +513,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(isOriginalHandlerRequired) {
             this._editorFactory.loseFocus();
             if(this._editingController.isEditing() && !this._isRowEditMode()) {
+                this._resetFocusedCell(true);
                 this._resetFocusedView();
                 this._closeEditCell();
             }
@@ -883,7 +892,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const isRevertButton = !!$(event.target).closest(`.${REVERT_BUTTON_CLASS}`).length;
         const isExpandCommandCell = $target.hasClass(COMMAND_EXPAND_CLASS);
 
-        if(!isRevertButton && this._isEventInCurrentGrid(event) && (this._isCellValid($target, !isInteractiveElement) || isExpandCommandCell)) {
+        if(!this._isEventInCurrentGrid(event)) {
+            return;
+        }
+
+        if(!isRevertButton && (this._isCellValid($target, !isInteractiveElement) || isExpandCommandCell)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
 
             this._focusView();
@@ -1023,8 +1036,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _resetFocusedView: function() {
-        const $cell = this._getFocusedCell();
-        this._resetFocusedCell($cell, true);
+
         this.setRowFocusType();
         this._focusedView = null;
     },
@@ -1105,15 +1117,15 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     }
                     if($cell.is('td') || $cell.hasClass(this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+                        const $focusedElementInsideCell = $cell.find(':focus');
+                        const isFocusedElementDefined = isElementDefined($focusedElementInsideCell);
                         if((isRenderView || !isCommandCell) && this._editorFactory.focus()) {
-                            const $focusedElementInsideCell = $cell.find(':focus');
-                            const isFocusedElementDefined = isElementDefined($focusedElementInsideCell);
                             if(isCommandCell && isFocusedElementDefined) {
                                 gridCoreUtils.focusAndSelectElement(this, $focusedElementInsideCell);
                                 return;
                             }
                             !isFocusedElementDefined && this._focus($cell);
-                        } else if(this._isNeedFocus || this._isHiddenFocus) {
+                        } else if(!isFocusedElementDefined && (this._isNeedFocus || this._isHiddenFocus)) {
                             this._focus($cell, this._isHiddenFocus);
                         }
                         if(isEditing) {
@@ -1209,15 +1221,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._editorFactory.focus($cell, true);
         }
     },
-    _resetFocusedCell: function($cellElement, preventScroll) {
-        const $cell = isElementDefined($cellElement) ? $cellElement : this._getFocusedCell();
-        isElementDefined($cell) && $cell.removeAttr('tabindex');
+    _resetFocusedCell: function(preventScroll) {
+        const $cell = this._getFocusedCell();
 
+        isElementDefined($cell) && $cell.removeAttr('tabindex');
         this._isNeedFocus = false;
         this._isNeedScroll = false;
         this._focusedCellPosition = {};
         clearTimeout(this._updateFocusTimeout);
-
         this._focusedView?.renderFocusState(preventScroll);
     },
     restoreFocusableElement: function(rowIndex, $event) {
@@ -2018,15 +2029,17 @@ export default {
                 },
                 renderDelayedTemplates: function(change) {
                     this.callBase.apply(this, arguments);
+                    this._renderFocusByChange(change);
+                },
+                _renderFocusByChange(change) {
                     if(!change || !change.repaintChangesOnly) {
-                        this.renderFocusState();
+                        const preventScroll = shouldPreventScroll(this);
+                        this.renderFocusState(preventScroll);
                     }
                 },
                 _renderCore: function(change) {
-                    this.callBase(change);
-                    if(!change || !change.repaintChangesOnly) {
-                        this.renderFocusState();
-                    }
+                    this.callBase.apply(this, arguments);
+                    this._renderFocusByChange(change);
                 },
                 _editCellPrepared: function($cell) {
                     const editorInstance = this._getEditorInstance($cell);

@@ -93,11 +93,14 @@ class RecurrenceProcessor {
             }
         }
 
-        return result;
+        return result.map(item => {
+            const match = item.match(/[A-Za-z]+/);
+            return !!match && match[0];
+        }).filter(item => !!item);
     }
 
     getAsciiStringByDate(date) {
-        const currentOffset = this._getTimeZoneOffset() * toMs('minute');
+        const currentOffset = date.getTimezoneOffset() * toMs('minute');
         const offsetDate = new Date(date.getTime() + currentOffset);
 
         return offsetDate.getFullYear() + ('0' + (offsetDate.getMonth() + 1)).slice(-2) + ('0' + offsetDate.getDate()).slice(-2) +

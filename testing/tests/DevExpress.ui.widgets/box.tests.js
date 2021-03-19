@@ -1,10 +1,9 @@
-import 'common.css!';
-import 'generic_light.css!';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import 'ui/box';
 import 'ui/scroll_view/ui.scrollable';
 
+import 'generic_light.css!';
 
 const { testStart, module, test } = QUnit;
 

@@ -3,7 +3,6 @@ const $ = require('jquery');
 require('../../helpers/qunitPerformanceExtension.js');
 require('../../content/orders.js');
 
-require('common.css!');
 require('generic_light.css!');
 require('ui/data_grid/ui.data_grid');
 

@@ -122,9 +122,13 @@ const DateBoxMask = DateBoxBase.inherit({
         });
     },
 
-    _isSingleCharKey(e) {
-        const key = e.originalEvent.data || e.originalEvent.key;
-        return typeof key === 'string' && key.length === 1 && !e.ctrl && !e.alt;
+    _isSingleCharKey({ originalEvent, ctrl, alt }) {
+        const key = originalEvent.data || (
+            normalizeKeyName(originalEvent) === 'space' ? // IE11 (T972456)
+                ' ' :
+                originalEvent.key
+        );
+        return typeof key === 'string' && key.length === 1 && !ctrl && !alt;
     },
 
     _isSingleDigitKey(e) {
@@ -359,7 +363,9 @@ const DateBoxMask = DateBoxBase.inherit({
 
         if(text) {
             this._dateParts = renderDateParts(text, this._regExpInfo);
-            this._isFocused() && this._selectNextPart();
+            if(!this._input().is(':hidden')) {
+                this._selectNextPart();
+            }
         }
     },
 

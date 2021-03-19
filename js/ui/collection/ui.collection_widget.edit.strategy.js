@@ -1,6 +1,7 @@
 import $ from '../../core/renderer';
 import Class from '../../core/class';
 import { equalByValue } from '../../core/utils/common';
+import domAdapter from '../../core/dom_adapter';
 const abstract = Class.abstract;
 
 
@@ -53,7 +54,7 @@ const EditStrategy = Class.inherit({
             return this._normalizeItemIndex(value);
         }
 
-        if(this._isDOMNode(value)) {
+        if(this._isNode(value)) {
             return this._getNormalizedItemIndex(value);
         }
 
@@ -69,7 +70,7 @@ const EditStrategy = Class.inherit({
             return value;
         }
 
-        if(this._isDOMNode(value)) {
+        if(this._isNode(value)) {
             return this._denormalizeItemIndex(this._getNormalizedItemIndex(value));
         }
 
@@ -85,12 +86,16 @@ const EditStrategy = Class.inherit({
             return this._getItemByNormalizedIndex(this._normalizeItemIndex(value));
         }
 
-        if(this._isDOMNode(value)) {
+        if(this._isNode(value)) {
             return $(value);
         }
 
         const normalizedItemIndex = this._normalizeItemIndex(this.getIndexByItemData(value));
         return this._getItemByNormalizedIndex(normalizedItemIndex);
+    },
+
+    _isNode: (el) => {
+        return domAdapter.isNode((el && el.get) ? el.get(0) : el);
     },
 
     deleteItemAtIndex: abstract,
@@ -103,18 +108,6 @@ const EditStrategy = Class.inherit({
 
     _isNormalizedItemIndex: function(index) {
         return (typeof index === 'number') && Math.round(index) === index;
-    },
-
-    _isDOMNode: function(value) {
-        let $value;
-
-        try {
-            $value = $(value);
-        } catch(error) {
-            return false;
-        }
-
-        return $value && $value.length && $value.get(0).nodeType;
     },
 
     _isItemIndex: abstract,

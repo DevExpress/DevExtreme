@@ -2,7 +2,6 @@ import $ from 'jquery';
 import themes from 'ui/themes';
 import 'ui/slider';
 
-import 'common.css!';
 
 const SLIDER_CLASS = 'dx-slider';
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';

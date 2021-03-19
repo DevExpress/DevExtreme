@@ -1404,7 +1404,7 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
   const dataGrid = new DataGrid('#container');
   const dataRow = dataGrid.getDataRow(0);
   const cell0 = dataRow.getDataCell(1);
-  const $revertButton = cell0.getRevertButton();
+  const $revertButton = dataGrid.getRevertButton();
 
   await t
     .doubleClick(cell0.element)
@@ -1629,3 +1629,147 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
     },
   },
 }));
+
+test('Batch - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const detailGrid = new DataGrid('#detailContainer');
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(0).element)
+    .click(detailGrid.getHeaderPanel().getAddRowButton())
+    .click(detailGrid.getHeaderPanel().getSaveButton())
+    .click(detailGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+
+  // act
+  await t
+    .click(detailGrid.getDataCell(0, 1).element);
+
+  // assert
+  await t
+    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+
+  // act
+  await t
+    .click(detailGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: [{ id: 1, field: 'field' }],
+  keyExpr: 'id',
+  loadingTimeout: undefined,
+  masterDetail: {
+    enabled: true,
+    template(): any {
+      return ($('<div id="detailContainer">') as any).dxDataGrid({
+        dataSource: [],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        columns: [
+          {
+            dataField: 'id',
+            validationRules: [
+              { type: 'required' },
+            ],
+          },
+          {
+            dataField: 'field',
+            validationRules: [
+              { type: 'required' },
+            ],
+          }],
+        editing: {
+          mode: 'batch',
+          allowAdding: true,
+          allowUpdating: true,
+        },
+      });
+    },
+  },
+}));
+
+test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const lastName0 = dataGrid.getDataCell(0, 1);
+  const active1 = dataGrid.getDataCell(1, 2);
+  await t
+    .click(lastName0.element)
+    .typeText(lastName0.getEditor().element, '1')
+    .click(active1.element)
+    .click(lastName0.element);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+    LastName: 'Heart',
+    Active: false,
+  }, {
+    ID: 1,
+    LastName: 'Broken',
+    Active: false,
+  }],
+  keyExpr: 'ID',
+  editing: {
+    allowUpdating: true,
+    mode: 'cell',
+  },
+}));
+
+['Cell', 'Batch'].forEach((editMode) => {
+  test(`${editMode} - Edit cell should be focused correclty when showEditorAlways is enabled (T976141)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    let currentCell;
+
+    // direct order
+    for (let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
+      for (let colIndex = 0; colIndex < 2; colIndex += 1) {
+        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        // act
+        await t
+          .click(currentCell.getEditor().element);
+
+        // assert
+        await t
+          .expect(currentCell.isFocused).ok()
+          .expect(currentCell.getEditor().element.focused).ok();
+      }
+    }
+
+    // reverse order
+    for (let rowIndex = 2; rowIndex >= 0; rowIndex -= 1) {
+      for (let colIndex = 1; colIndex >= 0; colIndex -= 1) {
+        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        // act
+        await t
+          .click(currentCell.getEditor().element);
+
+        // assert
+        await t
+          .expect(currentCell.isFocused).ok()
+          .expect(currentCell.getEditor().element.focused).ok();
+      }
+    }
+  }).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, field: 'field' },
+      { id: 2, field: 'field' },
+      { id: 3, field: 'field' },
+    ],
+    keyExpr: 'id',
+    editing: {
+      mode: editMode.toLowerCase(),
+      allowUpdating: true,
+    },
+    loadingTimeout: undefined,
+    customizeColumns(columns) {
+      columns.forEach((col) => {
+        col.showEditorAlways = true;
+      });
+    },
+  }));
+});

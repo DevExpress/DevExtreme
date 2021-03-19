@@ -330,6 +330,51 @@ QUnit.test('No syncronize axis if viewport have field \'action\' with value \'zo
     });
 });
 
+QUnit.test('No syncronize axis if viewport action is "pan"', function(assert) {
+    const mockFunctions = {
+        getViewport: function(instance) { instance.returns({ action: 'pan' }); }
+    };
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            {
+                range: { min: 0, max: 10, axisType: 'continuous' },
+                tickValues: [2, 4, 6, 8],
+                tickInterval: 2,
+                mockFunctions: mockFunctions
+            },
+            {
+                range: { min: 15, max: 60, axisType: 'continuous' },
+                tickValues: [20, 30, 40, 50, 60],
+                tickInterval: 0,
+                mockFunctions: mockFunctions
+            }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 0,
+                    minVisible: 0,
+                    max: 10,
+                    maxVisible: 10
+                },
+                tickValues: [2, 4, 6, 8]
+
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 15,
+                    minVisible: 15,
+                    max: 60,
+                    maxVisible: 60
+                },
+                tickValues: [20, 30, 40, 50, 60]
+            }
+        ]
+    });
+});
+
 QUnit.test('Synchronization for 2 synchronized axis', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [

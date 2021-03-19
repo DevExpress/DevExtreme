@@ -116,11 +116,25 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     QUnit.test('Get coordinates from series. Series is not visible', function(assert) {
         const chart = this.getChartForSeriesTests({
             series: [
-                { name: 's1', type: 'line', axis: 'a1', pane: 'p1', visible: false },
-                { name: 's2', type: 'line', axis: 'a2', pane: 'p2' }
+                { name: 's1', type: 'line', axis: 'a1', pane: 'p1', visible: false }
             ] }
         );
         this.checkCoords(assert, chart, { argument: 20, series: 's1' }, { x: 20, y: undefined }, undefined, 'series s1 is not visible');
+    });
+
+    QUnit.test('Get coordinates from series. Series is not visible. Argument axis is discrete', function(assert) {
+        const chart = this.getChartForSeriesTests({
+            argumentAxis: {
+                type: 'discrete',
+                categories: [0, 50, 100]
+            },
+            series: [
+                { name: 's1', type: 'line', axis: 'a1', pane: 'p1', visible: false },
+                { name: 's2', type: 'bar', axis: 'a1', pane: 'p1', visible: false }
+            ] }
+        );
+        this.checkCoords(assert, chart, { argument: 50, series: 's1' }, { x: 50, y: undefined }, undefined, 'series s1 is not visible');
+        this.checkCoords(assert, chart, { argument: 0, series: 's1' }, { x: 0, y: undefined }, undefined, 'series s2 is not visible');
     });
 
     QUnit.test('Get coordinates from series. DataSource has small count of points', function(assert) {

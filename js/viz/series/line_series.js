@@ -198,7 +198,7 @@ const lineMethods = {
     },
 
     checkSeriesViewportCoord(axis, coord) {
-        if(this._points.length === 0) {
+        if(!chartScatterSeries.checkSeriesViewportCoord.call(this)) {
             return false;
         }
         const range = axis.isArgumentAxis ? this.getArgumentRange() : this.getViewport();

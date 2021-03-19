@@ -611,7 +611,7 @@ chart = _extend({}, baseScatterMethods, {
     },
 
     checkSeriesViewportCoord(axis, coord) {
-        return true;
+        return this.getPoints().length && this.isVisible();
     },
 
     getSeriesPairCoord(coord, isArgument) {

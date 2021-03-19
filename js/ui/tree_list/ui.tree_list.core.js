@@ -4,10 +4,10 @@ import modules from '../grid_core/ui.grid_core.modules';
 export default extend({}, modules, {
     modules: [],
 
-    foreachNodes: function(nodes, callBack) {
+    foreachNodes: function(nodes, callBack, ignoreHasChildren) {
         for(let i = 0; i < nodes.length; i++) {
-            if(callBack(nodes[i]) !== false && nodes[i].hasChildren && nodes[i].children.length) {
-                this.foreachNodes(nodes[i].children, callBack);
+            if(callBack(nodes[i]) !== false && (ignoreHasChildren || nodes[i].hasChildren) && nodes[i].children.length) {
+                this.foreachNodes(nodes[i].children, callBack, ignoreHasChildren);
             }
         }
     }
