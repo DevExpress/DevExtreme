@@ -971,6 +971,18 @@ module('View Data Provider', {
                         verticalGroupCount: 1,
                         horizontalGroupCount: 2,
                         getDateHeaderText: (index) => index,
+                        getDateHeaderDate: (index) => {
+                            const date = new Date(baseStartDate);
+                            date.setDate(10 + index);
+
+                            return date;
+                        },
+                        getTimeCellDate: (rowIndex) => {
+                            const date = new Date(baseStartDate);
+                            date.setHours(rowIndex);
+
+                            return date;
+                        },
                         today: baseStartDate,
                         groupByDate: false,
                         isHorizontalGrouping: true,
@@ -990,7 +1002,7 @@ module('View Data Provider', {
                                     startDate,
                                     endDate,
                                     groups: { groupId: 1 },
-                                    groupIndex: 1,
+                                    groupIndex: 0,
                                 },
                             });
                         }],
@@ -1181,8 +1193,7 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
-                    groupIndex: 1,
+                    groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
                     isFirstGroupCell: true,
@@ -1193,8 +1204,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11),
-                    endDate: new Date(2021, 0, 11, 2),
-                    groupIndex: 1,
+                    groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 1,
                     isFirstGroupCell: false,
@@ -1205,7 +1215,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1217,7 +1226,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11),
-                    endDate: new Date(2021, 0, 11, 2),
                     groupIndex: 1,
                     groups: { groupId: 2, },
                     index: 1,
@@ -1249,8 +1257,7 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 2,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
-                    groupIndex: 1,
+                    groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
                     isFirstGroupCell: true,
@@ -1260,8 +1267,7 @@ module('View Data Provider', {
                     today: true,
                 }, {
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
+                    startDate: new Date(2021, 0, 11),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1298,7 +1304,7 @@ module('View Data Provider', {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 10),
                     endDate: new Date(2021, 0, 10, 2),
-                    groupIndex: 1,
+                    groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
                     isFirstGroupCell: false,
@@ -1319,8 +1325,7 @@ module('View Data Provider', {
                 }], [{
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
-                    groupIndex: 1,
+                    groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
                     isFirstGroupCell: true,
@@ -1331,8 +1336,7 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11),
-                    endDate: new Date(2021, 0, 11, 2),
-                    groupIndex: 1,
+                    groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 1,
                     isFirstGroupCell: false,
@@ -1343,7 +1347,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1355,7 +1358,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11),
-                    endDate: new Date(2021, 0, 11, 2),
                     groupIndex: 1,
                     groups: { groupId: 2, },
                     index: 1,
@@ -1386,8 +1388,51 @@ module('View Data Provider', {
 
                 const expectedCompleteTimePanelMap = [{
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
-                    groupIndex: 1,
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                    allDay: undefined,
+                }, {
+                    startDate: new Date(2021, 0, 10, 1),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 2,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 4,
+                    allDay: undefined,
+                }];
+
+                const completeTimePanelMap = viewDataProvider.completeTimePanelMap;
+
+                assert.deepEqual(completeTimePanelMap, expectedCompleteTimePanelMap, 'Correct Time Panel map');
+            });
+
+            test('completeTimePanelMap should be generated correctly when all-day panel is enabled', function(assert) {
+                const viewDataProvider = new ViewDataProvider({
+                    ...dataGenerationWorkSpaceMock,
+                    isAllDayPanelVisible: true,
+                    _getAllDayCellData: () => {
+                        return ({
+                            value: {
+                                allDay: true,
+                                startDate: new Date(2021, 0, 10),
+                                groupIndex: 0,
+                                groups: { groupId: 1 },
+                            },
+                        });
+                    }
+                });
+
+                viewDataProvider.update(true);
+
+                const expectedCompleteTimePanelMap = [{
+                    allDay: true,
+                    startDate: new Date(2021, 0, 10),
+                    groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
                     isFirstGroupCell: true,
@@ -1395,13 +1440,176 @@ module('View Data Provider', {
                     key: 0,
                 }, {
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
-                    groupIndex: 1,
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                    allDay: undefined,
+                }, {
+                    startDate: new Date(2021, 0, 10, 1),
+                    groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 2,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 4,
+                    allDay: undefined,
+                }];
+
+                const completeTimePanelMap = viewDataProvider.completeTimePanelMap;
+
+                assert.deepEqual(completeTimePanelMap, expectedCompleteTimePanelMap, 'Correct Time Panel map');
+            });
+
+            test('completeTimePanelMap should be generated correctly when vertical grouping is enabled', function(assert) {
+                const viewDataProvider = new ViewDataProvider({
+                    ...dataGenerationWorkSpaceMock,
+                    isAllDayPanelVisible: true,
+                    _getAllDayCellData: () => {
+                        return ({
+                            value: {
+                                allDay: true,
+                                startDate: new Date(2021, 0, 10),
+                                groupIndex: 0,
+                                groups: { groupId: 1 },
+                            },
+                        });
+                    },
+                    generateRenderOptions: () => {
+                        return ({
+                            ...dataGenerationWorkSpaceMock.generateRenderOptions(),
+                            isVerticalGrouping: true,
+                            groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                        });
+                    }
+                });
+
+                viewDataProvider.update(true);
+
+                const expectedCompleteTimePanelMap = [{
+                    allDay: true,
+                    startDate: new Date(2021, 0, 10),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                }, {
+                    startDate: new Date(2021, 0, 10),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                    allDay: undefined,
+                }, {
+                    startDate: new Date(2021, 0, 10, 1),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 2,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 4,
+                    allDay: undefined,
+                }, {
+                    allDay: true,
+                    startDate: new Date(2021, 0, 10),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 8,
+                }, {
+                    startDate: new Date(2021, 0, 10),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 8,
+                    allDay: undefined,
+                }, {
+                    startDate: new Date(2021, 0, 10, 1),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 2,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 12,
+                    allDay: undefined,
+                }];
+
+                const completeTimePanelMap = viewDataProvider.completeTimePanelMap;
+
+                assert.deepEqual(completeTimePanelMap, expectedCompleteTimePanelMap, 'Correct Time Panel map');
+            });
+
+            test('completeTimePanelMap should be generated correctly when vertical grouping is enabled and all-day panel is absent', function(assert) {
+                const viewDataProvider = new ViewDataProvider({
+                    ...dataGenerationWorkSpaceMock,
+                    isAllDayPanelVisible: false,
+                    _getAllDayCellData: () => {
+                        return ({
+                            value: {
+                                allDay: true,
+                                startDate: new Date(2021, 0, 10),
+                                groupIndex: 0,
+                                groups: { groupId: 1 },
+                            },
+                        });
+                    },
+                    generateRenderOptions: () => {
+                        return ({
+                            ...dataGenerationWorkSpaceMock.generateRenderOptions(),
+                            isVerticalGrouping: true,
+                            groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                        });
+                    }
+                });
+
+                viewDataProvider.update(true);
+
+                const expectedCompleteTimePanelMap = [{
+                    startDate: new Date(2021, 0, 10),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                    allDay: undefined,
+                }, {
+                    startDate: new Date(2021, 0, 10, 1),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 2,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 4,
+                    allDay: undefined,
+                }, {
+                    startDate: new Date(2021, 0, 10),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 8,
+                    allDay: undefined,
+                }, {
+                    startDate: new Date(2021, 0, 10, 1),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 2,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 12,
+                    allDay: undefined,
                 }];
 
                 const completeTimePanelMap = viewDataProvider.completeTimePanelMap;

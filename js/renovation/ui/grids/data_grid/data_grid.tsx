@@ -6,17 +6,17 @@ import {
   DataGridProps,
 } from './common/data_grid_props';
 
-import '../../../ui/data_grid/ui.data_grid';
+import '../../../../ui/data_grid/ui.data_grid';
 
-import { Widget } from '../common/widget';
+import { Widget } from '../../common/widget';
 import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
-import { TPromise } from '../../../core/utils/deferred'; // eslint-disable-line import/named
-import { TElement, TElementsArray } from '../../../core/element'; // eslint-disable-line import/named
-import DataGridBaseComponent from '../../component_wrapper/data_grid';
-import { DisposeEffectReturn } from '../../utils/effect_return';
+import { TPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
+import { TElement, TElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
+import DataGridBaseComponent from '../../../component_wrapper/data_grid';
+import { DisposeEffectReturn } from '../../../utils/effect_return';
 
 const aria = { role: 'presentation' };
 
