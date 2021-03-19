@@ -29,7 +29,7 @@ export class PageProps {
 
   @OneWay() selected = false;
 
-  @OneWay() className?: string;
+  @OneWay() className?: string = PAGER_PAGE_CLASS;
 }
 
 @Component({
@@ -50,7 +50,6 @@ export class Page extends JSXComponent<PageProps>() {
     const
       { selected } = this.props;
     return combineClasses({
-      [PAGER_PAGE_CLASS]: true,
       [`${this.props.className}`]: !!this.props.className,
       [PAGER_SELECTION_CLASS]: !!selected,
     });

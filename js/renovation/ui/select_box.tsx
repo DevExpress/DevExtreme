@@ -34,6 +34,10 @@ export class SelectBoxProps extends WidgetProps {
   @OneWay() valueExpr?: string;
 
   @Event() valueChange?: EventCallback<any>;
+
+  @OneWay() focusStateEnabled?: boolean = true;
+
+  @OneWay() hoverStateEnabled?: boolean = true;
 }
 @Component({
   defaultOptionRules: null,
