@@ -24,7 +24,6 @@ const generator = new InfernoGenerator();
 
 const jQueryComponentsGlob = 'js/renovation/**/*.j.tsx';
 
-const renovation = env.USE_RENOVATION;
 const esmPackage = env.BUILD_ESM_PACKAGE;
 
 const SRC = [
@@ -102,11 +101,8 @@ function generateInfernoComponents(distPath = './', babelConfig = transpileConfi
             }))
             .pipe(gulpIf(isNotDTS, babel(babelConfig)))
             .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PATH)))
-            .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PROD_PATH)))
-            .pipe(gulpIf(renovation, gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH)))
-            // dev is true only for 'generate-components-watch'. 'generate-components-watch' used in launch for qunit
-            // without renovation flag ui/renovation is clear after build:r
-            .pipe(gulpIf(renovation || dev, gulp.dest(context.TRANSPILED_RENOVATION_PATH)))
+            .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_RENOVATION_PATH)))
+            .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH)))
             .pipe(gulpIf(esmPackage, gulp.dest(path.join(context.TRANSPILED_PROD_ESM_PATH, distPath))))
             .on('end', function() {
                 done(!dev && errors.length || undefined);

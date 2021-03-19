@@ -794,35 +794,58 @@ QUnit.test('Data cell should has right content when dataCellTemplate option was 
     assert.ok($element.find('.new-custom-class').length > 0, 'class is ok');
 });
 
-QUnit.test('dataCellTemplate should have correct options', function(assert) {
-    let templateOptions;
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`dataCellTemplate should have correct options when renovateRender is ${renovateRender}`, function(assert) {
+        let templateOptions;
 
-    this.createInstance({
-        currentView: 'week',
-        startDayHour: 5,
-        currentDate: new Date(2016, 8, 5),
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                fieldExpr: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dataCellTemplate: function(itemData, index, $container) {
-            if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell')) templateOptions = itemData;
-        }
+        this.createInstance({
+            currentView: 'week',
+            startDayHour: 5,
+            currentDate: new Date(2016, 8, 5),
+            firstDayOfWeek: 0,
+            groups: ['ownerId'],
+            resources: [
+                {
+                    fieldExpr: 'ownerId',
+                    dataSource: [
+                        { id: 1, text: 'John' },
+                        { id: 2, text: 'Mike' }
+                    ]
+                }
+            ],
+            dataCellTemplate: function(itemData, index, $container) {
+                if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell') && !templateOptions) {
+                    templateOptions = itemData;
+                }
+            },
+            renovateRender,
+        });
+
+        assert.equal(templateOptions.text, '', 'text options is ok');
+        assert.equal(templateOptions.startDate.getTime(), new Date(2016, 8, 7, 5).getTime(), 'startDate option is ok');
+        assert.equal(templateOptions.endDate.getTime(), new Date(2016, 8, 7, 5, 30).getTime(), 'endDate option is ok');
+        assert.deepEqual(templateOptions.groups, {
+            'ownerId': 1
+        }, 'Resources option is ok');
     });
 
-    assert.equal(templateOptions.text, '', 'text options is ok');
-    assert.equal(templateOptions.startDate.getTime(), new Date(2016, 8, 7, 5).getTime(), 'startDate option is ok');
-    assert.equal(templateOptions.endDate.getTime(), new Date(2016, 8, 7, 5, 30).getTime(), 'endDate option is ok');
-    assert.deepEqual(templateOptions.groups, {
-        'ownerId': 1
-    }, 'Resources option is ok');
+    QUnit.test(`dataCellTemplate for all-day panel should take cellElement with correct geometry(T453520) when renovateRender is ${renovateRender}`, function(assert) {
+        assert.expect(2);
+        this.createInstance({
+            currentView: 'week',
+            views: ['week'],
+            height: 700,
+            width: 700,
+            dataSource: [],
+            dataCellTemplate: function(cellData, cellIndex, cellElement) {
+                if(cellData.allDay && !cellIndex) {
+                    assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Data cell width is OK');
+                    assert.roughEqual($(cellElement).outerHeight(), 24, 1.001, 'Data cell height is OK');
+                }
+            },
+            renovateRender,
+        });
+    });
 });
 
 QUnit.test('dataCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
@@ -837,23 +860,6 @@ QUnit.test('dataCellTemplate should take cellElement with correct geometry(T4535
             if(!cellData.allDay && !cellIndex) {
                 assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 85, 1.001, 'Data cell width is OK');
                 assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Data cell height is OK');
-            }
-        }
-    });
-});
-
-QUnit.test('dataCellTemplate for all-day panel should take cellElement with correct geometry(T453520)', function(assert) {
-    assert.expect(2);
-    this.createInstance({
-        currentView: 'week',
-        views: ['week'],
-        height: 700,
-        width: 700,
-        dataSource: [],
-        dataCellTemplate: function(cellData, cellIndex, cellElement) {
-            if(cellData.allDay && !cellIndex) {
-                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Data cell width is OK');
-                assert.roughEqual($(cellElement).outerHeight(), 24, 1.001, 'Data cell height is OK');
             }
         }
     });
@@ -2027,28 +2033,13 @@ QUnit.module('Cell Templates in renovated views', () => {
 
     [{
         viewType: 'day',
-        expectedTemplateOptions: [allDayCells[0], dataCells[0]],
+        expectedTemplateOptions: [dataCells[0], allDayCells[0]],
     }, {
         viewType: 'week',
-        expectedTemplateOptions: [...allDayCells, ...dataCells],
+        expectedTemplateOptions: [...dataCells, ...allDayCells],
     }, {
         viewType: 'workWeek',
         expectedTemplateOptions: [{
-            ...allDayCells[1],
-            index: 0,
-        }, {
-            ...allDayCells[2],
-            index: 1,
-        }, {
-            ...allDayCells[3],
-            index: 2,
-        }, {
-            ...allDayCells[4],
-            index: 3,
-        }, {
-            ...allDayCells[5],
-            index: 4,
-        }, {
             ...dataCells[1],
             index: 0,
         }, {
@@ -2062,6 +2053,21 @@ QUnit.module('Cell Templates in renovated views', () => {
             index: 3,
         }, {
             ...dataCells[5],
+            index: 4,
+        }, {
+            ...allDayCells[1],
+            index: 0,
+        }, {
+            ...allDayCells[2],
+            index: 1,
+        }, {
+            ...allDayCells[3],
+            index: 2,
+        }, {
+            ...allDayCells[4],
+            index: 3,
+        }, {
+            ...allDayCells[5],
             index: 4,
         }],
     }].forEach(({ viewType, expectedTemplateOptions }) => {
@@ -2733,25 +2739,6 @@ if(devices.real().deviceType === 'desktop') {
 }
 
 QUnit.module('Cell Templates', () => {
-    const baseConfig = {
-        currentView: 'day',
-        currentDate: new Date(2020, 10, 19),
-        resources: [{
-            fieldExpr: 'priority',
-            allowMultiple: false,
-            dataSource: [{
-                text: 'Low Priority',
-                id: 1
-            }, {
-                text: 'High Priority',
-                id: 2
-            }],
-            label: 'Priority',
-        }],
-        startDayHour: 10,
-        endDayHour: 12,
-    };
-
     const viewsBase = [{
         type: 'day',
         dateCellCount: 2,
@@ -2793,6 +2780,26 @@ QUnit.module('Cell Templates', () => {
     };
 
     [true, false].forEach((isRenovatedView) => {
+        const baseConfig = {
+            currentView: 'day',
+            currentDate: new Date(2020, 10, 19),
+            resources: [{
+                fieldExpr: 'priority',
+                allowMultiple: false,
+                dataSource: [{
+                    text: 'Low Priority',
+                    id: 1
+                }, {
+                    text: 'High Priority',
+                    id: 2
+                }],
+                label: 'Priority',
+            }],
+            startDayHour: 10,
+            endDayHour: 12,
+            renovateRender: isRenovatedView,
+        };
+
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
             assert.expect(totalDateCells * 2);
 
@@ -2856,21 +2863,26 @@ QUnit.module('Cell Templates', () => {
                 groupOrientation: 'horizontal',
             }));
             let cellCountPerGroup = 2;
+            let currentCellIndex = 0;
 
             const scheduler = createWrapper({
                 ...baseConfig,
                 views,
-                dateCellTemplate: ({ groups, groupIndex }, index) => {
-                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+                dateCellTemplate: ({ groups, groupIndex }) => {
+                    const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
                     assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+
+                    currentCellIndex += 1;
                 },
                 groups: ['priority'],
             });
 
             viewsBase.forEach(({ type, dateCellCount }) => {
                 cellCountPerGroup = dateCellCount;
+                currentCellIndex = 0;
+
                 scheduler.instance.option('currentView', type);
             });
         });
@@ -2898,21 +2910,26 @@ QUnit.module('Cell Templates', () => {
                 groupOrientation: 'vertical',
             }));
             let cellCountPerGroup = 4;
+            let currentCellIndex = 0;
 
             const scheduler = createWrapper({
                 ...baseConfig,
                 views,
-                timeCellTemplate: ({ groups, groupIndex }, index) => {
-                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
                     assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+
+                    currentCellIndex += 1;
                 },
                 groups: ['priority'],
             });
 
             viewsBase.slice(0, 3).forEach(({ type, timeCellCount }) => {
                 cellCountPerGroup = timeCellCount;
+                currentCellIndex = 0;
+
                 scheduler.instance.option('currentView', type);
             });
         });
@@ -2991,22 +3008,26 @@ QUnit.module('Cell Templates', () => {
                 groupOrientation: 'horizontal',
             }));
             let cellCountPerGroup = 8;
+            let currentCellIndex = 0;
 
             const scheduler = createWrapper({
                 ...baseConfig,
                 views,
                 currentView: 'timelineDay',
-                timeCellTemplate: ({ groups, groupIndex }, index) => {
-                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
                     assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+
+                    currentCellIndex += 1;
                 },
                 groups: ['priority'],
             });
 
             viewsBase.slice(3, 6).forEach(({ type, timeCellCount }) => {
                 cellCountPerGroup = timeCellCount;
+                currentCellIndex = 0;
                 scheduler.instance.option('currentView', type);
             });
         });

@@ -2116,6 +2116,36 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(this.instance.getVisibleResourceKeys().length, 0, 'resources keys');
         assert.equal(this.instance.getVisibleResourceAssignmentKeys().length, 0, 'resource assignments keys');
     });
+    test('double task insert - check infinite loop on selection (T980191)', function(assert) {
+        const myTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 4, 'parentId': 2, 'title': 'Secure project sponsorship', 'start': new Date('2019-02-21T10:00:00.000Z'), 'end': new Date('2019-02-22T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 5, 'parentId': 2, 'title': 'Define preliminary resources', 'start': new Date('2019-02-22T10:00:00.000Z'), 'end': new Date('2019-02-25T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 6, 'parentId': 2, 'title': 'Secure core resources', 'start': new Date('2019-02-25T10:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 },
+            { 'id': 7, 'parentId': 2, 'title': 'Scope complete', 'start': new Date('2019-02-26T09:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 }
+        ];
+        const options = {
+            tasks: { dataSource: myTasks },
+            editing: { enabled: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const data = {
+            title: 'My text',
+            start: new Date('2019-02-23'),
+            end: new Date('2019-02-23'),
+            parentId: 2
+        };
+
+        const tasksCount = myTasks.length;
+        this.instance.insertTask(data);
+        this.instance.insertTask(data);
+        this.clock.tick();
+        assert.equal(myTasks.length, tasksCount + 2, 'new task was created in ds');
+    });
 });
 
 QUnit.module('Mappings convert', moduleConfig, () => {

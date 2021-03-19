@@ -87,8 +87,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateForHeaderText(index) {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
-        return this._getDateByIndexCore(newFirstViewDate, index);
+        const firstViewDate = this._getValidFirstViewDateWithoutDST();
+
+        return this._getDateByIndexCore(firstViewDate, index);
     }
 
     _getDateByIndexCore(date, index) {
@@ -100,14 +101,22 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateByIndex(index) {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
-        const result = this._getDateByIndexCore(newFirstViewDate, index);
+        const firstViewDate = this._getValidFirstViewDateWithoutDST();
+
+        const result = this._getDateByIndexCore(firstViewDate, index);
 
         if(timeZoneUtils.isTimezoneChangeInDate(this._firstViewDate)) {
             result.setDate(result.getDate() - 1);
         }
 
         return result;
+    }
+
+    _getValidFirstViewDateWithoutDST() {
+        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
+        newFirstViewDate.setHours(this.option('startDayHour'));
+
+        return newFirstViewDate;
     }
 
     _getFormat() {

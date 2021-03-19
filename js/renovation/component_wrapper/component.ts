@@ -276,13 +276,15 @@ export default class ComponentWrapper extends DOMComponent {
       const dummyDivRefCallback: (ref: any) => void = (dummyDivRef) => {
         if (dummyDivRef) {
           const { parentNode } = dummyDivRef;
-          parentNode.removeChild(dummyDivRef);
-          this._getTemplate(this._templateManager.anonymousTemplateName).render(
-            {
-              container: getPublicElement($(parentNode)),
-              transclude: true,
-            }
-          );
+          if (parentNode) {
+            parentNode.removeChild(dummyDivRef);
+            this._getTemplate(this._templateManager.anonymousTemplateName).render(
+              {
+                container: getPublicElement($(parentNode)),
+                transclude: true,
+              }
+            );
+          }
         }
       };
 
@@ -369,7 +371,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   // NOTE: this method will be deprecated
   //       aria changes should be defined in declaration or passed through property
-  setAria() {
+  setAria(name: string, value: string) {
     throw new Error(
       '"setAria" method is deprecated, use "aria" property instead'
     );
