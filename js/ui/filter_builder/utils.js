@@ -510,7 +510,22 @@ export function getCurrentLookupValueText(field, value, handler) {
         const lookupDataSource = isFunction(lookup.dataSource) ? lookup.dataSource({}) : lookup.dataSource;
         const dataSource = new DataSource(lookupDataSource);
         dataSource.loadSingle(lookup.valueExpr, value).done(function(result) {
-            result ? handler(lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result) : handler('');
+            let valueText = '';
+
+            if(result) {
+                valueText = lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result;
+            }
+
+            if(field.customizeText) {
+                const text = field.customizeText.call(field, {
+                    value: value,
+                    valueText
+                });
+
+                return handler(text);
+            }
+
+            return handler(valueText);
         }).fail(function() {
             handler('');
         });
