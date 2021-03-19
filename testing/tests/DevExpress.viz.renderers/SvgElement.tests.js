@@ -5759,6 +5759,21 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.equal(text.element.childNodes[5].style.fontWeight, '');
         });
 
+        // T982300
+        QUnit.test('Wordwrap long text with too small width', function(assert) {
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Thereislong text' });
+
+            this.prepareRenderBeforeEllipsis();
+
+            // act
+            const result = text.setMaxSize(3, undefined, {
+                wordWrap: 'breakWord',
+                textOverflow: 'ellipsis'
+            });
+
+            assert.deepEqual(result, { rowCount: 2, textChanged: true, textIsEmpty: false });
+        });
+
         QUnit.test('Complex text. wordWrap: none, text overflow: ellipsis - remove test next to ellipsis', function(assert) {
             const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'longlonglonglonglong <b>longlonglonglonglong</b>' });
 

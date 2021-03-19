@@ -52,7 +52,7 @@ const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const RTL_DIRECTION_CLASS = 'dx-rtl';
 
-const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioning', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd'];
+const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd'];
 
 const OVERLAY_STACK = [];
 
@@ -1265,9 +1265,6 @@ const Overlay = Widget.inherit({
             const resultPosition = positionUtils.setup(this._$content, position);
 
             forceRepaint(this._$content);
-
-            // TODO: hotfix for T338096
-            this._actions.onPositioning();
 
             return resultPosition;
         }

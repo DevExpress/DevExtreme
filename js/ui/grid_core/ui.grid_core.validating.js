@@ -164,7 +164,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 each(changes, (index, { type, key }) => {
 
                     if(type !== 'remove') {
-                        const validationData = this._getValidationData(key);
+                        const validationData = this._getValidationData(key, true);
                         const validationResult = this.validateGroup(validationData);
                         completeList.push(validationResult);
                         validationResult.done((validationResult) => {

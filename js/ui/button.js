@@ -193,7 +193,7 @@ class Button extends Widget {
     }
 
     _optionChanged(args) {
-        const { name, previousValue } = args;
+        const { name } = args;
 
         switch(name) {
             case 'onClick':
@@ -205,7 +205,7 @@ class Button extends Widget {
                 this._updateAriaLabel();
                 break;
             case 'type':
-                this._updateType(previousValue);
+                this._updateType();
                 this._updateContent();
                 break;
             case '_templateData':
@@ -388,11 +388,10 @@ class Button extends Widget {
         this._renderStylingMode();
     }
 
-    _updateType(previous) {
+    _updateType() {
         const $element = this.$element();
 
-        // TODO: temporary solution
-        [previous, 'back', 'danger', 'default', 'normal', 'success'].map(type => `dx-button-${type}`)
+        ['back', 'danger', 'default', 'normal', 'success'].map(type => `dx-button-${type}`)
             .forEach($element.removeClass.bind($element));
 
         this._renderType();

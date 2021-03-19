@@ -390,7 +390,7 @@ const Lookup = DropDownList.inherit({
         });
     },
 
-    _fireContentReadyAction: noop, // TODO: why not symmetric to other dropdowns?
+    _fireContentReadyAction: noop,
 
     _popupWrapperClass: function() {
         return '';

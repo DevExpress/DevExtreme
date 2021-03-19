@@ -3,8 +3,6 @@ import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
-import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
-import changeTheme from '../../helpers/changeTheme';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'))
@@ -1632,42 +1630,95 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
   },
 }));
 
-test('Checkbox has ink ripple in material theme inside editing popup (T977287)', async (t) => {
+test('Batch - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const detailGrid = new DataGrid('#detailContainer');
 
   // act
   await t
-    .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0))
-    .click('.dx-checkbox');
+    .click(dataGrid.getDataRow(0).getCommandCell(0).element)
+    .click(detailGrid.getHeaderPanel().getAddRowButton())
+    .click(detailGrid.getHeaderPanel().getSaveButton())
+    .click(detailGrid.getDataCell(0, 0).element);
 
   // assert
   await t
-    .expect(await takeScreenshot('grid-popup-editing-checkbox.png', '.dx-overlay-content'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await changeTheme('material.blue.light');
-  return createWidget('dxDataGrid', {
-    dataSource: [{
-      ID: 1,
-      LastName: 'Heart',
-    }],
-    keyExpr: 'ID',
-    editing: {
-      allowUpdating: true,
-      mode: 'popup',
-      form: {
-        items: [{
-          dataField: 'checkbox',
-          editorType: 'dxCheckBox',
-        }],
-      },
+    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+
+  // act
+  await t
+    .click(detailGrid.getDataCell(0, 1).element);
+
+  // assert
+  await t
+    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+
+  // act
+  await t
+    .click(detailGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: [{ id: 1, field: 'field' }],
+  keyExpr: 'id',
+  loadingTimeout: undefined,
+  masterDetail: {
+    enabled: true,
+    template(): any {
+      return ($('<div id="detailContainer">') as any).dxDataGrid({
+        dataSource: [],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        columns: [
+          {
+            dataField: 'id',
+            validationRules: [
+              { type: 'required' },
+            ],
+          },
+          {
+            dataField: 'field',
+            validationRules: [
+              { type: 'required' },
+            ],
+          }],
+        editing: {
+          mode: 'batch',
+          allowAdding: true,
+          allowUpdating: true,
+        },
+      });
     },
-    columns: ['LastName'],
-  });
-}).after(() => changeTheme('generic.light'));
+  },
+}));
+
+test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const lastName0 = dataGrid.getDataCell(0, 1);
+  const active1 = dataGrid.getDataCell(1, 2);
+  await t
+    .click(lastName0.element)
+    .typeText(lastName0.getEditor().element, '1')
+    .click(active1.element)
+    .click(lastName0.element);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+    LastName: 'Heart',
+    Active: false,
+  }, {
+    ID: 1,
+    LastName: 'Broken',
+    Active: false,
+  }],
+  keyExpr: 'ID',
+  editing: {
+    allowUpdating: true,
+    mode: 'cell',
+  },
+}));
 
 ['Cell', 'Batch'].forEach((editMode) => {
   test(`${editMode} - Edit cell should be focused correclty when showEditorAlways is enabled (T976141)`, async (t) => {

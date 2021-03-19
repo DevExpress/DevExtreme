@@ -244,16 +244,15 @@ const baseFixedColumns = {
     },
 
     _getCellElementsCore: function(rowIndex) {
-        const that = this;
-        const cellElements = that.callBase.apply(this, arguments);
+        const cellElements = this.callBase.apply(this, arguments);
         const isGroupRow = cellElements.parent().hasClass(GROUP_ROW_CLASS);
-        const index = that.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
+        const index = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
 
-        if(that._fixedTableElement && cellElements) {
-            const fixedColumns = that.getFixedColumns(index);
-            const fixedCellElements = that._getRowElements(that._fixedTableElement).eq(rowIndex).children('td');
+        if(this._fixedTableElement && cellElements) {
+            const fixedColumns = this.getFixedColumns(index);
+            const fixedCellElements = this._getRowElements(this._fixedTableElement).eq(rowIndex).children('td');
 
-            each(fixedCellElements, function(columnIndex, cell) {
+            each(fixedCellElements, (columnIndex, cell) => {
                 if(isGroupRow) {
                     if(cellElements[columnIndex] && cell.style.visibility !== 'hidden') {
                         cellElements[columnIndex] = cell;
@@ -267,7 +266,7 @@ const baseFixedColumns = {
                                 cellElements[columnIndex] = cell || cellElements[columnIndex];
                             }
                         } else {
-                            const fixedColumnIndex = that._columnsController.getVisibleIndex(fixedColumn.index, index);
+                            const fixedColumnIndex = this._columnsController.getVisibleIndexByColumn(fixedColumn, rowIndex);
                             cellElements[fixedColumnIndex] = cell || cellElements[fixedColumnIndex];
                         }
                     }
