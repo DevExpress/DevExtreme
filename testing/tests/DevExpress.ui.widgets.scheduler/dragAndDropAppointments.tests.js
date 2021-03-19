@@ -1099,6 +1099,11 @@ module('appointmentDragging customization', $.extend({}, {
     [true, false].forEach(createDraggableFirst => {
         [true, false].forEach(allDay => {
             const testAppointmentDraggingFromSchedulerWithScroll = (assert, that, data, pointerMove, draggablePos, schedulerPos, scrollPos) => {
+                if(isIE11) {
+                    assert.ok('This test is not for IE11');
+                    return;
+                }
+
                 const group = 'testGroup';
 
                 const appointmentDragging = {
