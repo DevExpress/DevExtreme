@@ -35,6 +35,7 @@ class TimeZoneCache {
 const tzCache = new TimeZoneCache();
 
 const timeZoneDataUtils = {
+    _tzCache: tzCache,
     _timeZones: tzData.zones,
 
     getDisplayedTimeZones: function(timestamp) {
