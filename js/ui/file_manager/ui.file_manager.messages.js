@@ -1,24 +1,24 @@
 import messageLocalization from '../../localization/message';
-import ErrorCode from '../../file_management/file_system_error_code';
+import FileSystemErrorCode from '../../file_management/error_codes';
 
 export const FileManagerMessages = {
     get: (errorId, args) => {
         switch(errorId) {
-            case ErrorCode.NoAccess:
+            case FileSystemErrorCode.NoAccess:
                 return messageLocalization.format('dxFileManager-errorNoAccess');
-            case ErrorCode.FileExists:
+            case FileSystemErrorCode.FileExists:
                 return messageLocalization.format('dxFileManager-errorFileExistsFormat', args);
-            case ErrorCode.FileNotFound:
+            case FileSystemErrorCode.FileNotFound:
                 return messageLocalization.format('dxFileManager-errorFileNotFoundFormat', args);
-            case ErrorCode.DirectoryExists:
+            case FileSystemErrorCode.DirectoryExists:
                 return messageLocalization.format('dxFileManager-errorDirectoryExistsFormat', args);
-            case ErrorCode.DirectoryNotFound:
+            case FileSystemErrorCode.DirectoryNotFound:
                 return messageLocalization.format('dxFileManager-errorDirectoryNotFoundFormat', args);
-            case ErrorCode.WrongFileExtension:
+            case FileSystemErrorCode.WrongFileExtension:
                 return messageLocalization.format('dxFileManager-errorWrongFileExtension');
-            case ErrorCode.MaxFileSizeExceeded:
+            case FileSystemErrorCode.MaxFileSizeExceeded:
                 return messageLocalization.format('dxFileManager-errorMaxFileSizeExceeded');
-            case ErrorCode.InvalidSymbols:
+            case FileSystemErrorCode.InvalidSymbols:
                 return messageLocalization.format('dxFileManager-errorInvalidSymbols');
         }
 

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-commonjs */
 import DevExpress from './core';
-import FileSystemErrorCode from '../../file_management/file_system_error_code';
+import FileSystemErrorCode from '../../file_management/error_codes';
 import FileSystemError from '../../file_management/file_system_error';
 import FileSystemItem from '../../file_management/file_system_item';
 import ObjectFileSystemProvider from '../../file_management/object_provider';

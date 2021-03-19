@@ -3,7 +3,7 @@ const { test } = QUnit;
 import 'ui/file_manager';
 import ObjectFileSystemProvider from 'file_management/object_provider';
 import FileSystemItem from 'file_management/file_system_item';
-import ErrorCode from 'file_management/file_system_error_code';
+import FileSystemErrorCode from 'file_management/error_codes';
 import { fileSaver } from 'exporter/file_saver';
 
 import { createUploaderFiles, createUploadInfo } from '../../../helpers/fileManagerHelpers.js';
@@ -333,7 +333,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 done();
 
                 assert.equal(items[0].name, 'F1');
-                assert.equal(error.errorId, ErrorCode.Other);
+                assert.equal(error.errorId, FileSystemErrorCode.Other);
 
                 const dir = new FileSystemItem('F1', true);
                 return this.provider.getItems(dir);
@@ -350,7 +350,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 done();
 
                 assert.equal(subFolders[0].name, 'F1.1');
-                assert.equal(error.errorId, ErrorCode.Other);
+                assert.equal(error.errorId, FileSystemErrorCode.Other);
             });
     });
 
@@ -390,7 +390,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             .then(null, error => {
                 done();
 
-                assert.equal(error.errorId, ErrorCode.Other, 'error code is correct');
+                assert.equal(error.errorId, FileSystemErrorCode.Other, 'error code is correct');
 
                 const deferreds = this.provider.moveItems([ items[2] ], subFolders[0]);
                 return deferreds[0];
@@ -421,7 +421,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 done();
 
                 assert.equal(items[0].name, 'F1');
-                assert.equal(error.errorId, ErrorCode.Other);
+                assert.equal(error.errorId, FileSystemErrorCode.Other);
 
                 const dir = new FileSystemItem('F1', true);
                 return this.provider.getItems(dir);
@@ -438,7 +438,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 done();
 
                 assert.equal(subFolders[0].name, 'F1.1');
-                assert.equal(error.errorId, ErrorCode.Other);
+                assert.equal(error.errorId, FileSystemErrorCode.Other);
             });
     });
 
@@ -495,7 +495,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             .then(null, ({ errorId }) => {
                 done();
 
-                assert.equal(errorId, ErrorCode.DirectoryNotFound);
+                assert.equal(errorId, FileSystemErrorCode.DirectoryNotFound);
             });
     });
 
@@ -587,7 +587,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             .then(null, ({ errorId }) => {
                 done();
 
-                assert.equal(errorId, ErrorCode.DirectoryNotFound);
+                assert.equal(errorId, FileSystemErrorCode.DirectoryNotFound);
             });
     });
 
