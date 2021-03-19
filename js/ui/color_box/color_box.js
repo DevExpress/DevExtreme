@@ -302,7 +302,8 @@ const ColorBox = DropDownEditor.inherit({
 
     _renderValue: function() {
         const value = this.option('value');
-        this.option('text', this.option('editAlphaChannel') ? colorUtils.makeRgba(value) : value);
+
+        this.option('text', (this.option('editAlphaChannel') && value !== null) ? colorUtils.makeRgba(value) : value);
         return this.callBase();
     },
 
