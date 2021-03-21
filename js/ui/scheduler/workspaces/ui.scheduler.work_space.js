@@ -19,8 +19,8 @@ import { name as clickEventName } from '../../../events/click';
 import { name as contextMenuEventName } from '../../../events/contextmenu';
 import {
     enter as dragEventEnter,
-    leave as dragEventLeave,
-    drop as dragEventDrop
+    // leave as dragEventLeave,
+    // drop as dragEventDrop
 } from '../../../events/drag';
 import Scrollable from '../../scroll_view/ui.scrollable';
 import HorizontalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.horizontal';
@@ -101,8 +101,8 @@ const SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS = 'dx-scheduler-date-table-scrollabl
 const SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerWorkSpace');
 
 const SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME = addNamespace(dragEventEnter, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXDROP_EVENT_NAME = addNamespace(dragEventDrop, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME = addNamespace(dragEventLeave, 'dxSchedulerDateTable');
+// const SCHEDULER_CELL_DXDROP_EVENT_NAME = addNamespace(dragEventDrop, 'dxSchedulerDateTable');
+// const SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME = addNamespace(dragEventLeave, 'dxSchedulerDateTable');
 const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxSchedulerDateTable');
 
 const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
@@ -2202,46 +2202,46 @@ class SchedulerWorkSpace extends WidgetObserver {
     _attachTablesEvents() {
         const that = this;
         let isPointerDown = false;
-        let cellHeight;
-        let cellWidth;
+        // let cellHeight;
+        // let cellWidth;
         const $element = this.$element();
 
-        eventsEngine.off($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXDROP_EVENT_NAME);
+        // eventsEngine.off($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
+        // eventsEngine.off($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME);
+        // eventsEngine.off($element, SCHEDULER_CELL_DXDROP_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
-        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
-            itemSizeFunc($element) {
-                if(!cellHeight) {
-                    cellHeight = getBoundingRect($element.get(0)).height;
-                }
-                if(!cellWidth) {
-                    cellWidth = getBoundingRect($element.get(0)).width;
-                }
-                return {
-                    width: cellWidth,
-                    height: cellHeight
-                };
-            },
-            checkDropTarget: (target, event) => !this._isOutsideScrollable(target, event)
-        }, function(e) {
-            if(that._$currentTableTarget) {
-                that.removeDroppableCellClass(that._$currentTableTarget);
-            }
-            that._$currentTableTarget = $(e.target);
-            that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
-        });
-        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME, function(e) {
-            if(!$element.find($(e.draggingElement)).length) {
-                that.removeDroppableCellClass();
-            }
-        });
-        eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
-            that.removeDroppableCellClass($(e.target));
-            cellHeight = 0;
-            cellWidth = 0;
-        });
+        // eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
+        //     itemSizeFunc($element) {
+        //         if(!cellHeight) {
+        //             cellHeight = getBoundingRect($element.get(0)).height;
+        //         }
+        //         if(!cellWidth) {
+        //             cellWidth = getBoundingRect($element.get(0)).width;
+        //         }
+        //         return {
+        //             width: cellWidth,
+        //             height: cellHeight
+        //         };
+        //     },
+        //     checkDropTarget: (target, event) => !this._isOutsideScrollable(target, event)
+        // }, function(e) {
+        //     if(that._$currentTableTarget) {
+        //         that.removeDroppableCellClass(that._$currentTableTarget);
+        //     }
+        //     that._$currentTableTarget = $(e.target);
+        //     that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        // });
+        // eventsEngine.on($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME, function(e) {
+        //     if(!$element.find($(e.draggingElement)).length) {
+        //         that.removeDroppableCellClass();
+        //     }
+        // });
+        // eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
+        //     that.removeDroppableCellClass($(e.target));
+        //     cellHeight = 0;
+        //     cellWidth = 0;
+        // });
         eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
             if(isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
@@ -3459,77 +3459,21 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._createDragBehaviorBase($element, getItemData, getItemSettings);
     }
 
-    _createDragBehaviorBase($element, getItemData, getItemSettings, { isSetCursorOffset, ...restOptions } = {}) {
-        let dragElement;
-        const dragBehavior = this.dragBehavior;
-        let itemData;
+    _createDragBehaviorBase($element, getItemData, getItemSettings, options = {}) {
+        const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
-        dragBehavior.addTo($element, {
-            container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
-            dragTemplate: () => {
-                return dragElement;
-            },
-            onDragStart: (e) => {
-                const canceled = e.cancel;
-                const event = e.event;
-                const $itemElement = $(e.itemElement);
-                const appointments = e.component._appointments;
-
-                itemData = getItemData(e.itemElement, appointments);
-                const settings = getItemSettings($itemElement, e);
-
-                if(itemData && !itemData.disabled) {
-                    event.data = event.data || {};
-                    if(!canceled) {
-                        if(!settings.isCompact) {
-                            dragBehavior.updateDragSource(itemData, settings);
-                        }
-
-                        dragElement = this._createDragAppointment(itemData, settings, appointments);
-
-                        event.data.itemElement = dragElement;
-                        event.data.initialPosition = locate($(dragElement));
-                        event.data.itemData = itemData;
-                        event.data.itemSettings = settings;
-
-                        dragBehavior.onDragStart(event.data);
-
-                        resetPosition($(dragElement));
-                    }
-                }
-            },
-            onDragEnd: (e) => {
-                if(itemData && !itemData.disabled) {
-                    dragBehavior.onDragEnd(e);
-                }
-
-                dragElement?.remove();
-            },
-            cursorOffset: isSetCursorOffset
-                ? () => {
-                    const $dragElement = $(dragElement);
-                    return {
-                        x: $dragElement.width() / 2,
-                        y: $dragElement.height() / 2
-                    };
-                }
-                : undefined,
-            ...restOptions,
-        });
-    }
-
-    _createDragAppointment(itemData, settings, appointments) {
-        const appointmentIndex = appointments.option('items').length;
-
-        settings.isCompact = false;
-        settings.virtual = false;
-
-        const items = appointments._renderItem(appointmentIndex, {
-            itemData,
-            settings: [settings]
-        });
-
-        return items[0];
+        this.dragBehavior.addTo($element, createDragBehaviorConfig(
+            this.$element(),
+            (target, event) => this._isOutsideScrollable(target, event),
+            container,
+            this.dragBehavior,
+            () => this._getDroppableCell(),
+            () => this.removeDroppableCellClass(),
+            () => this.getCellWidth(),
+            getItemData,
+            getItemSettings,
+            options)
+        );
     }
 
     _isApplyCompactAppointmentOffset() {
@@ -3602,5 +3546,226 @@ class SchedulerWorkSpace extends WidgetObserver {
         return 0;
     }
 }
+
+const createDragBehaviorConfig = (workspaceElement, isOutsideScrollable, container, dragBehavior, getDroppableCell, removeDroppableCellClass,
+    getCellWidth, getItemData, getItemSettings, options) => {
+    const state = {
+        dragElement: undefined,
+        itemData: undefined,
+    };
+
+    const createDragAppointment = (itemData, settings, appointments) => {
+        const appointmentIndex = appointments.option('items').length;
+
+        settings.isCompact = false;
+        settings.virtual = false;
+
+        const items = appointments._renderItem(appointmentIndex, {
+            itemData,
+            settings: [settings]
+        });
+
+        return items[0];
+    };
+
+    const onDragStart = e => {
+        let cellHeight = 0;
+        let cellWidth = 0;
+
+        eventsEngine.on(workspaceElement, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
+            itemSizeFunc($element) {
+                if(!cellHeight) {
+                    cellHeight = getBoundingRect($element.get(0)).height;
+                }
+                if(!cellWidth) {
+                    cellWidth = getBoundingRect($element.get(0)).width;
+                }
+                return {
+                    width: cellWidth,
+                    height: cellHeight
+                };
+            },
+            checkDropTarget: (target, event) => !isOutsideScrollable(target, event)
+        }, e => {
+            const oldDroppableCell = getDroppableCell();
+            if(oldDroppableCell) {
+                removeDroppableCellClass();
+            }
+            $(e.target).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        });
+
+        const canceled = e.cancel;
+        const event = e.event;
+        const $itemElement = $(e.itemElement);
+        const appointments = e.component._appointments;
+
+        state.itemData = getItemData(e.itemElement, appointments);
+        const settings = getItemSettings($itemElement, e);
+
+        if(state.itemData && !state.itemData.disabled) {
+            event.data = event.data || {};
+            if(!canceled) {
+                if(!settings.isCompact) {
+                    dragBehavior.updateDragSource(state.itemData, settings);
+                }
+
+                state.dragElement = createDragAppointment(state.itemData, settings, appointments);
+
+                event.data.itemElement = state.dragElement;
+                event.data.initialPosition = locate($(state.dragElement));
+                event.data.itemData = state.itemData;
+                event.data.itemSettings = settings;
+
+                dragBehavior.onDragStart(event.data);
+
+                resetPosition($(state.dragElement));
+            }
+        }
+    };
+
+    const onDragMove = () => {
+    };
+
+    const onDragEnd = e => {
+        eventsEngine.off(workspaceElement, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
+
+        if(state.itemData && !state.itemData.disabled) {
+            dragBehavior.onDragEnd(e);
+        }
+
+        state.dragElement?.remove();
+        removeDroppableCellClass();
+    };
+
+    const cursorOffset = options.isSetCursorOffset
+        ? () => {
+            const $dragElement = $(state.dragElement);
+            return {
+                x: $dragElement.width() / 2,
+                y: $dragElement.height() / 2
+            };
+        }
+        : undefined;
+
+    return {
+        container,
+        dragTemplate: () => state.dragElement,
+        onDragStart,
+        onDragMove,
+        onDragEnd,
+        cursorOffset,
+        filter: options.filter
+    };
+};
+
+// const createDragBehaviorConfig = (workspaceElement, isOutsideScrollable, container, dragBehavior, getDroppableCell, removeDroppableCellClass,
+//     getCellWidth, getItemData, getItemSettings, options) => {
+//     const state = {
+//         dragElement: undefined,
+//         itemData: undefined,
+//     };
+
+//     const createDragAppointment = (itemData, settings, appointments) => {
+//         const appointmentIndex = appointments.option('items').length;
+
+//         settings.isCompact = false;
+//         settings.virtual = false;
+
+//         const items = appointments._renderItem(appointmentIndex, {
+//             itemData,
+//             settings: [settings]
+//         });
+
+//         return items[0];
+//     };
+
+//     const onDragStart = e => {
+//         const canceled = e.cancel;
+//         const event = e.event;
+//         const $itemElement = $(e.itemElement);
+//         const appointments = e.component._appointments;
+
+//         state.itemData = getItemData(e.itemElement, appointments);
+//         const settings = getItemSettings($itemElement, e);
+
+//         if(state.itemData && !state.itemData.disabled) {
+//             event.data = event.data || {};
+//             if(!canceled) {
+//                 if(!settings.isCompact) {
+//                     dragBehavior.updateDragSource(state.itemData, settings);
+//                 }
+
+//                 state.dragElement = createDragAppointment(state.itemData, settings, appointments);
+
+//                 event.data.itemElement = state.dragElement;
+//                 event.data.initialPosition = locate($(state.dragElement));
+//                 event.data.itemData = state.itemData;
+//                 event.data.itemSettings = settings;
+
+//                 dragBehavior.onDragStart(event.data);
+
+//                 resetPosition($(state.dragElement));
+//             }
+//         }
+//     };
+
+//     const onDragMove = () => {
+//         const mouseIndent = 10;
+
+//         const appointmentWidth = $(state.dragElement).width();
+//         const isWideAppointment = appointmentWidth > getCellWidth();
+
+//         const draggableElement = locate($(state.dragElement).parent());
+//         const document = domAdapter.getDocument();
+
+//         const newX = draggableElement.left + mouseIndent;
+//         const newY = draggableElement.top + mouseIndent;
+
+//         const elements = isWideAppointment ?
+//             document.elementsFromPoint(newX, newY) :
+//             document.elementsFromPoint(newX + appointmentWidth / 2, newY);
+
+//         const droppableCell = elements.find(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1);
+
+//         if(droppableCell) {
+//             const oldDroppableCell = getDroppableCell();
+
+//             if(!oldDroppableCell.is(droppableCell)) {
+//                 removeDroppableCellClass();
+//             }
+
+//             $(droppableCell).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+//         }
+//     };
+
+//     const onDragEnd = e => {
+//         if(state.itemData && !state.itemData.disabled) {
+//             dragBehavior.onDragEnd(e);
+//         }
+
+//         state.dragElement?.remove();
+//         removeDroppableCellClass();
+//     };
+
+//     const cursorOffset = options.isSetCursorOffset
+//         ? () => {
+//             const $dragElement = $(state.dragElement);
+//             return {
+//                 x: $dragElement.width() / 2,
+//                 y: $dragElement.height() / 2
+//             };
+//         }
+//         : undefined;
+
+//     return {
+//         container,
+//         dragTemplate: () => state.dragElement,
+//         onDragStart,
+//         onDragMove,
+//         onDragEnd,
+//         cursorOffset,
+//         filter: options.filter
+//     };
+// };
 
 export default SchedulerWorkSpace;
