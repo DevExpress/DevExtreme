@@ -623,7 +623,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 mode: 'standard',
             },
             renovateRender: true,
-            height: undefined
+            height: undefined,
+            draggingMode: 'default' // 'outlook'
         });
     }
 
@@ -2208,14 +2209,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachPointerEvents(element);
     }
 
-    __detachDragEvents(element) {
+    _detachDragEvents(element) {
         eventsEngine.off(element, DragEventNames.ENTER);
         eventsEngine.off(element, DragEventNames.LEAVE);
         eventsEngine.off(element, DragEventNames.DROP);
     }
 
     _attachDragEvents(element) {
-        this.__detachDragEvents(element);
+        this._detachDragEvents(element);
 
         const onDragEnter = e => {
             this.removeDroppableCellClass();
@@ -3455,63 +3456,29 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._createDragBehaviorBase($element, getItemData, getItemSettings);
     }
 
-    _createDragBehaviorBase($element, getItemData, getItemSettings, { isSetCursorOffset, ...restOptions } = {}) {
-        let dragElement;
-        const dragBehavior = this.dragBehavior;
-        let itemData;
+    _createDragBehaviorBase($element, getItemData, getItemSettings, options = {}) {
+        const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
-        dragBehavior.addTo($element, {
-            container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
-            dragTemplate: () => {
-                return dragElement;
-            },
-            onDragStart: (e) => {
-                const canceled = e.cancel;
-                const event = e.event;
-                const $itemElement = $(e.itemElement);
-                const appointments = e.component._appointments;
+        const element = this.$element();
 
-                itemData = getItemData(e.itemElement, appointments);
-                const settings = getItemSettings($itemElement, e);
+        const attachGeneralEvents = () => this._attachDragEvents(element);
+        const detachGeneralEvents = () => this._detachDragEvents(element);
 
-                if(itemData && !itemData.disabled) {
-                    event.data = event.data || {};
-                    if(!canceled) {
-                        if(!settings.isCompact) {
-                            dragBehavior.updateDragSource(itemData, settings);
-                        }
+        const isDefaultDraggingMode = this.option('draggingMode') === 'default';
 
-                        dragElement = this._createDragAppointment(itemData, settings, appointments);
-
-                        event.data.itemElement = dragElement;
-                        event.data.initialPosition = locate($(dragElement));
-                        event.data.itemData = itemData;
-                        event.data.itemSettings = settings;
-
-                        dragBehavior.onDragStart(event.data);
-
-                        resetPosition($(dragElement));
-                    }
-                }
-            },
-            onDragEnd: (e) => {
-                if(itemData && !itemData.disabled) {
-                    dragBehavior.onDragEnd(e);
-                }
-
-                dragElement?.remove();
-            },
-            cursorOffset: isSetCursorOffset
-                ? () => {
-                    const $dragElement = $(dragElement);
-                    return {
-                        x: $dragElement.width() / 2,
-                        y: $dragElement.height() / 2
-                    };
-                }
-                : undefined,
-            ...restOptions,
-        });
+        this.dragBehavior.addTo($element, createDragBehaviorConfig(
+            container,
+            isDefaultDraggingMode,
+            this.dragBehavior,
+            attachGeneralEvents,
+            detachGeneralEvents,
+            () => this._getDroppableCell(),
+            () => this.removeDroppableCellClass(),
+            () => this.getCellWidth(),
+            getItemData,
+            getItemSettings,
+            options)
+        );
     }
 
     _createDragAppointment(itemData, settings, appointments) {
@@ -3598,5 +3565,138 @@ class SchedulerWorkSpace extends WidgetObserver {
         return 0;
     }
 }
+
+const createDragBehaviorConfig = (
+    container,
+    isDefaultDraggingMode,
+    dragBehavior,
+    attachGeneralEvents,
+    detachGeneralEvents,
+    getDroppableCell,
+    removeDroppableCellClass,
+    getCellWidth,
+    getItemData,
+    getItemSettings,
+    options) => {
+
+    const state = {
+        dragElement: undefined,
+        itemData: undefined,
+    };
+
+    const createDragAppointment = (itemData, settings, appointments) => {
+        const appointmentIndex = appointments.option('items').length;
+
+        settings.isCompact = false;
+        settings.virtual = false;
+
+        const items = appointments._renderItem(appointmentIndex, {
+            itemData,
+            settings: [settings]
+        });
+
+        return items[0];
+    };
+
+    const onDragStart = e => {
+        if(!isDefaultDraggingMode) {
+            detachGeneralEvents();
+        }
+
+        const canceled = e.cancel;
+        const event = e.event;
+        const $itemElement = $(e.itemElement);
+        const appointments = e.component._appointments;
+
+        state.itemData = getItemData(e.itemElement, appointments);
+        const settings = getItemSettings($itemElement, e);
+
+        if(state.itemData && !state.itemData.disabled) {
+            event.data = event.data || {};
+            if(!canceled) {
+                if(!settings.isCompact) {
+                    dragBehavior.updateDragSource(state.itemData, settings);
+                }
+
+                state.dragElement = createDragAppointment(state.itemData, settings, appointments);
+
+                event.data.itemElement = state.dragElement;
+                event.data.initialPosition = locate($(state.dragElement));
+                event.data.itemData = state.itemData;
+                event.data.itemSettings = settings;
+
+                dragBehavior.onDragStart(event.data);
+
+                resetPosition($(state.dragElement));
+            }
+        }
+    };
+
+    const onDragMove = () => {
+        if(isDefaultDraggingMode) {
+            return;
+        }
+
+        const mouseIndent = 10;
+
+        const appointmentWidth = $(state.dragElement).width();
+        const isWideAppointment = appointmentWidth > getCellWidth();
+
+        const draggableElement = locate($(state.dragElement).parent());
+        const document = domAdapter.getDocument();
+
+        const newX = draggableElement.left + mouseIndent;
+        const newY = draggableElement.top + mouseIndent;
+
+        const elements = isWideAppointment ?
+            document.elementsFromPoint(newX, newY) :
+            document.elementsFromPoint(newX + appointmentWidth / 2, newY);
+
+        const droppableCell = elements.find(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1);
+
+        if(droppableCell) {
+            const oldDroppableCell = getDroppableCell();
+
+            if(!oldDroppableCell.is(droppableCell)) {
+                removeDroppableCellClass();
+            }
+
+            $(droppableCell).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        }
+    };
+
+    const onDragEnd = e => {
+        if(!isDefaultDraggingMode) {
+            attachGeneralEvents();
+        }
+
+        if(state.itemData && !state.itemData.disabled) {
+            dragBehavior.onDragEnd(e);
+        }
+
+        state.dragElement?.remove();
+        removeDroppableCellClass();
+    };
+
+    const cursorOffset = options.isSetCursorOffset
+        ? () => {
+            const $dragElement = $(state.dragElement);
+            return {
+                x: $dragElement.width() / 2,
+                y: $dragElement.height() / 2
+            };
+        }
+        : undefined;
+
+    return {
+        container,
+        dragTemplate: () => state.dragElement,
+        onDragStart,
+        onDragMove,
+        onDragEnd,
+        cursorOffset,
+        filter: options.filter
+    };
+};
 
 export default SchedulerWorkSpace;
