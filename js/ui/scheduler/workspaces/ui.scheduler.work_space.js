@@ -2200,7 +2200,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _attachTablesEvents() {
-        const that = this;
         let isPointerDown = false;
         const $element = this.$element();
 
@@ -2211,37 +2210,37 @@ class SchedulerWorkSpace extends WidgetObserver {
         eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
         eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
             checkDropTarget: (target, event) => !this._isOutsideScrollable(target, event)
-        }, function(e) {
-            if(that._$currentTableTarget) {
-                that.removeDroppableCellClass(that._$currentTableTarget);
+        }, e => {
+            if(this._$currentTableTarget) {
+                this.removeDroppableCellClass(this._$currentTableTarget);
             }
-            that._$currentTableTarget = $(e.target);
-            that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            this._$currentTableTarget = $(e.target);
+            this._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME, function(e) {
+        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME, e => {
             if(!$element.find($(e.draggingElement)).length) {
-                that.removeDroppableCellClass();
+                this.removeDroppableCellClass();
             }
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
-            that.removeDroppableCellClass($(e.target));
+        eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
+            this.removeDroppableCellClass($(e.target));
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
+        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
             if(isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
-                that.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
+                this.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
                 eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-                eventsEngine.on(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, function() {
+                eventsEngine.on(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, () => {
                     isPointerDown = false;
-                    that.$element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
+                    this.$element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
                 });
             }
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
-            if(isPointerDown && that._dateTableScrollable && !that._dateTableScrollable.option('scrollByContent')) {
+        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
+            if(isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
                 e.preventDefault();
                 e.stopPropagation();
-                that._moveToCell($(e.target), true);
+                this._moveToCell($(e.target), true);
             }
         });
     }
