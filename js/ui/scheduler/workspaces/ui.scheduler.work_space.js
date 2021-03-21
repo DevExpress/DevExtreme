@@ -2202,8 +2202,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _attachTablesEvents() {
         const that = this;
         let isPointerDown = false;
-        let cellHeight;
-        let cellWidth;
         const $element = this.$element();
 
         eventsEngine.off($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
@@ -2212,18 +2210,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
         eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
-            itemSizeFunc($element) {
-                if(!cellHeight) {
-                    cellHeight = getBoundingRect($element.get(0)).height;
-                }
-                if(!cellWidth) {
-                    cellWidth = getBoundingRect($element.get(0)).width;
-                }
-                return {
-                    width: cellWidth,
-                    height: cellHeight
-                };
-            },
             checkDropTarget: (target, event) => !this._isOutsideScrollable(target, event)
         }, function(e) {
             if(that._$currentTableTarget) {
@@ -2239,8 +2225,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
         eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
             that.removeDroppableCellClass($(e.target));
-            cellHeight = 0;
-            cellWidth = 0;
         });
         eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
             if(isMouseEvent(e) && e.which === 1) {
