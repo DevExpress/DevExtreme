@@ -122,8 +122,7 @@ const DATE_TABLE_MIN_CELL_WIDTH = 75;
 const DAY_MS = toMs('day');
 const HOUR_MS = toMs('hour');
 
-const SCHEDULER_DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
-
+const DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
 const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
 
 class ScrollSemaphore {
@@ -2214,25 +2213,18 @@ class SchedulerWorkSpace extends WidgetObserver {
         eventsEngine.off(element, DragEventNames.LEAVE);
         eventsEngine.off(element, DragEventNames.DROP);
 
-        eventsEngine.on(element, DragEventNames.ENTER, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
-            checkDropTarget: (target, event) => !this._isOutsideScrollable(target, event)
-        }, e => {
-            if(this._$currentTableTarget) {
-                this.removeDroppableCellClass(this._$currentTableTarget);
-            }
-            this._$currentTableTarget = $(e.target);
-            this._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
-        });
+        const onDragEnter = e => {
+            this.removeDroppableCellClass();
+            $(e.target).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        };
 
-        eventsEngine.on(element, DragEventNames.LEAVE, e => {
-            if(!element.find($(e.draggingElement)).length) {
-                this.removeDroppableCellClass();
-            }
-        });
+        const onCheckDropTarget = (target, event) => {
+            !this._isOutsideScrollable(target, event);
+        };
 
-        eventsEngine.on(element, DragEventNames.DROP, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
-            this.removeDroppableCellClass($(e.target));
-        });
+        eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
+        eventsEngine.on(element, DragEventNames.LEAVE, () => this.removeDroppableCellClass());
+        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => this.removeDroppableCellClass());
     }
 
     _attachPointerEvents(element) {
@@ -2241,7 +2233,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         eventsEngine.off(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
         eventsEngine.off(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
 
-        eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
+        eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, DRAG_AND_DROP_SELECTOR, e => {
             if(isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
                 this.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
@@ -2253,7 +2245,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             }
         });
 
-        eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
+        eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, DRAG_AND_DROP_SELECTOR, e => {
             if(isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
                 e.preventDefault();
                 e.stopPropagation();
