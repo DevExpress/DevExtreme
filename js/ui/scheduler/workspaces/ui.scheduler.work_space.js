@@ -2208,10 +2208,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachPointerEvents(element);
     }
 
-    _attachDragEvents(element) {
+    __detachDragEvents(element) {
         eventsEngine.off(element, DragEventNames.ENTER);
         eventsEngine.off(element, DragEventNames.LEAVE);
         eventsEngine.off(element, DragEventNames.DROP);
+    }
+
+    _attachDragEvents(element) {
+        this.__detachDragEvents(element);
 
         const onDragEnter = e => {
             this.removeDroppableCellClass();
@@ -2219,7 +2223,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         const onCheckDropTarget = (target, event) => {
-            !this._isOutsideScrollable(target, event);
+            return !this._isOutsideScrollable(target, event);
         };
 
         eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
