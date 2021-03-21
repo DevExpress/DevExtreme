@@ -100,9 +100,12 @@ const SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS = 'dx-scheduler-date-table-scrollabl
 
 const SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerWorkSpace');
 
-const SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME = addNamespace(dragEventEnter, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXDROP_EVENT_NAME = addNamespace(dragEventDrop, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME = addNamespace(dragEventLeave, 'dxSchedulerDateTable');
+const DragEventNames = {
+    ENTER: addNamespace(dragEventEnter, 'dxSchedulerDateTable'),
+    DROP: addNamespace(dragEventDrop, 'dxSchedulerDateTable'),
+    LEAVE: addNamespace(dragEventLeave, 'dxSchedulerDateTable')
+};
+
 const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxSchedulerDateTable');
 
 const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
@@ -2200,15 +2203,18 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _attachTablesEvents() {
-        let isPointerDown = false;
-        const $element = this.$element();
+        const element = this.$element();
 
-        eventsEngine.off($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXDROP_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
-        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
+        this._attachDragEvents(element);
+        this._attachPointerEvents(element);
+    }
+
+    _attachDragEvents(element) {
+        eventsEngine.off(element, DragEventNames.ENTER);
+        eventsEngine.off(element, DragEventNames.LEAVE);
+        eventsEngine.off(element, DragEventNames.DROP);
+
+        eventsEngine.on(element, DragEventNames.ENTER, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
             checkDropTarget: (target, event) => !this._isOutsideScrollable(target, event)
         }, e => {
             if(this._$currentTableTarget) {
@@ -2217,15 +2223,25 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$currentTableTarget = $(e.target);
             this._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME, e => {
-            if(!$element.find($(e.draggingElement)).length) {
+
+        eventsEngine.on(element, DragEventNames.LEAVE, e => {
+            if(!element.find($(e.draggingElement)).length) {
                 this.removeDroppableCellClass();
             }
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
+
+        eventsEngine.on(element, DragEventNames.DROP, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
             this.removeDroppableCellClass($(e.target));
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
+    }
+
+    _attachPointerEvents(element) {
+        let isPointerDown = false;
+
+        eventsEngine.off(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
+        eventsEngine.off(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
+
+        eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
             if(isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
                 this.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
@@ -2236,7 +2252,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 });
             }
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
+
+        eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, e => {
             if(isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
                 e.preventDefault();
                 e.stopPropagation();
