@@ -2,7 +2,7 @@ import FileSystemItem from "./file_system_item";
 
 /**
  * @docid FileSystemError
- * @module file_management/file_system_error
+ * @module file_management/error
  * @namespace DevExpress.fileManagement
  * @export default
  * @prevFileNamespace DevExpress.fileManagement

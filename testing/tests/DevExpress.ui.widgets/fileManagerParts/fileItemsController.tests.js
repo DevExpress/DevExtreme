@@ -1,7 +1,7 @@
 const { test } = QUnit;
 
 import FileItemsController from 'ui/file_manager/file_items_controller';
-import ErrorCode from 'file_management/errors';
+import ErrorCode from 'file_management/error_codes';
 import { createUploaderFiles, createUploadInfo, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
 import { isString } from 'core/utils/type';
 
