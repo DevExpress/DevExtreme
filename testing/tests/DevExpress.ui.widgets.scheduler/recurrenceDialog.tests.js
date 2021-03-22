@@ -18,7 +18,7 @@ module('Recurrence Dialog', {
         fx.off = false;
     },
 }, () => {
-    if(isDesktopEnvironment) {
+    if(isDesktopEnvironment()) {
         test('Recurrence dialog should be disposed of after it is closed', function(assert) {
             const scheduler = createWrapper({
                 currentDate: new Date(2021, 2, 22),
