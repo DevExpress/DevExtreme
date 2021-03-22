@@ -344,7 +344,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @type_function_param1_field4 value:Array<number,string,Date>
      * @type_function_param1_field5 previousValue:Array<number,string,Date>
      * @type_function_param1_field6 event:event
-     * @default null
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz

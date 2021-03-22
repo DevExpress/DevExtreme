@@ -34,7 +34,6 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
     fieldTemplate?: template | ((selectedItem: any, fieldElement: TElement) => string | TElement);
     /**
      * @docid
-     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 text:string
      * @type_function_param1_field5 customItem:string|object|Promise<any>

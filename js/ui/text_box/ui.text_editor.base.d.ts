@@ -154,7 +154,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
-     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
