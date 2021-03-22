@@ -3828,6 +3828,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
                 groupExpanding: undefined,
                 grouping: false,
                 pageIndex: true,
+                pageSize: false,
                 paging: true,
                 reload: false,
                 skip: true,
