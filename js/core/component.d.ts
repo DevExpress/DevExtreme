@@ -22,11 +22,6 @@ export interface ComponentOptions<T = Component> {
   onInitialized?: ((e: { component?: T, element?: TElement }) => void);
   /**
    * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field1 component:this
-   * @type_function_param1_field4 name:string
-   * @type_function_param1_field5 fullName:string
-   * @type_function_param1_field6 value:any
    * @default null
    * @action
    * @prevFileNamespace DevExpress.core
