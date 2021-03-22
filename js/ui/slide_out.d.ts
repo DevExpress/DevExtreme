@@ -101,7 +101,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => any);
+    onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -109,7 +109,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => any);
+    onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default 0

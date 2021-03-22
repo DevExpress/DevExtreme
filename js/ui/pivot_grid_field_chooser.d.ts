@@ -127,7 +127,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: TElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: TEvent }) => any);
+    onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: TElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: TEvent }) => void);
     /**
      * @docid
      * @default 500

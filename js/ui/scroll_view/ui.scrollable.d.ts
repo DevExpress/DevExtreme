@@ -52,7 +52,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -67,7 +67,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUpdated?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onUpdated?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
     /**
      * @docid
      * @default false [for](non-touch_devices)

@@ -304,7 +304,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, event?: TEvent, node?: dxTreeMapNode }) => any) | string;
+    onClick?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, event?: TEvent, node?: dxTreeMapNode }) => void) | string;
     /**
      * @docid
      * @extends Action
@@ -315,7 +315,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrill?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => any);
+    onDrill?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
     /**
      * @docid
      * @extends Action
@@ -326,7 +326,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => any);
+    onHoverChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
     /**
      * @docid
      * @extends Action
@@ -337,7 +337,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodesInitialized?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, root?: dxTreeMapNode }) => any);
+    onNodesInitialized?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, root?: dxTreeMapNode }) => void);
     /**
      * @docid
      * @extends Action
@@ -348,7 +348,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodesRendering?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => any);
+    onNodesRendering?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
     /**
      * @docid
      * @extends Action
@@ -359,7 +359,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => any);
+    onSelectionChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
     /**
      * @docid
      * @default undefined

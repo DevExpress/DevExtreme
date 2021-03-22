@@ -72,7 +72,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onResize?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -80,7 +80,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -88,7 +88,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -98,7 +98,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: T, element?: TElement, model?: any, titleElement?: TElement }) => any);
+    onTitleRendered?: ((e: { component?: T, element?: TElement, model?: any, titleElement?: TElement }) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function

@@ -56,7 +56,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onContentReady?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default 0

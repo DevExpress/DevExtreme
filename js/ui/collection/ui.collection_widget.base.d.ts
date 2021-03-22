@@ -77,7 +77,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any) | string;
+    onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void) | string;
     /**
      * @docid
      * @extends Action
@@ -90,7 +90,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any);
+    onItemContextMenu?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
     /**
      * @docid
      * @extends Action
@@ -103,7 +103,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any);
+    onItemHold?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
     /**
      * @docid
      * @extends Action
@@ -115,7 +115,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number }) => any);
+    onItemRendered?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number }) => void);
     /**
      * @docid
      * @extends Action
@@ -126,7 +126,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => void);
     /**
      * @docid
      * @default -1

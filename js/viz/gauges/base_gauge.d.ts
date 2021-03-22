@@ -54,7 +54,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => any);
+    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -65,7 +65,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => any);
+    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
      * @type object
@@ -180,7 +180,7 @@ export interface BaseGaugeRangeContainer {
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.color
        * @prevFileNamespace DevExpress.viz
-       * 
+       *
        */
       color?: string,
       /**

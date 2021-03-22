@@ -29,7 +29,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
+    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => void);
     /**
      * @docid
      * @default false

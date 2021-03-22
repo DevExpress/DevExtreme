@@ -43,7 +43,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onDisposing?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -55,7 +55,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: TElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
+    onOptionChanged?: ((e: { component?: T, element?: TElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
     /**
      * @docid
      * @default false

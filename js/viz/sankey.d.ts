@@ -449,7 +449,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyLink }) => any) | string;
+    onLinkClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyLink }) => void) | string;
     /**
      * @docid
      * @extends Action
@@ -460,7 +460,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyLink }) => any);
+    onLinkHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyLink }) => void);
     /**
      * @docid
      * @extends Action
@@ -472,7 +472,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyNode }) => any) | string;
+    onNodeClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyNode }) => void) | string;
     /**
      * @docid
      * @extends Action
@@ -483,7 +483,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyNode }) => any);
+    onNodeHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyNode }) => void);
     /**
      * @docid
      * @extends CommonVizPalette

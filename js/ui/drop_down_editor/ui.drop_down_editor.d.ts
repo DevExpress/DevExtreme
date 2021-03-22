@@ -82,7 +82,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onClosed?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -90,7 +90,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onOpened?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default false

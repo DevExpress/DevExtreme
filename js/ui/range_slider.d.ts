@@ -32,7 +32,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSlider, element?: TElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
+    onValueChanged?: ((e: { component?: dxRangeSlider, element?: TElement, model?: any, start?: number, end?: number, value?: Array<number> }) => void);
     /**
      * @docid
      * @default 40

@@ -98,7 +98,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomCommand?: ((e: { component?: dxDiagram, element?: TElement, name?: string }) => any);
+    onCustomCommand?: ((e: { component?: dxDiagram, element?: TElement, name?: string }) => void);
     /**
      * @docid
      * @type_function_param1 container:dxSVGElement
@@ -796,7 +796,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxDiagram, element?: TElement, model?: any, item?: dxDiagramItem }) => any);
+    onItemClick?: ((e: { component?: dxDiagram, element?: TElement, model?: any, item?: dxDiagramItem }) => void);
     /**
      * @docid
      * @extends Action
@@ -806,7 +806,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDblClick?: ((e: { component?: dxDiagram, element?: TElement, model?: any, item?: dxDiagramItem }) => any);
+    onItemDblClick?: ((e: { component?: dxDiagram, element?: TElement, model?: any, item?: dxDiagramItem }) => void);
     /**
      * @docid
      * @extends Action
@@ -816,7 +816,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxDiagram, element?: TElement, model?: any, items?: Array<dxDiagramItem> }) => any);
+    onSelectionChanged?: ((e: { component?: dxDiagram, element?: TElement, model?: any, items?: Array<dxDiagramItem> }) => void);
     /**
      * @docid
      * @extends Action
@@ -829,7 +829,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRequestEditOperation?: ((e: { component?: dxDiagram, element?: TElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs, reason?: 'checkUIElementAvailability' | 'modelModification', allowed?: boolean }) => any);
+    onRequestEditOperation?: ((e: { component?: dxDiagram, element?: TElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs, reason?: 'checkUIElementAvailability' | 'modelModification', allowed?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -840,7 +840,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: TElement, model?: any, changes?: any[], allowed?: boolean }) => any);
+    onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: TElement, model?: any, changes?: any[], allowed?: boolean }) => void);
     /**
      * @docid
      * @default "white"
@@ -1397,7 +1397,7 @@ export interface dxDiagramShape extends dxDiagramItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    containerExpanded?: boolean;    
+    containerExpanded?: boolean;
 }
 
 /**

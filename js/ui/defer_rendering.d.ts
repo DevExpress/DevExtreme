@@ -29,7 +29,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => any);
+    onRendered?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -37,7 +37,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => any);
+    onShown?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @type TPromise|bool

@@ -119,7 +119,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorEnterKey?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string }) => any);
+    onEditorEnterKey?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string }) => void);
     /**
      * @docid
      * @extends Action
@@ -130,7 +130,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFieldDataChanged?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string, value?: any }) => any);
+    onFieldDataChanged?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string, value?: any }) => void);
     /**
      * @docid
      * @default "optional"

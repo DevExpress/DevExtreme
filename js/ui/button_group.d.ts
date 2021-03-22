@@ -68,7 +68,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any);
+    onItemClick?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
     /**
      * @docid
      * @extends Action
@@ -79,7 +79,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+    onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => void);
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged

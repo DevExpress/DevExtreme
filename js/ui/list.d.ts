@@ -186,7 +186,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onGroupRendered?: ((e: { component?: dxList, element?: TElement, model?: any, groupData?: any, groupElement?: TElement, groupIndex?: number }) => any);
+    onGroupRendered?: ((e: { component?: dxList, element?: TElement, model?: any, groupData?: any, groupElement?: TElement, groupIndex?: number }) => void);
     /**
      * @docid
      * @extends Action
@@ -199,7 +199,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => any) | string;
+    onItemClick?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => void) | string;
     /**
      * @docid
      * @extends Action
@@ -212,7 +212,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => any);
+    onItemContextMenu?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => void);
     /**
      * @docid
      * @extends Action
@@ -225,7 +225,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDeleted?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any }) => any);
+    onItemDeleted?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any }) => void);
     /**
      * @docid
      * @extends Action
@@ -239,7 +239,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDeleting?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, cancel?: boolean | TPromise<void> }) => any);
+    onItemDeleting?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, cancel?: boolean | TPromise<void> }) => void);
     /**
      * @docid
      * @extends Action
@@ -252,7 +252,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => any);
+    onItemHold?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => void);
     /**
      * @docid
      * @extends Action
@@ -267,7 +267,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemReordered?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number }) => any);
+    onItemReordered?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number }) => void);
     /**
      * @docid
      * @extends Action
@@ -281,7 +281,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemSwipe?: ((e: { component?: dxList, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, itemIndex?: number | any, direction?: string }) => any);
+    onItemSwipe?: ((e: { component?: dxList, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, itemIndex?: number | any, direction?: string }) => void);
     /**
      * @docid
      * @extends Action
@@ -289,7 +289,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPageLoading?: ((e: { component?: dxList, element?: TElement, model?: any }) => any);
+    onPageLoading?: ((e: { component?: dxList, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -297,7 +297,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullRefresh?: ((e: { component?: dxList, element?: TElement, model?: any }) => any);
+    onPullRefresh?: ((e: { component?: dxList, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -312,7 +312,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: dxList, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: dxList, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -322,7 +322,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: { component?: dxList, element?: TElement, model?: any, value?: boolean }) => any);
+    onSelectAllValueChanged?: ((e: { component?: dxList, element?: TElement, model?: any, value?: boolean }) => void);
     /**
      * @docid
      * @type Enums.ListPageLoadMode

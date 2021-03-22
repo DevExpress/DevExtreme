@@ -146,7 +146,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragEnd?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
+    onDragEnd?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -163,7 +163,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragMove?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
+    onDragMove?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -177,7 +177,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragStart?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromData?: any }) => any);
+    onDragStart?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromData?: any }) => void);
 }
 /**
  * @docid

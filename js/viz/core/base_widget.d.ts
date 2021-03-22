@@ -70,7 +70,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrawn?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onDrawn?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -78,7 +78,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExported?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onExported?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -90,7 +90,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExporting?: ((e: { component?: T, element?: TElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => any);
+    onExporting?: ((e: { component?: T, element?: TElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -103,7 +103,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onFileSaving?: ((e: { component?: T, element?: TElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+    onFileSaving?: ((e: { component?: T, element?: TElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -113,7 +113,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onIncidentOccurred?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => any);
+    onIncidentOccurred?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
      * @default false

@@ -43,7 +43,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomItemCreating?: ((e: { component?: T, element?: TElement, model?: any, text?: string, customItem?: string | any | TPromise<any> }) => any);
+    onCustomItemCreating?: ((e: { component?: T, element?: TElement, model?: any, text?: string, customItem?: string | any | TPromise<any> }) => void);
     /**
      * @docid
      * @default true

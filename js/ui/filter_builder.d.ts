@@ -189,7 +189,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, editorElement?: TElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+    onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, editorElement?: TElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -211,7 +211,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPreparing?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: TElement, editorName?: string, editorOptions?: any, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+    onEditorPreparing?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: TElement, editorName?: string, editorOptions?: any, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -222,7 +222,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, previousValue?: any }) => any);
+    onValueChanged?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, previousValue?: any }) => void);
     /**
      * @docid
      * @type Filter expression

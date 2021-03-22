@@ -74,7 +74,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: TEvent }) => any);
+    onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: TEvent }) => void);
     /**
      * @docid
      * @extends Action
@@ -84,7 +84,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, selectedItem?: any }) => any);
+    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, selectedItem?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -96,7 +96,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
+    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => void);
     /**
      * @docid
      * @default false

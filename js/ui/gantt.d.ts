@@ -178,7 +178,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxGantt, element?: TElement, model?: any, selectedRowKey?: any }) => any);
+    onSelectionChanged?: ((e: { component?: dxGantt, element?: TElement, model?: any, selectedRowKey?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -188,7 +188,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomCommand?: ((e: { component?: dxGantt, element?: TElement, name?: string }) => any);
+    onCustomCommand?: ((e: { component?: dxGantt, element?: TElement, name?: string }) => void);
         /**
      * @docid
      * @extends Action
@@ -203,7 +203,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxGantt, element?: TElement, cancel?: boolean, event?: TEvent, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => any);
+    onContextMenuPreparing?: ((e: { component?: dxGantt, element?: TElement, cancel?: boolean, event?: TEvent, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => void);
     /**
      * @docid
      * @extends Action
@@ -214,7 +214,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskInserting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => any);
+    onTaskInserting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -225,7 +225,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskInserted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => any);
+    onTaskInserted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -237,7 +237,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskDeleting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
+    onTaskDeleting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -248,7 +248,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskDeleted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => any);
+    onTaskDeleted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -261,7 +261,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskUpdating?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => any);
+    onTaskUpdating?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -272,7 +272,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskUpdated?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => any);
+    onTaskUpdated?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -285,7 +285,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskMoving?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => any);
+    onTaskMoving?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -299,7 +299,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskEditDialogShowing?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any, readOnlyFields?: Array<string>, hiddenFields?: Array<string> }) => any);
+    onTaskEditDialogShowing?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any, readOnlyFields?: Array<string>, hiddenFields?: Array<string> }) => void);
     /**
      * @docid
      * @extends Action
@@ -310,7 +310,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDependencyInserting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => any);
+    onDependencyInserting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -321,52 +321,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDependencyInserted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
-     * @type_function_param1_field6 key:any
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onDependencyDeleting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onDependencyDeleted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 cancel:boolean
-     * @type_function_param1_field5 values:any
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onResourceInserting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 values:any
-     * @type_function_param1_field5 key:any
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onResourceInserted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => any);
+    onDependencyInserted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -378,8 +333,8 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResourceDeleting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
-     /**
+    onDependencyDeleting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => void);
+    /**
      * @docid
      * @extends Action
      * @type_function_param1 e:object
@@ -389,7 +344,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResourceDeleted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => any);
+    onDependencyDeleted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -400,8 +355,8 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResourceAssigning?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => any);
-     /**
+    onResourceInserting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => void);
+    /**
      * @docid
      * @extends Action
      * @type_function_param1 e:object
@@ -411,7 +366,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResourceAssigned?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => any);
+    onResourceInserted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -423,7 +378,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResourceUnassigning?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
+    onResourceDeleting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => void);
      /**
      * @docid
      * @extends Action
@@ -434,7 +389,52 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResourceUnassigned?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => any);
+    onResourceDeleted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
+    /**
+     * @docid
+     * @extends Action
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceAssigning?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => void);
+     /**
+     * @docid
+     * @extends Action
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 values:any
+     * @type_function_param1_field5 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceAssigned?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
+    /**
+     * @docid
+     * @extends Action
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field5 values:any
+     * @type_function_param1_field6 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceUnassigning?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => void);
+     /**
+     * @docid
+     * @extends Action
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 values:any
+     * @type_function_param1_field5 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceUnassigned?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -446,7 +446,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskClick?: ((e: { component?: dxGantt, element?: TElement, model?: any, event?: TEvent, key?: any, data?: any }) => any);
+    onTaskClick?: ((e: { component?: dxGantt, element?: TElement, model?: any, event?: TEvent, key?: any, data?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -459,7 +459,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskDblClick?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, event?: TEvent, key?: any, data?: any }) => any);
+    onTaskDblClick?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, event?: TEvent, key?: any, data?: any }) => void);
     /**
      * @docid
      * @default null

@@ -155,7 +155,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPageLoading?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => any);
+    onPageLoading?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -163,7 +163,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullRefresh?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => any);
+    onPullRefresh?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -178,7 +178,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: dxLookup, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: dxLookup, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -189,7 +189,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    onTitleRendered?: ((e: { component?: dxLookup, element?: TElement, model?: any, titleElement?: TElement }) => any);
+    onTitleRendered?: ((e: { component?: dxLookup, element?: TElement, model?: any, titleElement?: TElement }) => void);
     /**
      * @docid
      * @extends Action
@@ -201,7 +201,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxLookup, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
+    onValueChanged?: ((e: { component?: dxLookup, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => void);
     /**
      * @docid
      * @type Enums.ListPageLoadMode

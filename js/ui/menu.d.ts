@@ -51,7 +51,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuHidden?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => any);
+    onSubmenuHidden?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
     /**
      * @docid
      * @extends Action
@@ -62,7 +62,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuHiding?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement, cancel?: boolean }) => any);
+    onSubmenuHiding?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement, cancel?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -72,7 +72,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuShowing?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => any);
+    onSubmenuShowing?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
     /**
      * @docid
      * @extends Action
@@ -82,7 +82,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuShown?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => any);
+    onSubmenuShown?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
     /**
      * @docid
      * @type Enums.Orientation

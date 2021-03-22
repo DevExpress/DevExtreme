@@ -20,7 +20,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: { component?: dxProgressBar, element?: TElement, model?: any, event?: TEvent }) => any);
+    onComplete?: ((e: { component?: dxProgressBar, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
      * @default true

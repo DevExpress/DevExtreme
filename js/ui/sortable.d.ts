@@ -97,7 +97,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAdd?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+    onAdd?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -117,7 +117,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragChange?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+    onDragChange?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -137,7 +137,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragEnd?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+    onDragEnd?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -157,7 +157,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragMove?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+    onDragMove?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -172,7 +172,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragStart?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, fromData?: any }) => any);
+    onDragStart?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, fromData?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -190,7 +190,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRemove?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
+    onRemove?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -210,7 +210,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReorder?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: TPromise<void> }) => any);
+    onReorder?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: TPromise<void> }) => void);
 }
 /**
  * @docid

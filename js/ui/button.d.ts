@@ -53,7 +53,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxButton, element?: TElement, model?: any, event?: TEvent, validationGroup?: any }) => any);
+    onClick?: ((e: { component?: dxButton, element?: TElement, model?: any, event?: TEvent, validationGroup?: any }) => void);
     /**
      * @docid
      * @type Enums.ButtonStylingMode

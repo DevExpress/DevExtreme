@@ -514,7 +514,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onCenterChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, center?: Array<number> }) => any);
+    onCenterChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, center?: Array<number> }) => void);
     /**
      * @docid
      * @extends Action
@@ -526,7 +526,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, event?: TEvent, target?: MapLayerElement }) => any) | string;
+    onClick?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, event?: TEvent, target?: MapLayerElement }) => void) | string;
     /**
      * @docid
      * @extends Action
@@ -537,7 +537,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement }) => any);
+    onSelectionChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement }) => void);
     /**
      * @docid
      * @extends Action
@@ -548,7 +548,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
+    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
     /**
      * @docid
      * @extends Action
@@ -559,7 +559,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
+    onTooltipShown?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
     /**
      * @docid
      * @extends Action
@@ -570,7 +570,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, zoomFactor?: number }) => any);
+    onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, zoomFactor?: number }) => void);
     /**
      * @docid
      * @default true

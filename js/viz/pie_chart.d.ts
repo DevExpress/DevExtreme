@@ -168,7 +168,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxPieChart, element?: TElement, model?: any, event?: TEvent, target?: string | number, points?: Array<piePointObject> }) => any) | string;
+    onLegendClick?: ((e: { component?: dxPieChart, element?: TElement, model?: any, event?: TEvent, target?: string | number, points?: Array<piePointObject> }) => void) | string;
     /**
      * @docid
      * @extends CommonVizPalette

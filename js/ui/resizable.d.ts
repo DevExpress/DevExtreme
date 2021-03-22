@@ -66,7 +66,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => any);
+    onResize?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => void);
     /**
      * @docid
      * @extends Action
@@ -78,7 +78,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => any);
+    onResizeEnd?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => void);
     /**
      * @docid
      * @extends Action
@@ -90,7 +90,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => any);
+    onResizeStart?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => void);
     /**
      * @docid
      * @type_function_return number|string

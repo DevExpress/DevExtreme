@@ -201,7 +201,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => any);
+    onTooltipHidden?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -212,7 +212,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => any);
+    onTooltipShown?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
      * @extends CommonVizPalette

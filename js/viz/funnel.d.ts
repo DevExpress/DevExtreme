@@ -450,7 +450,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: { component?: dxFunnel, element?: TElement, model?: any, item?: dxFunnelItem }) => any);
+    onHoverChanged?: ((e: { component?: dxFunnel, element?: TElement, model?: any, item?: dxFunnelItem }) => void);
     /**
      * @docid
      * @extends Action
@@ -462,7 +462,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onItemClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => any) | string;
+    onItemClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => void) | string;
     /**
      * @docid
      * @extends Action
@@ -474,7 +474,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => any) | string;
+    onLegendClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => void) | string;
     /**
      * @docid
      * @extends Action
@@ -485,7 +485,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxFunnel, element?: TElement, model?: any, item?: dxFunnelItem }) => any);
+    onSelectionChanged?: ((e: { component?: dxFunnel, element?: TElement, model?: any, item?: dxFunnelItem }) => void);
     /**
      * @docid
      * @extends CommonVizPalette

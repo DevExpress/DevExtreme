@@ -123,7 +123,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemTitleClick?: ((e: { component?: dxAccordion, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any) | string;
+    onItemTitleClick?: ((e: { component?: dxAccordion, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void) | string;
     /**
      * @docid
      * @default false

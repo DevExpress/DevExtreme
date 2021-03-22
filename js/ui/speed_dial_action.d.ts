@@ -43,7 +43,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { event?: TEvent, component?: dxSpeedDialAction, element?: TElement, actionElement?: TElement }) => any);
+    onClick?: ((e: { event?: TEvent, component?: dxSpeedDialAction, element?: TElement, actionElement?: TElement }) => void);
     /**
      * @docid
      * @extends Action
@@ -53,7 +53,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: TElement, model?: any, actionElement?: TElement }) => any);
+    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: TElement, model?: any, actionElement?: TElement }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

@@ -112,7 +112,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onHidden?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -122,7 +122,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: T, element?: TElement, model?: any, cancel?: boolean }) => any);
+    onHiding?: ((e: { component?: T, element?: TElement, model?: any, cancel?: boolean }) => void);
     /**
      * @docid
      * @extends Action
@@ -130,7 +130,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onShowing?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @extends Action
@@ -138,7 +138,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onShown?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }
