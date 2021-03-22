@@ -2240,6 +2240,7 @@ export const columnsControllerModule = {
                 _checkColumns: function() {
                     const usedNames = {};
                     let hasEditableColumnWithoutName = false;
+                    let hasLookupWithoutKey = false;
                     const duplicatedNames = [];
                     this._columns.forEach(column => {
                         const name = column.name;
@@ -2254,7 +2255,22 @@ export const columnsControllerModule = {
                         } else if(isEditable) {
                             hasEditableColumnWithoutName = true;
                         }
+
+                        if(column.lookup?.dataSource) {
+                            const lookupDataSource = column.lookup.dataSource;
+                            const isArray = Array.isArray(lookupDataSource);
+                            const { key } = lookupDataSource;
+                            const hasKey = key && ((typeof key === 'string') || lookupDataSource.key());
+
+                            if(!isArray && !hasKey) {
+                                hasLookupWithoutKey = true;
+                            }
+                        }
                     });
+
+                    if(hasLookupWithoutKey) {
+                        errors.log('W1017');
+                    }
 
                     if(duplicatedNames.length) {
                         errors.log('E1059', duplicatedNames.join(', '));

@@ -324,5 +324,10 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1016
     */
-    W1016: 'The \'{0}\' field in the HTML Editor toolbar item configuration was renamed to \'{1}\'. Please make a corresponding change in your code.'
+    W1016: 'The \'{0}\' field in the HTML Editor toolbar item configuration was renamed to \'{1}\'. Please make a corresponding change in your code.',
+
+    /**
+    * @name ErrorsUIWidgets.W1017
+    */
+    W1017: 'The \'key\' option was not specified for the lookup data source. Please, set the \'key\' option to avoid request for all data during filtering.',
 });

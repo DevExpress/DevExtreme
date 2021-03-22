@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
+import CustomStore from 'data/custom_store';
 import dateLocalization from 'localization/date';
 import { isFunction } from 'core/utils/type';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
@@ -1377,6 +1378,97 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         assert.strictEqual(visibleColumns[0].minWidth, null);
         assert.strictEqual(visibleColumns[1].minWidth, 20);
         assert.strictEqual(visibleColumns[2].minWidth, 20);
+    });
+
+    QUnit.module('W1017', () => {
+        QUnit.test('Column with lookup with key', function(assert) {
+            sinon.spy(errors, 'log');
+
+            const columns = [{
+                dataField: 'test',
+                lookup: {
+                    dataSource: new CustomStore({
+                        key: 'id',
+                        data: []
+                    })
+                }
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 0, 'no errors');
+            errors.log.restore();
+        });
+
+        QUnit.test('Column with lookup with array as dataSource', function(assert) {
+            sinon.spy(errors, 'log');
+
+            const columns = [{
+                dataField: 'test',
+                lookup: {
+                    dataSource: []
+                }
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 0, 'no errors');
+            errors.log.restore();
+        });
+
+        QUnit.test('Column with lookup without key', function(assert) {
+            sinon.spy(errors, 'log');
+
+            const columns = [{
+                dataField: 'test',
+                lookup: {
+                    dataSource: new CustomStore({
+                        data: []
+                    })
+                }
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one warning');
+            assert.equal(errors.log.lastCall.args[0], 'W1017', 'warning code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Column with lookup with custom object as dataSource', function(assert) {
+            sinon.spy(errors, 'log');
+
+            const columns = [{
+                dataField: 'test',
+                lookup: {
+                    dataSource: {}
+                }
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one warning');
+            assert.equal(errors.log.lastCall.args[0], 'W1017', 'warning code');
+            errors.log.restore();
+        });
+
+        QUnit.test('Column with lookup with custom object as dataSource (key function is specified)', function(assert) {
+            sinon.spy(errors, 'log');
+
+            const columns = [{
+                dataField: 'test',
+                lookup: {
+                    dataSource: {
+                        key: 'id'
+                    }
+                }
+            }];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 0, 'no warnings');
+            errors.log.restore();
+        });
     });
 
     QUnit.module('Auto-generated names', () => {
