@@ -107,7 +107,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     minWidth?: number | string | (() => number | string);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -115,7 +115,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     onHidden?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
@@ -125,7 +125,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     onHiding?: ((e: { component?: T, element?: TElement, model?: any, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -133,7 +133,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     onShowing?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

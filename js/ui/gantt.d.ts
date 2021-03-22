@@ -171,7 +171,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 selectedRowKey:any
      * @action
@@ -181,7 +181,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onSelectionChanged?: ((e: { component?: dxGantt, element?: TElement, model?: any, selectedRowKey?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field3 name:String
      * @action
@@ -191,7 +191,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onCustomCommand?: ((e: { component?: dxGantt, element?: TElement, name?: string }) => void);
         /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 event:event
@@ -206,7 +206,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onContextMenuPreparing?: ((e: { component?: dxGantt, element?: TElement, cancel?: boolean, event?: TEvent, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -217,7 +217,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onTaskInserting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -228,7 +228,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onTaskInserted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -240,7 +240,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onTaskDeleting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -251,7 +251,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onTaskDeleted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 newValues:any
@@ -264,7 +264,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onTaskUpdating?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -275,7 +275,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onTaskUpdated?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 newValues:any
@@ -288,7 +288,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onTaskMoving?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -302,7 +302,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onTaskEditDialogShowing?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any, readOnlyFields?: Array<string>, hiddenFields?: Array<string> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -313,7 +313,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onDependencyInserting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -324,7 +324,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onDependencyInserted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -336,7 +336,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onDependencyDeleting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -347,7 +347,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onDependencyDeleted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -358,7 +358,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onResourceInserting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -369,7 +369,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onResourceInserted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -381,7 +381,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onResourceDeleting?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => void);
      /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -392,7 +392,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onResourceDeleted?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -403,7 +403,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onResourceAssigning?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any }) => void);
      /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -414,7 +414,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onResourceAssigned?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -426,7 +426,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onResourceUnassigning?: ((e: { component?: dxGantt, element?: TElement, model?: any, cancel?: boolean, values?: any, key?: any }) => void);
      /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -437,7 +437,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onResourceUnassigned?: ((e: { component?: dxGantt, element?: TElement, model?: any, values?: any, key?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 key:any
@@ -449,7 +449,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     onTaskClick?: ((e: { component?: dxGantt, element?: TElement, model?: any, event?: TEvent, key?: any, data?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 event:event

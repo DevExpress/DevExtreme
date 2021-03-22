@@ -25,7 +25,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     /**
      * @docid
      * @action
-     * @extends Action
+     * @default null
      * @type_function_param1_field4 start:number
      * @type_function_param1_field5 end:number
      * @type_function_param1_field6 value:array<number>

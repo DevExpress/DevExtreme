@@ -127,7 +127,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field13 rowType:string
      * @type_function_param1_field14 cellElement:dxElement
      * @type_function_param1_field15 row:dxTreeListRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -148,7 +148,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field13 rowType:string
      * @type_function_param1_field14 cellElement:dxElement
      * @type_function_param1_field15 row:dxTreeListRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -169,7 +169,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field13 rowType:string
      * @type_function_param1_field14 cellElement:dxElement
      * @type_function_param1_field15 row:dxTreeListRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -194,7 +194,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field17 cellElement:dxElement
      * @type_function_param1_field18 watch:function
      * @type_function_param1_field19 oldValue:any
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -210,7 +210,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field8 column:dxTreeListColumn
      * @type_function_param1_field9 rowIndex:number
      * @type_function_param1_field10 row:dxTreeListRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -223,7 +223,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 cancel:boolean
      * @type_function_param1_field7 column:object
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -243,7 +243,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field12 readOnly:boolean
      * @type_function_param1_field13 dataField:string
      * @type_function_param1_field14 row:dxTreeListRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -266,7 +266,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field15 editorOptions:object
      * @type_function_param1_field16 dataField:string
      * @type_function_param1_field17 row:dxTreeListRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -280,7 +280,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field6 rowIndex:number
      * @type_function_param1_field7 row:dxTreeListRowObject
      * @type_function_param1_field8 column:dxTreeListColumn
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -299,7 +299,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field11 columns:Array<dxTreeListColumn>
      * @type_function_param1_field12 cancel:boolean
      * @type_function_param1_field13 isHighlighted:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -311,7 +311,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field4 rowElement:dxElement
      * @type_function_param1_field5 rowIndex:number
      * @type_function_param1_field6 row:dxTreeListRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -326,7 +326,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 rows:Array<dxTreeListRowObject>
      * @type_function_param1_field9 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -336,7 +336,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 root:dxTreeListNode
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -359,7 +359,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field15 handled:boolean
      * @type_function_param1_field16 node:dxTreeListNode
      * @type_function_param1_field17 level:number
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -379,7 +379,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
      * @type_function_param1_field14 rowElement:dxElement
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -400,7 +400,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field13 rowElement:dxElement
      * @type_function_param1_field14 node:dxTreeListNode
      * @type_function_param1_field15 level:number
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

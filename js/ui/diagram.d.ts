@@ -789,7 +789,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     hasChanges?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
@@ -799,7 +799,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     onItemClick?: ((e: { component?: dxDiagram, element?: TElement, model?: any, item?: dxDiagramItem }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
@@ -809,7 +809,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     onItemDblClick?: ((e: { component?: dxDiagram, element?: TElement, model?: any, item?: dxDiagramItem }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 items:Array<dxDiagramItem>
      * @action
@@ -819,7 +819,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     onSelectionChanged?: ((e: { component?: dxDiagram, element?: TElement, model?: any, items?: Array<dxDiagramItem> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 operation:Enums.DiagramModelOperation
      * @type_function_param1_field5 args:dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs
@@ -832,7 +832,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     onRequestEditOperation?: ((e: { component?: dxDiagram, element?: TElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs, reason?: 'checkUIElementAvailability' | 'modelModification', allowed?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 changes:Array<any>
      * @type_function_param1_field5 allowed:boolean

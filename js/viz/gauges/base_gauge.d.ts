@@ -46,7 +46,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
     loadingIndicator?: BaseGaugeLoadingIndicator;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -57,7 +57,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
     onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme

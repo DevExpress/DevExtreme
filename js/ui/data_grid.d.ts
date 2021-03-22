@@ -694,7 +694,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     noDataText?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 formOptions:object
      * @action
@@ -704,7 +704,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     onAdaptiveDetailRowPreparing?: ((e: { component?: T, element?: TElement, model?: any, formOptions?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 error:Error
      * @action
@@ -716,7 +716,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 changes:Array<any>
-     * @extends Action
+     * @default null
      * @action
      * @public
      */
@@ -726,7 +726,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 changes:Array<any>
      * @type_function_param1_field5 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @public
      */
@@ -736,7 +736,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 promise:Promise<void>
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -747,7 +747,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 handled:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -757,7 +757,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 key:any
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -768,7 +768,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 key:any
      * @type_function_param1_field5 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -778,7 +778,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 key:any
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -789,7 +789,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 key:any
      * @type_function_param1_field5 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -801,7 +801,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 error:Error
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -812,7 +812,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 cancel:boolean|Promise<void>
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -824,7 +824,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 error:Error
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -836,7 +836,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 cancel:boolean|Promise<void>
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -848,7 +848,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 error:Error
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -861,7 +861,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field5 newData:object
      * @type_function_param1_field6 key:any
      * @type_function_param1_field7 cancel:boolean|Promise<void>
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -877,7 +877,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field8 oldData:object
      * @type_function_param1_field9 errorText:string
      * @type_function_param1_field10 promise:Promise<void>
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -887,7 +887,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 changes:Array<any>
-     * @extends Action
+     * @default null
      * @action
      * @public
      */
@@ -898,7 +898,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field4 changes:Array<any>
      * @type_function_param1_field5 promise:Promise<void>
      * @type_function_param1_field6 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @public
      */
@@ -910,7 +910,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field5 currentDeselectedRowKeys:Array<any>
      * @type_function_param1_field6 selectedRowKeys:Array<any>
      * @type_function_param1_field7 selectedRowsData:Array<Object>
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -920,7 +920,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 toolbarOptions:dxToolbarOptions
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3024,7 +3024,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field13 rowType:string
      * @type_function_param1_field14 cellElement:dxElement
      * @type_function_param1_field15 row:dxDataGridRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3045,7 +3045,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field13 rowType:string
      * @type_function_param1_field14 cellElement:dxElement
      * @type_function_param1_field15 row:dxDataGridRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3066,7 +3066,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field13 rowType:string
      * @type_function_param1_field14 cellElement:dxElement
      * @type_function_param1_field15 row:dxDataGridRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3091,7 +3091,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field17 cellElement:dxElement
      * @type_function_param1_field18 watch:function
      * @type_function_param1_field19 oldValue:any
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3107,7 +3107,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field8 column:dxDataGridColumn
      * @type_function_param1_field9 rowIndex:number
      * @type_function_param1_field10 row:dxDataGridRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3120,7 +3120,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 cancel:boolean
      * @type_function_param1_field7 column:object
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3140,7 +3140,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field12 readOnly:boolean
      * @type_function_param1_field13 dataField:string
      * @type_function_param1_field14 row:dxDataGridRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3163,7 +3163,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field15 editorOptions:object
      * @type_function_param1_field16 dataField:string
      * @type_function_param1_field17 row:dxDataGridRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3171,7 +3171,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     onEditorPreparing?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: TElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxDataGridRowObject }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3183,7 +3183,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3196,7 +3196,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field4 format:string
      * @type_function_param1_field5 data:BLOB
      * @type_function_param1_field6 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3211,7 +3211,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field6 rowIndex:number
      * @type_function_param1_field7 row:dxDataGridRowObject
      * @type_function_param1_field8 column:dxDataGridColumn
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3230,7 +3230,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field11 columns:Array<dxDataGridColumn>
      * @type_function_param1_field12 cancel:boolean
      * @type_function_param1_field13 isHighlighted:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3242,7 +3242,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field4 rowElement:dxElement
      * @type_function_param1_field5 rowIndex:number
      * @type_function_param1_field6 row:dxDataGridRowObject
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3257,7 +3257,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 rows:Array<dxDataGridRowObject>
      * @type_function_param1_field9 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3279,7 +3279,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field14 groupIndex:number
      * @type_function_param1_field15 rowElement:dxElement
      * @type_function_param1_field16 handled:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3300,7 +3300,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field13 isNewRow:boolean
      * @type_function_param1_field14 groupIndex:number
      * @type_function_param1_field15 rowElement:dxElement
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -3320,7 +3320,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
      * @type_function_param1_field14 rowElement:dxElement
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

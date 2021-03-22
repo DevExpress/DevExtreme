@@ -60,7 +60,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     name?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -70,7 +70,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     onFocusIn?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action

@@ -67,7 +67,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     height?: number | string | (() => number | string);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -75,7 +75,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     onResize?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -83,7 +83,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -91,7 +91,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 titleElement:dxElement
      * @action

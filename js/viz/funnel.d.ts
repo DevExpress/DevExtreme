@@ -442,7 +442,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     neckWidth?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
@@ -453,7 +453,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     onHoverChanged?: ((e: { component?: dxFunnel, element?: TElement, model?: any, item?: dxFunnelItem }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
@@ -465,7 +465,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     onItemClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
@@ -477,7 +477,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     onLegendClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme

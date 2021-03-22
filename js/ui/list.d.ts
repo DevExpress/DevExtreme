@@ -177,7 +177,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     nextButtonText?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 groupData:object
      * @type_function_param1_field5 groupElement:dxElement
@@ -189,7 +189,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onGroupRendered?: ((e: { component?: dxList, element?: TElement, model?: any, groupData?: any, groupElement?: TElement, groupIndex?: number }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -202,7 +202,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onItemClick?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -215,7 +215,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onItemContextMenu?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -228,7 +228,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onItemDeleted?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -242,7 +242,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onItemDeleting?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, cancel?: boolean | TPromise<void> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -255,7 +255,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onItemHold?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -270,7 +270,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onItemReordered?: ((e: { component?: dxList, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:object
@@ -284,7 +284,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onItemSwipe?: ((e: { component?: dxList, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, itemIndex?: number | any, direction?: string }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -292,7 +292,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onPageLoading?: ((e: { component?: dxList, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -300,7 +300,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onPullRefresh?: ((e: { component?: dxList, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -315,7 +315,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     onScroll?: ((e: { component?: dxList, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
      * @action

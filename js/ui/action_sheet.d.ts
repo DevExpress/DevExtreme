@@ -43,7 +43,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     items?: Array<string | dxActionSheetItem | any>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action

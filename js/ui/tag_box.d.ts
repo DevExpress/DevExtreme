@@ -42,7 +42,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     multiline?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 multiTagElement:dxElement
      * @type_function_param1_field5 selectedItems:Array<string,number,Object>
@@ -55,7 +55,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: TElement, model?: any, multiTagElement?: TElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
      * @action
@@ -65,7 +65,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: TElement, model?: any, value?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:Array<string,number,Object>
      * @type_function_param1_field5 removedItems:Array<string,number,Object>

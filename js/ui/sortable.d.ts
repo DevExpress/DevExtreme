@@ -81,7 +81,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     moveItemOnDrop?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:any
@@ -100,7 +100,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onAdd?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
@@ -120,7 +120,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onDragChange?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
@@ -140,7 +140,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onDragEnd?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
@@ -160,7 +160,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onDragMove?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
@@ -175,7 +175,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onDragStart?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, fromData?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:any
@@ -193,7 +193,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onRemove?: ((e: { component?: dxSortable, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:any

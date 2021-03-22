@@ -13,7 +13,7 @@ import dxScrollable, {
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -21,7 +21,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     onPullDown?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

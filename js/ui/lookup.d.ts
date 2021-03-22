@@ -150,7 +150,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     nextButtonText?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -158,7 +158,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     onPageLoading?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -166,7 +166,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     onPullRefresh?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -181,7 +181,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     onScroll?: ((e: { component?: dxLookup, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 titleElement:dxElement
      * @action
@@ -192,7 +192,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     onTitleRendered?: ((e: { component?: dxLookup, element?: TElement, model?: any, titleElement?: TElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object

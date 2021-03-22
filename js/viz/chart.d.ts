@@ -927,7 +927,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     negativesAsZeroes?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 argument:Date|Number|string
@@ -939,7 +939,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     onArgumentAxisClick?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, argument?: Date | number | string }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
@@ -951,7 +951,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     onLegendClick?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, target?: chartSeriesObject }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
@@ -963,7 +963,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     onSeriesClick?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, target?: chartSeriesObject }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
@@ -974,7 +974,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     onSeriesHoverChanged?: ((e: { component?: dxChart, element?: TElement, model?: any, target?: chartSeriesObject }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
@@ -985,7 +985,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     onSeriesSelectionChanged?: ((e: { component?: dxChart, element?: TElement, model?: any, target?: chartSeriesObject }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
@@ -1005,7 +1005,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     onZoomEnd?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject

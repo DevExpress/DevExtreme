@@ -20,7 +20,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     isValid?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object

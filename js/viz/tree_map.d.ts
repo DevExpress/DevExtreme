@@ -295,7 +295,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     maxDepth?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 node:dxTreeMapNode
@@ -307,7 +307,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     onClick?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, event?: TEvent, node?: dxTreeMapNode }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -318,7 +318,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     onDrill?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -329,7 +329,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     onHoverChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 root:dxTreeMapNode
      * @notUsedInTheme
@@ -340,7 +340,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     onNodesInitialized?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, root?: dxTreeMapNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -351,7 +351,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     onNodesRendering?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme

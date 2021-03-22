@@ -62,7 +62,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     items?: Array<string | dxTabPanelItem | any>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -74,7 +74,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     onTitleClick?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, event?: TEvent }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -86,7 +86,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     onTitleHold?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement

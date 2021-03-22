@@ -81,7 +81,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     name?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -91,7 +91,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onChange?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -101,7 +101,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onCopy?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -111,7 +111,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onCut?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -121,7 +121,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onEnterKey?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -131,7 +131,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onFocusIn?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -141,7 +141,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onFocusOut?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -151,7 +151,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onInput?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @default null
@@ -162,7 +162,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onKeyDown?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @deprecated
@@ -173,7 +173,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onKeyPress?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -183,7 +183,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onKeyUp?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action

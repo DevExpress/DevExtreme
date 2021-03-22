@@ -64,7 +64,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     margin?: BaseWidgetMargin;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
@@ -73,7 +73,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     onDrawn?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -85,7 +85,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 format:string
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -98,7 +98,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @type_function_param1_field4 format:string
      * @type_function_param1_field5 data:BLOB
      * @type_function_param1_field6 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -106,7 +106,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     onFileSaving?: ((e: { component?: T, element?: TElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:any
      * @action

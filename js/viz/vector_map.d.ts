@@ -506,7 +506,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     maxZoomFactor?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 center:Array<number>
      * @notUsedInTheme
@@ -517,7 +517,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     onCenterChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, center?: Array<number> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:MapLayerElement
@@ -529,7 +529,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     onClick?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, event?: TEvent, target?: MapLayerElement }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement
      * @notUsedInTheme
@@ -540,7 +540,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     onSelectionChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -551,7 +551,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     onTooltipHidden?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -562,7 +562,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     onTooltipShown?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 zoomFactor:number
      * @notUsedInTheme

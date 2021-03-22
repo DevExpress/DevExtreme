@@ -64,7 +64,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     noDataText?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:object
@@ -77,7 +77,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 selectedItem:object
      * @action
@@ -87,7 +87,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, selectedItem?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object

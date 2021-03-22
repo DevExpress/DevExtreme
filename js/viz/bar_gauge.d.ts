@@ -193,7 +193,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     loadingIndicator?: dxBarGaugeLoadingIndicator;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -204,7 +204,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     onTooltipHidden?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme

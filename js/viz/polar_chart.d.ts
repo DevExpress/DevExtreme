@@ -201,7 +201,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     negativesAsZeroes?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 argument:Date|Number|string
@@ -213,7 +213,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, argument?: Date | number | string }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
@@ -225,7 +225,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     onLegendClick?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, target?: polarChartSeriesObject }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
@@ -237,7 +237,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     onSeriesClick?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, target?: polarChartSeriesObject }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -248,7 +248,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     onSeriesHoverChanged?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, target?: polarChartSeriesObject }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -259,7 +259,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     onSeriesSelectionChanged?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, target?: polarChartSeriesObject }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
@@ -277,7 +277,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     onZoomEnd?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject

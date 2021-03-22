@@ -132,7 +132,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement }, containerElement: TElement) => string | TElement);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
@@ -149,7 +149,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     onDragEnd?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
@@ -166,7 +166,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     onDragMove?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean

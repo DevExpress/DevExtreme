@@ -24,7 +24,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
     animation?: animationConfig;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -32,7 +32,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
     onRendered?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

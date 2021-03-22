@@ -44,7 +44,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     items?: Array<dxMenuItem>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @action
@@ -54,7 +54,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     onSubmenuHidden?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @type_function_param1_field5 cancel:boolean
@@ -65,7 +65,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     onSubmenuHiding?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @action
@@ -75,7 +75,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     onSubmenuShowing?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @action

@@ -409,7 +409,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     noDataText?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -420,7 +420,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentAdded?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, error?: Error }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
@@ -431,7 +431,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentAdding?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, cancel: boolean | TPromise<boolean> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
@@ -445,7 +445,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentClick?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: TElement, event?: TEvent, cancel: boolean }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
@@ -458,7 +458,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentContextMenu?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: TElement, event?: TEvent }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
@@ -472,7 +472,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentDblClick?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: TElement, event?: TEvent, cancel: boolean }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -483,7 +483,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentDeleted?: ((e: { component: dxScheduler, element: TElement, model: any, appointmentData: any, error?: Error }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
@@ -494,7 +494,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentDeleting?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, cancel: boolean | TPromise<boolean> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 form:dxForm
@@ -507,7 +507,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentFormOpening?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData?: any, form: dxForm, popup: dxPopup, cancel: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object|undefined
@@ -519,7 +519,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentRendered?: ((e: { component: dxScheduler, element: TElement, model: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement?: TElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -530,7 +530,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentUpdated?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, error?: Error }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 oldData:Object
      * @type_function_param1_field5 newData:Object
@@ -542,7 +542,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentUpdating?: ((e: { component: dxScheduler, element: TElement, model?: any, oldData?: any, newData?: any, cancel?: boolean | TPromise<boolean> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cellData:object
      * @type_function_param1_field5 cellElement:dxElement
@@ -555,7 +555,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onCellClick?: ((e: { component: dxScheduler, element: TElement, model?: any, cellData: any, cellElement: TElement, event?: TEvent, cancel: boolean }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cellData:object
      * @type_function_param1_field5 cellElement:dxElement

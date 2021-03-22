@@ -57,7 +57,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     minWidth?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
@@ -69,7 +69,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     onResize?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
@@ -81,7 +81,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     onResizeEnd?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number

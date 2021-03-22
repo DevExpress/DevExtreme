@@ -51,7 +51,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     items?: Array<dxContextMenuItem>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -59,7 +59,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     onHidden?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
@@ -69,7 +69,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     onHiding?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 position:positionConfig
@@ -80,7 +80,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     onPositioning?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, event?: TEvent, position?: positionConfig }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
@@ -90,7 +90,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     onShowing?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

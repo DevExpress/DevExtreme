@@ -58,7 +58,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     keyExpr?: string | Function;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -71,7 +71,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     onItemClick?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>

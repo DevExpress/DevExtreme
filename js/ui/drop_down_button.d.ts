@@ -126,7 +126,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     noDataText?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 selectedItem:object
@@ -137,7 +137,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     onButtonClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, selectedItem?: any }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:object
@@ -149,7 +149,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     onItemClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:object
      * @type_function_param1_field5 previousItem:object

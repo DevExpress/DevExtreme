@@ -96,7 +96,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     menuVisible?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -104,7 +104,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

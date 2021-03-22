@@ -40,7 +40,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     disabled?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -55,7 +55,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     onScroll?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
