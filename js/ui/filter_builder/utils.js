@@ -516,7 +516,7 @@ function getCurrentLookupValueText(field, value, handler) {
                 });
             }
 
-            return handler(valueText);
+            handler(valueText);
         }).fail(function() {
             handler('');
         });
