@@ -83,7 +83,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions) => any);
+    onLoading?: ((loadOptions: LoadOptions) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.data

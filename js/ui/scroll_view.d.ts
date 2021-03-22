@@ -13,20 +13,20 @@ import dxScrollable, {
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullDown?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => any);
+    onPullDown?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReachBottom?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => any);
+    onReachBottom?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default "Release to refresh..."

@@ -174,7 +174,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     }>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 location:object
      * @type_function_param1_field5 event:event
@@ -182,10 +182,10 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxMap, element?: TElement, model?: any, location?: any, event?: TEvent }) => any) | string;
+    onClick?: ((e: { component?: dxMap, element?: TElement, model?: any, location?: any, event?: TEvent }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalMarker:object
@@ -193,30 +193,30 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMarkerAdded?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any, originalMarker?: any }) => any);
+    onMarkerAdded?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any, originalMarker?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMarkerRemoved?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any }) => any);
+    onMarkerRemoved?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 originalMap:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReady?: ((e: { component?: dxMap, element?: TElement, model?: any, originalMap?: any }) => any);
+    onReady?: ((e: { component?: dxMap, element?: TElement, model?: any, originalMap?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalRoute:object
@@ -224,17 +224,17 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRouteAdded?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any, originalRoute?: any }) => any);
+    onRouteAdded?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any, originalRoute?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRouteRemoved?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any }) => any);
+    onRouteRemoved?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any }) => void);
     /**
      * @docid
      * @type Enums.GeoMapProvider

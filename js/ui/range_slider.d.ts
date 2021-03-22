@@ -25,14 +25,14 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     /**
      * @docid
      * @action
-     * @extends Action
+     * @default null
      * @type_function_param1_field4 start:number
      * @type_function_param1_field5 end:number
      * @type_function_param1_field6 value:array<number>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSlider, element?: TElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
+    onValueChanged?: ((e: { component?: dxRangeSlider, element?: TElement, model?: any, start?: number, end?: number, value?: Array<number> }) => void);
     /**
      * @docid
      * @default 40

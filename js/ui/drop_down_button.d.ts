@@ -126,7 +126,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     noDataText?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 selectedItem:object
@@ -134,10 +134,10 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onButtonClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, selectedItem?: any }) => any) | string;
+    onButtonClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, selectedItem?: any }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:object
@@ -146,10 +146,10 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement }) => any) | string;
+    onItemClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:object
      * @type_function_param1_field5 previousItem:object
@@ -157,7 +157,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, item?: any, previousItem?: any }) => any) | string;
+    onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, item?: any, previousItem?: any }) => void) | string;
     /**
      * @docid
      * @default false
@@ -294,7 +294,7 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent }) => any) | string;
+    onClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent }) => void) | string;
 }
 
 export type Options = dxDropDownButtonOptions;
