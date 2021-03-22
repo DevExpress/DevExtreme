@@ -585,7 +585,7 @@ declare module DevExpress {
         /**
          * [descr:ComponentOptions.onOptionChanged]
          */
-        onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, name?: string, fullName?: string, value?: any }) => any);
+        onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
     }
     /**
      * [descr:Component]
