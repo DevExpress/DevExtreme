@@ -100,4 +100,25 @@ module('Renovated Views', () => {
 
         assert.ok(virtualCells.length > 0, 'Virtual cells have been rendered');
     });
+
+    [{
+        view: 'day',
+        cellCount: 1,
+    }, {
+        view: 'week',
+        cellCount: 7,
+    }].forEach(({ view, cellCount }) => {
+        test(`It should be possible to change showAllDayPanel in runtime in ${view}`, function(assert) {
+            const scheduler = createWrapper({
+                views: [view],
+                currentView: view,
+                showAllDayPanel: false,
+                renovateRender: true,
+            });
+
+            scheduler.instance.option('showAllDayPanel', true);
+
+            assert.equal(scheduler.workSpace.getAllDayCells.length, cellCount, 'Correct number of cells');
+        });
+    });
 });
