@@ -7,6 +7,7 @@ import { JSPdfDataGridTestHelper } from './jspdfTestHelper.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { JSPdfOptionTests } from './jspdf.options.tests.js';
 import { exportDataGrid } from 'pdf_exporter';
+import { initializeDxObjectAssign, clearDxObjectAssign } from '../exceljsParts/objectAssignHelper.js';
 
 import 'ui/data_grid/ui.data_grid';
 
@@ -21,6 +22,9 @@ QUnit.testStart(() => {
 let helper;
 
 const moduleConfig = {
+    before: function() {
+        initializeDxObjectAssign();
+    },
     beforeEach: function() {
         // The transpiling of the script on the drone and locally has differences that affect the imported jsPDF type.
         const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
@@ -28,6 +32,9 @@ const moduleConfig = {
         this.customizeCellCallCount = 0;
 
         helper = new JSPdfDataGridTestHelper(this.jsPDFDocument);
+    },
+    after: function() {
+        clearDxObjectAssign();
     }
 };
 
