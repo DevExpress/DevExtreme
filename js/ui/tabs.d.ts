@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -90,8 +94,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
  * @public
  */
 export default class dxTabs extends CollectionWidget {
-    constructor(element: Element, options?: dxTabsOptions)
-    constructor(element: JQuery, options?: dxTabsOptions)
+    constructor(element: TElement, options?: dxTabsOptions)
 }
 
 /**
@@ -114,15 +117,6 @@ export interface dxTabsItem extends CollectionWidgetItem {
     icon?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTabs(): JQuery;
-    dxTabs(options: "instance"): dxTabs;
-    dxTabs(options: string): any;
-    dxTabs(options: string, ...params: any[]): any;
-    dxTabs(options: dxTabsOptions): JQuery;
-}
-}
 export type Options = dxTabsOptions;
 
 /** @deprecated use Options instead */

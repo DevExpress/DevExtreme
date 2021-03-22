@@ -1,7 +1,5 @@
-import '../../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
@@ -13,7 +11,7 @@ import DataSource, {
 } from '../../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../../events/index';
 
 import Widget, {
@@ -45,7 +43,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @fires CollectionWidgetOptions.onOptionChanged
@@ -79,7 +77,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any) | string;
+    onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -92,7 +90,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    onItemContextMenu?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action
@@ -105,7 +103,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    onItemHold?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action
@@ -117,7 +115,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number }) => any);
+    onItemRendered?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number }) => any);
     /**
      * @docid
      * @extends Action
@@ -128,7 +126,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
     /**
      * @docid
      * @default -1
@@ -170,8 +168,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
  * @prevFileNamespace DevExpress.ui
  */
 export default class CollectionWidget extends Widget {
-    constructor(element: Element, options?: CollectionWidgetOptions)
-    constructor(element: JQuery, options?: CollectionWidgetOptions)
+    constructor(element: TElement, options?: CollectionWidgetOptions)
     getDataSource(): DataSource;
 }
 
@@ -200,7 +197,7 @@ export interface CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | (() => string | Element | JQuery);
+    template?: template | (() => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

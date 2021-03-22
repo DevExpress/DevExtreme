@@ -208,8 +208,6 @@ export const editingFormBasedModule = {
                         this._showEditPopup(rowIndex, true);
                         this._editPopup.option('animation', defaultAnimation);
                     }
-
-                    this.callBase.apply(this, arguments);
                 },
 
                 _hideEditPopup: function() {

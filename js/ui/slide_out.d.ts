@@ -1,12 +1,14 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
     template
 } from '../core/templates/template';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import DataSource, {
     DataSourceOptions
@@ -33,7 +35,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((container: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((container: TElement) => string | TElement);
     /**
      * @docid
      * @default null
@@ -58,7 +60,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | Element | JQuery);
+    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | TElement);
     /**
      * @docid
      * @default false
@@ -76,7 +78,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @type Enums.SlideOutMenuPosition
@@ -99,7 +101,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: dxElement, model?: any }) => any);
+    onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -107,7 +109,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: dxElement, model?: any }) => any);
+    onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @default 0
@@ -132,8 +134,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
  * @public
  */
 export default class dxSlideOut extends CollectionWidget {
-    constructor(element: Element, options?: dxSlideOutOptions)
-    constructor(element: JQuery, options?: dxSlideOutOptions)
+    constructor(element: TElement, options?: dxSlideOutOptions)
     /**
      * @docid
      * @publicName hideMenu()
@@ -141,7 +142,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hideMenu(): Promise<void> & JQueryPromise<void>;
+    hideMenu(): TPromise<void>;
     /**
      * @docid
      * @publicName showMenu()
@@ -149,7 +150,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showMenu(): Promise<void> & JQueryPromise<void>;
+    showMenu(): TPromise<void>;
     /**
      * @docid
      * @publicName toggleMenuVisibility(showing)
@@ -158,7 +159,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(showing: boolean): Promise<void> & JQueryPromise<void>;
+    toggleMenuVisibility(showing: boolean): TPromise<void>;
 }
 
 /**
@@ -173,18 +174,9 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuTemplate?: template | (() => string | Element | JQuery);
+    menuTemplate?: template | (() => string | TElement);
 }
 
-declare global {
-interface JQuery {
-    dxSlideOut(): JQuery;
-    dxSlideOut(options: "instance"): dxSlideOut;
-    dxSlideOut(options: string): any;
-    dxSlideOut(options: string, ...params: any[]): any;
-    dxSlideOut(options: dxSlideOutOptions): JQuery;
-}
-}
 export type Options = dxSlideOutOptions;
 
 /** @deprecated use Options instead */

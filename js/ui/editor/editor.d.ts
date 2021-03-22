@@ -1,11 +1,9 @@
-import '../../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
-    event
+    TEvent
 } from '../../events/index';
 
 import Widget, {
@@ -31,7 +29,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @default false
@@ -96,8 +94,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class Editor extends Widget {
-    constructor(element: Element, options?: EditorOptions)
-    constructor(element: JQuery, options?: EditorOptions)
+    constructor(element: TElement, options?: EditorOptions)
     /**
      * @docid
      * @publicName reset()

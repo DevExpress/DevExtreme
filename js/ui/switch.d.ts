@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import Editor, {
     EditorOptions
 } from './editor/editor';
@@ -63,19 +67,9 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @public
  */
 export default class dxSwitch extends Editor {
-    constructor(element: Element, options?: dxSwitchOptions)
-    constructor(element: JQuery, options?: dxSwitchOptions)
+    constructor(element: TElement, options?: dxSwitchOptions)
 }
 
-declare global {
-interface JQuery {
-    dxSwitch(): JQuery;
-    dxSwitch(options: "instance"): dxSwitch;
-    dxSwitch(options: string): any;
-    dxSwitch(options: string, ...params: any[]): any;
-    dxSwitch(options: dxSwitchOptions): JQuery;
-}
-}
 export type Options = dxSwitchOptions;
 
 /** @deprecated use Options instead */

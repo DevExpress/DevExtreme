@@ -24,10 +24,6 @@ $pager-info-paddings: 9px;
     }
 
     .dx-page {
-      &:first-child {
-        margin-left: 1px;
-      }
-
       display: inline-block;
       cursor: pointer;
       padding: 7px 8px 8px;
@@ -127,6 +123,10 @@ $pager-info-paddings: 9px;
 
     .dx-page {
       direction: ltr;
+
+      &:first-child {
+        margin-left: 1px;
+      }
     }
 
     .dx-info {

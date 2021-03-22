@@ -2,11 +2,13 @@ import {
     animationConfig
 } from '../animation/fx';
 
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import Widget, {
     WidgetOptions
@@ -27,7 +29,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering, element?: dxElement, model?: any }) => any);
+    onRendered?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -35,15 +37,15 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering, element?: dxElement, model?: any }) => any);
+    onShown?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => any);
     /**
      * @docid
-     * @type Promise<void> | bool
+     * @type TPromise|bool
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    renderWhen?: Promise<void> | JQueryPromise<void> | boolean;
+    renderWhen?: TPromise<void> | boolean;
     /**
      * @docid
      * @default false
@@ -68,19 +70,9 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
  * @public
  */
 export default class dxDeferRendering extends Widget {
-    constructor(element: Element, options?: dxDeferRenderingOptions)
-    constructor(element: JQuery, options?: dxDeferRenderingOptions)
+    constructor(element: TElement, options?: dxDeferRenderingOptions)
 }
 
-declare global {
-interface JQuery {
-    dxDeferRendering(): JQuery;
-    dxDeferRendering(options: "instance"): dxDeferRendering;
-    dxDeferRendering(options: string): any;
-    dxDeferRendering(options: string, ...params: any[]): any;
-    dxDeferRendering(options: dxDeferRenderingOptions): JQuery;
-}
-}
 export type Options = dxDeferRenderingOptions;
 
 /** @deprecated use Options instead */

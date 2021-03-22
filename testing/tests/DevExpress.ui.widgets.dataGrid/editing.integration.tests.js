@@ -4919,8 +4919,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                             data: { field: 'test' },
                             key,
                             type: 'insert',
-                            index: -1,
-                            pageIndex: 0
+                            index: -1
                         }];
                         const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
                         const dataGrid = $('#dataGrid').dxDataGrid({
@@ -5041,7 +5040,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                             data: { field: 'test' },
                             key,
                             type: 'insert',
-                            index: -1
+                            index: -1,
+                            pageIndex: -1
                         }];
                         const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
                         const dataGrid = $('#dataGrid').dxDataGrid({

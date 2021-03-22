@@ -1,15 +1,13 @@
-import '../jquery_augmentation';
-
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
@@ -68,7 +66,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
+    onResize?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => any);
     /**
      * @docid
      * @extends Action
@@ -80,7 +78,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
+    onResizeEnd?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => any);
     /**
      * @docid
      * @extends Action
@@ -92,7 +90,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
+    onResizeStart?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => any);
     /**
      * @docid
      * @type_function_return number|string
@@ -112,19 +110,9 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @public
  */
 export default class dxResizable extends DOMComponent {
-    constructor(element: Element, options?: dxResizableOptions)
-    constructor(element: JQuery, options?: dxResizableOptions)
+    constructor(element: TElement, options?: dxResizableOptions)
 }
 
-declare global {
-interface JQuery {
-    dxResizable(): JQuery;
-    dxResizable(options: "instance"): dxResizable;
-    dxResizable(options: string): any;
-    dxResizable(options: string, ...params: any[]): any;
-    dxResizable(options: dxResizableOptions): JQuery;
-}
-}
 export type Options = dxResizableOptions;
 
 /** @deprecated use Options instead */

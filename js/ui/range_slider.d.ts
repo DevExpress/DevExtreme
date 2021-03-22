@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -32,7 +32,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSlider, element?: dxElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
+    onValueChanged?: ((e: { component?: dxRangeSlider, element?: TElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
     /**
      * @docid
      * @default 40
@@ -65,19 +65,9 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @public
  */
 export default class dxRangeSlider extends dxTrackBar {
-    constructor(element: Element, options?: dxRangeSliderOptions)
-    constructor(element: JQuery, options?: dxRangeSliderOptions)
+    constructor(element: TElement, options?: dxRangeSliderOptions)
 }
 
-declare global {
-interface JQuery {
-    dxRangeSlider(): JQuery;
-    dxRangeSlider(options: "instance"): dxRangeSlider;
-    dxRangeSlider(options: string): any;
-    dxRangeSlider(options: string, ...params: any[]): any;
-    dxRangeSlider(options: dxRangeSliderOptions): JQuery;
-}
-}
 export type Options = dxRangeSliderOptions;
 
 /** @deprecated use Options instead */

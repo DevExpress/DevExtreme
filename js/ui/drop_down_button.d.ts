@@ -1,8 +1,10 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     template
@@ -13,7 +15,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -61,7 +63,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: dxElement) => string | Element | JQuery);
+    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default {}
@@ -100,7 +102,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null
@@ -132,7 +134,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onButtonClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
+    onButtonClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, selectedItem?: any }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -144,7 +146,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement }) => any) | string;
+    onItemClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -155,7 +157,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, item?: any, previousItem?: any }) => any) | string;
+    onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, item?: any, previousItem?: any }) => any) | string;
     /**
      * @docid
      * @default false
@@ -238,8 +240,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
  * @public
  */
 export default class dxDropDownButton extends Widget {
-    constructor(element: Element, options?: dxDropDownButtonOptions)
-    constructor(element: JQuery, options?: dxDropDownButtonOptions)
+    constructor(element: TElement, options?: dxDropDownButtonOptions)
     /**
      * @docid
      * @publicName close()
@@ -247,7 +248,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    close(): Promise<void> & JQueryPromise<void>;
+    close(): TPromise<void>;
     getDataSource(): DataSource;
     /**
      * @docid
@@ -256,7 +257,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    open(): Promise<void> & JQueryPromise<void>;
+    open(): TPromise<void>;
     /**
      * @docid
      * @publicName toggle()
@@ -264,7 +265,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): Promise<void> & JQueryPromise<void>;
+    toggle(): TPromise<void>;
     /**
      * @docid
      * @publicName toggle(visibility)
@@ -273,7 +274,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
+    toggle(visibility: boolean): TPromise<void>;
 }
 
 /**
@@ -293,18 +294,9 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event }) => any) | string;
+    onClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent }) => any) | string;
 }
 
-declare global {
-interface JQuery {
-    dxDropDownButton(): JQuery;
-    dxDropDownButton(options: "instance"): dxDropDownButton;
-    dxDropDownButton(options: string): any;
-    dxDropDownButton(options: string, ...params: any[]): any;
-    dxDropDownButton(options: dxDropDownButtonOptions): JQuery;
-}
-}
 export type Options = dxDropDownButtonOptions;
 
 /** @deprecated use Options instead */
