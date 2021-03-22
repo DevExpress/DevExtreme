@@ -517,12 +517,10 @@ export function getCurrentLookupValueText(field, value, handler) {
             }
 
             if(field.customizeText) {
-                const text = field.customizeText.call(field, {
-                    value: value,
+                valueText = field.customizeText({
+                    value,
                     valueText
                 });
-
-                return handler(text);
             }
 
             return handler(valueText);
