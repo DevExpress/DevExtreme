@@ -2589,7 +2589,7 @@ QUnit.module('Keyboard keys', {
                     }
                 };
 
-                setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'keyboardNavigation', 'focus'], { initViews: true });
+                setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'editingCellBased', 'keyboardNavigation', 'focus'], { initViews: true });
 
                 // act
                 this.gridView.render($('#container'));
