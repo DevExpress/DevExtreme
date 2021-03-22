@@ -1180,7 +1180,7 @@ class Scheduler extends Widget {
 
     _dispose() {
         this._appointmentTooltip && this._appointmentTooltip.dispose();
-        this._$recurrenceDialog?.remove();
+        this._recurrenceDialog?.hide();
 
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
@@ -1747,7 +1747,7 @@ class Scheduler extends Widget {
         const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
         const occurrenceText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteOccurrence' : 'dxScheduler-confirmRecurrenceEditOccurrence');
 
-        return customDialog({
+        this._recurrenceDialog = customDialog({
             messageHtml: message,
             showCloseButton: true,
             showTitle: true,
@@ -1759,11 +1759,10 @@ class Scheduler extends Widget {
                 onHidden: (e) => {
                     e.element.remove();
                 },
-                onContentReady: (e) => {
-                    this._$recurrenceDialog = e.element;
-                },
             },
-        }).show();
+        });
+
+        return this._recurrenceDialog.show();
     }
 
     _getUpdatedData(rawAppointment) {

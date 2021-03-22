@@ -3009,10 +3009,6 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             this.scheduler.appointmentList[0].drag.toCell(7);
 
-            this.clock.tick(100);
-
-            debugger;
-
             this.scheduler.appointmentPopup.dialog.clickEditAppointment();
 
             const newAppointmentCoords = translator.locate(this.scheduler.appointments.getAppointment(0));
