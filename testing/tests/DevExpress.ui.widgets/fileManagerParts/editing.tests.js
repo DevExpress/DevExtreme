@@ -6,7 +6,7 @@ import renderer from 'core/renderer';
 import browser from 'core/utils/browser';
 import { compare as compareVersion } from 'core/utils/version';
 import CustomFileSystemProvider from 'file_management/custom_provider';
-import FileSystemErrorCodes from 'file_management/error_codes';
+import ErrorCode from 'file_management/errors';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader, getDropFileEvent } from '../../../helpers/fileManagerHelpers.js';
 import NoDuplicatesFileProvider from '../../../helpers/fileManager/file_provider.no_duplicates.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
@@ -654,7 +654,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.strictEqual(errorSpy.callCount, 1, 'event raised');
-        assert.strictEqual(errorSpy.args[0][0].errorCode, FileSystemErrorCodes.WrongFileExtension, 'errorCode correct');
+        assert.strictEqual(errorSpy.args[0][0].errorCode, ErrorCode.WrongFileExtension, 'errorCode correct');
         assert.strictEqual(errorSpy.args[0][0].errorText, 'File extension is not allowed.', 'errorText correct');
         assert.strictEqual(errorSpy.args[0][0].fileSystemItem.name, 'File 1.txt', 'fileSystemItem correct');
     });

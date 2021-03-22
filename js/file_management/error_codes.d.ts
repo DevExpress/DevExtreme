@@ -5,7 +5,6 @@
 * @export default
 * @prevFileNamespace DevExpress.fileManagement
 * @public
-* @static
 * @name FileSystemErrorCodes
 */
 export default interface FileSystemErrorCodes {

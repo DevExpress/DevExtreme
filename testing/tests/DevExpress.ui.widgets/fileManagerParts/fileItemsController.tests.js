@@ -1,7 +1,7 @@
 const { test } = QUnit;
 
 import FileItemsController from 'ui/file_manager/file_items_controller';
-import FileSystemErrorCodes from 'file_management/error_codes';
+import ErrorCode from 'file_management/errors';
 import { createUploaderFiles, createUploadInfo, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
 import { isString } from 'core/utils/type';
 
@@ -407,7 +407,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 assert.throws(() => this.controller.uploadFileChunk(files[1], createUploadInfo(files[1]), currentDir.fileItem),
                     error => {
                         done2();
-                        return error.errorId === FileSystemErrorCodes.MaxFileSizeExceeded;
+                        return error.errorId === ErrorCode.MaxFileSizeExceeded;
                     },
                     'max file size exceeded error raised');
             });
@@ -438,7 +438,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 assert.throws(() => this.controller.uploadFileChunk(files[1], createUploadInfo(files[1]), currentDir.fileItem),
                     error => {
                         done2();
-                        return error.errorId === FileSystemErrorCodes.WrongFileExtension;
+                        return error.errorId === ErrorCode.WrongFileExtension;
                     },
                     'wrong file extension error raised');
             });

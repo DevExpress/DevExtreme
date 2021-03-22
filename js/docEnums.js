@@ -1080,11 +1080,6 @@
  */
 
 /**
- * @typedef {string} Enums.FileManagementFileSystemErrorCode
- * @enum {'noAccess'|'fileExists'|'fileNotFound'|'directoryExists'|'directoryNotFound'|'wrongFileExtension'|'maxFileSizeExceeded'|'invalidSymbols'|'other'}
- */
-
-/**
  * @typedef {string} Enums.DiagramDataLayoutType
  * @enum {'auto'|'off'|'tree'|'layered'}
  */
