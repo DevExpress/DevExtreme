@@ -1180,6 +1180,8 @@ class Scheduler extends Widget {
 
     _dispose() {
         this._appointmentTooltip && this._appointmentTooltip.dispose();
+        this._$recurrenceDialog?.remove();
+
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
 
@@ -1681,7 +1683,7 @@ class Scheduler extends Widget {
                     dragEvent.cancel = new Deferred();
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
-                    .done(result => {
+                    .done((result) => {
                         result && callback();
                         !result && this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
                     })
@@ -1752,7 +1754,15 @@ class Scheduler extends Widget {
             buttons: [
                 { text: seriesText, onClick: function() { return true; } },
                 { text: occurrenceText, onClick: function() { return false; } }
-            ]
+            ],
+            popupOptions: {
+                onHidden: (e) => {
+                    e.element.remove();
+                },
+                onContentReady: (e) => {
+                    this._$recurrenceDialog = e.element;
+                },
+            },
         }).show();
     }
 

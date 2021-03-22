@@ -3001,15 +3001,19 @@ supportedScrollingModes.forEach(scrollingMode => {
                 onAppointmentUpdating: function(e) {
                     e.cancel = true;
                 },
-                width: 800
+                width: 800,
+                height: 2000,
             });
             const $appointment = this.scheduler.appointments.getAppointment(0);
             const oldAppointmentCoords = translator.locate($appointment);
-            $appointment.trigger(dragEvents.start);
-            this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
-            $appointment.trigger(dragEvents.end);
 
-            this.scheduler.appointmentForm.clickFormDialogButton(1);
+            this.scheduler.appointmentList[0].drag.toCell(7);
+
+            this.clock.tick(100);
+
+            debugger;
+
+            this.scheduler.appointmentPopup.dialog.clickEditAppointment();
 
             const newAppointmentCoords = translator.locate(this.scheduler.appointments.getAppointment(0));
 
