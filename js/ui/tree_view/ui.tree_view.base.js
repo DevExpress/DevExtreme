@@ -101,7 +101,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const checkboxInstance = this._getCheckBoxInstance($element);
         const currentState = checkboxInstance.option('value');
         if(!checkboxInstance.option('disabled')) {
-            this._updateItemSelection(!currentState, $element.find('.' + ITEM_CLASS).get(0), true, $element);
+            this._updateItemSelection(!currentState, $element.find('.' + ITEM_CLASS).get(0), true);
         }
     },
 
@@ -1158,26 +1158,38 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return true;
         }
 
-        if(!value && this._isLastRequired(node)) {
+        if(value === false && this._isLastRequired(node)) {
             if(this._showCheckboxes()) {
                 const $node = this._getNodeElement(node);
-                const checkbox = this._getCheckBoxInstance($node);
-
-                checkbox && checkbox.option('value', true);
+                this._setCheckboxValue($node, true);
             }
             return false;
         }
 
-        const selectedNodesKeys = this.getSelectedNodeKeys();
-        if(this._isSingleSelection() && value) {
-            each(selectedNodesKeys, (index, nodeKey) => {
-                this.unselectItem(nodeKey);
+        if(value === true && this._isSingleSelection()) {
+            const selectedKeys = this.getSelectedNodeKeys();
+            each(selectedKeys, (index, key) => {
+                this._dataAdapter.toggleSelection(key, false);
+                this._updateItemsUI();
+
+                this._fireItemSelectionChanged(this._getNode(key));
             });
         }
 
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
         this._updateItemsUI();
 
+        this._fireItemSelectionChanged(node, dxEvent);
+        this._fireSelectionChanged();
+        return true;
+    },
+
+    _setCheckboxValue: function($node, value) {
+        const checkbox = this._getCheckBoxInstance($node);
+        checkbox && checkbox.option('value', true);
+    },
+
+    _fireItemSelectionChanged: function(node, dxEvent) {
         const initiator = dxEvent || this._findItemElementByItem(node.internalFields.item);
         const handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
 
@@ -1185,9 +1197,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             node: this._dataAdapter.getPublicNode(node),
             itemData: node.internalFields.item
         });
-
-        this._fireSelectionChanged();
-        return true;
     },
 
     _getCheckBoxInstance: function($node) {
@@ -1209,8 +1218,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this.setAria('selected', nodeSelection, $node);
 
             if(this._showCheckboxes()) {
-                const checkbox = this._getCheckBoxInstance($node);
-                checkbox.option('value', nodeSelection);
+                this._setCheckboxValue($node, nodeSelection);
             }
         });
 
@@ -1541,9 +1549,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-         * @name dxTreeViewNode
-         * @type object
-         */
+     * @name dxTreeViewNode
+     * @type object
+     */
 
 
     getNodes: function() {
