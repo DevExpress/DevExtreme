@@ -220,305 +220,305 @@ export type RemoveEvent = RemoveBaseEvent<dxDataGrid>;
 export type ReorderEvent = ReorderBaseEvent<dxDataGrid>;
 
 export interface FilterPanelCustomizeTextBaseArg<T> { 
-  component?: T,
-  filterValue?: any,
-  text?: string
+  readonly component: T,
+  readonly filterValue: any,
+  readonly text: string
 }
 
 export interface AdaptiveDetailRowPreparingBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  formOptions?: any;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly formOptions: any;
 }
 
 export interface DataErrorOcurredBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  error?: Error;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly error: Error;
 }
 
 export interface EditCanceledBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  changes?: Array<any>;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly changes: Array<any>;
 }
 
 export interface EditCancelingBaseArg<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  changes?: Array<any>;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly changes: Array<any>;
   cancel?: boolean;
 }
 
 
 export interface InitNewRowBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  data?: any;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  data: any;
   promise?: TPromise<void>;
 }
 
 
 export interface KeyDownBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  event?: TEvent;
-  handled?: boolean;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly event: TEvent;
+  handled: boolean;
 }
 
 
 export interface RowCollapsedBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  key?: any;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly key: any;
 }
 
 
 export interface RowCollapsingBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  key?: any;
-  cancel?: boolean;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly key: any;
+  cancel: boolean;
 }
 
 
 export interface RowExpandedBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  key?: any;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly key: any;
 }
 
 
 export interface RowExpandingBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  key?: any;
-  cancel?: boolean;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly key: any;
+  cancel: boolean;
 }
 
 
 export interface RowInsertedBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  data?: any;
-  key?: any;
-  error?: Error;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly data: any;
+  readonly key: any;
+  readonly error: Error;
 }
 
 
 export interface RowInsertingBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  data?: any;
-  cancel?: boolean | TPromise<void>;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly data: any;
+  cancel: boolean | TPromise<void>;
 }
 
 
 export interface RowRemovedBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  data?: any;
-  key?: any;
-  error?: Error;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly data: any;
+  readonly key: any;
+  readonly error: Error;
 }
 
 
 export interface RowRemovingBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  data?: any;
-  key?: any;
-  cancel?: boolean | TPromise<void>;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly data: any;
+  readonly key: any;
+  cancel: boolean | TPromise<void>;
 }
 
 
 export interface RowUpdatedBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  data?: any;
-  key?: any;
-  error?: Error;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly data: any;
+  readonly key: any;
+  readonly error: Error;
 }
 
 
 export interface RowUpdatingBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  oldData?: any;
-  newData?: any;
-  key?: any;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly oldData: any;
+  newData: any;
+  readonly key: any;
   cancel?: boolean | TPromise<void>;
 }
 
 
 export interface RowValidatingBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
-  isValid?: boolean;
-  key?: any;
-  newData?: any;
-  oldData?: any;
-  errorText?: string;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly brokenRules: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+  isValid: boolean;
+  readonly key: any;
+  readonly newData: any;
+  readonly oldData: any;
+  errorText: string;
   promise?: TPromise<void>;
 }
 
 
 export interface SavedBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  changes?: Array<any>;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly changes: Array<any>;
 }
 
 
 
 export interface SavingBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  changes?: Array<any>;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  changes: Array<any>;
   promise?: TPromise<void>;
-  cancel?: boolean;
+  cancel: boolean;
 }
 
 
 export interface SelectionChangedBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  currentSelectedRowKeys?: Array<any>;
-  currentDeselectedRowKeys?: Array<any>;
-  selectedRowKeys?: Array<any>;
-  selectedRowsData?: Array<any>;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly currentSelectedRowKeys: Array<any>;
+  readonly currentDeselectedRowKeys: Array<any>;
+  readonly selectedRowKeys: Array<any>;
+  readonly selectedRowsData: Array<any>;
 }
 
 
 export interface ToolbarPreparingBaseEvent<T> {
-  component?: T;
-  element?: TElement;
-  model?: any;
-  toolbarOptions?: dxToolbarOptions;
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  toolbarOptions: dxToolbarOptions;
 }
 
 export interface DragTemplateInfo {
-  itemData?: any;
-  itemElement?: TElement;
+  readonly itemData: any;
+  readonly itemElement: TElement;
 }
 
 
 export interface AddBaseEvent<T> {
-  component?: T;
-  event?: TEvent;
-  itemData?: any;
-  itemElement?: TElement;
-  fromIndex?: number;
-  toIndex?: number;
-  fromComponent?: dxSortable | dxDraggable;
-  toComponent?: dxSortable | dxDraggable;
-  fromData?: any;
-  toData?: any;
-  dropInsideItem?: boolean;
+  readonly component: T;
+  readonly event: TEvent;
+  readonly itemData?: any;
+  readonly itemElement: TElement;
+  readonly fromIndex: number;
+  readonly toIndex: number;
+  readonly fromComponent: dxSortable | dxDraggable;
+  readonly toComponent: dxSortable | dxDraggable;
+  readonly fromData?: any;
+  readonly toData?: any;
+  readonly dropInsideItem: boolean;
 }
 
 
 export interface DragChangeBaseEvent<T> {
-  component?: T;
-  event?: TEvent;
-  cancel?: boolean;
-  itemData?: any;
-  itemElement?: TElement;
-  fromIndex?: number;
-  toIndex?: number;
-  fromComponent?: dxSortable | dxDraggable;
-  toComponent?: dxSortable | dxDraggable;
-  fromData?: any;
-  toData?: any;
-  dropInsideItem?: boolean;
+  readonly component: T;
+  readonly event: TEvent;
+  cancel: boolean;
+  readonly itemData?: any;
+  readonly itemElement: TElement;
+  readonly fromIndex: number;
+  readonly toIndex: number;
+  readonly fromComponent: dxSortable | dxDraggable;
+  readonly toComponent: dxSortable | dxDraggable;
+  readonly fromData?: any;
+  readonly toData?: any;
+  readonly dropInsideItem: boolean;
 }
 
 export interface DragEndBaseEvent<T> {
-  component?: T;
-  event?: TEvent;
+  readonly component: T;
+  readonly event: TEvent;
   cancel?: boolean;
-  itemData?: any;
-  itemElement?: TElement;
-  fromIndex?: number;
-  toIndex?: number;
-  fromComponent?: dxSortable | dxDraggable;
-  toComponent?: dxSortable | dxDraggable;
-  fromData?: any;
-  toData?: any;
-  dropInsideItem?: boolean;
+  readonly itemData?: any;
+  readonly itemElement: TElement;
+  readonly fromIndex: number;
+  readonly toIndex: number;
+  readonly fromComponent: dxSortable | dxDraggable;
+  readonly toComponent: dxSortable | dxDraggable;
+  readonly fromData?: any;
+  readonly toData?: any;
+  readonly dropInsideItem: boolean;
 }
 
 export interface DragMoveBaseEvent<T> {
-  component?: T;
-  event?: TEvent;
-  cancel?: boolean;
-  itemData?: any;
-  itemElement?: TElement;
-  fromIndex?: number;
-  toIndex?: number;
-  fromComponent?: dxSortable | dxDraggable;
-  toComponent?: dxSortable | dxDraggable;
-  fromData?: any;
-  toData?: any;
-  dropInsideItem?: boolean;
+  readonly component: T;
+  readonly event: TEvent;
+  cancel: boolean;
+  readonly itemData?: any;
+  readonly itemElement: TElement;
+  readonly fromIndex: number;
+  readonly toIndex: number;
+  readonly fromComponent: dxSortable | dxDraggable;
+  readonly toComponent: dxSortable | dxDraggable;
+  readonly fromData?: any;
+  readonly toData?: any;
+  readonly dropInsideItem: boolean;
 }
 
 export interface DragStartBaseEvent<T = GridBase> {
-  component?: T;
-  event?: TEvent;
-  cancel?: boolean;
+  readonly component: T;
+  readonly event: TEvent;
+  cancel: boolean;
   itemData?: any;
-  itemElement?: TElement;
-  fromIndex?: number;
-  fromData?: any;
+  readonly itemElement: TElement;
+  readonly fromIndex: number;
+  readonly fromData?: any;
 }
 
 export interface RemoveBaseEvent<T> {
-  component?: T;
-  event?: TEvent;
-  itemData?: any;
-  itemElement?: TElement;
-  fromIndex?: number;
-  toIndex?: number;
-  fromComponent?: dxSortable | dxDraggable;
-  toComponent?: dxSortable | dxDraggable;
-  fromData?: any;
-  toData?: any;
+  readonly component: T;
+  readonly event: TEvent;
+  readonly itemData?: any;
+  readonly itemElement: TElement;
+  readonly fromIndex: number;
+  readonly toIndex: number;
+  readonly fromComponent: dxSortable | dxDraggable;
+  readonly toComponent: dxSortable | dxDraggable;
+  readonly fromData?: any;
+  readonly toData?: any;
 }
 
 export interface ReorderBaseEvent<T> {
-  component?: T;
-  event?: TEvent;
-  itemData?: any;
-  itemElement?: TElement;
-  fromIndex?: number;
-  toIndex?: number;
-  fromComponent?: dxSortable | dxDraggable;
-  toComponent?: dxSortable | dxDraggable;
-  fromData?: any;
-  toData?: any;
-  dropInsideItem?: boolean;
+  readonly component: T;
+  readonly event: TEvent;
+  readonly itemData?: any;
+  readonly itemElement: TElement;
+  readonly fromIndex: number;
+  readonly toIndex: number;
+  readonly fromComponent: dxSortable | dxDraggable;
+  readonly toComponent: dxSortable | dxDraggable;
+  readonly fromData?: any;
+  readonly toData?: any;
+  readonly dropInsideItem: boolean;
   promise?: TPromise<void>;
 }
 
@@ -3299,331 +3299,331 @@ export interface ColumnButtonBase {
  * @public
  */
 export interface CellClickEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  event?: TEvent;
-  data?: any;
-  key?: any;
-  value?: any;
-  displayValue?: any;
-  text?: string;
-  columnIndex?: number;
-  column?: any;
-  rowIndex?: number;
-  rowType?: string;
-  cellElement?: TElement;
-  row?: RowObject;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly event: TEvent;
+  readonly data: any;
+  readonly key: any;
+  readonly value?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly column: any;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly cellElement: TElement;
+  readonly row: RowObject;
 }
 
 /**
  * @public
  */
 export interface CellDblClickEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  event?: TEvent;
-  data?: any;
-  key?: any;
-  value?: any;
-  displayValue?: any;
-  text?: string;
-  columnIndex?: number;
-  column?: Column;
-  rowIndex?: number;
-  rowType?: string;
-  cellElement?: TElement;
-  row?: RowObject;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly event: TEvent;
+  readonly data: any;
+  readonly key: any;
+  readonly value?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly column: Column;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly cellElement: TElement;
+  readonly row: RowObject;
 }
 
 /**
  * @public
  */
 export interface CellHoverChangedEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  eventType?: string;
-  data?: any;
-  key?: any;
-  value?: any;
-  text?: string;
-  displayValue?: any;
-  columnIndex?: number;
-  rowIndex?: number;
-  column?: Column;
-  rowType?: string;
-  cellElement?: TElement;
-  row?: RowObject;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly eventType: string;
+  readonly data: any;
+  readonly key: any;
+  readonly value?: any;
+  readonly text: string;
+  readonly displayValue?: any;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly rowType: string;
+  readonly cellElement: TElement;
+  readonly row: RowObject;
 }
 
 /**
  * @public
  */
 export interface CellPreparedEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  data?: any;
-  key?: any;
-  value?: any;
-  displayValue?: any;
-  text?: string;
-  columnIndex?: number;
-  column?: Column;
-  rowIndex?: number;
-  rowType?: string;
-  row?: RowObject;
-  isSelected?: boolean;
-  isExpanded?: boolean;
-  isNewRow?: boolean;
-  cellElement?: TElement;
-  watch?: Function;
-  oldValue?: any;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly data: any;
+  readonly key: any;
+  readonly value?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly column: Column;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly row: RowObject;
+  readonly isSelected?: boolean;
+  readonly isExpanded?: boolean;
+  readonly isNewRow?: boolean;
+  readonly cellElement: TElement;
+  readonly watch?: Function;
+  readonly oldValue?: any;
 }
 
 /**
  * @public
  */
 export interface ContextMenuPreparingEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
   items?: Array<any>;
-  target?: string;
-  targetElement?: TElement;
-  columnIndex?: number;
-  column?: Column;
-  rowIndex?: number;
-  row?: RowObject;
+  readonly target: string;
+  readonly targetElement: TElement;
+  readonly columnIndex: number;
+  readonly column?: Column;
+  readonly rowIndex: number;
+  readonly row?: RowObject;
 }
 
 /**
  * @public
  */
 export interface EditingStartEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  data?: any;
-  key?: any;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly data: any;
+  readonly key: any;
   cancel?: boolean;
-  column?: any;
+  readonly column?: any;
 }
 
 /**
  * @public
  */
 export interface EditorPreparedEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  parentType?: string;
-  value?: any;
-  setValue?: any;
-  updateValueTimeout?: number;
-  width?: number;
-  disabled?: boolean;
-  rtlEnabled?: boolean;
-  editorElement?: TElement;
-  readOnly?: boolean;
-  dataField?: string;
-  row?: RowObject;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly parentType: string;
+  readonly value?: any;
+  readonly setValue?: any;
+  readonly updateValueTimeout?: number;
+  readonly width?: number;
+  readonly disabled: boolean;
+  readonly rtlEnabled: boolean;
+  readonly editorElement: TElement;
+  readonly readOnly: boolean;
+  readonly dataField?: string;
+  readonly row?: RowObject;
 }
 
 /**
  * @public
  */
 export interface EditorPreparingEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  parentType?: string;
-  value?: any;
-  setValue?: any;
-  updateValueTimeout?: number;
-  width?: number;
-  disabled?: boolean;
-  rtlEnabled?: boolean;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly parentType: string;
+  readonly value?: any;
+  readonly setValue?: any;
+  readonly updateValueTimeout?: number;
+  readonly width?: number;
+  readonly disabled: boolean;
+  readonly rtlEnabled: boolean;
   cancel?: boolean;
-  editorElement?: TElement;
-  readOnly?: boolean;
-  editorName?: string;
-  editorOptions?: any;
-  dataField?: string;
-  row?: RowObject;
+  readonly editorElement: TElement;
+  readonly readOnly: boolean;
+  editorName: string;
+  editorOptions: any;
+  readonly dataField?: string;
+  readonly row?: RowObject;
 }
 
 /**
  * @public
  */
 export interface ExportedEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
 }
 
 /**
  * @public
  */
 export interface ExportingEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
   fileName?: string;
-  cancel?: boolean;
+  cancel: boolean;
 }
 
 /**
  * @public
  */
 export interface FileSavingEvent {
-  component?: dxDataGrid;
-  element?: TElement;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
   fileName?: string;
   format?: string;
-  data?: Blob;
-  cancel?: boolean;
+  readonly data: Blob;
+  cancel: boolean;
 }
 
 /**
  * @public
  */
 export interface FocusedCellChangedEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  cellElement?: TElement;
-  columnIndex?: number;
-  rowIndex?: number;
-  row?: RowObject;
-  column?: Column;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly cellElement: TElement;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly row?: RowObject;
+  readonly column?: Column;
 }
 
 /**
  * @public
  */
 export interface FocusedCellChangingEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  cellElement?: TElement;
-  prevColumnIndex?: number;
-  prevRowIndex?: number;
-  newColumnIndex?: number;
-  newRowIndex?: number;
-  event?: TEvent;
-  rows?: Array<RowObject>;
-  columns?: Array<Column>;
-  cancel?: boolean;
-  isHighlighted?: boolean;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly cellElement: TElement;
+  readonly prevColumnIndex: number;
+  readonly prevRowIndex: number;
+  newColumnIndex: number;
+  newRowIndex: number;
+  readonly event: TEvent;
+  readonly rows: Array<RowObject>;
+  readonly columns: Array<Column>;
+  cancel: boolean;
+  isHighlighted: boolean;
 }
 
 /**
  * @public
  */
 export interface FocusedRowChangedEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  rowElement?: TElement;
-  rowIndex?: number;
-  row?: RowObject;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly rowElement: TElement;
+  readonly rowIndex: number;
+  readonly row?: RowObject;
 }
 
 /**
  * @public
  */
 export interface FocusedRowChangingEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  rowElement?: TElement;
-  prevRowIndex?: number;
-  newRowIndex?: number;
-  event?: TEvent;
-  rows?: Array<RowObject>;
-  cancel?: boolean;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly rowElement: TElement;
+  readonly prevRowIndex: number;
+  newRowIndex: number;
+  readonly event: TEvent;
+  readonly rows: Array<RowObject>;
+  cancel: boolean;
 }
 
 /**
  * @public
  */
 export interface RowClickEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  event?: TEvent;
-  data?: any;
-  key?: any;
-  values?: Array<any>;
-  columns?: Array<any>;
-  rowIndex?: number;
-  rowType?: string;
-  isSelected?: boolean;
-  isExpanded?: boolean;
-  isNewRow?: boolean;
-  groupIndex?: number;
-  rowElement?: TElement;
-  handled?: boolean;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly event: TEvent;
+  readonly data: any;
+  readonly key: any;
+  readonly values: Array<any>;
+  readonly columns: Array<any>;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly isSelected?: boolean;
+  readonly isExpanded?: boolean;
+  readonly isNewRow?: boolean;
+  readonly groupIndex?: number;
+  readonly rowElement: TElement;
+  readonly handled: boolean;
 }
 
 /**
  * @public
  */
 export interface RowDblClickEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  event?: TEvent;
-  data?: any;
-  key?: any;
-  values?: Array<any>;
-  columns?: Array<Column>;
-  rowIndex?: number;
-  rowType?: string;
-  isSelected?: boolean;
-  isExpanded?: boolean;
-  isNewRow?: boolean;
-  groupIndex?: number;
-  rowElement?: TElement;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly event: TEvent;
+  readonly data: any;
+  readonly key: any;
+  readonly values: Array<any>;
+  readonly columns: Array<Column>;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly isSelected?: boolean;
+  readonly isExpanded?: boolean;
+  readonly isNewRow?: boolean;
+  readonly groupIndex?: number;
+  readonly rowElement: TElement;
 }
 
 /**
  * @public
  */
 export interface RowPreparedEvent {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  data?: any;
-  key?: any;
-  values?: Array<any>;
-  columns?: Array<Column>;
-  rowIndex?: number;
-  rowType?: string;
-  groupIndex?: number;
-  isSelected?: boolean;
-  isExpanded?: boolean;
-  isNewRow?: boolean;
-  rowElement?: TElement;
+  readonly component: dxDataGrid;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly data: any;
+  readonly key: any;
+  readonly values: Array<any>;
+  readonly columns: Array<Column>;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly groupIndex?: number;
+  readonly isSelected?: boolean;
+  readonly isExpanded?: boolean;
+  readonly isNewRow?: boolean;
+  readonly rowElement: TElement;
 }
 
 /**
  * @public
  */
 export interface RowTemplateInfo {
-  key?: any;
-  data?: any;
-  component?: dxDataGrid;
-  values?: Array<any>;
-  rowIndex?: number;
-  columns?: Array<Column>;
-  isSelected?: boolean;
-  rowType?: string;
-  groupIndex?: number;
-  isExpanded?: boolean;
+  readonly key: any;
+  readonly data: any;
+  readonly component: dxDataGrid;
+  readonly values: Array<any>;
+  readonly rowIndex: number;
+  readonly columns: Array<Column>;
+  readonly isSelected?: boolean;
+  readonly rowType: string;
+  readonly groupIndex?: number;
+  readonly isExpanded?: boolean;
 }
 
 export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
@@ -4110,7 +4110,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
  * @public
  */
 export interface CustomizeExcelCellArg {
-  component?: dxDataGrid;
+  readonly component: dxDataGrid;
   horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
   verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
   wrapTextEnabled?: boolean;
@@ -4118,7 +4118,7 @@ export interface CustomizeExcelCellArg {
   fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
   fillPatternColor?: string;
   font?: ExcelFont;
-  value?: string | number | Date;
+  readonly value?: string | number | Date;
   numberFormat?: string;
   gridCell?: ExcelDataGridCell;
 }
@@ -4325,9 +4325,9 @@ export interface GroupingTexts {
  * @public
  */
 export interface MasterDetailTemplateInfo {
-  key?: any;
-  data?: any;
-  watch?: Function;
+  readonly key: any;
+  readonly data: any;
+  readonly watch?: Function;
 }
 
 /**
@@ -4388,12 +4388,12 @@ export interface dxDataGridSortByGroupSummaryInfoItem {
  * @public
  */
 export interface CalculateCustomSummaryArg {
-  component?: dxDataGrid;
-  name?: string;
-  summaryProcess?: string;
-  value?: any;
+  readonly component: dxDataGrid;
+  readonly name?: string;
+  readonly summaryProcess: string;
+  readonly value?: any;
   totalValue?: any;
-  groupIndex?: number;
+  readonly groupIndex?: number;
 }
 
 /**
@@ -4449,8 +4449,8 @@ export interface Summary {
  * @public
  */
 export interface SummaryItemCustomizeTextArg {
-  value?: string | number | Date;
-  valueText?: string;
+  readonly value?: string | number | Date;
+  readonly valueText: string;
 }
 
 /**
@@ -5200,61 +5200,61 @@ export interface RowObject {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    data?: any;
+    readonly data: any;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupIndex?: number;
+    readonly groupIndex?: number;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    isEditing?: boolean;
+     readonly isEditing?: boolean;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    isExpanded?: boolean;
+    readonly isExpanded?: boolean;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    isNewRow?: boolean;
+    readonly isNewRow?: boolean;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    isSelected?: boolean;
+    readonly isSelected?: boolean;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    key?: any;
+    readonly key: any;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowIndex?: number;
+    readonly rowIndex: number;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowType?: string;
+    readonly rowType: string;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    values?: Array<any>;
+    readonly values: Array<any>;
 }
 
 export type Options = dxDataGridOptions;
