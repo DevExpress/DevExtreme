@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
@@ -37,7 +37,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -46,7 +46,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz
@@ -78,7 +78,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointsInfo: any, element: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((pointsInfo: any, element: TElement) => string | TElement);
     /**
      * @docid BaseSparklineOptions.tooltip.customizeTooltip
      * @type_function_param1 pointsInfo:object
@@ -111,8 +111,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseSparkline extends BaseWidget {
-    constructor(element: Element, options?: BaseSparklineOptions)
-    constructor(element: JQuery, options?: BaseSparklineOptions)
+    constructor(element: TElement, options?: BaseSparklineOptions)
 
     /**
      * @docid

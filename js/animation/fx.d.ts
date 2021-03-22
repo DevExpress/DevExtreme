@@ -1,8 +1,10 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 /**
 * @docid
@@ -17,7 +19,7 @@ export interface animationConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    complete?: (($element: dxElement, config: any) => any);
+    complete?: (($element: TElement, config: any) => any);
     /**
      * @docid
      * @default 0
@@ -68,7 +70,7 @@ export interface animationConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    start?: (($element: dxElement, config: any) => any);
+    start?: (($element: TElement, config: any) => any);
     /**
      * @docid
      * @default {}
@@ -104,7 +106,7 @@ declare const fx: {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
+    animate(element: Element, config: animationConfig): TPromise<void>;
 
     /**
      * @docid

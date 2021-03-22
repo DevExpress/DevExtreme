@@ -1,11 +1,9 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import PivotGridDataSource, {
@@ -129,7 +127,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: dxElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: event }) => any);
+    onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: TElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: TEvent }) => any);
     /**
      * @docid
      * @default 500
@@ -191,8 +189,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
  * @public
  */
 export default class dxPivotGridFieldChooser extends Widget {
-    constructor(element: Element, options?: dxPivotGridFieldChooserOptions)
-    constructor(element: JQuery, options?: dxPivotGridFieldChooserOptions)
+    constructor(element: TElement, options?: dxPivotGridFieldChooserOptions)
     /**
      * @docid
      * @publicName applyChanges()
@@ -224,15 +221,6 @@ export default class dxPivotGridFieldChooser extends Widget {
     updateDimensions(): void;
 }
 
-declare global {
-interface JQuery {
-    dxPivotGridFieldChooser(): JQuery;
-    dxPivotGridFieldChooser(options: "instance"): dxPivotGridFieldChooser;
-    dxPivotGridFieldChooser(options: string): any;
-    dxPivotGridFieldChooser(options: string, ...params: any[]): any;
-    dxPivotGridFieldChooser(options: dxPivotGridFieldChooserOptions): JQuery;
-}
-}
 export type Options = dxPivotGridFieldChooserOptions;
 
 /** @deprecated use Options instead */

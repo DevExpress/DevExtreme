@@ -1,5 +1,5 @@
 import {
-  dxElement
+  TElement
 } from './element';
 
 export interface ComponentOptions<T = Component> {
@@ -23,7 +23,7 @@ export interface ComponentOptions<T = Component> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onInitialized?: ((e: { component?: T, element?: dxElement }) => any);
+  onInitialized?: ((e: { component?: T, element?: TElement }) => any);
   /**
    * @docid
    * @type_function_param1 e:object

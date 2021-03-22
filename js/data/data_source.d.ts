@@ -1,4 +1,6 @@
-import '../jquery_augmentation';
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import Store, {
     StoreOptions
@@ -259,7 +261,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(): Promise<any> & JQueryPromise<any>;
+    load(): TPromise<any>;
     /**
      * @docid
      * @publicName loadOptions()
@@ -361,7 +363,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    reload(): Promise<any> & JQueryPromise<any>;
+    reload(): TPromise<any>;
     /**
      * @docid
      * @publicName requireTotalCount()

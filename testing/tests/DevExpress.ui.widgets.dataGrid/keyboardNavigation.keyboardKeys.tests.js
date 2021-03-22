@@ -2489,7 +2489,7 @@ QUnit.module('Keyboard keys', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'keyboardNavigation'], { initViews: true });
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'editingCellBased', 'keyboardNavigation'], { initViews: true });
 
         // act
         this.gridView.render($('#container'));
@@ -2538,7 +2538,7 @@ QUnit.module('Keyboard keys', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'keyboardNavigation'], { initViews: true });
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'editingCellBased', 'keyboardNavigation'], { initViews: true });
 
         // act
         this.gridView.render($('#container'));
@@ -2563,6 +2563,55 @@ QUnit.module('Keyboard keys', {
         assert.ok($('#container .dx-datagrid-focus-overlay').hasClass('dx-hidden'), 'focus overlay is not visible');
     });
 
+    // T973782
+    ['row', 'cell', 'batch'].forEach(editMode => {
+        ['dblClick', 'click'].forEach(startEditAction => {
+            QUnit.testInActiveWindow(`Focus overlay should not overlap the whole row after addRow and tab (edit mode is ${editMode} and startEditAction = ${startEditAction})`, function(assert) {
+                this.$element = function() {
+                    return $('#container');
+                };
+
+                this.options = {
+                    keyboardNavigation: {
+                        enabled: true
+                    },
+                    showColumnHeaders: true,
+                    focusedRowEnabled: true,
+                    dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }],
+                    columns: ['field1', 'field2'],
+                    commonColumnSettings: { allowEditing: true },
+                    loadingTimeout: undefined,
+                    editing: {
+                        mode: editMode,
+                        allowUpdating: true,
+                        allowAdding: true,
+                        startEditAction
+                    }
+                };
+
+                setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'editingCellBased', 'keyboardNavigation', 'focus'], { initViews: true });
+
+                // act
+                this.gridView.render($('#container'));
+                this.gridView.update();
+
+                this.addRow();
+                this.clock.tick();
+
+                assert.ok($('#container .dx-datagrid-focus-overlay:visible').length, 'focus overlay is visible');
+
+                const $firstCell = this.rowsView.element().find('.dx-row-inserted').find('td').eq(0);
+
+                // act
+                this.triggerKeyDown('tab', false, false, $firstCell);
+                this.clock.tick();
+
+                // assert
+                assert.roughEqual($('#container .dx-datagrid-focus-overlay').outerWidth(), $('#container td').eq(1).outerWidth(), 0.51, 'focus overlay is not visible');
+                assert.ok($('.dx-focused').is('td'), 'focused element is td');
+            });
+        });
+    });
 
     // T280003
     QUnit.testInActiveWindow('Edit next cell after tab key press with column is not allow editing when editing mode batch', function(assert) {

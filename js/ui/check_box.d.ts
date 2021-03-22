@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import Editor, {
     EditorOptions
 } from './editor/editor';
@@ -56,19 +60,9 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @public
  */
 export default class dxCheckBox extends Editor {
-    constructor(element: Element, options?: dxCheckBoxOptions)
-    constructor(element: JQuery, options?: dxCheckBoxOptions)
+    constructor(element: TElement, options?: dxCheckBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxCheckBox(): JQuery;
-    dxCheckBox(options: "instance"): dxCheckBox;
-    dxCheckBox(options: string): any;
-    dxCheckBox(options: string, ...params: any[]): any;
-    dxCheckBox(options: dxCheckBoxOptions): JQuery;
-}
-}
 export type Options = dxCheckBoxOptions;
 
 /** @deprecated use Options instead */

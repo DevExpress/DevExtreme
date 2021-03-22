@@ -1,8 +1,6 @@
 import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
 
-import dxrDayDateTableLayout from '../../../renovation/ui/scheduler/workspaces/day/date_table/layout.j';
-
 const DAY_CLASS = 'dx-scheduler-work-space-day';
 
 class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
@@ -35,15 +33,6 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
 
     _renderDateHeader() {
         return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
-    }
-
-    renderRDateTable() {
-        this.renderRComponent(
-            this._$dateTable,
-            dxrDayDateTableLayout,
-            'renovatedDateTable',
-            this._getRDateTableProps(),
-        );
     }
 
     renderRHeaderPanel() {

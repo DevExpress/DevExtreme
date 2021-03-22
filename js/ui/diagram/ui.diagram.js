@@ -708,20 +708,13 @@ class Diagram extends Widget {
             this._updateSnapToGridState();
         }
         if(this.option('gridSize')) {
-            if(this.option('gridSize.items')) {
-                this._updateGridSizeItemsState();
-            }
             this._updateGridSizeState();
-        }
-        if(this.option('zoomLevel.items')) {
-            this._updateZoomLevelItemsState();
-        }
-
-        if(this.option('simpleView')) {
-            this._updateSimpleViewState();
         }
         if(this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
             this._updateZoomLevelState();
+        }
+        if(this.option('simpleView')) {
+            this._updateSimpleViewState();
         }
         if(this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
             this._updateAutoZoomState();
@@ -1290,18 +1283,22 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.ToggleReadOnly, readOnly);
     }
     _updateZoomLevelState() {
-        let zoomLevel = this.option('zoomLevel.value');
-        if(!zoomLevel) {
-            zoomLevel = this.option('zoomLevel');
+        if(this.option('zoomLevel.items')) {
+            this._updateZoomLevelItemsState();
+            const zoomLevel = this.option('zoomLevel.value');
+            if(!zoomLevel) return;
+            const { DiagramCommand } = getDiagram();
+            this._executeDiagramCommand(DiagramCommand.ZoomLevel, zoomLevel);
+        } else {
+            const zoomLevel = this.option('zoomLevel.value') || this.option('zoomLevel');
+            if(!zoomLevel) return;
+            const { DiagramCommand } = getDiagram();
+            this._executeDiagramCommand(DiagramCommand.ZoomLevel, zoomLevel);
         }
-
-        const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.ZoomLevel, zoomLevel);
     }
     _updateZoomLevelItemsState() {
         const zoomLevelItems = this.option('zoomLevel.items');
         if(!Array.isArray(zoomLevelItems)) return;
-
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.ZoomLevelItems, zoomLevelItems);
     }
@@ -1327,18 +1324,22 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.SnapToGrid, this.option('snapToGrid'));
     }
     _updateGridSizeState() {
-        let gridSize = this.option('gridSize.value');
-        if(!gridSize) {
-            gridSize = this.option('gridSize');
+        if(this.option('gridSize.items')) {
+            this._updateGridSizeItemsState();
+            const gridSize = this.option('gridSize.value');
+            if(!gridSize) return;
+            const { DiagramCommand } = getDiagram();
+            this._executeDiagramCommand(DiagramCommand.GridSize, gridSize);
+        } else {
+            const gridSize = this.option('gridSize.value') || this.option('gridSize');
+            if(!gridSize) return;
+            const { DiagramCommand } = getDiagram();
+            this._executeDiagramCommand(DiagramCommand.GridSize, gridSize);
         }
-
-        const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.GridSize, gridSize);
     }
     _updateGridSizeItemsState() {
         const gridSizeItems = this.option('gridSize.items');
         if(!Array.isArray(gridSizeItems)) return;
-
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.GridSizeItems, gridSizeItems);
     }
@@ -2033,10 +2034,7 @@ class Diagram extends Widget {
                 this._invalidate();
                 break;
             case 'zoomLevel':
-                if(args.fullName === 'zoomLevel' || args.fullName === 'zoomLevel.items') {
-                    this._updateZoomLevelItemsState();
-                }
-                if(args.fullName === 'zoomLevel' || args.fullName === 'zoomLevel.value') {
+                if(args.fullName === 'zoomLevel' || args.fullName === 'zoomLevel.items' || args.fullName === 'zoomLevel.value') {
                     this._updateZoomLevelState();
                 }
                 break;
@@ -2056,10 +2054,7 @@ class Diagram extends Widget {
                 this._updateSnapToGridState();
                 break;
             case 'gridSize':
-                if(args.fullName === 'gridSize' || args.fullName === 'gridSize.items') {
-                    this._updateGridSizeItemsState();
-                }
-                if(args.fullName === 'gridSize' || args.fullName === 'gridSize.value') {
+                if(args.fullName === 'gridSize' || args.fullName === 'gridSize.items' || args.fullName === 'gridSize.value') {
                     this._updateGridSizeState();
                 }
                 break;

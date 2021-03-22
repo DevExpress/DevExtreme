@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -12,7 +12,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -350,7 +350,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSelector, element?: dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: event }) => any);
+    onValueChanged?: ((e: { component?: dxRangeSelector, element?: TElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: TEvent }) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz
@@ -848,8 +848,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
  * @public
  */
 export default class dxRangeSelector extends BaseWidget {
-    constructor(element: Element, options?: dxRangeSelectorOptions)
-    constructor(element: JQuery, options?: dxRangeSelectorOptions)
+    constructor(element: TElement, options?: dxRangeSelectorOptions)
     getDataSource(): DataSource;
     /**
      * @docid
@@ -878,15 +877,6 @@ export default class dxRangeSelector extends BaseWidget {
     setValue(value: Array<number | string | Date> | VizRange): void;
 }
 
-declare global {
-interface JQuery {
-    dxRangeSelector(): JQuery;
-    dxRangeSelector(options: "instance"): dxRangeSelector;
-    dxRangeSelector(options: string): any;
-    dxRangeSelector(options: string, ...params: any[]): any;
-    dxRangeSelector(options: dxRangeSelectorOptions): JQuery;
-}
-}
 export type Options = dxRangeSelectorOptions;
 
 /** @deprecated use Options instead */

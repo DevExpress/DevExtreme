@@ -1,8 +1,10 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import dxScrollable, {
     dxScrollableOptions
@@ -16,7 +18,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullDown?: ((e: { component?: dxScrollView, element?: dxElement, model?: any }) => any);
+    onPullDown?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -24,7 +26,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReachBottom?: ((e: { component?: dxScrollView, element?: dxElement, model?: any }) => any);
+    onReachBottom?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @default "Release to refresh..."
@@ -68,8 +70,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @public
  */
 export default class dxScrollView extends dxScrollable {
-    constructor(element: Element, options?: dxScrollViewOptions)
-    constructor(element: JQuery, options?: dxScrollViewOptions)
+    constructor(element: TElement, options?: dxScrollViewOptions)
     /**
      * @docid
      * @publicName refresh()
@@ -85,18 +86,9 @@ export default class dxScrollView extends dxScrollable {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    release(preventScrollBottom: boolean): Promise<void> & JQueryPromise<void>;
+    release(preventScrollBottom: boolean): TPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxScrollView(): JQuery;
-    dxScrollView(options: "instance"): dxScrollView;
-    dxScrollView(options: string): any;
-    dxScrollView(options: string, ...params: any[]): any;
-    dxScrollView(options: dxScrollViewOptions): JQuery;
-}
-}
 export type Options = dxScrollViewOptions;
 
 /** @deprecated use Options instead */

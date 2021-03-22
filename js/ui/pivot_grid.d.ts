@@ -1,11 +1,13 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
-    event
+    TPromise
+} from '../core/utils/deferred';
+
+import {
+    TEvent
 } from '../events/index';
 
 import PivotGridDataSource, {
@@ -417,7 +419,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, dataFields?: Array<PivotGridDataSourceField>, event?: event, cancel?: boolean }) => any);
+    onCellClick?: ((e: { component?: dxPivotGrid, element?: TElement, model?: any, area?: string, cellElement?: TElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, dataFields?: Array<PivotGridDataSourceField>, event?: TEvent, cancel?: boolean }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -431,7 +433,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellPrepared?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
+    onCellPrepared?: ((e: { component?: dxPivotGrid, element?: TElement, model?: any, area?: string, cellElement?: TElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
     /**
      * @docid
      * @type_function_param1 e:Object
@@ -450,7 +452,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: dxElement, columnIndex?: number, rowIndex?: number, dataFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, columnFields?: Array<PivotGridDataSourceField>, field?: PivotGridDataSourceField }) => any);
+    onContextMenuPreparing?: ((e: { component?: dxPivotGrid, element?: TElement, model?: any, items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: TElement, columnIndex?: number, rowIndex?: number, dataFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, columnFields?: Array<PivotGridDataSourceField>, field?: PivotGridDataSourceField }) => any);
     /**
      * @docid
      * @extends Action
@@ -459,7 +461,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @public
      * @deprecated
      */
-    onExported?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any }) => any);
+    onExported?: ((e: { component?: dxPivotGrid, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -470,7 +472,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onExporting?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
+    onExporting?: ((e: { component?: dxPivotGrid, element?: TElement, model?: any, fileName?: string, cancel?: boolean }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -484,7 +486,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @public
      * @deprecated
      */
-    onFileSaving?: ((e: { component?: dxPivotGrid, element?: dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+    onFileSaving?: ((e: { component?: dxPivotGrid, element?: TElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
     /**
      * @docid
      * @type Enums.PivotGridRowHeadersLayout
@@ -568,7 +570,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @prevFileNamespace DevExpress.ui
        * @type_function_return Promise<Object>
        */
-      customLoad?: (() => Promise<any> | JQueryPromise<any>),
+      customLoad?: (() => TPromise<any>),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -691,8 +693,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
  * @public
  */
 export default class dxPivotGrid extends Widget {
-    constructor(element: Element, options?: dxPivotGridOptions)
-    constructor(element: JQuery, options?: dxPivotGridOptions)
+    constructor(element: TElement, options?: dxPivotGridOptions)
     /**
      * @docid
      * @publicName bindChart(chart, integrationOptions)
@@ -709,7 +710,7 @@ export default class dxPivotGrid extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    bindChart(chart: string | JQuery | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
+    bindChart(chart: string | TElement | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
     /**
      * @docid
      * @publicName exportToExcel()
@@ -970,15 +971,6 @@ export interface dxPivotGridSummaryCell {
     value(postProcessed: boolean): any;
 }
 
-declare global {
-interface JQuery {
-    dxPivotGrid(): JQuery;
-    dxPivotGrid(options: "instance"): dxPivotGrid;
-    dxPivotGrid(options: string): any;
-    dxPivotGrid(options: string, ...params: any[]): any;
-    dxPivotGrid(options: dxPivotGridOptions): JQuery;
-}
-}
 export type Options = dxPivotGridOptions;
 
 /** @deprecated use Options instead */

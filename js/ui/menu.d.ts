@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import DataSource, {
@@ -51,7 +51,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuHidden?: ((e: { component?: dxMenu, element?: dxElement, model?: any, rootItem?: dxElement }) => any);
+    onSubmenuHidden?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => any);
     /**
      * @docid
      * @extends Action
@@ -62,7 +62,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuHiding?: ((e: { component?: dxMenu, element?: dxElement, model?: any, rootItem?: dxElement, cancel?: boolean }) => any);
+    onSubmenuHiding?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement, cancel?: boolean }) => any);
     /**
      * @docid
      * @extends Action
@@ -72,7 +72,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuShowing?: ((e: { component?: dxMenu, element?: dxElement, model?: any, rootItem?: dxElement }) => any);
+    onSubmenuShowing?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => any);
     /**
      * @docid
      * @extends Action
@@ -82,7 +82,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuShown?: ((e: { component?: dxMenu, element?: dxElement, model?: any, rootItem?: dxElement }) => any);
+    onSubmenuShown?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => any);
     /**
      * @docid
      * @type Enums.Orientation
@@ -144,8 +144,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  * @public
  */
 export default class dxMenu extends dxMenuBase {
-    constructor(element: Element, options?: dxMenuOptions)
-    constructor(element: JQuery, options?: dxMenuOptions)
+    constructor(element: TElement, options?: dxMenuOptions)
 }
 
 /**
@@ -229,15 +228,6 @@ export interface dxMenuItem extends dxMenuBaseItem {
     items?: Array<dxMenuItem>;
 }
 
-declare global {
-interface JQuery {
-    dxMenu(): JQuery;
-    dxMenu(options: "instance"): dxMenu;
-    dxMenu(options: string): any;
-    dxMenu(options: string, ...params: any[]): any;
-    dxMenu(options: dxMenuOptions): JQuery;
-}
-}
 export type Options = dxMenuOptions;
 
 /** @deprecated use Options instead */

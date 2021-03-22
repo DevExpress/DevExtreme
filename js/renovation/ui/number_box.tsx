@@ -46,6 +46,10 @@ export class NumberBoxProps extends WidgetProps {
   @TwoWay() value: number | null = 0;
 
   @Event() valueChange?: EventCallback<number>;
+
+  @OneWay() focusStateEnabled?: boolean = true;
+
+  @OneWay() hoverStateEnabled?: boolean = true;
 }
 
 @Component({

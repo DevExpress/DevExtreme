@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Component from './component';
-import type { DataGrid } from '../ui/data_grid/data_grid';
+import type { DataGrid } from '../ui/grids/data_grid/data_grid';
 
 export default class DataGridWrapper extends Component {
     beginUpdate() {
