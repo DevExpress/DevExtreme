@@ -1,32 +1,32 @@
 import FileSystemItem from "./file_system_item";
 
 /**
- * @docid
- * @module file_management/error
+ * @docid FileSystemError
+ * @module file_management/file_system_error
  * @namespace DevExpress.fileManagement
  * @export default
  * @prevFileNamespace DevExpress.fileManagement
  * @public
  */
  export default class FileSystemError {
-   constructor(errorCode?: Enums.FileManagementFileSystemErrorCode|number, fileSystemItem?: FileSystemItem, errorText?: string)
+   constructor(errorCode?: number, fileSystemItem?: FileSystemItem, errorText?: string)
     /**
-     * @docid
+     * @docid FileSystemError.fileSystemItem
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     fileSystemItem?: FileSystemItem;
 
     /**
-     * @docid
-     * @type Enums.FileManagementFileSystemErrorCode|number
+     * @docid FileSystemError.errorCode
+     * @type number
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    errorCode?: 'noAccess' | 'fileExists' | 'fileNotFound' | 'directoryExists' | 'directoryNotFound' | 'wrongFileExtension' | 'maxFileSizeExceeded' | 'invalidSymbols' | 'other' | number;
+    errorCode?: number;
 
     /**
-     * @docid
+     * @docid FileSystemError.errorText
      * @prevFileNamespace DevExpress.fileManagement
      * @default ""
      * @public
