@@ -536,6 +536,30 @@ QUnit.module('focus policy', () => {
 
         assert.ok(dropDownEditor1.option('opened'), 'should be still opened after the widget\'s popup focus');
     });
+
+    [false, true].forEach((acceptCustomValue) => {
+        const position = acceptCustomValue ? 'end' : 'beginning';
+        const testTitle = `caret should be set to the ${position} of the text after click on the dropDown button when "acceptCustomValue" option is ${acceptCustomValue} (T976700)`;
+
+        QUnit.testInActiveWindow(testTitle, function(assert) {
+            const value = '1234567890abcdefgh';
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                items: [value],
+                focusStateEnabled: true,
+                showDropDownButton: true,
+                acceptCustomValue,
+                value
+            });
+            const $dropDownButton = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+            const input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).get(0);
+            const expectedPosition = acceptCustomValue ? value.length : 0;
+
+            $dropDownButton.trigger('dxclick');
+
+            assert.strictEqual(input.selectionStart, expectedPosition, 'correct start position');
+            assert.strictEqual(input.selectionEnd, expectedPosition, 'correct end position');
+        });
+    });
 });
 
 QUnit.module('keyboard navigation', {
@@ -1800,4 +1824,3 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 });
-
