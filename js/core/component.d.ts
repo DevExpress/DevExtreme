@@ -15,11 +15,7 @@ export interface ComponentOptions<T = Component> {
   onDisposing?: ((e: { component?: T }) => void);
   /**
    * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field1 component:this
-   * @type_function_param1_field2 element:dxElement
    * @default null
-   * @action
    * @prevFileNamespace DevExpress.core
    * @public
    */
