@@ -3,6 +3,7 @@ import FileSystemItem from '../../file_management/file_system_item';
 import ObjectFileSystemProvider from '../../file_management/object_provider';
 import RemoteFileSystemProvider from '../../file_management/remote_provider';
 import CustomFileSystemProvider from '../../file_management/custom_provider';
+import FileSystemError from '../../file_management/file_system_error';
 import ErrorCode from '../../file_management/errors';
 import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from '../../file_management/utils';
 import { whenSome } from './ui.file_manager.common';
@@ -311,7 +312,7 @@ export default class FileItemsController {
         this._raiseEditActionStarting(actionInfo);
         this._raiseEditActionResultAcquired(actionInfo);
         this._raiseEditActionError(actionInfo, {
-            errorId: errorInfo.errorId,
+            errorCode: errorInfo.errorCode,
             fileItem: parentDirectoryInfo.fileItem,
             index: 0
         });
@@ -697,13 +698,13 @@ class FileSecurityController {
 
     validateExtension(name) {
         if(!this._isValidExtension(name)) {
-            this._throwError(ErrorCode.WrongFileExtension);
+            throw new FileSystemError(ErrorCode.WrongFileExtension, null);
         }
     }
 
     validateMaxFileSize(size) {
         if(this._maxFileSize && size > this._maxFileSize) {
-            this._throwError(ErrorCode.MaxFileSizeExceeded);
+            throw new FileSystemError(ErrorCode.MaxFileSizeExceeded, null);
         }
     }
 
@@ -713,10 +714,6 @@ class FileSecurityController {
         }
         const extension = getFileExtension(name).toUpperCase();
         return this._extensionsMap[extension];
-    }
-
-    _throwError(errorId) {
-        throw { errorId };
     }
 
     get _allowedFileExtensions() {
