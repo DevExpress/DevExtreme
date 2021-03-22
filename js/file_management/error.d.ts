@@ -28,7 +28,6 @@ import FileSystemItem from "./file_system_item";
     /**
      * @docid FileSystemError.errorText
      * @prevFileNamespace DevExpress.fileManagement
-     * @default ""
      * @public
      */
      errorText?: string;
