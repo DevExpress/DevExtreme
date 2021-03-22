@@ -832,6 +832,7 @@ QUnit.module('Regressions', {
         $clearButton.trigger('dxclick');
 
         assert.equal(colorBox.option('value'), null);
+        assert.equal(colorBox.option('text'), '');
     });
 });
 
