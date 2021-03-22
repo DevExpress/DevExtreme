@@ -407,7 +407,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 assert.throws(() => this.controller.uploadFileChunk(files[1], createUploadInfo(files[1]), currentDir.fileItem),
                     error => {
                         done2();
-                        return error.errorId === ErrorCode.MaxFileSizeExceeded;
+                        return error.errorCode === ErrorCode.MaxFileSizeExceeded;
                     },
                     'max file size exceeded error raised');
             });
@@ -438,7 +438,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 assert.throws(() => this.controller.uploadFileChunk(files[1], createUploadInfo(files[1]), currentDir.fileItem),
                     error => {
                         done2();
-                        return error.errorId === ErrorCode.WrongFileExtension;
+                        return error.errorCode === ErrorCode.WrongFileExtension;
                     },
                     'wrong file extension error raised');
             });

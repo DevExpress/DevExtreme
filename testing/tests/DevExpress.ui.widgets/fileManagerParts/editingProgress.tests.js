@@ -110,7 +110,7 @@ const raiseErrorForItem = (fileItem, fileIndex) => {
     fileItem = fileItem || null;
     if(fileIndex % 2 === 1) {
         throw {
-            errorId: ErrorCode.Other,
+            errorCode: ErrorCode.Other,
             fileItem
         };
     }

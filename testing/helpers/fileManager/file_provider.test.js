@@ -168,7 +168,7 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
     _raiseErrorCore(fileItem) {
         fileItem = fileItem || null;
         throw {
-            errorId: ErrorCode.Other,
+            errorCode: ErrorCode.Other,
             fileItem
         };
     }
