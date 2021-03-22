@@ -23,5 +23,6 @@ const createScheduler = async (options: Record<string, unknown>): Promise<void> 
     currentView: view,
     renovateRender: true,
     showAllDayPanel: false,
+    crossScrollingEnabled: true,
   }));
 });
