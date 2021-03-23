@@ -533,6 +533,7 @@ testComponentDefaults(Popover,
     {},
     {
         position: 'bottom',
+        target: window,
         animation: {
             show: {
                 type: 'fade',
