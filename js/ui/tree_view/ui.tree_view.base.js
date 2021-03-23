@@ -1166,10 +1166,14 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return false;
         }
 
-        const selectedNodesKeys = this.getSelectedNodeKeys();
-        if(this._isSingleSelection() && value) {
-            each(selectedNodesKeys, (index, nodeKey) => {
-                this.unselectItem(nodeKey);
+        if(value === true && this._isSingleSelection()) {
+            const selectedKeys = this.getSelectedNodeKeys();
+            each(selectedKeys, (index, key) => {
+                this._dataAdapter.toggleSelection(key, false);
+                this._updateItemsUI();
+
+                this._fireItemSelectionChanged(this._getNode(key));
+                this._fireSelectionChanged();
             });
         }
 
