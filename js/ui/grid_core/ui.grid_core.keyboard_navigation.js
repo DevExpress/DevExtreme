@@ -14,6 +14,7 @@ import * as accessibility from '../shared/accessibility';
 import browser from '../../core/utils/browser';
 import { keyboard } from '../../events/short';
 import devices from '../../core/devices';
+import { Deferred } from '../../core/utils/deferred';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const EDIT_FORM_CLASS = 'edit-form';
@@ -1103,6 +1104,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     _updateFocus: function(isRenderView) {
         this._updateFocusTimeout = setTimeout(() => {
+            if(this._editingController.getEditMode() === EDIT_MODE_CELL && this._editingController.hasChanges()) {
+                this._editingController._focusEditingCell();
+                return;
+            }
+
             let $cell = this._getFocusedCell();
             const isEditing = this._editingController.isEditing();
 
@@ -2115,14 +2121,15 @@ export const keyboardNavigationModule = {
                     this._keyboardNavigationController = this.getController('keyboardNavigation');
                 },
                 closeEditCell: function() {
-                    const keyboardNavigation = this.getController('keyboardNavigation');
-                    keyboardNavigation._fastEditingStarted = false;
+                    const deferred = new Deferred();
+                    this._keyboardNavigationController._fastEditingStarted = false;
 
-                    const result = this.callBase.apply(this, arguments);
+                    this.callBase.apply(this, arguments).always(() => {
+                        deferred.resolve();
+                        this._keyboardNavigationController._updateFocus();
+                    });
 
-                    keyboardNavigation._updateFocus();
-
-                    return result;
+                    return deferred.promise();
                 },
                 _delayedInputFocus: function() {
                     this._keyboardNavigationController._isNeedScroll = true;
