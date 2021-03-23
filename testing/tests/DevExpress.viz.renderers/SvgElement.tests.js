@@ -1621,7 +1621,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             'fill-opacity': 0.2,
             'flex-grow': 1,
             'flex-shrink': 1,
-            'font-weight': 2,
+            'font-weight': 800,
             'line-height': 3,
             'opacity': 0.3,
             'order': 2,
@@ -1638,7 +1638,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             'fill-opacity': '0.2',
             'flex-grow': '1',
             'flex-shrink': '1',
-            'font-weight': '2',
+            'font-weight': '800',
             'line-height': '3',
             'opacity': '0.3',
             'order': '2',
@@ -1654,7 +1654,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.rect.css(cssStyles);
 
         for(const key in expectedStyleStrings) {
-            assert.strictEqual(this.rect.element.style[key], expectedStyleStrings[key]);
+            assert.strictEqual(this.rect.element.style[key].toString(), expectedStyleStrings[key]);
         }
     });
 
