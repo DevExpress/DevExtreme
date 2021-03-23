@@ -3683,7 +3683,7 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.pager]
          */
-        pager?: { allowedPageSizes?: Array<number> | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
+        pager?: { allowedPageSizes?: Array<number | 'all'> | 'auto', displayMode?: 'adaptive' | 'compact' | 'full', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
         /**
          * [descr:GridBaseOptions.paging]
          */
