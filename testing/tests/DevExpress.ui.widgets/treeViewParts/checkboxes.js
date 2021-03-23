@@ -375,7 +375,6 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-
         QUnit.test('all.selected: false -> selectItem(1) -> expandAll', function(assert) {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
@@ -1027,6 +1026,19 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
     });
+});
+
+QUnit.test('3 one-level items.selected: true. Selection mode: single -> selectItem(0)', function(assert) {
+    const wrapper = createWrapper({ selectionMode: 'single', dataSourceOption: 'items' }, {}, [
+        { id: 0, text: 'item0', parentId: ROOT_ID, selected: true },
+        { id: 1, text: 'item1', parentId: ROOT_ID, selected: true },
+        { id: 2, text: 'item2', parentId: ROOT_ID, selected: true }
+    ]);
+    wrapper.checkSelection([2], [2]);
+
+    wrapper.instance.selectItem(0);
+    wrapper.checkSelection([0], [0]);
+    wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged', 'itemSelectionChanged', 'selectionChanged']);
 });
 
 QUnit.module('Delayed datasource', () => {
