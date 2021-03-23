@@ -111,9 +111,11 @@ export default class FileManagerNotificationControl extends Widget {
         this._progressPanel.completeOperation(info, commonText, isError, statusText);
 
         if(!this._isProgressDrawerOpened() || !this._tryHideActionProgress()) {
-            let status = this.failedOperationCount === 0 ? ACTION_PROGRESS_STATUS.success : ACTION_PROGRESS_STATUS.error;
+            let status = ACTION_PROGRESS_STATUS.success;
             if(this._hasNoOperations()) {
                 status = ACTION_PROGRESS_STATUS.default;
+            } else if(this.failedOperationCount !== 0) {
+                status = ACTION_PROGRESS_STATUS.error;
             }
             this._updateActionProgress('', status);
         }
