@@ -596,6 +596,80 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
+        QUnit.test('all.selected: true -> selectItem(0) -> expandAll', function(assert) {
+            const wrapper = createWrapper(config, {}, [
+                { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
+
+            const selectResult = wrapper.instance.selectItem(0);
+
+            let expectedKeys = [0, 1];
+            let expectedNodes = [0, 1];
+            let expectedEventLog = [];
+            if(config.selectionMode === 'single') {
+                expectedKeys = [0];
+                expectedNodes = [0];
+                expectedEventLog = ['itemSelectionChanged', 'selectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+            }
+            if(!config.expanded) {
+                // unexpected result
+                expectedNodes = [0];
+            }
+
+            assert.strictEqual(selectResult, true, 'item1 is selected');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after select');
+            wrapper.checkEventLog(expectedEventLog, 'after select');
+            wrapper.clearEventLog();
+
+            wrapper.instance.expandAll();
+            if(config.selectionMode === 'multiple') {
+                expectedKeys = [0, 1];
+                expectedNodes = [0, 1];
+            }
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
+            wrapper.checkEventLog([], 'after expand');
+        });
+
+        QUnit.test('all.selected: true -> selectItem(1) -> expandAll', function(assert) {
+            const wrapper = createWrapper(config, {}, [
+                { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
+
+            const selectResult = wrapper.instance.selectItem(1);
+
+            let expectedKeys = [0, 1];
+            let expectedNodes = [0, 1];
+            const expectedEventLog = [];
+            if(!config.expanded) {
+                // unexpected result
+                expectedNodes = [0];
+            }
+            if(config.selectionMode === 'single') {
+                expectedKeys = [1];
+                expectedNodes = [1];
+
+                if(!config.expanded) {
+                    // unexpected result
+                    expectedNodes = [];
+                }
+            }
+
+            assert.strictEqual(selectResult, true, 'item1 is selected');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after select');
+            wrapper.checkEventLog(expectedEventLog, 'after select');
+            wrapper.clearEventLog();
+
+            wrapper.instance.expandAll();
+            if(config.selectionMode === 'multiple') {
+                expectedKeys = [0, 1];
+                expectedNodes = [0, 1];
+            } else if(config.expanded === false) {
+                expectedNodes = [1];
+            }
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
+            wrapper.checkEventLog([], 'after expand');
+        });
+
         QUnit.test('item1.selected: true', function() {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
@@ -743,7 +817,6 @@ configs.forEach(config => {
 
             wrapper.checkEventLog([]);
         });
-
 
         QUnit.test('item1_1.selected: true -> expandAll', function() {
             const wrapper = createWrapper(config, {}, [
@@ -955,7 +1028,6 @@ configs.forEach(config => {
         });
     });
 });
-
 
 QUnit.module('Delayed datasource', () => {
     function executeDelayed(action, timeout) {
