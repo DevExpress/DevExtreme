@@ -74,7 +74,7 @@ export default class FileManagerNotificationControl extends Widget {
         }
 
         setTimeout(() => {
-            this._progressDrawer.show().done(promise.resolve); // notifications.showPanel
+            this._progressDrawer.show().done(promise.resolve);
             this._hidePopup();
             this._tryHideActionProgress();
         });
@@ -267,7 +267,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _showPopup(content, errorMode) {
-        if(this._isProgressDrawerOpened() || !this.option('showNotificationPopup')) { // notifications.showPopup
+        if(this._isProgressDrawerOpened() || !this.option('showNotificationPopup')) {
             return;
         }
         this._getNotificationPopup()._wrapper().toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);
