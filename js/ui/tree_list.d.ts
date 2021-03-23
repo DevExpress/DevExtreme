@@ -1253,8 +1253,35 @@ export interface Column extends ColumnBase {
     type?: 'adaptive' | 'buttons';
 }
 
+/**
+ * @public
+ */
+export interface ColumnButtonTemplate {
+    readonly component: dxTreeList;
+    readonly data: any;
+    readonly key: any;
+    readonly columnIndex: number;
+    readonly column: Column;
+    readonly rowIndex: number;
+    readonly rowType: string;
+    readonly row: RowObject;
+}
+
+/**
+ * @public
+ */
+export interface ColumnButtonClickArg {
+    readonly component: dxTreeList;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly event: TEvent;
+    readonly row: RowObject;
+    readonly column: Column;
+}
+
 /** @deprecated Use ColumnButton instead */
 export type dxTreeListColumnButton = ColumnButton;
+
 
 /**
  * @docid
@@ -1282,7 +1309,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { readonly component: dxTreeList, readonly element: TElement, readonly model?: any, readonly event: TEvent, row?: RowObject, readonly column: Column }) => any) | string;
+    onClick?: ((e: ColumnButtonClickArg) => any) | string;
     /**
      * @docid
      * @type_function_param1 cellElement:dxElement
@@ -1299,7 +1326,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: { readonly component: dxTreeList, readonly data: any, readonly key: any, readonly columnIndex: number, readonly column: Column, readonly rowIndex: number, readonly rowType: string, row?: RowObject }) => string | TElement);
+    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplate) => string | TElement);
     /**
      * @docid
      * @default true
