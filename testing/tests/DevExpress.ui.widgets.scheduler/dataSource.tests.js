@@ -870,6 +870,7 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
                 currentView: 'week',
                 recurrenceEditMode: 'occurrence',
                 currentDate: new Date(2017, 4, 22),
+                _draggingMode: 'default',
                 onAppointmentAdding: e => {
                     assert.equal(e.appointmentData.id, undefined, 'key property \'id\' shouldn\'t exist in appointment on onAppointmentAdding event');
                 },

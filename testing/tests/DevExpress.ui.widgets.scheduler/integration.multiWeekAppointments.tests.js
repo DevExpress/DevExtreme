@@ -696,7 +696,8 @@ QUnit.test('Multi week task dragging on month view', function(assert) {
         firstDayOfWeek: 1,
         editing: true,
         startDayHour: 3,
-        endDayHour: 10
+        endDayHour: 10,
+        _draggingMode: 'default'
     });
 
     const updatedItem = {
@@ -734,7 +735,8 @@ QUnit.test('Multi week allDay task dragging on month view', function(assert) {
         firstDayOfWeek: 1,
         editing: true,
         startDayHour: 3,
-        endDayHour: 10
+        endDayHour: 10,
+        _draggingMode: 'default'
     });
 
     const updatedItem = {

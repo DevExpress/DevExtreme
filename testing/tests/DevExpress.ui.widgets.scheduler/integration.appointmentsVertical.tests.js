@@ -1144,7 +1144,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             ],
             startDayHour: 12,
             endDayHour: 16,
-            showAllDayPanel: false
+            showAllDayPanel: false,
+            _draggingMode: 'default'
         });
 
         this.scheduler.appointmentList[0].drag.toCell(75);

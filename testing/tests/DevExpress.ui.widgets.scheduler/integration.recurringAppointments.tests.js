@@ -40,7 +40,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                             height: 600,
                             scrolling: {
                                 mode: scrollingMode
-                            }
+                            },
+                            _draggingMode: 'default'
                         },
                         options
                     )
