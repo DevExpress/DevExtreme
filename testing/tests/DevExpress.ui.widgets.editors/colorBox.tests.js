@@ -834,6 +834,23 @@ QUnit.module('Regressions', {
         assert.equal(colorBox.option('value'), null);
         assert.equal(colorBox.option('text'), '');
     });
+
+    QUnit.test('value should be null after clear button click if editAlfaChannel = true, applyValueMode = instantly and colorview is rendered (T976630)', function(assert) {
+        const $colorBox = $('#color-box').dxColorBox({
+            value: '#f05b41',
+            showClearButton: true,
+            applyValueMode: 'instantly',
+            editAlphaChannel: true,
+            opened: true
+        });
+        const colorBox = $colorBox.dxColorBox('instance');
+        const $clearButton = $('#color-box').find(CLEAR_BUTTON_AREA_SELECTOR);
+
+        $clearButton.trigger('dxclick');
+
+        assert.equal(colorBox.option('value'), null);
+        assert.equal(colorBox.option('text'), '');
+    });
 });
 
 QUnit.module('valueChanged handler should receive correct event', {
