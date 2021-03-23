@@ -1683,10 +1683,11 @@ class Scheduler extends Widget {
                     dragEvent.cancel = new Deferred();
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
-                    .done((result) => {
-                        if(result !== undefined) {
-                            result && callback();
-                            !result && this._excludeAppointmentFromSeries(
+                    .done((isUpdateSeries) => {
+                        if(isUpdateSeries !== undefined) {
+                            isUpdateSeries && callback();
+
+                            !isUpdateSeries && this._excludeAppointmentFromSeries(
                                 targetAppointment, singleAppointment, exceptionDate,
                                 isDeleted, isPopupEditing, dragEvent,
                             );

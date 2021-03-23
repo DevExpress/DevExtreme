@@ -52,8 +52,6 @@ module('Recurrence Dialog', {
                 }],
             });
 
-            scheduler.drawControl();
-
             assert.equal(scheduler.appointmentPopup.getRecurrenceDialog().length, 0, 'There are no dialogs');
 
             scheduler.appointmentList[0].drag.toCell(12);
@@ -63,6 +61,31 @@ module('Recurrence Dialog', {
             scheduler.getElement().remove();
 
             assert.equal(scheduler.appointmentPopup.getRecurrenceDialog().length, 0, 'There are no dialogs');
+        });
+
+        test('Appointments should not be updated after scheduler\'s disposal', function(assert) {
+            const dataSource = [{
+                startDate: new Date(2021, 2, 22),
+                endDate: new Date(2021, 2, 22, 0, 30),
+                recurrenceRule: 'FREQ=DAILY',
+            }];
+
+            const scheduler = createWrapper({
+                currentDate: new Date(2021, 2, 22),
+                currentView: 'week',
+                dataSource,
+            });
+
+            scheduler.appointmentList[0].drag.toCell(12);
+            scheduler.getElement().remove();
+
+            const expectedDataSource = [{
+                startDate: new Date(2021, 2, 22),
+                endDate: new Date(2021, 2, 22, 0, 30),
+                recurrenceRule: 'FREQ=DAILY',
+            }];
+
+            assert.deepEqual(dataSource, expectedDataSource, 'Data source was not updated');
         });
     }
 });
