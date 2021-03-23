@@ -295,6 +295,13 @@ QUnit.module('Aggregation methods', {
     }
 });
 
+// T983625
+QUnit.test('length as argumentField', function(assert) {
+    const points = this.aggregateData('avg', [{ length: 1, val: 1 }, { length: 2, val: 2 }], 'line', { argumentField: 'length' });
+
+    assert.strictEqual(points.length, 1);
+});
+
 QUnit.test('Aggregation is disabled', function(assert) {
     const points = this.aggregateData('unknown', this.data, 'line', { aggregation: { enabled: false } });
     assert.equal(points.length, 5);
