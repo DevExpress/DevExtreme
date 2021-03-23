@@ -14,7 +14,6 @@ import * as accessibility from '../shared/accessibility';
 import browser from '../../core/utils/browser';
 import { keyboard } from '../../events/short';
 import devices from '../../core/devices';
-import { Deferred } from '../../core/utils/deferred';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const EDIT_FORM_CLASS = 'edit-form';
@@ -2121,15 +2120,12 @@ export const keyboardNavigationModule = {
                     this._keyboardNavigationController = this.getController('keyboardNavigation');
                 },
                 closeEditCell: function() {
-                    const deferred = new Deferred();
                     this._keyboardNavigationController._fastEditingStarted = false;
 
-                    this.callBase.apply(this, arguments).always(() => {
-                        deferred.resolve();
-                        this._keyboardNavigationController._updateFocus();
-                    });
+                    const result = this.callBase.apply(this, arguments);
+                    this._keyboardNavigationController._updateFocus();
 
-                    return deferred.promise();
+                    return result;
                 },
                 _delayedInputFocus: function() {
                     this._keyboardNavigationController._isNeedScroll = true;
