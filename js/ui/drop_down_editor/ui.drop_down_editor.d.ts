@@ -7,7 +7,20 @@ import {
 } from '../../core/templates/template';
 
 import dxTextBox, {
-    dxTextBoxOptions
+    dxTextBoxOptions,
+    ChangeEvent,
+    ContentReadyEvent,
+    CopyEvent,
+    CutEvent,
+    EnterKeyEvent,
+    FocusInEvent,
+    FocusOutEvent,
+    InputEvent,
+    KeyDownEvent,
+    KeyPressEvent,
+    KeyUpEvent,
+    PasteEvent,
+    ValueChangedEvent
 } from '../text_box';
 
 import {
@@ -17,6 +30,32 @@ import {
 import {
     dxPopupOptions
 } from '../popup';
+
+import {
+    BaseEvent
+} from '../../events/index';
+
+export interface ClosedEvent <T> extends BaseEvent<T> {}
+export interface OpenedEvent <T> extends BaseEvent<T> {}
+export interface DropDownButtonData {
+    readonly text?: string,
+    readonly icon?: string
+}
+export {
+    ChangeEvent,
+    ContentReadyEvent,
+    CopyEvent,
+    CutEvent,
+    EnterKeyEvent,
+    FocusInEvent,
+    FocusOutEvent,
+    InputEvent,
+    KeyDownEvent,
+    KeyPressEvent,
+    KeyUpEvent,
+    PasteEvent,
+    ValueChangedEvent
+}
 
 export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
     /**
@@ -74,7 +113,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | TElement);
+    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonData, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null
@@ -82,7 +121,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onClosed?: ((e: ClosedEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -90,7 +129,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onOpened?: ((e: OpenedEvent<T>) => void);
     /**
      * @docid
      * @default false

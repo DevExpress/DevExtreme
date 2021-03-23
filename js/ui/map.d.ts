@@ -7,13 +7,53 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    TEvent
+  BaseEvent,
+  BaseNativeEvent
 } from '../events/index';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+/**
+ * @public
+*/
+export interface ClickEvent<T> extends BaseNativeEvent<T> {}
+/**
+ * @public
+*/
+export interface MarkerAddedEvent<T> extends BaseEvent<T> {
+  readonly options: any,
+  originalMarker: any
+}
+/**
+ * @public
+*/
+export interface MarkerRemovedEvent<T> extends BaseEvent<T> {
+  readonly options?: any
+}
+/**
+ * @public
+*/
+export interface RouteAddedEvent<T> extends BaseEvent<T> {
+  readonly options: any,
+  originalRoute: any
+}
+/**
+ * @public
+*/
+export interface RouteRemovedEvent<T> extends BaseEvent<T> {
+  readonly options?: any
+}
+/**
+ * @public
+*/
+export interface ReadyEvent<T> extends BaseEvent<T> {
+  originalMap: any
+}
+/**
+ * @public
+*/
 export interface MapLocation {
     /**
      * @docid
@@ -21,14 +61,14 @@ export interface MapLocation {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    lat?: number;
+    lat: number;
     /**
      * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    lng?: number;
+    lng: number;
 }
 
 export interface dxMapOptions extends WidgetOptions<dxMap> {
@@ -182,7 +222,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxMap, element?: TElement, model?: any, location?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: ClickEvent<dxMap>) => void) | string;
     /**
      * @docid
      * @default null
@@ -193,7 +233,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMarkerAdded?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any, originalMarker?: any }) => void);
+    onMarkerAdded?: ((e: MarkerAddedEvent<dxMap>) => void);
     /**
      * @docid
      * @default null
@@ -203,7 +243,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMarkerRemoved?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any }) => void);
+    onMarkerRemoved?: ((e: MarkerRemovedEvent<dxMap>) => void);
     /**
      * @docid
      * @default null
@@ -213,7 +253,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReady?: ((e: { component?: dxMap, element?: TElement, model?: any, originalMap?: any }) => void);
+    onReady?: ((e: ReadyEvent<dxMap>) => void);
     /**
      * @docid
      * @default null
@@ -224,7 +264,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRouteAdded?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any, originalRoute?: any }) => void);
+    onRouteAdded?: ((e: RouteAddedEvent<dxMap>) => void);
     /**
      * @docid
      * @default null
@@ -234,7 +274,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRouteRemoved?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any }) => void);
+    onRouteRemoved?: ((e: RouteRemovedEvent<dxMap>) => void);
     /**
      * @docid
      * @type Enums.GeoMapProvider

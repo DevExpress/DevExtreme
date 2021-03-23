@@ -22,6 +22,16 @@ import {
     StringLengthRule
 } from './validation_rules';
 
+export interface ValidatedEvent {
+    name?: string,
+    isValid?: boolean,
+    value?: any,
+    validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>,
+    brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule,
+    brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>,
+    status?: 'valid' | 'invalid' | 'pending'
+}
+
 export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**
      * @docid
@@ -80,7 +90,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, status?: 'valid' | 'invalid' | 'pending' }) => void);
+    onValidated?: ((validatedInfo: ValidatedEvent) => void);
     /**
      * @docid
      * @ref

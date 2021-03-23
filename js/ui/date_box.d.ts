@@ -3,17 +3,54 @@ import {
 } from '../core/element';
 
 import {
+    DisabledDateData,
     dxCalendarOptions
 } from './calendar';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    CutEvent,
+    CopyEvent,
+    InputEvent,
+    KeyUpEvent,
+    PasteEvent,
+    OpenedEvent,
+    ClosedEvent,
+    ChangeEvent,
+    FocusInEvent,
+    KeyDownEvent,
+    EnterKeyEvent,
+    FocusOutEvent,
+    KeyPressEvent,
+    ContentReadyEvent,
+    ValueChangedEvent
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
     format
 } from './widget/ui.widget';
 
+/**
+ * @public
+*/
+export {
+    CutEvent,
+    CopyEvent,
+    InputEvent,
+    KeyUpEvent,
+    PasteEvent,
+    OpenedEvent,
+    ClosedEvent,
+    ChangeEvent,
+    FocusInEvent,
+    KeyDownEvent,
+    EnterKeyEvent,
+    FocusOutEvent,
+    KeyPressEvent,
+    ContentReadyEvent,
+    ValueChangedEvent,
+    DisabledDateData
+}
 export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     /**
      * @docid
@@ -68,7 +105,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    disabledDates?: Array<Date> | ((data: { component?: dxDateBox, date?: Date, view?: string }) => boolean);
+    disabledDates?: Array<Date> | ((data: DisabledDateData) => boolean);
     /**
      * @docid
      * @default null

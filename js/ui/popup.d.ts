@@ -1,3 +1,4 @@
+import { BaseEvent } from '../events/index';
 import {
     animationConfig
 } from '../animation/fx';
@@ -16,9 +17,36 @@ import {
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
+    ShownEvent,
+    HidindEvent,
+    HiddenEvent,
+    ShowingEvent,
+    ContentReadyEvent,
+    ResizeEvent,
+    ResizeEndEvent,
+    ResizeStartEvent
 } from './overlay';
 
+/**
+ * @public
+*/
+export interface TitleRenderedEvent<T> extends BaseEvent<T> {
+    titleElement: TElement
+}
+/**
+ * @public
+*/
+export {
+    ShownEvent,
+    HidindEvent,
+    HiddenEvent,
+    ShowingEvent,
+    ContentReadyEvent,
+    ResizeEvent,
+    ResizeEndEvent,
+    ResizeStartEvent
+}
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
@@ -72,7 +100,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onResize?: ((e: ResizeEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -80,7 +108,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onResizeEnd?: ((e: ResizeEndEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -88,7 +116,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onResizeStart?: ((e: ResizeStartEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -98,7 +126,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: T, element?: TElement, model?: any, titleElement?: TElement }) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent<T>) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function

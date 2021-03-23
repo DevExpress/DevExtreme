@@ -5,11 +5,72 @@ import {
 import {
     template
 } from '../core/templates/template';
+import { BaseEvent } from '../events/index';
+import {
+    SelectAllValueChangedEvent,
+} from './list';
 
 import dxSelectBox, {
-    dxSelectBoxOptions
+    dxSelectBoxOptions,
+    CutEvent,
+    CopyEvent,
+    PasteEvent,
+    KeyUpEvent,
+    InputEvent,
+    ChangeEvent,
+    ClosedEvent,
+    OpenedEvent,
+    EnterKeyEvent,
+    KeyDownEvent,
+    FocusInEvent,
+    KeyPressEvent,
+    FocusOutEvent,
+    ItemClickEvent,
+    ContentReadyEvent,
+    ValueChangedEvent,
+    SelectionChangedEvent as SelectBoxSelectionChangedEvent,
+    CustomItemCreatingEvent
 } from './select_box';
 
+/**
+ * @public
+*/
+export {
+    CutEvent,
+    CopyEvent,
+    PasteEvent,
+    KeyUpEvent,
+    InputEvent,
+    ChangeEvent,
+    ClosedEvent,
+    OpenedEvent,
+    EnterKeyEvent,
+    KeyDownEvent,
+    FocusInEvent,
+    KeyPressEvent,
+    FocusOutEvent,
+    ItemClickEvent,
+    ContentReadyEvent,
+    ValueChangedEvent,
+    CustomItemCreatingEvent,
+    SelectAllValueChangedEvent
+}
+/**
+ * @public
+*/
+export interface SelectionChangedEvent<T> extends SelectBoxSelectionChangedEvent<T> {
+    readonly addedItems: Array<string | number | any>,
+    readonly removedItems: Array<string | number | any>
+}
+/**
+ * @public
+*/
+export interface MultiTagPreparingEvent<T> extends BaseEvent<T> {
+    multiTagElement: TElement,
+    readonly selectedItems?: Array<string | number | any>,
+    readonly text?: string,
+    cancel?: boolean
+}
 export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     /**
      * @docid
@@ -52,7 +113,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: TElement, model?: any, multiTagElement?: TElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => void);
+    onMultiTagPreparing?: ((e: MultiTagPreparingEvent<dxTagBox>) => void);
     /**
      * @docid
      * @default null
@@ -62,7 +123,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: TElement, model?: any, value?: boolean }) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<dxTagBox>) => void);
     /**
      * @docid
      * @default null
@@ -73,7 +134,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxTagBox, element?: TElement, model?: any, addedItems?: Array<string | number | any>, removedItems?: Array<string | number | any> }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent<dxTagBox>) => void);
     /**
      * @docid
      * @type Enums.SelectAllMode

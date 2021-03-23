@@ -11,14 +11,38 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
+    BaseEvent,
     TEvent
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    ItemHoldEvent,
+    ItemClickEvent,
+    ItemRenderedEvent,
+    ContentReadyEvent,
+    SelectionChangedEvent,
+    ItemContextMenuEvent
 } from './collection/ui.collection_widget.base';
 
+/**
+ * @public
+*/
+export {
+    ItemHoldEvent,
+    ItemClickEvent,
+    ItemRenderedEvent,
+    ContentReadyEvent,
+    SelectionChangedEvent,
+    ItemContextMenuEvent
+}
+/**
+ * @public
+*/
+export interface CancelClickEvent<T> extends BaseEvent<T> {
+    cancel?: boolean
+}
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**
      * @docid
@@ -50,7 +74,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCancelClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, cancel?: boolean }) => void) | string;
+    onCancelClick?: ((e: CancelClickEvent<dxActionSheet>) => void) | string;
     /**
      * @docid
      * @default true

@@ -15,6 +15,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
+    BaseNativeEvent,
     TEvent
 } from '../events/index';
 
@@ -27,9 +28,34 @@ import {
 } from './popup';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
+    ContentReadyEvent
 } from './widget/ui.widget';
 
+/**
+ * @public
+*/
+export { ContentReadyEvent }
+/**
+ * @public
+*/
+export interface ButtonClickEvent<T> extends BaseNativeEvent<T> {
+    readonly selectedItem?: any
+}
+/**
+ * @public
+*/
+export interface ItemClickEvent<T> extends BaseNativeEvent<T> {
+    readonly itemData?: any,
+    itemElement?: TElement
+}
+/**
+ * @public
+*/
+export interface SelectionChangedEvent<T> extends BaseNativeEvent<T> {
+    readonly item: any,
+    readonly previousItem: any
+}
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * @docid
@@ -134,7 +160,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onButtonClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, selectedItem?: any }) => void) | string;
+    onButtonClick?: ((e: ButtonClickEvent<dxDropDownButton>) => void) | string;
     /**
      * @docid
      * @default null
@@ -146,7 +172,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent, itemData?: any, itemElement?: TElement }) => void) | string;
+    onItemClick?: ((e: ItemClickEvent<dxDropDownButton>) => void) | string;
     /**
      * @docid
      * @default null
@@ -157,7 +183,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, item?: any, previousItem?: any }) => void) | string;
+    onSelectionChanged?: ((e: SelectionChangedEvent<dxDropDownButton>) => void) | string;
     /**
      * @docid
      * @default false

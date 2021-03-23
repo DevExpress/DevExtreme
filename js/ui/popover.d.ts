@@ -20,8 +20,24 @@ import {
 
 import dxPopup, {
     dxPopupAnimation,
-    dxPopupOptions
+    dxPopupOptions,
+    ShownEvent,
+    HiddenEvent,
+    HidindEvent,
+    ShowingEvent,
+    ContentReadyEvent
 } from './popup';
+
+/**
+ * @public
+*/
+export {
+    ShownEvent,
+    HiddenEvent,
+    HidindEvent,
+    ShowingEvent,
+    ContentReadyEvent
+}
 
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**

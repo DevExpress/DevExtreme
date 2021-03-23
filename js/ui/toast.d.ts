@@ -16,9 +16,22 @@ import {
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
+    ShownEvent,
+    HiddenEvent,
+    HidindEvent,
+    ShowingEvent
 } from './overlay';
 
+/**
+ * @public
+*/
+export {
+    ShownEvent,
+    HiddenEvent,
+    HidindEvent,
+    ShowingEvent
+}
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid

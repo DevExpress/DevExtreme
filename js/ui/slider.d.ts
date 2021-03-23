@@ -3,13 +3,19 @@ import {
 } from '../core/element';
 
 import dxTrackBar, {
-    dxTrackBarOptions
+    dxTrackBarOptions,
+    ContentReadyEvent,
+    ValueChangedEvent
 } from './track_bar';
 
 import {
     format
 } from './widget/ui.widget';
 
+export {
+    ContentReadyEvent,
+    ValueChangedEvent
+}
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**
      * @docid

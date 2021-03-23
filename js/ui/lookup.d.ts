@@ -19,13 +19,40 @@ import {
 } from '../events/index';
 
 import dxDropDownList, {
-    dxDropDownListOptions
+    dxDropDownListOptions,
+    ClosedEvent,
+    OpenedEvent,
+    ItemClickEvent,
+    ContentReadyEvent,
+    ValueChangedEvent,
+    SelectionChangedEvent
 } from './drop_down_editor/ui.drop_down_list';
+import {
+    PageLoadingEvent,
+    PullRefreshEvent,
+    ScrollEvent
+} from './list';
 
 import {
-    dxPopoverOptions
+    dxPopoverOptions,
 } from './popover';
+import { TitleRenderedEvent } from './popup';
 
+/**
+ * @public
+*/
+export {
+    ClosedEvent,
+    OpenedEvent,
+    ItemClickEvent,
+    ContentReadyEvent,
+    ValueChangedEvent,
+    SelectionChangedEvent,
+    PageLoadingEvent,
+    PullRefreshEvent,
+    ScrollEvent,
+    TitleRenderedEvent
+}
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
@@ -155,7 +182,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPageLoading?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => void);
+    onPageLoading?: ((e: PageLoadingEvent<dxLookup>) => void);
     /**
      * @docid
      * @default null
@@ -163,7 +190,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullRefresh?: ((e: { component?: dxLookup, element?: TElement, model?: any }) => void);
+    onPullRefresh?: ((e: PullRefreshEvent<dxLookup>) => void);
     /**
      * @docid
      * @default null
@@ -178,7 +205,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: dxLookup, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
+    onScroll?: ((e: ScrollEvent<dxLookup>) => void);
     /**
      * @docid
      * @default null
@@ -189,7 +216,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    onTitleRendered?: ((e: { component?: dxLookup, element?: TElement, model?: any, titleElement?: TElement }) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent<dxLookup>) => void);
     /**
      * @docid
      * @default null
@@ -201,7 +228,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxLookup, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => void);
+    onValueChanged?: ValueChangedEvent<dxLookup>;
     /**
      * @docid
      * @type Enums.ListPageLoadMode

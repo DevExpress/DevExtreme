@@ -4,13 +4,44 @@ import {
 
 import dxTextEditor, {
     dxTextEditorButton,
-    dxTextEditorOptions
+    dxTextEditorOptions,
+    CutEvent,
+    CopyEvent,
+    InputEvent,
+    KeyUpEvent,
+    PasteEvent,
+    ChangeEvent,
+    FocusInEvent,
+    KeyDownEvent,
+    EnterKeyEvent,
+    FocusOutEvent,
+    KeyPressEvent,
+    ContentReadyEvent,
+    ValueChangedEvent
 } from './text_box/ui.text_editor.base';
 
 import {
     format
 } from './widget/ui.widget';
 
+/**
+ * @public
+*/
+export {
+    CutEvent,
+    CopyEvent,
+    InputEvent,
+    KeyUpEvent,
+    PasteEvent,
+    ChangeEvent,
+    FocusInEvent,
+    KeyDownEvent,
+    EnterKeyEvent,
+    FocusOutEvent,
+    KeyPressEvent,
+    ContentReadyEvent,
+    ValueChangedEvent
+}
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid

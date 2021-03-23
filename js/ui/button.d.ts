@@ -7,12 +7,31 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
+    BaseNativeEvent
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
+    ContentReadyEvent
 } from './widget/ui.widget';
+
+/**
+ * @public
+*/
+export interface ButtonData {
+    readonly text?: string,
+    readonly icon?: string
+}
+/**
+ * @public
+*/
+export interface ClickEvent<T> extends BaseNativeEvent<T> {
+    validationGroup?: any
+}
+/**
+ * @public
+*/
+export { ContentReadyEvent }
 
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
@@ -53,7 +72,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxButton, element?: TElement, model?: any, event?: TEvent, validationGroup?: any }) => void);
+    onClick?: ((e: ClickEvent<dxButton>) => void);
     /**
      * @docid
      * @type Enums.ButtonStylingMode
@@ -73,7 +92,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | TElement);
+    template?: template | ((buttonData: ButtonData, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default ""

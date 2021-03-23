@@ -3,9 +3,18 @@ import {
 } from '../core/element';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
+    ContentReadyEvent,
+    ValueChangedEvent
 } from './editor/editor';
 
+/**
+ * @public
+*/
+export {
+    ContentReadyEvent,
+    ValueChangedEvent
+}
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**
      * @docid

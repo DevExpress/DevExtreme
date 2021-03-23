@@ -8,9 +8,22 @@ import DataSource, {
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    ItemHoldEvent,
+    ItemClickEvent,
+    ItemRenderedEvent,
+    ItemContextMenuEvent
 } from './collection/ui.collection_widget.base';
 
+/**
+ * @public
+*/
+export {
+    ItemHoldEvent,
+    ItemClickEvent,
+    ItemRenderedEvent,
+    ItemContextMenuEvent
+}
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**
      * @docid

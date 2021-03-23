@@ -3,9 +3,14 @@ import {
 } from '../core/element';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
+    ContentReadyEvent
 } from './widget/ui.widget';
 
+/**
+ * @public
+*/
+export { ContentReadyEvent }
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
      * @docid

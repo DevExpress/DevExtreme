@@ -5,13 +5,22 @@ import {
 import DataSource from '../data/data_source';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
+    ContentReadyEvent,
+    ValueChangedEvent
 } from './editor/editor';
 
 import {
     DataExpressionMixinOptions
 } from './editor/ui.data_expression';
 
+/**
+ * @public
+*/
+export {
+    ContentReadyEvent,
+    ValueChangedEvent
+}
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
      * @docid

@@ -9,16 +9,52 @@ import {
 import DataSource from '../../data/data_source';
 
 import {
-    TEvent
-} from '../../events/index';
-
-import {
     DataExpressionMixinOptions
 } from '../editor/ui.data_expression';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    ChangeEvent,
+    ClosedEvent,
+    ContentReadyEvent,
+    CopyEvent,
+    CutEvent,
+    EnterKeyEvent,
+    FocusInEvent,
+    FocusOutEvent,
+    InputEvent,
+    KeyDownEvent,
+    KeyPressEvent,
+    KeyUpEvent,
+    OpenedEvent,
+    PasteEvent,
+    ValueChangedEvent
 } from './ui.drop_down_editor';
+
+import {
+    ItemClickEvent,
+    SelectionChangedEvent
+} from '../collection/ui.collection_widget.base';
+
+export {
+    ChangeEvent,
+    ClosedEvent,
+    ContentReadyEvent,
+    CopyEvent,
+    CutEvent,
+    EnterKeyEvent,
+    FocusInEvent,
+    FocusOutEvent,
+    InputEvent,
+    ItemClickEvent,
+    KeyDownEvent,
+    KeyPressEvent,
+    KeyUpEvent,
+    OpenedEvent,
+    PasteEvent,
+    SelectionChangedEvent,
+    ValueChangedEvent
+}
 
 export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
     /**
@@ -74,7 +110,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: TEvent }) => void);
+    onItemClick?: ((e: ItemClickEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -84,7 +120,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, selectedItem?: any }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -96,7 +132,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => void);
+    onValueChanged?: ((e: ValueChangedEvent<T>) => void);
     /**
      * @docid
      * @default false

@@ -3,7 +3,7 @@ import {
 } from '../../core/element';
 
 import {
-    TEvent
+    BaseNativeEvent
 } from '../../events/index';
 
 import dxButton, {
@@ -11,8 +11,26 @@ import dxButton, {
 } from '../button';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
+    ContentReadyEvent,
+    ValueChangedEvent
 } from '../editor/editor';
+
+export interface ChangeEvent<T> extends BaseNativeEvent<T> {}
+export interface CopyEvent<T> extends BaseNativeEvent<T> {}
+export interface CutEvent<T> extends BaseNativeEvent<T> {}
+export interface EnterKeyEvent<T> extends BaseNativeEvent<T> {}
+export interface FocusInEvent<T> extends BaseNativeEvent<T> {}
+export interface FocusOutEvent<T> extends BaseNativeEvent<T> {}
+export interface InputEvent<T> extends BaseNativeEvent<T> {}
+export interface KeyDownEvent<T> extends BaseNativeEvent<T> {}
+export interface KeyPressEvent<T> extends BaseNativeEvent<T> {}
+export interface KeyUpEvent<T> extends BaseNativeEvent<T> {}
+export interface PasteEvent<T> extends BaseNativeEvent<T> {}
+export {
+    ContentReadyEvent,
+    ValueChangedEvent
+}
 
 export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
     /**
@@ -88,7 +106,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onChange?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onChange?: ((e: ChangeEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -98,7 +116,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCopy?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onCopy?: ((e: CopyEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -108,7 +126,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCut?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onCut?: ((e: CutEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -118,7 +136,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEnterKey?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onEnterKey?: ((e: EnterKeyEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -128,7 +146,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onFocusIn?: ((e: FocusInEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -138,7 +156,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onFocusOut?: ((e: FocusOutEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -148,17 +166,17 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onInput?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onInput?: ((e: InputEvent<T>) => void);
     /**
      * @docid
-     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onKeyDown?: ((e: KeyDownEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -169,7 +187,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyPress?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onKeyPress?: ((e: KeyPressEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -179,7 +197,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyUp?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onKeyUp?: ((e: KeyUpEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -189,7 +207,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPaste?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    onPaste?: ((e: PasteEvent<T>) => void);
     /**
      * @docid
      * @default ""

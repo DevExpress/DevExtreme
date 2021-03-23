@@ -7,9 +7,44 @@ import {
 } from '../core/templates/template';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    CutEvent,
+    CopyEvent,
+    PasteEvent,
+    KeyUpEvent,
+    InputEvent,
+    ChangeEvent,
+    ClosedEvent,
+    OpenedEvent,
+    EnterKeyEvent,
+    KeyDownEvent,
+    FocusInEvent,
+    KeyPressEvent,
+    FocusOutEvent,
+    ContentReadyEvent,
+    ValueChangedEvent
 } from './drop_down_editor/ui.drop_down_editor';
 
+/**
+ * @public
+*/
+export {
+    CutEvent,
+    CopyEvent,
+    PasteEvent,
+    KeyUpEvent,
+    InputEvent,
+    ChangeEvent,
+    ClosedEvent,
+    OpenedEvent,
+    EnterKeyEvent,
+    KeyDownEvent,
+    FocusInEvent,
+    KeyPressEvent,
+    FocusOutEvent,
+    ContentReadyEvent,
+    ValueChangedEvent
+}
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
      * @docid

@@ -11,9 +11,56 @@ import {
 } from '../core/templates/template';
 
 import dxDropDownList, {
-    dxDropDownListOptions
+    dxDropDownListOptions,
+    ItemClickEvent,
+    ValueChangedEvent,
+    SelectionChangedEvent,
+    CutEvent,
+    CopyEvent,
+    InputEvent,
+    KeyUpEvent,
+    PasteEvent,
+    OpenedEvent,
+    ClosedEvent,
+    ChangeEvent,
+    FocusInEvent,
+    KeyDownEvent,
+    EnterKeyEvent,
+    FocusOutEvent,
+    KeyPressEvent,
+    ContentReadyEvent
 } from './drop_down_editor/ui.drop_down_list';
+import { BaseEvent } from '../events/index';
 
+/**
+ * @public
+*/
+export {
+    ItemClickEvent,
+    ValueChangedEvent,
+    SelectionChangedEvent,
+    CutEvent,
+    CopyEvent,
+    InputEvent,
+    KeyUpEvent,
+    PasteEvent,
+    OpenedEvent,
+    ClosedEvent,
+    ChangeEvent,
+    FocusInEvent,
+    KeyDownEvent,
+    EnterKeyEvent,
+    FocusOutEvent,
+    KeyPressEvent,
+    ContentReadyEvent
+}
+/**
+ * @public
+*/
+export interface CustomItemCreatingEvent<T> extends BaseEvent<T> {
+    readonly text?: string,
+    customItem?: string | any | TPromise<any> 
+}
 export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptions<T> {
     /**
      * @docid
@@ -34,6 +81,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
     fieldTemplate?: template | ((selectedItem: any, fieldElement: TElement) => string | TElement);
     /**
      * @docid
+     * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 text:string
      * @type_function_param1_field5 customItem:string|object|Promise<any>
@@ -42,7 +90,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomItemCreating?: ((e: { component?: T, element?: TElement, model?: any, text?: string, customItem?: string | any | TPromise<any> }) => void);
+    onCustomItemCreating?: ((e: CustomItemCreatingEvent<T>) => void);
     /**
      * @docid
      * @default true

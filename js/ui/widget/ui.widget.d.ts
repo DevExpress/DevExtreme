@@ -6,6 +6,12 @@ import {
     TElement
 } from '../../core/element';
 
+import {
+    BaseEvent
+} from '../../events/index';
+
+export interface ContentReadyEvent<T> extends BaseEvent<T> {} 
+
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**
      * @docid
@@ -56,7 +62,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onContentReady?: ((e: ContentReadyEvent<T>) => void);
     /**
      * @docid
      * @default 0

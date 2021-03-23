@@ -3,12 +3,20 @@ import {
 } from '../../core/element';
 
 import {
-    TEvent
+    BaseNativeEvent
 } from '../../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
+    ContentReadyEvent
 } from '../widget/ui.widget';
+
+export interface ValueChangedEvent<T> extends BaseNativeEvent<T> {
+    readonly previousValue?: any,
+    readonly value?: any,
+}
+
+export { ContentReadyEvent }
 
 export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     /**
@@ -29,7 +37,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => void);
+    onValueChanged?: ((e: ValueChangedEvent<T>) => void);
     /**
      * @docid
      * @default false

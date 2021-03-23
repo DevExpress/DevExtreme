@@ -3,13 +3,26 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
+    BaseNativeEvent
 } from '../events/index';
 
 import dxTrackBar, {
-    dxTrackBarOptions
+    dxTrackBarOptions,
+    ContentReadyEvent,
+    ValueChangedEvent
 } from './track_bar';
 
+/**
+ * @public
+*/
+export {
+    ContentReadyEvent,
+    ValueChangedEvent
+}
+/**
+ * @public
+*/
+export interface CompleteEvent<T> extends BaseNativeEvent<T> {} 
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid
@@ -20,7 +33,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: { component?: dxProgressBar, element?: TElement, model?: any, event?: TEvent }) => void);
+    onComplete?: ((e: CompleteEvent<dxProgressBar>) => void);
     /**
      * @docid
      * @default true

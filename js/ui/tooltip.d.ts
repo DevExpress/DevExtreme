@@ -3,9 +3,24 @@ import {
 } from '../core/element';
 
 import dxPopover, {
-    dxPopoverOptions
+    dxPopoverOptions,
+    ShownEvent,
+    HidindEvent,
+    HiddenEvent,
+    ShowingEvent,
+    ContentReadyEvent
 } from './popover';
 
+/**
+ * @public
+*/
+export {
+    ShownEvent,
+    HidindEvent,
+    HiddenEvent,
+    ShowingEvent,
+    ContentReadyEvent
+}
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
 }
 /**
