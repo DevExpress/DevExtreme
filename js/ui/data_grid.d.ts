@@ -116,7 +116,7 @@ export interface EditCancelingEvent<T extends GridBase> {
   readonly element: TElement;
   readonly model?: any;
   readonly changes: Array<any>;
-  cancel?: boolean;
+  cancel: boolean;
 }
 
 
@@ -253,7 +253,7 @@ export interface RowUpdatingEvent<T extends GridBase> {
   readonly oldData: any;
   newData: any;
   readonly key: any;
-  cancel?: boolean | TPromise<void>;
+  cancel: boolean | TPromise<void>;
 }
 
 /**
@@ -367,7 +367,7 @@ export interface DragChangeEvent<T extends GridBase> {
 export interface DragEndEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
-  cancel?: boolean;
+  cancel: boolean;
   readonly itemData?: any;
   readonly itemElement: TElement;
   readonly fromIndex: number;
@@ -3340,7 +3340,7 @@ export interface EditingStartEvent {
   readonly model?: any;
   readonly data: any;
   readonly key: any;
-  cancel?: boolean;
+  cancel: boolean;
   readonly column?: any;
 }
 
@@ -3378,7 +3378,7 @@ export interface EditorPreparingEvent {
   readonly width?: number;
   readonly disabled: boolean;
   readonly rtlEnabled: boolean;
-  cancel?: boolean;
+  cancel: boolean;
   readonly editorElement: TElement;
   readonly readOnly: boolean;
   editorName: string;
@@ -4058,7 +4058,7 @@ export interface CustomizeExcelCellArg {
 /**
  * @public
  */
-export interfaceexport {
+export interface Export {
   /**
     * @docid
     * @prevFileNamespace DevExpress.ui
