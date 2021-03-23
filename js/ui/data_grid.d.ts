@@ -72,7 +72,7 @@ import Widget, {
 /**
  * @public
  */
- export interface FilterPanelCustomizeTextBaseArg<T> { 
+export interface FilterPanelCustomizeTextBaseArg<T> { 
   readonly component: T,
   readonly filterValue: any,
   readonly text: string
@@ -81,7 +81,7 @@ import Widget, {
 /**
  * @public
  */
- export interface AdaptiveDetailRowPreparingEvent<T extends GridBase> {
+export interface AdaptiveDetailRowPreparingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -91,7 +91,7 @@ import Widget, {
 /**
  * @public
  */
- export interface DataErrorOcurredEvent<T extends GridBase> {
+export interface DataErrorOcurredEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -101,7 +101,7 @@ import Widget, {
 /**
  * @public
  */
- export interface EditCanceledEvent<T extends GridBase> {
+export interface EditCanceledEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -4058,7 +4058,7 @@ export interface CustomizeExcelCellArg {
 /**
  * @public
  */
-export interface Export {
+export interfaceexport {
   /**
     * @docid
     * @prevFileNamespace DevExpress.ui
@@ -4905,6 +4905,70 @@ declare class dxDataGrid extends Widget implements GridBase {
 }
 
 /**
+ * @public
+ */
+export interface CellTemplateInfo {
+  readonly data?: any;
+  readonly component: dxDataGrid;
+  readonly value?: any;
+  readonly oldValue?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly row: RowObject;
+  readonly rowType: string;
+  readonly watch?: Function;
+}
+
+/**
+ * @public
+ */
+export interface EditCellTemplateInfo {
+  readonly setValue?: any;
+  readonly data?: any;
+  readonly component: dxDataGrid;
+  readonly value?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly row: RowObject;
+  readonly rowType: string;
+  readonly watch?: Function;
+}
+
+/**
+ * @public
+ */
+export interface GroupCellTemplateInfo {
+  readonly data?: any;
+  readonly component: dxDataGrid;
+  readonly value?: any;
+  readonly text: string;
+  readonly displayValue?: any;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly row: RowObject;
+  readonly summaryItems: Array<any>;
+  readonly groupContinuesMessage?: string;
+  readonly groupContinuedMessage?: string;
+}
+
+/**
+ * @public
+ */
+export interface HeaderCellTemplateInfo {
+  readonly component: dxDataGrid;
+  readonly columnIndex: number;
+  readonly column: Column;
+}
+
+
+/**
  * @deprecated Use Column instead
  */ 
 export type dxDataGridColumn = Column;
@@ -4971,7 +5035,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((cellElement: TElement, cellInfo: { data?: any, component?: dxDataGrid, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: Column, row?: RowObject, rowType?: string, watch?: Function }) => any);
+    cellTemplate?: template | ((cellElement: TElement, cellInfo: CellTemplateInfo) => any);
     /**
      * @docid
      * @default undefined
@@ -4998,7 +5062,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editCellTemplate?: template | ((cellElement: TElement, cellInfo: { setValue?: any, data?: any, component?: dxDataGrid, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: Column, row?: RowObject, rowType?: string, watch?: Function }) => any);
+    editCellTemplate?: template | ((cellElement: TElement, cellInfo: EditCellTemplateInfo) => any);
     /**
      * @docid
      * @type_function_param1 cellElement:dxElement
@@ -5018,7 +5082,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupCellTemplate?: template | ((cellElement: TElement, cellInfo: { data?: any, component?: dxDataGrid, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: Column, row?: RowObject, summaryItems?: Array<any>, groupContinuesMessage?: string, groupContinuedMessage?: string }) => any);
+    groupCellTemplate?: template | ((cellElement: TElement, cellInfo: GroupCellTemplateInfo) => any);
     /**
      * @docid
      * @default undefined
@@ -5037,7 +5101,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: { component?: dxDataGrid, columnIndex?: number, column?: Column }) => any);
+    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: HeaderCellTemplateInfo) => any);
     /**
      * @docid
      * @default false
@@ -5056,9 +5120,23 @@ export interface Column extends ColumnBase {
 }
 
 /**
+ * @public
+ */ 
+export interface ColumnButtonTemplateInfo {
+  readonly component: dxDataGrid;
+  readonly data?: any;
+  readonly key?: any;
+  readonly columnIndex: number;
+  readonly column: Column;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly row: RowObject;
+}
+
+/**
  * @deprecated Use ColumnButton instead
  */ 
-export type dxDataGridColumnButton = ColumnButton;
+ export type dxDataGridColumnButton = ColumnButton;
 
 /**
  * @docid
@@ -5103,7 +5181,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: { component?: dxDataGrid, data?: any, key?: any, columnIndex?: number, column?: Column, rowIndex?: number, rowType?: string, row?: RowObject }) => string | TElement);
+    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplateInfo) => string | TElement);
     /**
      * @docid
      * @default true
