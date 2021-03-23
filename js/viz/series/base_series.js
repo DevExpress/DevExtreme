@@ -851,7 +851,7 @@ Series.prototype = {
                 }
             };
 
-            if(data.length) {
+            if(Array.isArray(data)) {
                 data.forEach(processData);
             } else {
                 processData(data);
