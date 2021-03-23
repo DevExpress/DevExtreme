@@ -117,6 +117,7 @@ module('Browser zoom', zoomModuleConfig, () => {
             dataSource: createDataSource(),
             currentDate: new Date(2017, 4, 25),
             startDayHour: 9,
+            _draggingMode: 'default',
             height: 600
         });
 
@@ -212,6 +213,7 @@ const draggingFromTooltipConfig = $.extend({}, {
             height: 600,
             groups: ['priorityId'],
             rtlEnabled: rtlEnabled,
+            _draggingMode: 'default',
             resources: [{
                 fieldExpr: 'priorityId',
                 dataSource: priorityData,
@@ -418,6 +420,7 @@ const moveAsMouseConfig = $.extend({}, {
             endDayHour: 16,
             groups: ['priorityId'],
             rtlEnabled: rtlEnabled,
+            _draggingMode: 'default',
             resources: [{
                 fieldExpr: 'priorityId',
                 dataSource: priorityData,
@@ -477,6 +480,7 @@ module('Common', commonModuleConfig, () => {
             views: ['month'],
             currentView: 'month',
             dataSource: tasks,
+            _draggingMode: 'default',
             currentDate: new Date(2015, 1, 9)
         });
 
@@ -506,6 +510,7 @@ module('Common', commonModuleConfig, () => {
                 startDate: new Date(2015, 1, 9, 1, 0),
                 endDate: new Date(2015, 1, 9, 2, 0)
             }],
+            _draggingMode: 'default',
             currentDate: new Date(2015, 1, 9)
         });
 
@@ -536,6 +541,7 @@ module('Common', commonModuleConfig, () => {
                 startDate: new Date(2015, 1, 9, 1, 0),
                 endDate: new Date(2015, 1, 9, 2, 0)
             }],
+            _draggingMode: 'default',
             currentDate: new Date(2015, 1, 9)
         });
 
@@ -568,6 +574,7 @@ module('Common', commonModuleConfig, () => {
                 endDate: new Date(2015, 1, 9, 2, 0),
                 disabled: true,
             }],
+            _draggingMode: 'default',
             currentDate: new Date(2015, 1, 9)
         });
 
@@ -596,6 +603,7 @@ module('Common', commonModuleConfig, () => {
                 endDate: new Date(2017, 4, 1, 11),
                 recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU,FR;COUNT=10'
             }],
+            _draggingMode: 'default',
             resources: [{
                 fieldExpr: 'roomId',
                 dataSource: [{
@@ -664,6 +672,7 @@ module('Common', commonModuleConfig, () => {
                 }
             },
             currentDate: new Date(2015, 1, 1),
+            _draggingMode: 'default',
             startDayHour: 9
         });
 
@@ -720,6 +729,7 @@ module('Common', commonModuleConfig, () => {
                 endDate: new Date(2015, 1, 9, 11, 30)
             }],
             currentDate: new Date(2015, 1, 9),
+            _draggingMode: 'default',
             startDayHour: 9
         });
 
@@ -759,6 +769,7 @@ module('Common', commonModuleConfig, () => {
             currentDate: new Date(2019, 10, 1),
             height: 300,
             startDayHour: 0,
+            _draggingMode: 'default'
         });
 
         const $element = scheduler.appointments.getAppointment();
@@ -795,7 +806,8 @@ module('Common', commonModuleConfig, () => {
             currentView: 'day',
             currentDate: new Date(2017, 4, 25),
             startDayHour: 9,
-            height: 600
+            height: 600,
+            _draggingMode: 'default'
         });
 
         const scrollable = scheduler.workSpace.getScrollable();
@@ -832,7 +844,8 @@ module('Common', commonModuleConfig, () => {
             views: [{ type: 'day', maxAppointmentsPerCell: 1 }],
             currentDate: new Date(2018, 4, 21),
             startDayHour: 9,
-            endDayHour: 16
+            endDayHour: 16,
+            _draggingMode: 'default'
         });
 
         scheduler.appointments.compact.click(0);
@@ -865,7 +878,8 @@ module('Common', commonModuleConfig, () => {
             views: ['day'],
             currentDate: new Date(2018, 4, 21),
             startDayHour: 9,
-            endDayHour: 16
+            endDayHour: 16,
+            _draggingMode: 'default'
         });
 
         const $appointment = scheduler.appointments.getAppointment();
@@ -903,6 +917,7 @@ module('appointmentDragging customization', $.extend({}, {
             currentDate: new Date(2018, 4, 21),
             startDayHour: 9,
             endDayHour: 16,
+            _draggingMode: 'default',
             ...options,
         });
     },
@@ -1130,6 +1145,7 @@ module('appointmentDragging customization', $.extend({}, {
                         currentView: 'week',
                         crossScrollingEnabled: true,
                         currentDate: new Date(2017, 3, 30),
+                        _draggingMode: 'default',
                         height: 300,
                         width: 300
                     });
@@ -1329,6 +1345,7 @@ module('appointmentDragging customization', $.extend({}, {
         const scheduler = this.createScheduler({
             views: ['month'],
             currentView: 'month',
+            _draggingMode: 'default',
             appointmentDragging: {
                 group: group,
                 onAdd: (e) => {
@@ -1369,6 +1386,7 @@ module('appointmentDragging customization', $.extend({}, {
                 startDate: new Date(2018, 4, 1, 9, 30),
                 endDate: new Date(2018, 4, 1, 11, 30)
             }],
+            _draggingMode: 'default',
             appointmentDragging: {
                 group: group
             }
@@ -1404,6 +1422,7 @@ module('appointmentDragging customization', $.extend({}, {
                 startDate: new Date(2018, 4, 1, 9, 30),
                 endDate: new Date(2018, 4, 1, 11, 30)
             }],
+            _draggingMode: 'default',
             appointmentDragging: {
                 group: group
             }
@@ -1437,6 +1456,7 @@ module('appointmentDragging customization', $.extend({}, {
                 startDate: new Date(2018, 4, 1, 9, 30),
                 endDate: new Date(2018, 4, 1, 11, 30)
             }],
+            _draggingMode: 'default',
             appointmentDragging: {
                 group: group
             }
@@ -1483,6 +1503,7 @@ module('appointmentDragging customization', $.extend({}, {
 
             const scheduler = this.createScheduler({
                 dataSource: data,
+                _draggingMode: 'default',
                 appointmentDragging: {
                     onDragStart: checkItemData(assert),
                     onDragMove: checkItemData(assert),
@@ -1617,6 +1638,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 14),
             startDayHour: 9,
             height: 600,
+            _draggingMode: 'default',
         });
 
         views.forEach((view, index) => {
@@ -1646,6 +1668,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 14),
             startDayHour: 9,
             height: 600,
+            _draggingMode: 'default',
         });
 
         checkAppointmentDragging(assert, scheduler, appointmentTitle, -30, 0);
@@ -1666,6 +1689,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 14),
             startDayHour: 9,
             height: 600,
+            _draggingMode: 'default',
         });
 
         checkAppointmentDragging(assert, scheduler, appointmentTitle, -30, 0, 2);
@@ -1686,6 +1710,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 14),
             startDayHour: 9,
             height: 600,
+            _draggingMode: 'default',
         });
 
         checkAppointmentDragging(assert, scheduler, appointmentTitle, 30, 0, 5);
@@ -1709,6 +1734,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 12),
             startDayHour: 9,
             height: 600,
+            _draggingMode: 'default',
         });
 
         scheduler.appointments.compact.click(0);
@@ -1757,6 +1783,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 16),
             startDayHour: 9,
             height: 600,
+            _draggingMode: 'default',
         });
 
         let appointments = scheduler.appointments.find(appointmentTitle);
@@ -1813,6 +1840,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
                 label: 'Priority',
             }],
             groups: ['priorityId'],
+            _draggingMode: 'default',
         });
 
         checkAppointmentDragging(assert, scheduler, appointmentTitle, 30, 0, 2, 1);
@@ -1836,6 +1864,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 9, 14),
             showAllDayPanel: false,
             scrolling: { mode: 'virtual' },
+            _draggingMode: 'default',
         });
         const schedulerInstance = scheduler.instance;
 
@@ -1944,6 +1973,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
                 showAllDayPanel: false,
                 resources,
                 groups,
+                _draggingMode: 'default',
             });
 
             const $appointment = scheduler.appointments.find(firstAppointmentTitle).eq(draggedAppointmentIndex);
@@ -1982,6 +2012,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
                 scrolling: { mode: 'virtual' },
                 resources,
                 groups,
+                _draggingMode: 'default',
             });
 
             const $appointment = scheduler.appointments.find(firstAppointmentTitle).eq(draggedAppointmentIndex);
@@ -2033,6 +2064,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 9, 14),
             showAllDayPanel: false,
             scrolling: { mode: 'virtual' },
+            _draggingMode: 'default',
         });
 
         checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 1, 1);
@@ -2065,6 +2097,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
                 label: 'Priority'
             }],
             groups: ['priorityId'],
+            _draggingMode: 'default',
         });
 
         checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 2, 1);
@@ -2088,6 +2121,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 16),
             showAllDayPanel: false,
             scrolling: { mode: 'virtual' },
+            _draggingMode: 'default',
         });
 
         checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 3, 3, true);
@@ -2114,6 +2148,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 16),
             showAllDayPanel: false,
             scrolling: { mode: 'virtual' },
+            _draggingMode: 'default',
         });
 
         const schedulerInstance = scheduler.instance;
@@ -2147,6 +2182,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 16),
             showAllDayPanel: false,
             scrolling: { mode: 'virtual' },
+            _draggingMode: 'default',
         });
 
         const schedulerInstance = scheduler.instance;
@@ -2200,6 +2236,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 12),
             startDayHour: 9,
             height: 600,
+            _draggingMode: 'default',
         });
 
         scheduler.appointments.compact.click(0);
@@ -2236,6 +2273,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             dataSource: data,
             currentDate: new Date(2020, 9, 14),
             showAllDayPanel: false,
+            _draggingMode: 'default',
         });
 
         const $appointment = scheduler.appointments.find(appointmentTitle).first();
@@ -2273,6 +2311,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 16),
             showAllDayPanel: false,
             scrolling: { mode: 'virtual' },
+            _draggingMode: 'default',
         });
 
         const schedulerInstance = scheduler.instance;
@@ -2313,6 +2352,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             this.createInstance = function(options) {
                 this.instance = $('#scheduler').dxScheduler($.extend(options,
                     {
+                        _draggingMode: 'default',
                         height: options && options.height || 600,
                         scrolling: {
                             mode: scrollingMode
@@ -2373,6 +2413,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 0,
                 endDayHour: 19,
                 startDayHour: 8,
+                _draggingMode: 'default',
                 dataSource: {
                     load: function() {
                         return [{
@@ -2414,6 +2455,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 0,
                 endDayHour: 19,
                 startDayHour: 8,
+                _draggingMode: 'default',
                 dataSource: {
                     load: function() {
                         return [{
@@ -2464,6 +2506,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                         ]
                     }
                 ],
+                _draggingMode: 'default',
                 height: 1500,
             });
 
@@ -2495,6 +2538,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 editing: true,
                 currentView: 'month',
                 groups: ['id'],
+                _draggingMode: 'default',
                 resources: [
                     {
                         field: 'id',
@@ -2551,6 +2595,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 cellDuration: 60,
                 editing: true,
                 groups: ['priority'],
+                _draggingMode: 'default',
                 resources: [{
                     fieldExpr: 'priority',
                     allowMultiple: false,
@@ -2589,7 +2634,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentView: 'week',
                 currentDate: new Date(2015, 2, 16),
                 dataSource: dataSource,
-                editing: true
+                editing: true,
+                _draggingMode: 'default',
             });
 
             const $workspace = $(this.instance.$element()).find('.dx-scrollable-content');
@@ -2609,6 +2655,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 views: ['month'],
                 currentView: 'month',
                 firstDayOfWeek: 0,
+                _draggingMode: 'default',
                 dataSource: [{
                     text: 'a',
                     startDate: new Date(2015, 1, 9, 8, 7),
@@ -2638,6 +2685,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 editing: true,
                 currentView: 'month',
                 firstDayOfWeek: 0,
+                _draggingMode: 'default',
                 dataSource: [{
                     text: 'a',
                     startDate: new Date(2015, 1, 9, 8, 0),
@@ -2668,6 +2716,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 0,
                 endDayHour: 19,
                 startDayHour: 8,
+                _draggingMode: 'default',
                 dataSource: [{
                     text: 'a',
                     startDate: new Date(2015, 4, 13, 10),
@@ -2698,6 +2747,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 0,
                 endDayHour: 19,
                 startDayHour: 8,
+                _draggingMode: 'default',
                 dataSource: [{
                     text: 'a',
                     startDate: new Date(2015, 4, 13, 8),
@@ -2773,7 +2823,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                         currentDate: new Date(2015, 1, 9),
                         dataSource: data,
                         editing: true,
-                        allDayExpr: 'AllDay'
+                        allDayExpr: 'AllDay',
+                        _draggingMode: 'default',
                     });
 
                     this.clock.tick();
@@ -2829,6 +2880,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                         ]
                     }
                 ],
+                _draggingMode: 'default',
                 width: 800
             });
 
@@ -2885,6 +2937,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                         ]
                     }
                 ],
+                _draggingMode: 'default',
                 width: 800,
                 height: 700
             });
@@ -2944,6 +2997,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                         ]
                     }
                 ],
+                _draggingMode: 'default',
                 width: 800
             });
 
@@ -3001,6 +3055,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 onAppointmentUpdating: function(e) {
                     e.cancel = true;
                 },
+                _draggingMode: 'default',
                 width: 800
             });
             const $appointment = this.scheduler.appointments.getAppointment(0);
@@ -3048,6 +3103,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     }
                 ],
                 onAppointmentUpdating: function(e) {},
+                _draggingMode: 'default',
                 width: 800,
                 height: 1500
             });
@@ -3069,6 +3125,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentDate: new Date(2015, 1, 9),
                 currentView: 'week',
                 firstDayOfWeek: 0,
+                _draggingMode: 'default',
                 dataSource: [{
                     text: 'a',
                     startDate: new Date(2015, 1, 9, 0, 7),
