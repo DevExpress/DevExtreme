@@ -131,7 +131,7 @@ QUnit.module('Markup', moduleConfig, () => {
         this.clock.tick();
         const treeListRowElement = this.$element.find(TREELIST_DATA_ROW_SELECTOR).last().get(0);
         const ganttViewRowElement = this.$element.find(GANTT_VIEW_ROW_SELECTOR).get(0);
-        assert.roughEqual(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, 0.001, 'row heights are equal');
+        assert.roughEqual(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, 0.01, 'row heights are equal');
     });
     test('auto height', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -3119,7 +3119,6 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.instance.option('height', 200);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         fullScreenCommand.execute();
@@ -3152,80 +3151,78 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.equal(inputs.attr('readOnly'), 'readonly', 'all inputs is readOnly');
         fullScreenCommand.execute();
     });
-    // eslint-disable-next-line qunit/no-commented-tests
-    // test('panel sizes are the same', function(assert) {
-    //     this.createInstance(allSourcesOptions);
-    //     this.clock.tick();
-    //     this.instance.option('width', 1400);
-    //     this.clock.tick();
-    //     const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
-    //     let leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
-    //     fullScreenCommand.execute();
-    //     assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in FullScreen');
-    //     fullScreenCommand.execute();
-    //     this.clock.tick();
-    //     const diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
-    //     assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
-    //     this.clock.tick();
-    //     fullScreenCommand.execute();
-    //     const splitterWrapper = this.$element.find(SPLITTER_WRAPPER_SELECTOR);
-    //     const splitter = this.$element.find(SPLITTER_SELECTOR);
+    test('panel sizes are the same', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
+        let leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
+        fullScreenCommand.execute();
+        assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in FullScreen');
+        fullScreenCommand.execute();
+        this.clock.tick();
+        const diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
+        assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
+        this.clock.tick();
+        fullScreenCommand.execute();
+        const splitterWrapper = this.$element.find(SPLITTER_WRAPPER_SELECTOR);
+        const splitter = this.$element.find(SPLITTER_SELECTOR);
 
-    //     const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
-    //     const treeListWrapperLeftOffset = treeListWrapperElement.offset().left;
-    //     const treeListWrapperTopOffset = treeListWrapperElement.offset().top;
+        const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
+        const treeListWrapperLeftOffset = treeListWrapperElement.offset().left;
+        const treeListWrapperTopOffset = treeListWrapperElement.offset().top;
 
-    //     const ganttView = this.$element.find(GANTT_VIEW_SELECTOR);
+        const ganttView = this.$element.find(GANTT_VIEW_SELECTOR);
 
-    //     const splitterContainerWrapperWidth = $(treeListWrapperElement).parent().width();
+        const splitterContainerWrapperWidth = $(treeListWrapperElement).parent().width();
 
-    //     assert.ok(splitterWrapper, 'Splitter wrapper has been found');
-    //     assert.ok(splitter, 'Splitter has been found');
+        assert.ok(splitterWrapper, 'Splitter wrapper has been found');
+        assert.ok(splitter, 'Splitter has been found');
 
-    //     splitter.trigger($.Event('dxpointerdown', { pointerType: 'mouse' }));
-    //     splitter.trigger($.Event('dxpointermove', {
-    //         pointerType: 'mouse',
-    //         pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
-    //         pageY: treeListWrapperTopOffset + 100 }));
-    //     splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
+        splitter.trigger($.Event('dxpointerdown', { pointerType: 'mouse' }));
+        splitter.trigger($.Event('dxpointermove', {
+            pointerType: 'mouse',
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
 
-    //     assert.equal(treeListWrapperElement.width(), 100);
-    //     assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
-    //     assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, 'Splitter has been moved by mouse');
+        assert.equal(treeListWrapperElement.width(), 100);
+        assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, 'Splitter has been moved by mouse');
 
-    //     splitter.trigger($.Event('dxpointerdown', { pointerType: 'touch' }));
-    //     splitter.trigger($.Event('dxpointermove', {
-    //         pointerType: 'touch',
-    //         pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
-    //         pageY: treeListWrapperTopOffset + 100 }));
-    //     splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
+        splitter.trigger($.Event('dxpointerdown', { pointerType: 'touch' }));
+        splitter.trigger($.Event('dxpointermove', {
+            pointerType: 'touch',
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
 
-    //     assert.equal(treeListWrapperElement.width(), 300);
-    //     assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
-    //     assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 300, 'Splitter has been moved by touch');
+        assert.equal(treeListWrapperElement.width(), 300);
+        assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 300, 'Splitter has been moved by touch');
 
-    //     splitter.trigger($.Event('dxpointerdown'));
-    //     splitter.trigger($.Event('dxpointermove', {
-    //         pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
-    //         pageY: treeListWrapperTopOffset + 100 }));
-    //     splitter.trigger($.Event('dxpointerup'));
+        splitter.trigger($.Event('dxpointerdown'));
+        splitter.trigger($.Event('dxpointermove', {
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup'));
 
-    //     assert.equal(treeListWrapperElement.width(), 0);
-    //     assert.equal(ganttView.width(), splitterContainerWrapperWidth);
-    //     assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 0, 'Splitter has not cross the left side');
+        assert.equal(treeListWrapperElement.width(), 0);
+        assert.equal(ganttView.width(), splitterContainerWrapperWidth);
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 0, 'Splitter has not cross the left side');
 
-    //     splitter.trigger($.Event('dxpointerdown'));
-    //     splitter.trigger($.Event('dxpointermove', {
-    //         pageX: splitterContainerWrapperWidth - parseFloat(splitter.css('margin-left')) + 10,
-    //         pageY: treeListWrapperTopOffset + 100 }));
-    //     splitter.trigger($.Event('dxpointerup'));
+        splitter.trigger($.Event('dxpointerdown'));
+        splitter.trigger($.Event('dxpointermove', {
+            pageX: splitterContainerWrapperWidth - parseFloat(splitter.css('margin-left')) + 10,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup'));
 
-    //     assert.equal(treeListWrapperElement.width(), splitterContainerWrapperWidth - splitter.width());
-    //     assert.equal(ganttView.width(), splitter.width());
-    //     assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
-    //     leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
-    //     fullScreenCommand.execute();
-    // });
+        assert.equal(treeListWrapperElement.width(), splitterContainerWrapperWidth - splitter.width());
+        assert.equal(ganttView.width(), splitter.width());
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
+        leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
+        fullScreenCommand.execute();
+        assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in Normal mode');
+    });
 });
 
 QUnit.module('Repaint', moduleConfig, () => {

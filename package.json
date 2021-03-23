@@ -29,7 +29,7 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "devexpress-diagram": "2.0.20",
-    "devexpress-gantt": "2.0.25",
+    "devexpress-gantt": "2.0.26",
     "jszip": "^2.0.0 || ^3.0.0",
     "devextreme-quill": "~0.10.3",
     "rrule": "2.6.6",
