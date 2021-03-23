@@ -7,7 +7,7 @@ import { JSPdfDataGridTestHelper } from './jspdfTestHelper.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { JSPdfOptionTests } from './jspdf.options.tests.js';
 import { exportDataGrid } from 'pdf_exporter';
-import { initializeDxObjectAssign, clearDxObjectAssign } from '../exceljsParts/objectAssignHelper.js';
+import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
 import 'ui/data_grid/ui.data_grid';
 
