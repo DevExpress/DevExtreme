@@ -69,184 +69,49 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-
 /**
  * @public
  */
-export type FilterPanelCustomizeTextArg = FilterPanelCustomizeTextBaseArg<dxDataGrid>;
-
-/**
- * @public
- */
-export type AdaptiveDetailRowPreparingEvent = AdaptiveDetailRowPreparingBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type DataErrorOcurredEvent = DataErrorOcurredBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type EditCanceledEvent = EditCanceledBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type EditCancelingArg = EditCancelingBaseArg<dxDataGrid>;
-
-/**
- * @public
- */
-
-/**
- * @public
- */
-export type InitNewRowEvent = InitNewRowBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type KeyDownEvent = KeyDownBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowCollapsedEvent = RowCollapsedBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowCollapsingEvent = RowCollapsingBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowExpandedEvent = RowExpandedBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowExpandingEvent = RowExpandingBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowInsertedEvent = RowInsertedBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowInsertingEvent = RowInsertingBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowRemovedEvent = RowRemovedBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowRemovingEvent = RowRemovingBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowUpdatedEvent = RowUpdatedBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowUpdatingEvent = RowUpdatingBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RowValidatingEvent = RowValidatingBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type SavedEvent = SavedBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type SavingEvent = SavingBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type SelectionChangedEvent = SelectionChangedBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type ToolbarPreparingEvent = ToolbarPreparingBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type AddEvent = AddBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type DragChangeEvent = DragChangeBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type DragEndEvent = DragEndBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type DragMoveEvent = DragMoveBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type DragStartEvent = DragStartBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type RemoveEvent = RemoveBaseEvent<dxDataGrid>;
-
-/**
- * @public
- */
-export type ReorderEvent = ReorderBaseEvent<dxDataGrid>;
-
-export interface FilterPanelCustomizeTextBaseArg<T> { 
+ export interface FilterPanelCustomizeTextBaseArg<T> { 
   readonly component: T,
   readonly filterValue: any,
   readonly text: string
 }
 
-export interface AdaptiveDetailRowPreparingBaseEvent<T> {
+/**
+ * @public
+ */
+ export interface AdaptiveDetailRowPreparingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
   readonly formOptions: any;
 }
 
-export interface DataErrorOcurredBaseEvent<T> {
+/**
+ * @public
+ */
+ export interface DataErrorOcurredEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
   readonly error: Error;
 }
 
-export interface EditCanceledBaseEvent<T> {
+/**
+ * @public
+ */
+ export interface EditCanceledEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
   readonly changes: Array<any>;
 }
 
-export interface EditCancelingBaseArg<T> {
+/**
+ * @public
+ */
+export interface EditCancelingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -255,7 +120,10 @@ export interface EditCancelingBaseArg<T> {
 }
 
 
-export interface InitNewRowBaseEvent<T> {
+/**
+ * @public
+ */
+export interface InitNewRowEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -263,8 +131,10 @@ export interface InitNewRowBaseEvent<T> {
   promise?: TPromise<void>;
 }
 
-
-export interface KeyDownBaseEvent<T> {
+/**
+ * @public
+ */
+export interface KeyDownEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -272,33 +142,20 @@ export interface KeyDownBaseEvent<T> {
   handled: boolean;
 }
 
-
-export interface RowCollapsedBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RowCollapsedEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
   readonly key: any;
 }
 
-
-export interface RowCollapsingBaseEvent<T> {
-  readonly component: T;
-  readonly element: TElement;
-  readonly model?: any;
-  readonly key: any;
-  cancel: boolean;
-}
-
-
-export interface RowExpandedBaseEvent<T> {
-  readonly component: T;
-  readonly element: TElement;
-  readonly model?: any;
-  readonly key: any;
-}
-
-
-export interface RowExpandingBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RowCollapsingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -306,8 +163,31 @@ export interface RowExpandingBaseEvent<T> {
   cancel: boolean;
 }
 
+/**
+ * @public
+ */
+export interface RowExpandedEvent<T extends GridBase> {
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly key: any;
+}
 
-export interface RowInsertedBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RowExpandingEvent<T extends GridBase> {
+  readonly component: T;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly key: any;
+  cancel: boolean;
+}
+
+/**
+ * @public
+ */
+export interface RowInsertedEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -316,8 +196,10 @@ export interface RowInsertedBaseEvent<T> {
   readonly error: Error;
 }
 
-
-export interface RowInsertingBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RowInsertingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -325,8 +207,10 @@ export interface RowInsertingBaseEvent<T> {
   cancel: boolean | TPromise<void>;
 }
 
-
-export interface RowRemovedBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RowRemovedEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -335,8 +219,10 @@ export interface RowRemovedBaseEvent<T> {
   readonly error: Error;
 }
 
-
-export interface RowRemovingBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RowRemovingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -345,8 +231,10 @@ export interface RowRemovingBaseEvent<T> {
   cancel: boolean | TPromise<void>;
 }
 
-
-export interface RowUpdatedBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RowUpdatedEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -355,8 +243,10 @@ export interface RowUpdatedBaseEvent<T> {
   readonly error: Error;
 }
 
-
-export interface RowUpdatingBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RowUpdatingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -366,8 +256,10 @@ export interface RowUpdatingBaseEvent<T> {
   cancel?: boolean | TPromise<void>;
 }
 
-
-export interface RowValidatingBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RowValidatingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -380,8 +272,10 @@ export interface RowValidatingBaseEvent<T> {
   promise?: TPromise<void>;
 }
 
-
-export interface SavedBaseEvent<T> {
+/**
+ * @public
+ */
+export interface SavedEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -389,8 +283,10 @@ export interface SavedBaseEvent<T> {
 }
 
 
-
-export interface SavingBaseEvent<T> {
+/**
+ * @public
+ */
+export interface SavingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -399,8 +295,10 @@ export interface SavingBaseEvent<T> {
   cancel: boolean;
 }
 
-
-export interface SelectionChangedBaseEvent<T> {
+/**
+ * @public
+ */
+export interface SelectionChangedEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
@@ -410,21 +308,28 @@ export interface SelectionChangedBaseEvent<T> {
   readonly selectedRowsData: Array<any>;
 }
 
-
-export interface ToolbarPreparingBaseEvent<T> {
+/**
+ * @public
+ */
+export interface ToolbarPreparingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
   toolbarOptions: dxToolbarOptions;
 }
 
+/**
+ * @public
+ */
 export interface DragTemplateInfo {
   readonly itemData: any;
   readonly itemElement: TElement;
 }
 
-
-export interface AddBaseEvent<T> {
+/**
+ * @public
+ */
+export interface AddEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   readonly itemData?: any;
@@ -438,8 +343,10 @@ export interface AddBaseEvent<T> {
   readonly dropInsideItem: boolean;
 }
 
-
-export interface DragChangeBaseEvent<T> {
+/**
+ * @public
+ */
+export interface DragChangeEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   cancel: boolean;
@@ -454,7 +361,10 @@ export interface DragChangeBaseEvent<T> {
   readonly dropInsideItem: boolean;
 }
 
-export interface DragEndBaseEvent<T> {
+/**
+ * @public
+ */
+export interface DragEndEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   cancel?: boolean;
@@ -469,7 +379,10 @@ export interface DragEndBaseEvent<T> {
   readonly dropInsideItem: boolean;
 }
 
-export interface DragMoveBaseEvent<T> {
+/**
+ * @public
+ */
+export interface DragMoveEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   cancel: boolean;
@@ -484,7 +397,10 @@ export interface DragMoveBaseEvent<T> {
   readonly dropInsideItem: boolean;
 }
 
-export interface DragStartBaseEvent<T = GridBase> {
+/**
+ * @public
+ */
+export interface DragStartEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   cancel: boolean;
@@ -494,7 +410,10 @@ export interface DragStartBaseEvent<T = GridBase> {
   readonly fromData?: any;
 }
 
-export interface RemoveBaseEvent<T> {
+/**
+ * @public
+ */
+export interface RemoveEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   readonly itemData?: any;
@@ -507,7 +426,10 @@ export interface RemoveBaseEvent<T> {
   readonly toData?: any;
 }
 
-export interface ReorderBaseEvent<T> {
+/**
+ * @public
+ */
+export interface ReorderEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   readonly itemData?: any;
@@ -522,7 +444,281 @@ export interface ReorderBaseEvent<T> {
   promise?: TPromise<void>;
 }
 
-export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
+/**
+ * @public
+ */
+export interface FilterPanel<T extends GridBase> {
+  /**
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 e:object
+   * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 filterValue:object
+   * @type_function_param1_field3 text:string
+   * @type_function_return string
+   */
+  customizeText?: ((e: FilterPanelCustomizeTextBaseArg<T>) => string),
+  /**
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   * @fires GridBaseOptions.onOptionChanged
+   */
+  filterEnabled?: boolean,
+  /**
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @default {}
+   */
+  texts?: FilterPanelTexts,
+  /**
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  visible?: boolean
+}
+
+/**
+ * @public
+ */
+export interface RowDragging<T extends GridBase> {
+  /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    allowDropInsideItem?: boolean,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    allowReordering?: boolean,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
+    autoScroll?: boolean,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    boundary?: string | TElement,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    container?: string | TElement,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     */
+    cursorOffset?: string | {
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 0
+       */
+      x?: number,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 0
+       */
+      y?: number
+    },
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    data?: any,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.DragDirection
+     * @default "both"
+     */
+    dragDirection?: 'both' | 'horizontal' | 'vertical',
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 dragInfo:object
+     * @type_function_param1_field1 itemData:any
+     * @type_function_param1_field2 itemElement:dxElement
+     * @type_function_param2 containerElement:dxElement
+     * @type_function_return string|Element|jQuery
+     * @default undefined
+     */
+    dragTemplate?: template | ((dragInfo: DragTemplateInfo, containerElement: TElement) => string | TElement),
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.DropFeedbackMode
+     * @default "indicate"
+     */
+    dropFeedbackMode?: 'push' | 'indicate',
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default "> *"
+     */
+    filter?: string,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    group?: string,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default ""
+     */
+    handle?: string,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 itemData:any
+     * @type_function_param1_field4 itemElement:dxElement
+     * @type_function_param1_field5 fromIndex:number
+     * @type_function_param1_field6 toIndex:number
+     * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 fromData:any
+     * @type_function_param1_field10 toData:any
+     * @type_function_param1_field11 dropInsideItem:boolean
+     */
+    onAdd?: ((e: AddEvent<T>) => any),
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 itemData:any
+     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field6 fromIndex:number
+     * @type_function_param1_field7 toIndex:number
+     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field10 fromData:any
+     * @type_function_param1_field11 toData:any
+     * @type_function_param1_field12 dropInsideItem:boolean
+     */
+    onDragChange?: ((e: DragChangeEvent<T>) => any),
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 itemData:any
+     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field6 fromIndex:number
+     * @type_function_param1_field7 toIndex:number
+     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field10 fromData:any
+     * @type_function_param1_field11 toData:any
+     * @type_function_param1_field12 dropInsideItem:boolean
+     */
+    onDragEnd?: ((e: DragEndEvent<T>) => any),
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 itemData:any
+     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field6 fromIndex:number
+     * @type_function_param1_field7 toIndex:number
+     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field10 fromData:any
+     * @type_function_param1_field11 toData:any
+     * @type_function_param1_field12 dropInsideItem:boolean
+     */
+    onDragMove?: ((e: DragMoveEvent<T>) => any),
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 itemData:any
+     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field6 fromIndex:number
+     * @type_function_param1_field7 fromData:any
+     */
+    onDragStart?: ((e: DragStartEvent<T>) => any),
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 itemData:any
+     * @type_function_param1_field4 itemElement:dxElement
+     * @type_function_param1_field5 fromIndex:number
+     * @type_function_param1_field6 toIndex:number
+     * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 fromData:any
+     * @type_function_param1_field10 toData:any
+     */
+    onRemove?: ((e: RemoveEvent<T>) => any),
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 itemData:any
+     * @type_function_param1_field4 itemElement:dxElement
+     * @type_function_param1_field5 fromIndex:number
+     * @type_function_param1_field6 toIndex:number
+     * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 fromData:any
+     * @type_function_param1_field10 toData:any
+     * @type_function_param1_field11 dropInsideItem:boolean
+     * @type_function_param1_field12 promise:Promise<void>
+     */
+    onReorder?: ((e: ReorderEvent<T>) => any),
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default 60
+     */
+    scrollSensitivity?: number,
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @default 30
+     */
+    scrollSpeed?: number,
+    /**
+    * @docid
+      * @prevFileNamespace DevExpress.ui
+    * @default true
+    */
+    showDragIcons?: boolean
+}
+
+export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
     /**
      * @docid
      * @default false
@@ -661,37 +857,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    filterPanel?: {
-      /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 e:object
-         * @type_function_param1_field1 component:this
-         * @type_function_param1_field2 filterValue:object
-         * @type_function_param1_field3 text:string
-         * @type_function_return string
-         */
-        customizeText?: ((e: FilterPanelCustomizeTextBaseArg<T>) => string),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default true
-         * @fires GridBaseOptions.onOptionChanged
-         */
-        filterEnabled?: boolean,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default {}
-         */
-        texts?: FilterPanelTexts,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default false
-         */
-        visible?: boolean
-    };
+    filterPanel?: FilterPanel<T>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -787,7 +953,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingBaseEvent<T>) => any);
+    onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent<T>) => any);
     /**
      * @docid
      * @default null
@@ -797,7 +963,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDataErrorOccurred?: ((e: DataErrorOcurredBaseEvent<T>) => any);
+    onDataErrorOccurred?: ((e: DataErrorOcurredEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -806,7 +972,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onEditCanceled?: ((e: EditCanceledBaseEvent<T>) => any);
+    onEditCanceled?: ((e: EditCanceledEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -816,7 +982,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onEditCanceling?: ((e: EditCancelingBaseArg<T>) => any);
+    onEditCanceling?: ((e: EditCancelingEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -827,7 +993,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onInitNewRow?: ((e: InitNewRowBaseEvent<T>) => any);
+    onInitNewRow?: ((e: InitNewRowEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -838,7 +1004,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: KeyDownBaseEvent<T>) => any);
+    onKeyDown?: ((e: KeyDownEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -848,28 +1014,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowCollapsed?: ((e: RowCollapsedBaseEvent<T>) => any);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 key:any
-     * @type_function_param1_field5 cancel:boolean
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onRowCollapsing?: ((e: RowCollapsingBaseEvent<T>) => any);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 key:any
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onRowExpanded?: ((e: RowExpandedBaseEvent<T>) => any);
+    onRowCollapsed?: ((e: RowCollapsedEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -880,7 +1025,28 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowExpanding?: ((e: RowExpandingBaseEvent<T>) => any);
+    onRowCollapsing?: ((e: RowCollapsingEvent<T>) => any);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 key:any
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRowExpanded?: ((e: RowExpandedEvent<T>) => any);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 key:any
+     * @type_function_param1_field5 cancel:boolean
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRowExpanding?: ((e: RowExpandingEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -892,7 +1058,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowInserted?: ((e: RowInsertedBaseEvent<T>) => any);
+    onRowInserted?: ((e: RowInsertedEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -903,7 +1069,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowInserting?: ((e: RowInsertingBaseEvent<T>) => any);
+    onRowInserting?: ((e: RowInsertingEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -915,7 +1081,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowRemoved?: ((e: RowRemovedBaseEvent<T>) => any);
+    onRowRemoved?: ((e: RowRemovedEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -927,7 +1093,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowRemoving?: ((e: RowRemovingBaseEvent<T>) => any);
+    onRowRemoving?: ((e: RowRemovingEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -939,7 +1105,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowUpdated?: ((e: RowUpdatedBaseEvent<T>) => any);
+    onRowUpdated?: ((e: RowUpdatedEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -952,7 +1118,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowUpdating?: ((e: RowUpdatingBaseEvent<T>) => any);
+    onRowUpdating?: ((e: RowUpdatingEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -968,7 +1134,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowValidating?: ((e: RowValidatingBaseEvent<T>) => any);
+    onRowValidating?: ((e: RowValidatingEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -977,7 +1143,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onSaved?: ((e: SavedBaseEvent<T>) => any);
+    onSaved?: ((e: SavedEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -988,7 +1154,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onSaving?: ((e: SavingBaseEvent<T>) => any);
+    onSaving?: ((e: SavingEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1001,7 +1167,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedBaseEvent<T>) => any);
+    onSelectionChanged?: ((e: SelectionChangedEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1011,7 +1177,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onToolbarPreparing?: ((e: ToolbarPreparingBaseEvent<T>) => any);
+    onToolbarPreparing?: ((e: ToolbarPreparingEvent<T>) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -1051,241 +1217,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowDragging?: {
-      /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default false
-         */
-        allowDropInsideItem?: boolean,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default false
-         */
-        allowReordering?: boolean,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default true
-         */
-        autoScroll?: boolean,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        boundary?: string | TElement,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        container?: string | TElement,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         */
-        cursorOffset?: string | {
-          /**
-           * @docid
-           * @prevFileNamespace DevExpress.ui
-           * @default 0
-           */
-          x?: number,
-          /**
-           * @docid
-           * @prevFileNamespace DevExpress.ui
-           * @default 0
-           */
-          y?: number
-        },
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        data?: any,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type Enums.DragDirection
-         * @default "both"
-         */
-        dragDirection?: 'both' | 'horizontal' | 'vertical',
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 dragInfo:object
-         * @type_function_param1_field1 itemData:any
-         * @type_function_param1_field2 itemElement:dxElement
-         * @type_function_param2 containerElement:dxElement
-         * @type_function_return string|Element|jQuery
-         * @default undefined
-         */
-        dragTemplate?: template | ((dragInfo: DragTemplateInfo, containerElement: TElement) => string | TElement),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type Enums.DropFeedbackMode
-         * @default "indicate"
-         */
-        dropFeedbackMode?: 'push' | 'indicate',
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "> *"
-         */
-        filter?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        group?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default ""
-         */
-        handle?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 e:object
-         * @type_function_param1_field1 component:this
-         * @type_function_param1_field2 event:event
-         * @type_function_param1_field3 itemData:any
-         * @type_function_param1_field4 itemElement:dxElement
-         * @type_function_param1_field5 fromIndex:number
-         * @type_function_param1_field6 toIndex:number
-         * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-         * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-         * @type_function_param1_field9 fromData:any
-         * @type_function_param1_field10 toData:any
-         * @type_function_param1_field11 dropInsideItem:boolean
-         */
-        onAdd?: ((e: AddBaseEvent<T>) => any),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 e:object
-         * @type_function_param1_field1 component:this
-         * @type_function_param1_field2 event:event
-         * @type_function_param1_field3 cancel:boolean
-         * @type_function_param1_field4 itemData:any
-         * @type_function_param1_field5 itemElement:dxElement
-         * @type_function_param1_field6 fromIndex:number
-         * @type_function_param1_field7 toIndex:number
-         * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-         * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-         * @type_function_param1_field10 fromData:any
-         * @type_function_param1_field11 toData:any
-         * @type_function_param1_field12 dropInsideItem:boolean
-         */
-        onDragChange?: ((e: DragChangeBaseEvent<T>) => any),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 e:object
-         * @type_function_param1_field1 component:this
-         * @type_function_param1_field2 event:event
-         * @type_function_param1_field3 cancel:boolean
-         * @type_function_param1_field4 itemData:any
-         * @type_function_param1_field5 itemElement:dxElement
-         * @type_function_param1_field6 fromIndex:number
-         * @type_function_param1_field7 toIndex:number
-         * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-         * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-         * @type_function_param1_field10 fromData:any
-         * @type_function_param1_field11 toData:any
-         * @type_function_param1_field12 dropInsideItem:boolean
-         */
-        onDragEnd?: ((e: DragEndBaseEvent<T>) => any),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 e:object
-         * @type_function_param1_field1 component:this
-         * @type_function_param1_field2 event:event
-         * @type_function_param1_field3 cancel:boolean
-         * @type_function_param1_field4 itemData:any
-         * @type_function_param1_field5 itemElement:dxElement
-         * @type_function_param1_field6 fromIndex:number
-         * @type_function_param1_field7 toIndex:number
-         * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-         * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-         * @type_function_param1_field10 fromData:any
-         * @type_function_param1_field11 toData:any
-         * @type_function_param1_field12 dropInsideItem:boolean
-         */
-        onDragMove?: ((e: DragMoveBaseEvent<T>) => any),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 e:object
-         * @type_function_param1_field1 component:this
-         * @type_function_param1_field2 event:event
-         * @type_function_param1_field3 cancel:boolean
-         * @type_function_param1_field4 itemData:any
-         * @type_function_param1_field5 itemElement:dxElement
-         * @type_function_param1_field6 fromIndex:number
-         * @type_function_param1_field7 fromData:any
-         */
-        onDragStart?: ((e: DragStartBaseEvent<T>) => any),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 e:object
-         * @type_function_param1_field1 component:this
-         * @type_function_param1_field2 event:event
-         * @type_function_param1_field3 itemData:any
-         * @type_function_param1_field4 itemElement:dxElement
-         * @type_function_param1_field5 fromIndex:number
-         * @type_function_param1_field6 toIndex:number
-         * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-         * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-         * @type_function_param1_field9 fromData:any
-         * @type_function_param1_field10 toData:any
-         */
-        onRemove?: ((e: RemoveBaseEvent<T>) => any),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 e:object
-         * @type_function_param1_field1 component:this
-         * @type_function_param1_field2 event:event
-         * @type_function_param1_field3 itemData:any
-         * @type_function_param1_field4 itemElement:dxElement
-         * @type_function_param1_field5 fromIndex:number
-         * @type_function_param1_field6 toIndex:number
-         * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-         * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-         * @type_function_param1_field9 fromData:any
-         * @type_function_param1_field10 toData:any
-         * @type_function_param1_field11 dropInsideItem:boolean
-         * @type_function_param1_field12 promise:Promise<void>
-         */
-        onReorder?: ((e: ReorderBaseEvent<T>) => any),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default 60
-         */
-        scrollSensitivity?: number,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default 30
-         */
-        scrollSpeed?: number,
-        /**
-        * @docid
-          * @prevFileNamespace DevExpress.ui
-        * @default true
-        */
-        showDragIcons?: boolean
-    };
+    rowDragging?: RowDragging<T>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
