@@ -118,7 +118,7 @@ module('Renovated Views', () => {
 
             scheduler.instance.option('showAllDayPanel', true);
 
-            assert.equal(scheduler.workSpace.getAllDayCells.length, cellCount, 'Correct number of cells');
+            assert.equal(scheduler.workSpace.getAllDayCells().length, cellCount, 'Correct number of cells');
         });
     });
 });
