@@ -8,6 +8,7 @@ import './ui.data_grid.column_chooser';
 import './ui.data_grid.grouping';
 import './ui.data_grid.master_detail';
 import './ui.data_grid.editing';
+import './ui.data_grid.editing_row_based';
 import './ui.data_grid.editing_form_based';
 import './ui.data_grid.editing_cell_based';
 import './ui.data_grid.validating';
