@@ -1166,13 +1166,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return false;
         }
 
-        if(value === true && this._isSingleSelection()) {
-            const selectedKeys = this.getSelectedNodeKeys();
-            each(selectedKeys, (index, key) => {
-                this._dataAdapter.toggleSelection(key, false);
-                this._updateItemsUI();
-
-                this._fireItemSelectionChanged(this._getNode(key));
+        const selectedNodesKeys = this.getSelectedNodeKeys();
+        if(this._isSingleSelection() && value) {
+            each(selectedNodesKeys, (index, nodeKey) => {
+                this.unselectItem(nodeKey);
             });
         }
 
@@ -1186,7 +1183,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _setCheckboxValue: function($node, value) {
         const checkbox = this._getCheckBoxInstance($node);
-        checkbox && checkbox.option('value', true);
+        checkbox && checkbox.option('value', value);
     },
 
     _fireItemSelectionChanged: function(node, dxEvent) {
