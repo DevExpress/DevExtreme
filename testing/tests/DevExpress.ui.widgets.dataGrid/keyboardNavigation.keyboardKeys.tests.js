@@ -2606,7 +2606,7 @@ QUnit.module('Keyboard keys', {
                 this.clock.tick();
 
                 // assert
-                assert.roughEqual($('#container .dx-datagrid-focus-overlay').outerWidth(), $('#container td').eq(1).outerWidth(), 0.51, 'focus overlay is not visible');
+                assert.roughEqual($('#container .dx-datagrid-focus-overlay').outerWidth(), $('#container td').eq(1).outerWidth(), 1.01, 'focus overlay is not visible');
                 assert.ok($('.dx-focused').is('td'), 'focused element is td');
             });
         });
