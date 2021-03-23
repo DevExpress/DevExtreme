@@ -1369,7 +1369,9 @@ class SchedulerWorkSpace extends WidgetObserver {
                 );
             }
 
-            this.renderRComponent(this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
+            !this._isVerticalGroupedWorkSpace() && this.renderRComponent(
+                this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible },
+            );
             this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
 
             this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
