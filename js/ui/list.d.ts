@@ -37,6 +37,10 @@ import {
     SearchBoxMixinOptions
 } from './widget/ui.search_box_mixin';
 
+interface ItemEvent extends BaseItemEvent<dxList> {
+    readonly itemIndex: number | any
+}
+
 /**
  * @public
 */
@@ -53,51 +57,42 @@ export interface GroupRenderedEvent<T> extends BaseEvent<T> {
     groupElement?: TElement,
     readonly groupIndex?: number
 }
+
 /**
  * @public
 */
-export interface ItemClickEvent<T> extends BaseItemEvent<T> {
-    readonly itemIndex: number | any
-}
+export interface ItemClickEvent extends ItemEvent { }
 /**
  * @public
 */
-export interface ItemContextMenuEvent<T> extends BaseItemEvent<T> {
-    readonly itemIndex: number | any
-}
+export interface ItemContextMenuEvent extends ItemEvent { }
 /**
  * @public
 */
-export interface ItemDeletedEvent<T> extends BaseItemEvent<T> {
-    readonly itemIndex: number | any
-}
+export interface ItemDeletedEvent extends ItemEvent { }
 /**
  * @public
 */
-export interface ItemDeletingEvent<T> extends BaseItemEvent<T> {
-    readonly itemIndex: number | any,
+export interface ItemDeletingEvent extends ItemEvent {
     cancel?: boolean | TPromise<void>
 }
 /**
  * @public
 */
-export interface ItemHoldEvent<T> extends BaseItemEvent<T> {
-    readonly itemIndex: number | any,
+export interface ItemHoldEvent extends ItemEvent {
     event?: TEvent
 }
 /**
  * @public
 */
-export interface ItemReorderedEvent<T> extends BaseItemEvent<T> {
-    readonly itemIndex: number | any,
+export interface ItemReorderedEvent extends ItemEvent {
     readonly fromIndex: number,
     readonly toIndex: number
 }
 /**
  * @public
 */
-export interface ItemSwipeEvent<T> extends BaseItemEvent<T> {
-    readonly itemIndex: number | any,
+export interface ItemSwipeEvent extends ItemEvent {
     readonly direction: string
 }
 /**
@@ -292,7 +287,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent<dxList>) => void) | string;
+    onItemClick?: ((e: ItemClickEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -305,7 +300,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: ItemContextMenuEvent<dxList>) => void);
+    onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
     /**
      * @docid
      * @default null
@@ -318,7 +313,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDeleted?: ((e: ItemDeletedEvent<dxList>) => void);
+    onItemDeleted?: ((e: ItemDeletedEvent) => void);
     /**
      * @docid
      * @default null
@@ -332,7 +327,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDeleting?: ((e: ItemDeletingEvent<dxList>) => void);
+    onItemDeleting?: ((e: ItemDeletingEvent) => void);
     /**
      * @docid
      * @default null
@@ -345,7 +340,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: ItemHoldEvent<dxList>) => void);
+    onItemHold?: ((e: ItemHoldEvent) => void);
     /**
      * @docid
      * @default null
@@ -360,7 +355,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemReordered?: ((e: ItemReorderedEvent<dxList>) => void);
+    onItemReordered?: ((e: ItemReorderedEvent) => void);
     /**
      * @docid
      * @default null
@@ -374,7 +369,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemSwipe?: ((e: ItemSwipeEvent<dxList>) => void);
+    onItemSwipe?: ((e: ItemSwipeEvent) => void);
     /**
      * @docid
      * @default null

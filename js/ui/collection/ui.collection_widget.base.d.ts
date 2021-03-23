@@ -24,12 +24,14 @@ export { ContentReadyEvent }
 export interface BaseItemEvent<T> extends BaseNativeEvent<T> {
     readonly itemData?: any,
     itemElement: TElement,
+}
+interface ItemEvent<T> extends BaseItemEvent<T> {
     readonly itemIndex: number
 }
-export interface ItemClickEvent<T> extends BaseItemEvent<T> {}
-export interface ItemContextMenuEvent<T> extends BaseItemEvent<T> {}
-export interface ItemHoldEvent<T> extends BaseItemEvent<T> {}
-export interface ItemRenderedEvent<T> extends BaseItemEvent<T> {}
+export interface ItemClickEvent<T> extends ItemEvent<T> {}
+export interface ItemContextMenuEvent<T> extends ItemEvent<T> {}
+export interface ItemHoldEvent<T> extends ItemEvent<T> {}
+export interface ItemRenderedEvent<T> extends ItemEvent<T> {}
 
 export interface SelectionChangedEvent<T> extends BaseEvent<T> {
     readonly addedItems: Array<any>,
