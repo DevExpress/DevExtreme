@@ -120,5 +120,75 @@ module('Renovated Views', () => {
 
             assert.equal(scheduler.workSpace.getAllDayCells().length, cellCount, 'Correct number of cells');
         });
+
+        [true, false].forEach((crossScrollingEnabled) => {
+            test(`All-day title should be rendered when crossScrollingEnabled=${crossScrollingEnabled} in ${view} and all-day panel is not enabled`, function(assert) {
+                const scheduler = createWrapper({
+                    views: [view],
+                    currentView: view,
+                    showAllDayPanel: false,
+                    renovateRender: true,
+                    crossScrollingEnabled,
+                });
+
+                assert.equal(scheduler.workSpace.getAllDayTitle().length, 1, 'All-day title exists');
+            });
+        });
+
+        test(`All-day title should not be rendered in ${view} when all-day panel is not enabled and vertical grouping is used`, function(assert) {
+            const scheduler = createWrapper({
+                views: [{
+                    type: view,
+                    groupOrientation: 'vertical',
+                }],
+                currentView: view,
+                showAllDayPanel: false,
+                renovateRender: true,
+                groups: ['ownerId'],
+                resources: [{
+                    fieldExpr: 'ownerId',
+                    dataSource: [{
+                        text: 'O1',
+                        id: 1,
+                    }, {
+                        text: 'O2',
+                        id: 2,
+                    }, {
+                        text: 'O3',
+                        id: 3,
+                    }],
+                }],
+            });
+
+            assert.equal(scheduler.workSpace.getAllDayTitle().length, 0, 'All-day title does not exist');
+        });
+
+        test(`All-day title should be rendered in ${view} when all-day panel is not enabled and horizontal grouping is used`, function(assert) {
+            const scheduler = createWrapper({
+                views: [{
+                    type: view,
+                    groupOrientation: 'horizontal',
+                }],
+                currentView: view,
+                showAllDayPanel: false,
+                renovateRender: true,
+                groups: ['ownerId'],
+                resources: [{
+                    fieldExpr: 'ownerId',
+                    dataSource: [{
+                        text: 'O1',
+                        id: 1,
+                    }, {
+                        text: 'O2',
+                        id: 2,
+                    }, {
+                        text: 'O3',
+                        id: 3,
+                    }],
+                }],
+            });
+
+            assert.equal(scheduler.workSpace.getAllDayTitle().length, 1, 'All-day title exists');
+        });
     });
 });
