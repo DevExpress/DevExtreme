@@ -131,7 +131,7 @@ QUnit.module('Markup', moduleConfig, () => {
         this.clock.tick();
         const treeListRowElement = this.$element.find(TREELIST_DATA_ROW_SELECTOR).last().get(0);
         const ganttViewRowElement = this.$element.find(GANTT_VIEW_ROW_SELECTOR).get(0);
-        assert.roughEqual(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, 0.001, 'row heights are equal');
+        assert.roughEqual(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, 0.01, 'row heights are equal');
     });
     test('auto height', function(assert) {
         this.createInstance(allSourcesOptions);
