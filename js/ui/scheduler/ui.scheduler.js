@@ -1684,8 +1684,13 @@ class Scheduler extends Widget {
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
                     .done((result) => {
-                        result && callback();
-                        !result && this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+                        if(result !== undefined) {
+                            result && callback();
+                            !result && this._excludeAppointmentFromSeries(
+                                targetAppointment, singleAppointment, exceptionDate,
+                                isDeleted, isPopupEditing, dragEvent,
+                            );
+                        }
                     })
                     .fail(() => this._appointments.moveAppointmentBack(dragEvent));
         }
@@ -1757,7 +1762,7 @@ class Scheduler extends Widget {
             ],
             popupOptions: {
                 onHidden: (e) => {
-                    e.element.remove();
+                    e.component.$element().remove();
                 },
             },
         });
