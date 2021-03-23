@@ -1521,7 +1521,6 @@ function checkDashStyle(assert, elem, result, style, value) {
             const svg = (new Element({}, 'svg')).append(parent);
 
             this.rect = (new Element({}, 'rect')).append(svg);
-            this.rect.element.setAttribute = sinon.spy();
         }
     });
 
@@ -1547,7 +1546,6 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Merge existing styles with new ones', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css({ 'font-family': 'SegoeUI', cursor: 'default' });
@@ -1562,7 +1560,6 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Empty styles do not clear existing ones', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css();
@@ -1576,7 +1573,6 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Special cases. value is undefined (does not take effect)', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css({ 'font-size': undefined, cursor: 'default' });
@@ -1590,7 +1586,6 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Special cases. value is null (does not take effect)', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css({ 'font-size': null, cursor: 'default' });
@@ -1604,7 +1599,6 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Special cases. value is empty string (deletes style)', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css({ 'font-size': '', cursor: 'default' });
