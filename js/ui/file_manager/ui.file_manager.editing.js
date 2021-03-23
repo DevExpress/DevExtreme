@@ -355,11 +355,11 @@ class FileManagerEditingControl extends Widget {
 
     _getErrorText(errorInfo, itemInfo, itemName) {
         itemName = itemName || itemInfo?.fileItem.name;
-        const errorText = errorInfo.errorText || FileManagerMessages.get(errorInfo.errorId, itemName);
+        const errorText = errorInfo.errorText || FileManagerMessages.get(errorInfo.errorCode, itemName);
 
         const errorArgs = {
             fileSystemItem: itemInfo?.fileItem,
-            errorCode: errorInfo.errorId,
+            errorCode: errorInfo.errorCode,
             errorText
         };
         this._raiseOnError(errorArgs);

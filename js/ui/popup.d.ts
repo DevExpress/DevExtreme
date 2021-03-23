@@ -67,38 +67,38 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     height?: number | string | (() => number | string);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onResize?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 titleElement:dxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: T, element?: TElement, model?: any, titleElement?: TElement }) => any);
+    onTitleRendered?: ((e: { component?: T, element?: TElement, model?: any, titleElement?: TElement }) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function

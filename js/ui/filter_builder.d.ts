@@ -184,12 +184,12 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @type_function_param1_field12 readOnly:boolean
      * @type_function_param1_field13 disabled:boolean
      * @type_function_param1_field14 rtlEnabled:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, editorElement?: TElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+    onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, editorElement?: TElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -206,15 +206,15 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @type_function_param1_field14 readOnly:boolean
      * @type_function_param1_field15 disabled:boolean
      * @type_function_param1_field16 rtlEnabled:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPreparing?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: TElement, editorName?: string, editorOptions?: any, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+    onEditorPreparing?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: TElement, editorName?: string, editorOptions?: any, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
@@ -222,7 +222,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, previousValue?: any }) => any);
+    onValueChanged?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, previousValue?: any }) => void);
     /**
      * @docid
      * @type Filter expression

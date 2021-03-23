@@ -50,7 +50,7 @@ export interface PivotGridDataSourceOptions {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => any);
+    onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -58,7 +58,7 @@ export interface PivotGridDataSourceOptions {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onLoadError?: ((error: any) => any);
+    onLoadError?: ((error: any) => void);
     /**
      * @docid
      * @type_function_param1 isLoading:boolean
@@ -66,7 +66,7 @@ export interface PivotGridDataSourceOptions {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onLoadingChanged?: ((isLoading: boolean) => any);
+    onLoadingChanged?: ((isLoading: boolean) => void);
     /**
      * @docid
      * @default false

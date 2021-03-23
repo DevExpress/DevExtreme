@@ -112,17 +112,17 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     minColWidth?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorEnterKey?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string }) => any);
+    onEditorEnterKey?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @type_function_param1_field5 value:object
@@ -130,7 +130,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFieldDataChanged?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string, value?: any }) => any);
+    onFieldDataChanged?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string, value?: any }) => void);
     /**
      * @docid
      * @default "optional"

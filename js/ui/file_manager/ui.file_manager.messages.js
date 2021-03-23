@@ -1,9 +1,9 @@
 import messageLocalization from '../../localization/message';
-import ErrorCode from '../../file_management/errors';
+import ErrorCode from '../../file_management/error_codes';
 
 export const FileManagerMessages = {
-    get: (errorId, args) => {
-        switch(errorId) {
+    get: (errorCode, args) => {
+        switch(errorCode) {
             case ErrorCode.NoAccess:
                 return messageLocalization.format('dxFileManager-errorNoAccess');
             case ErrorCode.FileExists:

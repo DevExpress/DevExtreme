@@ -116,16 +116,16 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     legend?: BaseChartLegend;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDone?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onDone?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:basePointObject
@@ -134,7 +134,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, target?: basePointObject }) => any) | string;
+    onPointClick?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, target?: basePointObject }) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -146,7 +146,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointHoverChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
+    onPointHoverChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -158,10 +158,10 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointSelectionChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
+    onPointSelectionChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
@@ -169,10 +169,10 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
+    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
@@ -180,7 +180,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
+    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => void);
     /**
      * @docid
      * @extends CommonVizPalette

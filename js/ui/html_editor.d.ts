@@ -60,24 +60,24 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     name?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => any);
+    onFocusIn?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => any);
+    onFocusOut?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
      * @default ""
