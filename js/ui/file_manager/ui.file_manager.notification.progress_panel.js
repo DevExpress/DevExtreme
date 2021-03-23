@@ -107,18 +107,26 @@ class FileManagerProgressPanel extends Widget {
             case 'onOperationItemCanceled':
                 this._actions[name] = this._createActionByOption(name);
                 break;
+            case 'disabled':
+                this._clearOperationsList();
+                this._renderEmptyListText();
+                super._optionChanged(args);
+                break;
             default:
                 super._optionChanged(args);
         }
     }
 
     addOperation(commonText, showCloseButtonAlways, allowProgressAutoUpdate) {
+        if(this.option('disabled')) {
+            return {};
+        }
         if(this._operationCount) {
             $('<div>')
                 .addClass(FILE_MANAGER_PROGRESS_PANEL_SEPARATOR_CLASS)
                 .prependTo(this._$infosContainer);
         } else {
-            this._$infosContainer.empty();
+            this._clearOperationsList();
         }
 
         this._operationCount++;
@@ -149,6 +157,9 @@ class FileManagerProgressPanel extends Widget {
     }
 
     addOperationDetails(info, details, showCloseButton) {
+        if(this.option('disabled')) {
+            return;
+        }
         info.$info.addClass(FILE_MANAGER_PROGRESS_PANEL_INFO_WITH_DETAILS_CLASS);
 
         const $details = $('<div>')
@@ -177,6 +188,9 @@ class FileManagerProgressPanel extends Widget {
     }
 
     completeOperationItem(operationInfo, itemIndex, commonProgress) {
+        if(this.option('disabled')) {
+            return;
+        }
         if(operationInfo.allowProgressAutoUpdate) {
             this.updateOperationItemProgress(operationInfo, itemIndex, 100, commonProgress);
         }
@@ -184,7 +198,9 @@ class FileManagerProgressPanel extends Widget {
     }
 
     updateOperationItemProgress(operationInfo, itemIndex, itemProgress, commonProgress) {
-        operationInfo.common.progressBar.option('value', commonProgress);
+        if(operationInfo.common) {
+            operationInfo.common.progressBar.option('value', commonProgress);
+        }
 
         if(operationInfo.details) {
             const detailsItem = operationInfo.details[itemIndex];
@@ -194,6 +210,9 @@ class FileManagerProgressPanel extends Widget {
 
     completeOperation(info, commonText, isError, statusText) {
         info.completed = true;
+        if(this.option('disabled')) {
+            return;
+        }
         info.common.$commonText.text(commonText);
         if(isError) {
             this._removeProgressBar(info.common);
@@ -209,8 +228,11 @@ class FileManagerProgressPanel extends Widget {
     }
 
     completeSingleOperationWithError(info, errorText) {
-        const detailsItem = info.details?.[0];
         info.completed = true;
+        if(this.option('disabled')) {
+            return;
+        }
+        const detailsItem = info.details?.[0];
         this._renderOperationError(detailsItem || info.common, errorText);
         this._setCloseButtonVisible(info.common, true);
         if(detailsItem) {
@@ -219,6 +241,9 @@ class FileManagerProgressPanel extends Widget {
     }
 
     addOperationDetailsError(info, index, errorText) {
+        if(this.option('disabled')) {
+            return;
+        }
         const detailsItem = info.details[index];
         this._renderOperationError(detailsItem, errorText);
         this._setCloseButtonVisible(detailsItem, false);
@@ -234,6 +259,11 @@ class FileManagerProgressPanel extends Widget {
     createErrorDetailsProgressBox($container, item, errorText) {
         const detailsItem = this._createDetailsItem($container, item, -1, true);
         this._renderOperationError(detailsItem, errorText);
+    }
+
+    _clearOperationsList() {
+        this._operationCount = 0;
+        this._$infosContainer.empty();
     }
 
     _renderEmptyListText() {
