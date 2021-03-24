@@ -100,10 +100,6 @@ const DropDownButton = Widget.inherit({
         });
     },
 
-    _focusTarget() {
-        return this._buttonGroup?.$element() || $();
-    },
-
     _setOptionsByReference() {
         this.callBase();
 
@@ -185,6 +181,7 @@ const DropDownButton = Widget.inherit({
         }
 
         this.callBase();
+        this._cleanFocusState();
     },
 
     _renderContentImpl() {
@@ -289,6 +286,7 @@ const DropDownButton = Widget.inherit({
             height: '100%',
             stylingMode: this.option('stylingMode'),
             selectionMode: 'none',
+            tabIndex: this.option('tabIndex'),
             buttonTemplate: ({ text, icon }, buttonContent) => {
                 if(this.option('splitButton') || !this.option('showArrowIcon')) {
                     return 'content';
@@ -570,6 +568,10 @@ const DropDownButton = Widget.inherit({
         this._setListOption('keyExpr', this._getKey());
     },
 
+    focus: function() {
+        this._buttonGroup.focus();
+    },
+
     _optionChanged(args) {
         const { name, value } = args;
         switch(name) {
@@ -667,6 +669,9 @@ const DropDownButton = Widget.inherit({
                 break;
             case 'deferRendering':
                 this.toggle(this.option('opened'));
+                break;
+            case 'tabIndex':
+                this._buttonGroup.option(name, value);
                 break;
             default:
                 this.callBase(args);

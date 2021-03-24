@@ -2229,26 +2229,6 @@ QUnit.module('keyboard navigation', {
 
         assert.ok($buttonGroup.hasClass(FOCUSED_CLASS), 'button group is focused');
     });
-
-    QUnit.testInActiveWindow('focusIn handler should be called on dropDownButton focus', function(assert) {
-        const focusInHandler = sinon.stub();
-
-        this.dropDownButton.option({ onFocusIn: focusInHandler });
-        this.dropDownButton.focus();
-
-        assert.ok(focusInHandler.calledOnce, 'focusIn handler was called');
-    });
-
-    QUnit.testInActiveWindow('focusOut handler should be called on buttonGroup blur', function(assert) {
-        const focusOutHandler = sinon.stub();
-        this.dropDownButton.option({ onFocusOut: focusOutHandler });
-        const $buttonGroup = getButtonGroup(this.dropDownButton).$element();
-
-        this.dropDownButton.focus();
-        eventsEngine.trigger($buttonGroup, 'focusout');
-
-        assert.ok(focusOutHandler.calledOnce, 'focusOut handler was called');
-    });
 });
 
 QUnit.module('custom content template', {}, () => {
