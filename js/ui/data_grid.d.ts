@@ -1728,16 +1728,16 @@ export interface Pager {
   /**
      * @docid
      * @prevFileNamespace DevExpress.ui
-     * @type Array<number>|Enums.Mode
+     * @type Array<number, Enums.GridPagerPageSize>|Enums.Mode
      * @default "auto"
      */
     allowedPageSizes?: Array<(number | 'all')> | 'auto',
-    // /**
-    //  * docid
-    //  * @prevFileNamespace DevExpress.ui
-    //  * @type Enums.GridPagerDisplayMode
-    //  */
-    // displayMode: 'adaptive' | 'compact' | 'full',
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.GridPagerDisplayMode
+     */
+    displayMode?: 'adaptive' | 'compact' | 'full',
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
