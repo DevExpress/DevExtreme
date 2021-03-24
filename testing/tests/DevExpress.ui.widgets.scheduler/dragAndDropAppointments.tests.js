@@ -2344,7 +2344,7 @@ module('Appointment dragging', {
         fx.off = true;
 
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler({ _draggingMode: 'default', ...options }).dxScheduler('instance');
 
             this.clock.tick(300);
             this.instance.focus();
@@ -2404,6 +2404,7 @@ module('Appointment dragging', {
                 this.createInstance = function(options) {
                     this.instance = $('#scheduler').dxScheduler($.extend(options,
                         {
+                            _draggingMode: 'default',
                             height: options && options.height || 600,
                             scrolling: {
                                 mode: scrollingMode
