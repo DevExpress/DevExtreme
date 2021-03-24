@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
+import renderer from 'core/renderer';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import { Consts, createTestFileSystem, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
@@ -492,7 +494,15 @@ QUnit.module('Progress panel tests', moduleConfig, () => {
 QUnit.module('Progress panel integration tests', integrationModuleConfig, () => {
 
     test('the progress panel cannot be shown if showPanel option is false', function(assert) {
-        this.fileManager.option('notifications.showPanel', false);
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+        resizeCallbacks.fire();
+        this.fileManager.option({
+            notifications: {
+                showPanel: false
+            },
+            width: '1200px'
+        });
         this.clock.tick(400);
 
         let $rows = this.wrapper.getRowsInDetailsView();
@@ -515,10 +525,19 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         assert.equal($rows.length, initialCount - 1, 'files count decreased');
 
         assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '-340px', 'progress panel is hidden');
+        renderer.fn.width = originalFunc;
     });
 
     test('the progress panel hides if to set showPanel option false when pane is shown', function(assert) {
-        this.fileManager.option('notifications.showPanel', true);
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+        resizeCallbacks.fire();
+        this.fileManager.option({
+            notifications: {
+                showPanel: true
+            },
+            width: '1200px'
+        });
         this.clock.tick(400);
 
         let $rows = this.wrapper.getRowsInDetailsView();
@@ -545,6 +564,7 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '-340px', 'progress panel is hidden');
+        renderer.fn.width = originalFunc;
     });
 
     test('it\'s impossible to add operations to the progress panel if showPanel option is false', function(assert) {
