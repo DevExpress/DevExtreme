@@ -121,7 +121,7 @@ export const Export = {
         }
     },
 
-    mergeCells: function(worksheet, topLeftCell, mergeRanges) {
+    tryMergeCells: function(worksheet, topLeftCell, mergeRanges) {
         mergeRanges.forEach((mergeRange) => {
             const startRow = mergeRange.start.row + topLeftCell.row;
             const startColumn = mergeRange.start.column + topLeftCell.column;
@@ -131,11 +131,13 @@ export const Export = {
             if(mergeRange.merged) {
                 worksheet.mergeCells(startRow, startColumn, endRow, endColumn);
             } else {
-                const copiedValue = worksheet.getCell(startRow, startColumn).value;
+                const masterCell = worksheet.getCell(startRow, startColumn);
 
                 for(let i = startRow; i <= endRow; i++) {
                     for(let j = startColumn; j <= endColumn; j++) {
-                        worksheet.getCell(i, j).value = copiedValue;
+                        const cell = worksheet.getCell(i, j);
+                        cell.value = masterCell.value;
+                        // cell.numFmt = masterCell.numFmt;
                     }
                 }
             }
@@ -211,7 +213,7 @@ export const Export = {
                     }
                 }
 
-                this.mergeCells(worksheet, topLeftCell, mergeRanges);
+                this.tryMergeCells(worksheet, topLeftCell, mergeRanges);
 
                 cellRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
