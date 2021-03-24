@@ -126,6 +126,12 @@ const StoreEventNames = {
     UPDATED: 'onAppointmentUpdated'
 };
 
+const RECURRENCE_EDITING_MODE = {
+    EDIT_SERIES: 'editSeries',
+    EDIT_OCCURENCE: 'editOccurence',
+    CANCEL: 'cancel',
+};
+
 class Scheduler extends Widget {
     get appointmentFilter() { return new AppointmentFilter(this); }
 
@@ -1180,7 +1186,7 @@ class Scheduler extends Widget {
 
     _dispose() {
         this._appointmentTooltip && this._appointmentTooltip.dispose();
-        this._recurrenceDialog?.hide();
+        this._recurrenceDialog?.hide(RECURRENCE_EDITING_MODE.CANCEL);
 
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
@@ -1683,15 +1689,13 @@ class Scheduler extends Widget {
                     dragEvent.cancel = new Deferred();
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
-                    .done((isUpdateSeries) => {
-                        if(isUpdateSeries !== undefined) {
-                            isUpdateSeries && callback();
+                    .done((editingMode) => {
+                        editingMode === RECURRENCE_EDITING_MODE.EDIT_SERIES && callback();
 
-                            !isUpdateSeries && this._excludeAppointmentFromSeries(
-                                targetAppointment, singleAppointment, exceptionDate,
-                                isDeleted, isPopupEditing, dragEvent,
-                            );
-                        }
+                        editingMode === RECURRENCE_EDITING_MODE.EDIT_OCCURENCE && this._excludeAppointmentFromSeries(
+                            targetAppointment, singleAppointment, exceptionDate,
+                            isDeleted, isPopupEditing, dragEvent,
+                        );
                     })
                     .fail(() => this._appointments.moveAppointmentBack(dragEvent));
         }
@@ -1758,8 +1762,8 @@ class Scheduler extends Widget {
             showCloseButton: true,
             showTitle: true,
             buttons: [
-                { text: seriesText, onClick: function() { return true; } },
-                { text: occurrenceText, onClick: function() { return false; } }
+                { text: seriesText, onClick: function() { return RECURRENCE_EDITING_MODE.EDIT_SERIES; } },
+                { text: occurrenceText, onClick: function() { return RECURRENCE_EDITING_MODE.EDIT_OCCURENCE; } }
             ],
             popupOptions: {
                 onHidden: (e) => {
