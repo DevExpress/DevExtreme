@@ -14,8 +14,8 @@ const privateOptions = {
         };
     },
 
-    _needMergeRange() {
-        return true;
+    _isHeaderCell(dataProvider, rowIndex, cellIndex) {
+        return rowIndex < dataProvider.getColumnAreaRowCount() || cellIndex < dataProvider.getRowAreaColCount();
     },
 
     _isRangeMerged(dataProvider, rowIndex, cellIndex, rowspan, colspan, mergeRowFieldValues, mergeColumnFieldValues) {

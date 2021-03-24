@@ -3,10 +3,10 @@ import { Export } from './export';
 import errors from '../../core/errors';
 
 const privateOptions = {
-    _trySetAutoFilter(dataProvider, worksheet, cellRange, headerRowCount, autoFilterEnabled) {
+    _trySetAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled) {
         if(autoFilterEnabled) {
             if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
-                const dataRange = { from: { row: cellRange.from.row + headerRowCount - 1, column: cellRange.from.column }, to: cellRange.to };
+                const dataRange = { from: { row: cellRange.from.row + dataProvider.getHeaderRowCount() - 1, column: cellRange.from.column }, to: cellRange.to };
 
                 worksheet.autoFilter = dataRange;
             }
@@ -24,8 +24,8 @@ const privateOptions = {
         return { state: 'frozen', ySplit: cellRange.from.row + dataProvider.getFrozenArea().y - 1 };
     },
 
-    _trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount) {
-        if(rowIndex >= headerRowCount) {
+    _trySetOutlineLevel(dataProvider, row, rowIndex) {
+        if(rowIndex >= dataProvider.getHeaderRowCount()) {
             row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
         }
     },
@@ -43,8 +43,8 @@ const privateOptions = {
         return options;
     },
 
-    _needMergeRange(rowIndex, headerRowCount) {
-        return rowIndex < headerRowCount;
+    _isHeaderCell(dataProvider, rowIndex) {
+        return rowIndex < dataProvider.getHeaderRowCount();
     },
 
     _isRangeMerged() {

@@ -205,7 +205,7 @@ export const Export = {
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount,
+                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell,
                         mergedCells, mergeRanges, mergeRowFieldValues, mergeColumnFieldValues, wrapText, styles, privateOptions);
 
                     if(rowIndex >= 1) {
@@ -227,7 +227,7 @@ export const Export = {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
                         extend(worksheetViewSettings, privateOptions._getWorksheetFrozenState(dataProvider, cellRange));
                     }
-                    privateOptions._trySetAutoFilter(dataProvider, worksheet, cellRange, headerRowCount, autoFilterEnabled);
+                    privateOptions._trySetAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
                 }
 
                 if(Object.keys(worksheetViewSettings).length > 0) {
@@ -241,9 +241,9 @@ export const Export = {
         });
     },
 
-    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges,
+    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, mergedCells, mergeRanges,
         mergeRowFieldValues, mergeColumnFieldValues, wrapText, styles, privateOptions) {
-        privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
+        privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex);
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -268,7 +268,7 @@ export const Export = {
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
-            if(privateOptions._needMergeRange(rowIndex, headerRowCount)) {
+            if(privateOptions._isHeaderCell(dataProvider, rowIndex, cellIndex)) {
                 if(this.cellInMergeRanges(mergedCells, rowIndex, cellIndex)) {
                     const cell = mergedCells[rowIndex][cellIndex];
                     if(cell.merged === false) {
