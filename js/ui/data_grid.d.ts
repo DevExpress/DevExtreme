@@ -934,17 +934,18 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     pager?: {
     /**
        * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @type Array<number>|Enums.Mode
+       * @prevFileNamespace DevExpress.ui
+       * @type Array<number, Enums.GridPagerPageSize>|Enums.Mode
        * @default "auto"
        */
       allowedPageSizes?: Array<(number | 'all')> | 'auto',
-      // /**
-      //  * docid
-      //  * @prevFileNamespace DevExpress.ui
-      //  * @type Enums.GridPagerDisplayMode
-      //  */
-      // displayMode: 'adaptive' | 'compact' | 'full',
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.GridPagerDisplayMode
+       * @default "adaptive"
+       */
+      displayMode?: 'adaptive' | 'compact' | 'full',
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui

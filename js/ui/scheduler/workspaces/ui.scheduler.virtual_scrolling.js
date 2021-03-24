@@ -15,7 +15,7 @@ const scrollingOrientations = {
     horizontal: 'horizontal',
     both: 'both'
 };
-const DefaultScrollingOrientation = scrollingOrientations.vertical;
+const DefaultScrollingOrientation = scrollingOrientations.both;
 
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
