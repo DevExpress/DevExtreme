@@ -203,11 +203,11 @@ const ColorBox = DropDownEditor.inherit({
 
             onValueChanged: function({ event, value, previousValue }) {
                 const instantlyMode = that.option('applyValueMode') === 'instantly';
-                const realColorChanged = colorUtils.makeRgba(value) !== previousValue;
+                const isOldValue = colorUtils.makeRgba(value) === previousValue;
                 const changesApplied = instantlyMode || that._colorViewEnterKeyPressed;
                 const valueCleared = that._shouldSaveEmptyValue;
 
-                if(!realColorChanged || !changesApplied || valueCleared) {
+                if(isOldValue || !changesApplied || valueCleared) {
                     return;
                 }
 
