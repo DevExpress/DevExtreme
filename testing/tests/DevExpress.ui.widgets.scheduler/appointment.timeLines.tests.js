@@ -146,7 +146,7 @@ module('Integration: Appointments in Timeline views', {
                 });
             });
 
-            test('Rival long appointments should have right position on timelineMonth view', function(assert) {
+            test('Rival long appointments should have correct position in timelineMonth view', function(assert) {
                 const data = [{
                     'id': '1',
                     'text': 'Long event',
@@ -168,7 +168,8 @@ module('Integration: Appointments in Timeline views', {
                     currentDate: new Date(2018, 11, 3),
                     firstDayOfWeek: 0,
                     startDayHour: 8,
-                    endDayHour: 20
+                    endDayHour: 20,
+                    width: 600
                 });
 
                 assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, APPOINTMENT_DEFAULT_TOP_OFFSET, 'Long appointment top is ok');
@@ -230,7 +231,8 @@ module('Integration: Appointments in Timeline views', {
                     currentView: 'timelineWeek',
                     dataSource: [appointment],
                     startDayHour: 8,
-                    endDayHour: 10
+                    endDayHour: 10,
+                    width: 1600
                 });
 
                 const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
@@ -254,7 +256,8 @@ module('Integration: Appointments in Timeline views', {
                     dataSource: [appointment],
                     startDayHour: 8,
                     endDayHour: 20,
-                    height: 200
+                    height: 200,
+                    width: 1600
                 });
 
                 const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
@@ -264,7 +267,7 @@ module('Integration: Appointments in Timeline views', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            test('Recurrence appointment part should have right width on timelineWeek view', function(assert) {
+            test('Recurrence appointment part should have correct width in timelineWeek view', function(assert) {
                 const appointment = {
                     startDate: new Date(2015, 4, 25, 21),
                     endDate: new Date(2015, 4, 26, 2),
@@ -276,16 +279,17 @@ module('Integration: Appointments in Timeline views', {
                     currentView: 'timelineWeek',
                     dataSource: [appointment],
                     startDayHour: 1,
-                    endDayHour: 22
+                    endDayHour: 22,
+                    width: 35000
                 });
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
-                const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+                const $appointment = $(this.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(1);
+                const $cell = $(this.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
 
-                assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 4, 1.001, 'Task has a right width');
+                assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 4, 1.001, 'Task width is correct');
             });
 
-            test('Multiday appointment should have right width on timelineWeek view', function(assert) {
+            test('Multiday appointment should have correct width in timelineWeek view', function(assert) {
                 const appointment = {
                     startDate: new Date(2015, 2, 2, 19),
                     endDate: new Date(2015, 2, 3, 13)
@@ -297,17 +301,18 @@ module('Integration: Appointments in Timeline views', {
                     cellDuration: 60,
                     dataSource: [appointment],
                     startDayHour: 10,
-                    endDayHour: 20
+                    endDayHour: 20,
+                    width: 4000
                 });
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+                const $appointment = $(this.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
+                const $cell = $(this.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
                 const cellsInAppointment = 4;
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            test('AllDay appointment should have right width on timelineWeek view', function(assert) {
+            test('AllDay appointment should have correct width in timelineWeek view', function(assert) {
                 const appointment = {
                     startDate: new Date(2015, 11, 14),
                     endDate: new Date(2015, 11, 17),
@@ -320,11 +325,12 @@ module('Integration: Appointments in Timeline views', {
                     cellDuration: 60,
                     dataSource: [appointment],
                     startDayHour: 10,
-                    endDayHour: 22
+                    endDayHour: 22,
+                    width: 8000
                 });
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+                const $appointment = $(this.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
+                const $cell = $(this.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
                 const cellsInAppointment = 48;
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
@@ -342,7 +348,8 @@ module('Integration: Appointments in Timeline views', {
                     cellDuration: 60,
                     dataSource: [appointment],
                     startDayHour: 10,
-                    endDayHour: 22
+                    endDayHour: 22,
+                    width: 1500
                 });
 
                 const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
@@ -352,7 +359,7 @@ module('Integration: Appointments in Timeline views', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            test('Long multiday appointment should have right width on timelineWorkWeek view', function(assert) {
+            test('Long multiday appointment should have correct width in timelineWorkWeek view', function(assert) {
                 const appointment = {
                     startDate: new Date(2015, 2, 2, 9),
                     endDate: new Date(2015, 2, 4, 18)
@@ -364,17 +371,18 @@ module('Integration: Appointments in Timeline views', {
                     cellDuration: 60,
                     dataSource: [appointment],
                     startDayHour: 10,
-                    endDayHour: 20
+                    endDayHour: 20,
+                    width: 4000
                 });
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+                const $appointment = $(this.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
+                const $cell = $(this.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
                 const cellsInAppointment = 28;
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            test('Long multiday appointment should have right width on timelineWeek view when set startDayHour > appointment endDate (T533348)', function(assert) {
+            test('Long multiday appointment should have correct width in timelineWeek view if startDayHour > appointment endDate (T533348)', function(assert) {
                 const appointment = {
                     startDate: new Date(2016, 1, 1, 11, 0),
                     endDate: new Date(2016, 1, 4, 1, 0)
@@ -389,7 +397,8 @@ module('Integration: Appointments in Timeline views', {
                     dataSource: [appointment],
                     startDayHour: 8,
                     endDayHour: 20,
-                    height: 200
+                    height: 200,
+                    width: 9000
                 });
 
                 const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
@@ -411,7 +420,8 @@ module('Integration: Appointments in Timeline views', {
                     cellDuration: 60,
                     dataSource: [appointment],
                     startDayHour: 10,
-                    endDayHour: 20
+                    endDayHour: 20,
+                    width: 15400
                 });
 
                 const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
@@ -486,6 +496,7 @@ module('Integration: Appointments in Timeline views', {
                         currentDate: new Date(testCase.currentDate),
                         height: 300,
                         startDayHour: 0,
+                        width: 1500
                     });
 
                     this.scheduler.instance.scrollToTime(0, 0, new Date(testCase.scrollDate));
@@ -522,7 +533,8 @@ module('Integration: Appointments in Timeline views', {
                     }],
                     views: ['timelineMonth'],
                     currentView: 'timelineMonth',
-                    currentDate: new Date(2018, 3, 27)
+                    currentDate: new Date(2018, 3, 27),
+                    width: 4000
                 });
 
                 assert.equal(this.scheduler.appointments.getAppointmentCount(), 30, 'Scheduler appointments are rendered without compact ones');
@@ -600,6 +612,7 @@ module('Integration: Appointments in Timeline views', {
                         endDayHour: 18,
                         height: 580,
                         renovateRender: scrollingMode === 'virtual' || isRenovatedRender,
+                        width: 800
                     });
 
                     assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 4, 'Appointments are rendered');

@@ -355,7 +355,7 @@ module('Integration: Appointment editing', {
             });
         });
 
-        module('Scroll after Editing', {
+        module(`Scroll after Editing if ${scrollingMode} scrolling mode`, {
             beforeEach: function() {
                 this.createScheduler = (options = {}) => {
                     return createWrapper({
@@ -510,7 +510,7 @@ module('Integration: Appointment editing', {
                 endDate: new Date('2020-09-08T01:00:00'),
                 groupOrientation: 'vertical',
             }].forEach(({ view, startDate, endDate, groupOrientation }) => {
-                test(`Scroll position should be updated if appointment is not visible in ${view}, ${groupOrientation} grouping`, function(assert) {
+                test(`Scroll position should be updated if appoinment is not visible in ${view}, ${groupOrientation} grouping`, function(assert) {
                     const scheduler = this.createScheduler({
                         views: [{
                             type: view,
@@ -518,6 +518,9 @@ module('Integration: Appointment editing', {
                         }],
                         currentView: view,
                         groups: ['ownerId'],
+                        scrolling: {
+                            orientation: 'vertical'
+                        }
                     });
 
                     const appointment = {

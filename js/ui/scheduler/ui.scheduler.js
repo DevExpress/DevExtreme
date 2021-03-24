@@ -1494,13 +1494,15 @@ class Scheduler extends Widget {
         const scrolling = this.option('scrolling');
         const isVirtualScrolling = scrolling.mode === 'virtual' ||
             currentViewOptions.scrolling?.mode === 'virtual';
-        const isHorizontalVirtualScrollingOrientation = isVirtualScrolling &&
-            ['horizontal', 'both'].filter(item =>
-                scrolling.orientation === item ||
-                currentViewOptions.scrolling?.orientation === item
-            ).length > 0;
+        const horizontalVirtualScrollingAllowed = isVirtualScrolling &&
+            (
+                !isDefined(scrolling.orientation) ||
+                ['horizontal', 'both'].filter(
+                    item => scrolling.orientation === item || currentViewOptions.scrolling?.orientation === item
+                ).length > 0
+            );
         const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
-            isHorizontalVirtualScrollingOrientation;
+            horizontalVirtualScrollingAllowed;
 
         const result = extend({
             noDataText: this.option('noDataText'),
