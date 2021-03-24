@@ -225,7 +225,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     set operationInProgressCount(value) {
-        if(this._isProgressDrawerDisabled()) {
+        if(this._isProgressDrawerDisabled() || this._progressPanel.isEmpty()) {
             this._operationInProgressCount = 0;
         } else {
             this._operationInProgressCount = value < 0 ? 0 : value;
@@ -241,7 +241,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     set failedOperationCount(value) {
-        if(this._isProgressDrawerDisabled()) {
+        if(this._isProgressDrawerDisabled() || this._progressPanel.isEmpty()) {
             this._failedOperationCount = 0;
         } else {
             this._failedOperationCount = value < 0 ? 0 : value;
