@@ -110,6 +110,62 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
  */
 export interface DraggableBase { }
 
+/**
+ * @public
+ */
+export interface DragTemplateInfo {
+    readonly itemData?: any;
+    readonly itemElement: TElement;
+}
+
+/**
+ * @public
+ */
+export interface DragEndEvent {
+    readonly component: dxDraggable;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly event: TEvent;
+    cancel: boolean;
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+}
+
+/**
+ * @public
+ */
+export interface DragMoveEvent {
+    readonly component: dxDraggable;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly event: TEvent;
+    cancel: boolean;
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+}
+
+/**
+ * @public
+ */
+export interface DragStartEvent {
+    readonly component: dxDraggable;
+    readonly element?: TElement;
+    readonly model?: any;
+    readonly event: TEvent;
+    cancel: boolean;
+    itemData?: any;
+    readonly itemElement?: TElement;
+    readonly fromData?: any;
+}
+
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid
@@ -129,7 +185,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement }, containerElement: TElement) => string | TElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateInfo, containerElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null
@@ -146,7 +202,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragEnd?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
+    onDragEnd?: ((e: DragEndEvent) => void);
     /**
      * @docid
      * @default null
@@ -163,7 +219,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragMove?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
+    onDragMove?: ((e: DragMoveEvent) => void);
     /**
      * @docid
      * @default null
@@ -177,7 +233,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragStart?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromData?: any }) => void);
+    onDragStart?: ((e: DragStartEvent) => void);
 }
 /**
  * @docid
