@@ -373,6 +373,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -381,6 +382,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
