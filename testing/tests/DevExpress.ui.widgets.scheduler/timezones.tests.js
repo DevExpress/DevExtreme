@@ -996,6 +996,7 @@ module('Scheduler grid', moduleConfig, () => {
         }].forEach(({ timeZone, startDate, endDate }) => {
             test(`Drag n drop should work right in week view if timezone='${timeZone}'`, function(assert) {
                 const scheduler = createWrapper({
+                    _draggingMode: 'default',
                     currentDate: new Date(2015, 11, 23),
                     views: ['week'],
                     currentView: 'week',
@@ -1051,6 +1052,7 @@ module('Scheduler grid', moduleConfig, () => {
             }].forEach(({ startDayHour, endDayHour }) => {
                 test(`Drag n drop should work right in month view if timezone='${timeZone}' and startDayHour=${startDayHour}, endDayHour=${endDayHour}`, function(assert) {
                     const scheduler = createWrapper({
+                        _draggingMode: 'default',
                         currentDate: new Date(2015, 11, 23),
                         views: ['month'],
                         currentView: 'month',
