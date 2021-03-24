@@ -3,6 +3,7 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { hasWindow } from '../../core/utils/window';
+import { getDefaultAlignment } from '../../core/utils/position';
 import formatHelper from '../../format_helper';
 import localizationNumber from '../../localization/number';
 import { excel as excelExporter, export as exportMethod } from '../../exporter';
@@ -88,7 +89,7 @@ export const ExportMixin = extend({}, exportMixin, {
 
         sourceItems[0].splice(0, 0, extend({}, this._getEmptyCell(),
             {
-                alignment: this._options.rtlEnabled ? 'right' : 'left',
+                alignment: getDefaultAlignment(this._options.rtlEnabled),
                 colspan: rowsLength,
                 rowspan: headerRowsCount
             }));
@@ -122,58 +123,18 @@ export const ExportMixin = extend({}, exportMixin, {
     }
 });
 
-function getCellDataType(field) {
-    if(field && field.customizeText) {
-        return 'string';
-    }
-
-    if(field.dataType) {
-        return field.dataType;
-    }
-
-    if(field.format) {
-        if(localizationNumber.parse(formatHelper.format(1, field.format)) === 1) {
-            return 'number';
-        }
-        if(formatHelper.format(new Date(), field.format)) {
-            return 'date';
-        }
-    }
-
-    return DEFAULT_DATA_TYPE;
-}
-
 export const DataProvider = Class.inherit({
     ctor: function(options) {
         this._options = options;
-        this._styles = [];
     },
 
     ready: function() {
         const that = this;
         const options = that._options;
-        const dataFields = options.dataFields;
 
         return when(options.items).done(function(items) {
             const headerSize = items[0][0].rowspan;
             const columns = items[headerSize - 1];
-            const dataItemStyle = { alignment: options.rtlEnabled ? 'left' : 'right' };
-
-            that._styles = [
-                { alignment: 'center', dataType: 'string' },
-                { alignment: options.rtlEnabled ? 'right' : 'left', dataType: 'string' }
-            ];
-
-            if(dataFields.length) {
-                dataFields.forEach(function(dataField) {
-                    that._styles.push(extend({}, dataItemStyle, {
-                        format: dataField.format,
-                        dataType: getCellDataType(dataField)
-                    }));
-                });
-            } else {
-                that._styles.push(dataItemStyle);
-            }
 
             each(columns, function(columnIndex, column) {
                 column.width = DEFAUL_COLUMN_WIDTH;
@@ -221,7 +182,7 @@ export const DataProvider = Class.inherit({
     },
 
     getCellType: function(rowIndex, cellIndex) {
-        const style = this._styles[this.getStyleId(rowIndex, cellIndex)];
+        const style = this.getStyles()[this.getStyleId(rowIndex, cellIndex)];
         return style && style.dataType || 'string';
     },
 
@@ -280,7 +241,55 @@ export const DataProvider = Class.inherit({
     },
 
     getStyles: function() {
-        return this._styles;
+        if(this._styles) {
+            return this._styles;
+        }
+
+        const dataFields = this._options.dataFields;
+        const dataItemStyle = { alignment: this._options.rtlEnabled ? 'left' : 'right' };
+
+        const styles = [
+            // column header style
+            { alignment: 'center', dataType: 'string' },
+            // row header style
+            { alignment: getDefaultAlignment(this._options.rtlEnabled), dataType: 'string' }
+        ];
+
+        if(dataFields.length) {
+            dataFields.forEach(function(dataField) {
+                styles.push(extend({}, dataItemStyle, {
+                    format: dataField.format,
+                    dataType: this.getCellDataType(dataField)
+                }));
+            });
+        } else {
+            styles.push(dataItemStyle);
+        }
+
+        this._styles = styles;
+
+        return styles;
+    },
+
+    getCellDataType: function(field) {
+        if(field && field.customizeText) {
+            return 'string';
+        }
+
+        if(field.dataType) {
+            return field.dataType;
+        }
+
+        if(field.format) {
+            if(localizationNumber.parse(formatHelper.format(1, field.format)) === 1) {
+                return 'number';
+            }
+            if(formatHelper.format(new Date(), field.format)) {
+                return 'date';
+            }
+        }
+
+        return DEFAULT_DATA_TYPE;
     },
 
     getStyleId: function(rowIndex, cellIndex) {

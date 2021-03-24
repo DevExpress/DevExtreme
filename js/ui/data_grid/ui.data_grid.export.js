@@ -25,6 +25,11 @@ const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
 
 const BUTTON_CLASS = 'dx-button';
 
+const HEADER_STYLE_ID = {
+    center: 0,
+    left: 1,
+    right: 2
+};
 const DATA_STYLE_OFFSET = 3;
 
 export const DataProvider = Class.inherit({
@@ -87,16 +92,14 @@ export const DataProvider = Class.inherit({
 
     getStyles: function() {
         const wrapTextEnabled = this._options.wrapTextEnabled;
-        const styles = ['center', 'left', 'right'].map(function(alignment) {
-            return {
-                // Header, Total styles
-                bold: true,
-                alignment: alignment,
-                wrapText: true
-            };
-        });
+        const styles = ['center', 'left', 'right'].map((alignment) => ({
+            // Header, Total styles
+            bold: true,
+            alignment: alignment,
+            wrapText: true
+        }));
 
-        this.getColumns().forEach(function(column) {
+        this.getColumns().forEach((column) => {
             styles.push({
                 // column styles
                 alignment: column.alignment || 'left',
@@ -116,20 +119,15 @@ export const DataProvider = Class.inherit({
         return styles;
     },
 
-    _getTotalCellStyleId: function(cellIndex) {
-        const alignment = this.getColumns()[cellIndex] && this.getColumns()[cellIndex].alignment || 'right';
-        return ['center', 'left', 'right'].indexOf(alignment);
-    },
-
     getStyleId: function(rowIndex, cellIndex) {
         if(rowIndex < this.getHeaderRowCount()) {
-            return 0;
+            return HEADER_STYLE_ID.center;
         } else if(this.isTotalCell(rowIndex - this.getHeaderRowCount(), cellIndex)) {
-            return this._getTotalCellStyleId(cellIndex);
+            return HEADER_STYLE_ID[this.getColumns()[cellIndex]?.alignment || 'right'];
         } else if(this.isGroupRow(rowIndex - this.getHeaderRowCount())) {
             return DATA_STYLE_OFFSET + this.getColumns().length;
         } else {
-            return cellIndex + DATA_STYLE_OFFSET;// header style offset
+            return cellIndex + DATA_STYLE_OFFSET;
         }
     },
 
