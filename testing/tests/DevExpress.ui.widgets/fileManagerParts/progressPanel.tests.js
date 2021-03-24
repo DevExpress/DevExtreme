@@ -1,8 +1,9 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import { FileManagerProgressPanelWrapper } from '../../../helpers/fileManagerHelpers.js';
+import { Consts, createTestFileSystem, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
+import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 
 const { test } = QUnit;
 
@@ -22,6 +23,46 @@ const moduleConfig = {
         fx.off = false;
     }
 
+};
+
+const integrationModuleConfig = {
+    beforeEach: function() {
+        const fileSystem = createTestFileSystem();
+
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+
+        this.$element = $('#fileManager').dxFileManager({
+            fileSystemProvider: fileSystem,
+            selectionMode: 'single',
+            itemView: {
+                showFolders: true,
+                showParentFolder: true
+            },
+            permissions: {
+                create: true,
+                copy: true,
+                move: true,
+                delete: true,
+                rename: true,
+                upload: true,
+                download: true
+            }
+        });
+
+        this.fileManager = this.$element.dxFileManager('instance');
+        this.wrapper = new FileManagerWrapper(this.$element);
+        this.progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
+
+        this.clock.tick(400);
+    },
+
+    afterEach: function() {
+        this.clock.tick(5000);
+
+        this.clock.restore();
+        fx.off = false;
+    }
 };
 
 const createProgressPanel = context => {
@@ -444,6 +485,145 @@ QUnit.module('Progress panel tests', moduleConfig, () => {
         assert.notOk(detail.$progressBar.length, 'progress bar not rendered');
         assert.notOk(detail.closeButton, 'detail item has no close button');
         assert.ok(detail.$image.hasClass('dx-icon-doc'), 'detail item has correct icon');
+    });
+
+});
+
+QUnit.module('Progress panel integration tests', integrationModuleConfig, () => {
+
+    test('the progress panel cannot be shown if showPanel option is false', function(assert) {
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
+        this.clock.tick(400);
+        this.wrapper.getContextMenuItem('Refresh').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '-340px', 'progress panel is hidden');
+    });
+
+    test('the progress panel hides if to set showPanel option false when pane is shown', function(assert) {
+        this.fileManager.option('notifications.showPanel', true);
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
+        this.clock.tick(400);
+        this.wrapper.getContextMenuItem('Refresh').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is shown');
+
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '-340px', 'progress panel is hidden');
+    });
+
+    test('it\'s impossible to add operations to the progress panel if showPanel option is false', function(assert) {
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick(400);
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is still no operations');
+    });
+
+    test('already added operations removes from the progress panel after set showPanel option to false', function(assert) {
+        this.fileManager.option('notifications.showPanel', true);
+        this.clock.tick(400);
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'there is one operation');
+        assert.equal(infos[0].common.commonText, 'Deleted an item from Files', 'common text is correct');
+
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick(400);
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations again');
+    });
+
+    test('refresh buttons status icon is default if showPanel option is false', function(assert) {
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        const $refresh = this.wrapper.getToolbarButton('Refresh');
+        assert.strictEqual($refresh.length, 2, 'refresh buttons exists');
+        const refreshIcon0 = $refresh.eq(0).find(`.${Consts.TOOLBAR_REFRESH_ITEM_ICON_CLASS}`);
+        const refreshIcon1 = $refresh.eq(1).find(`.${Consts.TOOLBAR_REFRESH_ITEM_ICON_CLASS}`);
+        assert.ok(refreshIcon0.hasClass(Consts.TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS), 'refresh button is in default state');
+        assert.ok(refreshIcon1.hasClass(Consts.TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS), 'refresh button is in default state');
     });
 
 });
