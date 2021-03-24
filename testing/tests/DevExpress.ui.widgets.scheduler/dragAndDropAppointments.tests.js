@@ -112,6 +112,7 @@ module('Browser zoom', zoomModuleConfig, () => {
 
     QUnit.test('Appointment should drag to above cell in browser zoom case(T833310)', function(assert) {
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             views: views,
             currentView: views[0],
             dataSource: createDataSource(),
@@ -203,6 +204,7 @@ const draggingFromTooltipConfig = $.extend({}, {
     ],
     createScheduler: function(views, currentView, rtlEnabled) {
         return createWrapper({
+            _draggingMode: 'default',
             dataSource: $.extend(true, [], this.data),
             views: views,
             currentView: currentView,
@@ -407,6 +409,7 @@ const moveAsMouseConfig = $.extend({}, {
     },
     createScheduler: function(views, rtlEnabled) {
         return createWrapper({
+            _draggingMode: 'default',
             dataSource: $.extend(true, [], this.data),
             width: 850,
             height: 600,
@@ -470,6 +473,7 @@ module('Common', commonModuleConfig, () => {
         ];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             editing: {
                 allowDragging: false
             },
@@ -522,6 +526,7 @@ module('Common', commonModuleConfig, () => {
 
     test('Appointment should move to the first cell from tooltip case', function(assert) {
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             editing: true,
             height: 600,
             views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
@@ -552,6 +557,7 @@ module('Common', commonModuleConfig, () => {
 
     test('Appointment shouldn\'t move to the cell from tooltip case if it is disabled', function(assert) {
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             editing: true,
             height: 600,
             views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
@@ -584,6 +590,7 @@ module('Common', commonModuleConfig, () => {
 
     test('The recurring appointment should have correct position when dragging', function(assert) {
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             editing: true,
             height: 600,
             views: ['month'],
@@ -640,6 +647,7 @@ module('Common', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             editing: true,
             height: 600,
             views: [{ type: 'timelineMonth' }],
@@ -710,6 +718,7 @@ module('Common', commonModuleConfig, () => {
     // T832754
     test('The appointment should be dropped correctly after pressing Esc key', function(assert) {
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             editing: true,
             height: 600,
             views: [{ type: 'day' }],
@@ -749,6 +758,7 @@ module('Common', commonModuleConfig, () => {
     // Timezone-sensitive test, use US/Pacific for proper testing
     QUnit.test('Appointment should have correct dates after dragging through timezone change (T835544)', function(assert) {
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             dataSource: [{
                 text: 'Staff Productivity Report',
                 startDate: '2019-11-04T00:00',
@@ -782,6 +792,7 @@ module('Common', commonModuleConfig, () => {
 
     QUnit.test('The appointment should be dragged into the all-day panel when there is a scroll offset(T851985)', function(assert) {
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             dataSource: [{
                 text: 'Task 1',
                 startDate: new Date(2017, 4, 25, 11, 0),
@@ -819,6 +830,7 @@ module('Common', commonModuleConfig, () => {
     // T938908
     test('Appointment dragged from tooltip should have correct css', function(assert) {
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             dataSource: [{
                 text: 'App 1',
                 startDate: new Date(2018, 4, 21, 9, 30),
@@ -856,6 +868,7 @@ module('Common', commonModuleConfig, () => {
 
     test('Dragged appointment should not have a right border', function(assert) {
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             dataSource: [{
                 text: 'App 1',
                 startDate: new Date(2018, 4, 21, 9, 30),
@@ -888,6 +901,7 @@ module('Common', commonModuleConfig, () => {
 module('appointmentDragging customization', $.extend({}, {
     createScheduler: options => {
         return createWrapper({
+            _draggingMode: 'default',
             dataSource: [{
                 text: 'App 1',
                 startDate: new Date(2018, 4, 21, 9, 30),
@@ -1125,6 +1139,7 @@ module('appointmentDragging customization', $.extend({}, {
 
                 const createScheduler = () => {
                     return createWrapper({
+                        _draggingMode: 'default',
                         appointmentDragging,
                         dataSource: data,
                         currentView: 'week',
@@ -1611,6 +1626,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             views: views,
             currentView: views[0],
             dataSource: getDataSource(),
@@ -1640,6 +1656,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             views: ['week'],
             currentView: 'week',
             dataSource: dataSource,
@@ -1660,6 +1677,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             views: ['week'],
             currentView: 'week',
             dataSource: dataSource,
@@ -1680,6 +1698,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             views: ['month'],
             currentView: 'month',
             dataSource: dataSource,
@@ -1703,6 +1722,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             views: [{ type: 'week', maxAppointmentsPerCell: 1 }],
             currentView: 'week',
             dataSource: dataSource,
@@ -1751,6 +1771,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             views: ['week'],
             currentView: 'week',
             dataSource: dataSource,
@@ -1801,6 +1822,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             views: ['month'],
             currentView: 'month',
             dataSource: dataSource,
@@ -1828,6 +1850,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             height: 600,
             views: ['day'],
             currentView: 'day',
@@ -1936,6 +1959,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             const data = getData();
 
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 height: 600,
                 views: ['week'],
                 currentView: 'week',
@@ -1973,6 +1997,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             const data = getData();
 
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 height: 600,
                 views: ['week'],
                 currentView: 'week',
@@ -2025,6 +2050,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             height: 600,
             views: ['day'],
             currentView: 'day',
@@ -2048,6 +2074,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             height: 600,
             views: [{
                 type: 'day',
@@ -2081,6 +2108,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             height: 600,
             views: ['week'],
             currentView: 'week',
@@ -2107,6 +2135,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             height: 600,
             views: ['week'],
             currentView: 'week',
@@ -2140,6 +2169,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             height: 600,
             views: ['week'],
             currentView: 'week',
@@ -2195,6 +2225,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             views: [{ type: 'week', maxAppointmentsPerCell: 1 }],
             currentView: 'week',
             dataSource: dataSource,
@@ -2230,6 +2261,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             height: 600,
             views: ['day'],
             currentView: 'day',
@@ -2266,6 +2298,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         }];
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             height: 600,
             views: ['week'],
             currentView: 'week',
