@@ -99,48 +99,48 @@ export const Export = {
         }
     },
 
-    tryGetMergeRange: function(rowIndex, cellIndex, mergedCells, mergeRowFieldValues, mergeColumnFieldValues, dataProvider, privateOptions) {
-        if(!mergedCells[rowIndex] || !mergedCells[rowIndex][cellIndex]) {
-            const cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
-            if(cellMerge.colspan || cellMerge.rowspan) {
-                for(let i = rowIndex; i <= rowIndex + cellMerge.rowspan || 0; i++) {
-                    for(let j = cellIndex; j <= cellIndex + cellMerge.colspan || 0; j++) {
-                        if(!mergedCells[i]) {
-                            mergedCells[i] = [];
-                        }
-                        mergedCells[i][j] = true;
-                    }
-                }
+    tryGetMergeRange: function(excelCell, mergedCells, rowIndex, cellIndex, dataProvider, mergeRowFieldValues, mergeColumnFieldValues, privateOptions) {
+        const { rowspan, colspan } = dataProvider.getCellMerging(rowIndex, cellIndex);
 
+        if(colspan || rowspan) {
+            const needMergeRange = privateOptions._isRangeMerged(dataProvider, rowIndex, cellIndex, rowspan, colspan, mergeRowFieldValues, mergeColumnFieldValues);
+            this.updateMergedCells(excelCell, mergedCells, rowIndex, cellIndex, rowspan, colspan, needMergeRange);
+
+            if(needMergeRange) {
                 return {
-                    start: { row: rowIndex, column: cellIndex },
-                    end: { row: rowIndex + (cellMerge.rowspan || 0), column: cellIndex + (cellMerge.colspan || 0) },
-                    merged: privateOptions._isRangeMerged(dataProvider, rowIndex, cellIndex, mergeRowFieldValues, mergeColumnFieldValues, cellMerge.rowspan, cellMerge.colspan)
+                    masterCell: excelCell,
+                    ...{ rowspan, colspan }
                 };
             }
         }
     },
 
-    tryMergeCells: function(worksheet, topLeftCell, mergeRanges) {
-        mergeRanges.forEach((mergeRange) => {
-            const startRow = mergeRange.start.row + topLeftCell.row;
-            const startColumn = mergeRange.start.column + topLeftCell.column;
-            const endRow = mergeRange.end.row + topLeftCell.row;
-            const endColumn = mergeRange.end.column + topLeftCell.column;
+    cellInMergeRanges(mergedCells, rowIndex, cellIndex) {
+        return mergedCells[rowIndex] && mergedCells[rowIndex][cellIndex];
+    },
 
-            if(mergeRange.merged) {
-                worksheet.mergeCells(startRow, startColumn, endRow, endColumn);
-            } else {
-                const masterCell = worksheet.getCell(startRow, startColumn);
-
-                for(let i = startRow; i <= endRow; i++) {
-                    for(let j = startColumn; j <= endColumn; j++) {
-                        const cell = worksheet.getCell(i, j);
-                        cell.value = masterCell.value;
-                        // cell.numFmt = masterCell.numFmt;
-                    }
+    updateMergedCells(excelCell, mergedCells, rowIndex, cellIndex, rowspan, colspan, needMergeRange) {
+        for(let i = rowIndex; i <= rowIndex + rowspan; i++) {
+            for(let j = cellIndex; j <= cellIndex + colspan; j++) {
+                if(!mergedCells[i]) {
+                    mergedCells[i] = [];
                 }
+                mergedCells[i][j] = {
+                    masterCell: excelCell,
+                    merged: needMergeRange
+                };
             }
+        }
+    },
+
+    mergeCells: function(worksheet, topLeftCell, mergeRanges) {
+        mergeRanges.forEach((mergeRange) => {
+            const startRowIndex = mergeRange.masterCell.fullAddress.row;
+            const startColumnIndex = mergeRange.masterCell.fullAddress.col;
+            const endRowIndex = startRowIndex + mergeRange.rowspan;
+            const endColumnIndex = startColumnIndex + mergeRange.colspan;
+
+            worksheet.mergeCells(startRowIndex, startColumnIndex, endRowIndex, endColumnIndex);
         });
     },
 
@@ -213,7 +213,7 @@ export const Export = {
                     }
                 }
 
-                this.tryMergeCells(worksheet, topLeftCell, mergeRanges);
+                this.mergeCells(worksheet, topLeftCell, mergeRanges);
 
                 cellRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
@@ -247,8 +247,6 @@ export const Export = {
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-            const cell = cellData.cellSourceData;
-
             const excelCell = row.getCell(startColumnIndex + cellIndex);
 
             if(isDate(cellData.value)) {
@@ -270,16 +268,26 @@ export const Export = {
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
-            if(isFunction(customizeCell)) {
-                customizeCell(privateOptions._getCustomizeCellOptions(excelCell, cell));
+            if(privateOptions._needMergeRange(rowIndex, headerRowCount)) {
+                if(this.cellInMergeRanges(mergedCells, rowIndex, cellIndex)) {
+                    const cell = mergedCells[rowIndex][cellIndex];
+                    if(cell.merged === false) {
+                        excelCell.style = cell.masterCell.style;
+                        excelCell.value = cell.masterCell.value;
+                    }
+                } else {
+                    const mergeRange = this.tryGetMergeRange(excelCell, mergedCells, rowIndex, cellIndex, dataProvider, mergeRowFieldValues, mergeColumnFieldValues, privateOptions);
+
+                    if(isDefined(mergeRange)) {
+                        mergeRanges.push(mergeRange);
+                    }
+                }
+
+
             }
 
-            if(privateOptions._needMergeRange(rowIndex, headerRowCount)) {
-                const mergeRange = this.tryGetMergeRange(rowIndex, cellIndex, mergedCells, mergeRowFieldValues, mergeColumnFieldValues, dataProvider, privateOptions);
-
-                if(isDefined(mergeRange)) {
-                    mergeRanges.push(mergeRange);
-                }
+            if(isFunction(customizeCell)) {
+                customizeCell(privateOptions._getCustomizeCellOptions(excelCell, cellData.cellSourceData));
             }
         }
     }

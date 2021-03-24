@@ -18,7 +18,7 @@ const privateOptions = {
         return true;
     },
 
-    _isRangeMerged(dataProvider, rowIndex, cellIndex, mergeRowFieldValues, mergeColumnFieldValues, rowspan, colspan) {
+    _isRangeMerged(dataProvider, rowIndex, cellIndex, rowspan, colspan, mergeRowFieldValues, mergeColumnFieldValues) {
         return !((dataProvider.isColumnAreaCell(rowIndex, cellIndex) && !mergeColumnFieldValues && !!colspan)
         || (dataProvider.isRowAreaCell(rowIndex, cellIndex) && !mergeRowFieldValues && !!rowspan));
     },
