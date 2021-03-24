@@ -3016,7 +3016,8 @@ module('Appointment dragging', {
                     onAppointmentUpdating: function(e) {
                         e.cancel = true;
                     },
-                    width: 800
+                    width: 800,
+                    height: 1100
                 });
                 const $appointment = this.scheduler.appointments.getAppointment(0);
                 const oldAppointmentCoords = translator.locate($appointment);
