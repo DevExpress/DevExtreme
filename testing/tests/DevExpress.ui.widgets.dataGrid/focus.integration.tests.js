@@ -3523,7 +3523,7 @@ QUnit.module('View\'s focus', {
         });
     });
 
-    QUnit.testInActiveWindow('Cell - An editable invalid cell should not lose focus when other cells are cicked (T983590)', function(assert) {
+    QUnit.testInActiveWindow('Cell - An editable invalid cell should not lose focus when other cells are clicked (T983590)', function(assert) {
         // arrange
         this.dataGrid.option({
             dataSource: [
@@ -3572,7 +3572,7 @@ QUnit.module('View\'s focus', {
         }
     });
 
-    QUnit.testInActiveWindow('Cell - An editable invalid cell in a new row should not lose focus when other cells are cicked (T983590)', function(assert) {
+    QUnit.testInActiveWindow('Cell - An editable invalid cell in a new row should not lose focus when other cells are clicked (T983590)', function(assert) {
         // arrange
         this.dataGrid.option({
             dataSource: [
