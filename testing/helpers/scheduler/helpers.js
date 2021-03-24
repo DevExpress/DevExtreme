@@ -58,7 +58,10 @@ export const CLASSES = {
     resizableHandle: {
         left: '.dx-resizable-handle-left',
         right: '.dx-resizable-handle-right'
-    }
+    },
+
+    dialog: '.dx-dialog',
+    popup: '.dx-popup',
 };
 
 export const isIE11 = browser.msie && parseInt(browser.version) <= 11;
@@ -481,12 +484,13 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
 
             dialog: {
-                clickEditSeries: () => $('.dx-dialog').find('.dx-dialog-button').eq(0).trigger('dxclick'),
-                clickEditAppointment: () => $('.dx-dialog').find('.dx-dialog-button').eq(1).trigger('dxclick'),
-                hide: () => $('.dx-dialog').find('.dx-closebutton.dx-button').trigger('dxclick')
+                clickEditSeries: () => $(CLASSES.dialog).find('.dx-dialog-button').eq(0).trigger('dxclick'),
+                clickEditAppointment: () => $(CLASSES.dialog).find('.dx-dialog-button').eq(1).trigger('dxclick'),
+                hide: () => $(CLASSES.dialog).find('.dx-closebutton.dx-button').trigger('dxclick')
             },
 
             getPopup: () => $('.dx-overlay-wrapper.dx-scheduler-appointment-popup'),
+            getRecurrenceDialog: () => $(`${CLASSES.dialog}${CLASSES.popup}`),
             getPopupTitleElement: () => this.appointmentPopup.getPopup().find('.dx-popup-title'),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find('.dx-scrollable-container').get(0);

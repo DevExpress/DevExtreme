@@ -3020,10 +3020,9 @@ module('Appointment dragging', {
                 });
                 const $appointment = this.scheduler.appointments.getAppointment(0);
                 const oldAppointmentCoords = translator.locate($appointment);
-                $appointment.trigger(dragEvents.start);
-                this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
-                $appointment.trigger(dragEvents.end);
-
+              
+                this.scheduler.appointmentList[0].drag.toCell(7);
+              
                 this.scheduler.appointmentForm.clickFormDialogButton(1);
 
                 const newAppointmentCoords = translator.locate(this.scheduler.appointments.getAppointment(0));
