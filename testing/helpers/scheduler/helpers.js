@@ -43,6 +43,7 @@ export const CLASSES = {
     focusedCell: '.dx-scheduler-focused-cell',
     virtualCell: '.dx-scheduler-virtual-cell',
 
+    allDayTitle: '.dx-scheduler-all-day-title',
     verticalGroupPanel: '.dx-scheduler-work-space-vertical-group-table',
 
     shader: '.dx-scheduler-date-time-shader',
@@ -597,6 +598,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getCurrentTimeIndicator: () => $('.dx-scheduler-date-time-indicator'),
             getCurrentTimeIndicatorCount: () => this.workSpace.getCurrentTimeIndicator().length,
             getAllDayPanel: () => $('.dx-scheduler-all-day-panel'),
+            getAllDayTitle: () => $(CLASSES.allDayTitle),
 
             getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find('.dx-scrollable-container'),
             getScrollPosition: () => {

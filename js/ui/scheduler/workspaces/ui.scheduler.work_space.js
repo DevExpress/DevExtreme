@@ -665,7 +665,11 @@ class SchedulerWorkSpace extends WidgetObserver {
                     this._initGrouping();
                     this.repaint();
                 } else {
-                    this._toggleAllDayVisibility(true);
+                    if(!this.isRenovatedRender()) {
+                        this._toggleAllDayVisibility(true);
+                    } else {
+                        this.renderRWorkspace();
+                    }
                 }
                 break;
             case 'allDayExpanded':
@@ -1344,7 +1348,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     renderRAllDayPanel() {
         const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
-        if(visible) {
+
+        if(this.supportAllDayRow() && !this._isVerticalGroupedWorkSpace()) {
             this._toggleAllDayVisibility(false);
 
             const groupCount = this._getGroupCount();
