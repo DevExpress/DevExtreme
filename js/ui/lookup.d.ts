@@ -228,7 +228,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ValueChangedEvent<dxLookup>;
+    onValueChanged?: ((e: ValueChangedEvent<dxLookup>) => void);
     /**
      * @docid
      * @type Enums.ListPageLoadMode
