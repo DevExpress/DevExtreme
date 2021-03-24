@@ -14,7 +14,7 @@ import ArrayStore from '../data/array_store';
 import { Deferred } from '../core/utils/deferred';
 import { extend } from '../core/utils/extend';
 import { isPlainObject, isDefined } from '../core/utils/type';
-import { ensureDefined } from '../core/utils/common';
+import { ensureDefined, noop } from '../core/utils/common';
 import Guid from '../core/guid';
 import { getElementWidth, getSizeValue } from './drop_down_editor/utils';
 import messageLocalization from '../localization/message';
@@ -175,13 +175,14 @@ const DropDownButton = Widget.inherit({
         }
     },
 
+    _renderFocusTarget: noop,
+
     _render() {
         if(!this.option('deferRendering') || this.option('opened')) {
             this._renderPopup();
         }
 
         this.callBase();
-        this._cleanFocusState();
     },
 
     _renderContentImpl() {
