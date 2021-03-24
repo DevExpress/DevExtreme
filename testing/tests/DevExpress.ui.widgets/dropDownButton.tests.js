@@ -2278,20 +2278,6 @@ QUnit.module('keyboard navigation', {
 
         assert.strictEqual(tabIndexAttribute, '1', 'buttonGroup tabIndex attribute changed');
     });
-
-    // QUnit.testInActiveWindow('tab should change focus to next dropDownButton', function(assert) {
-
-    //     this.dropDownButton.focus();
-
-
-    //     const anotherDropDownButton = new DropDownButton('#anotherDropDownButton', { focusStateEnabled: true });
-
-    //     this.keyboard.press('tab');
-
-    //     console.log(getButtonGroup(anotherDropDownButton).$element());
-
-    //     assert.ok(getButtonGroup(anotherDropDownButton).$element().hasClass(FOCUSED_CLASS), 'second button group is focused after tab');
-    // });
 });
 
 QUnit.module('custom content template', {}, () => {
