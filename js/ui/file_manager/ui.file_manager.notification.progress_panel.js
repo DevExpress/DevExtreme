@@ -37,7 +37,7 @@ class FileManagerProgressPanel extends Widget {
 
         this._initActions();
 
-        this._operationCount = 0;
+        this.operationCount = 0;
 
         this.$element().addClass(FILE_MANAGER_PROGRESS_PANEL_CLASS);
 
@@ -118,10 +118,10 @@ class FileManagerProgressPanel extends Widget {
     }
 
     addOperation(commonText, showCloseButtonAlways, allowProgressAutoUpdate) {
-        if(this.option('disabled')) {
+        if(this._isDisabled()) {
             return {};
         }
-        if(this._operationCount) {
+        if(this.operationCount) {
             $('<div>')
                 .addClass(FILE_MANAGER_PROGRESS_PANEL_SEPARATOR_CLASS)
                 .prependTo(this._$infosContainer);
@@ -129,7 +129,7 @@ class FileManagerProgressPanel extends Widget {
             this._clearOperationsList();
         }
 
-        this._operationCount++;
+        this.operationCount++;
 
         const info = {
             customCloseHandling: showCloseButtonAlways,
@@ -157,7 +157,7 @@ class FileManagerProgressPanel extends Widget {
     }
 
     addOperationDetails(info, details, showCloseButton) {
-        if(this.option('disabled')) {
+        if(this._isDisabled() || !info.$info || !info.details) {
             return;
         }
         info.$info.addClass(FILE_MANAGER_PROGRESS_PANEL_INFO_WITH_DETAILS_CLASS);
@@ -188,13 +188,15 @@ class FileManagerProgressPanel extends Widget {
     }
 
     completeOperationItem(operationInfo, itemIndex, commonProgress) {
-        if(this.option('disabled')) {
+        if(this._isDisabled()) {
             return;
         }
         if(operationInfo.allowProgressAutoUpdate) {
             this.updateOperationItemProgress(operationInfo, itemIndex, 100, commonProgress);
         }
-        this._setCloseButtonVisible(operationInfo.details[itemIndex], false);
+        if(operationInfo.details) {
+            this._setCloseButtonVisible(operationInfo.details[itemIndex], false);
+        }
     }
 
     updateOperationItemProgress(operationInfo, itemIndex, itemProgress, commonProgress) {
@@ -210,7 +212,7 @@ class FileManagerProgressPanel extends Widget {
 
     completeOperation(info, commonText, isError, statusText) {
         info.completed = true;
-        if(this.option('disabled')) {
+        if(this._isDisabled() || !info.common) {
             return;
         }
         info.common.$commonText.text(commonText);
@@ -229,19 +231,23 @@ class FileManagerProgressPanel extends Widget {
 
     completeSingleOperationWithError(info, errorText) {
         info.completed = true;
-        if(this.option('disabled')) {
+        if(this._isDisabled()) {
             return;
         }
         const detailsItem = info.details?.[0];
-        this._renderOperationError(detailsItem || info.common, errorText);
-        this._setCloseButtonVisible(info.common, true);
+        if(detailsItem || info.common) {
+            this._renderOperationError(detailsItem || info.common, errorText);
+        }
+        if(info.common) {
+            this._setCloseButtonVisible(info.common, true);
+        }
         if(detailsItem) {
             this._setCloseButtonVisible(detailsItem, false);
         }
     }
 
     addOperationDetailsError(info, index, errorText) {
-        if(this.option('disabled')) {
+        if(this._isDisabled() || !info.details) {
             return;
         }
         const detailsItem = info.details[index];
@@ -265,9 +271,29 @@ class FileManagerProgressPanel extends Widget {
         return this._$infosContainer.children(`.${FILE_MANAGER_PROGRESS_PANEL_INFO_CLASS}`).length === 0;
     }
 
+    _isDisabled() {
+        return this.option('disabled');
+    }
+
     _clearOperationsList() {
-        this._operationCount = 0;
+        this.operationCount = 0;
         this._$infosContainer.empty();
+    }
+
+    get operationCount() {
+        if(this._isDisabled()) {
+            return 0;
+        } else {
+            return this._operationCount;
+        }
+    }
+
+    set operationCount(value) {
+        if(this._isDisabled()) {
+            this._operationCount = 0;
+        } else {
+            this._operationCount = value < 0 ? 0 : value;
+        }
     }
 
     _renderEmptyListText() {
@@ -276,7 +302,9 @@ class FileManagerProgressPanel extends Widget {
 
     _renderOperationError(info, errorText) {
         this._removeProgressBar(info);
-        this.renderError(info.$wrapper, info.$commonText, errorText);
+        if(info.$wrapper && info.$commonText) {
+            this.renderError(info.$wrapper, info.$commonText, errorText);
+        }
     }
 
     _removeProgressBar(progressBox) {
@@ -355,14 +383,18 @@ class FileManagerProgressPanel extends Widget {
     _closeOperation(info) {
         if(info.customCloseHandling && !info.completed) {
             this._raiseOperationCanceled(info);
-            this._setCloseButtonVisible(info.common, false);
-            info.details.forEach(item => this._displayClosedOperationItem(item));
+            if(info.common) {
+                this._setCloseButtonVisible(info.common, false);
+            }
+            info.details?.forEach(item => this._displayClosedOperationItem(item));
         } else {
             this._raiseOperationClosed(info);
-            info.$info.next(`.${FILE_MANAGER_PROGRESS_PANEL_SEPARATOR_CLASS}`).remove();
-            info.$info.remove();
-            this._operationCount--;
-            if(!this._operationCount) {
+            if(info.$info) {
+                info.$info.next(`.${FILE_MANAGER_PROGRESS_PANEL_SEPARATOR_CLASS}`).remove();
+                info.$info.remove();
+            }
+            this.operationCount--;
+            if(!this.operationCount) {
                 this._renderEmptyListText();
             }
         }
@@ -371,8 +403,10 @@ class FileManagerProgressPanel extends Widget {
     _cancelOperationItem(item, itemIndex) {
         this._raiseOperationItemCanceled(item, itemIndex);
 
-        const itemInfo = item.info.details[itemIndex];
-        this._displayClosedOperationItem(itemInfo);
+        if(item.info) {
+            const itemInfo = item.info.details[itemIndex];
+            this._displayClosedOperationItem(itemInfo);
+        }
     }
 
     _displayClosedOperationItem(itemInfo) {

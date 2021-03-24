@@ -144,7 +144,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _updateActionProgress(message, status) {
-        if(this._isProgressDrawerDisabled() && status !== ACTION_PROGRESS_STATUS.default) {
+        if(this._isProgressDrawerDisabled() && !(status === ACTION_PROGRESS_STATUS.default || status === ACTION_PROGRESS_STATUS.progress)) {
             return;
         }
         this._actionProgressStatus = status;
