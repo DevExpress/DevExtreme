@@ -86,6 +86,9 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
      * @type_function_param1_field6 height:number
+     * @type_function_param1_field1 component:dxResizable
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -98,6 +101,9 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
      * @type_function_param1_field6 height:number
+     * @type_function_param1_field1 component:dxResizable
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -110,6 +116,9 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
      * @type_function_param1_field6 height:number
+     * @type_function_param1_field1 component:dxResizable
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

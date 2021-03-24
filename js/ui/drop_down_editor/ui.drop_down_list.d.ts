@@ -106,6 +106,9 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @type_function_param1_field5 itemElement:object
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -116,6 +119,9 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 selectedItem:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -128,6 +134,9 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

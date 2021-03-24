@@ -29,6 +29,9 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field1 component:dxProgressBar
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
