@@ -92,7 +92,7 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
     .expect(appointment.element.exists)
     .ok()
     .expect(appointment.date.time)
-    .eql('5:00 AM - 7:00 AM')
+    .eql('4:00 AM - 6:00 AM')
     .expect(collector.element.exists)
     .notOk();
 }).before(() => createScheduler({
