@@ -101,7 +101,7 @@ const DropDownButton = Widget.inherit({
     },
 
     _focusTarget() {
-        return this._buttonGroup.$element();
+        return this._buttonGroup?.$element() || $();
     },
 
     _setOptionsByReference() {
@@ -169,11 +169,10 @@ const DropDownButton = Widget.inherit({
     },
 
     _initMarkup() {
+        this.callBase();
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
         this._updateArrowClass();
-
-        this.callBase();
 
         if(isDefined(this.option('selectedItemKey'))) {
             this._loadSelectedItem().done(this._updateActionButton.bind(this));
