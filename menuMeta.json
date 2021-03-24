@@ -3255,7 +3255,7 @@
                 ]
               },
               {
-                "Title": "Zooming and Scrolling",
+                "Title": "Zooming and Panning",
                 "Name": "ZoomingAndScrolling",
                 "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/",
                 "Widget": "Charts",
@@ -3263,10 +3263,10 @@
                   "/Models/SampleData/PointsData.cs"
                 ],
                 "DemoType": "Viz",
-                "Equivalents": "visualRange, zoomAndPan"
+                "Equivalents": "visualRange, zoomAndPan, scrolling"
               },
               {
-                "Title": "Zooming and Scrolling API",
+                "Title": "Zooming and Panning API",
                 "Name": "ZoomingAndScrollingAPI",
                 "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/#Using_the_RangeSelector_Widget",
                 "Widget": "Charts",
@@ -3274,25 +3274,25 @@
                   "/Models/SampleData/PointsData.cs"
                 ],
                 "DemoType": "Viz",
-                "Equivalents": "visualRange, rangeSelector"
+                "Equivalents": "visualRange, rangeSelector, scrolling"
               },
               {
-                "Title": "Discrete Axis Zooming and Scrolling",
+                "Title": "Discrete Axis Zooming and Panning",
                 "Name": "DiscreteAxisZoomingAndScrolling",
                 "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/#Using_the_RangeSelector_Widget",
                 "Widget": "Charts",
                 "DemoType": "Viz",
-                "Equivalents": "orientation, rangeSelector, visualRange, legend"
+                "Equivalents": "orientation, rangeSelector, visualRange, legend, scrolling"
               },
               {
-                "Title": "Polar Chart Zooming and Scrolling API",
+                "Title": "Polar Chart Zooming and Panning API",
                 "Name": "PolarChartZoomingAndScrollingAPI",
                 "Widget": "Charts",
                 "MvcAdditionalFiles": [
                   "/Models/SampleData/StochasticData.cs"
                 ],
                 "DemoType": "Viz",
-                "Equivalents": "visualRange, rangeSelector"
+                "Equivalents": "visualRange, rangeSelector, scrolling"
               }
             ]
           }
