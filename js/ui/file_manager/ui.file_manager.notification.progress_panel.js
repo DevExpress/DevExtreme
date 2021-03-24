@@ -83,7 +83,8 @@ class FileManagerProgressPanel extends Widget {
             onOperationClosed: null,
             onOperationCanceled: null,
             onOperationItemCanceled: null,
-            onPanelClosed: null
+            onPanelClosed: null,
+            disabled: false
         });
     }
 
@@ -157,7 +158,7 @@ class FileManagerProgressPanel extends Widget {
     }
 
     addOperationDetails(info, details, showCloseButton) {
-        if(this._isDisabled() || !info.$info || !info.details) {
+        if(this._isDisabled() || !info.$info) {
             return;
         }
         info.$info.addClass(FILE_MANAGER_PROGRESS_PANEL_INFO_WITH_DETAILS_CLASS);

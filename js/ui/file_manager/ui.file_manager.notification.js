@@ -225,7 +225,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     set operationInProgressCount(value) {
-        if(this._isProgressDrawerDisabled() || this._progressPanel.isEmpty()) {
+        if(this._isProgressDrawerDisabled() || this._progressPanel?.isEmpty()) {
             this._operationInProgressCount = 0;
         } else {
             this._operationInProgressCount = value < 0 ? 0 : value;
@@ -241,7 +241,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     set failedOperationCount(value) {
-        if(this._isProgressDrawerDisabled() || this._progressPanel.isEmpty()) {
+        if(this._isProgressDrawerDisabled() || this._progressPanel?.isEmpty()) {
             this._failedOperationCount = 0;
         } else {
             this._failedOperationCount = value < 0 ? 0 : value;
@@ -250,7 +250,7 @@ export default class FileManagerNotificationControl extends Widget {
 
     _notifyError(errorInfo) {
         this._showPopupError(errorInfo);
-        const status = this._hasNoOperations() ? ACTION_PROGRESS_STATUS.default : ACTION_PROGRESS_STATUS.error;
+        const status = (this._hasNoOperations() && this._progressPanel.isEmpty()) ? ACTION_PROGRESS_STATUS.default : ACTION_PROGRESS_STATUS.error;
         this._updateActionProgress(errorInfo.commonErrorText, status);
     }
 
@@ -364,7 +364,9 @@ export default class FileManagerNotificationControl extends Widget {
             contentTemplate: null,
             onActionProgress: null,
             onOperationCanceled: null,
-            onOperationItemCanceled: null
+            onOperationItemCanceled: null,
+            showProgressPanel: true,
+            showNotificationPopup: true
         });
     }
 

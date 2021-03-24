@@ -40,9 +40,7 @@ export default class FileManagerNotificationControlMock extends FileManagerNotif
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             progressPanelComponent: null,
-            logger: null,
-            showProgressPanel: true,
-            showNotificationPopup: true
+            logger: null
         });
     }
 
