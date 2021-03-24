@@ -54,8 +54,7 @@ export class DataGridColumnButton {
     event?: TEvent;
     row?: RowObject;
     column?: Column;
-  }) => any)
-  | string;
+  }) => any);
 
   @OneWay()
   template?:
@@ -130,7 +129,7 @@ export class DataGridColumnLookup {
 @ComponentBindings()
 export class DataGridColumn {
   @OneWay()
-  alignment?: 'center' | 'left' | 'right' | undefined;
+  alignment?: 'center' | 'left' | 'right';
 
   @OneWay()
   allowEditing?: boolean;
@@ -297,7 +296,7 @@ export class DataGridColumn {
   sortIndex?: number;
 
   @OneWay()
-  sortOrder?: 'asc' | 'desc' | undefined;
+  sortOrder?: 'asc' | 'desc';
 
   @Event()
   sortingMethod?: (value1: any, value2: any) => number;
@@ -1317,7 +1316,6 @@ export class DataGridProps extends BaseWidgetProps implements Options {
   @TwoWay() selectionFilter: string | any[] | ((...args: any[]) => any) = [];
 
   @Event() onCellClick?:
-  | string
   | ((e: {
     component?: DxDataGrid;
     element?: TElement;

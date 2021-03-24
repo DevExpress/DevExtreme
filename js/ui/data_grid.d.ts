@@ -91,11 +91,11 @@ export interface AdaptiveDetailRowPreparingEvent<T extends GridBase> {
 /**
  * @public
  */
-export interface DataErrorOcurredEvent<T extends GridBase> {
+export interface DataErrorOccurredEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
-  readonly error: Error;
+  readonly error?: Error;
 }
 
 /**
@@ -203,7 +203,7 @@ export interface RowInsertingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
-  readonly data: any;
+  data: any;
   cancel: boolean | TPromise<void>;
 }
 
@@ -963,7 +963,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDataErrorOccurred?: ((e: DataErrorOcurredEvent<T>) => any);
+    onDataErrorOccurred?: ((e: DataErrorOccurredEvent<T>) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -2739,7 +2739,7 @@ export interface ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    alignment?: 'center' | 'left' | 'right' | undefined;
+    alignment?: 'center' | 'left' | 'right';
     /**
      * @docid
      * @default true
@@ -3064,7 +3064,7 @@ export interface ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    sortOrder?: 'asc' | 'desc' | undefined;
+    sortOrder?: 'asc' | 'desc';
     /**
      * @docid
      * @type_function_param1 value1:any
@@ -3640,7 +3640,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: CellClickEvent) => any) | string;
+    onCellClick?: ((e: CellClickEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -3895,7 +3895,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowClick?: ((e: RowClickEvent) => any) | string;
+    onRowClick?: ((e: RowClickEvent) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -5164,7 +5164,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, event?: TEvent, row?: RowObject, column?: Column }) => any) | string;
+    onClick?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, event?: TEvent, row?: RowObject, column?: Column }) => any);
     /**
      * @docid
      * @type_function_param1 cellElement:dxElement
