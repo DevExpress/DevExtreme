@@ -102,6 +102,9 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -114,6 +117,9 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -125,6 +131,9 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

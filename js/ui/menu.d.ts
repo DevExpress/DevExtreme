@@ -88,6 +88,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field1 component:dxMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -99,6 +102,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @type_function_param1_field5 cancel:boolean
+     * @type_function_param1_field1 component:dxMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -109,6 +115,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field1 component:dxMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -119,6 +128,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field1 component:dxMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

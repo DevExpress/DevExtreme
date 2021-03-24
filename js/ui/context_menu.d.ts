@@ -105,6 +105,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -115,6 +118,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -126,6 +132,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 position:positionConfig
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -136,6 +145,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -145,6 +157,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

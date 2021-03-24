@@ -499,6 +499,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @type_function_param1_field12 event:event
      * @type_function_param1_field13 cancel:boolean
      * @default null
+     * @type_function_param1_field1 component:dxPivotGrid
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -513,6 +516,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @type_function_param1_field7 rowIndex:number
      * @type_function_param1_field8 columnIndex:number
      * @default null
+     * @type_function_param1_field1 component:dxPivotGrid
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -532,6 +538,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @type_function_param1_field12 columnFields:Array<PivotGridDataSourceOptions.fields>
      * @type_function_param1_field13 field:PivotGridDataSourceOptions.fields
      * @default null
+     * @type_function_param1_field1 component:dxPivotGrid
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -541,6 +550,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxPivotGrid
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -553,6 +565,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
      * @default null
+     * @type_function_param1_field1 component:dxPivotGrid
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -566,6 +581,8 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @type_function_param1_field5 data:BLOB
      * @type_function_param1_field6 cancel:boolean
      * @default null
+     * @type_function_param1_field1 component:dxPivotGrid
+     * @type_function_param1_field2 element:TElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
