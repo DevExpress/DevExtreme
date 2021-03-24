@@ -23,6 +23,19 @@ import CollectionWidget, {
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
 
+/**
+ * @public
+*/
+export interface ItemTitleClickEvent {
+    readonly component: dxAccordion;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly itemData?: any;
+    readonly itemElement: TElement;
+    readonly itemIndex: number;
+    readonly event: TEvent;
+}
+
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**
      * @docid
@@ -123,7 +136,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemTitleClick?: ((e: { component?: dxAccordion, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void) | string;
+    onItemTitleClick?: ((e: ItemTitleClickEvent) => void) | string;
     /**
      * @docid
      * @default false

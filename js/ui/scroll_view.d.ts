@@ -10,6 +10,24 @@ import dxScrollable, {
     dxScrollableOptions
 } from './scroll_view/ui.scrollable';
 
+/**
+ * @public
+*/
+export interface PullDownEvent {
+    readonly component: dxScrollView;
+    readonly element: TElement;
+    readonly model?: any;
+}
+
+/**
+ * @public
+*/
+export interface ReachBottomEvent {
+    readonly component: dxScrollView;
+    readonly element: TElement;
+    readonly model?: any;
+}
+
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
@@ -18,7 +36,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullDown?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => void);
+    onPullDown?: ((e: PullDownEvent) => void);
     /**
      * @docid
      * @default null
@@ -26,7 +44,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReachBottom?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => void);
+    onReachBottom?: ((e: ReachBottomEvent) => void);
     /**
      * @docid
      * @default "Release to refresh..."

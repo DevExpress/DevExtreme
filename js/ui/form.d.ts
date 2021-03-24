@@ -40,6 +40,27 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+/**
+ * @public
+*/
+export interface EditorEnterKeyEvent {
+    readonly component: dxForm;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly dataField?: string;
+}
+
+/**
+ * @public
+*/
+export interface FieldDataChangedEvent {
+    readonly component: dxForm;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly dataField?: string;
+    readonly value?: any;
+}
+
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
@@ -119,7 +140,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorEnterKey?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string }) => void);
+    onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
     /**
      * @docid
      * @default null
@@ -130,7 +151,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFieldDataChanged?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string, value?: any }) => void);
+    onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
     /**
      * @docid
      * @default "optional"

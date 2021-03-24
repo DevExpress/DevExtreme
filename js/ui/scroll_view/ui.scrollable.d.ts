@@ -14,6 +14,36 @@ import {
     TEvent
 } from '../../events/index';
 
+/**
+ * @public
+*/
+export interface ScrollEvent<T = dxScrollable> {
+    readonly component: T;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly event?: TEvent;
+    readonly scrollOffset?: any;
+    readonly reachedLeft?: boolean;
+    readonly reachedRight?: boolean;
+    readonly reachedTop?: boolean;
+    readonly reachedBottom?: boolean;
+}
+
+/**
+ * @public
+*/
+export interface UpdatedEvent<T = dxScrollable> {
+    readonly component: T;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly event?: TEvent;
+    readonly scrollOffset?: any;
+    readonly reachedLeft?: boolean;
+    readonly reachedRight?: boolean;
+    readonly reachedTop?: boolean;
+    readonly reachedBottom?: boolean;
+}
+
 export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
     /**
      * @docid
@@ -52,7 +82,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
+    onScroll?: ((e: ScrollEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -67,7 +97,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUpdated?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
+    onUpdated?: ((e: UpdatedEvent<T>) => void);
     /**
      * @docid
      * @default false [for](non-touch_devices)
