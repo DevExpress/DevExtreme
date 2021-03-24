@@ -1,6 +1,8 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined, isFunction } from '../../core/utils/type';
+import { resetActiveElement } from '../../core/utils/dom';
+import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
 import { executeAsync, noop, ensureDefined, deferRender } from '../../core/utils/common';
 import registerComponent from '../../core/component_registrator';
@@ -553,6 +555,10 @@ const HtmlEditor = Editor.inherit({
         this._applyQuillMethod('setSelection', arguments);
     },
 
+    getText: function(index, length) {
+        return this._applyQuillMethod('getText', arguments);
+    },
+
     format: function(formatName, formatValue) {
         this._applyQuillMethod('format', arguments);
     },
@@ -591,6 +597,10 @@ const HtmlEditor = Editor.inherit({
         return this._applyQuillMethod('getLength');
     },
 
+    getBounds: function(index, length) {
+        return this._applyQuillMethod('getBounds', arguments);
+    },
+
     delete: function(index, length) {
         this._applyQuillMethod('deleteText', arguments);
     },
@@ -611,10 +621,21 @@ const HtmlEditor = Editor.inherit({
         return this._formDialog.popupOption.apply(this._formDialog, arguments);
     },
 
+    update: function() {
+        this._applyQuillMethod('update');
+    },
+
     focus: function() {
         this.callBase();
 
         this._applyQuillMethod('focus');
+    },
+
+    blur: function() {
+        if(this.$element().find(domAdapter.getActiveElement())) {
+            resetActiveElement();
+        }
+        this._applyQuillMethod('blur');
     }
 });
 

@@ -130,6 +130,13 @@ export default class dxHtmlEditor extends Editor {
     constructor(element: TElement, options?: dxHtmlEditorOptions)
     /**
      * @docid
+     * @publicName blur()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    blur(): void;
+    /**
+     * @docid
      * @publicName clearHistory()
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -206,6 +213,24 @@ export default class dxHtmlEditor extends Editor {
     get(componentPath: string): any;
     /**
      * @docid
+     * @publicName getBounds(index, length)
+     * @param1 index:number
+     * @param2 length:number
+     * @return Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getBounds(index: number, length: number): any;
+    /**
+     * @docid
+     * @publicName getFormat()
+     * @return Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getFormat(): any;
+    /**
+     * @docid
      * @publicName getFormat(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -249,6 +274,15 @@ export default class dxHtmlEditor extends Editor {
     getSelection(): any;
     /**
      * @docid
+     * @publicName getText(index, length)
+     * @param1 index:number
+     * @param2 length:number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getText(index: number, length: number): string;
+    /**
+     * @docid
      * @publicName insertEmbed(index, type, config)
      * @param1 index:number
      * @param2 type:string
@@ -257,6 +291,17 @@ export default class dxHtmlEditor extends Editor {
      * @public
      */
     insertEmbed(index: number, type: string, config: any): void;
+    /**
+     * @docid
+     * @publicName insertText(index, text, formatName, formatValue)
+     * @param1 index:number
+     * @param2 text:string
+     * @param3 formatName:Enums.HtmlEditorFormat|string
+     * @param4 formatValue:any
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    insertText(index: number, text: string, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
      * @publicName insertText(index, text, formats)
@@ -307,6 +352,13 @@ export default class dxHtmlEditor extends Editor {
      * @public
      */
     undo(): void;
+    /**
+     * @docid
+     * @publicName update()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    update(): void;
 }
 
 /**

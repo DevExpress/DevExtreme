@@ -127,12 +127,44 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), '<h1>Test 1</h1><h1>Test 2</h1><p>Test 3</p>', 'just block format applied');
     });
 
+    test('getBounds', function(assert) {
+        this.createEditor();
+        this.instance.option({
+            'value': '<p><b>Test Test</b></p>',
+            'width': 400,
+            'height': 200
+        });
+
+        const bounds = this.instance.getBounds(2, 7);
+        assert.roughEqual(bounds.top, 12, 5, 'correct top');
+        assert.roughEqual(bounds.left, 30, 5, 'correct left');
+        assert.roughEqual(bounds.width, 42, 5, 'correct width');
+        assert.roughEqual(bounds.height, 19, 5, 'correct height');
+    });
+
     test('getFormat', function(assert) {
         this.createEditor();
         this.instance.option('value', '<p><b>Test Test</b></p>');
 
         const format = this.instance.getFormat(1, 2);
         assert.deepEqual(format, { bold: true }, 'correct format');
+    });
+
+    test('getFormat for current selection', function(assert) {
+        this.createEditor();
+        this.instance.option('value', '<p><b>Test Test</b></p>');
+        this.instance.setSelection(2, 3);
+
+        const format = this.instance.getFormat(1, 2);
+        assert.deepEqual(format, { bold: true }, 'correct format');
+    });
+
+    test('getText', function(assert) {
+        this.createEditor();
+        this.instance.option('value', '<p><b>Test Test</b></p>');
+
+        const text = this.instance.getText(2, 5);
+        assert.strictEqual(text, 'st Te', 'correct text');
     });
 
     test('removeFormat', function(assert) {
@@ -162,6 +194,14 @@ testModule('API', moduleConfig, () => {
         this.createEditor();
         this.instance.insertText(1, 'one');
         this.instance.insertText(6, 'two', { italic: true });
+
+        assert.strictEqual(this.instance.option('value'), '<p>Tonees<em>two</em>t 1</p><p>Test 2</p><p>Test 3</p>', 'insert simple and formatted text');
+    });
+
+    test('insertText with simple arguments', function(assert) {
+        this.createEditor();
+        this.instance.insertText(1, 'one');
+        this.instance.insertText(6, 'two', 'italic', true);
 
         assert.strictEqual(this.instance.option('value'), '<p>Tonees<em>two</em>t 1</p><p>Test 2</p><p>Test 3</p>', 'insert simple and formatted text');
     });
@@ -256,6 +296,15 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(testModule.getEditor(), this.instance);
     });
 
+    test('\'update\' method should call the quill\'s update', function(assert) {
+        this.createEditor();
+        const updateSpy = sinon.spy(this.instance.getQuillInstance(), 'update');
+
+        this.instance.update();
+
+        assert.ok(updateSpy.calledOnce, 'Quill update() should triggered on the editor\'s update()');
+    });
+
     test('\'focus\' method should call the quill\'s focus', function(assert) {
         this.createEditor();
         const focusSpy = sinon.spy(this.instance.getQuillInstance(), 'focus');
@@ -263,6 +312,28 @@ testModule('API', moduleConfig, () => {
         this.instance.focus();
 
         assert.ok(focusSpy.calledOnce, 'Quill focus() should triggered on the editor\'s focus()');
+    });
+
+    test('\'blur\' method should call the quill\'s blur', function(assert) {
+        this.createEditor();
+        const blurSpy = sinon.spy(this.instance.getQuillInstance(), 'blur');
+
+        this.instance.blur();
+
+        assert.ok(blurSpy.calledOnce, 'Quill blur() should triggered on the editor\'s blur()');
+    });
+
+    test('\'blur\' method should remove focus from any htmlEditor element', function(assert) {
+        this.createEditor();
+        const internalElement = $('<input type="button">');
+        const blurSpy = sinon.spy();
+        internalElement.appendTo(this.instance.element());
+        internalElement.on('focusout', blurSpy);
+
+        internalElement.focus();
+        this.instance.blur();
+
+        assert.ok(blurSpy.calledOnce, 'Internal element blur() should triggered on the editor\'s blur()');
     });
 
     test('change value via \'option\' method should correctly update content', function(assert) {
