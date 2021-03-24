@@ -104,6 +104,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -143,6 +144,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

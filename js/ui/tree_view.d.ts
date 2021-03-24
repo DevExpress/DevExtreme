@@ -320,6 +320,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -32,6 +32,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -40,6 +41,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
