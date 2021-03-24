@@ -1348,7 +1348,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     renderRAllDayPanel() {
         const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
 
-        if(this.supportAllDayRow()) {
+        if(this.supportAllDayRow() && !this._isVerticalGroupedWorkSpace()) {
             this._toggleAllDayVisibility(false);
 
             const groupCount = this._getGroupCount();
@@ -1371,9 +1371,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 );
             }
 
-            !this._isVerticalGroupedWorkSpace() && this.renderRComponent(
-                this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible },
-            );
+            this.renderRComponent(this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
             this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
 
             this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
