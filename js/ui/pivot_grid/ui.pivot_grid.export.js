@@ -178,7 +178,7 @@ export const DataProvider = Class.inherit({
     },
 
     getFrozenArea: function() {
-        return { x: this.getRowAreaSize(), y: this.getColumnAreaSize() };
+        return { x: this.getRowAreaColCount(), y: this.getColumnAreaRowCount() };
     },
 
     getCellType: function(rowIndex, cellIndex) {
@@ -225,18 +225,18 @@ export const DataProvider = Class.inherit({
     },
 
     isRowAreaCell(rowIndex, cellIndex) {
-        return rowIndex >= this.getColumnAreaSize() && cellIndex < this.getRowAreaSize();
+        return rowIndex >= this.getColumnAreaRowCount() && cellIndex < this.getRowAreaColCount();
     },
 
     isColumnAreaCell(rowIndex, cellIndex) {
-        return cellIndex >= this.getRowAreaSize() && rowIndex < this.getColumnAreaSize();
+        return cellIndex >= this.getRowAreaColCount() && rowIndex < this.getColumnAreaRowCount();
     },
 
-    getColumnAreaSize() {
+    getColumnAreaRowCount() {
         return this._options.items[0][0].rowspan;
     },
 
-    getRowAreaSize() {
+    getRowAreaColCount() {
         return this._options.items[0][0].colspan;
     },
 
