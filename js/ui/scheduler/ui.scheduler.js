@@ -127,8 +127,8 @@ const StoreEventNames = {
 };
 
 const RECURRENCE_EDITING_MODE = {
-    EDIT_SERIES: 'editSeries',
-    EDIT_OCCURENCE: 'editOccurence',
+    SERIES: 'editSeries',
+    OCCURENCE: 'editOccurence',
     CANCEL: 'cancel',
 };
 
@@ -1690,9 +1690,9 @@ class Scheduler extends Widget {
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
                     .done((editingMode) => {
-                        editingMode === RECURRENCE_EDITING_MODE.EDIT_SERIES && callback();
+                        editingMode === RECURRENCE_EDITING_MODE.SERIES && callback();
 
-                        editingMode === RECURRENCE_EDITING_MODE.EDIT_OCCURENCE && this._excludeAppointmentFromSeries(
+                        editingMode === RECURRENCE_EDITING_MODE.OCCURENCE && this._excludeAppointmentFromSeries(
                             targetAppointment, singleAppointment, exceptionDate,
                             isDeleted, isPopupEditing, dragEvent,
                         );
@@ -1762,8 +1762,8 @@ class Scheduler extends Widget {
             showCloseButton: true,
             showTitle: true,
             buttons: [
-                { text: seriesText, onClick: function() { return RECURRENCE_EDITING_MODE.EDIT_SERIES; } },
-                { text: occurrenceText, onClick: function() { return RECURRENCE_EDITING_MODE.EDIT_OCCURENCE; } }
+                { text: seriesText, onClick: function() { return RECURRENCE_EDITING_MODE.SERIES; } },
+                { text: occurrenceText, onClick: function() { return RECURRENCE_EDITING_MODE.OCCURENCE; } }
             ],
             popupOptions: {
                 onHidden: (e) => {
