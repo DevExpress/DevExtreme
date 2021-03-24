@@ -1,4 +1,4 @@
-import { type } from '../../../../core/utils/type';
+import { type } from '../../../../../core/utils/type';
 
 interface ResultItem {
   path: string;

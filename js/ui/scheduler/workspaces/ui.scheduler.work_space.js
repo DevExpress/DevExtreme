@@ -37,6 +37,7 @@ import { resetPosition, locate } from '../../../animation/translator';
 import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
 import ViewDataProvider from './view_data_provider';
 
+import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
 import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
@@ -99,9 +100,12 @@ const SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS = 'dx-scheduler-date-table-scrollabl
 
 const SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerWorkSpace');
 
-const SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME = addNamespace(dragEventEnter, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXDROP_EVENT_NAME = addNamespace(dragEventDrop, 'dxSchedulerDateTable');
-const SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME = addNamespace(dragEventLeave, 'dxSchedulerDateTable');
+const DragEventNames = {
+    ENTER: addNamespace(dragEventEnter, 'dxSchedulerDateTable'),
+    DROP: addNamespace(dragEventDrop, 'dxSchedulerDateTable'),
+    LEAVE: addNamespace(dragEventLeave, 'dxSchedulerDateTable')
+};
+
 const SCHEDULER_CELL_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxSchedulerDateTable');
 
 const SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, 'dxSchedulerDateTable');
@@ -118,8 +122,7 @@ const DATE_TABLE_MIN_CELL_WIDTH = 75;
 const DAY_MS = toMs('day');
 const HOUR_MS = toMs('hour');
 
-const SCHEDULER_DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
-
+const DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
 const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
 
 class ScrollSemaphore {
@@ -619,7 +622,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolling: {
                 mode: 'standard',
             },
-            renovateRender: false,
+            renovateRender: true,
             height: undefined
         });
     }
@@ -1267,6 +1270,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             totalCellCount: cellCount,
             groupCount,
             getDateHeaderText: this._getHeaderText.bind(this),
+            getDateHeaderDate: this._getDateByIndex.bind(this),
+            getTimeCellDate: this._getTimeCellDate.bind(this),
             today: this._getToday?.(),
             groupByDate: this.isGroupedByDate(),
             groupsList: this._getAllGroups(),
@@ -1299,6 +1304,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.updateRSelection();
 
         this.virtualScrollingDispatcher?.updateDimensions();
+    }
+
+    renderRDateTable() {
+        this.renderRComponent(
+            this._$dateTable,
+            dxrDateTableLayout,
+            'renovatedDateTable',
+            this._getRDateTableProps(),
+        );
     }
 
     renderRGroupPanel() {
@@ -2188,64 +2202,58 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _attachTablesEvents() {
-        const that = this;
-        let isPointerDown = false;
-        let cellHeight;
-        let cellWidth;
-        const $element = this.$element();
+        const element = this.$element();
 
-        eventsEngine.off($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXDROP_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
-        eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
-        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
-            itemSizeFunc($element) {
-                if(!cellHeight) {
-                    cellHeight = getBoundingRect($element.get(0)).height;
-                }
-                if(!cellWidth) {
-                    cellWidth = getBoundingRect($element.get(0)).width;
-                }
-                return {
-                    width: cellWidth,
-                    height: cellHeight
-                };
-            },
-            checkDropTarget: (target, event) => !this._isOutsideScrollable(target, event)
-        }, function(e) {
-            if(that._$currentTableTarget) {
-                that.removeDroppableCellClass(that._$currentTableTarget);
-            }
-            that._$currentTableTarget = $(e.target);
-            that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
-        });
-        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME, function(e) {
-            if(!$element.find($(e.draggingElement)).length) {
-                that.removeDroppableCellClass();
-            }
-        });
-        eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
-            that.removeDroppableCellClass($(e.target));
-            cellHeight = 0;
-            cellWidth = 0;
-        });
-        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
+        this._attachDragEvents(element);
+        this._attachPointerEvents(element);
+    }
+
+    __detachDragEvents(element) {
+        eventsEngine.off(element, DragEventNames.ENTER);
+        eventsEngine.off(element, DragEventNames.LEAVE);
+        eventsEngine.off(element, DragEventNames.DROP);
+    }
+
+    _attachDragEvents(element) {
+        this.__detachDragEvents(element);
+
+        const onDragEnter = e => {
+            this.removeDroppableCellClass();
+            $(e.target).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        };
+
+        const onCheckDropTarget = (target, event) => {
+            return !this._isOutsideScrollable(target, event);
+        };
+
+        eventsEngine.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, { checkDropTarget: onCheckDropTarget }, onDragEnter);
+        eventsEngine.on(element, DragEventNames.LEAVE, () => this.removeDroppableCellClass());
+        eventsEngine.on(element, DragEventNames.DROP, DRAG_AND_DROP_SELECTOR, () => this.removeDroppableCellClass());
+    }
+
+    _attachPointerEvents(element) {
+        let isPointerDown = false;
+
+        eventsEngine.off(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
+        eventsEngine.off(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
+
+        eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, DRAG_AND_DROP_SELECTOR, e => {
             if(isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
-                that.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
+                this.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
                 eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-                eventsEngine.on(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, function() {
+                eventsEngine.on(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, () => {
                     isPointerDown = false;
-                    that.$element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
+                    this.$element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
                 });
             }
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
-            if(isPointerDown && that._dateTableScrollable && !that._dateTableScrollable.option('scrollByContent')) {
+
+        eventsEngine.on(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, DRAG_AND_DROP_SELECTOR, e => {
+            if(isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
                 e.preventDefault();
                 e.stopPropagation();
-                that._moveToCell($(e.target), true);
+                this._moveToCell($(e.target), true);
             }
         });
     }

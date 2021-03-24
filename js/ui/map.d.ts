@@ -1,11 +1,13 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
-    event
+    TPromise
+} from '../core/utils/deferred';
+
+import {
+    TEvent
 } from '../events/index';
 
 import Widget, {
@@ -172,7 +174,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     }>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 location:object
      * @type_function_param1_field5 event:event
@@ -180,10 +182,10 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxMap, element?: dxElement, model?: any, location?: any, event?: event }) => any) | string;
+    onClick?: ((e: { component?: dxMap, element?: TElement, model?: any, location?: any, event?: TEvent }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalMarker:object
@@ -191,30 +193,30 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMarkerAdded?: ((e: { component?: dxMap, element?: dxElement, model?: any, options?: any, originalMarker?: any }) => any);
+    onMarkerAdded?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any, originalMarker?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMarkerRemoved?: ((e: { component?: dxMap, element?: dxElement, model?: any, options?: any }) => any);
+    onMarkerRemoved?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 originalMap:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReady?: ((e: { component?: dxMap, element?: dxElement, model?: any, originalMap?: any }) => any);
+    onReady?: ((e: { component?: dxMap, element?: TElement, model?: any, originalMap?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalRoute:object
@@ -222,17 +224,17 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRouteAdded?: ((e: { component?: dxMap, element?: dxElement, model?: any, options?: any, originalRoute?: any }) => any);
+    onRouteAdded?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any, originalRoute?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRouteRemoved?: ((e: { component?: dxMap, element?: dxElement, model?: any, options?: any }) => any);
+    onRouteRemoved?: ((e: { component?: dxMap, element?: TElement, model?: any, options?: any }) => void);
     /**
      * @docid
      * @type Enums.GeoMapProvider
@@ -317,8 +319,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
  * @public
  */
 export default class dxMap extends Widget {
-    constructor(element: Element, options?: dxMapOptions)
-    constructor(element: JQuery, options?: dxMapOptions)
+    constructor(element: TElement, options?: dxMapOptions)
     /**
      * @docid
      * @publicName addMarker(markerOptions)
@@ -327,7 +328,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addMarker(markerOptions: any | Array<any>): Promise<any> & JQueryPromise<any>;
+    addMarker(markerOptions: any | Array<any>): TPromise<any>;
     /**
      * @docid
      * @publicName addRoute(routeOptions)
@@ -336,7 +337,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRoute(options: any | Array<any>): Promise<any> & JQueryPromise<any>;
+    addRoute(options: any | Array<any>): TPromise<any>;
     /**
      * @docid
      * @publicName removeMarker(marker)
@@ -345,7 +346,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    removeMarker(marker: any | number | Array<any>): Promise<void> & JQueryPromise<void>;
+    removeMarker(marker: any | number | Array<any>): TPromise<void>;
     /**
      * @docid
      * @publicName removeRoute(route)
@@ -354,18 +355,9 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    removeRoute(route: any | number | Array<any>): Promise<void> & JQueryPromise<void>;
+    removeRoute(route: any | number | Array<any>): TPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxMap(): JQuery;
-    dxMap(options: "instance"): dxMap;
-    dxMap(options: string): any;
-    dxMap(options: string, ...params: any[]): any;
-    dxMap(options: dxMapOptions): JQuery;
-}
-}
 export type Options = dxMapOptions;
 
 /** @deprecated use Options instead */

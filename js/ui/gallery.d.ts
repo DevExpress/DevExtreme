@@ -1,4 +1,10 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import DataSource, {
     DataSourceOptions
@@ -131,8 +137,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
  * @public
  */
 export default class dxGallery extends CollectionWidget {
-    constructor(element: Element, options?: dxGalleryOptions)
-    constructor(element: JQuery, options?: dxGalleryOptions)
+    constructor(element: TElement, options?: dxGalleryOptions)
     /**
      * @docid
      * @publicName goToItem(itemIndex, animation)
@@ -142,7 +147,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    goToItem(itemIndex: number, animation: boolean): Promise<void> & JQueryPromise<void>;
+    goToItem(itemIndex: number, animation: boolean): TPromise<void>;
     /**
      * @docid
      * @publicName nextItem(animation)
@@ -151,7 +156,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    nextItem(animation: boolean): Promise<void> & JQueryPromise<void>;
+    nextItem(animation: boolean): TPromise<void>;
     /**
      * @docid
      * @publicName prevItem(animation)
@@ -160,7 +165,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    prevItem(animation: boolean): Promise<void> & JQueryPromise<void>;
+    prevItem(animation: boolean): TPromise<void>;
 }
 
 /**
@@ -183,15 +188,6 @@ export interface dxGalleryItem extends CollectionWidgetItem {
     imageSrc?: string;
 }
 
-declare global {
-interface JQuery {
-    dxGallery(): JQuery;
-    dxGallery(options: "instance"): dxGallery;
-    dxGallery(options: string): any;
-    dxGallery(options: string, ...params: any[]): any;
-    dxGallery(options: dxGalleryOptions): JQuery;
-}
-}
 export type Options = dxGalleryOptions;
 
 /** @deprecated use Options instead */

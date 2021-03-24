@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -40,7 +40,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @deprecated
@@ -60,8 +60,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @public
  */
 export default class dxToolbar extends CollectionWidget {
-    constructor(element: Element, options?: dxToolbarOptions)
-    constructor(element: JQuery, options?: dxToolbarOptions)
+    constructor(element: TElement, options?: dxToolbarOptions)
 }
 
 
@@ -100,7 +99,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | (() => string | Element | JQuery);
+    menuItemTemplate?: template | (() => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -124,15 +123,6 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 }
 
-declare global {
-interface JQuery {
-    dxToolbar(): JQuery;
-    dxToolbar(options: "instance"): dxToolbar;
-    dxToolbar(options: string): any;
-    dxToolbar(options: string, ...params: any[]): any;
-    dxToolbar(options: dxToolbarOptions): JQuery;
-}
-}
 export type Options = dxToolbarOptions;
 
 /** @deprecated use Options instead */

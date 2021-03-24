@@ -1,5 +1,3 @@
-import '../../jquery_augmentation';
-
 import DOMComponent, {
     DOMComponentOptions
 } from '../../core/dom_component';
@@ -9,8 +7,12 @@ import {
 } from '../../core/devices';
 
 import {
-    dxElement
+    TElement
 } from '../../core/element';
+
+import {
+    TPromise
+} from '../../core/utils/deferred';
 
 import {
     format
@@ -62,33 +64,33 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     margin?: BaseWidgetMargin;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrawn?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onDrawn?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExported?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onExported?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 format:string
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExporting?: ((e: { component?: T, element?: dxElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => any);
+    onExporting?: ((e: { component?: T, element?: TElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -96,22 +98,22 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @type_function_param1_field4 format:string
      * @type_function_param1_field5 data:BLOB
      * @type_function_param1_field6 cancel:boolean
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onFileSaving?: ((e: { component?: T, element?: dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+    onFileSaving?: ((e: { component?: T, element?: TElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:any
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onIncidentOccurred?: ((e: { component?: T, element?: dxElement, model?: any, target?: any }) => any);
+    onIncidentOccurred?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
      * @default false
@@ -235,7 +237,7 @@ export interface BaseWidgetExport {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => Promise<void> | JQueryPromise<void>);
+    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => TPromise<void>);
 }
 export interface BaseWidgetLoadingIndicator {
     /**
@@ -512,7 +514,7 @@ export interface BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | TElement;
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0
@@ -615,8 +617,7 @@ export interface BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseWidget extends DOMComponent {
-    constructor(element: Element, options?: BaseWidgetOptions)
-    constructor(element: JQuery, options?: BaseWidgetOptions)
+    constructor(element: TElement, options?: BaseWidgetOptions)
     /**
      * @docid
      * @static

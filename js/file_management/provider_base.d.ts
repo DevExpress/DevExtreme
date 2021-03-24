@@ -1,6 +1,9 @@
-import '../jquery_augmentation';
 import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
@@ -58,7 +61,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItems(parentDirectory: FileSystemItem): Promise<Array<FileSystemItem>> & JQueryPromise<Array<FileSystemItem>>;
+    getItems(parentDirectory: FileSystemItem): TPromise<Array<FileSystemItem>>;
 
     /**
      * @docid
@@ -69,7 +72,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    renameItem(item: FileSystemItem, newName: string): Promise<any> & JQueryPromise<any>;
+    renameItem(item: FileSystemItem, newName: string): TPromise<any>;
 
     /**
      * @docid
@@ -80,7 +83,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    createDirectory(parentDirectory: FileSystemItem, name: string): Promise<any> & JQueryPromise<any>;
+    createDirectory(parentDirectory: FileSystemItem, name: string): TPromise<any>;
 
     /**
      * @docid
@@ -90,7 +93,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    deleteItems(items: Array<FileSystemItem>): Array<Promise<any> & JQueryPromise<any>>;
+    deleteItems(items: Array<FileSystemItem>): Array<TPromise<any>>;
 
     /**
      * @docid
@@ -101,7 +104,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> & JQueryPromise<any>>;
+    moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<TPromise<any>>;
 
     /**
      * @docid
@@ -112,7 +115,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> & JQueryPromise<any>>;
+    copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<TPromise<any>>;
 
     /**
      * @docid
@@ -124,7 +127,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+    uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): TPromise<any>;
 
     /**
      * @docid
@@ -136,7 +139,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+    abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): TPromise<any>;
 
     /**
      * @docid
@@ -155,5 +158,5 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItemsContent(items: Array<FileSystemItem>): Promise<any> & JQueryPromise<any>;
+    getItemsContent(items: Array<FileSystemItem>): TPromise<any>;
 }

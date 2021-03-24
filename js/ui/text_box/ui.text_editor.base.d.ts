@@ -1,11 +1,9 @@
-import '../../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
-    event
+    TEvent
 } from '../../events/index';
 
 import dxButton, {
@@ -83,88 +81,87 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     name?: string;
     /**
      * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onChange?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onCopy?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onCut?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onEnterKey?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onFocusIn?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onFocusOut?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onInput?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
-    /**
-     * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
+    onChange?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onCopy?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onCut?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onEnterKey?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onFocusIn?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onFocusOut?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onInput?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onKeyDown?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
+    /**
+     * @docid
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @deprecated
@@ -172,27 +169,27 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyPress?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
+    onKeyPress?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyUp?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
+    onKeyUp?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPaste?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
+    onPaste?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
      * @default ""
@@ -267,8 +264,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxTextEditor extends Editor {
-    constructor(element: Element, options?: dxTextEditorOptions)
-    constructor(element: JQuery, options?: dxTextEditorOptions)
+    constructor(element: TElement, options?: dxTextEditorOptions)
     /**
      * @docid
      * @publicName blur()

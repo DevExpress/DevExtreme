@@ -1,7 +1,5 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -9,7 +7,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -119,7 +117,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
+    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
@@ -160,7 +158,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     minDiameter?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:String|Number
@@ -170,7 +168,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxPieChart, element?: dxElement, model?: any, event?: event, target?: string | number, points?: Array<piePointObject> }) => any) | string;
+    onLegendClick?: ((e: { component?: dxPieChart, element?: TElement, model?: any, event?: TEvent, target?: string | number, points?: Array<piePointObject> }) => void) | string;
     /**
      * @docid
      * @extends CommonVizPalette
@@ -335,7 +333,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
@@ -345,7 +343,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: TElement) => string | TElement);
 }
 export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
@@ -405,7 +403,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
 }
 /**
  * @docid
@@ -416,8 +414,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
  * @public
  */
 export default class dxPieChart extends BaseChart {
-    constructor(element: Element, options?: dxPieChartOptions)
-    constructor(element: JQuery, options?: dxPieChartOptions)
+    constructor(element: TElement, options?: dxPieChartOptions)
     /**
      * @docid
      * @publicName getInnerRadius()
@@ -939,15 +936,6 @@ export interface pieChartSeriesObject extends baseSeriesObject {
   isHovered(): boolean;
 }
 
-declare global {
-interface JQuery {
-    dxPieChart(): JQuery;
-    dxPieChart(options: "instance"): dxPieChart;
-    dxPieChart(options: string): any;
-    dxPieChart(options: string, ...params: any[]): any;
-    dxPieChart(options: dxPieChartOptions): JQuery;
-}
-}
 export type Options = dxPieChartOptions;
 
 /** @deprecated use Options instead */

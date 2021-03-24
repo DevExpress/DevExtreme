@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -173,20 +177,10 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
  * @public
  */
 export default class dxSparkline extends BaseSparkline {
-    constructor(element: Element, options?: dxSparklineOptions)
-    constructor(element: JQuery, options?: dxSparklineOptions)
+    constructor(element: TElement, options?: dxSparklineOptions)
     getDataSource(): DataSource;
 }
 
-declare global {
-interface JQuery {
-    dxSparkline(): JQuery;
-    dxSparkline(options: "instance"): dxSparkline;
-    dxSparkline(options: string): any;
-    dxSparkline(options: string, ...params: any[]): any;
-    dxSparkline(options: dxSparklineOptions): JQuery;
-}
-}
 export type Options = dxSparklineOptions;
 
 /** @deprecated use Options instead */

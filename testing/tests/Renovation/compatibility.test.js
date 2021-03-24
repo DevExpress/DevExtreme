@@ -11,8 +11,7 @@ import 'ui/pager';
 const PRIVATE_JQUERY_WIDGETS = [
     'Widget',
     'TimePanelTableLayout', 'GroupPanel', 'HeaderPanelLayout', 'TimelineHeaderPanelLayout',
-    'DayDateTableLayout', 'WeekTableLayout', 'TimelineDateTableLayout',
-    'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
+    'DateTableLayoutBase', 'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
     'GridPager', 'Scrollable',
 ];
 const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet'];

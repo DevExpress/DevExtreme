@@ -1,15 +1,17 @@
-import '../../jquery_augmentation';
-
 import DOMComponent, {
     DOMComponentOptions
 } from '../../core/dom_component';
 
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
-    event
+    TPromise
+} from '../../core/utils/deferred';
+
+import {
+    TEvent
 } from '../../events/index';
 
 export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
@@ -38,7 +40,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     disabled?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -50,10 +52,10 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -65,7 +67,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUpdated?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onUpdated?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
     /**
      * @docid
      * @default false [for](non-touch_devices)
@@ -109,8 +111,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxScrollable extends DOMComponent {
-    constructor(element: Element, options?: dxScrollableOptions)
-    constructor(element: JQuery, options?: dxScrollableOptions)
+    constructor(element: TElement, options?: dxScrollableOptions)
     /**
      * @docid
      * @publicName clientHeight()
@@ -134,7 +135,7 @@ export default class dxScrollable extends DOMComponent {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): dxElement;
+    content(): TElement;
     /**
      * @docid
      * @publicName scrollBy(distance)
@@ -182,7 +183,7 @@ export default class dxScrollable extends DOMComponent {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToElement(element: Element | JQuery): void;
+    scrollToElement(element: TElement): void;
     /**
      * @docid
      * @publicName scrollTop()
@@ -206,5 +207,5 @@ export default class dxScrollable extends DOMComponent {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    update(): Promise<void> & JQueryPromise<void>;
+    update(): TPromise<void>;
 }

@@ -1,4 +1,4 @@
-name: QUnit tests
+name: IE QUnit tests
 
 on: [push, pull_request]
 
