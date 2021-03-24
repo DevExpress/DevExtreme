@@ -412,12 +412,12 @@ QUnit.module('Scenarios', moduleConfig, () => {
         const ds = {
             fields: [
                 { area: 'row', dataField: 'row1', dataType: 'string' },
-                { area: 'column', dataField: 'col1', dataType: 'string' },
+                { area: 'column', dataField: 'col1', dataType: 'number', format: 'currency' },
                 { area: 'data', summaryType: 'count', dataType: 'number' },
                 { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' }
             ],
             store: [
-                { row1: 'A', col1: 'a', data1: 42 },
+                { row1: 'A', col1: 20, data1: 42 },
             ]
         };
 
@@ -430,21 +430,33 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
         const expectedCells = [[
             { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 2, text: '' } },
-            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: 'a', type: 'D' } },
-            { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['a'], rowspan: 1, text: '', type: 'D' } }
+            { excelCell: { value: '$20', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap, fill: { 'fgColor': { 'argb': 'FFC7CE' }, 'pattern': 'solid', 'type': 'pattern' }, font: { 'bold': true, 'color': { 'argb': '9C0006' } } }, pivotCell: { area: 'column', colspan: 2, dataSourceIndex: 1, path: ['20'], rowspan: 1, text: '$20', type: 'D' } },
+            { excelCell: { value: '$20', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap, fill: { 'fgColor': { 'argb': 'FFC7CE' }, 'pattern': 'solid', 'type': 'pattern' }, font: { 'bold': true, 'color': { 'argb': '9C0006' } } }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, path: ['20'], rowspan: 1, text: '', type: 'D' } }
         ], [
             { excelCell: { value: '', master: [1, 1], type: ExcelJS.ValueType.Merge, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
-            { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
-            { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
+            { excelCell: { value: 'Count', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 0, dataSourceIndex: 1, isLast: true, path: ['20'], rowspan: 1, text: 'Count', type: 'D', width: 100 } },
+            { excelCell: { value: 'Data1 (Sum)', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataIndex: 1, dataSourceIndex: 1, isLast: true, path: ['20'], rowspan: 1, text: 'Data1 (Sum)', type: 'D', width: 100 } }
         ], [
             { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
-            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
-            { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
+            { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['20'], columnType: 'D', dataIndex: 0, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '1' } },
+            { excelCell: { value: 42, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['20'], columnType: 'D', dataIndex: 1, dataType: 'number', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '42' } }
         ]];
 
         helper.extendExpectedCells(expectedCells, topLeft);
 
-        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, { mergeColumnFieldValues: false })).then((cellRange) => {
+        exportPivotGrid(getOptions(this, pivotGrid, expectedCells, {
+            mergeColumnFieldValues: false,
+            customizeCell: ({ excelCell, pivotCell }) => {
+                if(pivotCell.area === 'column' && pivotCell.text === '$20') {
+                    Object.assign(excelCell, {
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        font: { color: { argb: '9C0006' }, bold: true }
+                    });
+                }
+            }
+        })).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
             helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
