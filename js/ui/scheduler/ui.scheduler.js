@@ -126,6 +126,12 @@ const StoreEventNames = {
     UPDATED: 'onAppointmentUpdated'
 };
 
+const RECURRENCE_EDITING_MODE = {
+    SERIES: 'editSeries',
+    OCCURENCE: 'editOccurence',
+    CANCEL: 'cancel',
+};
+
 class Scheduler extends Widget {
     get appointmentFilter() { return new AppointmentFilter(this); }
 
@@ -1185,6 +1191,8 @@ class Scheduler extends Widget {
 
     _dispose() {
         this._appointmentTooltip && this._appointmentTooltip.dispose();
+        this._recurrenceDialog?.hide(RECURRENCE_EDITING_MODE.CANCEL);
+
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
 
@@ -1687,9 +1695,13 @@ class Scheduler extends Widget {
                     dragEvent.cancel = new Deferred();
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
-                    .done(result => {
-                        result && callback();
-                        !result && this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+                    .done((editingMode) => {
+                        editingMode === RECURRENCE_EDITING_MODE.SERIES && callback();
+
+                        editingMode === RECURRENCE_EDITING_MODE.OCCURENCE && this._excludeAppointmentFromSeries(
+                            targetAppointment, singleAppointment, exceptionDate,
+                            isDeleted, isPopupEditing, dragEvent,
+                        );
                     })
                     .fail(() => this._appointments.moveAppointmentBack(dragEvent));
         }
@@ -1751,15 +1763,22 @@ class Scheduler extends Widget {
         const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
         const occurrenceText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteOccurrence' : 'dxScheduler-confirmRecurrenceEditOccurrence');
 
-        return customDialog({
+        this._recurrenceDialog = customDialog({
             messageHtml: message,
             showCloseButton: true,
             showTitle: true,
             buttons: [
-                { text: seriesText, onClick: function() { return true; } },
-                { text: occurrenceText, onClick: function() { return false; } }
-            ]
-        }).show();
+                { text: seriesText, onClick: function() { return RECURRENCE_EDITING_MODE.SERIES; } },
+                { text: occurrenceText, onClick: function() { return RECURRENCE_EDITING_MODE.OCCURENCE; } }
+            ],
+            popupOptions: {
+                onHidden: (e) => {
+                    e.component.$element().remove();
+                },
+            },
+        });
+
+        return this._recurrenceDialog.show();
     }
 
     _getUpdatedData(rawAppointment) {
