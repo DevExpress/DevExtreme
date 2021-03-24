@@ -20,27 +20,21 @@ export const editingRowBasedModule = {
                 },
 
                 _isDefaultButtonVisible: function(button, options) {
-                    let result = true;
                     const isRowMode = this.isRowBasedEditMode();
                     const isEditRow = options.row && options.row.rowIndex === this._getVisibleEditRowIndex();
 
                     if(isRowMode) {
                         switch(button.name) {
                             case 'edit':
-                                result = !isEditRow && this.allowUpdating(options);
-                                break;
+                                return !isEditRow && this.allowUpdating(options);
                             case 'delete':
-                                result = this.callBase.apply(this, arguments) && !isEditRow;
-                                break;
+                                return this.callBase.apply(this, arguments) && !isEditRow;
                             case 'save':
                             case 'cancel':
-                                result = isEditRow;
-                                break;
+                                return isEditRow;
                             default:
-                                result = this.callBase.apply(this, arguments);
+                                return this.callBase.apply(this, arguments);
                         }
-
-                        return result;
                     }
 
                     return this.callBase.apply(this, arguments);

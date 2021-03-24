@@ -476,8 +476,6 @@ export default {
                 },
 
                 _isDefaultButtonVisible: function(button, options) {
-                    let result = true;
-
                     if(this.isCellOrBatchEditMode()) {
                         const isBatchMode = this.isBatchEditMode();
 
@@ -485,19 +483,14 @@ export default {
                             case 'save':
                             case 'cancel':
                             case 'edit':
-                                result = false;
-                                break;
+                                return false;
                             case 'delete':
-                                result = this.callBase.apply(this, arguments) && (!isBatchMode || !options.row.removed);
-                                break;
+                                return this.callBase.apply(this, arguments) && (!isBatchMode || !options.row.removed);
                             case 'undelete':
-                                result = isBatchMode && this.allowDeleting(options) && options.row.removed;
-                                break;
+                                return isBatchMode && this.allowDeleting(options) && options.row.removed;
                             default:
-                                result = this.callBase.apply(this, arguments);
+                                return this.callBase.apply(this, arguments);
                         }
-
-                        return result;
                     }
 
                     return this.callBase.apply(this, arguments);
