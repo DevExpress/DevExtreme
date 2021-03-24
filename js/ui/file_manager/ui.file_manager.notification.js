@@ -112,7 +112,7 @@ export default class FileManagerNotificationControl extends Widget {
 
         if(!this._isProgressDrawerOpened() || !this._tryHideActionProgress()) {
             let status = ACTION_PROGRESS_STATUS.success;
-            if(this._hasNoOperations()) {
+            if(this._hasNoOperations() && this._progressPanel.isEmpty()) {
                 status = ACTION_PROGRESS_STATUS.default;
             } else if(this.failedOperationCount !== 0) {
                 status = ACTION_PROGRESS_STATUS.error;
@@ -195,7 +195,7 @@ export default class FileManagerNotificationControl extends Widget {
     _ensureProgressPanelCreated(container) {
         if(!this._progressPanel) {
             const $progressPanelElement = $('<div>').appendTo(container);
-            this._progressPanel = this._createComponent($progressPanelElement, FileManagerProgressPanel, {
+            this._progressPanel = this._createComponent($progressPanelElement, this._getProgressPanelComponent(), {
                 onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
                 onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
                 onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
@@ -205,6 +205,11 @@ export default class FileManagerNotificationControl extends Widget {
         } else {
             this._progressPanel.$element().appendTo(container);
         }
+    }
+
+    // needed for editingProgress.tests.js
+    _getProgressPanelComponent() {
+        return FileManagerProgressPanel;
     }
 
     _hasNoOperations() {

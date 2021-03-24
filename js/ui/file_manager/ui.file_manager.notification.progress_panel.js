@@ -261,6 +261,10 @@ class FileManagerProgressPanel extends Widget {
         this._renderOperationError(detailsItem, errorText);
     }
 
+    isEmpty() {
+        return this._$infosContainer.children(`.${FILE_MANAGER_PROGRESS_PANEL_INFO_CLASS}`).length === 0;
+    }
+
     _clearOperationsList() {
         this._operationCount = 0;
         this._$infosContainer.empty();
