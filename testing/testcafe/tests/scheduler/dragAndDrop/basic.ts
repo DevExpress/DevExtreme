@@ -41,7 +41,7 @@ test('Drag-n-drop when browser has horizontal scroll', async (t) => {
   const draggableAppointment = scheduler.getAppointment('Staff Productivity Report');
 
   await t
-    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(6))
+    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(6), { speed: 0.5 })
     .expect(draggableAppointment.isAllDay).eql(true);
 }).before(() => createScheduler({
   views: ['week'],
