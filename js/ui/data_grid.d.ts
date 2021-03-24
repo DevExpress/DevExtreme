@@ -72,7 +72,7 @@ import Widget, {
 /**
  * @public
  */
-export interface FilterPanelCustomizeTextBaseArg<T> { 
+export interface FilterPanelCustomizeTextArg<T> { 
   readonly component: T,
   readonly filterValue: any,
   readonly text: string
@@ -457,7 +457,7 @@ export interface FilterPanel<T extends GridBase> {
    * @type_function_param1_field3 text:string
    * @type_function_return string
    */
-  customizeText?: ((e: FilterPanelCustomizeTextBaseArg<T>) => string),
+  customizeText?: ((e: FilterPanelCustomizeTextArg<T>) => string),
   /**
    * @docid
    * @prevFileNamespace DevExpress.ui
@@ -2727,6 +2727,16 @@ export interface GridBase {
 }
 
 /**
+ * @public
+ */
+export interface ColumnCustomizeTextArg {
+  value?: string | number | Date;
+  valueText?: string;
+  target?: string;
+  groupInterval?: string | number;
+}
+
+/**
  * @docid
  * @type object
  */
@@ -2862,7 +2872,7 @@ export interface ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string, target?: string, groupInterval?: string | number }) => string);
+    customizeText?: ((cellInfo: ColumnCustomizeTextArg) => string);
     /**
      * @docid
      * @default undefined
@@ -5134,9 +5144,22 @@ export interface ColumnButtonTemplateInfo {
 }
 
 /**
+ * @public
+ */ 
+export interface ColumnButtonClickEvent {
+  component?: dxDataGrid;
+  element?: TElement;
+  model?: any;
+  event?: TEvent;
+  row?: RowObject;
+  column?: Column;
+}
+
+/**
  * @deprecated Use ColumnButton instead
  */ 
- export type dxDataGridColumnButton = ColumnButton;
+export type dxDataGridColumnButton = ColumnButton;
+
 
 /**
  * @docid
@@ -5164,7 +5187,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, event?: TEvent, row?: RowObject, column?: Column }) => any);
+    onClick?: ((e: ColumnButtonClickEvent) => any);
     /**
      * @docid
      * @type_function_param1 cellElement:dxElement
