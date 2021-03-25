@@ -43,7 +43,7 @@ const privateOptions = {
         return options;
     },
 
-    _isHeader(dataProvider) {
+    _isFrozenZone(dataProvider) {
         return dataProvider.getHeaderRowCount() > 0;
     },
 

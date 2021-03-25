@@ -176,7 +176,7 @@ export const Export = {
                     worksheetViewSettings.rightToLeft = true;
                 }
 
-                if(privateOptions._isHeader()) {
+                if(privateOptions._isFrozenZone(dataProvider)) {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
                         extend(worksheetViewSettings, privateOptions._getWorksheetFrozenState(dataProvider, cellRange));
                     }

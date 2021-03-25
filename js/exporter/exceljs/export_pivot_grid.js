@@ -14,7 +14,7 @@ const privateOptions = {
         };
     },
 
-    _isHeader() {
+    _isFrozenZone() {
         return true;
     },
 
