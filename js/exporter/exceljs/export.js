@@ -1,6 +1,7 @@
 import { isDefined, isString, isDate, isObject, isFunction } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
+import { MergeRanges } from './export_merge';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
 
@@ -99,51 +100,6 @@ export const Export = {
         }
     },
 
-    tryGetMergeRange: function(excelCell, mergedCells, rowIndex, cellIndex, dataProvider, mergeRowFieldValues, mergeColumnFieldValues, privateOptions) {
-        const { rowspan, colspan } = dataProvider.getCellMerging(rowIndex, cellIndex);
-
-        if(colspan || rowspan) {
-            const needMergeRange = privateOptions._isRangeMerged(dataProvider, rowIndex, cellIndex, rowspan, colspan, mergeRowFieldValues, mergeColumnFieldValues);
-            this.updateMergedCells(excelCell, mergedCells, rowIndex, cellIndex, rowspan, colspan, needMergeRange);
-
-            if(needMergeRange) {
-                return {
-                    masterCell: excelCell,
-                    ...{ rowspan, colspan }
-                };
-            }
-        }
-    },
-
-    cellInMergeRanges(mergedCells, rowIndex, cellIndex) {
-        return mergedCells[rowIndex] && mergedCells[rowIndex][cellIndex];
-    },
-
-    updateMergedCells(excelCell, mergedCells, rowIndex, cellIndex, rowspan, colspan, needMergeRange) {
-        for(let i = rowIndex; i <= rowIndex + rowspan; i++) {
-            for(let j = cellIndex; j <= cellIndex + colspan; j++) {
-                if(!mergedCells[i]) {
-                    mergedCells[i] = [];
-                }
-                mergedCells[i][j] = {
-                    masterCell: excelCell,
-                    merged: needMergeRange
-                };
-            }
-        }
-    },
-
-    mergeCells: function(worksheet, topLeftCell, mergeRanges) {
-        mergeRanges.forEach((mergeRange) => {
-            const startRowIndex = mergeRange.masterCell.fullAddress.row;
-            const startColumnIndex = mergeRange.masterCell.fullAddress.col;
-            const endRowIndex = startRowIndex + mergeRange.rowspan;
-            const endColumnIndex = startColumnIndex + mergeRange.colspan;
-
-            worksheet.mergeCells(startRowIndex, startColumnIndex, endRowIndex, endColumnIndex);
-        });
-    },
-
     setLoadPanelOptions: function(component, options, privateOptions) {
         if(!hasWindow()) {
             return;
@@ -198,22 +154,20 @@ export const Export = {
                     this.setColumnsWidth(worksheet, dataProvider.getColumnsWidths(), cellRange.from.column);
                 }
 
-                const mergedCells = [];
-                const mergeRanges = [];
+                const mergeRanges = new MergeRanges(dataProvider, privateOptions, mergeRowFieldValues, mergeColumnFieldValues);
                 const styles = this.getCellStyles(dataProvider);
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell,
-                        mergedCells, mergeRanges, mergeRowFieldValues, mergeColumnFieldValues, wrapText, styles, privateOptions);
+                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, mergeRanges, wrapText, styles, privateOptions);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
                     }
                 }
 
-                this.mergeCells(worksheet, topLeftCell, mergeRanges);
+                mergeRanges.mergeCells(worksheet);
 
                 cellRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
@@ -241,8 +195,7 @@ export const Export = {
         });
     },
 
-    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, mergedCells, mergeRanges,
-        mergeRowFieldValues, mergeColumnFieldValues, wrapText, styles, privateOptions) {
+    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, mergeRanges, wrapText, styles, privateOptions) {
         privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex);
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -268,23 +221,7 @@ export const Export = {
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
-            if(privateOptions._isHeaderCell(dataProvider, rowIndex, cellIndex)) {
-                if(this.cellInMergeRanges(mergedCells, rowIndex, cellIndex)) {
-                    const cell = mergedCells[rowIndex][cellIndex];
-                    if(cell.merged === false) {
-                        excelCell.style = cell.masterCell.style;
-                        excelCell.value = cell.masterCell.value;
-                    }
-                } else {
-                    const mergeRange = this.tryGetMergeRange(excelCell, mergedCells, rowIndex, cellIndex, dataProvider, mergeRowFieldValues, mergeColumnFieldValues, privateOptions);
-
-                    if(isDefined(mergeRange)) {
-                        mergeRanges.push(mergeRange);
-                    }
-                }
-
-
-            }
+            mergeRanges.update(excelCell, rowIndex, cellIndex);
 
             if(isFunction(customizeCell)) {
                 customizeCell(privateOptions._getCustomizeCellOptions(excelCell, cellData.cellSourceData));
