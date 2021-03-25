@@ -95,7 +95,7 @@ const getDSWithAsyncSearch = () => {
                 const deferred = $.Deferred();
                 setTimeout(() => {
                     if(loadOptions.take && !loadOptions.searchValue) {
-                        deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take));
+                        deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
                     } else if(loadOptions.filter) {
                         const result = data.filter((item) => {
                             if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
@@ -114,7 +114,7 @@ const getDSWithAsyncSearch = () => {
                             }
                         });
 
-                        deferred.resolve(result);
+                        deferred.resolve(result, { totalCount: 9 });
                     } else if(loadOptions.searchValue) {
                         const result = data.filter((item) => {
                             if(item.id.indexOf(loadOptions.searchValue) >= 0) {
@@ -122,7 +122,9 @@ const getDSWithAsyncSearch = () => {
                             }
                         });
 
-                        deferred.resolve(result.splice(loadOptions.skip, loadOptions.take));
+                        deferred.resolve(result.splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
+                    } else {
+                        deferred.resolve(data, { totalCount: 9 });
                     }
                 }, TIME_TO_WAIT * 2);
 

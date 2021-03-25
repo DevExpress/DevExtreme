@@ -151,20 +151,27 @@ export default SelectionStrategy.inherit({
         const that = this;
         const deferred = new Deferred();
         const isMultiSelectEnabled = this._isMultiSelectEnabled();
+        const isDeselectAll = isDeselect && isSelectAll;
 
         let oldAddedItems = [];
         let oldRemovedItems = [];
 
-        if(isMultiSelectEnabled) {
-            if(that._lastLoadDeferred?.state() === 'pending' && !isKeysEqual(keys, this.options.selectedItemKeys)) {
-                oldAddedItems = this._lastRequestData.addedItems;
-                oldRemovedItems = this._lastRequestData.removedItems;
 
-                if(!isDeselect) {
+        if(isMultiSelectEnabled) {
+            if(that._lastLoadDeferred?.state() === 'pending') {
+                if(isDeselectAll) {
                     that._lastLoadDeferred.reject();
+                    this._lastRequestData = {};
+                } else if(!isKeysEqual(keys, this.options.selectedItemKeys)) {
+                    oldAddedItems = this._lastRequestData.addedItems;
+                    oldRemovedItems = this._lastRequestData.removedItems;
+
+                    if(!isDeselect) {
+                        that._lastLoadDeferred.reject();
+                    }
+                } else {
+                    this._lastRequestData = {};
                 }
-            } else {
-                this._lastRequestData = {};
             }
 
             const deselectedItems = isDeselect ? keys : [];
@@ -175,6 +182,7 @@ export default SelectionStrategy.inherit({
                 keys: keys
             };
         }
+
 
         when(that._lastLoadDeferred).always(function() {
             let currentKeys = keys;
