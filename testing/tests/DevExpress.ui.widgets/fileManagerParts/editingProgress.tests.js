@@ -71,7 +71,7 @@ const createNotificationControl = (context, options) => {
 
     context.clock.tick(400);
 
-    context.notificationControl._progressPanel.option('logger', logger);
+    context.notificationControl._notificationManager._progressPanel.option('logger', logger);
 };
 
 const createEditing = (context, options) => {
