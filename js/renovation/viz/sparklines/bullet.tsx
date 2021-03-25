@@ -370,34 +370,35 @@ export class Bullet extends JSXComponent(BulletProps) {
   }
 
   get isValidTarget(): boolean {
-    const { target, startScaleValue, endScaleValue } = this.scaleProps;
     const { showTarget } = this.props;
 
-    return !(target > endScaleValue || target < startScaleValue || !showTarget);
+    return !(this.scaleProps.target > this.scaleProps.endScaleValue
+      || this.scaleProps.target < this.scaleProps.startScaleValue || !showTarget);
   }
 
   get isValidZeroLevel(): boolean {
-    const { startScaleValue, endScaleValue } = this.scaleProps;
     const { showZeroLevel } = this.props;
 
-    return !(endScaleValue < 0 || startScaleValue > 0 || !showZeroLevel);
+    return !(this.scaleProps.endScaleValue < 0
+      || this.scaleProps.startScaleValue > 0 || !showZeroLevel);
   }
 
   get barValueShape(): [number, number, number, number, number, number, number, number] {
     const translatorX = this.argumentAxis.getTranslator();
     const translatorY = this.valueAxis.getTranslator();
-    const { value, startScaleValue, endScaleValue } = this.scaleProps;
     const y2 = translatorY.translate(BAR_VALUE_MIN_Y);
     const y1 = translatorY.translate(BAR_VALUE_MAX_Y);
     let x1;
     let x2;
 
-    if (value > 0) {
-      x1 = Math.max(0, startScaleValue);
-      x2 = value >= endScaleValue ? endScaleValue : Math.max(value, x1);
+    if (this.scaleProps.value > 0) {
+      x1 = Math.max(0, this.scaleProps.startScaleValue);
+      x2 = this.scaleProps.value >= this.scaleProps.endScaleValue
+        ? this.scaleProps.endScaleValue : Math.max(this.scaleProps.value, x1);
     } else {
-      x1 = Math.min(0, endScaleValue);
-      x2 = value < startScaleValue ? startScaleValue : Math.min(value, x1);
+      x1 = Math.min(0, this.scaleProps.endScaleValue);
+      x2 = this.scaleProps.value < this.scaleProps.startScaleValue
+        ? this.scaleProps.startScaleValue : Math.min(this.scaleProps.value, x1);
     }
 
     x1 = translatorX.translate(x1);
