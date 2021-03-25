@@ -267,12 +267,12 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName getSelection()
-     * @param1 focus:boolean
+     * @param1 focus:boolean|undefined
      * @return Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelection(focus?: boolean): any;
+    getSelection(focus?: boolean|undefined): any;
     /**
      * @docid
      * @publicName getText(index, length)
