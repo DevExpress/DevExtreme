@@ -960,8 +960,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _updateFocus: function(isRenderView) {
         const that = this;
         setTimeout(function() {
-            const editingController = that.getController('editing');
-            if(editingController.getEditMode() === EDIT_MODE_CELL && editingController.hasChanges()) {
+            const editingController = this._editingController;
+            const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
+
+            if(!this.option('repaintChangesOnly') && isCellEditMode && editingController.hasChanges()) {
                 editingController._focusEditingCell();
                 return;
             }
@@ -2016,7 +2018,7 @@ module.exports = {
                     this._keyboardNavigationController = this.getController('keyboardNavigation');
                 },
                 closeEditCell: function() {
-                    const keyboardNavigation = this.getController('keyboardNavigation');
+                    const keyboardNavigation = this._keyboardNavigationController;
                     keyboardNavigation._fastEditingStarted = false;
 
                     const result = this.callBase.apply(this, arguments);
