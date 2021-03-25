@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import DropDownButton from 'ui/drop_down_button';
+import browser from 'core/utils/browser';
 import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
