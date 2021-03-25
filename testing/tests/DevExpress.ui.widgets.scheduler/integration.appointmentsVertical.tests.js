@@ -1079,6 +1079,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
     QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Day', function(assert) {
         this.createInstance({
+            _draggingMode: 'default',
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 1, 12),
@@ -1144,7 +1145,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             ],
             startDayHour: 12,
             endDayHour: 16,
-            showAllDayPanel: false
+            showAllDayPanel: false,
+            _draggingMode: 'default'
         });
 
         this.scheduler.appointmentList[0].drag.toCell(75);

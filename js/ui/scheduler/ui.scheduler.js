@@ -385,7 +385,7 @@ class Scheduler extends Widget {
 
             renovateRender: true,
 
-            _draggingMode: 'default',
+            _draggingMode: 'outlook',
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: 'bottom',

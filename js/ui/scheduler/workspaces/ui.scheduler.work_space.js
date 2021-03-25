@@ -624,7 +624,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             },
             renovateRender: true,
             height: undefined,
-            draggingMode: 'default' // 'outlook'
+            draggingMode: 'outlook'
         });
     }
 
