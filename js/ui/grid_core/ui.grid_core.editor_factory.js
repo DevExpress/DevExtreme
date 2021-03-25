@@ -25,7 +25,7 @@ const DX_HIDDEN = 'dx-hidden';
 const EditorFactory = modules.ViewController.inherit({
     _getFocusedElement: function($dataGridElement) {
         const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
-        const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton:focus`;
+        const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus, .dx-switch:focus, .dx-dropdownbutton .dx-buttongroup:focus`;
 
         // T181706
         return $dataGridElement.find(focusedElementSelector);
