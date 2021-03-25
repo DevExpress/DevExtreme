@@ -14,7 +14,7 @@ import ArrayStore from '../data/array_store';
 import { Deferred } from '../core/utils/deferred';
 import { extend } from '../core/utils/extend';
 import { isPlainObject, isDefined } from '../core/utils/type';
-import { ensureDefined } from '../core/utils/common';
+import { ensureDefined, noop } from '../core/utils/common';
 import Guid from '../core/guid';
 import { getElementWidth, getSizeValue } from './drop_down_editor/utils';
 import messageLocalization from '../localization/message';
@@ -178,6 +178,9 @@ const DropDownButton = Widget.inherit({
         }
     },
 
+    // T977758
+    _renderFocusTarget: noop,
+
     _render() {
         if(!this.option('deferRendering') || this.option('opened')) {
             this._renderPopup();
@@ -288,6 +291,8 @@ const DropDownButton = Widget.inherit({
             height: '100%',
             stylingMode: this.option('stylingMode'),
             selectionMode: 'none',
+            tabIndex: this.option('tabIndex'),
+            onKeyboardHandled: (e) => this._keyboardHandler(e),
             buttonTemplate: ({ text, icon }, buttonContent) => {
                 if(this.option('splitButton') || !this.option('showArrowIcon')) {
                     return 'content';
@@ -384,11 +389,21 @@ const DropDownButton = Widget.inherit({
         } else {
             this.open();
         }
+
+        return true;
     },
 
     _escHandler() {
         this.close();
         this._buttonGroup.focus();
+
+        return true;
+    },
+
+    _tabHandler() {
+        this.close();
+
+        return true;
     },
 
     _renderPopup() {
@@ -450,7 +465,7 @@ const DropDownButton = Widget.inherit({
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
-        this._buttonGroup.registerKeyHandler('tab', this.close.bind(this));
+        this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
         this._buttonGroup.registerKeyHandler('upArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('escape', this._escHandler.bind(this));
 
@@ -569,6 +584,10 @@ const DropDownButton = Widget.inherit({
         this._setListOption('keyExpr', this._getKey());
     },
 
+    focus: function() {
+        this._buttonGroup.focus();
+    },
+
     _optionChanged(args) {
         const { name, value } = args;
         switch(name) {
@@ -665,6 +684,9 @@ const DropDownButton = Widget.inherit({
                 break;
             case 'deferRendering':
                 this.toggle(this.option('opened'));
+                break;
+            case 'tabIndex':
+                this._buttonGroup.option(name, value);
                 break;
             default:
                 this.callBase(args);
