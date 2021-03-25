@@ -81,6 +81,10 @@ export default {
                     return this.option('editing.mode') === EDIT_MODE_BATCH;
                 },
 
+                isCellOrBatchEditMode: function() {
+                    return this.isCellEditMode() || this.isBatchEditMode();
+                },
+
                 _needToCloseEditableCell: function($targetElement) {
                     const $element = this.component.$element();
                     let result = this.isEditing();
@@ -427,6 +431,69 @@ export default {
                     } else {
                         this.callBase.apply(this, arguments);
                     }
+                },
+
+                _refreshCore: function(isPageChanged) {
+                    const needResetIndexes = this.isBatchEditMode() || isPageChanged && this.option('scrolling.mode') !== 'virtual';
+
+                    if(this.isCellOrBatchEditMode()) {
+                        if(needResetIndexes) {
+                            this._resetEditColumnName();
+                            this._resetEditRowKey();
+                        }
+                    } else {
+                        this.callBase.apply(this, arguments);
+                    }
+                },
+
+                _allowRowAdding: function(params) {
+                    if(this.isBatchEditMode()) {
+                        return true;
+                    }
+
+                    return this.callBase.apply(this, arguments);
+                },
+
+                _afterDeleteRow: function(rowIndex, oldEditRowIndex) {
+                    const dataController = this._dataController;
+
+                    if(this.isBatchEditMode()) {
+                        dataController.updateItems({
+                            changeType: 'update',
+                            rowIndices: [oldEditRowIndex, rowIndex]
+                        });
+                    } else {
+                        this.callBase.apply(this, arguments);
+                    }
+                },
+
+                _updateEditRow: function(row, forceUpdateRow, isCustomSetCellValue) {
+                    if(this.isCellOrBatchEditMode()) {
+                        this._updateRowImmediately(row, forceUpdateRow, isCustomSetCellValue);
+                    } else {
+                        this.callBase.apply(this, arguments);
+                    }
+                },
+
+                _isDefaultButtonVisible: function(button, options) {
+                    if(this.isCellOrBatchEditMode()) {
+                        const isBatchMode = this.isBatchEditMode();
+
+                        switch(button.name) {
+                            case 'save':
+                            case 'cancel':
+                            case 'edit':
+                                return false;
+                            case 'delete':
+                                return this.callBase.apply(this, arguments) && (!isBatchMode || !options.row.removed);
+                            case 'undelete':
+                                return isBatchMode && this.allowDeleting(options) && options.row.removed;
+                            default:
+                                return this.callBase.apply(this, arguments);
+                        }
+                    }
+
+                    return this.callBase.apply(this, arguments);
                 },
             }
         },

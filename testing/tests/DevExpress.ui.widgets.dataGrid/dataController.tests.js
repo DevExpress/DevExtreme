@@ -26,6 +26,7 @@ const setupModule = function() {
         'filterRow',
         'search',
         'editing',
+        'editingRowBased',
         'editingFormBased',
         'editingCellBased',
         'grouping',
@@ -3656,7 +3657,7 @@ const setupVirtualRenderingModule = function() {
         dataSource: array
     };
 
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail'], {
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'editingRowBased', 'editingCellBased', 'grouping', 'headerFilter', 'masterDetail'], {
         initDefaultOptions: true,
         options: options
     });
@@ -11238,7 +11239,7 @@ QUnit.module('Summary with Editing', {
         };
 
         this.setupDataGridModules = function(options) {
-            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing'], options);
+            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing', 'editingRowBased', 'editingCellBased'], options);
         };
 
         this.getTotalValues = function() {

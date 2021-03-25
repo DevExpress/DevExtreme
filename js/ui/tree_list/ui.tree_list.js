@@ -6,6 +6,7 @@ import './ui.tree_list.state_storing';
 import './ui.tree_list.column_chooser';
 import './ui.tree_list.master_detail';
 import './ui.tree_list.editing';
+import './ui.tree_list.editing_row_based';
 import './ui.tree_list.editing_form_based';
 import './ui.tree_list.editing_cell_based';
 import './ui.tree_list.validating';

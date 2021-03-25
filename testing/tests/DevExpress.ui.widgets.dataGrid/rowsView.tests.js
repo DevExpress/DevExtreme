@@ -87,7 +87,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
         }
     };
 
-    setupDataGridModules(mockDataGrid, ['data', 'virtualScrolling', 'columns', 'grouping', 'rows', 'pager', 'selection', 'editing', 'editingCellBased', 'editorFactory', 'summary', 'masterDetail', 'keyboardNavigation', 'search', 'contextMenu'], {
+    setupDataGridModules(mockDataGrid, ['data', 'virtualScrolling', 'columns', 'grouping', 'rows', 'pager', 'selection', 'editing', 'editingRowBased', 'editingCellBased', 'editorFactory', 'summary', 'masterDetail', 'keyboardNavigation', 'search', 'contextMenu'], {
         initViews: true,
         controllers: {
             columns: columnsController,
@@ -5512,7 +5512,7 @@ QUnit.module('Rows view with real dataController and columnController', {
                 }
             };
 
-            this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editingFormBased', 'editorFactory', 'masterDetail', 'search']);
+            this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editorFactory', 'masterDetail', 'search']);
             this.rowsView.render($testElement);
             clock.tick();
 
