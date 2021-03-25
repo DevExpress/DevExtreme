@@ -316,6 +316,40 @@ describe('Bullet', () => {
           expect(getEventHandlers(pointerAction.down).length).toBe(0);
         });
       });
+
+      describe('tooltipOutEffect', () => {
+        it('should be ignored if the tooltip is not visible', () => {
+          const bullet = new Bullet({ });
+          bullet.tooltipVisible = false;
+
+          expect(bullet.tooltipOutEffect()).toBe(undefined);
+          expect(getEventHandlers(pointerAction.move)).toBeUndefined();
+          expect(getEventHandlers(pointerAction.down)).toBeUndefined();
+        });
+
+        it('should call "pointerOutHandler" callback', () => {
+          const bullet = new Bullet({ });
+          bullet.tooltipVisible = true;
+
+          bullet.pointerOutHandler = jest.fn();
+          bullet.tooltipOutEffect();
+
+          emit(pointerAction.down, defaultEvent);
+          expect(bullet.pointerOutHandler).toHaveBeenCalledTimes(1);
+        });
+
+        it('should return event detach callback', () => {
+          const bullet = new Bullet({});
+          bullet.tooltipVisible = true;
+
+          bullet.pointerOutHandler = jest.fn();
+          const detach = bullet.tooltipOutEffect() as () => undefined;
+
+          expect(getEventHandlers(pointerAction.down).length).toBe(1);
+          detach();
+          expect(getEventHandlers(pointerAction.down).length).toBe(0);
+        });
+      });
     });
 
     afterEach(clearEventHandlers);
@@ -327,17 +361,6 @@ describe('Bullet', () => {
           bullet.pointerHandler();
 
           expect(bullet.tooltipVisible).toBe(true);
-          expect(getEventHandlers(pointerAction.down).length).toBe(1);
-        });
-
-        it('should call "pointerOutHandler" callback by pointer out move', () => {
-          const bullet = new Bullet({ });
-          bullet.pointerOutHandler = jest.fn();
-          bullet.pointerHandler();
-          emit(pointerAction.down, defaultEvent);
-
-          expect(bullet.pointerOutHandler).toHaveBeenCalledTimes(1);
-          expect(bullet.pointerOutHandler).toHaveBeenCalledWith({ ...defaultEvent });
         });
       });
 
@@ -357,7 +380,6 @@ describe('Bullet', () => {
           bullet.pointerOutHandler({ pageX: 100, pageY: 20 });
 
           expect(bullet.tooltipVisible).toBe(true);
-          expect(getEventHandlers(pointerAction.down).length).toBe(1);
         });
 
         it('should hide tooltip if pointer out of canvas', () => {
@@ -375,7 +397,6 @@ describe('Bullet', () => {
           bullet.pointerOutHandler({ pageX: 300, pageY: 200 });
 
           expect(bullet.tooltipVisible).toBe(false);
-          expect(getEventHandlers(pointerAction.down).length).toBe(0);
         });
 
         it('should not hide tooltip if pointer in the canvas with margins, top-left', () => {

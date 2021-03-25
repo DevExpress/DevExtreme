@@ -250,6 +250,19 @@ export class Bullet extends JSXComponent(BulletProps) {
     return undefined;
   }
 
+  @Effect()
+  tooltipOutEffect(): EffectReturn {
+    if (this.tooltipVisible) {
+      const document = domAdapter.getDocument();
+      eventsEngine.on(document, POINTER_ACTION, this.pointerOutHandler);
+      return (): void => {
+        eventsEngine.off(document, POINTER_ACTION, this.pointerOutHandler);
+      };
+    }
+
+    return undefined;
+  }
+
   get cssClasses(): string {
     const { classes } = this.props;
     return getCssClasses({ classes });
@@ -470,11 +483,6 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   pointerHandler(): void {
     this.tooltipVisible = true;
-    eventsEngine.on(
-      domAdapter.getDocument(),
-      POINTER_ACTION,
-      this.pointerOutHandler,
-    );
   }
 
   pointerOutHandler({ pageX, pageY }): void {
@@ -484,11 +492,6 @@ export class Bullet extends JSXComponent(BulletProps) {
 
     if (!inCanvas(this.canvasState, x, y)) {
       this.tooltipVisible = false;
-      eventsEngine.off(
-        domAdapter.getDocument(),
-        POINTER_ACTION,
-        this.pointerOutHandler,
-      );
     }
   }
 }
