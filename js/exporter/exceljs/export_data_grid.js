@@ -43,6 +43,10 @@ const privateOptions = {
         return options;
     },
 
+    _isHeader(dataProvider) {
+        return dataProvider.getHeaderRowCount() > 0;
+    },
+
     _isHeaderCell(dataProvider, rowIndex) {
         return rowIndex < dataProvider.getHeaderRowCount();
     },

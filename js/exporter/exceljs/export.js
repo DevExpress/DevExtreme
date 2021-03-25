@@ -13,7 +13,7 @@ const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 const MAX_EXCEL_COLUMN_WIDTH = 255;
 
 export const Export = {
-    getFullOptions: function(options) {
+    getFullOptions(options) {
         const fullOptions = extend({}, options);
         if(!(isDefined(fullOptions.worksheet) && isObject(fullOptions.worksheet))) {
             throw Error('The "worksheet" field must contain an object.');
@@ -40,7 +40,7 @@ export const Export = {
         return fullOptions;
     },
 
-    convertDateForExcelJS: function(date) {
+    convertDateForExcelJS(date) {
         return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
     },
 
@@ -48,7 +48,7 @@ export const Export = {
         excelCell.numFmt = numberFormat;
     },
 
-    getCellStyles: function(dataProvider) {
+    getCellStyles(dataProvider) {
         const styles = dataProvider.getStyles();
 
         styles.forEach((style) => {
@@ -64,7 +64,7 @@ export const Export = {
         return styles;
     },
 
-    tryConvertToExcelNumberFormat: function(format, dataType) {
+    tryConvertToExcelNumberFormat(format, dataType) {
         const newFormat = ExportFormat.formatObjectConverter(format, dataType);
         const currency = newFormat.currency;
 
@@ -74,7 +74,7 @@ export const Export = {
         return ExportFormat.convertFormat(format, newFormat.precision, dataType, currency);
     },
 
-    setAlignment: function(excelCell, wrapText, horizontalAlignment) {
+    setAlignment(excelCell, wrapText, horizontalAlignment) {
         excelCell.alignment = excelCell.alignment || {};
 
         if(isDefined(wrapText)) {
@@ -87,7 +87,7 @@ export const Export = {
         excelCell.alignment.vertical = 'top';
     },
 
-    setColumnsWidth: function(worksheet, widths, startColumnIndex) {
+    setColumnsWidth(worksheet, widths, startColumnIndex) {
         if(!isDefined(widths)) {
             return;
         }
@@ -100,7 +100,7 @@ export const Export = {
         }
     },
 
-    setLoadPanelOptions: function(component, options, privateOptions) {
+    setLoadPanelOptions(component, options, privateOptions) {
         if(!hasWindow()) {
             return;
         }
@@ -109,7 +109,7 @@ export const Export = {
         privateOptions._renderLoadPanel(component);
     },
 
-    export: function(options, privateOptions) {
+    export(options, privateOptions) {
         const {
             customizeCell,
             component,
@@ -147,7 +147,6 @@ export const Export = {
         return new Promise((resolve) => {
             dataProvider.ready().done(() => {
                 const columns = dataProvider.getColumns();
-                const headerRowCount = isFunction(dataProvider.getHeaderRowCount) ? dataProvider.getHeaderRowCount() : 1;
                 const dataRowsCount = dataProvider.getRowsCount();
 
                 if(keepColumnWidths) {
@@ -160,7 +159,7 @@ export const Export = {
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, mergeRanges, wrapText, styles, privateOptions);
+                    this.exportRow(dataProvider, privateOptions, rowIndex, columns.length, row, cellRange.from.column, customizeCell, mergeRanges, wrapText, styles);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
@@ -177,7 +176,7 @@ export const Export = {
                     worksheetViewSettings.rightToLeft = true;
                 }
 
-                if(headerRowCount > 0) {
+                if(privateOptions._isHeader()) {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
                         extend(worksheetViewSettings, privateOptions._getWorksheetFrozenState(dataProvider, cellRange));
                     }
@@ -195,7 +194,7 @@ export const Export = {
         });
     },
 
-    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, mergeRanges, wrapText, styles, privateOptions) {
+    exportRow(dataProvider, privateOptions, rowIndex, cellCount, row, startColumnIndex, customizeCell, mergeRanges, wrapText, styles) {
         privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex);
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {

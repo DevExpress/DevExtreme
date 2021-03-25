@@ -14,6 +14,10 @@ const privateOptions = {
         };
     },
 
+    _isHeader() {
+        return true;
+    },
+
     _isHeaderCell(dataProvider, rowIndex, cellIndex) {
         return rowIndex < dataProvider.getColumnAreaRowCount() || cellIndex < dataProvider.getRowAreaColCount();
     },
