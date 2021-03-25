@@ -117,7 +117,7 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    static getInstance(element: TElement): DOMComponent;
+    static getInstance(element: TElement<Element>): DOMComponent;
 
     $element(): TElement;
     _getTemplate(template: unknown): FunctionTemplate;
