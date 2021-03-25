@@ -1205,7 +1205,6 @@
           {
             "Title": "Simple Array: Plain Structure",
             "Name": "SimpleArrayPlainStructure",
-            "DocUrl": "Guide/UI_Components/TreeList/Data_Binding/Use_Plain_Data/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Scripts/data/employeesPS.js"
@@ -1215,7 +1214,6 @@
           {
             "Title": "Simple Array: Hierarchical Structure",
             "Name": "SimpleArrayHierarchicalStructure",
-            "DocUrl": "Guide/UI_Components/TreeList/Data_Binding/Use_Hierarchical_Data/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Scripts/data/employeesHS.js"
