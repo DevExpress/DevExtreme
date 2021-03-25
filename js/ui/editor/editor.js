@@ -9,6 +9,8 @@ import ValidationEngine from '../validation_engine';
 import EventsEngine from '../../events/core/events_engine';
 import ValidationMessage from '../validation_message';
 import Guid from '../../core/guid';
+import { noop } from '../../core/utils/common';
+import { resetActiveElement } from '../../core/utils/dom';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
@@ -307,6 +309,8 @@ const Editor = Widget.inherit({
         this._validationMessage?.option(optionKey, value);
     },
 
+    _hasActiveElement: noop,
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'onValueChanged':
@@ -356,6 +360,12 @@ const Editor = Widget.inherit({
                 break;
             default:
                 this.callBase(args);
+        }
+    },
+
+    blur: function() {
+        if(this._hasActiveElement()) {
+            resetActiveElement();
         }
     },
 

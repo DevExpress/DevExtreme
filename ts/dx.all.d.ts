@@ -8207,6 +8207,10 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxHtmlEditorOptions)
         constructor(element: JQuery, options?: dxHtmlEditorOptions)
         /**
+         * [descr:dxHtmlEditor.blur()]
+         */
+        blur(): void;
+        /**
          * [descr:dxHtmlEditor.clearHistory()]
          */
         clearHistory(): void;
@@ -8239,6 +8243,14 @@ declare module DevExpress.ui {
          */
         get(componentPath: string): any;
         /**
+         * [descr:dxHtmlEditor.getBounds(index, length)]
+         */
+        getBounds(index: number, length: number): any;
+        /**
+         * [descr:dxHtmlEditor.getFormat()]
+         */
+        getFormat(): any;
+        /**
          * [descr:dxHtmlEditor.getFormat(index, length)]
          */
         getFormat(index: number, length: number): any;
@@ -8257,11 +8269,19 @@ declare module DevExpress.ui {
         /**
          * [descr:dxHtmlEditor.getSelection()]
          */
-        getSelection(): any;
+        getSelection(focus?: boolean): any;
+        /**
+         * [descr:dxHtmlEditor.getText(index, length)]
+         */
+        getText(index: number, length: number): void;
         /**
          * [descr:dxHtmlEditor.insertEmbed(index, type, config)]
          */
         insertEmbed(index: number, type: string, config: any): void;
+        /**
+         * [descr:dxHtmlEditor.insertText(index, text, formatName, formatValue)]
+         */
+        insertText(index: number, text: string, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
         /**
          * [descr:dxHtmlEditor.insertText(index, text, formats)]
          */
@@ -8286,6 +8306,10 @@ declare module DevExpress.ui {
          * [descr:dxHtmlEditor.undo()]
          */
         undo(): void;
+        /**
+         * [descr:dxHtmlEditor.update()]
+         */
+        update(): void;
     }
     /**
      * [descr:dxHtmlEditorMediaResizing]

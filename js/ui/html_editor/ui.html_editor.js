@@ -1,6 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined, isFunction } from '../../core/utils/type';
+import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
 import { executeAsync, noop, ensureDefined, deferRender } from '../../core/utils/common';
 import registerComponent from '../../core/component_registrator';
@@ -412,6 +413,12 @@ const HtmlEditor = Editor.inherit({
         return this._$htmlContainer;
     },
 
+    _hasActiveElement: function() {
+        const activeElement = domAdapter.getActiveElement();
+
+        return this.$element().is(activeElement) || this.$element().find(activeElement).length;
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'value':
@@ -545,12 +552,16 @@ const HtmlEditor = Editor.inherit({
         return this._quillInstance;
     },
 
-    getSelection: function() {
-        return this._applyQuillMethod('getSelection');
+    getSelection: function(focus) {
+        return this._applyQuillMethod('getSelection', arguments);
     },
 
     setSelection: function(index, length) {
         this._applyQuillMethod('setSelection', arguments);
+    },
+
+    getText: function(index, length) {
+        return this._applyQuillMethod('getText', arguments);
     },
 
     format: function(formatName, formatValue) {
@@ -591,6 +602,10 @@ const HtmlEditor = Editor.inherit({
         return this._applyQuillMethod('getLength');
     },
 
+    getBounds: function(index, length) {
+        return this._applyQuillMethod('getBounds', arguments);
+    },
+
     delete: function(index, length) {
         this._applyQuillMethod('deleteText', arguments);
     },
@@ -611,10 +626,18 @@ const HtmlEditor = Editor.inherit({
         return this._formDialog.popupOption.apply(this._formDialog, arguments);
     },
 
+    update: function() {
+        this._applyQuillMethod('update');
+    },
+
     focus: function() {
         this.callBase();
-
         this._applyQuillMethod('focus');
+    },
+
+    blur: function() {
+        this.callBase();
+        this._applyQuillMethod('blur');
     }
 });
 
