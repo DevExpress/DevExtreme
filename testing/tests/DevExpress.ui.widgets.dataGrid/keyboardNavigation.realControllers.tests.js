@@ -72,7 +72,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.dispose();
+        this.dispose && this.dispose();
         this.clock.restore();
     }
 }, function() {
