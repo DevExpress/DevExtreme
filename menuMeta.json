@@ -1786,6 +1786,30 @@
         ]
       },
       {
+        "Name": "Virtual Scrolling",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Horizontal Views",
+            "Badge": "New",
+            "Name": "HorizontalVirtualScrolling",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Vertical Views",
+            "Badge": "Updated",
+            "Name": "VerticalVirtualScrolling",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+            ],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
         "Name": "Grouping",
         "Equivalents": "",
         "Demos": [

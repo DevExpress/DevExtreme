@@ -1,0 +1,24 @@
+<dx-scheduler
+    [width]="800"
+    [height]="600"
+    [currentDate]="currentDate"
+    [dataSource]="appointments"
+    [views]="['workWeek', 'timelineWorkWeek']"
+    currentView="timelineWorkWeek"
+    [firstDayOfWeek]="0"
+    [startDayHour]="8"
+    [endDayHour]="20"
+    [cellDuration]="60"
+    [showAllDayPanel]="false"
+    [scrolling]="{
+        mode: 'virtual',
+        orientation: 'both'
+    }"
+    [groups]="['humanId']"
+    [resources]="[{
+        fieldExpr: 'humanId',
+        dataSource: resources,
+        allowMultiple: false
+    }]"
+>
+</dx-scheduler>

@@ -97,14 +97,11 @@ export class Service {
     generateResources(): Resource[] {
         const resources = [];
 
-        for(let i = 0; i < this.resourcesAmount; ++i) {
-            const color = colors[i % colors.length];
+        for(let id = 0; id < this.resourcesAmount; ++id) {
+            const color = colors[id % colors.length];
+            const text = `Resource ${id}`;
 
-            resources.push({
-                id: i,
-                text: `Resource ${i}`,
-                color: color
-            });
+            resources.push({ id, text, color });
         }
 
         return resources;

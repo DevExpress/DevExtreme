@@ -1,0 +1,7 @@
+#scheduler .dx-scheduler-cell-sizes-vertical {
+    height: 100px;
+}
+
+#scheduler .dx-scheduler-cell-sizes-horizontal {
+    width: 150px;
+}
