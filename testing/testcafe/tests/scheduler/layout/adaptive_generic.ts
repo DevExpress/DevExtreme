@@ -61,11 +61,11 @@ const resources = [{
       groupOrientation: 'horizontal',
     }))
     .forEach((view) => {
-      test(`Adaptive views layout test in generic theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
+      test(`Adaptive views layout test in generic theme (view='${view.type})', crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
         await t.resizeWindow(400, 600);
 
         await t.expect(
-          await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping).png`),
+          await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping).png`),
         ).ok();
       }).before(() => createScheduler({
         views: [view],
