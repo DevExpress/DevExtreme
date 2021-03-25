@@ -186,6 +186,19 @@ QUnit.module('Editor', {
         assert.strictEqual(editor.option('value'), null);
     });
 
+    QUnit.testInActiveWindow('The blur() method does not blur the active item', function(assert) {
+        const focusOutSpy = sinon.spy();
+        const editor = this.fixture.createEditor({ value: '123' });
+        const $testElement = $('<input type="button">');
+        $testElement.appendTo('#qunit-fixture');
+        $testElement.on('blur', focusOutSpy);
+        $testElement.focus();
+
+        editor.blur();
+
+        assert.strictEqual(focusOutSpy.callCount, 0);
+    });
+
     QUnit.test('T359215 - the hover class should be added on hover event if widget has read only state', function(assert) {
         const editor = this.fixture.createEditor({
             hoverStateEnabled: true,
