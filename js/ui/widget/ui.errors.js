@@ -329,5 +329,5 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1017
     */
-    W1017: 'The \'key\' option was not specified for the lookup data source. Please, set the \'key\' option to avoid request for all data during filtering.',
+    W1017: 'The \'key\' property is not specified for a lookup data source. Please specify it to prevent requests for the entire dataset when users filter data.',
 });
