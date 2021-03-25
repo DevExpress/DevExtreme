@@ -772,11 +772,11 @@ const TagBox = SelectBox.inherit({
             const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
             const filterLength = encodeURI(JSON.stringify(filterExpr)).length;
             const filter = filterLength > this.option('maxFilterLength') ? undefined : filterExpr;
-            const { customQueryParams, expand } = dataSource.loadOptions();
+            const { customQueryParams, expand, select } = dataSource.loadOptions();
 
             dataSource
                 .store()
-                .load({ filter, customQueryParams, expand })
+                .load({ filter, customQueryParams, expand, select })
                 .done((data, extra) => {
                     this._isDataSourceChanged = false;
                     if(this._disposed) {
