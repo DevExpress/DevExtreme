@@ -409,7 +409,7 @@ $scheduler-appointment-form-label-padding: 20px;
     margin-left: -($size + $scheduler-left-column-width);
 
     .dx-scheduler-small & {
-      margin-left: -($size + $scheduler-left-column-width * $scheduler-small-size-factor);
+      margin-left: floor(-($size + $scheduler-left-column-width * $scheduler-small-size-factor));
     }
 
     .dx-scheduler-virtual-row::before,
