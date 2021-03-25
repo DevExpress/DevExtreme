@@ -272,7 +272,7 @@ export default class dxHtmlEditor extends Editor {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelection(): any;
+    getSelection(focus?: boolean): any;
     /**
      * @docid
      * @publicName getText(index, length)
