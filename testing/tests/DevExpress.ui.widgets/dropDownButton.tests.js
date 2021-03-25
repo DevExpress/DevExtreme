@@ -2250,13 +2250,35 @@ QUnit.module('keyboard navigation', {
         assert.ok(focusOutHandler.calledOnce, 'focusOut handler was called');
     });
 
-    QUnit.test('registerKeyHandler method should update buttonGroup listeners', function(assert) {
-        const handler = sinon.stub();
-        this.dropDownButton.registerKeyHandler('backspace', handler);
+    QUnit.module('registerKeyHandler', () => {
+        QUnit.test('should add keyboard event handler with correct context', function(assert) {
+            assert.expect(1);
 
-        this.keyboard.press('backspace');
+            const handler = function() {
+                assert.strictEqual(this.NAME, 'dxDropDownButton', 'context is correct');
+            };
+            this.dropDownButton.registerKeyHandler('backspace', handler);
 
-        assert.ok(handler.calledOnce, 'handler is registered successfully');
+            this.keyboard.press('backspace');
+        });
+
+        [
+            ['downArrow', true],
+            ['upArrow', true],
+            ['tab', false],
+            ['escape', false]
+        ].forEach(([key, opened]) => {
+            QUnit.test(`should work correctly with ${key}`, function(assert) {
+                const handler = sinon.stub();
+                this.dropDownButton.registerKeyHandler(key, handler);
+                this.dropDownButton.focus();
+
+                this.keyboard.press(key);
+
+                assert.strictEqual(this.dropDownButton.option('opened'), opened, 'default handler was called');
+                assert.ok(handler.calledOnce, 'custom handler was called');
+            });
+        });
     });
 });
 

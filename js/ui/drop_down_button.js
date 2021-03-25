@@ -289,6 +289,7 @@ const DropDownButton = Widget.inherit({
             stylingMode: this.option('stylingMode'),
             selectionMode: 'none',
             tabIndex: this.option('tabIndex'),
+            onKeyboardHandled: (e) => this._keyboardHandler(e),
             buttonTemplate: ({ text, icon }, buttonContent) => {
                 if(this.option('splitButton') || !this.option('showArrowIcon')) {
                     return 'content';
@@ -385,11 +386,21 @@ const DropDownButton = Widget.inherit({
         } else {
             this.open();
         }
+
+        return true;
     },
 
     _escHandler() {
         this.close();
         this._buttonGroup.focus();
+
+        return true;
+    },
+
+    _tabHandler() {
+        this.close();
+
+        return true;
     },
 
     _renderPopup() {
@@ -451,16 +462,11 @@ const DropDownButton = Widget.inherit({
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
-        this._buttonGroup.registerKeyHandler('tab', this.close.bind(this));
+        this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
         this._buttonGroup.registerKeyHandler('upArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('escape', this._escHandler.bind(this));
 
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
-    },
-
-    registerKeyHandler: function(key, handler) {
-        this.callBase(key, handler);
-        this._buttonGroup.registerKeyHandler(key, handler);
     },
 
     _updateArrowClass() {
