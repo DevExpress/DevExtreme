@@ -3988,13 +3988,13 @@ QUnit.test('Value axis. Set small values for the offset option (T980159, T971769
     const chart = this.createChart({});
 
     chart.option('valueAxis[2].offset', -9);
-    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 110, 6);
+    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 112, 6);
 
     chart.option('valueAxis[2].offset', 9);
     assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 120, 6);
 
     chart.option('valueAxis[2].offset', 0);
-    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 110, 6);
+    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 112, 6);
 });
 
 QUnit.test('Value axis. No space is added for labels on the edge of the axis argument', function(assert) {
@@ -4149,12 +4149,12 @@ QUnit.test('Custom position is set for argument and value axis (T889092)', funct
         }
     });
 
-    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 538, 6);
+    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 540, 7);
     assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
 
     chart.option('valueAxis.customPosition', -21);
 
-    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 538, 6);
+    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 540, 7);
     assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
 });
 
