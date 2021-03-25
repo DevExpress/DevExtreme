@@ -6,17 +6,18 @@ import { createDataSetForScreenShotTests } from './utils';
 fixture`Scheduler: Generic theme layout`
   .page(url(__dirname, '../../container.html'));
 
-const createScheduler = async (view: string, crossScrollingEnabled: boolean): Promise<void> => {
+const createScheduler = async (
+  additionalProps: Record<string, unknown>,
+): Promise<void> => {
   await createWidget('dxScheduler', {
     dataSource: createDataSetForScreenShotTests(),
     currentDate: new Date(2020, 6, 15),
-    views: [view],
-    currentView: view,
-    crossScrollingEnabled,
     height: 600,
-    width: 300, // In this case, dx-scheduler-small class is added to the scheduler
+    ...additionalProps,
   }, true);
 };
+
+const views = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 
 const resources = [{
   fieldExpr: 'priorityId',
@@ -35,17 +36,36 @@ const resources = [{
 }];
 
 [undefined].forEach((crossScrollingEnabled) => {
-  ['day', 'week', 'workWeek', 'month'].forEach((view) => {
-    test(`Adaptive base views layout test in generic theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
-      await t.expect(await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}).png`)).ok();
-    }).before(() => createScheduler(view, false));
+  views.forEach((view) => {
+    test(`Adaptive views layout test in generic theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
+      await t.expect(
+        await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}).png`),
+      ).ok();
+    }).before(() => createScheduler({
+      views: [view],
+      currentView: view,
+      crossScrollingEnabled,
+    }));
   });
 });
 
 [undefined].forEach((crossScrollingEnabled) => {
-  ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    test(`Adaptive timeline views layout test in generic theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
-      await t.expect(await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}).png`)).ok();
-    }).before(() => createScheduler(view, false));
-  });
+  views
+    .map((viewType) => ({
+      type: viewType,
+      groupOrientation: 'horizontal',
+    }))
+    .forEach((view) => {
+      test(`Adaptive views layout test in generic theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
+        await t.expect(
+          await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping).png`),
+        ).ok();
+      }).before(() => createScheduler({
+        views: [view],
+        currentView: view,
+        crossScrollingEnabled,
+        groups: ['priorityId'],
+        resources,
+      }));
+    });
 });
