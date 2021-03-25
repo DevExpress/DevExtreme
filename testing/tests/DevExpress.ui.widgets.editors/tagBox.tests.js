@@ -3793,6 +3793,30 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
     });
 
+    QUnit.test('filtering operation should pass "select" parameter to the data source (T982439)', function(assert) {
+        const done = assert.async();
+
+        ajaxMock.setup({
+            url: 'dxdataservice',
+            callback: ({ data }) => {
+                assert.deepEqual(data, {
+                    $filter: 'this eq \'1\'',
+                    $select: 'name,company'
+                });
+                ajaxMock.clear();
+                done();
+            }
+        });
+
+        $('#tagBox').dxTagBox({
+            value: ['1'],
+            dataSource: new DataSource({
+                store: new ODataStore({ url: 'dxdataservice' }),
+                select: ['name', 'company']
+            })
+        });
+    });
+
     QUnit.testInActiveWindow('input should be focused after click on field (searchEnabled is true or acceptCustomValue is true)', function(assert) {
         const items = ['111', '222', '333'];
 
