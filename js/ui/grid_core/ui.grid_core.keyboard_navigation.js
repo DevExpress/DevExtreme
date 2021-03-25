@@ -960,7 +960,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _updateFocus: function(isRenderView) {
         const that = this;
         setTimeout(function() {
-            const editingController = that._editingController;
+            const editingController = that.getController('editing');
             const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
 
             if(!that.option('repaintChangesOnly') && isCellEditMode && editingController.hasChanges()) {
