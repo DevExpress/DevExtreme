@@ -356,6 +356,10 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-header-scrollable {
     margin-left: $size;
 
+    .dx-scheduler-small & {
+      margin-left: $size;
+    }
+
     .dx-rtl & {
       margin-right: $size;
       margin-left: 0;
@@ -402,7 +406,11 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-date-table {
-    margin-left: -($size + $scheduler-left-column-width * $scheduler-small-size-factor);
+    margin-left: -($size + $scheduler-left-column-width);
+
+    .dx-scheduler-small & {
+      margin-left: -($size + $scheduler-left-column-width * $scheduler-small-size-factor);
+    }
 
     .dx-scheduler-virtual-row::before,
     .dx-scheduler-date-table-row::before,
@@ -435,12 +443,13 @@ $scheduler-appointment-form-label-padding: 20px;
       margin-left: 0;
     }
 
-    .dx-scheduler-date-table-scrollable {
-      margin-left: $size + $scheduler-left-column-width + 1px + $offset;
-    }
-
+    .dx-scheduler-date-table-scrollable,
     .dx-scheduler-header-scrollable.dx-scrollable {
-      margin: 0 0 0 $size + $scheduler-left-column-width + 1px + $offset;
+      margin-left: $size + $scheduler-left-column-width + 1px + $offset;
+
+      .dx-scheduler-small & {
+        margin-left: $size + $scheduler-left-column-width * $scheduler-small-size-factor + 1px + $offset;
+      }
     }
 
     &.dx-rtl {
@@ -455,6 +464,15 @@ $scheduler-appointment-form-label-padding: 20px;
 
       .dx-scheduler-header-scrollable.dx-scrollable {
         margin: 0 $size + $scheduler-left-column-width + 1px + $offset 0 0;
+      }
+    }
+
+    &.dx-scheduler-work-space-month {
+      .dx-scheduler-small & {
+        .dx-scheduler-date-table-scrollable,
+        .dx-scheduler-header-scrollable.dx-scrollable {
+          margin-left: $size + 1px + $offset;
+        }
       }
     }
   }

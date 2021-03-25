@@ -80,7 +80,7 @@ const resources = [{
     });
 });
 
-[false].forEach((crossScrollingEnabled) => {
+[false, true].forEach((crossScrollingEnabled) => {
   views
     .map((viewType) => ({
       type: viewType,
