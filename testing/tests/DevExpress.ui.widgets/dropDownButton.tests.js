@@ -2249,6 +2249,15 @@ QUnit.module('keyboard navigation', {
 
         assert.ok(focusOutHandler.calledOnce, 'focusOut handler was called');
     });
+
+    QUnit.test('registerKeyHandler method should update buttonGroup listeners', function(assert) {
+        const handler = sinon.stub();
+        this.dropDownButton.registerKeyHandler('backspace', handler);
+
+        this.keyboard.press('backspace');
+
+        assert.ok(handler.calledOnce, 'handler is registered successfully');
+    });
 });
 
 QUnit.module('custom content template', {}, () => {

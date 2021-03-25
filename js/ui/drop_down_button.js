@@ -458,6 +458,11 @@ const DropDownButton = Widget.inherit({
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
     },
 
+    registerKeyHandler: function(key, handler) {
+        this.callBase(key, handler);
+        this._buttonGroup.registerKeyHandler(key, handler);
+    },
+
     _updateArrowClass() {
         const hasArrow = this.option('splitButton') || this.option('showArrowIcon');
         this.$element().toggleClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS, hasArrow);
