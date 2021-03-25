@@ -38,6 +38,8 @@ const resources = [{
 [undefined].forEach((crossScrollingEnabled) => {
   views.forEach((view) => {
     test(`Adaptive views layout test in generic theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
+      await t.resizeWindow(400, 600);
+
       await t.expect(
         await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}).png`),
       ).ok();
@@ -45,7 +47,10 @@ const resources = [{
       views: [view],
       currentView: view,
       crossScrollingEnabled,
-    }));
+    }))
+      .after(async (t) => {
+        await t.resizeWindow(1200, 800);
+      });
   });
 });
 
@@ -57,6 +62,8 @@ const resources = [{
     }))
     .forEach((view) => {
       test(`Adaptive views layout test in generic theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
+        await t.resizeWindow(400, 600);
+
         await t.expect(
           await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping).png`),
         ).ok();
@@ -66,6 +73,9 @@ const resources = [{
         crossScrollingEnabled,
         groups: ['priorityId'],
         resources,
-      }));
+      }))
+        .after(async (t) => {
+          await t.resizeWindow(1200, 800);
+        });
     });
 });
