@@ -129,14 +129,13 @@ export const DataProvider = Class.inherit({
     },
 
     ready: function() {
-        const that = this;
-        const options = that._options;
+        const options = this._options;
 
-        return when(options.items).done(function(items) {
+        return when(options.items).done((items) => {
             const headerSize = items[0][0].rowspan;
             const columns = items[headerSize - 1];
 
-            each(columns, function(columnIndex, column) {
+            each(columns, (columnIndex, column) => {
                 column.width = DEFAUL_COLUMN_WIDTH;
             });
 
@@ -248,7 +247,7 @@ export const DataProvider = Class.inherit({
         const dataFields = this._options.dataFields;
         const dataItemStyle = { alignment: this._options.rtlEnabled ? 'left' : 'right' };
 
-        const styles = [
+        this._styles = [
             // column header style
             { alignment: 'center', dataType: 'string' },
             // row header style
@@ -257,18 +256,16 @@ export const DataProvider = Class.inherit({
 
         if(dataFields.length) {
             dataFields.forEach((dataField) => {
-                styles.push(extend({}, dataItemStyle, {
+                this._styles.push(extend({}, dataItemStyle, {
                     format: dataField.format,
                     dataType: this.getCellDataType(dataField)
                 }));
             });
         } else {
-            styles.push(dataItemStyle);
+            this._styles.push(dataItemStyle);
         }
 
-        this._styles = styles;
-
-        return styles;
+        return this._styles;
     },
 
     getCellDataType: function(field) {
