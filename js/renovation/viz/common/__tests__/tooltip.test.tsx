@@ -750,6 +750,19 @@ describe('Effects', () => {
       expect(tooltip.isEmptyContainer).toBe(true);
     });
   });
+
+  describe('setCanvas', () => {
+    it('should set canvas', () => {
+      const tooltip = new Tooltip({});
+      const canvas = {
+        top: 1, left: 2, right: 3, bottom: 4, width: 10, height: 10,
+      };
+      (getCanvas as jest.Mock).mockReturnValue(canvas);
+      tooltip.setCanvas();
+
+      expect(tooltip.canvas).toEqual(canvas);
+    });
+  });
 });
 
 describe('Methods', () => {
@@ -1057,10 +1070,9 @@ describe('Getters', () => {
       offset: 7,
       arrowLength: 5,
     });
-
-    (getCanvas as jest.Mock).mockReturnValue({
+    tooltip.canvas = {
       top: 1, left: 2, right: 3, bottom: 4, width: 10, height: 10,
-    });
+    };
 
     expect(tooltip.correctedCoordinates).toEqual({
       x: 4, y: 5, anchorX: 11, anchorY: 12,
