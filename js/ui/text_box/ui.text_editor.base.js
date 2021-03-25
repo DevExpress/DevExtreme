@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import { resetActiveElement } from '../../core/utils/dom';
 import { focused } from '../widget/selectors';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -659,6 +658,10 @@ const TextEditorBase = Editor.inherit({
         return this._input();
     },
 
+    _hasActiveElement: function() {
+        return this._input().is(domAdapter.getActiveElement());
+    },
+
     _optionChanged: function(args) {
         const { name, fullName, value } = args;
 
@@ -756,12 +759,6 @@ const TextEditorBase = Editor.inherit({
 
     focus: function() {
         eventsEngine.trigger(this._input(), 'focus');
-    },
-
-    blur: function() {
-        if(this._input().is(domAdapter.getActiveElement())) {
-            resetActiveElement();
-        }
     },
 
     reset: function() {
