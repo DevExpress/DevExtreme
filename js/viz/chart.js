@@ -176,6 +176,11 @@ function getHorizontalAxesMargins(axes, getMarginsFunc) {
         margins.left = pickMax('left', paneMargins, margins);
         margins.right = pickMax('right', paneMargins, margins);
 
+        const orthogonalAxis = axis.getOrthogonalAxis?.();
+        if(orthogonalAxis && orthogonalAxis.customPositionIsAvailable() &&
+            (!axis.customPositionIsBoundaryOrthogonalAxis() || !orthogonalAxis.customPositionEqualsToPredefined())) {
+            margins[orthogonalAxis.getResolvedBoundaryPosition()] = 0;
+        }
         return margins;
     }, { panes: {} });
 }
@@ -1330,13 +1335,11 @@ const dxChart = AdvancedChart.inherit({
     _applyClipRectsForAxes() {
         const that = this;
         const axes = that._getAllAxes();
-        const customPositionAxes = axes.filter(a => a.hasCustomPosition());
         const chartCanvasClipRectID = that._getCanvasClipRectID();
 
         for(let i = 0; i < axes.length; i++) {
             const elementsClipRectID = that._getElementsClipRectID(axes[i].pane);
-            const canvasClipRectID = customPositionAxes.indexOf(axes[i]) >= 0 ? elementsClipRectID : chartCanvasClipRectID;
-            axes[i].applyClipRects(elementsClipRectID, canvasClipRectID);
+            axes[i].applyClipRects(elementsClipRectID, chartCanvasClipRectID);
         }
     },
 
