@@ -175,6 +175,7 @@ const DropDownButton = Widget.inherit({
         }
     },
 
+    // T977758
     _renderFocusTarget: noop,
 
     _render() {
