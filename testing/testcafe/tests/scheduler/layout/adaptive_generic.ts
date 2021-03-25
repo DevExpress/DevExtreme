@@ -35,7 +35,7 @@ const resources = [{
   label: 'Priority',
 }];
 
-[undefined].forEach((crossScrollingEnabled) => {
+[false, true].forEach((crossScrollingEnabled) => {
   views.forEach((view) => {
     test(`Adaptive views layout test in generic theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
       await t.resizeWindow(400, 600);
@@ -54,7 +54,7 @@ const resources = [{
   });
 });
 
-[undefined].forEach((crossScrollingEnabled) => {
+[false, true].forEach((crossScrollingEnabled) => {
   views
     .map((viewType) => ({
       type: viewType,
