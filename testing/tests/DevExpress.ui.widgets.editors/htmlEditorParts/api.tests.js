@@ -162,10 +162,10 @@ testModule('API', moduleConfig, () => {
 
     test('getFormat for current selection', function(assert) {
         this.createEditor();
-        this.instance.option('value', '<p><b>Test Test</b></p>');
-        this.instance.setSelection(2, 3);
+        this.instance.option('value', '<p>Test <b>Test</b></p>');
+        this.instance.setSelection(6, 2);
 
-        const format = this.instance.getFormat(1, 2);
+        const format = this.instance.getFormat();
         assert.deepEqual(format, { bold: true }, 'correct format');
     });
 
