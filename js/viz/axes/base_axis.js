@@ -786,24 +786,14 @@ Axis.prototype = {
 
     getMargins: function() {
         const that = this;
-        if(that.hasCustomPosition()) {
-            return {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            };
-        }
-
-        const options = that._options;
-        const position = options.position;
-        const placeholderSize = options.placeholderSize;
+        const { position, offset, customPosition, placeholderSize, grid, tick, crosshairMargin } = that._options;
+        const boundaryPosition = that.getResolvedBoundaryPosition();
         const canvas = that.getCanvas();
         const cLeft = canvas.left;
         const cTop = canvas.top;
         const cRight = canvas.width - canvas.right;
         const cBottom = canvas.height - canvas.bottom;
-        const edgeMarginCorrection = _max(options.grid.visible && options.grid.width || 0, options.tick.visible && options.tick.width || 0);
+        const edgeMarginCorrection = _max(grid.visible && grid.width || 0, tick.visible && tick.width || 0);
         const constantLineAboveSeries = that._axisConstantLineGroups.above;
         const constantLineUnderSeries = that._axisConstantLineGroups.under;
         const boxes = [that._axisElementsGroup,
@@ -830,8 +820,11 @@ Axis.prototype = {
 
         const margins = calculateCanvasMargins(boxes, canvas);
 
-        margins[position] += options.crosshairMargin;
+        margins[position] += crosshairMargin;
 
+        if(that.hasCustomPosition() && isDefined(customPosition)) {
+            margins[boundaryPosition] = 0;
+        }
         if(placeholderSize) {
             margins[position] = placeholderSize;
         }
@@ -843,6 +836,13 @@ Axis.prototype = {
             if(!that._isHorizontal && canvas.bottom < edgeMarginCorrection && margins.bottom < edgeMarginCorrection) {
                 margins.bottom = edgeMarginCorrection;
             }
+        }
+
+        if(!isDefined(customPosition) && isDefined(offset)) {
+            const moveByOffset = that.customPositionIsBoundary() &&
+                ((offset > 0 && (boundaryPosition === LEFT || boundaryPosition === TOP)) ||
+                (offset < 0 && (boundaryPosition === RIGHT || boundaryPosition === BOTTOM)));
+            margins[boundaryPosition] -= moveByOffset ? offset : 0;
         }
 
         return margins;

@@ -3974,7 +3974,7 @@ QUnit.test('Value axis. Set customPosition and offset options', function(assert)
     assert.ok(chart.getValueAxis('axis2')._majorTicks[0].label.attr('translateY') < 0);
 
     chart.option('valueAxis[1].offset', -18);
-    assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 970, 5);
+    assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 980, 5);
 
     chart.option('valueAxis[1].offset', 18);
     assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 990, 5);
@@ -3982,6 +3982,31 @@ QUnit.test('Value axis. Set customPosition and offset options', function(assert)
     chart.option('valueAxis[0].offset', 50);
     chart.option('valueAxis[0].customPosition', 'abcd');
     assert.roughEqual(chart.getValueAxis('axis0')._axisPosition, 132, 8);
+});
+
+QUnit.test('Value axis. Set small values for the offset option (T980159, T971769)', function(assert) {
+    const chart = this.createChart({});
+
+    chart.option('valueAxis[2].offset', -9);
+    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 110, 6);
+
+    chart.option('valueAxis[2].offset', 9);
+    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 120, 6);
+
+    chart.option('valueAxis[2].offset', 0);
+    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 110, 6);
+});
+
+QUnit.test('Value axis. No space is added for labels on the edge of the axis argument', function(assert) {
+    const chart = this.createChart({
+        legend: { horizontalAlignment: 'right' },
+        argumentAxis: { visualRange: [303, 700] }
+    });
+
+    chart.option('valueAxis[0].offset', 30);
+    chart.option('valueAxis[2].offset', 30);
+
+    assert.ok(chart.getArgumentAxis()._majorTicks[0].label.element.getBBox().x < 0);
 });
 
 QUnit.testStart(function() {
@@ -4029,6 +4054,31 @@ QUnit.test('Zoom and pan', function(assert) {
 
     assert.equal(valAxis1._axisPosition, chart.getValueAxis('axis0')._axisPosition);
     assert.roughEqual(valAxis1._axisShift, 37, 5);
+});
+
+QUnit.test('Zoom and pan when set small values for the offset option (T980159)', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: [300, 700]
+        }
+    });
+    const valAxis2 = chart.getValueAxis('axis2');
+
+    chart.option('valueAxis[2].offset', 9);
+    assert.roughEqual(valAxis2._axisPosition, 120, 6);
+
+    const $root = $(chart._renderer.root.element);
+    $root.trigger(new $.Event('dxdragstart', { pageX: 200, pageY: 250 }));
+    $root.trigger(new $.Event('dxdrag', { offset: { x: -100, y: 0 } }));
+    $root.trigger(new $.Event('dxdragend', {}));
+
+    assert.roughEqual(valAxis2._axisPosition, 120, 6);
+
+    $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
+    $root.trigger(new $.Event('dxdrag', { offset: { x: 150, y: 0 } }));
+    $root.trigger(new $.Event('dxdragend', {}));
+
+    assert.roughEqual(valAxis2._axisPosition, 120, 6);
 });
 
 QUnit.test('Argument axis. Set customPositionAxis option', function(assert) {
@@ -4099,12 +4149,12 @@ QUnit.test('Custom position is set for argument and value axis (T889092)', funct
         }
     });
 
-    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 538, 2);
+    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 538, 6);
     assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
 
     chart.option('valueAxis.customPosition', -21);
 
-    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 490, 5);
+    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 538, 6);
     assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
 });
 
@@ -4188,4 +4238,38 @@ QUnit.test('Resolve overlapping: labels', function(assert) {
     assert.equal(valAxis2._majorTicks[4].mark.attr('translateX'), -6);
     assert.ok(argAxis._majorTicks[5].label.attr('translateY') < 0);
     assert.equal(argAxis._majorTicks[5].mark.attr('translateY'), -6);
+});
+
+QUnit.test('Resolve overlapping: opposite position of the axis and the intersection of the orthogonal labels (left to right)', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            customPositionAxis: 'axis2',
+            visualRange: [300, 710],
+            customPosition: 319.5
+        }
+    });
+
+    chart.option('valueAxis[2]', {
+        visualRange: [310, 330],
+        offset: 1200
+    });
+
+    assert.equal(chart.getValueAxis('axis2')._majorTicks[6].mark.attr('translateX'), 6);
+});
+
+QUnit.test('Resolve overlapping: opposite position of the axis and the intersection of the orthogonal labels (top to bottom)', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            position: 'top',
+            offset: 1200
+        }
+    });
+
+    chart.option('valueAxis[0]', {
+        endOnTick: false,
+        visualRange: [444.5, 455],
+        offset: 450
+    });
+
+    assert.equal(chart.getArgumentAxis()._majorTicks[5].mark.attr('translateY'), 6);
 });
