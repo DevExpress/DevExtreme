@@ -7,7 +7,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    BaseNativeEvent
+    ComponentNativeEvent
 } from '../events/index';
 
 import Widget, {
@@ -25,7 +25,7 @@ export interface ButtonData {
 /**
  * @public
 */
-export interface ClickEvent<T> extends BaseNativeEvent<T> {
+export interface ClickEvent<T> extends ComponentNativeEvent<T> {
     validationGroup?: any
 }
 /**

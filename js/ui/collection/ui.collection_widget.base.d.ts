@@ -11,8 +11,9 @@ import DataSource, {
 } from '../../data/data_source';
 
 import {
-    BaseEvent,
-    BaseNativeEvent
+    ComponentEvent,
+    ComponentNativeEvent,
+    ItemEvent
 } from '../../events/index';
 
 import Widget, {
@@ -21,19 +22,13 @@ import Widget, {
 } from '../widget/ui.widget';
 
 export { ContentReadyEvent }
-export interface BaseItemEvent<T> extends BaseNativeEvent<T> {
-    readonly itemData?: any,
-    itemElement: TElement,
-}
-interface ItemEvent<T> extends BaseItemEvent<T> {
-    readonly itemIndex: number
-}
-export interface ItemClickEvent<T> extends ItemEvent<T> {}
-export interface ItemContextMenuEvent<T> extends ItemEvent<T> {}
-export interface ItemHoldEvent<T> extends ItemEvent<T> {}
-export interface ItemRenderedEvent<T> extends ItemEvent<T> {}
 
-export interface SelectionChangedEvent<T> extends BaseEvent<T> {
+export interface ItemClickEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
+export interface ItemContextMenuEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
+export interface ItemHoldEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
+export interface ItemRenderedEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
+
+export interface SelectionChangedEvent<T> extends ComponentEvent<T> {
     readonly addedItems: Array<any>,
     readonly removedItems: Array<any>
 }

@@ -11,7 +11,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    BaseEvent,
+    ComponentEvent,
     TEvent
 } from '../events/index';
 
@@ -40,7 +40,7 @@ export {
 /**
  * @public
 */
-export interface CancelClickEvent<T> extends BaseEvent<T> {
+export interface CancelClickEvent<T> extends ComponentEvent<T> {
     cancel?: boolean
 }
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {

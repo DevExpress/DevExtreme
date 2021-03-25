@@ -3,7 +3,7 @@ import {
 } from '../../core/element';
 
 import {
-    BaseNativeEvent
+    ComponentNativeEvent
 } from '../../events/index';
 
 import Widget, {
@@ -11,7 +11,7 @@ import Widget, {
     ContentReadyEvent
 } from '../widget/ui.widget';
 
-export interface ValueChangedEvent<T> extends BaseNativeEvent<T> {
+export interface ValueChangedEvent<T> extends ComponentNativeEvent<T> {
     readonly previousValue?: any,
     readonly value?: any,
 }

@@ -30,7 +30,7 @@ import dxDropDownList, {
     KeyPressEvent,
     ContentReadyEvent
 } from './drop_down_editor/ui.drop_down_list';
-import { BaseEvent } from '../events/index';
+import { ComponentEvent } from '../events/index';
 
 /**
  * @public
@@ -57,7 +57,7 @@ export {
 /**
  * @public
 */
-export interface CustomItemCreatingEvent<T> extends BaseEvent<T> {
+export interface CustomItemCreatingEvent<T> extends ComponentEvent<T> {
     readonly text?: string,
     customItem?: string | any | TPromise<any> 
 }

@@ -7,8 +7,8 @@ import {
 } from '../core/utils/deferred';
 
 import {
-  BaseEvent,
-  BaseNativeEvent
+  ComponentEvent,
+  ComponentNativeEvent
 } from '../events/index';
 
 import Widget, {
@@ -18,37 +18,37 @@ import Widget, {
 /**
  * @public
 */
-export interface ClickEvent<T> extends BaseNativeEvent<T> {}
+export interface ClickEvent<T> extends ComponentNativeEvent<T> {}
 /**
  * @public
 */
-export interface MarkerAddedEvent<T> extends BaseEvent<T> {
+export interface MarkerAddedEvent<T> extends ComponentEvent<T> {
   readonly options: any,
   originalMarker: any
 }
 /**
  * @public
 */
-export interface MarkerRemovedEvent<T> extends BaseEvent<T> {
+export interface MarkerRemovedEvent<T> extends ComponentEvent<T> {
   readonly options?: any
 }
 /**
  * @public
 */
-export interface RouteAddedEvent<T> extends BaseEvent<T> {
+export interface RouteAddedEvent<T> extends ComponentEvent<T> {
   readonly options: any,
   originalRoute: any
 }
 /**
  * @public
 */
-export interface RouteRemovedEvent<T> extends BaseEvent<T> {
+export interface RouteRemovedEvent<T> extends ComponentEvent<T> {
   readonly options?: any
 }
 /**
  * @public
 */
-export interface ReadyEvent<T> extends BaseEvent<T> {
+export interface ReadyEvent<T> extends ComponentEvent<T> {
   originalMap: any
 }
 /**

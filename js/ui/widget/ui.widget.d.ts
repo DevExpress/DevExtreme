@@ -7,10 +7,10 @@ import {
 } from '../../core/element';
 
 import {
-    BaseEvent
+    ComponentEvent
 } from '../../events/index';
 
-export interface ContentReadyEvent<T> extends BaseEvent<T> {} 
+export interface ContentReadyEvent<T> extends ComponentEvent<T> {} 
 
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**

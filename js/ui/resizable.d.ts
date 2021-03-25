@@ -7,10 +7,10 @@ import {
 } from '../core/element';
 
 import {
-    BaseNativeEvent
+    ComponentNativeEvent
 } from '../events/index';
 
-interface BaseResizeEvent<T> extends BaseNativeEvent<T> {
+interface BaseResizeEvent<T> extends ComponentNativeEvent<T> {
     readonly width: number,
     readonly height: number,
     handles: {

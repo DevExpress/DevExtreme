@@ -32,11 +32,11 @@ import {
 } from '../popup';
 
 import {
-    BaseEvent
+    ComponentEvent
 } from '../../events/index';
 
-export interface ClosedEvent <T> extends BaseEvent<T> {}
-export interface OpenedEvent <T> extends BaseEvent<T> {}
+export interface ClosedEvent <T> extends ComponentEvent<T> {}
+export interface OpenedEvent <T> extends ComponentEvent<T> {}
 export interface DropDownButtonData {
     readonly text?: string,
     readonly icon?: string

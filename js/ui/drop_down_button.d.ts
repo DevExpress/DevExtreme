@@ -15,7 +15,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    BaseNativeEvent,
+    ComponentNativeEvent,
     TEvent
 } from '../events/index';
 
@@ -39,20 +39,20 @@ export { ContentReadyEvent }
 /**
  * @public
 */
-export interface ButtonClickEvent<T> extends BaseNativeEvent<T> {
+export interface ButtonClickEvent<T> extends ComponentNativeEvent<T> {
     readonly selectedItem?: any
 }
 /**
  * @public
 */
-export interface ItemClickEvent<T> extends BaseNativeEvent<T> {
+export interface ItemClickEvent<T> extends ComponentNativeEvent<T> {
     readonly itemData?: any,
     itemElement?: TElement
 }
 /**
  * @public
 */
-export interface SelectionChangedEvent<T> extends BaseNativeEvent<T> {
+export interface SelectionChangedEvent<T> extends ComponentNativeEvent<T> {
     readonly item: any,
     readonly previousItem: any
 }

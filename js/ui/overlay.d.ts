@@ -15,7 +15,7 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    BaseEvent,
+    ComponentEvent,
     TEvent
 } from '../events/index';
 
@@ -29,12 +29,12 @@ import {
     ResizeStartEvent
 } from './resizable';
 
-export interface HiddenEvent<T> extends BaseEvent<T> {}
-export interface HidindEvent<T> extends BaseEvent<T> {
+export interface HiddenEvent<T> extends ComponentEvent<T> {}
+export interface HidindEvent<T> extends ComponentEvent<T> {
     cancel?: boolean
 }
-export interface ShowingEvent<T> extends BaseEvent<T> {}
-export interface ShownEvent<T> extends BaseEvent<T> {}
+export interface ShowingEvent<T> extends ComponentEvent<T> {}
+export interface ShownEvent<T> extends ComponentEvent<T> {}
 export {
     ContentReadyEvent,
     ResizeEndEvent,

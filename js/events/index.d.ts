@@ -9,13 +9,41 @@ export interface EventType { }
  * @prevFileNamespace DevExpress.events
  */
 export type TEvent = {} extends EventType ? dxEvent : EventType;
-export interface BaseEvent<T> {
+export interface ComponentEvent<T> {
     component: T,
     element: TElement,
     model?: any
 }
-export interface BaseNativeEvent<T> extends BaseEvent<T> {
+
+export interface ComponentNativeEvent<T> extends ComponentEvent<T> {
     event?: TEvent
+}
+
+interface ItemInfo {
+    readonly itemData?: any,
+    itemElement: TElement,
+}
+
+/**
+ * @public
+*/
+export interface GroupItemIndex {
+    group: number;
+    item: number;
+}
+
+/**
+ * @public
+ */
+export interface ItemEvent extends ItemInfo {
+    readonly itemIndex: number;
+}
+
+/**
+ * @public
+ */
+export interface GroupItemEvent extends ItemInfo {
+    readonly itemIndex: number | GroupItemIndex;
 }
 
 /**

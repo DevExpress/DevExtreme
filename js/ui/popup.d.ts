@@ -1,4 +1,4 @@
-import { BaseEvent } from '../events/index';
+import { ComponentEvent } from '../events/index';
 import {
     animationConfig
 } from '../animation/fx';
@@ -31,7 +31,7 @@ import dxOverlay, {
 /**
  * @public
 */
-export interface TitleRenderedEvent<T> extends BaseEvent<T> {
+export interface TitleRenderedEvent<T> extends ComponentEvent<T> {
     titleElement: TElement
 }
 /**

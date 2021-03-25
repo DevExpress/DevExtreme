@@ -3,7 +3,7 @@ import {
 } from '../../core/element';
 
 import {
-    BaseNativeEvent
+    ComponentNativeEvent
 } from '../../events/index';
 
 import dxButton, {
@@ -16,17 +16,17 @@ import Editor, {
     ValueChangedEvent
 } from '../editor/editor';
 
-export interface ChangeEvent<T> extends BaseNativeEvent<T> {}
-export interface CopyEvent<T> extends BaseNativeEvent<T> {}
-export interface CutEvent<T> extends BaseNativeEvent<T> {}
-export interface EnterKeyEvent<T> extends BaseNativeEvent<T> {}
-export interface FocusInEvent<T> extends BaseNativeEvent<T> {}
-export interface FocusOutEvent<T> extends BaseNativeEvent<T> {}
-export interface InputEvent<T> extends BaseNativeEvent<T> {}
-export interface KeyDownEvent<T> extends BaseNativeEvent<T> {}
-export interface KeyPressEvent<T> extends BaseNativeEvent<T> {}
-export interface KeyUpEvent<T> extends BaseNativeEvent<T> {}
-export interface PasteEvent<T> extends BaseNativeEvent<T> {}
+export interface ChangeEvent<T> extends ComponentNativeEvent<T> {}
+export interface CopyEvent<T> extends ComponentNativeEvent<T> {}
+export interface CutEvent<T> extends ComponentNativeEvent<T> {}
+export interface EnterKeyEvent<T> extends ComponentNativeEvent<T> {}
+export interface FocusInEvent<T> extends ComponentNativeEvent<T> {}
+export interface FocusOutEvent<T> extends ComponentNativeEvent<T> {}
+export interface InputEvent<T> extends ComponentNativeEvent<T> {}
+export interface KeyDownEvent<T> extends ComponentNativeEvent<T> {}
+export interface KeyPressEvent<T> extends ComponentNativeEvent<T> {}
+export interface KeyUpEvent<T> extends ComponentNativeEvent<T> {}
+export interface PasteEvent<T> extends ComponentNativeEvent<T> {}
 export {
     ContentReadyEvent,
     ValueChangedEvent

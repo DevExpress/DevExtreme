@@ -11,7 +11,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    BaseNativeEvent,
+    ComponentNativeEvent,
     TEvent
 } from '../events/index';
 
@@ -35,11 +35,11 @@ export {
 /**
  * @public
 */
-export interface FocusInEvent<T> extends BaseNativeEvent<T> {}
+export interface FocusInEvent<T> extends ComponentNativeEvent<T> {}
 /**
  * @public
 */
-export interface FocusOutEvent<T> extends BaseNativeEvent<T> {}
+export interface FocusOutEvent<T> extends ComponentNativeEvent<T> {}
 /**
  * @public
 */

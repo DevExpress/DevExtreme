@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    BaseNativeEvent
+    ComponentNativeEvent
 } from '../events/index';
 
 import dxTrackBar, {
@@ -22,7 +22,7 @@ export {
 /**
  * @public
 */
-export interface CompleteEvent<T> extends BaseNativeEvent<T> {} 
+export interface CompleteEvent<T> extends ComponentNativeEvent<T> {} 
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid

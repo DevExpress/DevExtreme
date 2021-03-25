@@ -5,7 +5,7 @@ import {
 import {
     template
 } from '../core/templates/template';
-import { BaseEvent } from '../events/index';
+import { ComponentEvent } from '../events/index';
 import {
     SelectAllValueChangedEvent,
 } from './list';
@@ -65,7 +65,7 @@ export interface SelectionChangedEvent<T> extends SelectBoxSelectionChangedEvent
 /**
  * @public
 */
-export interface MultiTagPreparingEvent<T> extends BaseEvent<T> {
+export interface MultiTagPreparingEvent<T> extends ComponentEvent<T> {
     multiTagElement: TElement,
     readonly selectedItems?: Array<string | number | any>,
     readonly text?: string,
