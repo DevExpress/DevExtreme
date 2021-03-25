@@ -14,7 +14,7 @@ import ArrayStore from '../data/array_store';
 import { Deferred } from '../core/utils/deferred';
 import { extend } from '../core/utils/extend';
 import { isPlainObject, isDefined } from '../core/utils/type';
-import { ensureDefined } from '../core/utils/common';
+import { ensureDefined, noop } from '../core/utils/common';
 import Guid from '../core/guid';
 import { getElementWidth, getSizeValue } from './drop_down_editor/utils';
 import messageLocalization from '../localization/message';
@@ -100,10 +100,6 @@ const DropDownButton = Widget.inherit({
         });
     },
 
-    _focusTarget() {
-        return this._buttonGroup.$element();
-    },
-
     _setOptionsByReference() {
         this.callBase();
 
@@ -169,16 +165,17 @@ const DropDownButton = Widget.inherit({
     },
 
     _initMarkup() {
+        this.callBase();
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
         this._updateArrowClass();
-
-        this.callBase();
 
         if(isDefined(this.option('selectedItemKey'))) {
             this._loadSelectedItem().done(this._updateActionButton.bind(this));
         }
     },
+
+    _renderFocusTarget: noop,
 
     _render() {
         if(!this.option('deferRendering') || this.option('opened')) {
@@ -290,6 +287,7 @@ const DropDownButton = Widget.inherit({
             height: '100%',
             stylingMode: this.option('stylingMode'),
             selectionMode: 'none',
+            tabIndex: this.option('tabIndex'),
             buttonTemplate: ({ text, icon }, buttonContent) => {
                 if(this.option('splitButton') || !this.option('showArrowIcon')) {
                     return 'content';
@@ -571,6 +569,10 @@ const DropDownButton = Widget.inherit({
         this._setListOption('keyExpr', this._getKey());
     },
 
+    focus: function() {
+        this._buttonGroup.focus();
+    },
+
     _optionChanged(args) {
         const { name, value } = args;
         switch(name) {
@@ -668,6 +670,9 @@ const DropDownButton = Widget.inherit({
                 break;
             case 'deferRendering':
                 this.toggle(this.option('opened'));
+                break;
+            case 'tabIndex':
+                this._buttonGroup.option(name, value);
                 break;
             default:
                 this.callBase(args);

@@ -719,7 +719,10 @@ export class DataGridSummary {
 @ComponentBindings()
 export class DataGridPager {
   @OneWay()
-  allowedPageSizes?: number[] | 'auto';
+  allowedPageSizes?: (number | 'all')[] | 'auto';
+
+  @OneWay()
+  displayMode?: 'adaptive' | 'compact' | 'full';
 
   @OneWay()
   infoText?: string;

@@ -2249,35 +2249,6 @@ QUnit.module('keyboard navigation', {
 
         assert.ok(focusOutHandler.calledOnce, 'focusOut handler was called');
     });
-
-    QUnit.testInActiveWindow('dropDownButton has no tabIndex attribute', function(assert) {
-        const tabIndexAttribute = this.$element.attr('tabIndex');
-
-        assert.strictEqual(tabIndexAttribute, undefined);
-    });
-
-    QUnit.testInActiveWindow('buttonGroup tabIndex attribute equals 0', function(assert) {
-        const $buttonGroup = getButtonGroup(this.dropDownButton).$element();
-        const tabIndexAttribute = $buttonGroup.attr('tabIndex');
-
-        assert.strictEqual(tabIndexAttribute, '0');
-    });
-
-    QUnit.testInActiveWindow('tabIndex option change does not affect dropDownButton tabIndex attribute', function(assert) {
-        this.dropDownButton.option('tabIndex', 1);
-        const tabIndexAttribute = this.$element.attr('tabIndex');
-
-        assert.strictEqual(tabIndexAttribute, undefined, 'tabIndex attribute still undefined');
-    });
-
-    QUnit.testInActiveWindow('tabIndex option change sets buttonGroup tabIndex attribute', function(assert) {
-        const $buttonGroup = getButtonGroup(this.dropDownButton).$element();
-
-        this.dropDownButton.option('tabIndex', 1);
-        const tabIndexAttribute = $buttonGroup.attr('tabIndex');
-
-        assert.strictEqual(tabIndexAttribute, '1', 'buttonGroup tabIndex attribute changed');
-    });
 });
 
 QUnit.module('custom content template', {}, () => {
