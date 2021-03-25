@@ -1020,11 +1020,9 @@ QUnit.test('Should not merge element with ".dx-template-wrapper" class', functio
     };
 
     initMarkup($markup, controller, this);
-    // debugger;
 
     this.clock.tick(0);
     const template = $markup.find('.test-cell').first();
-    // debugger;
 
     assert.equal(template.length, 1, 'Template exists');
     assert.ok(template.hasClass('dx-template-wrapper'), 'Template has class ".dx-template-wrapper"');
