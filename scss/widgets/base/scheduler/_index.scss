@@ -402,12 +402,16 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-date-table {
-    margin-left: -($size + $scheduler-left-column-width);
+    margin-left: -($size + $scheduler-left-column-width * $scheduler-small-size-factor);
 
     .dx-scheduler-virtual-row::before,
     .dx-scheduler-date-table-row::before,
     .dx-scheduler-all-day-table-row::before {
       width: $size + $scheduler-left-column-width;
+
+      .dx-scheduler-small & {
+        width: $size + $scheduler-left-column-width * $scheduler-small-size-factor;
+      }
     }
 
     .dx-rtl & {
@@ -419,6 +423,10 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-header-panel {
     .dx-scheduler-header-row::before {
       width: $size + $scheduler-left-column-width;
+
+      .dx-scheduler-small & {
+        width: $size + $scheduler-left-column-width * $scheduler-small-size-factor;
+      }
     }
   }
 

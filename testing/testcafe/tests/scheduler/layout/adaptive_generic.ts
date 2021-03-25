@@ -79,3 +79,29 @@ const resources = [{
         });
     });
 });
+
+[false].forEach((crossScrollingEnabled) => {
+  views
+    .map((viewType) => ({
+      type: viewType,
+      groupOrientation: 'vertical',
+    }))
+    .forEach((view) => {
+      test(`Adaptive views layout test in generic theme (view='${view.type})', crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping is used`, async (t) => {
+        await t.resizeWindow(400, 600);
+
+        await t.expect(
+          await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping).png`),
+        ).ok();
+      }).before(() => createScheduler({
+        views: [view],
+        currentView: view,
+        crossScrollingEnabled,
+        groups: ['priorityId'],
+        resources,
+      }))
+        .after(async (t) => {
+          await t.resizeWindow(1200, 800);
+        });
+    });
+});
