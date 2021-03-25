@@ -8269,7 +8269,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxHtmlEditor.getSelection()]
          */
-        getSelection(): any;
+        getSelection(focus: boolean): any;
         /**
          * [descr:dxHtmlEditor.getText(index, length)]
          */

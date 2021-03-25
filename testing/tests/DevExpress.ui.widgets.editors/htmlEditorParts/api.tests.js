@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import { prepareTableValue } from './utils.js';
+import { isObject } from 'core/utils/type';
 
 const { test, module: testModule } = QUnit;
 
@@ -97,6 +98,14 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(selection.length, 2, 'Correct length');
     });
 
+    test('quill getSelection gets correct arguments', function(assert) {
+        this.createEditor();
+        const getSelectionSpy = sinon.spy(this.instance.getQuillInstance(), 'getSelection');
+        this.instance.getSelection(true);
+
+        assert.deepEqual(getSelectionSpy.lastCall.args[0], true, 'Quill getSelection() gets correct arguments');
+    });
+
     test('format', function(assert) {
         this.createEditor();
         this.instance.setSelection(1, 2);
@@ -134,12 +143,13 @@ testModule('API', moduleConfig, () => {
             'width': 400,
             'height': 200
         });
+        const getBoundsSpy = sinon.spy(this.instance.getQuillInstance(), 'getBounds');
 
         const bounds = this.instance.getBounds(2, 7);
-        assert.roughEqual(bounds.top, 12, 5, 'correct top');
-        assert.roughEqual(bounds.left, 30, 5, 'correct left');
-        assert.roughEqual(bounds.width, 42, 5, 'correct width');
-        assert.roughEqual(bounds.height, 19, 5, 'correct height');
+
+        assert.ok(getBoundsSpy.calledOnce, 'Quill getBounds() should triggered on the editor\'s getBounds()');
+        assert.deepEqual(getBoundsSpy.lastCall.args, [2, 7], 'Quill getBounds() gets correct arguments');
+        assert.ok(isObject(bounds), 'bounds object is returned');
     });
 
     test('getFormat', function(assert) {

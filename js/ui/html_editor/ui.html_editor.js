@@ -547,8 +547,8 @@ const HtmlEditor = Editor.inherit({
         return this._quillInstance;
     },
 
-    getSelection: function() {
-        return this._applyQuillMethod('getSelection');
+    getSelection: function(focus) {
+        return this._applyQuillMethod('getSelection', arguments);
     },
 
     setSelection: function(index, length) {
@@ -632,7 +632,8 @@ const HtmlEditor = Editor.inherit({
     },
 
     blur: function() {
-        if(this.$element().find(domAdapter.getActiveElement())) {
+        const activeElement = domAdapter.getActiveElement();
+        if(this.$element().is(activeElement) || this.$element().find(activeElement).length) {
             resetActiveElement();
         }
         this._applyQuillMethod('blur');
