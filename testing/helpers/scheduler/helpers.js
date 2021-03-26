@@ -32,6 +32,7 @@ export const CLASSES = {
 
     dateTableCell: '.dx-scheduler-date-table-cell',
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
+    selectedCell: '.dx-state-focused',
 
     appointment: '.dx-scheduler-appointment',
     appointmentDate: '.dx-scheduler-appointment-content-date',
@@ -505,7 +506,22 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find('.dx-scheduler-group-header'),
                 getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
             },
-            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick')
+            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick'),
+
+            selectCells: (firstCellIndex, lastCellIndex) => {
+                const firstCell = this.workSpace.getCell(firstCellIndex);
+                const secondCell = this.workSpace.getCell(lastCellIndex);
+
+                const { x: firstCellLeft, y: firstCellTop } = firstCell.offset();
+                const { x: secondCellLeft, y: secondCellTop } = secondCell.offset();
+
+                pointerMock(firstCell)
+                    .start()
+                    .down(firstCellLeft, firstCellTop);
+                pointerMock(secondCell)
+                    .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
+                    .up();
+            },
         };
 
         this.viewSwitcher = {
