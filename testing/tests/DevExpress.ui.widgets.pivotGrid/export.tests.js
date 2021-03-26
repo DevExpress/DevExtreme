@@ -344,14 +344,14 @@ QUnit.module('Data Provider', () => {
 
     QUnit.test('Initialization. Get styles', function(assert) {
         const dataProvider = new DataProvider({
-            dataFields: [{}]
+            dataFields: []
         });
 
         assert.ok(dataProvider.getStyles() instanceof Array);
         assert.deepEqual(dataProvider.getStyles(), [
             { alignment: 'center', dataType: 'string' },
             { alignment: 'left', dataType: 'string' },
-            { alignment: 'right', dataType: 'string' }
+            { alignment: 'right' }
         ]);
     });
 
