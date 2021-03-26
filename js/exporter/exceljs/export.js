@@ -1,7 +1,7 @@
 import { isDefined, isString, isDate, isObject, isFunction } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
-import { MergedRangesManager } from './export_merge';
+import { MergedRangesManager } from './export_merged_ranges_manager';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
 
