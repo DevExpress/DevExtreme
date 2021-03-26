@@ -58,6 +58,7 @@ System.config({
     /**/
 
     /** jspdf&jspdf-autotable */
+    'fflate': 'npm:fflate/esm/browser.js',
     'jspdf': 'npm:jspdf/dist/jspdf.es.min.js',
     'jspdf-autotable': 'npm:jspdf-autotable/dist/jspdf.plugin.autotable.min.js',
     /**/
