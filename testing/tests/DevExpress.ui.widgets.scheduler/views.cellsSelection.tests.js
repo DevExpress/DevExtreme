@@ -1,4 +1,5 @@
 import 'generic_light.css!';
+import fx from 'animation/fx';
 import { createWrapper, initTestMarkup, CLASSES } from '../../helpers/scheduler/helpers.js';
 
 const { test, module, testStart } = QUnit;
@@ -7,7 +8,16 @@ const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 
 testStart(() => initTestMarkup());
 
-module('Cells Selection', () => {
+module('Cells Selection', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+    },
+    afterEach: function() {
+        this.clock.restore();
+        fx.off = false;
+    },
+}, () => {
     ['standard', 'virtual'].forEach((scrollingMode) => {
         [{
             startCell: 4,
