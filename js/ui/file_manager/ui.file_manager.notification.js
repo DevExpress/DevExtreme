@@ -9,15 +9,10 @@ import Popup from '../popup';
 import Drawer from '../drawer/ui.drawer';
 
 import { NotificationManagerReal, NotificationManagerStub } from './ui.file_manager.notification_manager';
+import FileManagerProgressPanel from './ui.file_manager.notification.progress_panel';
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 1000;
-const ACTION_PROGRESS_STATUS = {
-    default: 'default',
-    progress: 'progress',
-    error: 'error',
-    success: 'success'
-};
 
 const FILE_MANAGER_NOTIFICATION_CLASS = 'dx-filemanager-notification';
 const FILE_MANAGER_NOTIFICATION_DRAWER_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-drawer`;
@@ -36,7 +31,6 @@ export default class FileManagerNotificationControl extends Widget {
 
         this._initActions();
 
-        this._actionProgressStatus = 'default';
         this._isInAdaptiveState = this._isSmallScreen();
 
         this._setNotificationManager();
@@ -67,29 +61,32 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _setNotificationManager() {
+        const options = {
+            onActionProgressStatusChanged: this._raiseActionProgress.bind(this),
+            getProgressPanelComponent: this._getProgressPanelComponent.bind(this)
+        };
         if(this._isProgressDrawerDisabled()) {
-            this._notificationManager = new NotificationManagerStub($('<div>'));
+            this._notificationManager = new NotificationManagerStub(options);
         } else {
-            this._notificationManager = new NotificationManagerReal($('<div>'));
+            this._notificationManager = new NotificationManagerReal(options);
         }
     }
 
     tryShowProgressPanel() {
         const promise = new Deferred();
-        if(this._actionProgressStatus === 'default' || this._isProgressDrawerOpened() || this._isProgressDrawerDisabled()) {
+        if(this._notificationManager.isActionProgressStatusDefault() || this._isProgressDrawerOpened() || this._isProgressDrawerDisabled()) {
             return promise.resolve().promise();
         }
 
         setTimeout(() => {
             this._progressDrawer.show().done(promise.resolve);
             this._hidePopup();
-            this._tryHideActionProgress();
+            this._notificationManager.updateActionProgressStatus();
         });
         return promise.promise();
     }
 
     addOperation(processingMessage, allowCancel, allowProgressAutoUpdate) {
-        this._updateActionProgress(processingMessage, ACTION_PROGRESS_STATUS.progress);
         return this._notificationManager.addOperation(processingMessage, allowCancel, allowProgressAutoUpdate);
     }
 
@@ -106,54 +103,29 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     completeOperation(operationInfo, commonText, isError, statusText) {
-        this.operationInProgressCount--;
-        if(isError) {
-            this.failedOperationCount++;
-        } else {
+        if(!isError) {
             this._showPopup(commonText);
         }
 
         this._notificationManager.completeOperation(operationInfo, commonText, isError, statusText);
 
-        if(!this._isProgressDrawerOpened() || !this._tryHideActionProgress()) {
-            let status = ACTION_PROGRESS_STATUS.success;
-            if(this._hasNoOperations(operationInfo)) {
-                status = ACTION_PROGRESS_STATUS.default;
-            } else if(this.failedOperationCount !== 0) {
-                status = ACTION_PROGRESS_STATUS.error;
-            }
-            this._updateActionProgress('', status);
+        if(!this._isProgressDrawerOpened() || !this._hasNoOperations(operationInfo)) {
+            this._notificationManager.updateActionProgressStatus(operationInfo);
         }
     }
 
     completeSingleOperationWithError(operationInfo, errorInfo) {
         this._notificationManager.completeSingleOperationWithError(operationInfo, errorInfo);
-        this._notifyError(operationInfo, errorInfo);
+        this._showPopupError(errorInfo);
     }
 
     addOperationDetailsError(operationInfo, errorInfo) {
         this._notificationManager.addOperationDetailsError(operationInfo, errorInfo);
-        this._notifyError(operationInfo, errorInfo);
+        this._showPopupError(errorInfo);
     }
 
     _hideProgressPanel() {
         setTimeout(() => this._progressDrawer.hide());
-    }
-
-    _tryHideActionProgress() {
-        if(this._hasNoOperations()) {
-            this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
-            return true;
-        }
-        return false;
-    }
-
-    _updateActionProgress(message, status) {
-        if(this._isProgressDrawerDisabled() && !(status === ACTION_PROGRESS_STATUS.default || status === ACTION_PROGRESS_STATUS.progress)) {
-            return;
-        }
-        this._actionProgressStatus = status;
-        this._raiseActionProgress(message, status);
     }
 
     _isSmallScreen() {
@@ -195,40 +167,20 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _ensureProgressPanelCreated(container) {
-        this._notificationManager.ensureProgressPanelCreated(container);
+        this._notificationManager.ensureProgressPanelCreated(container, {
+            onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
+            onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
+            onPanelClosed: () => this._hideProgressPanel()
+        });
+    }
+
+    // needed for editingProgress.tests.js
+    _getProgressPanelComponent() {
+        return FileManagerProgressPanel;
     }
 
     _hasNoOperations(operationInfo) {
         return this._notificationManager.hasNoOperations(operationInfo);
-    }
-
-    get operationInProgressCount() {
-        return this._notificationManager.operationInProgressCount;
-    }
-
-    set operationInProgressCount(value) {
-        this._notificationManager.operationInProgressCount = value;
-    }
-
-    get failedOperationCount() {
-        return this._notificationManager.failedOperationCount;
-    }
-
-    set failedOperationCount(value) {
-        this._notificationManager.failedOperationCount = 0;
-    }
-
-    _notifyError(operationInfo, errorInfo) {
-        this._showPopupError(errorInfo);
-        const status = this._hasNoOperations(operationInfo) ? ACTION_PROGRESS_STATUS.default : ACTION_PROGRESS_STATUS.error;
-        this._updateActionProgress(errorInfo.commonErrorText, status);
-    }
-
-    _onProgressPanelOperationClosed(info) {
-        if(info.hasError) {
-            this.failedOperationCount--;
-            this._tryHideActionProgress();
-        }
     }
 
     _isProgressDrawerDisabled() {
@@ -273,7 +225,7 @@ export default class FileManagerNotificationControl extends Widget {
             this._notificationManager.createErrorDetailsProgressBox($details, errorInfo.item, errorInfo.detailErrorText);
         } else {
             $message.addClass(FILE_MANAGER_NOTIFICATION_COMMON_NO_ITEM_CLASS);
-            this._notificationManager.renderError($details, $separator, errorInfo.detailErrorText);
+            this._notificationManager.renderError($details, errorInfo.detailErrorText);
         }
 
         $content.append($message, $separator, $details);
@@ -350,7 +302,8 @@ export default class FileManagerNotificationControl extends Widget {
             case 'showProgressPanel':
                 if(!args.value) {
                     this._hideProgressPanel();
-                    this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
+                    this._setNotificationManager();
+                    this._notificationManager.updateActionProgressStatus();
                 }
                 break;
             case 'showNotificationPopup':
