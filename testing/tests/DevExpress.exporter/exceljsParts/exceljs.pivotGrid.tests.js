@@ -2,7 +2,7 @@ import $ from 'jquery';
 import ExcelJS from 'exceljs';
 import { ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportPivotGrid } from 'excel_exporter';
-import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
+import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.options.tests.js';
