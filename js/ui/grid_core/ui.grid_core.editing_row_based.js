@@ -1,10 +1,10 @@
-const EDIT_MODE_ROW = 'row';
-const EDIT_MODE_FORM = 'form';
-const MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
-
-const ROW_SELECTED = 'dx-selection';
-const EDIT_ROW = 'dx-edit-row';
-const EDIT_FORM_CLASS = 'edit-form';
+import {
+    EDIT_MODE_ROW,
+    MODES_WITH_DELAYED_FOCUS,
+    ROW_SELECTED,
+    EDIT_ROW,
+    EDIT_FORM_CLASS
+} from './ui.grid_core.editing_constants';
 
 export const editingRowBasedModule = {
     extenders: {

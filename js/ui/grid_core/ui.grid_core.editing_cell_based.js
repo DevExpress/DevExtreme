@@ -10,25 +10,22 @@ import holdEvent from '../../events/hold';
 import { when, Deferred } from '../../core/utils/deferred';
 import { deferRender } from '../../core/utils/common';
 import { createObjectWithChanges } from '../../data/array_utils';
-
-const FOCUS_OVERLAY_CLASS = 'focus-overlay';
-const ADD_ROW_BUTTON_CLASS = 'addrow-button';
-const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
-const EDITOR_CELL_CLASS = 'dx-editor-cell';
-const ROW_CLASS = 'dx-row';
-const CELL_MODIFIED = 'dx-cell-modified';
-const DATA_ROW_CLASS = 'dx-data-row';
-const ROW_REMOVED = 'dx-row-removed';
-
-const EDIT_MODE_BATCH = 'batch';
-const EDIT_MODE_CELL = 'cell';
-
-const TARGET_COMPONENT_NAME = 'targetComponent';
-
-const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
-const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
-
-const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
+import {
+    FOCUS_OVERLAY_CLASS,
+    ADD_ROW_BUTTON_CLASS,
+    DROPDOWN_EDITOR_OVERLAY_CLASS,
+    EDITOR_CELL_CLASS,
+    ROW_CLASS,
+    CELL_MODIFIED,
+    DATA_ROW_CLASS,
+    ROW_REMOVED,
+    EDIT_MODE_BATCH,
+    EDIT_MODE_CELL,
+    TARGET_COMPONENT_NAME,
+    EDITING_EDITROWKEY_OPTION_NAME,
+    EDITING_EDITCOLUMNNAME_OPTION_NAME,
+    DATA_EDIT_DATA_REMOVE_TYPE
+} from './ui.grid_core.editing_constants';
 
 export default {
     extenders: {

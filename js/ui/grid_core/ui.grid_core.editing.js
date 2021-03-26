@@ -18,81 +18,42 @@ import devices from '../../core/devices';
 import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 import { equalByValue, noop } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
-
-const READONLY_CLASS = 'readonly';
-const LINK_CLASS = 'dx-link';
-const EDITOR_CELL_CLASS = 'dx-editor-cell';
-const ROW_SELECTED = 'dx-selection';
-const EDIT_BUTTON_CLASS = 'dx-edit-button';
-const COMMAND_EDIT_CLASS = 'dx-command-edit';
-const COMMAND_EDIT_WITH_ICONS_CLASS = COMMAND_EDIT_CLASS + '-with-icons';
-
-
-const INSERT_INDEX = '__DX_INSERT_INDEX__';
-const ROW_CLASS = 'dx-row';
-const ROW_INSERTED = 'dx-row-inserted';
-const ROW_MODIFIED = 'dx-row-modified';
-const CELL_MODIFIED = 'dx-cell-modified';
-const EDITING_NAMESPACE = 'dxDataGridEditing';
-
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
-
-const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
-const FOCUSABLE_ELEMENT_SELECTOR = '[tabindex], ' + EDITORS_INPUT_SELECTOR;
-
-const EDIT_MODE_BATCH = 'batch';
-const EDIT_MODE_ROW = 'row';
-const EDIT_MODE_CELL = 'cell';
-const EDIT_MODE_FORM = 'form';
-const EDIT_MODE_POPUP = 'popup';
-
-const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
-const DATA_EDIT_DATA_UPDATE_TYPE = 'update';
-const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
-
-const DEFAULT_START_EDIT_ACTION = 'click';
-
-const TARGET_COMPONENT_NAME = 'targetComponent';
-const EDIT_FORM_CLASS = 'edit-form';
-
-const EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP];
-const ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP];
-
-const EDIT_LINK_CLASS = {
-    save: 'dx-link-save',
-    cancel: 'dx-link-cancel',
-    edit: 'dx-link-edit',
-    undelete: 'dx-link-undelete',
-    delete: 'dx-link-delete',
-    add: 'dx-link-add'
-};
-const EDIT_ICON_CLASS = {
-    save: 'save',
-    cancel: 'revert',
-    edit: 'edit',
-    undelete: 'revert',
-    delete: 'trash',
-    add: 'add'
-};
-const METHOD_NAMES = {
-    edit: 'editRow',
-    delete: 'deleteRow',
-    undelete: 'undeleteRow',
-    save: 'saveEditData',
-    cancel: 'cancelEditData',
-    add: 'addRowByRowIndex'
-};
-const ACTION_OPTION_NAMES = {
-    add: 'allowAdding',
-    edit: 'allowUpdating',
-    delete: 'allowDeleting'
-};
-const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
-
-const EDITING_POPUP_OPTION_NAME = 'editing.popup';
-const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
-const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
-const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
+import {
+    READONLY_CLASS,
+    LINK_CLASS,
+    EDITOR_CELL_CLASS,
+    ROW_SELECTED,
+    EDIT_BUTTON_CLASS,
+    COMMAND_EDIT_CLASS,
+    COMMAND_EDIT_WITH_ICONS_CLASS,
+    INSERT_INDEX,
+    ROW_CLASS,
+    ROW_INSERTED,
+    ROW_MODIFIED,
+    CELL_MODIFIED,
+    EDITING_NAMESPACE,
+    CELL_FOCUS_DISABLED_CLASS,
+    EDITORS_INPUT_SELECTOR,
+    FOCUSABLE_ELEMENT_SELECTOR,
+    DATA_EDIT_DATA_INSERT_TYPE,
+    DATA_EDIT_DATA_UPDATE_TYPE,
+    DATA_EDIT_DATA_REMOVE_TYPE,
+    EDIT_MODES,
+    ROW_BASED_MODES,
+    EDIT_LINK_CLASS,
+    EDIT_ICON_CLASS,
+    METHOD_NAMES,
+    ACTION_OPTION_NAMES,
+    BUTTON_NAMES,
+    EDITING_POPUP_OPTION_NAME,
+    EDITING_CHANGES_OPTION_NAME,
+    EDITING_EDITROWKEY_OPTION_NAME,
+    EDITING_EDITCOLUMNNAME_OPTION_NAME,
+    EDIT_MODE_ROW,
+    DEFAULT_START_EDIT_ACTION,
+    TARGET_COMPONENT_NAME,
+    EDIT_FORM_CLASS
+} from './ui.grid_core.editing_constants';
 
 const createFailureHandler = function(deferred) {
     return function(arg) {

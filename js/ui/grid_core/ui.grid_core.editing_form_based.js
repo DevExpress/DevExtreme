@@ -11,22 +11,19 @@ import Form from '../form';
 import { Deferred } from '../../core/utils/deferred';
 import Scrollable from '../scroll_view/ui.scrollable';
 import Popup from '../popup';
-
-const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
-const EDIT_POPUP_CLASS = 'edit-popup';
-const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-const EDIT_MODE_FORM = 'form';
-const EDIT_MODE_POPUP = 'popup';
-const BUTTON_CLASS = 'dx-button';
-
-const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
-const FOCUSABLE_ELEMENT_SELECTOR = '[tabindex], ' + EDITORS_INPUT_SELECTOR;
-
-const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
-const EDITING_POPUP_OPTION_NAME = 'editing.popup';
-const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
-
-const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
+import {
+    EDIT_FORM_ITEM_CLASS,
+    EDIT_POPUP_CLASS,
+    SCROLLABLE_CONTAINER_CLASS,
+    EDIT_MODE_FORM,
+    EDIT_MODE_POPUP,
+    BUTTON_CLASS,
+    FOCUSABLE_ELEMENT_SELECTOR,
+    EDITING_EDITROWKEY_OPTION_NAME,
+    EDITING_POPUP_OPTION_NAME,
+    FORM_BUTTONS_CONTAINER_CLASS,
+    DATA_EDIT_DATA_INSERT_TYPE
+} from './ui.grid_core.editing_constants';
 
 const getEditorType = (item) => {
     const column = item.column;
