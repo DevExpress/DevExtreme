@@ -1531,7 +1531,7 @@ class Scheduler extends Widget {
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
             scrolling,
-            renovateRender: this.option('renovateRender') || isVirtualScrolling,
+            renovateRender: this._isRenovatedRender(isVirtualScrolling),
             draggingMode: this.option('_draggingMode')
         }, currentViewOptions);
 
@@ -1552,6 +1552,11 @@ class Scheduler extends Widget {
         result.dateCellTemplate = result.dateCellTemplate ? this._getTemplate(result.dateCellTemplate) : null;
 
         return result;
+    }
+
+    _isRenovatedRender(isVirtualScrolling) {
+        return (this.option('renovateRender') && hasWindow() && this.option('integrationOptions.renderedOnServer'))
+            || isVirtualScrolling;
     }
 
     _waitAsyncTemplate(callback) {
