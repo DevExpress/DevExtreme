@@ -34,7 +34,7 @@ class MergedRangesManager {
         return this.mergedCells[rowIndex] && this.mergedCells[rowIndex][cellIndex];
     }
 
-    tryGetMergedCellInfo(rowIndex, cellIndex) {
+    findMergedCellInfo(rowIndex, cellIndex) {
         if(this.helpers._isHeaderCell(this.dataProvider, rowIndex, cellIndex)) {
             if(this.isCellInMergedRanges(rowIndex, cellIndex)) {
                 return this.mergedCells[rowIndex][cellIndex];

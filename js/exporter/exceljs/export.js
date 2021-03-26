@@ -202,7 +202,7 @@ export const Export = {
 
             mergedRangesManager.updateMergedRanges(excelCell, rowIndex, cellIndex);
 
-            const cellInfo = mergedRangesManager.tryGetMergedCellInfo(rowIndex, cellIndex);
+            const cellInfo = mergedRangesManager.findMergedCellInfo(rowIndex, cellIndex);
             if(isDefined(cellInfo) && (excelCell !== cellInfo.masterCell)) {
                 excelCell.style = cellInfo.masterCell.style;
                 excelCell.value = cellInfo.masterCell.value;
