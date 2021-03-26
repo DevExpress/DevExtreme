@@ -153,7 +153,7 @@ export const Export = {
                     this.setColumnsWidth(worksheet, dataProvider.getColumnsWidths(), cellRange.from.column);
                 }
 
-                const mergeRanges = new MergeRanges(dataProvider, privateOptions, mergeRowFieldValues, mergeColumnFieldValues);
+                const mergeRanges = new MergeRanges(dataProvider, privateOptions.isHeaderCell, privateOptions.allowToMergeRange, mergeRowFieldValues, mergeColumnFieldValues);
                 const styles = this.getCellStyles(dataProvider);
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {

@@ -1,16 +1,17 @@
 class MergeRanges {
-    constructor(dataProvider, privateOptions, mergeRowFieldValues, mergeColumnFieldValues) {
+    constructor(dataProvider, isHeaderCell, allowToMergeRange, mergeRowFieldValues, mergeColumnFieldValues) {
         this.mergedCells = [];
         this.mergeRanges = [];
 
         this.dataProvider = dataProvider;
-        this.privateOptions = privateOptions;
+        this.isHeaderCell = isHeaderCell;
+        this.allowToMergeRange = allowToMergeRange;
         this.mergeRowFieldValues = mergeRowFieldValues;
         this.mergeColumnFieldValues = mergeColumnFieldValues;
     }
 
     update(excelCell, rowIndex, cellIndex) {
-        if(this.privateOptions._isHeaderCell(this.dataProvider, rowIndex, cellIndex)) {
+        if(this.isHeaderCell(this.dataProvider, rowIndex, cellIndex)) {
             if(this.cellInMergeRanges(rowIndex, cellIndex)) {
                 const cell = this.mergedCells[rowIndex][cellIndex];
                 if(cell.merged === false) {
@@ -28,7 +29,7 @@ class MergeRanges {
         const isMasterCell = colspan || rowspan;
 
         if(isMasterCell) {
-            const allowToMergeRange = this.privateOptions._allowToMergeRange(this.dataProvider, rowIndex, cellIndex, rowspan, colspan, this.mergeRowFieldValues, this.mergeColumnFieldValues);
+            const allowToMergeRange = this.allowToMergeRange(this.dataProvider, rowIndex, cellIndex, rowspan, colspan, this.mergeRowFieldValues, this.mergeColumnFieldValues);
             this.updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan, allowToMergeRange);
 
             if(allowToMergeRange) {
