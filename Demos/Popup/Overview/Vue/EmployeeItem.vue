@@ -1,6 +1,9 @@
 <template>
   <li>
-    <img :src="employee.Picture"><br>
+    <img
+      :src="employee.Picture"
+      :id="'image' + employee.ID"
+    ><br>
     <i>{{ employee.FirstName }} {{ employee.LastName }}</i><br>
     <DxButton
       :on-click="showEmployeeInfo"

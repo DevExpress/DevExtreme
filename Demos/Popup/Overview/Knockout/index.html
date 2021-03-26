@@ -22,7 +22,7 @@
 
             <ul data-bind="foreach: employees">
                 <li>
-                    <img data-bind="attr: { src: $data.Picture }" /><br/>
+                    <img data-bind="attr: { src: $data.Picture, id: 'image' + $data.ID }" /><br/>
                     <i data-bind="text: $data.FirstName"></i>
                     <i data-bind="text: $data.LastName"></i><br/>
                     <div class="button-info" data-bind="dxButton: {

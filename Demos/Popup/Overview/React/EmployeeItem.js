@@ -13,7 +13,7 @@ export class EmployeeItem extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <img src={this.props.employee.Picture} /><br />
+        <img src={ this.props.employee.Picture } id={ `image${this.props.employee.ID}` } /><br />
         <i>{this.props.employee.FirstName} {this.props.employee.LastName}</i><br />
         <Button
           className="button-info"

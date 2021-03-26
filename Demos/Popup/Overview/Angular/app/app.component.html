@@ -2,23 +2,43 @@
     <h1>Employees</h1>
     <ul>
         <li *ngFor="let employee of employees">
-            <img [src]="employee.Picture"/><br/>
+            <img [src]="employee.Picture" [id]="'image' + employee.ID"/><br/>
             <i>{{employee.FirstName}} {{employee.LastName}}</i><br/>
             <dx-button
                 class="button-info"
                 text="Details"
+                (mouseenter)="detailsButtonMouseEnter(employee.ID)"
                 (onClick)="showInfo(employee)">
             </dx-button>
         </li>
     </ul>
     <dx-popup
         [width]="300"
-        [height]="250"
+        [height]="280"
         [showTitle]="true"
         title="Information"
         [dragEnabled]="false"
         [closeOnOutsideClick]="true"
+        [showCloseButton]="false"
+        container=".dx-viewport"
         [(visible)]="popupVisible">
+        <dxi-toolbar-item
+            widget="dxButton"
+            toolbar="bottom"
+            location="before"
+            [options]="emailButtonOptions">
+        </dxi-toolbar-item>
+        <dxi-toolbar-item
+            widget="dxButton"
+            toolbar="bottom"
+            location="after"
+            [options]="closeButtonOptions">
+        </dxi-toolbar-item>
+        <dxo-position
+            at="bottom"
+            my="center"
+            [of]="positionOf">
+        </dxo-position>
         <div *dxTemplate="let data of 'content'">
             <p>
                 Full Name:

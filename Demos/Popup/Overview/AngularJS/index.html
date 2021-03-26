@@ -22,7 +22,7 @@
 
             <ul>
                 <li ng-repeat="employee in employees">
-                    <img ng-src="{{employee.Picture}}"/><br/>
+                    <img ng-src="{{employee.Picture}}" id="image{{employee.ID}}"/><br/>
                     <i>{{employee.FirstName}} {{employee.LastName}}</i><br/>
                     <div class="button-info" dx-button="{
                         text: 'Details',

@@ -17,9 +17,27 @@
       :close-on-outside-click="true"
       :show-title="true"
       :width="300"
-      :height="250"
+      :height="280"
+      container=".dx-viewport"
       title="Information"
     >
+      <DxPosition
+        at="bottom"
+        my="center"
+        v-model:of="positionOf"
+      />
+      <DxToolbarItem
+        widget="dxButton"
+        toolbar="bottom"
+        location="before"
+        :options="emailButtonOptions"
+      />
+      <DxToolbarItem
+        widget="dxButton"
+        toolbar="bottom"
+        location="after"
+        :options="closeButtonOptions"
+      />
       <p>
         Full Name:
         <span>{{ currentEmployee.FirstName }}</span>
@@ -42,13 +60,16 @@
   </div>
 </template>
 <script>
-import { DxPopup } from 'devextreme-vue/popup';
+import { DxPopup, DxPosition, DxToolbarItem } from 'devextreme-vue/popup';
 import EmployeeItem from './EmployeeItem.vue';
 import { employees } from './data.js';
+import notify from 'devextreme/ui/notify';
 
 export default {
   components: {
     DxPopup,
+    DxPosition,
+    DxToolbarItem,
     EmployeeItem
   },
 
@@ -56,13 +77,35 @@ export default {
     return {
       employees,
       currentEmployee: {},
-      popupVisible: false
+      popupVisible: false,
+      positionOf: '',
+      emailButtonOptions: {
+        icon: 'email',
+        text: 'Send',
+        onClick: () => {
+          const message = `Email is sent to ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
+          notify({
+            message: message,
+            position: {
+              my: 'center top',
+              at: 'center top'
+            }
+          }, 'success', 3000);
+        }
+      },
+      closeButtonOptions: {
+        text: 'Close',
+        onClick: () => {
+          this.popupVisible = false;
+        }
+      },
     };
   },
 
   methods: {
     showInfo(employee) {
       this.currentEmployee = employee;
+      this.positionOf = `#image${employee.ID}`;
       this.popupVisible = true;
     }
   }
