@@ -9,6 +9,7 @@ import { addNamespace } from '../../events/utils/index';
 import holdEvent from '../../events/hold';
 import { when, Deferred } from '../../core/utils/deferred';
 import { deferRender } from '../../core/utils/common';
+import { createObjectWithChanges } from '../../data/array_utils';
 
 const FOCUS_OVERLAY_CLASS = 'focus-overlay';
 const ADD_ROW_BUTTON_CLASS = 'addrow-button';
@@ -17,6 +18,7 @@ const EDITOR_CELL_CLASS = 'dx-editor-cell';
 const ROW_CLASS = 'dx-row';
 const CELL_MODIFIED = 'dx-cell-modified';
 const DATA_ROW_CLASS = 'dx-data-row';
+const ROW_REMOVED = 'dx-row-removed';
 
 const EDIT_MODE_BATCH = 'batch';
 const EDIT_MODE_CELL = 'cell';
@@ -25,6 +27,8 @@ const TARGET_COMPONENT_NAME = 'targetComponent';
 
 const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
 const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
+
+const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
 
 export default {
     extenders: {
@@ -433,6 +437,14 @@ export default {
                     }
                 },
 
+                _checkAndDeleteRow: function(rowIndex) {
+                    if(this.isBatchEditMode()) {
+                        this._deleteRowCore(rowIndex);
+                    } else {
+                        this.callBase.apply(this, arguments);
+                    }
+                },
+
                 _refreshCore: function(isPageChanged) {
                     const needResetIndexes = this.isBatchEditMode() || isPageChanged && this.option('scrolling.mode') !== 'virtual';
 
@@ -495,6 +507,96 @@ export default {
 
                     return this.callBase.apply(this, arguments);
                 },
+
+                _isRowDeleteAllowed: function() {
+                    const callBase = this.callBase.apply(this, arguments);
+
+                    return callBase || this.isBatchEditMode();
+                },
+
+                _beforeEndSaving: function(changes) {
+                    if(this.isCellEditMode()) {
+                        if(changes[0]?.type !== 'update') {
+                            this.callBase.apply(this, arguments);
+                        }
+                    } else {
+                        if(this.isBatchEditMode()) {
+                            this._resetModifiedClassCells(changes);
+                        }
+                        this.callBase.apply(this, arguments);
+                    }
+                },
+
+                prepareEditButtons: function(headerPanel) {
+                    const editingOptions = this.option('editing') || {};
+                    const buttonItems = this.callBase.apply(this, arguments);
+
+                    if((editingOptions.allowUpdating || editingOptions.allowAdding || editingOptions.allowDeleting) && this.isBatchEditMode()) {
+                        buttonItems.push(this.prepareButtonItem(headerPanel, 'save', 'saveEditData', 21));
+                        buttonItems.push(this.prepareButtonItem(headerPanel, 'revert', 'cancelEditData', 22));
+                    }
+
+                    return buttonItems;
+                },
+
+                _applyChange: function(options, params, forceUpdateRow) {
+                    const isUpdateInCellMode = this.isCellEditMode() && options.row && !options.row.isNewRow;
+                    const showEditorAlways = options.column.showEditorAlways;
+                    const isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
+                    const focusPreviousEditingCell = showEditorAlways && !forceUpdateRow && isUpdateInCellMode && this.hasEditData() && !this.isEditCell(options.rowIndex, options.columnIndex);
+
+                    if(focusPreviousEditingCell) {
+                        this._focusEditingCell();
+                        this._updateEditRow(options.row, true, isCustomSetCellValue);
+                        return;
+                    }
+
+                    return this.callBase.apply(this, arguments);
+                },
+
+                _applyChangeCore: function(options, forceUpdateRow) {
+                    const showEditorAlways = options.column.showEditorAlways;
+                    const isUpdateInCellMode = this.isCellEditMode() && options.row && !options.row.isNewRow;
+
+                    if(showEditorAlways && !forceUpdateRow) {
+                        if(isUpdateInCellMode) {
+                            this._setEditRowKey(options.row.key, true);
+                            this._setEditColumnNameByIndex(options.columnIndex, true);
+
+                            return this.saveEditData();
+                        } else if(this.isBatchEditMode()) {
+                            forceUpdateRow = this._needUpdateRow(options.column);
+
+                            return this.callBase(options, forceUpdateRow);
+                        }
+                    }
+
+                    return this.callBase.apply(this, arguments);
+                },
+
+                _processDataItemCore: function(item, { data, type }) {
+                    if(this.isBatchEditMode() && type === DATA_EDIT_DATA_REMOVE_TYPE) {
+                        item.data = createObjectWithChanges(item.data, data);
+                    }
+
+                    this.callBase.apply(this, arguments);
+                },
+
+                _processRemoveCore: function(changes, editIndex, processIfBatch) {
+                    if(this.isBatchEditMode() && !processIfBatch) {
+                        return;
+                    }
+
+                    return this.callBase.apply(this, arguments);
+                },
+
+                _processRemoveIfError: function() {
+                    if(this.isBatchEditMode()) {
+                        return;
+                    }
+
+                    return this.callBase.apply(this, arguments);
+                }
             }
         },
         views: {
@@ -513,6 +615,26 @@ export default {
 
                     return $table;
                 },
+                _createRow: function(row) {
+                    const $row = this.callBase(row);
+
+                    if(row) {
+                        const editingController = this._editingController;
+                        const isRowRemoved = !!row.removed;
+
+                        if(editingController.isBatchEditMode()) {
+                            isRowRemoved && $row.addClass(ROW_REMOVED);
+                        }
+                    }
+                    return $row;
+                }
+            },
+            headerPanel: {
+                isVisible: function() {
+                    const editingOptions = this.getController('editing').option('editing');
+
+                    return this.callBase() || editingOptions && (editingOptions.allowUpdating || editingOptions.allowDeleting) && editingOptions.mode === EDIT_MODE_BATCH;
+                }
             }
         }
     }

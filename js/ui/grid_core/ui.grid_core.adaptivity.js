@@ -319,7 +319,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _isItemEdited: function(item) {
-        if(this.isFormEditMode()) {
+        if(this.isFormOrPopupEditMode()) {
             return false;
         }
 
@@ -463,7 +463,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         return this._editingController.getEditMode();
     },
 
-    isFormEditMode: function() {
+    isFormOrPopupEditMode: function() {
         const editMode = this._getEditMode();
 
         return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
@@ -558,7 +558,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     toggleExpandAdaptiveDetailRow: function(key, alwaysExpanded) {
-        if(!(this.isFormEditMode() && this._editingController.isEditing())) {
+        if(!(this.isFormOrPopupEditMode() && this._editingController.isEditing())) {
             this.getController('data').toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
         }
     },
@@ -895,7 +895,7 @@ export const adaptivityModule = {
                 },
 
                 _beforeUpdateItems: function(rowIndices, rowIndex) {
-                    if(!this._adaptiveController.isFormEditMode() && this._adaptiveController.hasHiddenColumns()) {
+                    if(!this._adaptiveController.isFormOrPopupEditMode() && this._adaptiveController.hasHiddenColumns()) {
                         const items = this._dataController.items();
                         const item = items[rowIndex];
                         const oldExpandRowIndex = gridCoreUtils.getIndexByKey(this._dataController.adaptiveExpandedKey(), items);
@@ -976,7 +976,7 @@ export const adaptivityModule = {
                 },
 
                 editRow: function(rowIndex) {
-                    if(this._adaptiveController.isFormEditMode()) {
+                    if(this._adaptiveController.isFormOrPopupEditMode()) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                     }
 

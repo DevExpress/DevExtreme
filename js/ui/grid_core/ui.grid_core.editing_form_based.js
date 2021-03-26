@@ -26,6 +26,8 @@ const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
 const EDITING_POPUP_OPTION_NAME = 'editing.popup';
 const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
 
+const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
+
 const getEditorType = (item) => {
     const column = item.column;
 
@@ -386,7 +388,6 @@ export const editingFormBasedModule = {
                     };
                 },
 
-
                 getEditForm: function() {
                     return this._editForm;
                 },
@@ -394,6 +395,30 @@ export const editingFormBasedModule = {
                 _endUpdateCore: function() {
                     this._updateEditFormDeferred && this._updateEditFormDeferred.resolve();
                 },
+
+                _beforeEndSaving: function() {
+                    this.callBase.apply(this, arguments);
+
+                    if(this.isPopupEditMode()) {
+                        this._editPopup?.hide();
+                    }
+                },
+
+                _processDataItemCore: function(item, { type }) {
+                    if(this.isPopupEditMode() && type === DATA_EDIT_DATA_INSERT_TYPE) {
+                        item.visible = false;
+                    }
+
+                    this.callBase.apply(this, arguments);
+                },
+
+                _editRowFromOptionChangedCore: function(rowIndices, rowIndex, oldRowIndex) {
+                    if(this.isPopupEditMode()) {
+                        this._showEditPopup(rowIndex);
+                    } else {
+                        this.callBase.apply(this, arguments);
+                    }
+                }
             },
             data: {
                 _updateEditItem: function(item) {
