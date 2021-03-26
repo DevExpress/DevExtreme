@@ -18,12 +18,12 @@ class MergeRanges {
                     excelCell.value = cell.masterCell.value;
                 }
             } else {
-                this.updateMergeRanges(excelCell, rowIndex, cellIndex);
+                this.updateMergedRanges(excelCell, rowIndex, cellIndex);
             }
         }
     }
 
-    updateMergeRanges(excelCell, rowIndex, cellIndex) {
+    updateMergedRanges(excelCell, rowIndex, cellIndex) {
         const { rowspan, colspan } = this.dataProvider.getCellMerging(rowIndex, cellIndex);
         const isMasterCell = colspan || rowspan;
 
