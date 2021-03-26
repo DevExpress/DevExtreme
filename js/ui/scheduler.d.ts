@@ -243,11 +243,11 @@ export interface onAppointmentRenderedEvent {
   * @public
   */
 export interface onAppointmentUpdatedEvent {
-  component: dxScheduler;
-  element: TElement;
-  model?: any;
-  appointmentData: any;
-  error?: Error;
+  readonly component: dxScheduler;
+  readonly element: TElement;
+  readonly model?: any;
+  readonly appointmentData: any;
+  readonly error?: Error;
 }
 
 /**
