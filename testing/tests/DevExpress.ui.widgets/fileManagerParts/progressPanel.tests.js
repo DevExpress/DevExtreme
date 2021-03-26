@@ -232,30 +232,11 @@ QUnit.module('Progress panel tests', moduleConfig, () => {
         createProgressPanel(this);
 
         const $container = $('<div>').appendTo(this.$element);
-        this.progressPanel.renderError($container, null, 'Some error occurred');
+        this.progressPanel._renderError($container, null, 'Some error occurred');
 
         const $error = this.progressPanelWrapper.findError($container);
         assert.equal($error.length, 1, 'error rendered');
         assert.equal($error.text(), 'Some error occurred', 'error text rendered');
-    });
-
-    test('create error details progress box', function(assert) {
-        createProgressPanel(this);
-
-        const $container = $('<div>').appendTo(this.$element);
-        const itemInfo = { commonText: 'File 1.txt', imageUrl: 'doc' };
-        this.progressPanel.createErrorDetailsProgressBox($container, itemInfo, 'Some error occurred');
-
-        const boxes = this.progressPanelWrapper.findProgressBoxes($container);
-        assert.equal(boxes.length, 1, 'progress box rendered');
-
-        const box = boxes[0];
-        assert.ok(box.hasError, 'error rendered');
-        assert.equal(box.errorText, 'Some error occurred', 'error text rendered');
-        assert.equal(box.commonText, 'File 1.txt', 'common text rendered');
-        assert.notOk(box.$progressBar.length, 'progress bar not rendered');
-        assert.notOk(box.$closeButton.length, 'close button not rendered');
-        assert.ok(box.$image.hasClass('dx-icon-doc'), 'correct icon rendered');
     });
 
     test('complete single operation with error', function(assert) {
@@ -524,7 +505,8 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         $rows = this.wrapper.getRowsInDetailsView();
         assert.equal($rows.length, initialCount - 1, 'files count decreased');
 
-        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '-340px', 'progress panel is hidden');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is hidden');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '0px', 'progress panel is hidden');
         renderer.fn.width = originalFunc;
     });
 
@@ -559,11 +541,13 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         assert.equal($rows.length, initialCount - 1, 'files count decreased');
 
         assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is shown');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '340px', 'progress panel is shown');
 
         this.fileManager.option('notifications.showPanel', false);
         this.clock.tick(400);
 
-        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '-340px', 'progress panel is hidden');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is hidden');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '0px', 'progress panel is hidden');
         renderer.fn.width = originalFunc;
     });
 

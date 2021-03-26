@@ -32,6 +32,7 @@ export default class FileManagerNotificationControl extends Widget {
         this._initActions();
 
         this._isInAdaptiveState = this._isSmallScreen();
+        // this._progressPanelContainer = null;
 
         this._setNotificationManager();
         const $progressPanelContainer = this.option('progressPanelContainer');
@@ -65,11 +66,8 @@ export default class FileManagerNotificationControl extends Widget {
             onActionProgressStatusChanged: this._raiseActionProgress.bind(this),
             getProgressPanelComponent: this._getProgressPanelComponent.bind(this)
         };
-        if(this._isProgressDrawerDisabled()) {
-            this._notificationManager = new NotificationManagerStub(options);
-        } else {
-            this._notificationManager = new NotificationManagerReal(options);
-        }
+        const notificationManagerComponent = this._getProgressManagerComponent();
+        this._notificationManager = new notificationManagerComponent(options);
     }
 
     tryShowProgressPanel() {
@@ -81,7 +79,11 @@ export default class FileManagerNotificationControl extends Widget {
         setTimeout(() => {
             this._progressDrawer.show().done(promise.resolve);
             this._hidePopup();
-            this._notificationManager.updateActionProgressStatus();
+            // TODO: remove this hack
+            const fakeOperationInfo = {
+                [this._notificationManager._isRealHandler]: this._isProgressDrawerDisabled() ? false : true
+            };
+            this._notificationManager.updateActionProgressStatus(fakeOperationInfo);
         });
         return promise.promise();
     }
@@ -167,6 +169,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _ensureProgressPanelCreated(container) {
+        // this._progressPanelContainer = container;
         this._notificationManager.ensureProgressPanelCreated(container, {
             onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
             onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
@@ -177,6 +180,15 @@ export default class FileManagerNotificationControl extends Widget {
     // needed for editingProgress.tests.js
     _getProgressPanelComponent() {
         return FileManagerProgressPanel;
+    }
+
+    // needed for editingProgress.tests.js
+    _getProgressManagerComponent() {
+        if(this._isProgressDrawerDisabled()) {
+            return NotificationManagerStub;
+        } else {
+            return NotificationManagerReal;
+        }
     }
 
     _hasNoOperations(operationInfo) {
@@ -302,9 +314,10 @@ export default class FileManagerNotificationControl extends Widget {
             case 'showProgressPanel':
                 if(!args.value) {
                     this._hideProgressPanel();
-                    this._setNotificationManager();
-                    this._notificationManager.updateActionProgressStatus();
                 }
+                this._setNotificationManager();
+                this._notificationManager.updateActionProgressStatus();
+                this._progressDrawer.repaint();
                 break;
             case 'showNotificationPopup':
                 if(!args.value) {
