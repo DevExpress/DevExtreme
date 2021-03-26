@@ -67,7 +67,7 @@ module('Cells Selection', {
                     }],
                     groups: ['ownerId'],
                     height: 600,
-                    width: 1000,
+                    width: 2000,
                 });
 
                 scheduler.workSpace.selectCells(startCell, endCell);
