@@ -27,9 +27,9 @@ module('Cells Selection', {
             cellFromAnotherGroup: 7,
             view: 'day',
         }, {
-            startCell: 15,
-            endCell: 19,
-            intermediateCells: [43, 45],
+            startCell: 29,
+            endCell: 33,
+            intermediateCells: [85, 87],
             selectedCellsAmount: 9,
             cellFromAnotherGroup: 20,
             view: 'week',
