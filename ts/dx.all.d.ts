@@ -6790,6 +6790,10 @@ declare module DevExpress.ui {
          */
         itemView?: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /**
+         * [descr:dxFileManagerOptions.notifications]
+         */
+        notifications?: { showPanel?: boolean, showPopup?: boolean };
+        /**
          * [descr:dxFileManagerOptions.onContextMenuItemClick]
          */
         onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.TElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event, fileSystemItem?: DevExpress.fileManagement.FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);

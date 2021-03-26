@@ -86,7 +86,9 @@ class FileManager extends Widget {
             progressPanelContainer: this.$element(),
             contentTemplate: container => this._createWrapper(container),
             onActionProgress: e => this._onActionProgress(e),
-            positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`
+            positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`,
+            showProgressPanel: this.option('notifications.showPanel'),
+            showNotificationPopup: this.option('notifications.showPopup')
         });
         this._editing.option('notificationControl', this._notificationControl);
     }
@@ -514,6 +516,11 @@ class FileManager extends Widget {
                 rename: false,
                 upload: false,
                 download: false
+            },
+
+            notifications: {
+                showPanel: true,
+                showPopup: true
             }
         });
     }
@@ -581,6 +588,10 @@ class FileManager extends Widget {
                     this._filesTreeViewContextMenu.option('items', contextMenuItems);
                     this._itemViewContextMenu.option('items', contextMenuItems);
                 }
+                break;
+            case 'notifications':
+                this._notificationControl.option('showProgressPanel', this.option('notifications.showPanel'));
+                this._notificationControl.option('showNotificationPopup', this.option('notifications.showPopup'));
                 break;
             case 'onContextMenuItemClick':
             case 'onContextMenuShowing':
