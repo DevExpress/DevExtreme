@@ -5184,17 +5184,6 @@ QUnit.test('Check boundary side margin is not equal 0 when the \'customPosition\
     assert.equal(margins.left, 19);
 });
 
-QUnit.test('Check boundary side margin is not equal 0 when the \'customPosition\' option exists and position of axis is a boundary', function(assert) {
-    const { verticalAxis } = this.drawOrthogonalAxes({},
-        {
-            customPosition: 200
-        });
-    verticalAxis._customBoundaryPosition = 'left';
-
-    const margins = verticalAxis.getMargins();
-    assert.equal(margins.left, 19);
-});
-
 QUnit.test('Check boundary side margin is cut when the \'offset\' option exists and position of axis is a boundary (position left, offset > 0)', function(assert) {
     const { verticalAxis } = this.drawOrthogonalAxes({},
         {
