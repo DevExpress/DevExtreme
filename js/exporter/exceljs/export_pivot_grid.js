@@ -2,7 +2,7 @@ import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './export';
 import { noop } from '../../core/utils/common';
 
-const privateOptions = {
+const helpers = {
     _getWorksheetFrozenState(dataProvider, cellRange) {
         return { state: 'frozen', xSplit: cellRange.from.column + dataProvider.getFrozenArea().x - 1, ySplit: cellRange.from.row + dataProvider.getFrozenArea().y - 1 };
     },
@@ -37,7 +37,7 @@ const privateOptions = {
 };
 
 function exportPivotGrid(options) {
-    return Export.export(_getFullOptions(options), privateOptions);
+    return Export.export(_getFullOptions(options), helpers);
 }
 
 function _getFullOptions(options) {

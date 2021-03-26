@@ -2,7 +2,7 @@ import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './export';
 import errors from '../../core/errors';
 
-const privateOptions = {
+const helpers = {
     _trySetAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled) {
         if(autoFilterEnabled) {
             if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
@@ -62,7 +62,7 @@ const privateOptions = {
 };
 
 function exportDataGrid(options) {
-    return Export.export(_getFullOptions(options), privateOptions);
+    return Export.export(_getFullOptions(options), helpers);
 }
 
 function _getFullOptions(options) {

@@ -1,48 +1,45 @@
 class MergedRangesManager {
-    constructor(dataProvider, isHeaderCell, allowToMergeRange, mergeRowFieldValues, mergeColumnFieldValues) {
+    constructor(dataProvider, helpers, mergeRowFieldValues, mergeColumnFieldValues) {
         this.mergedCells = [];
-        this.mergeRanges = [];
+        this.mergedRanges = [];
 
         this.dataProvider = dataProvider;
-        this.isHeaderCell = isHeaderCell;
-        this.allowToMergeRange = allowToMergeRange;
+        this.helpers = helpers;
         this.mergeRowFieldValues = mergeRowFieldValues;
         this.mergeColumnFieldValues = mergeColumnFieldValues;
     }
 
-    update(excelCell, rowIndex, cellIndex) {
-        if(this.isHeaderCell(this.dataProvider, rowIndex, cellIndex)) {
-            if(this.isCellInMergedRanges(rowIndex, cellIndex)) {
-                const cell = this.mergedCells[rowIndex][cellIndex];
-                if(cell.merged === false) {
-                    excelCell.style = cell.masterCell.style;
-                    excelCell.value = cell.masterCell.value;
-                }
-            } else {
-                this.updateMergedRanges(excelCell, rowIndex, cellIndex);
-            }
-        }
-    }
-
     updateMergedRanges(excelCell, rowIndex, cellIndex) {
-        const { rowspan, colspan } = this.dataProvider.getCellMerging(rowIndex, cellIndex);
-        const isMasterCellOfMergedRange = colspan || rowspan;
+        if(this.helpers._isHeaderCell(this.dataProvider, rowIndex, cellIndex)) {
+            if(!this.isCellInMergedRanges(rowIndex, cellIndex)) {
+                const { rowspan, colspan } = this.dataProvider.getCellMerging(rowIndex, cellIndex);
+                const isMasterCellOfMergedRange = colspan || rowspan;
 
-        if(isMasterCellOfMergedRange) {
-            const allowToMergeRange = this.allowToMergeRange(this.dataProvider, rowIndex, cellIndex, rowspan, colspan, this.mergeRowFieldValues, this.mergeColumnFieldValues);
-            this.updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan, allowToMergeRange);
+                if(isMasterCellOfMergedRange) {
+                    const allowToMergeRange = this.helpers._allowToMergeRange(this.dataProvider, rowIndex, cellIndex, rowspan, colspan, this.mergeRowFieldValues, this.mergeColumnFieldValues);
+                    this.updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan, allowToMergeRange);
 
-            if(allowToMergeRange) {
-                this.mergeRanges.push({
-                    masterCell: excelCell,
-                    ...{ rowspan, colspan }
-                });
+                    if(allowToMergeRange) {
+                        this.mergedRanges.push({
+                            masterCell: excelCell,
+                            ...{ rowspan, colspan }
+                        });
+                    }
+                }
             }
         }
     }
 
     isCellInMergedRanges(rowIndex, cellIndex) {
         return this.mergedCells[rowIndex] && this.mergedCells[rowIndex][cellIndex];
+    }
+
+    tryGetMergedCellInfo(rowIndex, cellIndex) {
+        if(this.helpers._isHeaderCell(this.dataProvider, rowIndex, cellIndex)) {
+            if(this.isCellInMergedRanges(rowIndex, cellIndex)) {
+                return this.mergedCells[rowIndex][cellIndex];
+            }
+        }
     }
 
     updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan, allowToMergeRange) {
@@ -53,18 +50,18 @@ class MergedRangesManager {
                 }
                 this.mergedCells[i][j] = {
                     masterCell: excelCell,
-                    merged: allowToMergeRange
+                    unmerged: !allowToMergeRange
                 };
             }
         }
     }
 
     applyMergedRages(worksheet) {
-        this.mergeRanges.forEach((mergeRange) => {
-            const startRowIndex = mergeRange.masterCell.fullAddress.row;
-            const startColumnIndex = mergeRange.masterCell.fullAddress.col;
-            const endRowIndex = startRowIndex + mergeRange.rowspan;
-            const endColumnIndex = startColumnIndex + mergeRange.colspan;
+        this.mergedRanges.forEach((range) => {
+            const startRowIndex = range.masterCell.fullAddress.row;
+            const startColumnIndex = range.masterCell.fullAddress.col;
+            const endRowIndex = startRowIndex + range.rowspan;
+            const endColumnIndex = startColumnIndex + range.colspan;
 
             worksheet.mergeCells(startRowIndex, startColumnIndex, endRowIndex, endColumnIndex);
         });
