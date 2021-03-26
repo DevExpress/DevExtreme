@@ -3,7 +3,7 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { Table } from '../table';
 import { DateTableBody } from './table_body';
 import { DateTableLayoutProps } from './layout_props';

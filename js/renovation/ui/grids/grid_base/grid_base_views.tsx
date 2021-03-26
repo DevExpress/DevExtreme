@@ -1,6 +1,6 @@
 import {
   JSXComponent, Component,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { GridBaseViewProps } from './common/grid_base_view_props';
 import { GridBaseViewWrapper } from './grid_base_view_wrapper';
 

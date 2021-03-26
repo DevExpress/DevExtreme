@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent,
   OneWay, Template, Event, JSXTemplate,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import noop from '../../../utils/noop';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../ui/scheduler';

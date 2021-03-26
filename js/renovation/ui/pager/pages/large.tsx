@@ -4,7 +4,7 @@ import {
   Fragment,
   Consumer,
   Mutable,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { Page, PageProps } from './page';
 import { PagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';

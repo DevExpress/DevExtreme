@@ -10,7 +10,7 @@ import {
   Template,
   Slot,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
 import { isMaterial, current } from '../../ui/themes';

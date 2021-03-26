@@ -5,7 +5,7 @@ import {
   Slot,
   Provider,
   Component,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { ConfigContextValue, ConfigContext } from './config_context';
 
 export const viewFunction = (viewModel: ConfigProvider): JSX.Element => viewModel.props.children;

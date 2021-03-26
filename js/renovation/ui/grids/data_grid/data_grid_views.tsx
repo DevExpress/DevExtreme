@@ -1,6 +1,6 @@
 import {
   JSXComponent, Component,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { GridBaseViews } from '../grid_base/grid_base_views';
 import { GridBaseView } from '../grid_base/common/types';
 import { DataGridViewProps } from './common/data_grid_view_props';

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   JSXComponent, Component, Method, Effect, Mutable,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import {
   DataGridProps,
 } from './common/data_grid_props';

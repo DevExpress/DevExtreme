@@ -1,6 +1,6 @@
 import {
   OneWay, ComponentBindings,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import SvgBaseProps from './base_props';
 
 @ComponentBindings()
