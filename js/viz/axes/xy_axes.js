@@ -326,7 +326,7 @@ export default {
             const position = this.getResolvedBoundaryPosition();
             return (length % 2 === 1 ?
                 (width % 2 === 0 && (position === LEFT || position === TOP) ||
-                width % 2 === 1 && ((position === RIGHT || position === BOTTOM) && !this.hasCustomPosition()) ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
+                width % 2 === 1 && ((position === RIGHT || position === BOTTOM) && !this.hasNonBoundaryPosition()) ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
                 (-length / 2 + (width % 2 === 0 ? 0 : (position === BOTTOM || position === RIGHT ? -1 : 1))));
         },
 
@@ -1316,7 +1316,7 @@ export default {
             return isDefined(this.getOrthogonalAxis()) && (isDefined(options.customPosition) || isFinite(options.offset));
         },
 
-        hasCustomPosition() {
+        hasNonBoundaryPosition() {
             return this.customPositionIsAvailable() && !this.customPositionIsBoundary();
         },
 
@@ -1343,7 +1343,7 @@ export default {
         resolveOverlappingForCustomPositioning(oppositeAxes) {
             const that = this;
 
-            if(!that.hasCustomPosition() && !that.customPositionIsBoundary() && !oppositeAxes.some(a => a.hasCustomPosition())) {
+            if(!that.hasNonBoundaryPosition() && !that.customPositionIsBoundary() && !oppositeAxes.some(a => a.hasNonBoundaryPosition())) {
                 return;
             }
 

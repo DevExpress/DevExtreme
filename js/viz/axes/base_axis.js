@@ -348,7 +348,7 @@ Axis.prototype = {
 
     resolveOverlappingForCustomPositioning: _noop,
 
-    hasCustomPosition() {
+    hasNonBoundaryPosition() {
         return false;
     },
 
@@ -362,7 +362,7 @@ Axis.prototype = {
 
     getAxisSharpDirection() {
         const position = this.getResolvedBoundaryPosition();
-        return this.hasCustomPosition() || position !== BOTTOM && position !== RIGHT ? 1 : -1;
+        return this.hasNonBoundaryPosition() || position !== BOTTOM && position !== RIGHT ? 1 : -1;
     },
 
     getSharpDirectionByCoords(coords) {
@@ -787,6 +787,7 @@ Axis.prototype = {
     getMargins: function() {
         const that = this;
         const { position, offset, customPosition, placeholderSize, grid, tick, crosshairMargin } = that._options;
+        const isDefinedCustomPositionOption = isDefined(customPosition);
         const boundaryPosition = that.getResolvedBoundaryPosition();
         const canvas = that.getCanvas();
         const cLeft = canvas.left;
@@ -822,7 +823,7 @@ Axis.prototype = {
 
         margins[position] += crosshairMargin;
 
-        if(that.hasCustomPosition() && isDefined(customPosition)) {
+        if(that.hasNonBoundaryPosition() && isDefinedCustomPositionOption) {
             margins[boundaryPosition] = 0;
         }
         if(placeholderSize) {
@@ -838,7 +839,7 @@ Axis.prototype = {
             }
         }
 
-        if(!isDefined(customPosition) && isDefined(offset)) {
+        if(!isDefinedCustomPositionOption && isDefined(offset)) {
             const moveByOffset = that.customPositionIsBoundary() &&
                 ((offset > 0 && (boundaryPosition === LEFT || boundaryPosition === TOP)) ||
                 (offset < 0 && (boundaryPosition === RIGHT || boundaryPosition === BOTTOM)));

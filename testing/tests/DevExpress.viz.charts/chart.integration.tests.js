@@ -4240,7 +4240,7 @@ QUnit.test('Resolve overlapping: labels', function(assert) {
     assert.equal(argAxis._majorTicks[5].mark.attr('translateY'), -6);
 });
 
-QUnit.test('Resolve overlapping: opposite position of the axis and the intersection of the orthogonal labels (left to right)', function(assert) {
+QUnit.test('Resolve orthogonal labels overlapping: axis moves to the opposite position (relative to default), and the orthogonal mark moves across the axis (left to right)', function(assert) {
     const chart = this.createChart({
         argumentAxis: {
             customPositionAxis: 'axis2',
@@ -4257,7 +4257,7 @@ QUnit.test('Resolve overlapping: opposite position of the axis and the intersect
     assert.equal(chart.getValueAxis('axis2')._majorTicks[6].mark.attr('translateX'), 6);
 });
 
-QUnit.test('Resolve overlapping: opposite position of the axis and the intersection of the orthogonal labels (top to bottom)', function(assert) {
+QUnit.test('Resolve orthogonal labels overlapping: axis moves to the opposite position (relative to default), and the orthogonal mark moves across the axis (top to bottom)', function(assert) {
     const chart = this.createChart({
         argumentAxis: {
             position: 'top',
