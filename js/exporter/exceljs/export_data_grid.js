@@ -51,7 +51,7 @@ const privateOptions = {
         return rowIndex < dataProvider.getHeaderRowCount();
     },
 
-    _isRangeMerged() {
+    _allowToMergeRange() {
         return true;
     },
 

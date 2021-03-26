@@ -28,10 +28,10 @@ class MergeRanges {
         const isMasterCell = colspan || rowspan;
 
         if(isMasterCell) {
-            const isRangeMerged = this.privateOptions._isRangeMerged(this.dataProvider, rowIndex, cellIndex, rowspan, colspan, this.mergeRowFieldValues, this.mergeColumnFieldValues);
-            this.updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan, isRangeMerged);
+            const allowToMergeRange = this.privateOptions._allowToMergeRange(this.dataProvider, rowIndex, cellIndex, rowspan, colspan, this.mergeRowFieldValues, this.mergeColumnFieldValues);
+            this.updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan, allowToMergeRange);
 
-            if(isRangeMerged) {
+            if(allowToMergeRange) {
                 this.mergeRanges.push({
                     masterCell: excelCell,
                     ...{ rowspan, colspan }
@@ -44,7 +44,7 @@ class MergeRanges {
         return this.mergedCells[rowIndex] && this.mergedCells[rowIndex][cellIndex];
     }
 
-    updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan, isRangeMerged) {
+    updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan, allowToMergeRange) {
         for(let i = rowIndex; i <= rowIndex + rowspan; i++) {
             for(let j = cellIndex; j <= cellIndex + colspan; j++) {
                 if(!this.mergedCells[i]) {
@@ -52,7 +52,7 @@ class MergeRanges {
                 }
                 this.mergedCells[i][j] = {
                     masterCell: excelCell,
-                    merged: isRangeMerged
+                    merged: allowToMergeRange
                 };
             }
         }
