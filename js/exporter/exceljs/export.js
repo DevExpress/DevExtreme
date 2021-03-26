@@ -1,7 +1,7 @@
 import { isDefined, isString, isDate, isObject, isFunction } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
-import { MergeRanges } from './export_merge';
+import { MergedRangesManager } from './export_merge';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
 
@@ -163,21 +163,21 @@ export const Export = {
                     this.setColumnsWidth(worksheet, dataProvider.getColumnsWidths(), cellRange.from.column);
                 }
 
-                const mergeRanges = new MergeRanges(dataProvider, _isHeaderCell, _allowToMergeRange, mergeRowFieldValues, mergeColumnFieldValues);
+                const mergedRangesManager = new MergedRangesManager(dataProvider, _isHeaderCell, _allowToMergeRange, mergeRowFieldValues, mergeColumnFieldValues);
                 const styles = this.getCellStyles(dataProvider);
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
                     _trySetOutlineLevel(dataProvider, row, rowIndex);
 
-                    this.exportRow(dataProvider, rowIndex, columns.length, row, cellRange.from.column, customizeCell, mergeRanges, wrapText, styles, _trySetFont, _getCustomizeCellOptions);
+                    this.exportRow(dataProvider, mergedRangesManager, rowIndex, columns.length, row, cellRange.from.column, customizeCell, wrapText, styles, _trySetFont, _getCustomizeCellOptions);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
                     }
                 }
 
-                mergeRanges.mergeCells(worksheet);
+                mergedRangesManager.applyMergedRages(worksheet);
 
                 cellRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
@@ -205,7 +205,7 @@ export const Export = {
         });
     },
 
-    exportRow(dataProvider, rowIndex, cellCount, row, startColumnIndex, customizeCell, mergeRanges, wrapText, styles, _trySetFont, _getCustomizeCellOptions) {
+    exportRow(dataProvider, mergedRangesManager, rowIndex, cellCount, row, startColumnIndex, customizeCell, wrapText, styles, _trySetFont, _getCustomizeCellOptions) {
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
             const excelCell = row.getCell(startColumnIndex + cellIndex);
@@ -229,7 +229,7 @@ export const Export = {
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
-            mergeRanges.update(excelCell, rowIndex, cellIndex);
+            mergedRangesManager.update(excelCell, rowIndex, cellIndex);
 
             if(isFunction(customizeCell)) {
                 customizeCell(_getCustomizeCellOptions(excelCell, cellData.cellSourceData));

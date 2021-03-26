@@ -1,4 +1,4 @@
-class MergeRanges {
+class MergedRangesManager {
     constructor(dataProvider, isHeaderCell, allowToMergeRange, mergeRowFieldValues, mergeColumnFieldValues) {
         this.mergedCells = [];
         this.mergeRanges = [];
@@ -12,7 +12,7 @@ class MergeRanges {
 
     update(excelCell, rowIndex, cellIndex) {
         if(this.isHeaderCell(this.dataProvider, rowIndex, cellIndex)) {
-            if(this.cellInMergeRanges(rowIndex, cellIndex)) {
+            if(this.isCellInMergedRanges(rowIndex, cellIndex)) {
                 const cell = this.mergedCells[rowIndex][cellIndex];
                 if(cell.merged === false) {
                     excelCell.style = cell.masterCell.style;
@@ -26,9 +26,9 @@ class MergeRanges {
 
     updateMergedRanges(excelCell, rowIndex, cellIndex) {
         const { rowspan, colspan } = this.dataProvider.getCellMerging(rowIndex, cellIndex);
-        const isMasterCell = colspan || rowspan;
+        const isMasterCellOfMergedRange = colspan || rowspan;
 
-        if(isMasterCell) {
+        if(isMasterCellOfMergedRange) {
             const allowToMergeRange = this.allowToMergeRange(this.dataProvider, rowIndex, cellIndex, rowspan, colspan, this.mergeRowFieldValues, this.mergeColumnFieldValues);
             this.updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan, allowToMergeRange);
 
@@ -41,7 +41,7 @@ class MergeRanges {
         }
     }
 
-    cellInMergeRanges(rowIndex, cellIndex) {
+    isCellInMergedRanges(rowIndex, cellIndex) {
         return this.mergedCells[rowIndex] && this.mergedCells[rowIndex][cellIndex];
     }
 
@@ -59,7 +59,7 @@ class MergeRanges {
         }
     }
 
-    mergeCells(worksheet) {
+    applyMergedRages(worksheet) {
         this.mergeRanges.forEach((mergeRange) => {
             const startRowIndex = mergeRange.masterCell.fullAddress.row;
             const startColumnIndex = mergeRange.masterCell.fullAddress.col;
@@ -71,4 +71,4 @@ class MergeRanges {
     }
 }
 
-export { MergeRanges };
+export { MergedRangesManager };
