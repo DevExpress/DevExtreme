@@ -100,16 +100,26 @@ export const Export = {
         }
     },
 
-    setLoadPanelOptions(component, options, privateOptions) {
+    setLoadPanelOptions(component, options, _renderLoadPanel) {
         if(!hasWindow()) {
             return;
         }
 
         component._setOptionWithoutOptionChange('loadPanel', options);
-        privateOptions._renderLoadPanel(component);
+        _renderLoadPanel(component);
     },
 
-    export(options, privateOptions) {
+    export(options, {
+        _renderLoadPanel,
+        _isHeaderCell,
+        _allowToMergeRange,
+        _isFrozenZone,
+        _getWorksheetFrozenState,
+        _trySetAutoFilter,
+        _trySetOutlineLevel,
+        _trySetFont,
+        _getCustomizeCellOptions
+    }) {
         const {
             customizeCell,
             component,
@@ -128,7 +138,7 @@ export const Export = {
             loadPanel.animation = null;
         }
 
-        this.setLoadPanelOptions(component, loadPanel, privateOptions);
+        this.setLoadPanelOptions(component, loadPanel, _renderLoadPanel);
 
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -153,13 +163,14 @@ export const Export = {
                     this.setColumnsWidth(worksheet, dataProvider.getColumnsWidths(), cellRange.from.column);
                 }
 
-                const mergeRanges = new MergeRanges(dataProvider, privateOptions.isHeaderCell, privateOptions.allowToMergeRange, mergeRowFieldValues, mergeColumnFieldValues);
+                const mergeRanges = new MergeRanges(dataProvider, _isHeaderCell, _allowToMergeRange, mergeRowFieldValues, mergeColumnFieldValues);
                 const styles = this.getCellStyles(dataProvider);
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
+                    _trySetOutlineLevel(dataProvider, row, rowIndex);
 
-                    this.exportRow(dataProvider, privateOptions, rowIndex, columns.length, row, cellRange.from.column, customizeCell, mergeRanges, wrapText, styles);
+                    this.exportRow(dataProvider, rowIndex, columns.length, row, cellRange.from.column, customizeCell, mergeRanges, wrapText, styles, _trySetFont, _getCustomizeCellOptions);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
@@ -176,11 +187,11 @@ export const Export = {
                     worksheetViewSettings.rightToLeft = true;
                 }
 
-                if(privateOptions._isFrozenZone(dataProvider)) {
+                if(_isFrozenZone(dataProvider)) {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
-                        extend(worksheetViewSettings, privateOptions._getWorksheetFrozenState(dataProvider, cellRange));
+                        extend(worksheetViewSettings, _getWorksheetFrozenState(dataProvider, cellRange));
                     }
-                    privateOptions._trySetAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
+                    _trySetAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
                 }
 
                 if(Object.keys(worksheetViewSettings).length > 0) {
@@ -189,14 +200,12 @@ export const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                this.setLoadPanelOptions(component, initialLoadPanelOptions, privateOptions);
+                this.setLoadPanelOptions(component, initialLoadPanelOptions, _renderLoadPanel);
             });
         });
     },
 
-    exportRow(dataProvider, privateOptions, rowIndex, cellCount, row, startColumnIndex, customizeCell, mergeRanges, wrapText, styles) {
-        privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex);
-
+    exportRow(dataProvider, rowIndex, cellCount, row, startColumnIndex, customizeCell, mergeRanges, wrapText, styles, _trySetFont, _getCustomizeCellOptions) {
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
             const excelCell = row.getCell(startColumnIndex + cellIndex);
@@ -216,14 +225,14 @@ export const Export = {
                     this.setNumberFormat(excelCell, '@');
                 }
 
-                privateOptions._trySetFont(excelCell, bold);
+                _trySetFont(excelCell, bold);
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
             mergeRanges.update(excelCell, rowIndex, cellIndex);
 
             if(isFunction(customizeCell)) {
-                customizeCell(privateOptions._getCustomizeCellOptions(excelCell, cellData.cellSourceData));
+                customizeCell(_getCustomizeCellOptions(excelCell, cellData.cellSourceData));
             }
         }
     }
