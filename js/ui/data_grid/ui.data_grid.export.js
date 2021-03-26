@@ -25,13 +25,6 @@ const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
 
 const BUTTON_CLASS = 'dx-button';
 
-const HEADER_STYLE_ID = {
-    center: 0,
-    left: 1,
-    right: 2
-};
-const DATA_STYLE_OFFSET = 3;
-
 export const DataProvider = Class.inherit({
     _getGroupValue: function(item) {
         const { key, data, rowType, groupIndex, summaryCells } = item;
@@ -90,18 +83,28 @@ export const DataProvider = Class.inherit({
         this._selectedRowsOnly = selectedRowsOnly;
     },
 
-    getStyles: function() {
-        const wrapTextEnabled = this._options.wrapTextEnabled;
-        const styles = ['center', 'left', 'right'].map((alignment) => ({
-            // Header, Total styles
+    getHeaderStyles() {
+        return [
+            { bold: true, alignment: 'center', wrapText: true },
+            { bold: true, alignment: 'left', wrapText: true },
+            { bold: true, alignment: 'right', wrapText: true },
+        ];
+    },
+
+    getGroupRowStyle() {
+        return {
             bold: true,
-            alignment: alignment,
-            wrapText: true
-        }));
+            wrapText: false,
+            alignment: getDefaultAlignment(this._options.rtlEnabled)
+        };
+    },
+
+    getColumnStyles() {
+        const wrapTextEnabled = this._options.wrapTextEnabled;
+        const columnStyles = [];
 
         this.getColumns().forEach((column) => {
-            styles.push({
-                // column styles
+            columnStyles.push({
                 alignment: column.alignment || 'left',
                 format: column.format,
                 wrapText: wrapTextEnabled,
@@ -109,30 +112,32 @@ export const DataProvider = Class.inherit({
             });
         });
 
-        styles.push({
-            // Group row style
-            bold: true,
-            wrapText: false,
-            alignment: getDefaultAlignment(this._options.rtlEnabled)
-        });
+        return columnStyles;
+    },
 
-        return styles;
+    getStyles: function() {
+        return [...this.getHeaderStyles(), ...this.getColumnStyles(), this.getGroupRowStyle()];
+    },
+
+    _getTotalCellStyleId: function(cellIndex) {
+        const alignment = this.getColumns()[cellIndex]?.alignment || 'right';
+        return this.getHeaderStyles().map(style => style.alignment).indexOf(alignment);
     },
 
     getStyleId: function(rowIndex, cellIndex) {
         if(rowIndex < this.getHeaderRowCount()) {
-            return HEADER_STYLE_ID.center;
+            return 0;
         } else if(this.isTotalCell(rowIndex - this.getHeaderRowCount(), cellIndex)) {
-            return HEADER_STYLE_ID[this.getColumns()[cellIndex]?.alignment || 'right'];
+            return this._getTotalCellStyleId(cellIndex);
         } else if(this.isGroupRow(rowIndex - this.getHeaderRowCount())) {
-            return DATA_STYLE_OFFSET + this.getColumns().length;
+            return this.getHeaderStyles().length + this.getColumns().length;
         } else {
-            return cellIndex + DATA_STYLE_OFFSET;
+            return cellIndex + this.getHeaderStyles().length;
         }
     },
 
     getColumns: function(getColumnsByAllRows) {
-        const columns = this._options.columns;
+        const { columns } = this._options;
 
         return getColumnsByAllRows ? columns : columns[columns.length - 1];
     },

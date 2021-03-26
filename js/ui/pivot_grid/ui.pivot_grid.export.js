@@ -11,9 +11,6 @@ import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const DEFAULT_DATA_TYPE = 'string';
-const COLUMN_HEADER_STYLE_ID = 0;
-const ROW_HEADER_STYLE_ID = 1;
-const DATA_STYLE_OFFSET = 2;
 const DEFAUL_COLUMN_WIDTH = 100;
 
 export const ExportMixin = extend({}, exportMixin, {
@@ -239,31 +236,38 @@ export const DataProvider = Class.inherit({
         return this._options.items[0][0].colspan;
     },
 
+    getHeaderStyles() {
+        return [
+            { alignment: 'center', dataType: 'string' },
+            { alignment: getDefaultAlignment(this._options.rtlEnabled), dataType: 'string' }
+        ];
+    },
+
+    getDataFieldStyles() {
+        const dataFields = this._options.dataFields;
+        const dataItemStyle = { alignment: this._options.rtlEnabled ? 'left' : 'right' };
+        const dataFieldStyles = [];
+
+        if(dataFields.length) {
+            dataFields.forEach((dataField) => {
+                dataFieldStyles.push({
+                    ...dataItemStyle,
+                    ...{ format: dataField.format, dataType: this.getCellDataType(dataField) }
+                });
+            });
+
+            return dataFieldStyles;
+        }
+
+        return [dataItemStyle];
+    },
+
     getStyles: function() {
         if(this._styles) {
             return this._styles;
         }
 
-        const dataFields = this._options.dataFields;
-        const dataItemStyle = { alignment: this._options.rtlEnabled ? 'left' : 'right' };
-
-        this._styles = [
-            // column header style
-            { alignment: 'center', dataType: 'string' },
-            // row header style
-            { alignment: getDefaultAlignment(this._options.rtlEnabled), dataType: 'string' }
-        ];
-
-        if(dataFields.length) {
-            dataFields.forEach((dataField) => {
-                this._styles.push(extend({}, dataItemStyle, {
-                    format: dataField.format,
-                    dataType: this.getCellDataType(dataField)
-                }));
-            });
-        } else {
-            this._styles.push(dataItemStyle);
-        }
+        this._styles = [...this.getHeaderStyles(), ...this.getDataFieldStyles()];
 
         return this._styles;
     },
@@ -293,15 +297,13 @@ export const DataProvider = Class.inherit({
         const items = this._options.items;
         const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-        if(cellIndex === 0 && rowIndex === 0) {
-            return COLUMN_HEADER_STYLE_ID;
-        } else if(this.isColumnAreaCell(rowIndex, cellIndex)) {
-            return COLUMN_HEADER_STYLE_ID;
+        if((cellIndex === 0 && rowIndex === 0) || this.isColumnAreaCell(rowIndex, cellIndex)) {
+            return 0;
         } else if(this.isRowAreaCell(rowIndex, cellIndex)) {
-            return ROW_HEADER_STYLE_ID;
+            return 1;
         }
 
-        return DATA_STYLE_OFFSET + (item.dataIndex || 0);
+        return this.getHeaderStyles().length + (item.dataIndex || 0);
     },
 
     hasCustomizeExcelCell: function() {
