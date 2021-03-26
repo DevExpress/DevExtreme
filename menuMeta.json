@@ -692,7 +692,6 @@
           {
             "Title": "Total Summaries",
             "Name": "GridSummaries",
-            "DocUrl": "Guide/UI_Components/DataGrid/Summaries/Total_Summary/",
             "Widget": "DataGrid",
             "Modules": "globalize--vue&react",
             "MvcAdditionalFiles": [
@@ -705,7 +704,6 @@
           {
             "Title": "Group Summaries",
             "Name": "GroupSummaries",
-            "DocUrl": "Guide/UI_Components/DataGrid/Summaries/Group_Summary/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridSummariesController.cs",
@@ -717,7 +715,6 @@
           {
             "Title": "Custom Summaries",
             "Name": "CustomSummaries",
-            "DocUrl": "Guide/UI_Components/DataGrid/Summaries/Custom_Aggregate_Function/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridCustomSummariesController.cs",
@@ -729,7 +726,6 @@
           {
             "Title": "Recalculate While Editing",
             "Name": "RecalculateWhileEditing",
-            "DocUrl": "",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/Order.cs",
