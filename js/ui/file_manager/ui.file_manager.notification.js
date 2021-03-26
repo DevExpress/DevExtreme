@@ -83,7 +83,7 @@ export default class FileManagerNotificationControl extends Widget {
             const fakeOperationInfo = {
                 [this._notificationManager._isRealHandler]: this._isProgressDrawerDisabled() ? false : true
             };
-            this._notificationManager.updateActionProgressStatus(fakeOperationInfo);
+            this._notificationManager._tryHideActionProgress(fakeOperationInfo);
         });
         return promise.promise();
     }
