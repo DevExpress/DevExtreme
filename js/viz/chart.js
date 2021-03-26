@@ -1147,7 +1147,7 @@ const dxChart = AdvancedChart.inherit({
             const argAxisLabelPosition = argumentAxis.getOptions().label?.position;
             const scrollBarPosition = that._scrollBar.getOptions().position;
 
-            return argumentAxis.hasCustomPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
+            return argumentAxis.hasNonBoundaryPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
         }
 
         return false;
