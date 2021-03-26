@@ -20,7 +20,6 @@ class App extends React.Component {
     return (
       <Scheduler
         dataSource={appointments}
-        width={800}
         height={600}
         views={views}
         defaultCurrentView="timelineWorkWeek"

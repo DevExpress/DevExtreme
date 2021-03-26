@@ -4,7 +4,6 @@
     :current-date="currentDate"
     :views="views"
     :height="600"
-    :width="800"
     :first-day-of-week="0"
     :start-day-hour="8"
     :end-day-hour="20"

@@ -1773,15 +1773,6 @@
               "/Models/SampleData/PriorityResources.cs"
             ],
             "DemoType": "Web"
-          },
-          {
-            "Title": "Virtual Scrolling",
-            "Badge": "New",
-            "Name": "VirtualScrolling",
-            "Widget": "Scheduler",
-            "MvcAdditionalFiles": [
-            ],
-            "DemoType": "Web"
           }
         ]
       },
@@ -1790,7 +1781,7 @@
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Horizontal Views",
+            "Title": "Horizontal",
             "Badge": "New",
             "Name": "HorizontalVirtualScrolling",
             "Widget": "Scheduler",
@@ -1799,7 +1790,7 @@
             "DemoType": "Web"
           },
           {
-            "Title": "Vertical Views",
+            "Title": "Vertical",
             "Badge": "Updated",
             "Name": "VerticalVirtualScrolling",
             "Widget": "Scheduler",
