@@ -51,6 +51,7 @@ class App extends React.Component {
           onHiding={this.hideInfo}
           dragEnabled={false}
           closeOnOutsideClick={true}
+          showCloseButton={false}
           showTitle={true}
           title="Information"
           container=".dx-viewport"

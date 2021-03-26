@@ -17,6 +17,7 @@ window.onload = function() {
             visible: that.visiblePopup,
             dragEnabled: false,
             closeOnOutsideClick: true,
+            showCloseButton: false,
             position: {
                 at: "bottom",
                 my: "center",

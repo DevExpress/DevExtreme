@@ -15,6 +15,7 @@
       v-model:visible="popupVisible"
       :drag-enabled="false"
       :close-on-outside-click="true"
+      :show-close-button="false"
       :show-title="true"
       :width="300"
       :height="280"
