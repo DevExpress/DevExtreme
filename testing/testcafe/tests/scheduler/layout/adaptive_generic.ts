@@ -38,19 +38,20 @@ const resources = [{
 [false, true].forEach((crossScrollingEnabled) => {
   views.forEach((view) => {
     test(`Adaptive views layout test in generic theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
-      await t.resizeWindow(400, 600);
-
       await t.expect(
         await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}).png`),
       ).ok();
-    }).before(() => createScheduler({
-      views: [view],
-      currentView: view,
-      crossScrollingEnabled,
-    }))
-      .after(async (t) => {
-        await t.resizeWindow(1200, 800);
+    }).before(async (t) => {
+      await t.resizeWindow(400, 600);
+
+      await createScheduler({
+        views: [view],
+        currentView: view,
+        crossScrollingEnabled,
       });
+    }).after(async (t) => {
+      await t.resizeWindow(1200, 800);
+    });
   });
 });
 
@@ -62,21 +63,22 @@ const resources = [{
     }))
     .forEach((view) => {
       test(`Adaptive views layout test in generic theme (view='${view.type})', crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
-        await t.resizeWindow(400, 600);
-
         await t.expect(
           await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping).png`),
         ).ok();
-      }).before(() => createScheduler({
-        views: [view],
-        currentView: view,
-        crossScrollingEnabled,
-        groups: ['priorityId'],
-        resources,
-      }))
-        .after(async (t) => {
-          await t.resizeWindow(1200, 800);
+      }).before(async (t) => {
+        await t.resizeWindow(400, 600);
+
+        await createScheduler({
+          views: [view],
+          currentView: view,
+          crossScrollingEnabled,
+          groups: ['priorityId'],
+          resources,
         });
+      }).after(async (t) => {
+        await t.resizeWindow(1200, 800);
+      });
     });
 });
 
@@ -88,20 +90,21 @@ const resources = [{
     }))
     .forEach((view) => {
       test(`Adaptive views layout test in generic theme (view='${view.type})', crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping is used`, async (t) => {
-        await t.resizeWindow(400, 600);
-
         await t.expect(
           await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping).png`),
         ).ok();
-      }).before(() => createScheduler({
-        views: [view],
-        currentView: view,
-        crossScrollingEnabled,
-        groups: ['priorityId'],
-        resources,
-      }))
-        .after(async (t) => {
-          await t.resizeWindow(1200, 800);
+      }).before(async (t) => {
+        await t.resizeWindow(400, 600);
+
+        await createScheduler({
+          views: [view],
+          currentView: view,
+          crossScrollingEnabled,
+          groups: ['priorityId'],
+          resources,
         });
+      }).after(async (t) => {
+        await t.resizeWindow(1200, 800);
+      });
     });
 });
