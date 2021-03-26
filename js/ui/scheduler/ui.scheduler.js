@@ -1531,8 +1531,10 @@ class Scheduler extends Widget {
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
             scrolling,
+            draggingMode: this.option('_draggingMode'),
+
+            // TODO: SSR does not work correctly with renovated render
             renovateRender: this._isRenovatedRender(isVirtualScrolling),
-            draggingMode: this.option('_draggingMode')
         }, currentViewOptions);
 
         result.observer = this;
