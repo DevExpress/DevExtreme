@@ -35,7 +35,7 @@ const SRC = [
 ];
 
 const IGNORE_PATHS_BY_FRAMEWORKS = {
-    vue: ['!js/renovation/viz/**/*'],
+    vue: [],
     react: [],
     angular: []
 };
