@@ -164,8 +164,8 @@ export default Class.inherit({
         return this._selectionStrategy.isItemDataSelected(data);
     },
 
-    isItemSelected: function(arg) {
-        return this._selectionStrategy.isItemKeySelected(arg);
+    isItemSelected: function(arg, checkPending) {
+        return this._selectionStrategy.isItemKeySelected(arg, checkPending);
     },
 
     _resetItemSelectionWhenShiftKeyPressed: function() {

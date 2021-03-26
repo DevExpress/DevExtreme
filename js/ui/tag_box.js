@@ -1507,6 +1507,7 @@ const TagBox = SelectBox.inherit({
                 this._setListOption('selectAllText', this.option('selectAllText'));
                 break;
             case 'value':
+
                 this._valuesToUpdate = args?.value;
                 this.callBase(args);
                 this._valuesToUpdate = undefined;

@@ -382,11 +382,20 @@ export default SelectionStrategy.inherit({
         return this.isItemKeySelected(key);
     },
 
-    isItemKeySelected: function(key) {
-        const keyHash = this._getKeyHash(key);
-        const index = this._indexOfSelectedItemKey(keyHash);
+    isItemKeySelected: function(key, checkPending) {
+        let result;
+        checkPending = true;
+        if(checkPending && this._lastRequestData && this._lastLoadDeferred?.state() === 'pending') {
+            result = this._lastRequestData.addedItems.indexOf(key) !== -1;
+        }
 
-        return index !== -1;
+        if(!result) {
+            const keyHash = this._getKeyHash(key);
+            const index = this._indexOfSelectedItemKey(keyHash);
+            result = index !== -1;
+        }
+
+        return result;
     },
 
     getSelectAllState: function(visibleOnly) {

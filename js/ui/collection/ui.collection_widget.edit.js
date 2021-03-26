@@ -751,7 +751,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
         const key = this._getKeyByIndex(itemIndex);
 
-        if(!this._selection.isItemSelected(key)) {
+        if(!this._selection.isItemSelected(key, true)) {
             return;
         }
 
