@@ -964,9 +964,7 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
 
 const workWeekModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({
-            currentDate: new Date(2021, 0, 10),
-        }).dxSchedulerWorkSpaceWorkWeek('instance');
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek().dxSchedulerWorkSpaceWorkWeek('instance');
         stubInvokeMethod(this.instance);
     }
 };
@@ -1022,7 +1020,8 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
     });
 
     QUnit.test('Scheduler workspace work week view should contain a 5 headers', function(assert) {
-        const currentDate = new Date();
+        const currentDate = new Date(2021, 0, 10);
+        this.instance.option('currentDate', currentDate);
         const $element = this.instance.$element();
         const weekStartDate = new Date(currentDate).getDate() - (new Date(currentDate).getDay() - 1);
         const $headerCells = $element.find('.dx-scheduler-header-panel-cell');
