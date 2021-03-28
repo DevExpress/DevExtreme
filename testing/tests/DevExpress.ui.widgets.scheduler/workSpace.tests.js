@@ -1518,6 +1518,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
             beforeEach: function() {
                 this.createInstance = (options, workSpaceName) => {
                     return $('#scheduler-work-space')[workSpaceName]({
+                        currentDate: new Date(2021, 0, 10),
                         ...options,
                         scrolling: { mode: scrollingMode },
                         height: 1000,
@@ -2430,6 +2431,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
             beforeEach: function() {
                 this.createInstance = (options, workSpaceName) => {
                     return $('#scheduler-work-space')[workSpaceName]({
+                        currentDate: new Date(2021, 0, 10),
                         ...options,
                         scrolling: { mode: scrollingMode },
                         renovateRender: scrollingMode === 'virtual',
