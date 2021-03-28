@@ -964,7 +964,9 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
 
 const workWeekModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek().dxSchedulerWorkSpaceWorkWeek('instance');
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({
+            currentDate: new Date(2021, 0, 10),
+        }).dxSchedulerWorkSpaceWorkWeek('instance');
         stubInvokeMethod(this.instance);
     }
 };
