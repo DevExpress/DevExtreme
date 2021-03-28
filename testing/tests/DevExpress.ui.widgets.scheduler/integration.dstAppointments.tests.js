@@ -29,6 +29,50 @@ const moduleConfig = {
     }
 };
 
+QUnit.test('Scheduler - Fix - Recurrent appointment settings generator should consider daylight saving time (T985142)', function(assert) {
+    // NOTE: The daylight saving changed in Pacific/Tahiti on 28.03.2021
+    let scheduler;
+    try {
+        scheduler = createWrapper({
+            dataSource: [{
+                startDate: '2021-03-28T10:00:00.000Z',
+                endDate: '2021-03-29T10:00:00.000Z',
+                startDateTimeZone: 'Europe/Paris',
+                endDateTimeZone: 'Europe/Paris',
+                recurrenceRule: 'FREQ=DAILY;INTERVAL=1;COUNT=1'
+            }],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2021, 2, 27),
+            height: 600,
+            timeZone: 'Pacific/Tahiti'
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appoitment count is correct');
+
+        const appointmentSettings = scheduler.instance.getAppointmentsInstance().option('items')[0];
+
+        assert.deepEqual({
+            appointment: {
+                startDate: new Date('2021-03-27T22:00:00.000Z'),
+                endDate: new Date('2021-03-28T22:00:00.000Z'),
+                source: {
+                    startDate: new Date('2021-03-28T10:00:00.000Z'),
+                    endDate: new Date('2021-03-29T10:00:00.000Z')
+                }
+            },
+            sourceAppointment: {
+                startDate: new Date('2021-03-28T10:00:00.000Z'),
+                endDate: new Date('2021-03-29T10:00:00.000Z')
+            }
+        },
+        appointmentSettings.settings[0].info,
+        'Appoitment settings is correct');
+    } catch(e) {
+        assert.ok(false, e.Message);
+    }
+});
+
 QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleConfig, () => {
     QUnit.test('Any recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
         // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
@@ -77,6 +121,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
         assert.equal(scheduler.appointments.getDateText(0), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in appointment after time changing in appointment timezone');
     });
+
 
     QUnit.test('Any recurrence appt part should have correct tooltip and popup if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
         if(!isDeviceDesktop(assert)) {
