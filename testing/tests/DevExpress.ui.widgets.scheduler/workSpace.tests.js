@@ -1519,10 +1519,10 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 this.createInstance = (options, workSpaceName) => {
                     return $('#scheduler-work-space')[workSpaceName]({
                         currentDate: new Date(2021, 0, 10),
-                        ...options,
                         scrolling: { mode: scrollingMode },
                         height: 1000,
                         renovateRender: scrollingMode === 'virtual',
+                        ...options,
                     });
                 };
             },
@@ -2432,10 +2432,10 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 this.createInstance = (options, workSpaceName) => {
                     return $('#scheduler-work-space')[workSpaceName]({
                         currentDate: new Date(2021, 0, 10),
-                        ...options,
                         scrolling: { mode: scrollingMode },
                         renovateRender: scrollingMode === 'virtual',
                         height: 1000,
+                        ...options,
                     });
                 };
             },
