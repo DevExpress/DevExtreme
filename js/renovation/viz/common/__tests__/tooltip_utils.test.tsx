@@ -9,68 +9,68 @@ jest.mock('../../../../core/dom_adapter', () => ({
   getBody: jest.fn(),
 }));
 
-describe('#getCloudAngle', () => {
-  it('should return angle=0', () => {
+describe('getCloudAngle', () => {
+  it('should return angle = 0, anchor in the center, top-right and right areas', () => {
     const size = { width: 30, height: 20 };
 
     expect(getCloudAngle(size, {
       x: 44, y: 56, anchorX: 40, anchorY: 50,
-    })).toBe(0); // 0
+    })).toBe(0); // center
 
     expect(getCloudAngle(size, {
       x: 44, y: 56, anchorX: 66, anchorY: 40,
-    })).toBe(0); // 3
+    })).toBe(0); // top-right
 
     expect(getCloudAngle(size, {
       x: 44, y: 56, anchorX: 66, anchorY: 50,
-    })).toBe(0); // 4
+    })).toBe(0); // right
   });
 
-  it('should return angle = 270', () => {
+  it('should return angle = 270, anchor in the top-left and top areas', () => {
     const size = { width: 30, height: 20 };
 
-    // 1
+    // top-left
     expect(getCloudAngle(size, {
       x: 44, y: 56, anchorX: 20, anchorY: 40,
     })).toBe(270);
 
-    // 2
+    // top
     expect(getCloudAngle(size, {
       x: 44, y: 56, anchorX: 33, anchorY: 40,
     })).toBe(270);
   });
 
-  it('should return angle = 90', () => {
+  it('should return angle = 90, anchor in the bottom-right and bottom areas', () => {
     const size = { width: 30, height: 20 };
 
-    // 5
+    // bottom-right
     expect(getCloudAngle(size, {
       x: 44, y: 56, anchorX: 66, anchorY: 70,
     })).toBe(90);
 
-    // 6
+    // bottom
     expect(getCloudAngle(size, {
       x: 44, y: 56, anchorX: 55, anchorY: 70,
     })).toBe(90);
   });
 
-  it('should return angle = 180', () => {
+  it('should return angle = 180, anchor in the bottom-left and left areas', () => {
     const size = { width: 30, height: 20 };
 
-    // 7
+    // bottom-left
     expect(getCloudAngle(size, {
       x: 44, y: 56, anchorX: 20, anchorY: 70,
     })).toBe(180);
 
-    // 8
+    // left
     expect(getCloudAngle(size, {
       x: 44, y: 56, anchorX: 20, anchorY: 70,
     })).toBe(180);
   });
 });
 
-describe('#recalculateCoordinates', () => {
-  it('should return new coordinatess', () => {
+describe('recalculateCoordinates', () => {
+  it('should return new coordinates', () => {
     const canvas = {
       left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 450,
     };
@@ -89,7 +89,7 @@ describe('#recalculateCoordinates', () => {
     });
   });
 
-  it('should return new coordinates, is not fit on the top', () => {
+  it('should return new coordinates, area of tooltip goes beyond the top canvas', () => {
     const canvas = {
       left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 450,
     };
@@ -108,7 +108,7 @@ describe('#recalculateCoordinates', () => {
     });
   });
 
-  it('should return new coordinates, is not fit on the left', () => {
+  it('should return new coordinates, area of tooltip goes beyond the left canvas', () => {
     const canvas = {
       left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 450,
     };
@@ -127,7 +127,7 @@ describe('#recalculateCoordinates', () => {
     });
   });
 
-  it('should return new coordinates, is not fit on the right', () => {
+  it('should return new coordinates, area of tooltip goes beyond the right canvas', () => {
     const canvas = {
       left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 450,
     };
@@ -146,7 +146,7 @@ describe('#recalculateCoordinates', () => {
     });
   });
 
-  it('should return new coordinates, canvas width less the width of the element', () => {
+  it('should return new coordinates, canvas width less the width of the tooltip', () => {
     const canvas = {
       left: 0, right: 0, top: 0, bottom: 0, width: 27, height: 450,
     };
@@ -165,7 +165,7 @@ describe('#recalculateCoordinates', () => {
     });
   });
 
-  it('should return new coordinates, canvas height less the height of the element', () => {
+  it('should return new coordinates, canvas height less the height of the tooltip', () => {
     const canvas = {
       left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 35,
     };
@@ -184,7 +184,7 @@ describe('#recalculateCoordinates', () => {
     });
   });
 
-  it('should return false, coordinates out of canvas', () => {
+  it('should return false, coordinates is not in the canvas', () => {
     const options = {
       canvas: {
         left: 10, right: 20, top: 25, bottom: 30, width: 400, height: 100,
@@ -218,8 +218,8 @@ describe('#recalculateCoordinates', () => {
   });
 });
 
-describe('#getCloudPoints', () => {
-  it('should return path, arrow in the bottom', () => {
+describe('getCloudPoints', () => {
+  it('should return path, anchor in the bottom of tooltip', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 100, y: 51, anchorX: 100, anchorY: 82,
@@ -230,7 +230,7 @@ describe('#getCloudPoints', () => {
       .toBe('M80,46a 10 10 0 0 1 10 -10L110,36a 10 10 0 0 1 8.660254037844386 5L118.66025403784438,41,131,51,118.66025403784438,61A 10 10 0 0 1 110 66L90,66a 10 10 0 0 1 -10 -10Z');
   });
 
-  it('should return path, arrow inside', () => {
+  it('should return path, anchor inside of tooltip', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 100, y: 80, anchorX: 100, anchorY: 82,
@@ -241,18 +241,7 @@ describe('#getCloudPoints', () => {
       .toBe('M85,70a 10 10 0 0 1 10 -10L105,60a 10 10 0 0 1 10 10L115,90a 10 10 0 0 1 -10 10L95,100a 10 10 0 0 1 -10 -10Z');
   });
 
-  it('should return path, is not bounded', () => {
-    const size = { width: 30, height: 40 };
-    const coordinates = {
-      x: 100, y: 51, anchorX: 100, anchorY: 82,
-    };
-    const options = { arrowWidth: 20, cornerRadius: 10 };
-
-    expect(getCloudPoints(size, coordinates, getCloudAngle(size, coordinates), options, false))
-      .toBe('M80,46a 10 10 0 0 1 10 -10L110,36a 10 10 0 0 1 10 10L120,56a 10 10 0 0 1 -10 10L90,66a 10 10 0 0 1 -10 -10Z');
-  });
-
-  it('should return path, arrow in the top', () => {
+  it('should return path, anchor in the top of tooltip', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 100, y: 82, anchorX: 100, anchorY: 51,
@@ -263,7 +252,7 @@ describe('#getCloudPoints', () => {
       .toBe('M80,77a 10 10 0 0 1 10 -10L110,67a 10 10 0 0 1 8.660254037844386 5L118.66025403784438,72,131,82,118.66025403784438,92A 10 10 0 0 1 110 97L90,97a 10 10 0 0 1 -10 -10Z');
   });
 
-  it('should return path, arrow in the left', () => {
+  it('should return path, anchor in the left of tooltip', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 50, y: 80, anchorX: 30, anchorY: 80,
@@ -274,7 +263,7 @@ describe('#getCloudPoints', () => {
       .toBe('M35,70a 10 10 0 0 1 10 -10L55,60a 10 10 0 0 1 10 10L65,70,70,80,65,90L65,90a 10 10 0 0 1 -10 10L45,100a 10 10 0 0 1 -10 -10Z');
   });
 
-  it('should return path, arrow in the right', () => {
+  it('should return path, anchor in the right of tooltip', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 50, y: 80, anchorX: 80, anchorY: 80,
@@ -285,7 +274,7 @@ describe('#getCloudPoints', () => {
       .toBe('M35,70a 10 10 0 0 1 10 -10L55,60a 10 10 0 0 1 10 10L65,70,80,80,65,90L65,90a 10 10 0 0 1 -10 10L45,100a 10 10 0 0 1 -10 -10Z');
   });
 
-  it('should return path, arrow in the top-right', () => {
+  it('should return path, anchor in the top-right of tooltip', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 50, y: 50, anchorX: 80, anchorY: 20,
@@ -296,7 +285,7 @@ describe('#getCloudPoints', () => {
       .toBe('M35,40a 10 10 0 0 1 10 -10L55,30,80,20,65,40L65,60a 10 10 0 0 1 -10 10L45,70a 10 10 0 0 1 -10 -10Z');
   });
 
-  it('should return path, arrow in the top-right, more corner radius', () => {
+  it('should return path, anchor in the top-right, corner radius >= half height of tooltip', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 50, y: 50, anchorX: 80, anchorY: 20,
@@ -307,7 +296,7 @@ describe('#getCloudPoints', () => {
       .toBe('M35,45a 15 15 0 0 1 15 -15L50,30a 15 15 0 0 1 1.7767909546784961 0.10560461437347568L80,20,64.89439538562652,43.223209045321504A 15 15 0 0 1 65 45L65,55a 15 15 0 0 1 -15 15L50,70a 15 15 0 0 1 -15 -15Z');
   });
 
-  it('should return path, arrow in the top-right, arrow on the corner', () => {
+  it('should return path, anchor in the top-right, anchor right on the corner', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 50, y: 50, anchorX: 80, anchorY: 30,
@@ -318,7 +307,7 @@ describe('#getCloudPoints', () => {
       .toBe('M35,40a 10 10 0 0 1 10 -10L55,30a 10 10 0 0 1 5.403023058681398 1.585290151921035L60.4030230586814,31.585290151921036,80,30,65,40L65,60a 10 10 0 0 1 -10 10L45,70a 10 10 0 0 1 -10 -10Z');
   });
 
-  it('should return path, arrow in the top-right, arrow on the corner, less arrow width', () => {
+  it('should return path, anchor in the top-right, anchor right on the corner, small arrow width', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 50, y: 50, anchorX: 80, anchorY: 30,
@@ -329,7 +318,7 @@ describe('#getCloudPoints', () => {
       .toBe('M35,40a 10 10 0 0 1 10 -10L55,30a 10 10 0 0 1 5.403023058681398 1.585290151921035L60.4030230586814,31.585290151921036,80,30,62.76541234242515,33.699335657876134A 10 10 0 0 1 65 40L65,60a 10 10 0 0 1 -10 10L45,70a 10 10 0 0 1 -10 -10Z');
   });
 
-  it('should return path, arrow in the bottom-right, arrow on the corner', () => {
+  it('should return path, anchor in the bottom-right, anchor right on the corner', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 50, y: 50, anchorX: 80, anchorY: 70,
@@ -340,7 +329,7 @@ describe('#getCloudPoints', () => {
       .toBe('M35,40a 10 10 0 0 1 10 -10L55,30a 10 10 0 0 1 10 10L65,60,80,70,55,70A 10 10 0 0 1 55 70L45,70a 10 10 0 0 1 -10 -10Z');
   });
 
-  it('should return path, arrow in the bottom-right, arrow on the corner, more corner radius', () => {
+  it('should return path, anchor in the bottom-right, anchor right on the corner, corner radius >= half height of tooltip', () => {
     const size = { width: 30, height: 40 };
     const coordinates = {
       x: 50, y: 50, anchorX: 80, anchorY: 70,
@@ -352,7 +341,7 @@ describe('#getCloudPoints', () => {
   });
 });
 
-describe('#prepareData', () => {
+describe('prepareData', () => {
   const border = {
     color: 'color_2', width: 2, dashStyle: 'dashStyle', visible: true,
   };
@@ -405,7 +394,7 @@ function setReturnValue(method, returnValue) {
   (domAdapter[method] as jest.Mock).mockReturnValue(returnValue);
 }
 
-describe('#getCanvas', () => {
+describe('getCanvas', () => {
   afterEach(() => jest.resetAllMocks);
 
   it('should return valid canvas. tooltip in body. width from the document.clientWidth', () => {

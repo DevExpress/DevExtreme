@@ -13,6 +13,7 @@ export const Consts = {
     GENERAL_TOOLBAR_CLASS: 'dx-filemanager-general-toolbar',
     FILE_TOOLBAR_CLASS: 'dx-filemanager-file-toolbar',
     CONTAINER_CLASS: 'dx-filemanager-container',
+    DRAWER_WRAPPER_CLASS: 'dx-drawer-wrapper',
     DRAWER_PANEL_CONTENT_CLASS: 'dx-drawer-panel-content',
     DRAWER_CONTENT_CLASS: 'dx-drawer-content',
     DRAWER_MODE_SHRINK: 'dx-drawer-shrink',
@@ -52,9 +53,12 @@ export const Consts = {
     TOOLBAR_HAS_LARGE_ICON_CLASS: 'dx-filemanager-toolbar-has-large-icon',
     TOOLBAR_ITEM_CLASS: 'dx-toolbar-item',
     TOOLBAR_ITEM_WITH_HIDDEN_TEXT_CLASS: 'dx-toolbar-text-auto-hide',
+    TOOLBAR_REFRESH_ITEM_ICON_CLASS: 'dx-filemanager-i',
+    TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS: 'dx-filemanager-i-refresh',
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
+    NOTIFICATION_POPUP_CLASS: 'dx-filemanager-notification-popup',
     POPUP_NORMAL_CLASS: 'dx-popup-normal',
     POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
     BUTTON_CLASS: 'dx-button',
@@ -438,8 +442,12 @@ export class FileManagerWrapper {
         return $container.find(`.${Consts.FILE_ACTION_BUTTON_CLASS} .${Consts.BUTTON_CLASS}`);
     }
 
-    getDrawerPanelContent() {
+    getNavPaneDrawerPanelContent() {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
+    }
+
+    getProgressPaneDrawerPanelContent() {
+        return this._$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS} > .${Consts.DRAWER_WRAPPER_CLASS} > .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
     }
 
     getProgressDrawer() {
@@ -452,7 +460,7 @@ export class FileManagerWrapper {
 
     moveSplitter(delta, pointerType) {
         const $splitter = this.getSplitter();
-        const $drawerContent = this.getDrawerPanelContent();
+        const $drawerContent = this.getNavPaneDrawerPanelContent();
         if(!pointerType) {
             pointerType = 'mouse';
         }
@@ -478,6 +486,10 @@ export class FileManagerWrapper {
     getSplitterPosition() {
         const $splitterWrapper = this._$element.find(`.${Consts.SPLITTER_WRAPPER_CLASS}`);
         return $splitterWrapper.get(0).offsetLeft + parseFloat(this.getSplitter().css('margin-left'));
+    }
+
+    getNotificationPopup() {
+        return $(`.${Consts.NOTIFICATION_POPUP_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
     }
 
     getFolderChooserDialog() {
