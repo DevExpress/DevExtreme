@@ -2949,55 +2949,63 @@ QUnit.module('dxPivotGrid', {
         assert.deepEqual(pivotGrid.getScrollPath('row'), ['A']);
     });
 
-    ['row', 'column'].forEach((expandDimension) => {
+    ['row', 'column'].forEach((dimension) => {
         [false, true].forEach((useNative) => {
-            ['virtual'].forEach((mode) => {
-                QUnit.test(`PivotGrid -> scrollTo() -> expandHeader -> collapseHeader (T984139). Mode: ${mode}, useNative: ${useNative}, expandDimension: ${expandDimension}`, function(assert) {
-                    const checkScrollOffset = (scrollable, expected) => {
-                        const offset = scrollable.scrollOffset();
-                        assert.strictEqual(offset.left, expected);
-                        assert.strictEqual(offset.top, expected);
-                    };
+            QUnit.test(`PivotGrid -> scrollTo() -> expandHeader -> collapseHeader (T984139). UseNative: ${useNative}, expandDimension: ${dimension}`, function(assert) {
+                this.clock.restore();
+                const done = assert.async();
 
-                    const store = [];
-                    for(let i = 0; i < 2000; i++) {
-                        store.push({ id: i, row: i + 1, column: i + 1, data: 1 });
+                const checkScrollOffset = (scrollable, expected) => {
+                    const offset = scrollable.scrollOffset();
+                    assert.strictEqual(offset.left, expected);
+                    assert.strictEqual(offset.top, expected);
+                };
+
+                const store = [];
+                for(let i = 0; i < 2000; i++) {
+                    store.push({ id: i, row: i + 1, column: i + 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'id', area: dimension },
+                            { dataField: 'data', area: 'data' }
+                        ]
                     }
+                });
 
-                    const pivotGrid = createPivotGrid({
-                        width: 1000,
-                        height: 1000,
-                        scrolling: { mode, useNative },
-                        dataSource: {
-                            store: store,
-                            fields: [
-                                { dataField: 'column', area: 'column' },
-                                { dataField: 'row', area: 'row' },
-                                { dataField: 'id', area: expandDimension },
-                                { dataField: 'data', area: 'data' }
-                            ]
-                        }
-                    });
-                    this.clock.tick();
+                setTimeout(() => {
                     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
                     checkScrollOffset(scrollable, 0);
 
+                    const nodeNumberToExpand = 65;
                     const expectedOffset = 2000;
                     scrollable.scrollTo({ left: expectedOffset, top: expectedOffset });
-                    this.clock.tick(100);
-                    checkScrollOffset(scrollable, expectedOffset);
+                    setTimeout(() => {
+                        checkScrollOffset(scrollable, expectedOffset);
 
-                    pivotGrid.getDataSource().expandHeaderItem(expandDimension, [65]);
-                    this.clock.tick(100);
-                    checkScrollOffset(scrollable, expectedOffset);
-                    const nodeAfterExpanding = pivotGrid.$element().find('.dx-pivotgrid-expanded');
-                    assert.notEqual(nodeAfterExpanding.length, 0);
+                        pivotGrid.getDataSource().expandHeaderItem(dimension, [nodeNumberToExpand]);
+                        setTimeout(() => {
+                            checkScrollOffset(scrollable, expectedOffset);
+                            const nodeAfterExpanding = pivotGrid.$element().find('.dx-pivotgrid-expanded');
+                            assert.notEqual(nodeAfterExpanding.length, 0);
 
-                    pivotGrid.getDataSource().collapseHeaderItem(expandDimension, [65]);
-                    this.clock.tick(100);
-                    checkScrollOffset(scrollable, expectedOffset);
-                    const nodeAfterCollapsing = pivotGrid.$element().find('.dx-pivotgrid-expanded');
-                    assert.strictEqual(nodeAfterCollapsing.length, 0);
+                            pivotGrid.getDataSource().collapseHeaderItem(dimension, [nodeNumberToExpand]);
+                            setTimeout(() => {
+                                checkScrollOffset(scrollable, expectedOffset);
+                                const nodeAfterCollapsing = pivotGrid.$element().find('.dx-pivotgrid-expanded');
+                                assert.strictEqual(nodeAfterCollapsing.length, 0);
+                                done();
+                            }, 300);
+                        }, 300);
+                    }, 300);
                 });
             });
         });
