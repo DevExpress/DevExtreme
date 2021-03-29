@@ -37,9 +37,15 @@ export default class FileManagerNotificationControlMock extends FileManagerNotif
         return component ? component : super._getProgressPanelComponent();
     }
 
+    _getProgressManagerComponent() {
+        const component = this.option('progressManagerComponent');
+        return component ? component : super._getProgressPanelComponent();
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             progressPanelComponent: null,
+            progressManagerComponent: null,
             logger: null
         });
     }
@@ -49,6 +55,7 @@ export default class FileManagerNotificationControlMock extends FileManagerNotif
 
         switch(name) {
             case 'progressPanelComponent':
+            case 'progressManagerComponent':
             case 'logger':
                 break;
             default:
