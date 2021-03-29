@@ -38,16 +38,33 @@ import Widget, {
 /**
   * @public
   */
+export interface AppointmentTemplateModel {
+  readonly appointmentData?: any;
+  readonly targetedAppointmentData?: any;
+}
+
+/**
+  * @public
+  */
+export interface CustomizeDateNavigatorTextInfo {
+  readonly startDate: Date;
+  readonly endDate: Date;
+  readonly text: string;
+}
+
+/**
+  * @public
+  */
 export interface AppointmentCollectorTemplateInfo {
-  readonly appointmentCount?: number;
-  readonly isCompact?: boolean;
+  readonly appointmentCount: number;
+  readonly isCompact: boolean;
 }
 
 /**
   * @public
   */
 export interface onAddEvent {
-  readonly component?: dxScheduler;
+  readonly component: dxScheduler;
   readonly event?: TEvent;
   readonly itemData?: any;
   readonly itemElement?: TElement;
@@ -61,7 +78,7 @@ export interface onAddEvent {
   * @public
   */
 export interface DragEndEvent {
-  readonly component?: dxScheduler;
+  readonly component: dxScheduler;
   readonly event?: TEvent;
   readonly itemData?: any;
   readonly itemElement?: TElement;
@@ -76,7 +93,7 @@ export interface DragEndEvent {
   * @public
   */
 export interface DragMoveEvent {
-  readonly component?: dxScheduler;
+  readonly component: dxScheduler;
   readonly event?: TEvent;
   readonly itemData?: any;
   readonly itemElement?: TElement;
@@ -91,7 +108,7 @@ export interface DragMoveEvent {
   * @public
   */
 export interface DragStartEvent {
-  readonly component?: dxScheduler;
+  readonly component: dxScheduler;
   readonly event?: TEvent;
   readonly itemData?: any;
   readonly itemElement?: TElement;
@@ -103,30 +120,13 @@ export interface DragStartEvent {
   * @public
   */
 export interface RemoveEvent {
-  readonly component?: dxScheduler;
+  readonly component: dxScheduler;
   readonly event?: TEvent;
   readonly itemData?: any;
   readonly itemElement?: TElement;
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
   readonly fromData?: any;
-}
-
-/**
-  * @public
-  */
-export interface AppointmentTemplateModel {
-  readonly appointmentData?: any;
-  readonly targetedAppointmentData?: any;
-}
-
-/**
-  * @public
-  */
-export interface CustomizeDateNavigatorTextInfo {
-  readonly startDate?: Date;
-  readonly endDate?: Date;
-  text?: string; // TODO
 }
 
 /**
@@ -161,7 +161,7 @@ export interface AppointmentClickEvent {
   readonly appointmentData: any;
   readonly targetedAppointmentData?: any;
   readonly appointmentElement: TElement;
-  readonly event?: TEvent;
+  readonly event: TEvent;
   cancel: boolean;
 }
 
@@ -175,7 +175,7 @@ export interface AppointmentContextMenuEvent {
   readonly appointmentData: any;
   readonly targetedAppointmentData?: any;
   readonly appointmentElement: TElement;
-  readonly event?: TEvent;
+  readonly event: TEvent;
 }
 
 /**
@@ -188,7 +188,7 @@ export interface AppointmentDblClickEvent {
   readonly appointmentData: any;
   readonly targetedAppointmentData?: any;
   readonly appointmentElement: TElement;
-  readonly event?: TEvent;
+  readonly event: TEvent;
   cancel: boolean;
 }
 
@@ -198,7 +198,7 @@ export interface AppointmentDblClickEvent {
 export interface AppointmentDeletedEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
-  readonly model: any;
+  readonly model?: any;
   readonly appointmentData: any;
   readonly error?: Error;
 }
@@ -233,10 +233,10 @@ export interface AppointmentFormOpeningEvent {
 export interface AppointmentRenderedEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
-  readonly model: any;
+  readonly model?: any;
   readonly appointmentData: any;
   readonly targetedAppointmentData?: any;
-  readonly appointmentElement?: TElement;
+  readonly appointmentElement: TElement;
 }
 
 /**
@@ -257,8 +257,8 @@ export interface AppointmentUpdatingEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
-  readonly oldData?: any;
-  readonly newData?: any;
+  readonly oldData: any;
+  readonly newData: any;
   cancel?: boolean | TPromise<boolean>;
 }
 
@@ -271,7 +271,7 @@ export interface CellClickEvent {
   readonly model?: any;
   readonly cellData: any;
   readonly cellElement: TElement;
-  readonly event?: TEvent;
+  readonly event: TEvent;
   cancel: boolean;
 }
 
@@ -284,7 +284,7 @@ export interface CellContextMenuEvent {
   readonly model?: any;
   readonly cellData: any;
   readonly cellElement: TElement;
-  readonly event?: TEvent;
+  readonly event: TEvent;
 }
 
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
@@ -1018,7 +1018,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default "appointmentCollector"
        * @extends AppointmentCollectorTemplate
        */
-      appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: TElement) => string | TElement),
+      appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateInfo, collectorElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
