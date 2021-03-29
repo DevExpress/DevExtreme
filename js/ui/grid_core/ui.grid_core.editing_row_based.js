@@ -1,10 +1,12 @@
 import {
     EDIT_MODE_ROW,
     MODES_WITH_DELAYED_FOCUS,
-    ROW_SELECTED,
-    EDIT_ROW,
+    ROW_SELECTED_CLASS,
     EDIT_FORM_CLASS
+
 } from './ui.grid_core.editing_constants';
+
+const EDIT_ROW = 'dx-edit-row';
 
 export const editingRowBasedModule = {
     extenders: {
@@ -118,7 +120,7 @@ export const editingRowBasedModule = {
 
                         if(isEditRow) {
                             $row.addClass(EDIT_ROW);
-                            $row.removeClass(ROW_SELECTED);
+                            $row.removeClass(ROW_SELECTED_CLASS);
 
                             if(row.rowType === 'detail') {
                                 $row.addClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
@@ -132,7 +134,7 @@ export const editingRowBasedModule = {
                 _update: function(change) {
                     this.callBase(change);
                     if(change.changeType === 'updateSelection') {
-                        this.getTableElements().children('tbody').children('.' + EDIT_ROW).removeClass(ROW_SELECTED);
+                        this.getTableElements().children('tbody').children('.' + EDIT_ROW).removeClass(ROW_SELECTED_CLASS);
                     }
                 },
             }

@@ -19,41 +19,74 @@ import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 import { equalByValue, noop } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
 import {
-    READONLY_CLASS,
-    LINK_CLASS,
     EDITOR_CELL_CLASS,
-    ROW_SELECTED,
-    EDIT_BUTTON_CLASS,
-    COMMAND_EDIT_CLASS,
-    COMMAND_EDIT_WITH_ICONS_CLASS,
-    INSERT_INDEX,
     ROW_CLASS,
-    ROW_INSERTED,
-    ROW_MODIFIED,
-    CELL_MODIFIED,
-    EDITING_NAMESPACE,
-    CELL_FOCUS_DISABLED_CLASS,
-    EDITORS_INPUT_SELECTOR,
-    FOCUSABLE_ELEMENT_SELECTOR,
+    EDIT_FORM_CLASS,
     DATA_EDIT_DATA_INSERT_TYPE,
-    DATA_EDIT_DATA_UPDATE_TYPE,
     DATA_EDIT_DATA_REMOVE_TYPE,
-    EDIT_MODES,
-    ROW_BASED_MODES,
-    EDIT_LINK_CLASS,
-    EDIT_ICON_CLASS,
-    METHOD_NAMES,
-    ACTION_OPTION_NAMES,
-    BUTTON_NAMES,
     EDITING_POPUP_OPTION_NAME,
-    EDITING_CHANGES_OPTION_NAME,
     EDITING_EDITROWKEY_OPTION_NAME,
     EDITING_EDITCOLUMNNAME_OPTION_NAME,
-    EDIT_MODE_ROW,
-    DEFAULT_START_EDIT_ACTION,
     TARGET_COMPONENT_NAME,
-    EDIT_FORM_CLASS
+    EDITORS_INPUT_SELECTOR,
+    FOCUSABLE_ELEMENT_SELECTOR,
+    EDIT_MODE_ROW,
+    EDIT_MODES,
+    ROW_BASED_MODES,
 } from './ui.grid_core.editing_constants';
+
+const READONLY_CLASS = 'readonly';
+const LINK_CLASS = 'dx-link';
+const ROW_SELECTED = 'dx-selection';
+const EDIT_BUTTON_CLASS = 'dx-edit-button';
+const COMMAND_EDIT_CLASS = 'dx-command-edit';
+const COMMAND_EDIT_WITH_ICONS_CLASS = COMMAND_EDIT_CLASS + '-with-icons';
+
+
+const INSERT_INDEX = '__DX_INSERT_INDEX__';
+const ROW_INSERTED = 'dx-row-inserted';
+const ROW_MODIFIED = 'dx-row-modified';
+const CELL_MODIFIED = 'dx-cell-modified';
+const EDITING_NAMESPACE = 'dxDataGridEditing';
+
+const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+
+const DATA_EDIT_DATA_UPDATE_TYPE = 'update';
+
+const DEFAULT_START_EDIT_ACTION = 'click';
+
+const EDIT_LINK_CLASS = {
+    save: 'dx-link-save',
+    cancel: 'dx-link-cancel',
+    edit: 'dx-link-edit',
+    undelete: 'dx-link-undelete',
+    delete: 'dx-link-delete',
+    add: 'dx-link-add'
+};
+const EDIT_ICON_CLASS = {
+    save: 'save',
+    cancel: 'revert',
+    edit: 'edit',
+    undelete: 'revert',
+    delete: 'trash',
+    add: 'add'
+};
+const METHOD_NAMES = {
+    edit: 'editRow',
+    delete: 'deleteRow',
+    undelete: 'undeleteRow',
+    save: 'saveEditData',
+    cancel: 'cancelEditData',
+    add: 'addRowByRowIndex'
+};
+const ACTION_OPTION_NAMES = {
+    add: 'allowAdding',
+    edit: 'allowUpdating',
+    delete: 'allowDeleting'
+};
+const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
+
+const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
 
 const createFailureHandler = function(deferred) {
     return function(arg) {
