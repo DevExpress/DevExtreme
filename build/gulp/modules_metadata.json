@@ -184,6 +184,12 @@
     }
   },
   {
+    "name": "file_management/error",
+    "exports": {
+      "default": { "path": "fileManagement.FileSystemError" }
+    }
+  },
+  {
     "name": "file_management/file_system_item",
     "exports": {
       "default": { "path": "fileManagement.FileSystemItem" }
