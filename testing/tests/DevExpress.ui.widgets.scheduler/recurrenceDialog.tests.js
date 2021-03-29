@@ -21,6 +21,7 @@ module('Recurrence Dialog', {
     if(isDesktopEnvironment()) {
         test('Recurrence dialog should be disposed of after it is closed', function(assert) {
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 currentDate: new Date(2021, 2, 22),
                 currentView: 'week',
                 dataSource: [{
@@ -43,6 +44,7 @@ module('Recurrence Dialog', {
 
         test('Recurrence dialog should be disposed of after scheduler is removed from DOM', function(assert) {
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 currentDate: new Date(2021, 2, 22),
                 currentView: 'week',
                 dataSource: [{
@@ -71,6 +73,7 @@ module('Recurrence Dialog', {
             }];
 
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 currentDate: new Date(2021, 2, 22),
                 currentView: 'week',
                 dataSource,
