@@ -344,10 +344,16 @@ QUnit.module('dxPivotGrid', {
 QUnit.module('Data Provider', () => {
 
     QUnit.test('Initialization. Get styles', function(assert) {
-        const dataProvider = new DataProvider();
+        const dataProvider = new DataProvider({
+            dataFields: []
+        });
 
         assert.ok(dataProvider.getStyles() instanceof Array);
-        assert.deepEqual(dataProvider.getStyles(), []);
+        assert.deepEqual(dataProvider.getStyles(), [
+            { alignment: 'center', dataType: 'string' },
+            { alignment: 'left', dataType: 'string' },
+            { alignment: 'right' }
+        ]);
     });
 
     QUnit.test('getCellType. fields dataType is not defined', function(assert) {
