@@ -32,7 +32,6 @@ export default class FileManagerNotificationControl extends Widget {
         this._initActions();
 
         this._isInAdaptiveState = this._isSmallScreen();
-        // this._progressPanelContainer = null;
 
         this._setNotificationManager();
         const $progressPanelContainer = this.option('progressPanelContainer');
@@ -79,11 +78,7 @@ export default class FileManagerNotificationControl extends Widget {
         setTimeout(() => {
             this._progressDrawer.show().done(promise.resolve);
             this._hidePopup();
-            // TODO: remove this hack
-            const fakeOperationInfo = {
-                [this._notificationManager._isRealHandler]: this._isProgressDrawerDisabled() ? false : true
-            };
-            this._notificationManager._tryHideActionProgress(fakeOperationInfo);
+            this._notificationManager.tryHideActionProgress();
         });
         return promise.promise();
     }
@@ -111,7 +106,7 @@ export default class FileManagerNotificationControl extends Widget {
 
         this._notificationManager.completeOperation(operationInfo, commonText, isError, statusText);
 
-        if(!this._isProgressDrawerOpened() || !this._hasNoOperations(operationInfo)) {
+        if(!this._isProgressDrawerOpened() || !this._notificationManager.hasNoOperations()) {
             this._notificationManager.updateActionProgressStatus(operationInfo);
         }
     }
@@ -169,7 +164,6 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _ensureProgressPanelCreated(container) {
-        // this._progressPanelContainer = container;
         this._notificationManager.ensureProgressPanelCreated(container, {
             onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
             onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
@@ -189,10 +183,6 @@ export default class FileManagerNotificationControl extends Widget {
         } else {
             return NotificationManagerReal;
         }
-    }
-
-    _hasNoOperations(operationInfo) {
-        return this._notificationManager.hasNoOperations(operationInfo);
     }
 
     _isProgressDrawerDisabled() {

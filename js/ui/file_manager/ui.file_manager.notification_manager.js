@@ -94,6 +94,10 @@ class NotificationManagerStub extends NotificationManagerBase {
 
     ensureProgressPanelCreated() {}
 
+    tryHideActionProgress() {
+        this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
+    }
+
     updateActionProgressStatus() {
         this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
     }
@@ -193,12 +197,12 @@ class NotificationManagerReal extends NotificationManagerStub {
     _onProgressPanelOperationClosed(operationInfo) {
         if(operationInfo.hasError) {
             this._failedOperationCount--;
-            this._tryHideActionProgress(operationInfo);
+            this.tryHideActionProgress(operationInfo);
         }
     }
 
-    _tryHideActionProgress(operationInfo) {
-        if(this.hasNoOperations(operationInfo)) {
+    tryHideActionProgress(operationInfo) {
+        if(this.hasNoOperations()) {
             this._updateActionProgressWrapper(operationInfo, '', ACTION_PROGRESS_STATUS.default);
         }
     }
@@ -228,12 +232,8 @@ class NotificationManagerReal extends NotificationManagerStub {
         this._raiseActionProgress(message, status);
     }
 
-    hasNoOperations(operationInfo) {
-        if(operationInfo && operationInfo[this._isRealHandler]) {
-            return this._operationInProgressCount === 0 && this._failedOperationCount === 0;
-        } else {
-            return super.hasNoOperations();
-        }
+    hasNoOperations() {
+        return this._operationInProgressCount === 0 && this._failedOperationCount === 0;
     }
 
     get _operationInProgressCount() { return this._operationInProgressCountInternal; }
