@@ -118,7 +118,7 @@ function _convertNumberFormat(format, precision, currency) {
 }
 
 export const ExportFormat = {
-    formatObjectConverter: function(format, dataType) {
+    formatObjectConverter(format, dataType) {
         const result = {
             format: format,
             precision: format && format.precision,
@@ -135,7 +135,7 @@ export const ExportFormat = {
         return result;
     },
 
-    convertFormat: function(format, precision, type, currency) {
+    convertFormat(format, precision, type, currency) {
         if(isDefined(format)) {
             if(type === 'date') {
                 return _convertDateFormat(format);
