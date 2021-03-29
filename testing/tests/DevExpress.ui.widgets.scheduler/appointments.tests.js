@@ -147,7 +147,10 @@ const moduleOptions = {
             }
         };
 
-        this.instance = $('#scheduler-appointments').dxSchedulerAppointments({ observer: observer }).dxSchedulerAppointments('instance');
+        this.instance = $('#scheduler-appointments').dxSchedulerAppointments({
+            observer: observer,
+            _draggingMode: 'default'
+        }).dxSchedulerAppointments('instance');
 
         this.workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({}).dxSchedulerWorkSpaceWeek('instance');
         this.workspaceInstance.getWorkArea().append(this.instance.$element());
