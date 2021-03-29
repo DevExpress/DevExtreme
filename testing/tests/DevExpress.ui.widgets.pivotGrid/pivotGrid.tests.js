@@ -2949,6 +2949,51 @@ QUnit.module('dxPivotGrid', {
         assert.deepEqual(pivotGrid.getScrollPath('row'), ['A']);
     });
 
+    QUnit.test('Scrolling when virtual scrolling is enabled', function(assert) {
+        const done = assert.async();
+        let assertFunction;
+
+        $('#pivotGrid').empty();
+        $('#pivotGrid').width(100);
+        $('#pivotGrid').height(150);
+        const pivotGrid = createPivotGrid({
+            fieldChooser: {
+                enabled: false
+            },
+            scrolling: {
+                mode: 'virtual',
+                timeout: 0
+            },
+            dataSource: this.dataSource
+        });
+        this.clock.tick();
+        assert.ok(pivotGrid);
+
+        const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
+        const setViewportPosition = sinon.spy(pivotGrid._dataController, 'setViewportPosition');
+        const updateWindowScrollPosition = sinon.spy(pivotGrid._dataController, 'updateWindowScrollPosition');
+
+        const scrollFunction = function(e) {
+            assertFunction();
+        };
+        scrollable.on('scroll', scrollFunction);
+
+        assertFunction = function() {
+            assert.deepEqual(setViewportPosition.lastCall.args, [10, 0]);
+        };
+        // act1
+        scrollable.scrollTo({ left: 10 });
+
+        assertFunction = function() {
+            assert.deepEqual(setViewportPosition.lastCall.args, [10, 1]);
+            assert.strictEqual(updateWindowScrollPosition.lastCall.args[0], 1);
+            scrollable.off('scroll', scrollFunction);
+            done();
+        };
+        // act2
+        scrollable.scrollTo({ left: 10, top: 1 });
+    });
+
     ['row', 'column'].forEach((dimension) => {
         [false, true].forEach((useNative) => {
             QUnit.test(`PivotGrid -> scrollTo() -> expandHeader -> collapseHeader (T984139). UseNative: ${useNative}, expandDimension: ${dimension}`, function(assert) {
