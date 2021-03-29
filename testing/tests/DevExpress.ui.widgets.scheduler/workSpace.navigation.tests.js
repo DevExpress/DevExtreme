@@ -876,7 +876,7 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
-                                scrolling: { mode: scrollingMode },
+                                scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');
@@ -924,7 +924,7 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
-                                scrolling: { mode: scrollingMode },
+                                scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');
@@ -1433,7 +1433,7 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 height: 500,
-                                scrolling: { mode: scrollingMode },
+                                scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');
