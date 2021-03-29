@@ -3030,12 +3030,12 @@ QUnit.module('dxPivotGrid', {
                     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
                     checkScrollOffset(scrollable, 0);
 
-                    const nodeNumberToExpand = 65;
                     const expectedOffset = 2000;
                     scrollable.scrollTo({ left: expectedOffset, top: expectedOffset });
                     setTimeout(() => {
                         checkScrollOffset(scrollable, expectedOffset);
 
+                        const nodeNumberToExpand = 65;
                         pivotGrid.getDataSource().expandHeaderItem(dimension, [nodeNumberToExpand]);
                         setTimeout(() => {
                             checkScrollOffset(scrollable, expectedOffset);
@@ -3050,7 +3050,7 @@ QUnit.module('dxPivotGrid', {
                                 done();
                             }, 300);
                         }, 300);
-                    }, 300);
+                    });
                 });
             });
         });
