@@ -567,9 +567,14 @@
         },
         "target": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxActionSheet.Options.target"
         },
@@ -1092,6 +1097,12 @@
           "IsReadonly": true,
           "DocID": "dxTextEditor.Options.text"
         },
+        "useItemTextAsTitle": {
+          "PrimitiveTypes": [
+            "boolean"
+          ],
+          "DocID": "dxDropDownList.Options.useItemTextAsTitle"
+        },
         "validationError": {
           "PrimitiveTypes": [
             "any"
@@ -1323,23 +1334,22 @@
             },
             "font": {
               "PrimitiveTypes": [
-                "DevExpress.viz.Font"
+                "Font"
               ],
               "ComplexTypes": [
                 "VizFont"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "Font",
+                  "Path": "viz/core/base_widget"
                 }
               ],
               "DocID": "dxBarGauge.Options.label.font"
             },
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -1347,9 +1357,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxBarGauge.Options.label.format"
@@ -1583,16 +1592,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseLegend.title.font"
@@ -1646,16 +1654,15 @@
                   "Options": {
                     "font": {
                       "PrimitiveTypes": [
-                        "DevExpress.viz.Font"
+                        "Font"
                       ],
                       "ComplexTypes": [
                         "VizFont"
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "Font",
+                          "Path": "viz/core/base_widget"
                         }
                       ],
                       "DocID": "BaseLegend.title.subtitle.font"
@@ -1999,16 +2006,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -2117,9 +2123,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -2769,9 +2780,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -5436,23 +5452,22 @@
                     },
                     "font": {
                       "PrimitiveTypes": [
-                        "DevExpress.viz.Font"
+                        "Font"
                       ],
                       "ComplexTypes": [
                         "VizFont"
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "Font",
+                          "Path": "viz/core/base_widget"
                         }
                       ],
                       "DocID": "dxChart.Options.crosshair.horizontalLine.label.font"
                     },
                     "format": {
                       "PrimitiveTypes": [
-                        "DevExpress.ui.format",
+                        "format",
                         "string"
                       ],
                       "ComplexTypes": [
@@ -5460,9 +5475,8 @@
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "format",
+                          "Path": "ui/widget/ui.widget"
                         }
                       ],
                       "DocID": "dxChart.Options.crosshair.horizontalLine.label.format"
@@ -5513,23 +5527,22 @@
                 },
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "dxChart.Options.crosshair.label.font"
                 },
                 "format": {
                   "PrimitiveTypes": [
-                    "DevExpress.ui.format",
+                    "format",
                     "string"
                   ],
                   "ComplexTypes": [
@@ -5537,9 +5550,8 @@
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "format",
+                      "Path": "ui/widget/ui.widget"
                     }
                   ],
                   "DocID": "dxChart.Options.crosshair.label.format"
@@ -5594,23 +5606,22 @@
                     },
                     "font": {
                       "PrimitiveTypes": [
-                        "DevExpress.viz.Font"
+                        "Font"
                       ],
                       "ComplexTypes": [
                         "VizFont"
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "Font",
+                          "Path": "viz/core/base_widget"
                         }
                       ],
                       "DocID": "dxChart.Options.crosshair.verticalLine.label.font"
                     },
                     "format": {
                       "PrimitiveTypes": [
-                        "DevExpress.ui.format",
+                        "format",
                         "string"
                       ],
                       "ComplexTypes": [
@@ -5618,9 +5629,8 @@
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "format",
+                          "Path": "ui/widget/ui.widget"
                         }
                       ],
                       "DocID": "dxChart.Options.crosshair.verticalLine.label.format"
@@ -6012,16 +6022,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseLegend.title.font"
@@ -6075,16 +6084,15 @@
                   "Options": {
                     "font": {
                       "PrimitiveTypes": [
-                        "DevExpress.viz.Font"
+                        "Font"
                       ],
                       "ComplexTypes": [
                         "VizFont"
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "Font",
+                          "Path": "viz/core/base_widget"
                         }
                       ],
                       "DocID": "BaseLegend.title.subtitle.font"
@@ -6732,16 +6740,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -6866,9 +6873,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -8331,7 +8343,8 @@
         },
         "value": {
           "PrimitiveTypes": [
-            "boolean"
+            "boolean",
+            "undefined"
           ],
           "IsChangeable": true,
           "DocID": "dxCheckBox.Options.value"
@@ -9029,16 +9042,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -9147,9 +9159,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -9726,32 +9743,30 @@
           "Options": {
             "hide": {
               "PrimitiveTypes": [
-                "DevExpress.animationConfig"
+                "animationConfig"
               ],
               "ComplexTypes": [
                 "AnimationConfig"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "animationConfig",
+                  "Path": "animation/fx"
                 }
               ],
               "DocID": "dxMenuBase.Options.animation.hide"
             },
             "show": {
               "PrimitiveTypes": [
-                "DevExpress.animationConfig"
+                "animationConfig"
               ],
               "ComplexTypes": [
                 "AnimationConfig"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "animationConfig",
+                  "Path": "animation/fx"
                 }
               ],
               "DocID": "dxMenuBase.Options.animation.show"
@@ -10104,9 +10119,14 @@
         },
         "target": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxContextMenu.Options.target"
         },
@@ -11554,11 +11574,18 @@
                 "string"
               ],
               "ItemPrimitiveTypes": [
-                "number"
+                "number",
+                "string"
               ],
               "IsCollection": true,
               "SingularName": "allowedPageSize",
               "DocID": "GridBase.Options.pager.allowedPageSizes"
+            },
+            "displayMode": {
+              "PrimitiveTypes": [
+                "string"
+              ],
+              "DocID": "GridBase.Options.pager.displayMode"
             },
             "infoText": {
               "PrimitiveTypes": [
@@ -11704,17 +11731,27 @@
             },
             "boundary": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "GridBase.Options.rowDragging.boundary"
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "GridBase.Options.rowDragging.container"
             },
@@ -12230,7 +12267,7 @@
                 },
                 "valueFormat": {
                   "PrimitiveTypes": [
-                    "DevExpress.ui.format",
+                    "format",
                     "string"
                   ],
                   "ComplexTypes": [
@@ -12238,9 +12275,8 @@
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "format",
+                      "Path": "ui/widget/ui.widget"
                     }
                   ],
                   "DocID": "dxDataGrid.Options.summary.groupItems.valueFormat"
@@ -12383,7 +12419,7 @@
                 },
                 "valueFormat": {
                   "PrimitiveTypes": [
-                    "DevExpress.ui.format",
+                    "format",
                     "string"
                   ],
                   "ComplexTypes": [
@@ -12391,9 +12427,8 @@
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "format",
+                      "Path": "ui/widget/ui.widget"
                     }
                   ],
                   "DocID": "dxDataGrid.Options.summary.totalItems.valueFormat"
@@ -13093,12 +13128,15 @@
         },
         "renderWhen": {
           "PrimitiveTypes": [
-            "boolean"
+            "boolean",
+            "TPromise"
           ],
-          "ItemPrimitiveTypes": [
-            "void"
+          "TypeImports": [
+            {
+              "Name": "TPromise",
+              "Path": "core/utils/deferred"
+            }
           ],
-          "IsPromise": true,
           "DocID": "dxDeferRendering.Options.renderWhen"
         },
         "rtlEnabled": {
@@ -14488,9 +14526,14 @@
         },
         "boundary": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "DraggableBase.Options.boundary"
         },
@@ -14502,9 +14545,14 @@
         },
         "container": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "DraggableBase.Options.container"
         },
@@ -14790,9 +14838,14 @@
         },
         "target": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "IsDeprecated": true,
           "DocID": "dxDrawer.Options.target"
@@ -14878,7 +14931,6 @@
             "string"
           ],
           "ItemPrimitiveTypes": [
-            "DevExpress.ui.CollectionWidgetItem",
             "any"
           ],
           "TypeImports": [
@@ -14889,7 +14941,7 @@
             }
           ],
           "IsDataSource": true,
-          "DocID": "DataExpressionMixin.Options.dataSource"
+          "DocID": "dxDropDownBox.Options.dataSource"
         },
         "deferRendering": {
           "PrimitiveTypes": [
@@ -14991,6 +15043,47 @@
             "boolean"
           ],
           "DocID": "Editor.Options.isValid"
+        },
+        "items": {
+          "ItemPrimitiveTypes": [
+            "any"
+          ],
+          "IsCollection": true,
+          "SingularName": "item",
+          "DocID": "dxDropDownBox.Options.items",
+          "Options": {
+            "disabled": {
+              "PrimitiveTypes": [
+                "boolean"
+              ],
+              "DocID": "CollectionWidgetItem.disabled"
+            },
+            "html": {
+              "PrimitiveTypes": [
+                "string"
+              ],
+              "DocID": "CollectionWidgetItem.html"
+            },
+            "template": {
+              "PrimitiveTypes": [
+                "any"
+              ],
+              "IsTemplate": true,
+              "DocID": "CollectionWidgetItem.template"
+            },
+            "text": {
+              "PrimitiveTypes": [
+                "string"
+              ],
+              "DocID": "CollectionWidgetItem.text"
+            },
+            "visible": {
+              "PrimitiveTypes": [
+                "boolean"
+              ],
+              "DocID": "CollectionWidgetItem.visible"
+            }
+          }
         },
         "maxLength": {
           "PrimitiveTypes": [
@@ -15585,6 +15678,12 @@
           ],
           "DocID": "dxDropDownButton.Options.text"
         },
+        "useItemTextAsTitle": {
+          "PrimitiveTypes": [
+            "boolean"
+          ],
+          "DocID": "dxDropDownButton.Options.useItemTextAsTitle"
+        },
         "useSelectMode": {
           "PrimitiveTypes": [
             "boolean"
@@ -15779,6 +15878,23 @@
             }
           }
         },
+        "notifications": {
+          "DocID": "dxFileManager.Options.notifications",
+          "Options": {
+            "showPanel": {
+              "PrimitiveTypes": [
+                "boolean"
+              ],
+              "DocID": "dxFileManager.Options.notifications.showPanel"
+            },
+            "showPopup": {
+              "PrimitiveTypes": [
+                "boolean"
+              ],
+              "DocID": "dxFileManager.Options.notifications.showPopup"
+            }
+          }
+        },
         "onContentReady": {
           "PrimitiveTypes": [
             "Function"
@@ -15794,6 +15910,14 @@
           "IsFunc": true,
           "IsEvent": true,
           "DocID": "dxFileManager.Options.onContextMenuItemClick"
+        },
+        "onContextMenuShowing": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxFileManager.Options.onContextMenuShowing"
         },
         "onCurrentDirectoryChanged": {
           "PrimitiveTypes": [
@@ -16046,9 +16170,14 @@
         },
         "dialogTrigger": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxFileUploader.Options.dialogTrigger"
         },
@@ -16060,9 +16189,14 @@
         },
         "dropZone": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxFileUploader.Options.dropZone"
         },
@@ -17405,23 +17539,22 @@
             },
             "font": {
               "PrimitiveTypes": [
-                "DevExpress.viz.Font"
+                "Font"
               ],
               "ComplexTypes": [
                 "VizFont"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "Font",
+                  "Path": "viz/core/base_widget"
                 }
               ],
               "DocID": "dxFunnel.Options.label.font"
             },
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -17429,9 +17562,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxFunnel.Options.label.format"
@@ -17679,16 +17811,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseLegend.title.font"
@@ -17742,16 +17873,15 @@
                   "Options": {
                     "font": {
                       "PrimitiveTypes": [
-                        "DevExpress.viz.Font"
+                        "Font"
                       ],
                       "ComplexTypes": [
                         "VizFont"
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "Font",
+                          "Path": "viz/core/base_widget"
                         }
                       ],
                       "DocID": "BaseLegend.title.subtitle.font"
@@ -18131,16 +18261,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -18249,9 +18378,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -18950,6 +19084,14 @@
           "IsEvent": true,
           "DocID": "dxGantt.Options.onCustomCommand"
         },
+        "onDependencyDeleted": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onDependencyDeleted"
+        },
         "onDependencyDeleting": {
           "PrimitiveTypes": [
             "Function"
@@ -18957,6 +19099,14 @@
           "IsFunc": true,
           "IsEvent": true,
           "DocID": "dxGantt.Options.onDependencyDeleting"
+        },
+        "onDependencyInserted": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onDependencyInserted"
         },
         "onDependencyInserting": {
           "PrimitiveTypes": [
@@ -18990,6 +19140,14 @@
           "IsEvent": true,
           "DocID": "DOMComponent.Options.onOptionChanged"
         },
+        "onResourceAssigned": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onResourceAssigned"
+        },
         "onResourceAssigning": {
           "PrimitiveTypes": [
             "Function"
@@ -18997,6 +19155,14 @@
           "IsFunc": true,
           "IsEvent": true,
           "DocID": "dxGantt.Options.onResourceAssigning"
+        },
+        "onResourceDeleted": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onResourceDeleted"
         },
         "onResourceDeleting": {
           "PrimitiveTypes": [
@@ -19006,6 +19172,14 @@
           "IsEvent": true,
           "DocID": "dxGantt.Options.onResourceDeleting"
         },
+        "onResourceInserted": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onResourceInserted"
+        },
         "onResourceInserting": {
           "PrimitiveTypes": [
             "Function"
@@ -19013,6 +19187,14 @@
           "IsFunc": true,
           "IsEvent": true,
           "DocID": "dxGantt.Options.onResourceInserting"
+        },
+        "onResourceUnassigned": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onResourceUnassigned"
         },
         "onResourceUnassigning": {
           "PrimitiveTypes": [
@@ -19046,6 +19228,14 @@
           "IsEvent": true,
           "DocID": "dxGantt.Options.onTaskDblClick"
         },
+        "onTaskDeleted": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onTaskDeleted"
+        },
         "onTaskDeleting": {
           "PrimitiveTypes": [
             "Function"
@@ -19062,6 +19252,14 @@
           "IsEvent": true,
           "DocID": "dxGantt.Options.onTaskEditDialogShowing"
         },
+        "onTaskInserted": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onTaskInserted"
+        },
         "onTaskInserting": {
           "PrimitiveTypes": [
             "Function"
@@ -19077,6 +19275,14 @@
           "IsFunc": true,
           "IsEvent": true,
           "DocID": "dxGantt.Options.onTaskMoving"
+        },
+        "onTaskUpdated": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onTaskUpdated"
         },
         "onTaskUpdating": {
           "PrimitiveTypes": [
@@ -19233,6 +19439,13 @@
             "number"
           ],
           "DocID": "Widget.Options.tabIndex"
+        },
+        "taskContentTemplate": {
+          "PrimitiveTypes": [
+            "any"
+          ],
+          "IsTemplate": true,
+          "DocID": "dxGantt.Options.taskContentTemplate"
         },
         "taskListWidth": {
           "PrimitiveTypes": [
@@ -19563,6 +19776,12 @@
             "boolean"
           ],
           "DocID": "DOMComponent.Options.rtlEnabled"
+        },
+        "stylingMode": {
+          "PrimitiveTypes": [
+            "string"
+          ],
+          "DocID": "dxHtmlEditor.Options.stylingMode"
         },
         "tabIndex": {
           "PrimitiveTypes": [
@@ -20346,16 +20565,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -20464,9 +20682,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -21352,9 +21575,14 @@
         },
         "container": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxLoadPanel.Options.container"
         },
@@ -21606,32 +21834,30 @@
           "Options": {
             "hide": {
               "PrimitiveTypes": [
-                "DevExpress.animationConfig"
+                "animationConfig"
               ],
               "ComplexTypes": [
                 "AnimationConfig"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "animationConfig",
+                  "Path": "animation/fx"
                 }
               ],
               "DocID": "dxLookup.Options.animation.hide"
             },
             "show": {
               "PrimitiveTypes": [
-                "DevExpress.animationConfig"
+                "animationConfig"
               ],
               "ComplexTypes": [
                 "AnimationConfig"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "animationConfig",
+                  "Path": "animation/fx"
                 }
               ],
               "DocID": "dxLookup.Options.animation.show"
@@ -22195,6 +22421,12 @@
           "IsTemplate": true,
           "DocID": "dxLookup.Options.titleTemplate"
         },
+        "useItemTextAsTitle": {
+          "PrimitiveTypes": [
+            "boolean"
+          ],
+          "DocID": "dxDropDownList.Options.useItemTextAsTitle"
+        },
         "useNativeScrolling": {
           "PrimitiveTypes": [
             "boolean"
@@ -22704,32 +22936,30 @@
           "Options": {
             "hide": {
               "PrimitiveTypes": [
-                "DevExpress.animationConfig"
+                "animationConfig"
               ],
               "ComplexTypes": [
                 "AnimationConfig"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "animationConfig",
+                  "Path": "animation/fx"
                 }
               ],
               "DocID": "dxMenuBase.Options.animation.hide"
             },
             "show": {
               "PrimitiveTypes": [
-                "DevExpress.animationConfig"
+                "animationConfig"
               ],
               "ComplexTypes": [
                 "AnimationConfig"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "animationConfig",
+                  "Path": "animation/fx"
                 }
               ],
               "DocID": "dxMenuBase.Options.animation.show"
@@ -24490,16 +24720,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseLegend.title.font"
@@ -24553,16 +24782,15 @@
                   "Options": {
                     "font": {
                       "PrimitiveTypes": [
-                        "DevExpress.viz.Font"
+                        "Font"
                       ],
                       "ComplexTypes": [
                         "VizFont"
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "Font",
+                          "Path": "viz/core/base_widget"
                         }
                       ],
                       "DocID": "BaseLegend.title.subtitle.font"
@@ -25007,16 +25235,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -25141,9 +25368,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -25348,6 +25580,12 @@
             "any"
           ],
           "DocID": "DOMComponent.Options.elementAttr"
+        },
+        "encodeHtml": {
+          "PrimitiveTypes": [
+            "boolean"
+          ],
+          "DocID": "dxPivotGrid.Options.encodeHtml"
         },
         "export": {
           "DocID": "dxPivotGrid.Options.export",
@@ -27658,16 +27896,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseLegend.title.font"
@@ -27721,16 +27958,15 @@
                   "Options": {
                     "font": {
                       "PrimitiveTypes": [
-                        "DevExpress.viz.Font"
+                        "Font"
                       ],
                       "ComplexTypes": [
                         "VizFont"
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "Font",
+                          "Path": "viz/core/base_widget"
                         }
                       ],
                       "DocID": "BaseLegend.title.subtitle.font"
@@ -28213,16 +28449,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -28347,9 +28582,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -29314,9 +29554,14 @@
         },
         "container": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxPopup.Options.container"
         },
@@ -29565,9 +29810,14 @@
         },
         "target": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxPopover.Options.target"
         },
@@ -29724,9 +29974,14 @@
         },
         "container": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxPopup.Options.container"
         },
@@ -31236,23 +31491,22 @@
                 },
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "dxRangeSelector.Options.scale.label.font"
                 },
                 "format": {
                   "PrimitiveTypes": [
-                    "DevExpress.ui.format",
+                    "format",
                     "string"
                   ],
                   "ComplexTypes": [
@@ -31260,9 +31514,8 @@
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "format",
+                      "Path": "ui/widget/ui.widget"
                     }
                   ],
                   "DocID": "dxRangeSelector.Options.scale.label.format"
@@ -31314,7 +31567,7 @@
                     },
                     "format": {
                       "PrimitiveTypes": [
-                        "DevExpress.ui.format",
+                        "format",
                         "string"
                       ],
                       "ComplexTypes": [
@@ -31322,9 +31575,8 @@
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "format",
+                          "Path": "ui/widget/ui.widget"
                         }
                       ],
                       "DocID": "dxRangeSelector.Options.scale.marker.label.format"
@@ -31818,23 +32070,22 @@
             },
             "font": {
               "PrimitiveTypes": [
-                "DevExpress.viz.Font"
+                "Font"
               ],
               "ComplexTypes": [
                 "VizFont"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "Font",
+                  "Path": "viz/core/base_widget"
                 }
               ],
               "DocID": "dxRangeSelector.Options.sliderMarker.font"
             },
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -31842,9 +32093,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxRangeSelector.Options.sliderMarker.format"
@@ -31960,16 +32210,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -32137,7 +32386,7 @@
           "Options": {
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -32145,9 +32394,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxSliderBase.Options.label.format"
@@ -32271,7 +32519,7 @@
             },
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -32279,9 +32527,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxSliderBase.Options.tooltip.format"
@@ -33128,16 +33375,15 @@
             },
             "font": {
               "PrimitiveTypes": [
-                "DevExpress.viz.Font"
+                "Font"
               ],
               "ComplexTypes": [
                 "VizFont"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "Font",
+                  "Path": "viz/core/base_widget"
                 }
               ],
               "DocID": "dxSankey.Options.label.font"
@@ -33766,16 +34012,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -33884,9 +34129,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -34869,16 +35119,15 @@
             },
             "scrolling": {
               "PrimitiveTypes": [
-                "DevExpress.ui.dxSchedulerScrolling"
+                "dxSchedulerScrolling"
               ],
               "ComplexTypes": [
                 "SchedulerScrolling"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "dxSchedulerScrolling",
+                  "Path": "ui/scheduler"
                 }
               ],
               "DocID": "dxScheduler.Options.views.scrolling"
@@ -35624,6 +35873,12 @@
           "IsReadonly": true,
           "DocID": "dxTextEditor.Options.text"
         },
+        "useItemTextAsTitle": {
+          "PrimitiveTypes": [
+            "boolean"
+          ],
+          "DocID": "dxDropDownList.Options.useItemTextAsTitle"
+        },
         "validationError": {
           "PrimitiveTypes": [
             "any"
@@ -36197,7 +36452,7 @@
           "Options": {
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -36205,9 +36460,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxSliderBase.Options.label.format"
@@ -36325,7 +36579,7 @@
             },
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -36333,9 +36587,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxSliderBase.Options.tooltip.format"
@@ -36429,17 +36682,27 @@
         },
         "boundary": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "DraggableBase.Options.boundary"
         },
         "container": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "DraggableBase.Options.container"
         },
@@ -36975,9 +37238,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -38349,6 +38617,12 @@
           ],
           "DocID": "dxTagBox.Options.maxDisplayedTags"
         },
+        "maxFilterQueryLength": {
+          "PrimitiveTypes": [
+            "number"
+          ],
+          "DocID": "dxTagBox.Options.maxFilterQueryLength"
+        },
         "maxLength": {
           "PrimitiveTypes": [
             "number",
@@ -38675,6 +38949,12 @@
           ],
           "IsReadonly": true,
           "DocID": "dxTextEditor.Options.text"
+        },
+        "useItemTextAsTitle": {
+          "PrimitiveTypes": [
+            "boolean"
+          ],
+          "DocID": "dxDropDownList.Options.useItemTextAsTitle"
         },
         "validationError": {
           "PrimitiveTypes": [
@@ -40327,9 +40607,14 @@
         },
         "container": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxPopup.Options.container"
         },
@@ -40558,9 +40843,14 @@
         },
         "target": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxPopover.Options.target"
         },
@@ -41842,11 +42132,18 @@
                 "string"
               ],
               "ItemPrimitiveTypes": [
-                "number"
+                "number",
+                "string"
               ],
               "IsCollection": true,
               "SingularName": "allowedPageSize",
               "DocID": "GridBase.Options.pager.allowedPageSizes"
+            },
+            "displayMode": {
+              "PrimitiveTypes": [
+                "string"
+              ],
+              "DocID": "GridBase.Options.pager.displayMode"
             },
             "infoText": {
               "PrimitiveTypes": [
@@ -41987,17 +42284,27 @@
             },
             "boundary": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "GridBase.Options.rowDragging.boundary"
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "GridBase.Options.rowDragging.container"
             },
@@ -42640,16 +42947,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "dxTreeMap.Options.group.label.font"
@@ -42667,6 +42973,12 @@
                   "DocID": "dxTreeMap.Options.group.label.visible"
                 }
               }
+            },
+            "padding": {
+              "PrimitiveTypes": [
+                "number"
+              ],
+              "DocID": "dxTreeMap.Options.group.padding"
             },
             "selectionStyle": {
               "DocID": "dxTreeMap.Options.group.selectionStyle",
@@ -43012,16 +43324,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "dxTreeMap.Options.tile.label.font"
@@ -43149,16 +43460,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -43267,9 +43577,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -44489,16 +44804,15 @@
                 },
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "dxVectorMap.Options.layers.label.font"
@@ -44539,6 +44853,12 @@
               "IsCollection": true,
               "SingularName": "palette",
               "DocID": "dxVectorMap.Options.layers.palette"
+            },
+            "paletteIndex": {
+              "PrimitiveTypes": [
+                "number"
+              ],
+              "DocID": "dxVectorMap.Options.layers.paletteIndex"
             },
             "paletteSize": {
               "PrimitiveTypes": [
@@ -44831,16 +45151,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseLegend.title.font"
@@ -44894,16 +45213,15 @@
                   "Options": {
                     "font": {
                       "PrimitiveTypes": [
-                        "DevExpress.viz.Font"
+                        "Font"
                       ],
                       "ComplexTypes": [
                         "VizFont"
                       ],
                       "TypeImports": [
                         {
-                          "Name": "default",
-                          "Alias": "DevExpress",
-                          "Path": "bundles/dx.all"
+                          "Name": "Font",
+                          "Path": "viz/core/base_widget"
                         }
                       ],
                       "DocID": "BaseLegend.title.subtitle.font"
@@ -45252,16 +45570,15 @@
               "Options": {
                 "font": {
                   "PrimitiveTypes": [
-                    "DevExpress.viz.Font"
+                    "Font"
                   ],
                   "ComplexTypes": [
                     "VizFont"
                   ],
                   "TypeImports": [
                     {
-                      "Name": "default",
-                      "Alias": "DevExpress",
-                      "Path": "bundles/dx.all"
+                      "Name": "Font",
+                      "Path": "viz/core/base_widget"
                     }
                   ],
                   "DocID": "BaseWidget.Options.title.subtitle.font"
@@ -45370,9 +45687,14 @@
             },
             "container": {
               "PrimitiveTypes": [
-                "Element",
-                "JQuery",
-                "string"
+                "string",
+                "TElement"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "TElement",
+                  "Path": "core/element"
+                }
               ],
               "DocID": "BaseWidget.Options.tooltip.container"
             },
@@ -49300,13 +49622,6 @@
           ],
           "DocID": "dxMenuBaseItem.selected"
         },
-        "template": {
-          "PrimitiveTypes": [
-            "any"
-          ],
-          "IsTemplate": true,
-          "DocID": "CollectionWidgetItem.template"
-        },
         "text": {
           "PrimitiveTypes": [
             "string"
@@ -49451,12 +49766,6 @@
           ],
           "DocID": "CollectionWidgetItem.disabled"
         },
-        "html": {
-          "PrimitiveTypes": [
-            "string"
-          ],
-          "DocID": "CollectionWidgetItem.html"
-        },
         "icon": {
           "PrimitiveTypes": [
             "string"
@@ -49475,13 +49784,6 @@
           ],
           "DocID": "dxFileManagerToolbarItem.location"
         },
-        "menuItemTemplate": {
-          "PrimitiveTypes": [
-            "any"
-          ],
-          "IsTemplate": true,
-          "DocID": "dxToolbarItem.menuItemTemplate"
-        },
         "name": {
           "PrimitiveTypes": [
             "string"
@@ -49499,13 +49801,6 @@
             "string"
           ],
           "DocID": "dxToolbarItem.showText"
-        },
-        "template": {
-          "PrimitiveTypes": [
-            "any"
-          ],
-          "IsTemplate": true,
-          "DocID": "CollectionWidgetItem.template"
         },
         "text": {
           "PrimitiveTypes": [
@@ -50667,9 +50962,14 @@
       "Options": {
         "container": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
-            "string"
+            "string",
+            "TElement"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "dxHtmlEditorToolbar.container"
         },
@@ -50703,6 +51003,16 @@
     "HtmlEditorToolbarItem": {
       "DocID": "dxHtmlEditorToolbarItem",
       "Options": {
+        "acceptedValues": {
+          "ItemPrimitiveTypes": [
+            "string",
+            "number",
+            "boolean"
+          ],
+          "IsCollection": true,
+          "SingularName": "acceptedValue",
+          "DocID": "dxHtmlEditorToolbarItem.acceptedValues"
+        },
         "cssClass": {
           "PrimitiveTypes": [
             "string"
@@ -50714,22 +51024,6 @@
             "boolean"
           ],
           "DocID": "CollectionWidgetItem.disabled"
-        },
-        "formatName": {
-          "PrimitiveTypes": [
-            "string"
-          ],
-          "DocID": "dxHtmlEditorToolbarItem.formatName"
-        },
-        "formatValues": {
-          "ItemPrimitiveTypes": [
-            "string",
-            "number",
-            "boolean"
-          ],
-          "IsCollection": true,
-          "SingularName": "formatValue",
-          "DocID": "dxHtmlEditorToolbarItem.formatValues"
         },
         "html": {
           "PrimitiveTypes": [
@@ -50755,6 +51049,12 @@
           ],
           "IsTemplate": true,
           "DocID": "dxToolbarItem.menuItemTemplate"
+        },
+        "name": {
+          "PrimitiveTypes": [
+            "string"
+          ],
+          "DocID": "dxHtmlEditorToolbarItem.name"
         },
         "options": {
           "PrimitiveTypes": [
@@ -52269,7 +52569,8 @@
         },
         "endDate": {
           "PrimitiveTypes": [
-            "Date"
+            "Date",
+            "string"
           ],
           "DocID": "dxSchedulerAppointment.endDate"
         },
@@ -52299,7 +52600,8 @@
         },
         "startDate": {
           "PrimitiveTypes": [
-            "Date"
+            "Date",
+            "string"
           ],
           "DocID": "dxSchedulerAppointment.startDate"
         },
@@ -54071,23 +54373,22 @@
             },
             "font": {
               "PrimitiveTypes": [
-                "DevExpress.viz.Font"
+                "Font"
               ],
               "ComplexTypes": [
                 "VizFont"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "Font",
+                  "Path": "viz/core/base_widget"
                 }
               ],
               "DocID": "CommonIndicator.text.font"
             },
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -54095,9 +54396,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "CommonIndicator.text.format"
@@ -54315,7 +54615,7 @@
           "Options": {
             "argumentFormat": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -54323,9 +54623,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat"
@@ -54397,23 +54696,22 @@
             },
             "font": {
               "PrimitiveTypes": [
-                "DevExpress.viz.Font"
+                "Font"
               ],
               "ComplexTypes": [
                 "VizFont"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "Font",
+                  "Path": "viz/core/base_widget"
                 }
               ],
               "DocID": "dxPieChartSeriesTypes.CommonPieChartSeries.label.font"
             },
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -54421,9 +54719,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxPieChartSeriesTypes.CommonPieChartSeries.label.format"
@@ -54727,7 +55024,7 @@
           "Options": {
             "argumentFormat": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -54735,9 +55032,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat"
@@ -54809,23 +55105,22 @@
             },
             "font": {
               "PrimitiveTypes": [
-                "DevExpress.viz.Font"
+                "Font"
               ],
               "ComplexTypes": [
                 "VizFont"
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "Font",
+                  "Path": "viz/core/base_widget"
                 }
               ],
               "DocID": "dxPieChartSeriesTypes.CommonPieChartSeries.label.font"
             },
             "format": {
               "PrimitiveTypes": [
-                "DevExpress.ui.format",
+                "format",
                 "string"
               ],
               "ComplexTypes": [
@@ -54833,9 +55128,8 @@
               ],
               "TypeImports": [
                 {
-                  "Name": "default",
-                  "Alias": "DevExpress",
-                  "Path": "bundles/dx.all"
+                  "Name": "format",
+                  "Path": "ui/widget/ui.widget"
                 }
               ],
               "DocID": "dxPieChartSeriesTypes.CommonPieChartSeries.label.format"
@@ -56463,10 +56757,15 @@
         },
         "boundary": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
             "string",
+            "TElement",
             "Window"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "positionConfig.boundary"
         },
@@ -56532,10 +56831,15 @@
         },
         "of": {
           "PrimitiveTypes": [
-            "Element",
-            "JQuery",
             "string",
+            "TElement",
             "Window"
+          ],
+          "TypeImports": [
+            {
+              "Name": "TElement",
+              "Path": "core/element"
+            }
           ],
           "DocID": "positionConfig.of"
         },
