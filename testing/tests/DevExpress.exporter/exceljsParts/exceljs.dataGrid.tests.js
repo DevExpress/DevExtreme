@@ -12,7 +12,7 @@ import { Export } from 'exporter/exceljs/export';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
-import { ExcelJSOptionTests } from './exceljs.option.tests.js';
+import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import { isDefined } from 'core/utils/type';
 
 import 'ui/data_grid/ui.data_grid';
