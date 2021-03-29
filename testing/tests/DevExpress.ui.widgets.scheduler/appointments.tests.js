@@ -152,7 +152,7 @@ const moduleOptions = {
         }).dxSchedulerAppointments('instance');
 
         this.workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
-            _draggingMode: 'default'
+            draggingMode: 'default'
         }).dxSchedulerWorkSpaceWeek('instance');
         this.workspaceInstance.getWorkArea().append(this.instance.$element());
 
