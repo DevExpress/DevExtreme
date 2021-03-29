@@ -338,7 +338,7 @@ testModule('API', moduleConfig, () => {
         const internalElement = $('<input type="button">');
         const blurSpy = sinon.spy();
         internalElement.appendTo(this.instance.element());
-        internalElement.on('focusout', blurSpy);
+        internalElement.on('blur', blurSpy);
 
         internalElement.focus();
         this.instance.blur();
