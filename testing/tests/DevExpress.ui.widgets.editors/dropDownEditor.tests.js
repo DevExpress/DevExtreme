@@ -1124,6 +1124,23 @@ QUnit.module('Templates', () => {
         assert.strictEqual($buttons.length, 1, 'there is only one button');
         assert.strictEqual($buttons.text(), 'test button', 'correct text');
     });
+
+    [false, true].forEach((readOnly) => {
+        QUnit.test(`Drop button template should be rendered once after change the "readOnly" option value to ${!readOnly}`, function(assert) {
+            const dropDownButtonTemplate = sinon.spy(() => {
+                return '<div>Template</div>';
+            });
+            const expectedCallCount = readOnly ? 1 : 2;
+
+            const editor = $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownButtonTemplate,
+                readOnly
+            }).dxDropDownEditor('instance');
+
+            editor.option('readOnly', !readOnly);
+            assert.strictEqual(dropDownButtonTemplate.callCount, expectedCallCount, `dropDownButton template rendered ${expectedCallCount} time[s]`);
+        });
+    });
 });
 
 QUnit.module('options', () => {

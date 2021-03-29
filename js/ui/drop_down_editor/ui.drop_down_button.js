@@ -76,9 +76,10 @@ export default class ClearButton extends TextEditorButton {
     }
 
     update() {
+        const shouldRender = this._shouldRender();
         const shouldUpdate = super.update();
 
-        if(shouldUpdate) {
+        if(!shouldRender && shouldUpdate) {
             const { editor, instance } = this;
             const $editor = editor.$element();
             const options = this._getOptions();
