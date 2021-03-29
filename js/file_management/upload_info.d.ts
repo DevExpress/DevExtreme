@@ -5,7 +5,7 @@
  * @namespace DevExpress.fileManagement
  * @export default
  * @prevFileNamespace DevExpress.fileManagement
- * @hidden
+ * @public
  */
 export default interface UploadInfo {
     /**
