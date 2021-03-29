@@ -54,7 +54,7 @@ function testTemplateOption(testedOption: string) {
 
   if (testedOption === 'itemComponent') {
     prepareTemplate = (render) => {
-      class ItemComponent extends React.PureComponent<{data: any, index?: number}> {
+      class ItemComponent extends React.PureComponent<{ data: any, index?: number }> {
         public render() {
           const { data, index } = this.props;
           return render(data, index);
@@ -172,8 +172,8 @@ function testTemplateOption(testedOption: string) {
     const container = document.createElement('div');
     renderItemTemplate({ text: 'with data' }, container);
     component.update();
-    expect(container.innerHTML).
-      toBe('<div style=\"display: none;\"></div>Template with data<span style=\"display: none;\"></span>');
+    expect(container.innerHTML)
+      .toBe('<div style=\"display: none;\"></div>Template with data<span style=\"display: none;\"></span>');
   });
 
   it('does not render template removeEvent listener', () => {

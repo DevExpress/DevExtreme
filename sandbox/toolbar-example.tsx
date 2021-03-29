@@ -3,7 +3,7 @@ import { Button } from 'devextreme-react/button';
 import { Toolbar } from 'devextreme-react/toolbar';
 import Example from './example-block';
 
-const ItemComponent = (data: {data: {text: string}}) => (
+const ItemComponent = (data: { data: { text: string } }) => (
   <Button text={data.data.text} />
 );
 

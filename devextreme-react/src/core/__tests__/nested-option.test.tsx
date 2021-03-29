@@ -527,7 +527,7 @@ describe('nested sub-option', () => {
   });
 });
 
-const ComponentWithConditionalOption = (props: {enableOption: boolean}) => {
+const ComponentWithConditionalOption = (props: { enableOption: boolean }) => {
   const { enableOption } = props;
   return (
     <TestComponent>

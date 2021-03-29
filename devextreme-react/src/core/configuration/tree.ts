@@ -156,5 +156,5 @@ export {
   buildNode,
   buildTemplates,
   findValue,
-  findValueInObject
+  findValueInObject,
 };

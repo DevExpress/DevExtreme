@@ -13,82 +13,97 @@ import {
 
 describe('collectIndependentEvents', () => {
   it('discard dependent events', () => {
-    const options: IProp[] = [{
-      name: 'option1',
-      isSubscribable: true,
-      types: [
-        {
-          type: 'Function',
-          acceptableValues: [],
-          isCustomType: true,
-        },
-      ],
-      props: [],
-      firedEvents: ['func1'],
-    }, {
-      name: 'onOption',
-      isSubscribable: false,
-      types: [
-        {
-          type: 'Function',
-          acceptableValues: [],
-          isCustomType: true,
-        },
-      ],
-      props: [],
-      firedEvents: [],
-    }, {
-      name: 'option3',
-      isSubscribable: true,
-      types: [
-        {
-          type: 'Function',
-          acceptableValues: [],
-          isCustomType: true,
-        },
-        {
-          type: 'Number',
-          acceptableValues: [],
-          isCustomType: true,
-        },
-      ],
-      props: [],
-      firedEvents: [],
-    }, {
-      name: 'onOption4',
-      isSubscribable: true,
-      types: [
-        {
-          type: 'Function',
-          acceptableValues: [],
-          isCustomType: true,
-        },
-        {
-          type: 'Number',
-          acceptableValues: [],
-          isCustomType: true,
-        },
-      ],
-      props: [],
-      firedEvents: ['func1'],
-    }, {
-      name: 'option5',
-      isSubscribable: true,
-      types: [
-        {
-          type: 'Function',
-          acceptableValues: [],
-          isCustomType: true,
-        },
-        {
-          type: 'Number',
-          acceptableValues: [],
-          isCustomType: true,
-        },
-      ],
-      props: [],
-      firedEvents: [],
-    }];
+    const options: IProp[] = [
+      {
+        name: 'option1',
+        isSubscribable: true,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: ['func1'],
+      }, {
+        name: 'onOption',
+        isSubscribable: false,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: [],
+      }, {
+        name: 'option3',
+        isSubscribable: true,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+          {
+            type: 'Number',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: [],
+      }, {
+        name: 'onOption4',
+        isSubscribable: true,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+          {
+            type: 'Number',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: ['func1'],
+      }, {
+        name: 'option5',
+        isSubscribable: true,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+          {
+            type: 'Number',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: [],
+      },
+      {
+        name: 'onOptionChanged',
+        isSubscribable: true,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: [],
+      },
+    ];
     const independentEvents = collectIndependentEvents(options);
     expect(independentEvents.length).toBe(1);
     expect(independentEvents[0]).toEqual(options[1]);

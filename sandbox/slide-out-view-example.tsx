@@ -42,7 +42,7 @@ export default class extends React.Component<any, any> {
     this.setState({ menuVisible: !menuVisible });
   }
 
-  private _optionChangeHandler(args: {name: string, value: any }) {
+  private _optionChangeHandler(args: { name: string, value: any }) {
     if (args.name === 'menuVisible') {
       this.setState({ menuVisible: args.value });
     }
