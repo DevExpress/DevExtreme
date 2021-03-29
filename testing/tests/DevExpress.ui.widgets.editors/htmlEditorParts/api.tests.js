@@ -333,7 +333,7 @@ testModule('API', moduleConfig, () => {
         assert.ok(blurSpy.calledOnce, 'Quill blur() should triggered on the editor\'s blur()');
     });
 
-    test('\'blur\' method should remove focus from any htmlEditor element', function(assert) {
+    test('\'blur\' method should not remove focus from additional htmlEditor element', function(assert) {
         this.createEditor();
         const internalElement = $('<input type="button">');
         const blurSpy = sinon.spy();
@@ -343,7 +343,7 @@ testModule('API', moduleConfig, () => {
         internalElement.focus();
         this.instance.blur();
 
-        assert.ok(blurSpy.calledOnce, 'Internal element blur() should triggered on the editor\'s blur()');
+        assert.strictEqual(blurSpy.callCount, 0, 'custom internal element blur() should not triggered on the editor\'s blur()');
     });
 
     test('change value via \'option\' method should correctly update content', function(assert) {
