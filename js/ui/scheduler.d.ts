@@ -60,49 +60,49 @@ export interface onAddEvent {
 /**
   * @public
   */
-export interface onDragEndEvent {
+export interface DragEndEvent {
   readonly component?: dxScheduler;
   readonly event?: TEvent;
-  cancel?: boolean;
   readonly itemData?: any;
   readonly itemElement?: TElement;
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
   readonly fromData?: any;
   readonly toData?: any;
+  cancel?: boolean;
 }
 
 /**
   * @public
   */
-export interface onDragMoveEvent {
+export interface DragMoveEvent {
   readonly component?: dxScheduler;
   readonly event?: TEvent;
-  cancel?: boolean;
   readonly itemData?: any;
   readonly itemElement?: TElement;
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
   readonly fromData?: any;
   readonly toData?: any;
+  cancel?: boolean;
 }
 
 /**
   * @public
   */
-export interface onDragStartEvent {
+export interface DragStartEvent {
   readonly component?: dxScheduler;
   readonly event?: TEvent;
-  cancel?: boolean;
   readonly itemData?: any;
   readonly itemElement?: TElement;
   readonly fromData?: any;
+  cancel?: boolean;
 }
 
 /**
   * @public
   */
-export interface onRemoveEvent {
+export interface RemoveEvent {
   readonly component?: dxScheduler;
   readonly event?: TEvent;
   readonly itemData?: any;
@@ -132,7 +132,7 @@ export interface CustomizeDateNavigatorTextInfo {
 /**
   * @public
   */
-export interface onAppointmentAddedEvent {
+export interface AppointmentAddedEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -143,7 +143,7 @@ export interface onAppointmentAddedEvent {
 /**
   * @public
   */
-export interface onAppointmentAddingEvent {
+export interface AppointmentAddingEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -154,7 +154,7 @@ export interface onAppointmentAddingEvent {
 /**
   * @public
   */
-export interface onAppointmentClickEvent {
+export interface AppointmentClickEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -168,7 +168,7 @@ export interface onAppointmentClickEvent {
 /**
   * @public
   */
-export interface onAppointmentContextMenuEvent {
+export interface AppointmentContextMenuEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -181,7 +181,7 @@ export interface onAppointmentContextMenuEvent {
 /**
   * @public
   */
-export interface onAppointmentDblClickEvent {
+export interface AppointmentDblClickEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -195,7 +195,7 @@ export interface onAppointmentDblClickEvent {
 /**
   * @public
   */
-export interface onAppointmentDeletedEvent {
+export interface AppointmentDeletedEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model: any;
@@ -206,7 +206,7 @@ export interface onAppointmentDeletedEvent {
 /**
   * @public
   */
-export interface onAppointmentDeletingEvent {
+export interface AppointmentDeletingEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -217,7 +217,7 @@ export interface onAppointmentDeletingEvent {
 /**
   * @public
   */
-export interface onAppointmentFormOpeningEvent {
+export interface AppointmentFormOpeningEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -230,7 +230,7 @@ export interface onAppointmentFormOpeningEvent {
 /**
   * @public
   */
-export interface onAppointmentRenderedEvent {
+export interface AppointmentRenderedEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model: any;
@@ -242,7 +242,7 @@ export interface onAppointmentRenderedEvent {
 /**
   * @public
   */
-export interface onAppointmentUpdatedEvent {
+export interface AppointmentUpdatedEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -253,7 +253,7 @@ export interface onAppointmentUpdatedEvent {
 /**
   * @public
   */
-export interface onAppointmentUpdatingEvent {
+export interface AppointmentUpdatingEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -265,7 +265,7 @@ export interface onAppointmentUpdatingEvent {
 /**
   * @public
   */
-export interface onCellClickEvent {
+export interface CellClickEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -278,7 +278,7 @@ export interface onCellClickEvent {
 /**
   * @public
   */
-export interface onCellContextMenuEvent {
+export interface CellContextMenuEvent {
   readonly component: dxScheduler;
   readonly element: TElement;
   readonly model?: any;
@@ -362,7 +362,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field8 fromData:any
        * @type_function_param1_field9 toData:any
        */
-      onDragEnd?: ((e: onDragEndEvent) => void),
+      onDragEnd?: ((e: DragEndEvent) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -377,7 +377,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field8 fromData:any
        * @type_function_param1_field9 toData:any
        */
-      onDragMove?: ((e: onDragMoveEvent) => void),
+      onDragMove?: ((e: DragMoveEvent) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -389,7 +389,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field5 itemElement:dxElement
        * @type_function_param1_field6 fromData:any
        */
-      onDragStart?: ((e: onDragStartEvent) => void),
+      onDragStart?: ((e: DragStartEvent) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -402,7 +402,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 fromData:any
        */
-      onRemove?: ((e: onRemoveEvent) => void),
+      onRemove?: ((e: RemoveEvent) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -669,7 +669,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentAdded?: ((e: onAppointmentAddedEvent) => void);
+    onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
     /**
      * @docid
      * @default null
@@ -680,7 +680,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentAdding?: ((e: onAppointmentAddingEvent) => void);
+    onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
     /**
      * @docid
      * @default null
@@ -694,7 +694,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentClick?: ((e: onAppointmentClickEvent) => void) | string;
+    onAppointmentClick?: ((e: AppointmentClickEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -707,7 +707,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentContextMenu?: ((e: onAppointmentContextMenuEvent) => void) | string;
+    onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -721,7 +721,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDblClick?: ((e: onAppointmentDblClickEvent) => void) | string;
+    onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -732,7 +732,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDeleted?: ((e: onAppointmentDeletedEvent) => void);
+    onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
     /**
      * @docid
      * @default null
@@ -743,7 +743,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDeleting?: ((e: onAppointmentDeletingEvent) => void);
+    onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
     /**
      * @docid
      * @default null
@@ -756,7 +756,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentFormOpening?: ((e: onAppointmentFormOpeningEvent) => void);
+    onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
     /**
      * @docid
      * @default null
@@ -768,7 +768,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentRendered?: ((e: onAppointmentRenderedEvent) => void);
+    onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
     /**
      * @docid
      * @default null
@@ -779,7 +779,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentUpdated?: ((e: onAppointmentUpdatedEvent) => void);
+    onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
     /**
      * @docid
      * @default null
@@ -791,7 +791,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentUpdating?: ((e: onAppointmentUpdatingEvent) => void);
+    onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
     /**
      * @docid
      * @default null
@@ -804,7 +804,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: onCellClickEvent) => void) | string;
+    onCellClick?: ((e: CellClickEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -816,7 +816,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellContextMenu?: ((e: onCellContextMenuEvent) => void) | string;
+    onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
     /**
      * @docid
      * @type Enums.SchedulerRecurrenceEditMode
