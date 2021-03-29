@@ -1,6 +1,5 @@
 import { isDefined } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
-import timeZoneUtils from './utils.timeZone.js';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -43,21 +42,6 @@ export class TimeZoneCalculator {
             common: !isDefined(commonOffset) ? clientOffset : commonOffset,
             appointment: typeof appointmentOffset !== 'number' ? clientOffset : appointmentOffset
         };
-    }
-
-    getDateRange(startDate, endDate, info) {
-        const convertedStartDate = this.createDate(startDate, info);
-        let convertedEndDate = this.createDate(endDate, info);
-
-        const daylightOffset = timeZoneUtils.getDaylightOffsetInMs(convertedStartDate, convertedEndDate);
-        if(daylightOffset) {
-            convertedEndDate = new Date(convertedEndDate.getTime() + daylightOffset);
-        }
-
-        return [
-            convertedStartDate,
-            convertedEndDate
-        ];
     }
 
     _getClientOffset(date) { return this.options.getClientOffset(date); }
