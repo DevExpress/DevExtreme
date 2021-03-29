@@ -497,9 +497,7 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         this.wrapper.getDialogButton('Delete').trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
-        this.clock.tick(400);
-        this.wrapper.getContextMenuItem('Refresh').trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton(true).trigger('dxclick');
         this.clock.tick(400);
 
         $rows = this.wrapper.getRowsInDetailsView();
@@ -532,9 +530,7 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         this.wrapper.getDialogButton('Delete').trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
-        this.clock.tick(400);
-        this.wrapper.getContextMenuItem('Refresh').trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton(true).trigger('dxclick');
         this.clock.tick(400);
 
         $rows = this.wrapper.getRowsInDetailsView();
