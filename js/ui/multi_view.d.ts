@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -74,8 +78,7 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
  * @public
  */
 export default class dxMultiView extends CollectionWidget {
-    constructor(element: Element, options?: dxMultiViewOptions)
-    constructor(element: JQuery, options?: dxMultiViewOptions)
+    constructor(element: TElement, options?: dxMultiViewOptions)
 }
 
 /**
@@ -86,15 +89,6 @@ export default class dxMultiView extends CollectionWidget {
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 
-declare global {
-interface JQuery {
-    dxMultiView(): JQuery;
-    dxMultiView(options: "instance"): dxMultiView;
-    dxMultiView(options: string): any;
-    dxMultiView(options: string, ...params: any[]): any;
-    dxMultiView(options: dxMultiViewOptions): JQuery;
-}
-}
 export type Options = dxMultiViewOptions;
 
 /** @deprecated use Options instead */

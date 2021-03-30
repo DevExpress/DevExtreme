@@ -7,7 +7,7 @@ import {
 } from '../animation/position';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -34,7 +34,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | TElement;
     /**
      * @docid
      * @default false
@@ -67,38 +67,38 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     height?: number | string | (() => number | string);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onResize?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 titleElement:dxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: T, element?: dxElement, model?: any, titleElement?: dxElement }) => any);
+    onTitleRendered?: ((e: { component?: T, element?: TElement, model?: any, titleElement?: TElement }) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function
@@ -143,7 +143,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    titleTemplate?: template | ((titleElement: dxElement) => string | Element | JQuery);
+    titleTemplate?: template | ((titleElement: TElement) => string | TElement);
     /**
      * @docid
      * @type Array<Object>
@@ -249,19 +249,9 @@ export interface dxPopupToolbarItem {
  * @public
  */
 export default class dxPopup extends dxOverlay {
-    constructor(element: Element, options?: dxPopupOptions)
-    constructor(element: JQuery, options?: dxPopupOptions)
+    constructor(element: TElement, options?: dxPopupOptions)
 }
 
-declare global {
-interface JQuery {
-    dxPopup(): JQuery;
-    dxPopup(options: "instance"): dxPopup;
-    dxPopup(options: string): any;
-    dxPopup(options: string, ...params: any[]): any;
-    dxPopup(options: dxPopupOptions): JQuery;
-}
-}
 export type Options = dxPopupOptions;
 
 /** @deprecated use Options instead */

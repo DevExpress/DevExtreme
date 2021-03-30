@@ -81,7 +81,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         _getValidationData: function(key, create) {
-            let validationData = this._validationState.filter(data => data.key === key)[0];
+            let validationData = this._validationState.filter(data => equalByValue(data.key, key))[0];
 
             if(!validationData && create) {
                 validationData = { key, isValid: true };
@@ -428,7 +428,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         isCurrentValidatorProcessing: function({ rowKey, columnIndex }) {
-            return this._currentCellValidator && this._currentCellValidator.option('validationGroup').key === rowKey
+            return this._currentCellValidator && equalByValue(this._currentCellValidator.option('validationGroup').key, rowKey)
                 && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
         },
 

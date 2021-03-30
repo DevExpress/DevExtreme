@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import Editor, {
     EditorOptions
 } from './editor/editor';
@@ -22,19 +26,9 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
  * @public
  */
 export default class dxRecurrenceEditor extends Editor {
-    constructor(element: Element, options?: dxRecurrenceEditorOptions)
-    constructor(element: JQuery, options?: dxRecurrenceEditorOptions)
+    constructor(element: TElement, options?: dxRecurrenceEditorOptions)
 }
 
-declare global {
-interface JQuery {
-    dxRecurrenceEditor(): JQuery;
-    dxRecurrenceEditor(options: "instance"): dxRecurrenceEditor;
-    dxRecurrenceEditor(options: string): any;
-    dxRecurrenceEditor(options: string, ...params: any[]): any;
-    dxRecurrenceEditor(options: dxRecurrenceEditorOptions): JQuery;
-}
-}
 export type Options = dxRecurrenceEditorOptions;
 
 /** @deprecated use Options instead */

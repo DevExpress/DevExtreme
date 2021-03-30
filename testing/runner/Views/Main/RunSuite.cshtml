@@ -6,9 +6,9 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
-    var npmModule = Model.Renovation
-        ? "transpiled-renovation"
-        : "transpiled";
+    var npmModule = Model.NoRenovation
+        ? "transpiled"
+        : "transpiled-renovation";
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -129,9 +129,9 @@
             });
 
             QUnit.config.urlConfig.push({
-                id: "renovation",
-                label: "Renovation",
-                tooltip: "Use renovation components with old tests",
+                id: "norenovation",
+                label: "No Renovation",
+                tooltip: "Use norenovation components with old tests",
             });
 
             function notifyExtraDoneCall() {
@@ -167,9 +167,9 @@
                 }
             }
 
-            var baseURL = QUnit.urlParams.renovation
-                ? '@Url.Content("~/artifacts/transpiled-renovation")'
-                : '@Url.Content("~/artifacts/transpiled")';
+            var baseURL = QUnit.urlParams.norenovation
+                ? '@Url.Content("~/artifacts/transpiled")'
+                : '@Url.Content("~/artifacts/transpiled-renovation")';
 
             SystemJS.config({
                 baseURL: baseURL,
@@ -194,6 +194,7 @@
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/artifacts/js/dx-gantt.js")',
                     'exceljs': '@Url.Content("~/node_modules/exceljs/dist/exceljs.js")',
+                    'fflate': '@Url.Content("~/node_modules/fflate/esm/browser.js")',
                     'jspdf': '@Url.Content("~/node_modules/jspdf/dist/jspdf.es.js")',
                     'jspdf-autotable': '@Url.Content("~/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
                     'turndown': '@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")',

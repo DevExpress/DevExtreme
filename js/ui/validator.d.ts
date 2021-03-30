@@ -1,8 +1,14 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     AsyncRule,
@@ -74,7 +80,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, status?: 'valid' | 'invalid' | 'pending' }) => any);
+    onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, status?: 'valid' | 'invalid' | 'pending' }) => void);
     /**
      * @docid
      * @ref
@@ -99,8 +105,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @public
  */
 export default class dxValidator extends DOMComponent {
-    constructor(element: Element, options?: dxValidatorOptions)
-    constructor(element: JQuery, options?: dxValidatorOptions)
+    constructor(element: TElement, options?: dxValidatorOptions)
     /**
      * @docid
      * @publicName focus()
@@ -148,7 +153,7 @@ export interface dxValidatorResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: Promise<dxValidatorResult> | JQueryPromise<dxValidatorResult>;
+    complete?: TPromise<dxValidatorResult>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -182,15 +187,6 @@ export interface dxValidatorResult {
     value?: any;
 }
 
-declare global {
-interface JQuery {
-    dxValidator(): JQuery;
-    dxValidator(options: "instance"): dxValidator;
-    dxValidator(options: string): any;
-    dxValidator(options: string, ...params: any[]): any;
-    dxValidator(options: dxValidatorOptions): JQuery;
-}
-}
 export type Options = dxValidatorOptions;
 
 /** @deprecated use Options instead */

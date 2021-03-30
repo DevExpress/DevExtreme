@@ -2,18 +2,20 @@ import {
     positionConfig
 } from '../animation/position';
 
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxMenuBase, {
@@ -33,7 +35,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -49,25 +51,25 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     items?: Array<dxContextMenuItem>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any }) => any);
+    onHidden?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, cancel?: boolean }) => any);
+    onHiding?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 position:positionConfig
@@ -75,25 +77,25 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPositioning?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, event?: event, position?: positionConfig }) => any);
+    onPositioning?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, event?: TEvent, position?: positionConfig }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, cancel?: boolean }) => any);
+    onShowing?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any }) => any);
+    onShown?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }
@@ -136,7 +138,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | TElement;
     /**
      * @docid
      * @default false
@@ -156,8 +158,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
  * @public
  */
 export default class dxContextMenu extends dxMenuBase {
-    constructor(element: Element, options?: dxContextMenuOptions)
-    constructor(element: JQuery, options?: dxContextMenuOptions)
+    constructor(element: TElement, options?: dxContextMenuOptions)
     /**
      * @docid
      * @publicName hide()
@@ -165,7 +166,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): Promise<void> & JQueryPromise<void>;
+    hide(): TPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -173,7 +174,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): Promise<void> & JQueryPromise<void>;
+    show(): TPromise<void>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -182,7 +183,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
+    toggle(showing: boolean): TPromise<void>;
 }
 
 /**
@@ -199,15 +200,6 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
     items?: Array<dxContextMenuItem>;
 }
 
-declare global {
-interface JQuery {
-    dxContextMenu(): JQuery;
-    dxContextMenu(options: "instance"): dxContextMenu;
-    dxContextMenu(options: string): any;
-    dxContextMenu(options: string, ...params: any[]): any;
-    dxContextMenu(options: dxContextMenuOptions): JQuery;
-}
-}
 export type Options = dxContextMenuOptions;
 
 /** @deprecated use Options instead */

@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import dxTabs, {
     dxTabsItem,
     dxTabsOptions
@@ -20,8 +24,7 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @public
  */
 export default class dxNavBar extends dxTabs {
-    constructor(element: Element, options?: dxNavBarOptions)
-    constructor(element: JQuery, options?: dxNavBarOptions)
+    constructor(element: TElement, options?: dxNavBarOptions)
 }
 
 /**
@@ -38,15 +41,6 @@ export interface dxNavBarItem extends dxTabsItem {
     badge?: string;
 }
 
-declare global {
-interface JQuery {
-    dxNavBar(): JQuery;
-    dxNavBar(options: "instance"): dxNavBar;
-    dxNavBar(options: string): any;
-    dxNavBar(options: string, ...params: any[]): any;
-    dxNavBar(options: dxNavBarOptions): JQuery;
-}
-}
 export type Options = dxNavBarOptions;
 
 /** @deprecated use Options instead */

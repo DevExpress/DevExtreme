@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import DataSource from '../data/data_source';
 
 import Editor, {
@@ -64,20 +68,10 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
  * @public
  */
 export default class dxRadioGroup extends Editor {
-    constructor(element: Element, options?: dxRadioGroupOptions)
-    constructor(element: JQuery, options?: dxRadioGroupOptions)
+    constructor(element: TElement, options?: dxRadioGroupOptions)
     getDataSource(): DataSource;
 }
 
-declare global {
-interface JQuery {
-    dxRadioGroup(): JQuery;
-    dxRadioGroup(options: "instance"): dxRadioGroup;
-    dxRadioGroup(options: string): any;
-    dxRadioGroup(options: string, ...params: any[]): any;
-    dxRadioGroup(options: dxRadioGroupOptions): JQuery;
-}
-}
 export type Options = dxRadioGroupOptions;
 
 /** @deprecated use Options instead */

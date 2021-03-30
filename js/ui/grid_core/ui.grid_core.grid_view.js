@@ -454,7 +454,7 @@ const ResizingController = modules.ViewController.inherit({
             }
         }
 
-        return result;
+        return Math.round(result);
     },
 
     updateSize: function($rootElement) {

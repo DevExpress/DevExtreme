@@ -1,15 +1,17 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import CollectionWidget, {
@@ -41,14 +43,14 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     items?: Array<string | dxActionSheetItem | any>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCancelClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, cancel?: boolean }) => any) | string;
+    onCancelClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, cancel?: boolean }) => void) | string;
     /**
      * @docid
      * @default true
@@ -68,7 +70,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | TElement;
     /**
      * @docid
      * @default ""
@@ -102,8 +104,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @public
  */
 export default class dxActionSheet extends CollectionWidget {
-    constructor(element: Element, options?: dxActionSheetOptions)
-    constructor(element: JQuery, options?: dxActionSheetOptions)
+    constructor(element: TElement, options?: dxActionSheetOptions)
     /**
      * @docid
      * @publicName hide()
@@ -111,7 +112,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): Promise<void> & JQueryPromise<void>;
+    hide(): TPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -119,7 +120,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): Promise<void> & JQueryPromise<void>;
+    show(): TPromise<void>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -128,7 +129,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
+    toggle(showing: boolean): TPromise<void>;
 }
 
 /**
@@ -154,7 +155,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, event?: event }) => any) | string;
+    onClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, event?: TEvent }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType
@@ -165,15 +166,6 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
-declare global {
-interface JQuery {
-    dxActionSheet(): JQuery;
-    dxActionSheet(options: "instance"): dxActionSheet;
-    dxActionSheet(options: string): any;
-    dxActionSheet(options: string, ...params: any[]): any;
-    dxActionSheet(options: dxActionSheetOptions): JQuery;
-}
-}
 export type Options = dxActionSheetOptions;
 
 /** @deprecated use Options instead */

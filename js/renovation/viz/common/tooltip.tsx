@@ -275,6 +275,8 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @InternalState() isEmptyContainer = false;
 
+  @InternalState() canvas = DEFAULT_CANVAS;
+
   @Ref() cloudRef!: RefObject<SVGGElement>;
 
   @Ref() textRef!: RefObject<SVGGElement>;
@@ -333,6 +335,11 @@ export class Tooltip extends JSXComponent(TooltipProps) {
         this.isEmptyContainer = true;
       }
     }
+  }
+
+  @Effect()
+  setCanvas(): void {
+    this.canvas = getCanvas(this.container);
   }
 
   @Method()
@@ -419,12 +426,11 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   }
 
   get correctedCoordinates(): TooltipCoordinates | false {
-    const canvas = getCanvas(this.container);
     const {
       x, y, offset, arrowLength,
     } = this.props;
     return recalculateCoordinates({
-      canvas: canvas ?? DEFAULT_CANVAS,
+      canvas: this.canvas,
       anchorX: Number(x),
       anchorY: Number(y),
       size: this.textSizeWithPaddings,

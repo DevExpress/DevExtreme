@@ -5,6 +5,7 @@ import { isFunction, isObject } from 'core/utils/type';
 
 import 'ui/data_grid/ui.data_grid';
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
+import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
 import 'generic_light.css!';
 
@@ -14,11 +15,17 @@ QUnit.testStart(() => {
 });
 
 const moduleConfig = {
+    before: function() {
+        initializeDxObjectAssign();
+    },
     beforeEach: function() {
         // The transpiling of the script on the drone and locally has differences that affect the imported jsPDF type.
         const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
         this.jsPDFDocument = _jsPDF();
         this.customizeCellCallCount = 0;
+    },
+    after: function() {
+        clearDxObjectAssign();
     }
 };
 

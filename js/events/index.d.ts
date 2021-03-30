@@ -1,4 +1,10 @@
-import '../jquery_augmentation';
+export interface EventExtension { }
+export interface EventType { }
+/**
+ * @docid
+ * @prevFileNamespace DevExpress.events
+ */
+export type TEvent = {} extends EventType ? dxEvent : EventType;
 
 /**
  * @docid
@@ -83,8 +89,9 @@ export class dxEvent {
  * @type dxEvent|jQuery.Event
  * @hidden
  * @prevFileNamespace DevExpress.events
+ * @deprecated TEvent
  */
-export type event = dxEvent | JQueryEventObject;
+export type event = TEvent;
 
 /**
  * @docid
@@ -296,7 +303,7 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @prevFileNamespace DevExpress.events
  * @public
  */
-export function trigger(element: Element | Array<Element>, event: string | event): void;
+export function trigger(element: Element | Array<Element>, event: string | TEvent): void;
 
 /**
  * @docid eventsMethods.trigger
@@ -310,7 +317,7 @@ export function trigger(element: Element | Array<Element>, event: string | event
  * @prevFileNamespace DevExpress.events
  * @public
  */
-export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
+export function trigger(element: Element | Array<Element>, event: string | TEvent, extraParameters: any): void;
 
 /**
  * @docid eventsMethods.triggerHandler
@@ -323,7 +330,7 @@ export function trigger(element: Element | Array<Element>, event: string | event
  * @hidden
  * @prevFileNamespace DevExpress.events
  */
-export function triggerHandler(element: Element | Array<Element>, event: string | event): void;
+export function triggerHandler(element: Element | Array<Element>, event: string | TEvent): void;
 
 /**
  * @docid eventsMethods.triggerHandler
@@ -337,4 +344,4 @@ export function triggerHandler(element: Element | Array<Element>, event: string 
  * @hidden
  * @prevFileNamespace DevExpress.events
  */
-export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
+export function triggerHandler(element: Element | Array<Element>, event: string | TEvent, extraParameters: any): void;

@@ -736,7 +736,7 @@ module('Renovated Render', {
     test('should generate correct data for month view', function(assert) {
         this.createInstance({
             startDayHour: 0,
-            endDayHour: 0,
+            endDayHour: 0
         }, 'dxSchedulerWorkSpaceMonth');
 
         this.instance.viewDataProvider.update();
@@ -852,7 +852,8 @@ module('Renovated Render', {
                     groupOrientation: 'horizontal',
                     scrolling: {
                         mode: scrollingMode
-                    }
+                    },
+                    width: 800
                 });
                 this.instance.option('groups', [
                     {

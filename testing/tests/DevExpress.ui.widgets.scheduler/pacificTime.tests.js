@@ -198,103 +198,108 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             return result;
         })();
 
-        module('timeCellTemplate', () => {
-            testCases.forEach(testCase => {
-                test(`arguments should be valid in '${testCase.view}' view`, function(assert) {
-                    let index = 0;
-
-                    createWrapper({
-                        dataSource: [],
-                        timeCellTemplate: arg => {
-                            if(index < expectedAllTimes.length) {
-                                assert.equal(arg.date.valueOf(), expectedDateResults[index].valueOf(), 'arg.date should be valid');
-                                assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
-
-                                index++;
-                            }
-                        },
-                        views: testCases.map(testCases => testCases.view),
-                        currentView: testCase.view,
-                        startDayHour: 0,
-                        currentDate: summerDSTDate,
-                        height: 600
-                    });
-
-                    assert.expect(expectedAllTimes.length * 2);
-                });
-
-                test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, function(assert) {
-                    let index = 0;
-
-                    const validExpectedDateResults = expectedDateResults.slice(4);
-                    const times = testCase.times.slice(4);
-
-                    createWrapper({
-                        dataSource: [],
-                        timeCellTemplate: ({ date, text }) => {
-                            if(index < validExpectedDateResults.length) {
-                                assert.equal(date.valueOf(), validExpectedDateResults[index].valueOf(), 'correct date');
-                                assert.equal(text, times[index], 'correct text');
-
-                                index++;
-                            }
-                        },
-                        views: testCases.map(testCases => testCases.view),
-                        currentView: testCase.view,
-                        startDayHour: 2,
-                        currentDate: summerDSTDate,
-                        height: 600
-                    });
-
-                    assert.expect(times.length * 2);
-                });
-            });
-        });
-
-        module('dataCellTemplate', () => {
-            testCases
-                .map(testCase => {
-                    return ({
-                        ...testCase,
-                        isDivideIndex: testCase.view === 'week',
-                    });
-                })
-                .forEach((testCase) => {
-                    // TODO: we should decide what startDate we should use for "dead time" - one hour before it or one hour after
-                    test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, function(assert) {
+        [true, false].forEach((renovateRender) => {
+            module('timeCellTemplate', () => {
+                testCases.forEach(testCase => {
+                    test(`arguments should be valid in '${testCase.view}' view when renovateRender is ${renovateRender}`, function(assert) {
                         let index = 0;
-
-                        const validExpectedDateResults = expectedDateResults.slice(4);
 
                         createWrapper({
                             dataSource: [],
-                            dataCellTemplate: ({ startDate, allDay }) => {
-                                if(allDay) {
-                                    return undefined;
-                                }
+                            timeCellTemplate: arg => {
+                                if(index < expectedAllTimes.length) {
+                                    assert.equal(arg.date.valueOf(), expectedDateResults[index].valueOf(), 'arg.date should be valid');
+                                    assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
 
-                                const correctedIndex = testCase.isDivideIndex
-                                    ? Math.floor(index / 7)
-                                    : index;
-                                const isValidIndex = testCase.isDivideIndex
-                                    ? index % 7 === 0
-                                    : true;
-
-                                if(correctedIndex < validExpectedDateResults.length && isValidIndex) {
-                                    assert.equal(startDate.valueOf(), validExpectedDateResults[correctedIndex].valueOf(), 'correct date');
+                                    index++;
                                 }
-                                index++;
+                            },
+                            views: testCases.map(testCases => testCases.view),
+                            currentView: testCase.view,
+                            startDayHour: 0,
+                            currentDate: summerDSTDate,
+                            height: 600,
+                            renovateRender,
+                        });
+
+                        assert.expect(expectedAllTimes.length * 2);
+                    });
+
+                    test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
+                        let index = 0;
+
+                        const validExpectedDateResults = expectedDateResults.slice(4);
+                        const times = testCase.times.slice(4);
+
+                        createWrapper({
+                            dataSource: [],
+                            timeCellTemplate: ({ date, text }) => {
+                                if(index < validExpectedDateResults.length) {
+                                    assert.equal(date.valueOf(), validExpectedDateResults[index].valueOf(), 'correct date');
+                                    assert.equal(text, times[index], 'correct text');
+
+                                    index++;
+                                }
                             },
                             views: testCases.map(testCases => testCases.view),
                             currentView: testCase.view,
                             startDayHour: 2,
                             currentDate: summerDSTDate,
-                            height: 600
+                            height: 600,
+                            renovateRender,
                         });
 
-                        assert.expect(validExpectedDateResults.length);
+                        assert.expect(times.length * 2);
                     });
                 });
+            });
+
+            module('dataCellTemplate', () => {
+                testCases
+                    .map(testCase => {
+                        return ({
+                            ...testCase,
+                            isDivideIndex: testCase.view === 'week',
+                        });
+                    })
+                    .forEach((testCase) => {
+                        // TODO: we should decide what startDate we should use for "dead time" - one hour before it or one hour after
+                        test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
+                            let index = 0;
+
+                            const validExpectedDateResults = expectedDateResults.slice(4);
+
+                            createWrapper({
+                                dataSource: [],
+                                dataCellTemplate: ({ startDate, allDay }) => {
+                                    if(allDay) {
+                                        return undefined;
+                                    }
+
+                                    const correctedIndex = testCase.isDivideIndex
+                                        ? Math.floor(index / 7)
+                                        : index;
+                                    const isValidIndex = testCase.isDivideIndex
+                                        ? index % 7 === 0
+                                        : true;
+
+                                    if(correctedIndex < validExpectedDateResults.length && isValidIndex) {
+                                        assert.equal(startDate.valueOf(), validExpectedDateResults[correctedIndex].valueOf(), 'correct date');
+                                    }
+                                    index++;
+                                },
+                                views: testCases.map(testCases => testCases.view),
+                                currentView: testCase.view,
+                                startDayHour: 2,
+                                currentDate: summerDSTDate,
+                                height: 600,
+                                renovateRender,
+                            });
+
+                            assert.expect(validExpectedDateResults.length);
+                        });
+                    });
+            });
         });
 
         module('Time panel render', () => {
