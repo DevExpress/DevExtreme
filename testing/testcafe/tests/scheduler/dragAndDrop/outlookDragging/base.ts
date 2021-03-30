@@ -6,6 +6,49 @@ import { createScreenshotsComparer } from '../../../../helpers/screenshot-compar
 fixture`Outlook dragging base tests`
   .page(url(__dirname, '../../../container.html'));
 
+[{
+  currentView: 'timelineWeek',
+  dataSource: [{
+    text: 'Website Re-Design Plan',
+    startDate: new Date(2021, 4, 23, 9, 30),
+    endDate: new Date(2021, 4, 23, 10, 45),
+  }],
+}, {
+  currentView: 'timelineMonth',
+  dataSource: [{
+    text: 'Website Re-Design Plan',
+    startDate: new Date(2021, 4, 2, 9, 30),
+    endDate: new Date(2021, 4, 3, 11, 0),
+  }],
+}].forEach(({ currentView, dataSource }) => {
+  test(`Basic drag-n-drop movements in ${currentView} view`, async (t) => {
+    const scheduler = new Scheduler('#container');
+    const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
+
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t
+      .drag(draggableAppointment.element, 250, 0)
+      .expect(await takeScreenshot(`drag-n-drop-${currentView}-to-right.png`, scheduler.workSpace))
+      .ok()
+
+      .drag(draggableAppointment.element, -250, 0)
+      .expect(await takeScreenshot(`drag-n-drop-${currentView}-to-left.png`, scheduler.workSpace))
+      .ok()
+
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(() => createWidget('dxScheduler', {
+    dataSource,
+    views: ['timelineWeek', 'timelineMonth'],
+    currentView,
+    currentDate: new Date(2021, 4, 27),
+    startDayHour: 9,
+    height: 600,
+    width: 1000,
+  }));
+});
+
 test('Basic drag-n-drop movements', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
