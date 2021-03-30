@@ -5995,9 +5995,17 @@ declare module DevExpress.ui {
          */
         getItemByKey(key: any): dxDiagramItem;
         /**
+         * [descr:dxDiagram.getItems()]
+         */
+        getItems(): Array<dxDiagramItem>;
+        /**
          * [descr:dxDiagram.getNodeDataSource()]
          */
         getNodeDataSource(): DevExpress.data.DataSource;
+        /**
+         * [descr:dxDiagram.getSelectedItems()]
+         */
+        getSelectedItems(): Array<dxDiagramItem>;
         /**
          * [descr:dxDiagram.import(data, updateExistingItemsOnly)]
          */
