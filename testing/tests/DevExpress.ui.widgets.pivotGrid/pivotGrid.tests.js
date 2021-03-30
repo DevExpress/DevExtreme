@@ -3043,6 +3043,7 @@ QUnit.module('dxPivotGrid', {
                         ]
                     }
                 });
+
                 this.clock.tick(100);
                 checkFirstVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
@@ -3054,17 +3055,17 @@ QUnit.module('dxPivotGrid', {
                 checkFirstVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after scrolling');
 
                 const nodeToExpand = 65;
+                const getExpandedCells = () => pivotGrid.$element().find('.dx-pivotgrid-expanded');
+
                 pivotGrid.getDataSource().expandHeaderItem(dimension, [nodeToExpand]);
                 this.clock.tick(100);
                 checkFirstVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after expanding');
-                const nodeAfterExpanding = pivotGrid.$element().find('.dx-pivotgrid-expanded');
-                assert.equal(nodeAfterExpanding.length, 2);
+                assert.strictEqual(getExpandedCells().length, 2);
 
                 pivotGrid.getDataSource().collapseHeaderItem(dimension, [nodeToExpand]);
                 this.clock.tick(100);
                 checkFirstVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after collapsing');
-                const nodeAfterCollapsing = pivotGrid.$element().find('.dx-pivotgrid-expanded');
-                assert.strictEqual(nodeAfterCollapsing.length, 0);
+                assert.strictEqual(getExpandedCells().length, 0);
             });
 
             QUnit.test(`PivotGrid -> scrollTo() -> subField.visible=false -> subField.visible=true (T984139). UseNative: ${useNative}, expandDimension: ${dimension}`, function(assert) {
