@@ -105,10 +105,6 @@ const Slider = TrackBar.inherit({
         });
     },
 
-    _useTemplates: function() {
-        return false;
-    },
-
     _processKeyboardEvent: function(e) {
         e.preventDefault();
         e.stopPropagation();
