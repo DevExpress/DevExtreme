@@ -29,7 +29,9 @@ export default {
       currentDate: new Date(2021, 1, 2),
       views: ['workWeek', 'timelineWorkWeek'],
       currentView: 'timelineWorkWeek',
-      scrolling: { mode: 'virtual', orientation: 'both' },
+      scrolling: {
+        mode: 'virtual'
+      },
       groups: ['humanId'],
       resources: [{
         fieldExpr: 'humanId',

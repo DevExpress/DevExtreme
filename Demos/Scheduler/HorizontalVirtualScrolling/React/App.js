@@ -8,7 +8,7 @@ import {
 
 const currentDate = new Date(2021, 1, 2);
 const views = ['workWeek', 'timelineWorkWeek'];
-const scrolling = { mode: 'virtual', orientation: 'both' };
+const scrolling = { mode: 'virtual' };
 const resources = [{
   fieldExpr: 'humanId',
   dataSource: humans

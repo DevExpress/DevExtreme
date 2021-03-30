@@ -12,8 +12,7 @@ $(function () {
         endDayHour: 20,
         cellDuration: 60,
         scrolling: {
-            mode: 'virtual',
-            orientation: 'both'
+            mode: 'virtual'
         },
         showAllDayPanel: false,
         groups: ["humanId"],
