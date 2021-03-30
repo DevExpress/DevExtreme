@@ -1159,7 +1159,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!value && this._isLastRequired(node)) {
             if(this._showCheckboxes()) {
                 const $node = this._getNodeElement(node);
-                this._getCheckBoxInstance($node).option('value', value);
+                this._getCheckBoxInstance($node).option('value', true);
             }
             return false;
         }
