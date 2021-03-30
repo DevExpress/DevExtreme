@@ -3,32 +3,22 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent,
+    ComponentNativeEvent
+} from '../events';
+
+import {
     ComponentValueChangedEvent
 } from './editor/editor';
 
 import dxTextEditor, {
-    dxTextEditorOptions,
-    ComponentChangeEvent,
-    ComponentCopyEvent,
-    ComponentCutEvent,
-    ComponentEnterKeyEvent,
-    ComponentFocusInEvent,
-    ComponentFocusOutEvent,
-    ComponentInputEvent,
-    ComponentKeyDownEvent,
-    ComponentKeyPressEvent,
-    ComponentKeyUpEvent,
-    ComponentPasteEvent,
+    dxTextEditorOptions
 } from './text_box/ui.text_editor.base';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxTextBox>;
+export type ContentReadyEvent = ComponentEvent<dxTextBox>;
 /**
  * @public
  */
@@ -36,47 +26,47 @@ export type ValueChangedEvent = ComponentValueChangedEvent<dxTextBox>;
 /**
  * @public
  */
-export type ChangeEvent = ComponentChangeEvent<dxTextBox>;
+export type ChangeEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type CopyEvent = ComponentCopyEvent<dxTextBox>;
+export type CopyEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type CutEvent = ComponentCutEvent<dxTextBox>;
+export type CutEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type EnterKeyEvent = ComponentEnterKeyEvent<dxTextBox>;
+export type EnterKeyEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type FocusInEvent = ComponentFocusInEvent<dxTextBox>;
+export type FocusInEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type FocusOutEvent = ComponentFocusOutEvent<dxTextBox>;
+export type FocusOutEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type InputEvent = ComponentInputEvent<dxTextBox>;
+export type InputEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type KeyDownEvent = ComponentKeyDownEvent<dxTextBox>;
+export type KeyDownEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type KeyPressEvent = ComponentKeyPressEvent<dxTextBox>;
+export type KeyPressEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type KeyUpEvent = ComponentKeyUpEvent<dxTextBox>;
+export type KeyUpEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
-export type PasteEvent = ComponentPasteEvent<dxTextBox>;
+export type PasteEvent = ComponentNativeEvent<dxTextBox>;
 
 export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
     /**

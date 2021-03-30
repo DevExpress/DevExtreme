@@ -8,7 +8,7 @@ import {
 
 import {
     ComponentEvent
-} from '../events/index';
+} from '../events/';
 
 import dxScrollable, {
     dxScrollableOptions,

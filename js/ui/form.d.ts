@@ -12,7 +12,7 @@ import {
 
 import {
     ComponentEvent
-} from '../events/index';
+} from '../events';
 
 import dxButton, {
     dxButtonOptions
@@ -44,14 +44,10 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget';
-
 /**
  * @public
  */
- export type ContentReadyEvent = ComponentContentReadyEvent<dxForm>;
+ export type ContentReadyEvent = ComponentEvent<dxForm>;
 /**
  * @public
  */

@@ -5,17 +5,16 @@ import {
 import {
     template
 } from '../core/templates/template';
-import { ComponentEvent } from '../events/index';
+
+import {
+    ComponentEvent,
+    ComponentNativeEvent
+} from '../events';
 
 import {
     ComponentItemClickEvent,
     ComponentSelectionChangedEvent,
 } from './collection/ui.collection_widget.base';
-
-import {
-    ComponentClosedEvent,
-    ComponentOpenedEvent
-} from './drop_down_editor/ui.drop_down_editor';
 
 import {
     ComponentValueChangedEvent
@@ -30,28 +29,10 @@ import dxSelectBox, {
     ComponentCustomItemCreatingEvent
 } from './select_box';
 
-import {
-    ComponentChangeEvent,
-    ComponentCopyEvent,
-    ComponentCutEvent,
-    ComponentEnterKeyEvent,
-    ComponentFocusInEvent,
-    ComponentFocusOutEvent,
-    ComponentInputEvent,
-    ComponentKeyDownEvent,
-    ComponentKeyPressEvent,
-    ComponentKeyUpEvent,
-    ComponentPasteEvent,
-} from './text_box/ui.text_editor.base';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxTagBox>;
+export type ContentReadyEvent = ComponentEvent<dxTagBox>;
 /**
  * @public
  */
@@ -59,11 +40,11 @@ export type ValueChangedEvent = ComponentValueChangedEvent<dxTagBox>;
 /**
  * @public
  */
-export type ClosedEvent = ComponentClosedEvent<dxTagBox>;
+export type ClosedEvent = ComponentEvent<dxTagBox>;
 /**
  * @public
  */
-export type OpenedEvent = ComponentOpenedEvent<dxTagBox>;
+export type OpenedEvent = ComponentEvent<dxTagBox>;
 /**
  * @public
  */
@@ -71,47 +52,47 @@ export type ItemClickEvent = ComponentItemClickEvent<dxTagBox>;
 /**
  * @public
  */
-export type ChangeEvent = ComponentChangeEvent<dxTagBox>;
+export type ChangeEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type CopyEvent = ComponentCopyEvent<dxTagBox>;
+export type CopyEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type CutEvent = ComponentCutEvent<dxTagBox>;
+export type CutEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type EnterKeyEvent = ComponentEnterKeyEvent<dxTagBox>;
+export type EnterKeyEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type FocusInEvent = ComponentFocusInEvent<dxTagBox>;
+export type FocusInEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type FocusOutEvent = ComponentFocusOutEvent<dxTagBox>;
+export type FocusOutEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type InputEvent = ComponentInputEvent<dxTagBox>;
+export type InputEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type KeyDownEvent = ComponentKeyDownEvent<dxTagBox>;
+export type KeyDownEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type KeyPressEvent = ComponentKeyPressEvent<dxTagBox>;
+export type KeyPressEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type KeyUpEvent = ComponentKeyUpEvent<dxTagBox>;
+export type KeyUpEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type PasteEvent = ComponentPasteEvent<dxTagBox>;
+export type PasteEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */

@@ -11,8 +11,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
+    ComponentEvent,
     ComponentNativeEvent
-} from '../events/index';
+} from '../events';
 
 import Editor, {
     ComponentValueChangedEvent,
@@ -23,14 +24,10 @@ import {
     dxToolbarItem
 } from './toolbar';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxHtmlEditor>;
+export type ContentReadyEvent = ComponentEvent<dxHtmlEditor>;
 /**
  * @public
  */

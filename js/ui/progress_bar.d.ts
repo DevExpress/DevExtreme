@@ -3,8 +3,9 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent,
     ComponentNativeEvent
-} from '../events/index';
+} from '../events';
 
 import {
     ComponentValueChangedEvent
@@ -14,14 +15,10 @@ import dxTrackBar, {
     dxTrackBarOptions
 } from './track_bar';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxProgressBar>;
+export type ContentReadyEvent = ComponentEvent<dxProgressBar>;
 /**
  * @public
  */

@@ -10,10 +10,13 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent
+} from '../events';
+
 import dxDropDownEditor, {
-    dxDropDownEditorOptions,
-    ComponentClosedEvent,
-    ComponentOpenedEvent
+    dxDropDownEditorOptions
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
@@ -24,28 +27,10 @@ import {
     DataExpressionMixinOptions
 } from './editor/ui.data_expression';
 
-import {
-    ComponentChangeEvent,
-    ComponentCopyEvent,
-    ComponentCutEvent,
-    ComponentEnterKeyEvent,
-    ComponentFocusInEvent,
-    ComponentFocusOutEvent,
-    ComponentInputEvent,
-    ComponentKeyDownEvent,
-    ComponentKeyPressEvent,
-    ComponentKeyUpEvent,
-    ComponentPasteEvent,
-} from './text_box/ui.text_editor.base';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxDropDownBox>;
+export type ContentReadyEvent = ComponentEvent<dxDropDownBox>;
 /**
  * @public
  */
@@ -53,55 +38,55 @@ export type ValueChangedEvent = ComponentValueChangedEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type ClosedEvent = ComponentClosedEvent<dxDropDownBox>;
+export type ClosedEvent = ComponentEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type OpenedEvent = ComponentOpenedEvent<dxDropDownBox>;
+export type OpenedEvent = ComponentEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type ChangeEvent = ComponentChangeEvent<dxDropDownBox>;
+export type ChangeEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type CopyEvent = ComponentCopyEvent<dxDropDownBox>;
+export type CopyEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type CutEvent = ComponentCutEvent<dxDropDownBox>;
+export type CutEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type EnterKeyEvent = ComponentEnterKeyEvent<dxDropDownBox>;
+export type EnterKeyEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type FocusInEvent = ComponentFocusInEvent<dxDropDownBox>;
+export type FocusInEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type FocusOutEvent = ComponentFocusOutEvent<dxDropDownBox>;
+export type FocusOutEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type InputEvent = ComponentInputEvent<dxDropDownBox>;
+export type InputEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type KeyDownEvent = ComponentKeyDownEvent<dxDropDownBox>;
+export type KeyDownEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type KeyPressEvent = ComponentKeyPressEvent<dxDropDownBox>;
+export type KeyPressEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type KeyUpEvent = ComponentKeyUpEvent<dxDropDownBox>;
+export type KeyUpEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
-export type PasteEvent = ComponentPasteEvent<dxDropDownBox>;
+export type PasteEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */

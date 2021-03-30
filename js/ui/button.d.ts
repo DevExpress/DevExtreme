@@ -7,12 +7,12 @@ import {
 } from '../core/templates/template';
 
 import {
+    ComponentEvent,
     ComponentNativeEvent
-} from '../events/index';
+} from '../events/';
 
 import Widget, {
-    WidgetOptions,
-    ComponentContentReadyEvent
+    WidgetOptions
 } from './widget/ui.widget';
 
 /**
@@ -31,7 +31,7 @@ export type ClickEvent = ComponentNativeEvent<dxButton> & {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxButton>;
+export type ContentReadyEvent = ComponentEvent<dxButton>;
 
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**

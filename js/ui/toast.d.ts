@@ -11,16 +11,14 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
-} from '../events/index';
+    TEvent,
+    ComponentEvent
+} from '../events';
 
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions,
     ComponentHidingEvent,
-    ComponentHiddenEvent,
-    ComponentShowingEvent,
-    ComponentShownEvent
 } from './overlay';
 
 /**
@@ -30,15 +28,15 @@ export type HidingEvent = ComponentHidingEvent<dxToast>;
 /**
  * @public
  */
-export type HiddenEvent = ComponentHiddenEvent<dxToast>;
+export type HiddenEvent = ComponentEvent<dxToast>;
 /**
  * @public
  */
-export type ShowingEvent = ComponentShowingEvent<dxToast>;
+export type ShowingEvent = ComponentEvent<dxToast>;
 /**
  * @public
  */
-export type ShownEvent = ComponentShownEvent<dxToast>;
+export type ShownEvent = ComponentEvent<dxToast>;
 
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**

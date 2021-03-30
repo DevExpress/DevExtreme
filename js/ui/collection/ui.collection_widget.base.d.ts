@@ -13,7 +13,7 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent
-} from '../../events/index';
+} from '../../events/';
 
 import Widget, {
     WidgetOptions

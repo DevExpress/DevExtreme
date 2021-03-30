@@ -13,7 +13,7 @@ import DataSource, {
 
 import {
     TEvent
-} from '../events/index';
+} from '../events/';
 
 import {
     format

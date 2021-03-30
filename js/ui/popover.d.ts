@@ -15,14 +15,12 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    TEvent
-} from '../events/index';
+    TEvent,
+    ComponentEvent
+} from '../events';
 
 import {
     ComponentHidingEvent,
-    ComponentHiddenEvent,
-    ComponentShowingEvent,
-    ComponentShownEvent
 } from './overlay';
 
 import dxPopup, {
@@ -30,14 +28,10 @@ import dxPopup, {
     dxPopupOptions
 } from './popup';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxPopover>;
+export type ContentReadyEvent = ComponentEvent<dxPopover>;
 /**
  * @public
  */
@@ -45,15 +39,15 @@ export type HidingEvent = ComponentHidingEvent<dxPopover>;
 /**
  * @public
  */
-export type HiddenEvent = ComponentHiddenEvent<dxPopover>;
+export type HiddenEvent = ComponentEvent<dxPopover>;
 /**
  * @public
  */
-export type ShowingEvent = ComponentShowingEvent<dxPopover>;
+export type ShowingEvent = ComponentEvent<dxPopover>;
 /**
  * @public
  */
-export type ShownEvent = ComponentShownEvent<dxPopover>;
+export type ShownEvent = ComponentEvent<dxPopover>;
 
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**

@@ -6,12 +6,6 @@ import {
     TElement
 } from '../../core/element';
 
-import {
-    ComponentEvent
-} from '../../events/index';
-
-export type ComponentContentReadyEvent<T> = ComponentEvent<T>;
-
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**
      * @docid

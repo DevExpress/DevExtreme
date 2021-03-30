@@ -3,6 +3,10 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent
+} from '../events';
+
+import {
     ComponentValueChangedEvent
 } from './editor/editor';
 
@@ -11,14 +15,13 @@ import dxTrackBar, {
 } from './track_bar';
 
 import {
-    ComponentContentReadyEvent,
     format
 } from './widget/ui.widget';
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxSlider>;
+export type ContentReadyEvent = ComponentEvent<dxSlider>;
 /**
  * @public
  */

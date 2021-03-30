@@ -3,37 +3,19 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent,
+    ComponentNativeEvent
+} from '../events';
+
+import {
     ComponentItemClickEvent,
     ComponentSelectionChangedEvent,
     
 } from './collection/ui.collection_widget.base';
 
-import {
-    ComponentClosedEvent,
-    ComponentOpenedEvent
-} from './drop_down_editor/ui.drop_down_editor';
-
 import dxDropDownList, {
     dxDropDownListOptions
 } from './drop_down_editor/ui.drop_down_list';
-
-import {
-    ComponentChangeEvent,
-    ComponentCopyEvent,
-    ComponentCutEvent,
-    ComponentEnterKeyEvent,
-    ComponentFocusInEvent,
-    ComponentFocusOutEvent,
-    ComponentInputEvent,
-    ComponentKeyDownEvent,
-    ComponentKeyPressEvent,
-    ComponentKeyUpEvent,
-    ComponentPasteEvent,
-} from './text_box/ui.text_editor.base';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget';
 
 import {
     ComponentValueChangedEvent
@@ -42,7 +24,7 @@ import {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxAutocomplete>;
+export type ContentReadyEvent = ComponentEvent<dxAutocomplete>;
 /**
  * @public
  */
@@ -58,55 +40,55 @@ export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxAutocomplet
 /**
  * @public
  */
-export type ClosedEvent = ComponentClosedEvent<dxAutocomplete>;
+export type ClosedEvent = ComponentEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type OpenedEvent = ComponentOpenedEvent<dxAutocomplete>;
+export type OpenedEvent = ComponentEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type ChangeEvent = ComponentChangeEvent<dxAutocomplete>;
+export type ChangeEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type CopyEvent = ComponentCopyEvent<dxAutocomplete>;
+export type CopyEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type CutEvent = ComponentCutEvent<dxAutocomplete>;
+export type CutEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type EnterKeyEvent = ComponentEnterKeyEvent<dxAutocomplete>;
+export type EnterKeyEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type FocusInEvent = ComponentFocusInEvent<dxAutocomplete>;
+export type FocusInEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type FocusOutEvent = ComponentFocusOutEvent<dxAutocomplete>;
+export type FocusOutEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type InputEvent = ComponentInputEvent<dxAutocomplete>;
+export type InputEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type KeyDownEvent = ComponentKeyDownEvent<dxAutocomplete>;
+export type KeyDownEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type KeyPressEvent = ComponentKeyPressEvent<dxAutocomplete>;
+export type KeyPressEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type KeyUpEvent = ComponentKeyUpEvent<dxAutocomplete>;
+export type KeyUpEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type PasteEvent = ComponentPasteEvent<dxAutocomplete>;
+export type PasteEvent = ComponentNativeEvent<dxAutocomplete>;
 
 export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
     /**

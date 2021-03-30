@@ -15,9 +15,10 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentNativeEvent,
-    TEvent
-} from '../events/index';
+    TEvent,
+    ComponentEvent,
+    ComponentNativeEvent
+} from '../events';
 
 import {
     ItemInfo
@@ -32,14 +33,13 @@ import {
 } from './popup';
 
 import Widget, {
-    ComponentContentReadyEvent,
     WidgetOptions
 } from './widget/ui.widget';
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxDropDownButton>;
+export type ContentReadyEvent = ComponentEvent<dxDropDownButton>;
 /**
  * @public
  */

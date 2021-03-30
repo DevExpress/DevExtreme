@@ -4,6 +4,10 @@ import {
 
 import DataSource from '../data/data_source';
 
+import {
+    ComponentEvent
+} from '../events';
+
 import Editor, {
     ComponentValueChangedEvent,
     EditorOptions
@@ -13,14 +17,10 @@ import {
     DataExpressionMixinOptions
 } from './editor/ui.data_expression';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxRadioGroup>;
+export type ContentReadyEvent = ComponentEvent<dxRadioGroup>;
 /**
  * @public
  */

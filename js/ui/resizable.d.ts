@@ -8,7 +8,7 @@ import {
 
 import {
     ComponentNativeEvent
-} from '../events/index';
+} from '../events/';
 
 interface ComponentResizeEvent<T> extends ComponentNativeEvent<T> {
     readonly width: number;

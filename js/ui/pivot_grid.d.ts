@@ -9,7 +9,7 @@ import {
 import {
     TEvent,
     ComponentEvent
-} from '../events/index';
+} from '../events';
 
 import PivotGridDataSource, {
     PivotGridDataSourceField,
@@ -19,14 +19,13 @@ import PivotGridDataSource, {
 import dxPopup from './popup';
 
 import Widget, {
-    WidgetOptions,
-    ComponentContentReadyEvent
+    WidgetOptions
 } from './widget/ui.widget';
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxPivotGrid>;
+export type ContentReadyEvent = ComponentEvent<dxPivotGrid>;
 /**
  * @public
  */

@@ -15,9 +15,9 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    ComponentEvent,
-    TEvent
-} from '../events/index';
+    TEvent,
+    ComponentEvent
+} from '../events';
 
 import Widget, {
     WidgetOptions
@@ -26,9 +26,6 @@ import Widget, {
 export interface ComponentHidingEvent<T> extends ComponentEvent<T> {
     cancel?: boolean;
 }
-export type ComponentHiddenEvent<T> = ComponentEvent<T>;
-export type ComponentShowingEvent<T> = ComponentEvent<T>;
-export type ComponentShownEvent<T> = ComponentEvent<T>;
 
 export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
@@ -124,7 +121,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: ComponentHiddenEvent<T>) => void);
+    onHidden?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -149,7 +146,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: ComponentShowingEvent<T>) => void);
+    onShowing?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -161,7 +158,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: ComponentShownEvent<T>) => void);
+    onShown?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }

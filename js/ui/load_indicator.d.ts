@@ -2,15 +2,18 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentEvent
+} from '../events';
+
 import Widget, {
-    ComponentContentReadyEvent,
     WidgetOptions
 } from './widget/ui.widget';
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxLoadIndicator>;
+export type ContentReadyEvent = ComponentEvent<dxLoadIndicator>;
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
      * @docid

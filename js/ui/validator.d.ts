@@ -22,13 +22,16 @@ import {
     StringLengthRule
 } from './validation_rules';
 
-export interface ValidatedEvent {
-    name?: string,
-    isValid?: boolean,
-    value?: any,
-    validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>,
-    brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule,
-    brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>,
+/**
+ * @public
+ */
+export type ValidatedEvent = {
+    name?: string;
+    isValid?: boolean;
+    value?: any;
+    validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+    brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule;
+    brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     status?: 'valid' | 'invalid' | 'pending'
 }
 

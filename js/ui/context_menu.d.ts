@@ -16,8 +16,9 @@ import DataSource, {
 
 import {
     TEvent,
+    ComponentEvent,
     ComponentNativeEvent
-} from '../events/index';
+} from '../events';
 
 import dxMenuBase, {
     dxMenuBaseOptions
@@ -36,19 +37,12 @@ import {
 
 import {
     ComponentHidingEvent,
-    ComponentHiddenEvent,
-    ComponentShowingEvent,
-    ComponentShownEvent
 } from './overlay';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget';
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxContextMenu>;
+export type ContentReadyEvent = ComponentEvent<dxContextMenu>;
 /**
  * @public
  */
@@ -72,17 +66,17 @@ export type HidingEvent = ComponentHidingEvent<dxContextMenu>;
 /**
  * @public
  */
-export type HiddenEvent = ComponentHiddenEvent<dxContextMenu>;
+export type HiddenEvent = ComponentEvent<dxContextMenu>;
 /**
  * @public
  */
- export type ShowingEvent  = ComponentShowingEvent<dxContextMenu> & {
+ export type ShowingEvent = ComponentEvent<dxContextMenu> & {
     cancel?: boolean;
 }
 /**
  * @public
  */
-export type ShownEvent = ComponentShownEvent<dxContextMenu>;
+export type ShownEvent = ComponentEvent<dxContextMenu>;
 /**
  * @public
  */

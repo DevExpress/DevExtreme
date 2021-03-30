@@ -3,6 +3,10 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent
+} from '../events';
+
+import {
     animationConfig
 } from '../animation/fx';
 
@@ -14,19 +18,12 @@ import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions,
     ComponentHidingEvent,
-    ComponentHiddenEvent,
-    ComponentShowingEvent,
-    ComponentShownEvent
 } from './overlay';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxLoadPanel>;
+export type ContentReadyEvent = ComponentEvent<dxLoadPanel>;
 /**
  * @public
  */
@@ -34,15 +31,15 @@ export type HidingEvent = ComponentHidingEvent<dxLoadPanel>;
 /**
  * @public
  */
-export type HiddenEvent = ComponentHiddenEvent<dxLoadPanel>;
+export type HiddenEvent = ComponentEvent<dxLoadPanel>;
 /**
  * @public
  */
-export type ShowingEvent = ComponentShowingEvent<dxLoadPanel>;
+export type ShowingEvent = ComponentEvent<dxLoadPanel>;
 /**
  * @public
  */
-export type ShownEvent = ComponentShownEvent<dxLoadPanel>;
+export type ShownEvent = ComponentEvent<dxLoadPanel>;
 
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**

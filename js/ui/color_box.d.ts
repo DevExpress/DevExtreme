@@ -3,41 +3,26 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent,
+    ComponentNativeEvent
+} from '../events';
+
+import {
     template
 } from '../core/templates/template';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions,
-    ComponentClosedEvent,
-    ComponentOpenedEvent
+    dxDropDownEditorOptions
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
     ComponentValueChangedEvent
 } from './editor/editor';
 
-import {
-    ComponentChangeEvent,
-    ComponentCopyEvent,
-    ComponentCutEvent,
-    ComponentEnterKeyEvent,
-    ComponentFocusInEvent,
-    ComponentFocusOutEvent,
-    ComponentInputEvent,
-    ComponentKeyDownEvent,
-    ComponentKeyPressEvent,
-    ComponentKeyUpEvent,
-    ComponentPasteEvent,
-} from './text_box/ui.text_editor.base';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget';
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxColorBox>;
+export type ContentReadyEvent = ComponentEvent<dxColorBox>;
 /**
  * @public
  */
@@ -45,55 +30,55 @@ export type ValueChangedEvent = ComponentValueChangedEvent<dxColorBox>;
 /**
  * @public
  */
-export type ClosedEvent = ComponentClosedEvent<dxColorBox>;
+export type ClosedEvent = ComponentEvent<dxColorBox>;
 /**
  * @public
  */
-export type OpenedEvent = ComponentOpenedEvent<dxColorBox>;
+export type OpenedEvent = ComponentEvent<dxColorBox>;
 /**
  * @public
  */
-export type ChangeEvent = ComponentChangeEvent<dxColorBox>;
+export type ChangeEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type CopyEvent = ComponentCopyEvent<dxColorBox>;
+export type CopyEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type CutEvent = ComponentCutEvent<dxColorBox>;
+export type CutEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type EnterKeyEvent = ComponentEnterKeyEvent<dxColorBox>;
+export type EnterKeyEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type FocusInEvent = ComponentFocusInEvent<dxColorBox>;
+export type FocusInEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type FocusOutEvent = ComponentFocusOutEvent<dxColorBox>;
+export type FocusOutEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type InputEvent = ComponentInputEvent<dxColorBox>;
+export type InputEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type KeyDownEvent = ComponentKeyDownEvent<dxColorBox>;
+export type KeyDownEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type KeyPressEvent = ComponentKeyPressEvent<dxColorBox>;
+export type KeyPressEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type KeyUpEvent = ComponentKeyUpEvent<dxColorBox>;
+export type KeyUpEvent = ComponentNativeEvent<dxColorBox>;
 /**
  * @public
  */
-export type PasteEvent = ComponentPasteEvent<dxColorBox>;
+export type PasteEvent = ComponentNativeEvent<dxColorBox>;
 
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**

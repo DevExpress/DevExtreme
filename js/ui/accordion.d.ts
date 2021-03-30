@@ -15,8 +15,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
-} from '../events/index';
+    TEvent,
+    ComponentEvent
+} from '../events/';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -28,14 +29,10 @@ import CollectionWidget, {
     ComponentSelectionChangedEvent,
 } from './collection/ui.collection_widget.base';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget';
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxAccordion>;
+export type ContentReadyEvent = ComponentEvent<dxAccordion>;
 /**
  * @public
  */

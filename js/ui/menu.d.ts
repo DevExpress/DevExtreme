@@ -7,6 +7,10 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
+    ComponentEvent
+} from '../events';
+
+import {
     CollectionWidgetItem,
     ComponentItemClickEvent,
     ComponentItemContextMenuEvent,
@@ -20,19 +24,12 @@ import dxMenuBase, {
 
 import {
     ComponentHidingEvent,
-    ComponentHiddenEvent,
-    ComponentShowingEvent,
-    ComponentShownEvent
 } from './overlay';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget';
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxMenu>;
+export type ContentReadyEvent = ComponentEvent<dxMenu>;
 /**
  * @public
  */
@@ -52,7 +49,7 @@ export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxMenu>;
 /**
  * @public
  */
-export type SubmenuHiddenEvent = ComponentHiddenEvent<dxMenu> & {
+export type SubmenuHiddenEvent = ComponentEvent<dxMenu> & {
     readonly rootItem?: TElement;
 }
 /**
@@ -64,13 +61,13 @@ export type SubmenuHidingEvent = ComponentHidingEvent<dxMenu> & {
 /**
  * @public
  */
-export type SubmenuShowingEvent = ComponentShowingEvent<dxMenu> & {
+export type SubmenuShowingEvent = ComponentEvent<dxMenu> & {
     readonly rootItem?: TElement;
 }
 /**
  * @public
  */
-export type SubmenuShownEvent = ComponentShownEvent<dxMenu> & {
+export type SubmenuShownEvent = ComponentEvent<dxMenu> & {
     readonly rootItem?: TElement;
 }
 

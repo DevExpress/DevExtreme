@@ -2,19 +2,19 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentEvent
+} from '../events';
+
 import Editor, {
     EditorOptions,
     ComponentValueChangedEvent
 } from './editor/editor';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxCheckBox>;
+export type ContentReadyEvent = ComponentEvent<dxCheckBox>;
 /**
  * @public
  */

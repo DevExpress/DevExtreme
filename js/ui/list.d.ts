@@ -17,7 +17,7 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent
-} from '../events/index';
+} from '../events/';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -35,10 +35,6 @@ import {
     SearchBoxMixinOptions
 } from './widget/ui.search_box_mixin';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 interface GroupItemIndex {
     group: number;
     item: number;
@@ -46,8 +42,6 @@ interface GroupItemIndex {
 interface GroupItemEvent extends ItemInfo {
     readonly itemIndex: number | GroupItemIndex;
 }
-export type ComponentPageLoadingEvent<T> = ComponentEvent<T>;
-export type ComponentPullRefreshEvent<T> = ComponentEvent<T>;
 export interface ComponentScrollEvent<T> extends ComponentNativeEvent<T> {
     readonly scrollOffset?: any;
     readonly reachedLeft: boolean;
@@ -59,7 +53,7 @@ export interface ComponentScrollEvent<T> extends ComponentNativeEvent<T> {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxList>;
+export type ContentReadyEvent = ComponentEvent<dxList>;
 /**
  * @public
  */
@@ -114,11 +108,11 @@ export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxList>;
 /**
  * @public
  */
-export type PageLoadingEvent = ComponentPageLoadingEvent<dxList>;
+export type PageLoadingEvent = ComponentEvent<dxList>;
 /**
  * @public
  */
-export type PullRefreshEvent = ComponentPullRefreshEvent<dxList>;
+export type PullRefreshEvent = ComponentEvent<dxList>;
 /**
  * @public
  */

@@ -1,4 +1,3 @@
-import { ComponentEvent } from '../events/index';
 import {
     animationConfig
 } from '../animation/fx';
@@ -15,22 +14,19 @@ import {
     template
 } from '../core/templates/template';
 
+import {
+    ComponentEvent
+} from '../events';
+
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions,
     ComponentHidingEvent,
-    ComponentHiddenEvent,
-    ComponentShowingEvent,
-    ComponentShownEvent
 } from './overlay';
 
 import {
     ComponentResizeEvent
 } from './resizable';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
 
 export interface ComponentTitleRenderedEvent<T> extends ComponentEvent<T> {
     titleElement: TElement
@@ -39,7 +35,7 @@ export interface ComponentTitleRenderedEvent<T> extends ComponentEvent<T> {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxPopup>;
+export type ContentReadyEvent = ComponentEvent<dxPopup>;
 /**
  * @public
  */
@@ -47,15 +43,15 @@ export type HidingEvent = ComponentHidingEvent<dxPopup>;
 /**
  * @public
  */
-export type HiddenEvent = ComponentHiddenEvent<dxPopup>;
+export type HiddenEvent = ComponentEvent<dxPopup>;
 /**
  * @public
  */
-export type ShowingEvent = ComponentShowingEvent<dxPopup>;
+export type ShowingEvent = ComponentEvent<dxPopup>;
 /**
  * @public
  */
-export type ShownEvent = ComponentShownEvent<dxPopup>;
+export type ShownEvent = ComponentEvent<dxPopup>;
 /**
  * @public
  */

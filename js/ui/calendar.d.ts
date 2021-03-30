@@ -3,6 +3,10 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent
+} from '../events';
+
+import {
     template
 } from '../core/templates/template';
 
@@ -10,10 +14,6 @@ import Editor, {
     ComponentValueChangedEvent,
     EditorOptions
 } from './editor/editor';
-
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
 
 export interface ComponentDisabledDateData<T> {
     component: T;
@@ -24,7 +24,7 @@ export interface ComponentDisabledDateData<T> {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxCalendar>;
+export type ContentReadyEvent = ComponentEvent<dxCalendar>;
 /**
  * @public
  */

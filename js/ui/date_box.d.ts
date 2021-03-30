@@ -3,14 +3,17 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent,
+    ComponentNativeEvent
+} from '../events';
+
+import {
     ComponentDisabledDateData,
     dxCalendarOptions
 } from './calendar';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions,
-    ComponentOpenedEvent,
-    ComponentClosedEvent
+    dxDropDownEditorOptions
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
@@ -18,28 +21,13 @@ import {
 } from './editor/editor';
 
 import {
-    ComponentChangeEvent,
-    ComponentCopyEvent,
-    ComponentCutEvent,
-    ComponentEnterKeyEvent,
-    ComponentFocusInEvent,
-    ComponentFocusOutEvent,
-    ComponentInputEvent,
-    ComponentKeyDownEvent,
-    ComponentKeyPressEvent,
-    ComponentKeyUpEvent,
-    ComponentPasteEvent,
-} from './text_box/ui.text_editor.base';
-
-import {
-    ComponentContentReadyEvent,
     format
 } from './widget/ui.widget';
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxDateBox>;
+export type ContentReadyEvent = ComponentEvent<dxDateBox>;
 /**
  * @public
  */
@@ -47,55 +35,55 @@ export type ValueChangedEvent = ComponentValueChangedEvent<dxDateBox>;
 /**
  * @public
  */
-export type ClosedEvent = ComponentClosedEvent<dxDateBox>;
+export type ClosedEvent = ComponentEvent<dxDateBox>;
 /**
  * @public
  */
-export type OpenedEvent = ComponentOpenedEvent<dxDateBox>;
+export type OpenedEvent = ComponentEvent<dxDateBox>;
 /**
  * @public
  */
-export type ChangeEvent = ComponentChangeEvent<dxDateBox>;
+export type ChangeEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type CopyEvent = ComponentCopyEvent<dxDateBox>;
+export type CopyEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type CutEvent = ComponentCutEvent<dxDateBox>;
+export type CutEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type EnterKeyEvent = ComponentEnterKeyEvent<dxDateBox>;
+export type EnterKeyEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type FocusInEvent = ComponentFocusInEvent<dxDateBox>;
+export type FocusInEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type FocusOutEvent = ComponentFocusOutEvent<dxDateBox>;
+export type FocusOutEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type InputEvent = ComponentInputEvent<dxDateBox>;
+export type InputEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type KeyDownEvent = ComponentKeyDownEvent<dxDateBox>;
+export type KeyDownEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type KeyPressEvent = ComponentKeyPressEvent<dxDateBox>;
+export type KeyPressEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type KeyUpEvent = ComponentKeyUpEvent<dxDateBox>;
+export type KeyUpEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
-export type PasteEvent = ComponentPasteEvent<dxDateBox>;
+export type PasteEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */

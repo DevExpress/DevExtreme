@@ -12,7 +12,7 @@ import {
 
 import {
     ComponentNativeEvent
-} from '../../events/index';
+} from '../../events/';
 
 export interface ComponentScrollEvent<T = dxScrollable> extends ComponentNativeEvent<T> {
     readonly scrollOffset?: any;

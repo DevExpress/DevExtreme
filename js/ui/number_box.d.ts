@@ -2,20 +2,14 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent
+} from '../events';
+
 import dxTextEditor, {
     dxTextEditorButton,
-    dxTextEditorOptions,
-    ComponentChangeEvent,
-    ComponentCopyEvent,
-    ComponentCutEvent,
-    ComponentEnterKeyEvent,
-    ComponentFocusInEvent,
-    ComponentFocusOutEvent,
-    ComponentInputEvent,
-    ComponentKeyDownEvent,
-    ComponentKeyPressEvent,
-    ComponentKeyUpEvent,
-    ComponentPasteEvent,
+    dxTextEditorOptions
 } from './text_box/ui.text_editor.base';
 
 import {
@@ -23,14 +17,13 @@ import {
 } from './editor/editor';
 
 import {
-    ComponentContentReadyEvent,
     format
 } from './widget/ui.widget';
 
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxNumberBox>;
+export type ContentReadyEvent = ComponentEvent<dxNumberBox>;
 /**
  * @public
  */
@@ -38,47 +31,47 @@ export type ValueChangedEvent = ComponentValueChangedEvent<dxNumberBox>;
 /**
  * @public
  */
-export type ChangeEvent = ComponentChangeEvent<dxNumberBox>;
+export type ChangeEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type CopyEvent = ComponentCopyEvent<dxNumberBox>;
+export type CopyEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type CutEvent = ComponentCutEvent<dxNumberBox>;
+export type CutEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type EnterKeyEvent = ComponentEnterKeyEvent<dxNumberBox>;
+export type EnterKeyEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type FocusInEvent = ComponentFocusInEvent<dxNumberBox>;
+export type FocusInEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type FocusOutEvent = ComponentFocusOutEvent<dxNumberBox>;
+export type FocusOutEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type InputEvent = ComponentInputEvent<dxNumberBox>;
+export type InputEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type KeyDownEvent = ComponentKeyDownEvent<dxNumberBox>;
+export type KeyDownEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type KeyPressEvent = ComponentKeyPressEvent<dxNumberBox>;
+export type KeyPressEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type KeyUpEvent = ComponentKeyUpEvent<dxNumberBox>;
+export type KeyUpEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
-export type PasteEvent = ComponentPasteEvent<dxNumberBox>;
+export type PasteEvent = ComponentNativeEvent<dxNumberBox>;
 
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**

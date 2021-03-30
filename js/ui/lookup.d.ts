@@ -15,8 +15,9 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
-} from '../events/index';
+    TEvent,
+    ComponentEvent
+} from '../events';
 
 import {
     ComponentItemClickEvent,
@@ -28,19 +29,11 @@ import {
     ComponentValueChangedEvent
 } from './editor/editor';
 
-import {
-    ComponentClosedEvent,
-    ComponentOpenedEvent
-} from './drop_down_editor/ui.drop_down_editor';
-
-
 import dxDropDownList, {
     dxDropDownListOptions
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    ComponentPageLoadingEvent,
-    ComponentPullRefreshEvent,
     ComponentScrollEvent
 } from './list';
 
@@ -52,14 +45,10 @@ import {
     ComponentTitleRenderedEvent
 } from './popup';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxLookup>;
+export type ContentReadyEvent = ComponentEvent<dxLookup>;
 /**
  * @public
  */
@@ -67,11 +56,11 @@ export type ValueChangedEvent = ComponentValueChangedEvent<dxLookup>;
 /**
  * @public
  */
-export type ClosedEvent = ComponentClosedEvent<dxLookup>;
+export type ClosedEvent = ComponentEvent<dxLookup>;
 /**
  * @public
  */
-export type OpenedEvent = ComponentOpenedEvent<dxLookup>;
+export type OpenedEvent = ComponentEvent<dxLookup>;
 /**
  * @public
  */
@@ -87,11 +76,11 @@ export type TitleRenderedEvent = ComponentTitleRenderedEvent<dxLookup>;
 /**
  * @public
  */
-export type PageLoadingEvent = ComponentPageLoadingEvent<dxLookup>;
+export type PageLoadingEvent = ComponentEvent<dxLookup>;
 /**
  * @public
  */
-export type PullRefreshEvent = ComponentPullRefreshEvent<dxLookup>;
+export type PullRefreshEvent = ComponentEvent<dxLookup>;
 /**
  * @public
  */
@@ -230,7 +219,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPageLoading?: ((e: PageLoadingEvent<dxLookup>) => void);
+    onPageLoading?: ((e: PageLoadingEvent) => void);
     /**
      * @docid
      * @default null
@@ -242,7 +231,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullRefresh?: ((e: PullRefreshEvent<dxLookup>) => void);
+    onPullRefresh?: ((e: PullRefreshEvent) => void);
     /**
      * @docid
      * @default null
@@ -260,7 +249,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: ScrollEvent<dxLookup>) => void);
+    onScroll?: ((e: ScrollEvent) => void);
     /**
      * @docid
      * @default null

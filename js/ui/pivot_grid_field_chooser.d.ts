@@ -5,7 +5,7 @@ import {
 import {
     TEvent,
     ComponentEvent
-} from '../events/index';
+} from '../events/';
 
 import PivotGridDataSource, {
     PivotGridDataSourceField

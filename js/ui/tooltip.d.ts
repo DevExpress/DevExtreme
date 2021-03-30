@@ -3,24 +3,21 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent
+} from '../events';
+
+import {
     ComponentHidingEvent,
-    ComponentHiddenEvent,
-    ComponentShowingEvent,
-    ComponentShownEvent
 } from './overlay';
 
 import dxPopover, {
     dxPopoverOptions
 } from './popover';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxTooltip>;
+export type ContentReadyEvent = ComponentEvent<dxTooltip>;
 /**
  * @public
  */
@@ -28,15 +25,15 @@ export type HidingEvent = ComponentHidingEvent<dxTooltip>;
 /**
  * @public
  */
-export type HiddenEvent = ComponentHiddenEvent<dxTooltip>;
+export type HiddenEvent = ComponentEvent<dxTooltip>;
 /**
  * @public
  */
-export type ShowingEvent = ComponentShowingEvent<dxTooltip>;
+export type ShowingEvent = ComponentEvent<dxTooltip>;
 /**
  * @public
  */
-export type ShownEvent = ComponentShownEvent<dxTooltip>;
+export type ShownEvent = ComponentEvent<dxTooltip>;
 
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
 }

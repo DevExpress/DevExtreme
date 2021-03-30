@@ -4,7 +4,7 @@ import {
 
 import {
     ComponentNativeEvent
-} from '../../events/index';
+} from '../../events/';
 
 import Widget, {
     WidgetOptions

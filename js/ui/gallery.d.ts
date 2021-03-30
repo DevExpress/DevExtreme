@@ -10,6 +10,10 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    ComponentEvent
+} from '../events';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
@@ -20,14 +24,10 @@ import CollectionWidget, {
     ComponentSelectionChangedEvent
 } from './collection/ui.collection_widget.base';
 
-import {
-    ComponentContentReadyEvent
-} from './widget/ui.widget'
-
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentContentReadyEvent<dxGallery>;
+export type ContentReadyEvent = ComponentEvent<dxGallery>;
 /**
  * @public
  */
