@@ -84,6 +84,45 @@ test('Basic drag-n-drop movements with mouse offset', async (t) => {
   width: 1000,
 }));
 
+test('Basic drag-n-drop all day appointment movements', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
+
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .drag(draggableAppointment.element, 200, 0, { speed: 0.1 })
+    .expect(await takeScreenshot('drag-n-drop-all-day-to-right.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, -200, 0, { speed: 0.1 })
+    .expect(await takeScreenshot('drag-n-drop-all-day-to-left.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, 260, 270, { speed: 0.1 })
+    .expect(await takeScreenshot('drag-n-drop-all-day-to-bottom.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, 0, -260, { speed: 0.1 })
+    .expect(await takeScreenshot('drag-n-drop-all-day-to-top.png', scheduler.workSpace))
+    .ok()
+
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(() => createWidget('dxScheduler', {
+  dataSource: [{
+    text: 'Website Re-Design Plan',
+    startDate: new Date(2021, 4, 25, 10),
+    endDate: new Date(2021, 4, 27, 12, 30),
+  }],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 4, 27),
+  startDayHour: 9,
+  height: 600,
+  width: 1000,
+}));
+
 test('Basic drag-n-drop movements within the cell', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
@@ -91,11 +130,11 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .drag(draggableAppointment.element, 50, 0)
+    .drag(draggableAppointment.element, 55, 0)
     .expect(await takeScreenshot('drag-n-drop-within-cell-to-right.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, -50, 0)
+    .drag(draggableAppointment.element, -55, 0)
     .expect(await takeScreenshot('drag-n-drop-within-cell-to-left.png', scheduler.workSpace))
     .ok()
 
@@ -113,6 +152,84 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
   }],
   views: ['week'],
   currentView: 'week',
+  currentDate: new Date(2021, 4, 27),
+  startDayHour: 9,
+  height: 600,
+  width: 1000,
+}));
+
+test('Basic drag-n-drop small appointments', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
+
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .drag(draggableAppointment.element, 250, 0)
+    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-right.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, -250, 0)
+    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-left.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, 0, 170)
+    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-bottom.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, 0, -170)
+    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-bottom.png', scheduler.workSpace))
+    .ok()
+
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(() => createWidget('dxScheduler', {
+  dataSource: [{
+    text: 'Website Re-Design Plan',
+    startDate: new Date(2021, 4, 12, 10),
+    endDate: new Date(2021, 4, 12, 12, 30),
+  }],
+  views: ['month'],
+  currentView: 'month',
+  currentDate: new Date(2021, 4, 27),
+  startDayHour: 9,
+  height: 600,
+  width: 1000,
+}));
+
+test('Basic drag-n-drop long appointments', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
+
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .drag(draggableAppointment.element, 150, 0)
+    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-right.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, -30, 0)
+    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-left.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, 0, 70)
+    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-bottom.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, 0, -70)
+    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-bottom.png', scheduler.workSpace))
+    .ok()
+
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(() => createWidget('dxScheduler', {
+  dataSource: [{
+    text: 'Website Re-Design Plan',
+    startDate: new Date(2021, 4, 11, 10),
+    endDate: new Date(2021, 4, 13, 12, 30),
+  }],
+  views: ['month'],
+  currentView: 'month',
   currentDate: new Date(2021, 4, 27),
   startDayHour: 9,
   height: 600,
