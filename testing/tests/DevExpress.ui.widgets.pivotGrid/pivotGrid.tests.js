@@ -2995,41 +2995,35 @@ QUnit.module('dxPivotGrid', {
     });
 
     ['row', 'column'].forEach((dimension) => {
-        [false, true].forEach((useNative) => {
-            const getFirstVisibleHeaderCellText = (pivotGrid, dimension) => {
+        [false].forEach((useNative) => {
+            function getFirstVisibleHeaderCellText(pivotGrid, dimension) {
                 const areaSelector = dimension === 'row'
                     ? '.dx-pivotgrid-vertical-headers'
                     : '.dx-pivotgrid-horizontal-headers';
 
                 const $headerArea = pivotGrid.$element().find(areaSelector);
-                const headerRect = $headerArea.get(0).getBoundingClientRect();
+                const mainHeaderRect = $headerArea.get(0).getBoundingClientRect();
 
-                let firstVisibleCell;
-                $headerArea.eq(2).find('td').each((_, cell) => {
-                    const prop = dimension === 'row' ? 'y' : 'x';
-                    if(cell.getBoundingClientRect()[prop] >= headerRect[prop]) {
-                        firstVisibleCell = cell;
-                        return false;
+                const prop = dimension === 'row' ? 'y' : 'x';
+                const virtualTableHeaderCells = $headerArea.eq(2).find('td');
+                for(let i = 0; i < virtualTableHeaderCells.length; i++) {
+                    const cell = virtualTableHeaderCells.get(i);
+                    if(cell.getBoundingClientRect()[prop] >= mainHeaderRect[prop]) {
+                        return cell.innerText;
                     }
-                });
+                }
+                return undefined;
+            }
 
-                return firstVisibleCell !== undefined
-                    ? firstVisibleCell.innerText
-                    : undefined;
-            };
-
-            const checkHeadersAreVisible = (pivotGrid, expected, message) => {
+            function checkFirstVisibleHeaderCellTexts(pivotGrid, expected, message) {
                 const firstVisibleRowHeaderText = getFirstVisibleHeaderCellText(pivotGrid, 'row');
                 const firstVisibleColumnHeaderText = getFirstVisibleHeaderCellText(pivotGrid, 'column');
 
                 QUnit.assert.equal(firstVisibleRowHeaderText, expected.row, `row ${message}`);
                 QUnit.assert.equal(firstVisibleColumnHeaderText, expected.column, `column ${message}`);
-            };
+            }
 
-            QUnit.test(`PivotGrid -> scrollTo() -> expandHeader -> collapseHeader -> subField.visible=false (T984139). UseNative: ${useNative}, expandDimension: ${dimension}`, function(assert) {
-                this.clock.restore();
-                const done = assert.async();
-
+            QUnit.test(`PivotGrid -> scrollTo() -> expandHeader -> collapseHeader (T984139). UseNative: ${useNative}, expandDimension: ${dimension}`, function(assert) {
                 const store = [];
                 for(let i = 0; i < 2000; i++) {
                     store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -3049,40 +3043,69 @@ QUnit.module('dxPivotGrid', {
                         ]
                     }
                 });
+                this.clock.tick(100);
+                checkFirstVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
-                setTimeout(() => {
-                    checkHeadersAreVisible(pivotGrid, { row: '1', column: '1' }, 'after initialization');
+                pivotGrid._dataArea.groupElement().dxScrollable('instance').scrollTo({ left: 2000, top: 2000 });
+                this.clock.tick(100);
 
-                    pivotGrid._dataArea.groupElement().dxScrollable('instance').scrollTo({ left: 2000, top: 2000 });
-                    setTimeout(() => {
-                        const expectedRow = 60;
-                        let expectedColumn = dimension === 'row' ? 58 : 47;
-                        checkHeadersAreVisible(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after scrolling');
+                const expectedRow = 60;
+                const expectedColumn = dimension === 'row' ? 58 : 47;
+                checkFirstVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after scrolling');
 
-                        const nodeToExpand = 65;
-                        pivotGrid.getDataSource().expandHeaderItem(dimension, [nodeToExpand]);
-                        setTimeout(() => {
-                            checkHeadersAreVisible(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after expanding');
-                            const nodeAfterExpanding = pivotGrid.$element().find('.dx-pivotgrid-expanded');
-                            assert.notEqual(nodeAfterExpanding.length, 0);
+                const nodeToExpand = 65;
+                pivotGrid.getDataSource().expandHeaderItem(dimension, [nodeToExpand]);
+                this.clock.tick(100);
+                checkFirstVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after expanding');
+                const nodeAfterExpanding = pivotGrid.$element().find('.dx-pivotgrid-expanded');
+                assert.equal(nodeAfterExpanding.length, 2);
 
-                            pivotGrid.getDataSource().collapseHeaderItem(dimension, [nodeToExpand]);
-                            setTimeout(() => {
-                                checkHeadersAreVisible(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after collapsing');
-                                const nodeAfterCollapsing = pivotGrid.$element().find('.dx-pivotgrid-expanded');
-                                assert.strictEqual(nodeAfterCollapsing.length, 0);
+                pivotGrid.getDataSource().collapseHeaderItem(dimension, [nodeToExpand]);
+                this.clock.tick(100);
+                checkFirstVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after collapsing');
+                const nodeAfterCollapsing = pivotGrid.$element().find('.dx-pivotgrid-expanded');
+                assert.strictEqual(nodeAfterCollapsing.length, 0);
+            });
 
-                                pivotGrid.getDataSource().field('subField', { visible: false });
-                                pivotGrid.getDataSource().load();
-                                setTimeout(() => {
-                                    expectedColumn = dimension === 'row' ? expectedColumn : expectedColumn + 1;
-                                    checkHeadersAreVisible(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after changing subfield visible');
-                                    done();
-                                }, 300);
-                            }, 300);
-                        }, 300);
-                    });
+            QUnit.test(`PivotGrid -> scrollTo() -> subField.visible=false -> subField.visible=true (T984139). UseNative: ${useNative}, expandDimension: ${dimension}`, function(assert) {
+                const store = [];
+                for(let i = 0; i < 2000; i++) {
+                    store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
+                }
+
+                const pivotGrid = createPivotGrid({
+                    width: 1000,
+                    height: 1000,
+                    scrolling: { mode: 'virtual', useNative },
+                    dataSource: {
+                        store: store,
+                        fields: [
+                            { dataField: 'column', area: 'column' },
+                            { dataField: 'row', area: 'row' },
+                            { dataField: 'subField', area: dimension },
+                            { dataField: 'data', area: 'data' }
+                        ]
+                    }
                 });
+                this.clock.tick(100);
+                checkFirstVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
+
+                pivotGrid._dataArea.groupElement().dxScrollable('instance').scrollTo({ left: 2000, top: 2000 });
+                this.clock.tick(100);
+                const expectedRow = 60;
+                const expectedColumn = dimension === 'row' ? 58 : 47;
+                checkFirstVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after scrolling');
+
+                const dataSource = pivotGrid.getDataSource();
+                dataSource.field('subField', { visible: false });
+                dataSource.load();
+                this.clock.tick(100);
+                checkFirstVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: dimension === 'row' ? expectedColumn : expectedColumn + 1 }, 'after changing visible to a false value');
+
+                dataSource.field('subField', { visible: true });
+                dataSource.load();
+                this.clock.tick(100);
+                checkFirstVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after changing visible to a true value');
             });
         });
     });
