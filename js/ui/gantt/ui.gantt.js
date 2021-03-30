@@ -1456,7 +1456,8 @@ class Gantt extends Widget {
         const style = window.getComputedStyle(cell);
         const styleForExport = {
             color: style.color,
-            padding: style.padding
+            padding: style.padding,
+            width: cellElement.clientWidth
         };
 
         const nodeKey = treeList.getKeyByRowIndex(rowIndex);
