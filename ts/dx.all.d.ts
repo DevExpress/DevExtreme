@@ -2684,6 +2684,14 @@ declare module DevExpress.excelExporter {
          * [descr:ExcelExportPivotGridProps.customizeCell]
          */
         customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeColumnFieldValues]
+         */
+        mergeColumnFieldValues?: boolean;
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeRowFieldValues]
+         */
+        mergeRowFieldValues?: boolean;
     }
     /**
      * [descr:ExcelPivotGridCell]
@@ -5987,9 +5995,17 @@ declare module DevExpress.ui {
          */
         getItemByKey(key: any): dxDiagramItem;
         /**
+         * [descr:dxDiagram.getItems()]
+         */
+        getItems(): Array<dxDiagramItem>;
+        /**
          * [descr:dxDiagram.getNodeDataSource()]
          */
         getNodeDataSource(): DevExpress.data.DataSource;
+        /**
+         * [descr:dxDiagram.getSelectedItems()]
+         */
+        getSelectedItems(): Array<dxDiagramItem>;
         /**
          * [descr:dxDiagram.import(data, updateExistingItemsOnly)]
          */
@@ -6789,6 +6805,10 @@ declare module DevExpress.ui {
          * [descr:dxFileManagerOptions.itemView]
          */
         itemView?: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        /**
+         * [descr:dxFileManagerOptions.notifications]
+         */
+        notifications?: { showPanel?: boolean, showPopup?: boolean };
         /**
          * [descr:dxFileManagerOptions.onContextMenuItemClick]
          */

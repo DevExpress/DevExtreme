@@ -97,6 +97,10 @@ const LoadIndicator = Widget.inherit({
         ]);
     },
 
+    _useTemplates: function() {
+        return false;
+    },
+
     _init: function() {
         this.callBase();
 
