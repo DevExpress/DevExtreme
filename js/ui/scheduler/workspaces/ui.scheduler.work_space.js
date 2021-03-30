@@ -1479,7 +1479,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         data.forEach((cellData) => {
-            const { groups, startDate, allDay } = cellData;
+            const { groups, startDate, allDay, index } = cellData;
             let { groupIndex } = cellData;
 
             if(!groupIndex) {
@@ -1490,7 +1490,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const coordinates = this.isVirtualScrolling()
                 ? this.viewDataProvider.findCellPositionInMap(
-                    groupIndex, startDate, allDay,
+                    groupIndex, startDate, allDay, index
                 )
                 : this.getCoordinatesByDate(startDate, groupIndex, allDay);
 

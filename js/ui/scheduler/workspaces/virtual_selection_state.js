@@ -1,3 +1,5 @@
+import dateUtils from '../../../core/utils/date';
+
 export default class VirtualSelectionState {
     constructor(viewDataProvider) {
         this._viewDataProvider = viewDataProvider;
@@ -26,7 +28,7 @@ export default class VirtualSelectionState {
         }
 
         const { groupIndex, startDate, allDay } = focusedCell;
-        const cellPosition = this.viewDataProvider.findCellPositionInMap(groupIndex, startDate, allDay);
+        const cellPosition = this.viewDataProvider.findCellPositionInMap(groupIndex, startDate, allDay, focusedCell.index);
 
         return { coordinates: cellPosition, cellData: focusedCell };
     }
@@ -57,16 +59,21 @@ export default class VirtualSelectionState {
         }
 
         const {
-            startDate: firstStartDate, groupIndex: firstGroupIndex,
+            startDate: firstStartDate, groupIndex: firstGroupIndex, index: firstCellIndex
         } = firstCell;
         const {
-            startDate: lastStartDate,
+            startDate: lastStartDate, index: lastCellIndex
         } = lastCell;
 
         const cells = viewDataProvider.getCellsByGroupIndexAndAllDay(firstGroupIndex, isLastCellAllDay);
 
         const filteredCells = cells.reduce((selectedCells, cellsRow) => {
-            const filteredRow = this._filterCellsByDate(cellsRow, firstStartDate, lastStartDate);
+            const filteredRow = this._filterCellsByDateAndIndex(
+                cellsRow
+                , firstStartDate
+                , lastStartDate
+                , firstCellIndex
+                , lastCellIndex);
             selectedCells.push(...filteredRow);
 
             return selectedCells;
@@ -111,15 +118,31 @@ export default class VirtualSelectionState {
         return groupIndex === nextGroupIndex && allDay === nextAllDay;
     }
 
-    _filterCellsByDate(cellsRow, firstDate, lastDate) {
-        const firstTime = firstDate.getTime();
-        const lastTime = lastDate.getTime();
+    _filterCellsByDateAndIndex(cellsRow, firstDate, lastDate, firstIndex, lastIndex) {
+        const firstDay = dateUtils.trimTime(firstDate).getTime();
+        const lastDay = dateUtils.trimTime(lastDate).getTime();
 
         return cellsRow.filter((cell) => {
-            const { startDate } = cell;
-            const time = startDate.getTime();
+            const { startDate, index } = cell;
+            const day = dateUtils.trimTime(startDate).getTime();
 
-            return firstTime <= time && time <= lastTime;
+            return this._compareCellsByDateAndIndex(day, index, firstDay, firstIndex, lastDay, lastIndex);
         });
+    }
+
+    _compareCellsByDateAndIndex(day, index, firstDay, firstIndex, lastDay, lastIndex) {
+        if(firstDay === lastDay) {
+            let _firstIndex = firstIndex;
+            let _lastIndex = lastIndex;
+            if(_firstIndex > _lastIndex) {
+                [_firstIndex, _lastIndex] = [_lastIndex, _firstIndex];
+            }
+
+            return firstDay === day && index >= _firstIndex && index <= _lastIndex;
+        } else {
+            return (day === firstDay && index >= firstIndex)
+                || (day === lastDay && index <= lastIndex)
+                || (firstDay < day && day < lastDay);
+        }
     }
 }
