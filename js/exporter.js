@@ -19,6 +19,7 @@ import { getData } from './exporter/pdf_creator';
 
 function _export(data, options, getData) {
     if(!data) {
+        data.d;
         return new Deferred().resolve();
     }
 
