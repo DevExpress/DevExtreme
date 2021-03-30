@@ -287,7 +287,7 @@ export default {
         _initAxisPositions() {
             const that = this;
 
-            if(that.customPositionIsAvailable() && !isDefined(that._customBoundaryPosition)) {
+            if(that.customPositionIsAvailable()) {
                 that._customBoundaryPosition = that.getCustomBoundaryPosition();
             }
 
@@ -326,7 +326,7 @@ export default {
             const position = this.getResolvedBoundaryPosition();
             return (length % 2 === 1 ?
                 (width % 2 === 0 && (position === LEFT || position === TOP) ||
-                width % 2 === 1 && ((position === RIGHT || position === BOTTOM) && !this.hasCustomPosition()) ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
+                width % 2 === 1 && ((position === RIGHT || position === BOTTOM) && !this.hasNonBoundaryPosition()) ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
                 (-length / 2 + (width % 2 === 0 ? 0 : (position === BOTTOM || position === RIGHT ? -1 : 1))));
         },
 
@@ -1275,8 +1275,9 @@ export default {
 
         getCustomBoundaryPosition(position) {
             const that = this;
-            const orthogonalAxis = that.getOrthogonalAxis();
+            const { customPosition, offset } = that.getOptions();
             const resolvedPosition = position ?? that.getResolvedPositionOption();
+            const orthogonalAxis = that.getOrthogonalAxis();
             const orthogonalTranslator = orthogonalAxis.getTranslator();
             const visibleArea = orthogonalTranslator.getCanvasVisibleArea();
 
@@ -1288,10 +1289,18 @@ export default {
 
             if(!isDefined(currentPosition)) {
                 return that.getResolvedBoundaryPosition();
-            } else if(currentPosition <= visibleArea.min) {
-                return that._isHorizontal ? TOP : LEFT;
-            } else if(currentPosition >= visibleArea.max) {
-                return that._isHorizontal ? BOTTOM : RIGHT;
+            } else if(isDefined(customPosition)) {
+                if(currentPosition <= visibleArea.min) {
+                    return that._isHorizontal ? TOP : LEFT;
+                } else if(currentPosition >= visibleArea.max) {
+                    return that._isHorizontal ? BOTTOM : RIGHT;
+                }
+            } else if(isDefined(offset)) {
+                if(currentPosition <= that._orthogonalPositions.start) {
+                    return that._isHorizontal ? TOP : LEFT;
+                } else if(currentPosition >= that._orthogonalPositions.end) {
+                    return that._isHorizontal ? BOTTOM : RIGHT;
+                }
             }
 
             return currentPosition;
@@ -1307,7 +1316,7 @@ export default {
             return isDefined(this.getOrthogonalAxis()) && (isDefined(options.customPosition) || isFinite(options.offset));
         },
 
-        hasCustomPosition() {
+        hasNonBoundaryPosition() {
             return this.customPositionIsAvailable() && !this.customPositionIsBoundary();
         },
 
@@ -1334,7 +1343,7 @@ export default {
         resolveOverlappingForCustomPositioning(oppositeAxes) {
             const that = this;
 
-            if(!that.hasCustomPosition() && !that.customPositionIsBoundary() && !oppositeAxes.some(a => a.hasCustomPosition())) {
+            if(!that.hasNonBoundaryPosition() && !that.customPositionIsBoundary() && !oppositeAxes.some(a => a.hasNonBoundaryPosition())) {
                 return;
             }
 
@@ -1436,9 +1445,9 @@ export default {
             label.attr(attr);
 
             if(tick.mark) {
-                const markerCoord = that._isHorizontal ? tickMarkBBox.y : tickMarkBBox.x;
                 const markerSize = that._isHorizontal ? tickMarkBBox.height : tickMarkBBox.width;
-                attr[translateCoordName] = 2 * (axisPosition - markerCoord) - markerSize + 1;
+                const dir = labelPosition === defaultLabelPosition ? 1 : -1;
+                attr[translateCoordName] = dir * (markerSize - 1);
                 tick.mark.attr(attr);
             }
         },

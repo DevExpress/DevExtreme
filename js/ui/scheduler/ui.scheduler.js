@@ -383,7 +383,7 @@ class Scheduler extends Widget {
                 mode: 'standard'
             },
 
-            renovateRender: true,
+            renovateRender: false,
 
             _draggingMode: 'outlook',
 

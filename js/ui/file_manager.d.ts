@@ -119,6 +119,25 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     };
     /**
      * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    notifications?: {
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
+      showPanel?: boolean,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
+      showPopup?: boolean
+    }
+    /**
+     * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object

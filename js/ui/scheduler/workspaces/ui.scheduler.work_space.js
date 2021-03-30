@@ -622,7 +622,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolling: {
                 mode: 'standard',
             },
-            renovateRender: true,
+            renovateRender: false,
             height: undefined,
             draggingMode: 'outlook'
         });

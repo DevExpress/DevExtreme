@@ -187,6 +187,7 @@ module('Events', {
             };
 
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 dataSource: [appointment],
                 currentView: 'day',
                 currentDate: new Date(2021, 2, 25),
@@ -331,6 +332,7 @@ module('Events', {
             });
 
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
                 },

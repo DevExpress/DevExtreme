@@ -172,6 +172,10 @@ const DropDownEditor = TextBox.inherit({
         });
     },
 
+    _useTemplates: function() {
+        return true;
+    },
+
     _getDefaultPopupPosition: function(isRtlEnabled) {
         const position = getDefaultAlignment(isRtlEnabled);
 
