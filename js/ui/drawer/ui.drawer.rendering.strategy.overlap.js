@@ -26,9 +26,9 @@ class OverlapStrategy extends DrawerStrategy {
                     duration: 0
                 }
             },
-            onPositioned: (function(e) {
-                this._fixOverlayPosition(e.component.$content());
-            }).bind(this),
+            // onPositioned: (function(e) {
+            //     this._fixOverlayPosition(e.component.$content());
+            // }).bind(this),
             contentTemplate: drawer.option('template'),
             onContentReady: (args) => {
                 whenPanelContentRendered.resolve();
@@ -39,21 +39,21 @@ class OverlapStrategy extends DrawerStrategy {
         });
     }
 
-    _fixOverlayPosition($overlayContent) {
-        // NOTE: overlay should be positioned in extended wrapper
-        // const position = ensureDefined(this._initialPosition, { left: 0, top: 0 });
-        // if(this.getDrawerInstance().calcTargetPosition() !== 'bottom') {
-        //     move($overlayContent, position);
-        // }
+    // _fixOverlayPosition($overlayContent) {
+    //     // NOTE: overlay should be positioned in extended wrapper
+    //     const position = ensureDefined(this._initialPosition, { left: 0, top: 0 });
+    //     if(this.getDrawerInstance().calcTargetPosition() !== 'bottom') {
+    //         move($overlayContent, position);
+    //     }
 
-        // if(this.getDrawerInstance().calcTargetPosition() === 'right') {
-        //     $overlayContent.css('left', 'auto');
-        // }
-        // if(this.getDrawerInstance().calcTargetPosition() === 'bottom') {
-        //     $overlayContent.css('top', 'auto');
-        //     $overlayContent.css('bottom', '0px');
-        // }
-    }
+    //     if(this.getDrawerInstance().calcTargetPosition() === 'right') {
+    //         $overlayContent.css('left', 'auto');
+    //     }
+    //     if(this.getDrawerInstance().calcTargetPosition() === 'bottom') {
+    //         $overlayContent.css('top', 'auto');
+    //         $overlayContent.css('bottom', '0px');
+    //     }
+    // }
 
     _getOverlayPosition() {
         const drawer = this.getDrawerInstance();
