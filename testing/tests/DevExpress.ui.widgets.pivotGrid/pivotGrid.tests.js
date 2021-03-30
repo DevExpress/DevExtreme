@@ -3000,10 +3000,34 @@ QUnit.module('dxPivotGrid', {
                 this.clock.restore();
                 const done = assert.async();
 
-                const checkScrollOffset = (scrollable, expected) => {
-                    const offset = scrollable.scrollOffset();
-                    assert.strictEqual(offset.left, expected);
-                    assert.strictEqual(offset.top, expected);
+                const getFirstVisibleHeaderCellText = (pivotGrid, dimension) => {
+                    const areaSelector = dimension === 'row'
+                        ? '.dx-pivotgrid-horizontal-headers'
+                        : '.dx-pivotgrid-vertical-headers';
+
+                    const $headerArea = pivotGrid.$element().find(areaSelector);
+                    const headerRect = $headerArea.get(0).getBoundingClientRect();
+
+                    let firstVisibleCell;
+                    $headerArea.eq(2).find('td').each((_, cell) => {
+                        const prop = dimension === 'row' ? 'x' : 'y';
+                        if(cell.getBoundingClientRect()[prop] >= headerRect[prop]) {
+                            firstVisibleCell = cell;
+                            return false;
+                        }
+                    });
+
+                    return firstVisibleCell !== undefined
+                        ? firstVisibleCell.innerText
+                        : undefined;
+                };
+
+                const checkHeadersAreVisible = (pivotGrid, expected, message) => {
+                    const firstVisibleRowHeaderText = getFirstVisibleHeaderCellText(pivotGrid, 'row');
+                    const firstVisibleColumnHeaderText = getFirstVisibleHeaderCellText(pivotGrid, 'column');
+
+                    assert.equal(firstVisibleRowHeaderText, expected.row, `row ${message}`);
+                    assert.equal(firstVisibleColumnHeaderText, expected.column, `column ${message}`);
                 };
 
                 const store = [];
@@ -3027,24 +3051,24 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 setTimeout(() => {
-                    const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
-                    checkScrollOffset(scrollable, 0);
+                    checkHeadersAreVisible(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
-                    const expectedOffset = 2000;
-                    scrollable.scrollTo({ left: expectedOffset, top: expectedOffset });
+                    pivotGrid._dataArea.groupElement().dxScrollable('instance').scrollTo({ left: 2000, top: 2000 });
                     setTimeout(() => {
-                        checkScrollOffset(scrollable, expectedOffset);
+                        const expectedColumn = '60';
+                        const expectedRow = dimension === 'row' ? '58' : '47';
+                        checkHeadersAreVisible(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after scrolling');
 
                         const nodeNumberToExpand = 65;
                         pivotGrid.getDataSource().expandHeaderItem(dimension, [nodeNumberToExpand]);
                         setTimeout(() => {
-                            checkScrollOffset(scrollable, expectedOffset);
+                            checkHeadersAreVisible(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after expanding');
                             const nodeAfterExpanding = pivotGrid.$element().find('.dx-pivotgrid-expanded');
                             assert.notEqual(nodeAfterExpanding.length, 0);
 
                             pivotGrid.getDataSource().collapseHeaderItem(dimension, [nodeNumberToExpand]);
                             setTimeout(() => {
-                                checkScrollOffset(scrollable, expectedOffset);
+                                checkHeadersAreVisible(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after collapsing');
                                 const nodeAfterCollapsing = pivotGrid.$element().find('.dx-pivotgrid-expanded');
                                 assert.strictEqual(nodeAfterCollapsing.length, 0);
                                 done();
