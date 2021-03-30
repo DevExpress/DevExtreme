@@ -161,7 +161,7 @@ export default Class.inherit({
     },
 
     isItemDataSelected: function(data) {
-        return this._selectionStrategy.isItemDataSelected(data);
+        return this._selectionStrategy.isItemDataSelected(data, true);
     },
 
     isItemSelected: function(arg, checkPending) {

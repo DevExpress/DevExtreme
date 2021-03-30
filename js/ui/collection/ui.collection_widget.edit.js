@@ -542,7 +542,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _isItemSelected: function(index) {
         const key = this._getKeyByIndex(index);
-        return this._selection.isItemSelected(key);
+        return this._selection.isItemSelected(key, true);
     },
 
     _optionChanged: function(args) {

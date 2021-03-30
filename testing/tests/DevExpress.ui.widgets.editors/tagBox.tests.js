@@ -4038,7 +4038,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 2', 'item for search 3'], 'correctly items values');
     });
 
-    QUnit.test('TagBox should correctly add and remove all clicked items after search if dataSource is async (T958611)', function(assert) {
+    QUnit.test('TagBox should correctly add remove all clicked items after search if dataSource is async (T958611)', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             dataSource: getDSWithAsyncSearch(),
             valueExpr: 'id',
@@ -4077,7 +4077,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
     });
 
-    QUnit.test('TagBox should correctly add and quickly remove items after search if dataSource is async (T978877)', function(assert) {
+    QUnit.test('TagBox should correctly quickly add remove the same item after search if dataSource is async (T978877)', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             dataSource: getDSWithAsyncSearch(),
             valueExpr: 'id',
@@ -4093,7 +4093,40 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT * 3);
         let $listItems = getListItems(tagBox);
         $listItems.eq(0).trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT * 5);
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(1).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 1, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly quickly add remove items after search if dataSource is async (T978877)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
 
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         keyboardMock($input).type('search');
@@ -4102,11 +4135,45 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems = getListItems(tagBox);
         $listItems.eq(0).trigger('dxclick');
         $listItems.eq(1).trigger('dxclick');
-        $listItems.eq(2).trigger('dxclick');
-        // this.clock.tick(TIME_TO_WAIT);
-        $listItems.eq(1).trigger('dxclick');
-        $listItems.eq(2).trigger('dxclick');
+
         $listItems.eq(3).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 3, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly add and quickly remove items after search if dataSource is async and all old items has been already selected (T978877)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems.eq(3).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 4);
 
         const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
