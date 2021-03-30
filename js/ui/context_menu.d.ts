@@ -26,6 +26,58 @@ import {
     dxMenuBaseItem
 } from './menu';
 
+/**
+ * @public
+*/
+export interface HiddenEvent {
+    readonly component: dxContextMenu;
+    readonly element: TElement;
+    readonly model?: any;
+}
+
+/**
+ * @public
+*/
+export interface HidingEvent {
+    readonly component: dxContextMenu;
+    readonly element: TElement;
+    readonly model?: any;
+    cancel?: boolean;
+}
+
+/**
+ * @public
+*/
+export interface PositioningEvent {
+    readonly component: dxContextMenu;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly event?: TEvent;
+    readonly position: positionConfig;
+}
+
+/**
+ * @public
+*/
+export interface ShowingEvent {
+    readonly component: dxContextMenu;
+    readonly element: TElement;
+    readonly model?: any;
+    cancel?: boolean;
+}
+
+/**
+ * @public
+*/
+export interface ShownEvent {
+    readonly component: dxContextMenu;
+    readonly element: TElement;
+    readonly model?: any;
+}
+
+/**
+ * @public
+*/
 export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid
@@ -52,50 +104,67 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => void);
+    onHidden?: ((e: HiddenEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
+    onHiding?: ((e: HidingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 position:positionConfig
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPositioning?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, event?: TEvent, position?: positionConfig }) => void);
+    onPositioning?: ((e: PositioningEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
+    onShowing?: ((e: ShowingEvent) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => void);
+    onShown?: ((e: ShownEvent) => void);
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }

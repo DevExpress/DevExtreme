@@ -14,6 +14,36 @@ import {
     TEvent
 } from '../../events/index';
 
+/**
+ * @public
+*/
+export interface ScrollEvent<T = dxScrollable> {
+    readonly component: T;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly event?: TEvent;
+    readonly scrollOffset?: any;
+    readonly reachedLeft?: boolean;
+    readonly reachedRight?: boolean;
+    readonly reachedTop?: boolean;
+    readonly reachedBottom?: boolean;
+}
+
+/**
+ * @public
+*/
+export interface UpdatedEvent<T = dxScrollable> {
+    readonly component: T;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly event?: TEvent;
+    readonly scrollOffset?: any;
+    readonly reachedLeft?: boolean;
+    readonly reachedRight?: boolean;
+    readonly reachedTop?: boolean;
+    readonly reachedBottom?: boolean;
+}
+
 export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
     /**
      * @docid
@@ -48,11 +78,14 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @type_function_param1_field7 reachedRight:boolean
      * @type_function_param1_field8 reachedTop:boolean
      * @type_function_param1_field9 reachedBottom:boolean
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
+    onScroll?: ((e: ScrollEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -63,11 +96,14 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @type_function_param1_field7 reachedRight:boolean
      * @type_function_param1_field8 reachedTop:boolean
      * @type_function_param1_field9 reachedBottom:boolean
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUpdated?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => void);
+    onUpdated?: ((e: UpdatedEvent<T>) => void);
     /**
      * @docid
      * @default false [for](non-touch_devices)

@@ -14,6 +14,47 @@ import dxMenuBase, {
     dxMenuBaseOptions
 } from './context_menu/ui.menu_base';
 
+/**
+ * @public
+*/
+export interface SubmenuHiddenEvent {
+    readonly component: dxMenu;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly rootItem?: TElement;
+}
+
+/**
+ * @public
+*/
+export interface SubmenuHidingEvent {
+    readonly component: dxMenu;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly rootItem?: TElement;
+    cancel?: boolean;
+}
+
+/**
+ * @public
+*/
+export interface SubmenuShowingEvent {
+    readonly component: dxMenu;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly rootItem?: TElement;
+}
+
+/**
+ * @public
+*/
+export interface onSubmenuShownEvent {
+    readonly component: dxMenu;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly rootItem?: TElement;
+}
+
 export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     /**
      * @docid
@@ -47,42 +88,54 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field1 component:dxMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuHidden?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
+    onSubmenuHidden?: ((e: SubmenuHiddenEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @type_function_param1_field5 cancel:boolean
+     * @type_function_param1_field1 component:dxMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuHiding?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement, cancel?: boolean }) => void);
+    onSubmenuHiding?: ((e: SubmenuHidingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field1 component:dxMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuShowing?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
+    onSubmenuShowing?: ((e: SubmenuShowingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field1 component:dxMenu
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuShown?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
+    onSubmenuShown?: ((e: onSubmenuShownEvent) => void);
     /**
      * @docid
      * @type Enums.Orientation

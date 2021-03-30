@@ -19,6 +19,41 @@ import dxMultiView, {
     dxMultiViewOptions
 } from './multi_view';
 
+/**
+ * @public
+*/
+export interface TitleClickEvent {
+    readonly component: dxTabPanel;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+    readonly event?: TEvent
+}
+
+/**
+ * @public
+*/
+export interface TitleHoldEvent {
+    readonly component: dxTabPanel;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+    readonly event?: TEvent;
+}
+
+/**
+ * @public
+*/
+export interface TitleRenderedEvent {
+    readonly component: dxTabPanel;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+}
+
 export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid
@@ -67,11 +102,14 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleClick?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, event?: TEvent }) => void) | string;
+    onTitleClick?: ((e: TitleClickEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -79,22 +117,28 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleHold?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, event?: TEvent }) => void);
+    onTitleHold?: ((e: TitleHoldEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement }) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
      * @default false

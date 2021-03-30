@@ -40,6 +40,27 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+/**
+ * @public
+*/
+export interface EditorEnterKeyEvent {
+    readonly component: dxForm;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly dataField?: string;
+}
+
+/**
+ * @public
+*/
+export interface FieldDataChangedEvent {
+    readonly component: dxForm;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly dataField?: string;
+    readonly value?: any;
+}
+
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
@@ -115,22 +136,28 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
+     * @type_function_param1_field1 component:dxForm
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorEnterKey?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string }) => void);
+    onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @type_function_param1_field5 value:object
+     * @type_function_param1_field1 component:dxForm
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFieldDataChanged?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string, value?: any }) => void);
+    onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
     /**
      * @docid
      * @default "optional"
