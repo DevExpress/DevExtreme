@@ -1153,15 +1153,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     const isOverflowHidden = getElementStyle('overflowY', this.contentRef.current) === 'hidden';
 
-    let contentHeight = this.contentClientHeight;
-
     if (!isOverflowHidden) {
       const containerScrollSize = this.contentScrollHeight * this.scaleRatioHeight;
 
-      contentHeight = Math.max(containerScrollSize, this.contentClientHeight);
+      return Math.max(containerScrollSize, this.contentClientHeight);
     }
 
-    return contentHeight;
+    return this.contentClientHeight;
   }
 
   get scrollableOffset(): { left: number; top: number } {

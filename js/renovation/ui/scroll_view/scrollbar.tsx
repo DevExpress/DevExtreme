@@ -417,8 +417,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     const { target } = e.originalEvent;
-    const { scrollByThumb } = this.props;
-    const scrollbarClicked = (scrollByThumb && this.isScrollbar(target));
+    const scrollbarClicked = (this.props.scrollByThumb && this.isScrollbar(target));
 
     if (scrollbarClicked) {
       this.moveToMouseLocation(e);
@@ -426,7 +425,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
     // TODO: cross naming with mutable variabless (thumbScrolling -> currentThumbScrolling)
     // https://trello.com/c/ohg2pHUZ/2579-mutable-cross-naming
-    const currentThumbScrolling = scrollbarClicked || (scrollByThumb && this.isThumb(target));
+    const currentThumbScrolling = scrollbarClicked
+      || (this.props.scrollByThumb && this.isThumb(target));
     this.thumbScrolling = currentThumbScrolling;
     this.crossThumbScrolling = !currentThumbScrolling && currentCrossThumbScrolling;
 

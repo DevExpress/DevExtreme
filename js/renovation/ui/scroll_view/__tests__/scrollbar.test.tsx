@@ -12,7 +12,7 @@ import {
 } from '../scrollbar';
 
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
-import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../scrollable_utils';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TopPocketState } from '../scrollable_utils';
 import { ScrollbarProps } from '../scrollbar_props';
 
 describe('TopPocket', () => {
@@ -243,44 +243,57 @@ describe('Methods', () => {
 
           each([undefined, jest.fn()]).describe('contentPositionChange: %o', (contentPositionChange) => {
             each([undefined, jest.fn()]).describe('contentTranslateOffsetChange: %o', (contentTranslateOffsetChange) => {
-              it('updateContent() call should change position of content and scroll', () => {
-                const viewModel = new Scrollbar({
-                  showScrollbar, // TODO: we don't need check it
-                  direction,
-                  scaleRatio,
-                  contentPositionChange,
-                  contentTranslateOffsetChange,
+              each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+                each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+                  it('updateContent() call should change position of content and scroll', () => {
+                    const topPocketSize = 85;
+
+                    const viewModel = new Scrollbar({
+                      showScrollbar, // TODO: we don't need check it
+                      direction,
+                      scaleRatio,
+                      forceGeneratePockets,
+                      pullDownEnabled,
+                      contentPositionChange,
+                      contentTranslateOffsetChange,
+                      topPocketSize,
+                    });
+
+                    const minOffset = -400;
+                    Object.defineProperties(viewModel, {
+                      minOffset: { get() { return minOffset; } },
+                    });
+
+                    viewModel.scrollLocation = location;
+
+                    viewModel.updateContent();
+
+                    if (contentPositionChange) {
+                      expect(contentPositionChange).toHaveBeenCalledTimes(1);
+                      expect(contentPositionChange)
+                        .toHaveBeenCalledWith(viewModel.fullScrollProp, location, scaleRatio);
+                    }
+
+                    if (contentTranslateOffsetChange) {
+                      let expectedContentTranslate = 0;
+                      if (location > 0) {
+                        expectedContentTranslate = location;
+                      } else if (location <= minOffset) {
+                        expectedContentTranslate = location - minOffset;
+                      } else {
+                        expectedContentTranslate = location % 1;
+                      }
+
+                      if (forceGeneratePockets && pullDownEnabled) {
+                        expectedContentTranslate -= topPocketSize;
+                      }
+
+                      expect(contentTranslateOffsetChange).toHaveBeenCalledTimes(1);
+                      expect(contentTranslateOffsetChange)
+                        .toHaveBeenCalledWith({ [viewModel.scrollProp]: expectedContentTranslate });
+                    }
+                  });
                 });
-
-                const minOffset = -400;
-                Object.defineProperties(viewModel, {
-                  minOffset: { get() { return minOffset; } },
-                });
-
-                viewModel.scrollLocation = location;
-
-                viewModel.updateContent();
-
-                if (contentPositionChange) {
-                  expect(contentPositionChange).toHaveBeenCalledTimes(1);
-                  expect(contentPositionChange)
-                    .toHaveBeenCalledWith(viewModel.fullScrollProp, location, scaleRatio);
-                }
-
-                if (contentTranslateOffsetChange) {
-                  let expectedContentTranslate = 0;
-                  if (location > 0) {
-                    expectedContentTranslate = location;
-                  } else if (location <= minOffset) {
-                    expectedContentTranslate = location - minOffset;
-                  } else {
-                    expectedContentTranslate = location % 1;
-                  }
-
-                  expect(contentTranslateOffsetChange).toHaveBeenCalledTimes(1);
-                  expect(contentTranslateOffsetChange)
-                    .toHaveBeenCalledWith({ [viewModel.scrollProp]: expectedContentTranslate });
-                }
               });
             });
           });
@@ -418,6 +431,32 @@ describe('Methods', () => {
 
         expect((viewModel as any).topPocketSize).toBe(pullDownEnabled ? 30 : 0);
       });
+
+      each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
+        each([-100, 0, 100]).describe('boundaryOffset: %o', (boundaryOffset) => {
+          it('isPullDown()', () => {
+            const topPocketSize = 85;
+            const bottomPocketSize = 55;
+
+            const viewModel = new Scrollbar({
+              direction,
+              bounceEnabled,
+              pullDownEnabled,
+              topPocketSize,
+              bottomPocketSize,
+            });
+
+            viewModel.boundaryOffset = boundaryOffset;
+
+            if (pullDownEnabled
+          && bounceEnabled && boundaryOffset >= 0) {
+              expect(viewModel.isPullDown()).toBe(true);
+            } else {
+              expect(viewModel.isPullDown()).toBe(false);
+            }
+          });
+        });
+      });
     });
 
     each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
@@ -425,6 +464,36 @@ describe('Methods', () => {
         const viewModel = new Scrollbar({ direction, reachBottomEnabled, bottomPocketSize: 30 });
 
         expect((viewModel as any).bottomPocketSize).toBe(reachBottomEnabled ? 30 : 0);
+      });
+
+      each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+        each([-200, -500]).describe('minOffset: %o', (minOffset) => {
+          each([-100, -300, -359.4, -359.6, -500]).describe('scrollLocation: %o', (scrollLocation) => {
+            it('isReachBottom()', () => {
+              const topPocketSize = 85;
+              const bottomPocketSize = 55;
+
+              const viewModel = new Scrollbar({
+                direction,
+                reachBottomEnabled,
+                pullDownEnabled,
+                topPocketSize,
+                bottomPocketSize,
+              });
+
+              viewModel.minOffset = minOffset;
+              viewModel.scrollLocation = scrollLocation;
+
+              if (reachBottomEnabled
+                && (scrollLocation - minOffset
+                  - viewModel.topPocketSize - viewModel.bottomPocketSize) <= 0.5) {
+                expect(viewModel.isReachBottom()).toBe(true);
+              } else {
+                expect(viewModel.isReachBottom()).toBe(false);
+              }
+            });
+          });
+        });
       });
     });
 
@@ -445,6 +514,191 @@ describe('Methods', () => {
         viewModel.moveScrollbar(50);
 
         expect(viewModel.getLocation()).toBe(50 * scaleRatio);
+      });
+    });
+
+    each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+      each([true, false]).describe('isReachBottom: %o', (isReachBottom) => {
+        it('getScrollLocation()', () => {
+          const viewModel = new Scrollbar({
+            direction,
+            forceGeneratePockets,
+          } as any);
+
+          viewModel.isReachBottom = jest.fn(() => isReachBottom);
+          viewModel.boundaryOffset = -100;
+          viewModel.scrollLocation = -15;
+
+          if (forceGeneratePockets && isReachBottom) {
+            expect(viewModel.getScrollLocation()).toEqual(-100);
+          } else {
+            expect(viewModel.getScrollLocation()).toEqual(-15);
+          }
+        });
+
+        each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
+          each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
+            each([true, false]).describe('pendingRelease: %o', (pendingRelease) => {
+              each([-200, -400]).describe('scrollLocation: %o', (scrollLocation) => {
+                it('updateMinLimit()', () => {
+                  const viewModel = new Scrollbar({
+                    direction,
+                    forceGeneratePockets,
+                    reachBottomEnabled,
+                    bounceEnabled,
+                    bottomPocketSize: 55,
+                    topPocketSize: 80,
+                  });
+
+                  viewModel.pendingRelease = pendingRelease;
+                  viewModel.boundLocation = jest.fn(() => -300);
+                  viewModel.scrollLocation = scrollLocation;
+                  viewModel.minOffset = -300;
+                  viewModel.isReachBottom = jest.fn(() => isReachBottom);
+                  Object.defineProperties(viewModel, {
+                    bottomBoundaryOffset: { get() { return 300; } },
+                    topPocketSize: { get() { return 80; } },
+                    bottomPocketSize: { get() { return 55; } },
+                  });
+
+                  debugger;
+                  viewModel.updateMinLimit();
+
+                  if (forceGeneratePockets && reachBottomEnabled) {
+                    if (isReachBottom && scrollLocation + 355 < 0) {
+                      if (!pendingRelease) {
+                        expect(viewModel.scrollLocation).toEqual(-300);
+                        expect(viewModel.pendingRelease).toEqual(true);
+                        return;
+                      }
+                      if (!bounceEnabled) {
+                        expect(viewModel.minLimit).toEqual(-220);
+                        return;
+                      }
+                      debugger;
+                      viewModel.updateMinLimit();
+                      expect(viewModel.scrollLocation).toEqual(-300);
+                    } else {
+                      expect(viewModel.minLimit).toEqual(-300);
+                    }
+                  }
+                });
+              });
+            });
+          });
+        });
+
+        each([TopPocketState.STATE_RELEASED, TopPocketState.STATE_LOADING,
+          TopPocketState.STATE_READY, TopPocketState.STATE_REFRESHING]).describe('pocketState: %o', (pocketState) => {
+          each([true, false]).describe('isPullDown: %o', (isPullDown) => {
+            it('set correct pocketState on content position change', () => {
+              const releaseHandler = jest.fn();
+              const pocketStateChangeHandler = jest.fn();
+
+              const viewModel = new Scrollbar({
+                direction,
+                forceGeneratePockets,
+                pocketState,
+                onRelease: releaseHandler,
+                pocketStateChange: pocketStateChangeHandler,
+              }) as any;
+
+              viewModel.isPullDown = jest.fn(() => isPullDown);
+              viewModel.isReachBottom = jest.fn(() => isReachBottom);
+
+              viewModel.moveScrollbar();
+
+              if (forceGeneratePockets) {
+                if (isPullDown) {
+                  if (pocketState !== 1) {
+                    expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
+                    expect(pocketStateChangeHandler).toHaveBeenCalledWith(1);
+                    return;
+                  }
+                } else if (isReachBottom) {
+                  if (pocketState !== 3) {
+                    expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
+                    expect(pocketStateChangeHandler).toHaveBeenCalledWith(3);
+                    return;
+                  }
+                } else if (pocketState !== 0) {
+                  expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
+                  expect(pocketStateChangeHandler).toHaveBeenCalledWith(0);
+                  expect(releaseHandler).toHaveBeenCalledTimes(1);
+                  return;
+                }
+              }
+
+              expect(pocketStateChangeHandler).not.toHaveBeenCalled();
+            });
+          });
+
+          each([true, false]).describe('inBounds: %o', (inBounds) => {
+            it('scrollComplete()', () => {
+              const pullDownHandler = jest.fn();
+              const reachBottomHandler = jest.fn();
+              const pocketStateChangeHandler = jest.fn();
+
+              const viewModel = new Scrollbar({
+                direction,
+                forceGeneratePockets,
+                pocketState,
+                onPullDown: pullDownHandler,
+                onReachBottom: reachBottomHandler,
+                pocketStateChange: pocketStateChangeHandler,
+              } as any);
+
+              viewModel.pendingRelease = true;
+              viewModel.scrollToBounds = jest.fn();
+              viewModel.inBounds = jest.fn(() => inBounds);
+              viewModel.isReachBottom = jest.fn(() => isReachBottom);
+
+              viewModel.scrollComplete();
+
+              if (forceGeneratePockets) {
+                if (inBounds) {
+                  if (pocketState === 1) {
+                    if (pocketState !== 2) {
+                      expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
+                      expect(pocketStateChangeHandler).toHaveBeenCalledWith(2);
+                      expect(reachBottomHandler).not.toHaveBeenCalled();
+                      expect(pullDownHandler).toHaveBeenCalledTimes(1);
+                      expect(viewModel.pendingRelease).toEqual(true);
+                    } else {
+                      expect(pocketStateChangeHandler).not.toHaveBeenCalled();
+                      expect(reachBottomHandler).not.toHaveBeenCalled();
+                      expect(pullDownHandler).not.toHaveBeenCalled();
+                      expect(viewModel.pendingRelease).toEqual(true);
+                    }
+
+                    return;
+                  }
+                  if (pocketState === 3) {
+                    expect(pocketStateChangeHandler).not.toHaveBeenCalled();
+                    expect(reachBottomHandler).toHaveBeenCalledTimes(1);
+                    expect(pullDownHandler).not.toHaveBeenCalled();
+                    expect(viewModel.pendingRelease).toEqual(true);
+                    return;
+                  }
+                }
+
+                expect(viewModel.scrollToBounds).toHaveBeenCalledTimes(1);
+
+                if (isReachBottom) {
+                  expect(viewModel.pendingRelease).toEqual(false);
+                } else {
+                  expect(viewModel.pendingRelease).toEqual(true);
+                }
+              } else {
+                expect(viewModel.pendingRelease).toEqual(true);
+              }
+
+              expect(pullDownHandler).not.toHaveBeenCalled();
+              expect(reachBottomHandler).not.toHaveBeenCalled();
+              expect(pocketStateChangeHandler).not.toHaveBeenCalled();
+            });
+          });
+        });
       });
     });
 
