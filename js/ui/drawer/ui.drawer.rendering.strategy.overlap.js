@@ -3,7 +3,7 @@ import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import { move } from '../../animation/translator';
 import Overlay from '../overlay';
-import { ensureDefined } from '../../core/utils/common';
+// import { ensureDefined } from '../../core/utils/common';
 import { camelize } from '../../core/utils/inflector';
 
 class OverlapStrategy extends DrawerStrategy {
@@ -41,16 +41,18 @@ class OverlapStrategy extends DrawerStrategy {
 
     _fixOverlayPosition($overlayContent) {
         // NOTE: overlay should be positioned in extended wrapper
-        const position = ensureDefined(this._initialPosition, { left: 0, top: 0 });
-        move($overlayContent, position);
+        // const position = ensureDefined(this._initialPosition, { left: 0, top: 0 });
+        // if(this.getDrawerInstance().calcTargetPosition() !== 'bottom') {
+        //     move($overlayContent, position);
+        // }
 
-        if(this.getDrawerInstance().calcTargetPosition() === 'right') {
-            $overlayContent.css('left', 'auto');
-        }
-        if(this.getDrawerInstance().calcTargetPosition() === 'bottom') {
-            $overlayContent.css('top', 'auto');
-            $overlayContent.css('bottom', '0px');
-        }
+        // if(this.getDrawerInstance().calcTargetPosition() === 'right') {
+        //     $overlayContent.css('left', 'auto');
+        // }
+        // if(this.getDrawerInstance().calcTargetPosition() === 'bottom') {
+        //     $overlayContent.css('top', 'auto');
+        //     $overlayContent.css('bottom', '0px');
+        // }
     }
 
     _getOverlayPosition() {
@@ -154,17 +156,23 @@ class OverlapStrategy extends DrawerStrategy {
                 this._initialPosition = drawer.isHorizontalDirection() ? { left: panelOffset } : { top: panelOffset };
                 move($panel, this._initialPosition);
             } else if(revealMode === 'expand') {
-                this._initialPosition = { left: 0 };
-                move($panelOverlayContent, this._initialPosition);
+                // this._initialPosition = { left: 0 };
+                // move($panelOverlayContent, this._initialPosition);
 
                 if(drawer.isHorizontalDirection()) {
-                    $($panelOverlayContent).css('width', panelSize);
+                    // $($panelOverlayContent).css('width', panelSize);
+                    drawer._overlay.option({
+                        width: panelSize
+                    });
                 } else {
-                    $($panelOverlayContent).css('height', panelSize);
+                    // $($panelOverlayContent).css('height', panelSize);
+                    drawer._overlay.option({
+                        height: panelSize
+                    });
 
-                    if(targetPanelPosition === 'bottom') {
-                        $($panelOverlayContent).css('marginTop', marginTop);
-                    }
+                    // if(targetPanelPosition === 'bottom') {
+                    //     $($panelOverlayContent).css('marginTop', marginTop);
+                    // }
                 }
             }
         }
