@@ -534,7 +534,7 @@ QUnit.module('Drawer behavior', () => {
         fx.off = false;
     });
 
-    QUnit.test('drawer panel should be repositioned correctly after dimension changed, right position', function(assert) {
+    QUnit.skip('drawer panel should be repositioned correctly after dimension changed, right position', function(assert) {
         fx.off = true;
 
         const $element = $('#drawer').dxDrawer({
@@ -1795,7 +1795,7 @@ QUnit.module('Overlap mode', {
         assert.equal($panel.position().top, 100, 'panel has correct top when minSize is set');
     });
 
-    QUnit.test('minSize and maxSize should be rendered correctly in overlap mode, bottom panel position expand', function(assert) {
+    QUnit.skip('minSize and maxSize should be rendered correctly in overlap mode, bottom panel position expand', function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 300,
