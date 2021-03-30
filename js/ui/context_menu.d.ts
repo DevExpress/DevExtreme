@@ -15,7 +15,8 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    TEvent,
+    ComponentNativeEvent
 } from '../events/index';
 
 import dxMenuBase, {
@@ -26,58 +27,72 @@ import {
     dxMenuBaseItem
 } from './menu';
 
-/**
- * @public
-*/
-export interface HiddenEvent {
-    readonly component: dxContextMenu;
-    readonly element: TElement;
-    readonly model?: any;
-}
+import {
+    ComponentItemClickEvent,
+    ComponentItemContextMenuEvent,
+    ComponentItemRenderedEvent,
+    ComponentSelectionChangedEvent
+} from './collection/ui.collection_widget.base';
+
+import {
+    ComponentHidingEvent,
+    ComponentHiddenEvent,
+    ComponentShowingEvent,
+    ComponentShownEvent
+} from './overlay';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget';
 
 /**
  * @public
-*/
-export interface HidingEvent {
-    readonly component: dxContextMenu;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxContextMenu>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxContextMenu>;
+/**
+ * @public
+ */
+export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxContextMenu>;
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentItemRenderedEvent<dxContextMenu>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxContextMenu>;
+/**
+ * @public
+ */
+export type HidingEvent = ComponentHidingEvent<dxContextMenu>;
+/**
+ * @public
+ */
+export type HiddenEvent = ComponentHiddenEvent<dxContextMenu>;
+/**
+ * @public
+ */
+ export type ShowingEvent  = ComponentShowingEvent<dxContextMenu> & {
     cancel?: boolean;
 }
-
 /**
  * @public
-*/
-export interface PositioningEvent {
-    readonly component: dxContextMenu;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly event?: TEvent;
+ */
+export type ShownEvent = ComponentShownEvent<dxContextMenu>;
+/**
+ * @public
+ */
+export type PositioningEvent = ComponentNativeEvent<dxContextMenu> & {
     readonly position: positionConfig;
 }
 
 /**
  * @public
-*/
-export interface ShowingEvent {
-    readonly component: dxContextMenu;
-    readonly element: TElement;
-    readonly model?: any;
-    cancel?: boolean;
-}
-
-/**
- * @public
-*/
-export interface ShownEvent {
-    readonly component: dxContextMenu;
-    readonly element: TElement;
-    readonly model?: any;
-}
-
-/**
- * @public
-*/
+ */
 export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid

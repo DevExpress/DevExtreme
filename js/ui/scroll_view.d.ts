@@ -6,27 +6,31 @@ import {
     TPromise
 } from '../core/utils/deferred';
 
+import {
+    ComponentEvent
+} from '../events/index';
+
 import dxScrollable, {
-    dxScrollableOptions
+    dxScrollableOptions,
+    ComponentScrollEvent
 } from './scroll_view/ui.scrollable';
 
 /**
  * @public
-*/
-export interface PullDownEvent {
-    readonly component: dxScrollView;
-    readonly element: TElement;
-    readonly model?: any;
-}
-
+ */
+export type ScrollEvent = ComponentScrollEvent<dxScrollView>;
 /**
  * @public
-*/
-export interface ReachBottomEvent {
-    readonly component: dxScrollView;
-    readonly element: TElement;
-    readonly model?: any;
-}
+ */
+export type UpdatedEvent = ComponentScrollEvent<dxScrollView>;
+/**
+ * @public
+ */
+export type PullDownEvent = ComponentEvent<dxScrollView>;
+/**
+ * @public
+ */
+export type ReachBottomEvent = ComponentEvent<dxScrollView>;
 
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**

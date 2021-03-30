@@ -11,8 +11,17 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    ComponentEvent,
+    ComponentNativeEvent
 } from '../events/index';
+
+import {
+    ComponentItemClickEvent,
+    ComponentItemContextMenuEvent,
+    ComponentItemHoldEvent,
+    ComponentItemRenderedEvent,
+    ComponentSelectionChangedEvent,
+} from './collection/ui.collection_widget.base';
 
 import dxMultiView, {
     dxMultiViewItem,
@@ -21,35 +30,46 @@ import dxMultiView, {
 
 /**
  * @public
-*/
-export interface TitleClickEvent {
-    readonly component: dxTabPanel;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly itemData?: any;
-    readonly itemElement?: TElement;
-    readonly event?: TEvent
-}
-
+ */
+export type ContentReadyEvent = ComponentEvent<dxTabPanel>;
 /**
  * @public
-*/
-export interface TitleHoldEvent {
-    readonly component: dxTabPanel;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly itemData?: any;
-    readonly itemElement?: TElement;
-    readonly event?: TEvent;
-}
-
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxTabPanel>;
 /**
  * @public
-*/
-export interface TitleRenderedEvent {
-    readonly component: dxTabPanel;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxTabPanel>;
+/**
+ * @public
+ */
+export type ItemHoldEvent = ComponentItemHoldEvent<dxTabPanel>;
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentItemRenderedEvent<dxTabPanel>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxTabPanel>;
+/**
+ * @public
+ */
+export type TitleClickEvent = ComponentNativeEvent<dxTabPanel> & {
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+}
+/**
+ * @public
+ */
+export type TitleHoldEvent = ComponentNativeEvent<dxTabPanel> & {
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+}
+/**
+ * @public
+ */
+export type TitleRenderedEvent = ComponentEvent<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
 }

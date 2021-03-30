@@ -3,7 +3,8 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
+    TEvent,
+    ComponentEvent
 } from '../events/index';
 
 import PivotGridDataSource, {
@@ -16,11 +17,12 @@ import Widget, {
 
 /**
  * @public
-*/
-export interface ContextMenuPreparingEvent {
-    readonly component: dxPivotGridFieldChooser;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ContentReadyEvent = ComponentEvent<dxPivotGridFieldChooser>;
+/**
+ * @public
+ */
+export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGridFieldChooser> & {
     readonly area?: string;
     readonly field?: PivotGridDataSourceField;
     readonly event?: TEvent;

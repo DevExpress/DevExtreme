@@ -20,13 +20,46 @@ import {
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    ComponentItemClickEvent,
+    ComponentItemContextMenuEvent,
+    ComponentItemHoldEvent,
+    ComponentItemRenderedEvent,
+    ComponentSelectionChangedEvent,
 } from './collection/ui.collection_widget.base';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget';
 
 /**
  * @public
-*/
-export interface ItemTitleClickEvent {
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxAccordion>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxAccordion>;
+/**
+ * @public
+ */
+export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxAccordion>;
+/**
+ * @public
+ */
+export type ItemHoldEvent = ComponentItemHoldEvent<dxAccordion>;
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentItemRenderedEvent<dxAccordion>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxAccordion>;
+/**
+ * @public
+ */
+export type ItemTitleClickEvent = {
     readonly component: dxAccordion;
     readonly element: TElement;
     readonly model?: any;

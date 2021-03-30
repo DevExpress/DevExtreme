@@ -10,6 +10,10 @@ import {
     template
 } from '../core/templates/template';
 
+import {
+    ComponentEvent
+} from '../events/index';
+
 import dxButton, {
     dxButtonOptions
 } from './button';
@@ -40,23 +44,24 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
-*/
-export interface EditorEnterKeyEvent {
-    readonly component: dxForm;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly dataField?: string;
-}
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget';
 
 /**
  * @public
-*/
-export interface FieldDataChangedEvent {
-    readonly component: dxForm;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+ export type ContentReadyEvent = ComponentContentReadyEvent<dxForm>;
+/**
+ * @public
+ */
+export type EditorEnterKeyEvent = ComponentEvent<dxForm> & {
+    readonly dataField?: string;
+}
+/**
+ * @public
+ */
+export type FieldDataChangedEvent = ComponentEvent<dxForm> & {
     readonly dataField?: string;
     readonly value?: any;
 }

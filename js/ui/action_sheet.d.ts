@@ -22,13 +22,12 @@ import CollectionWidget, {
     ComponentItemContextMenuEvent,
     ComponentItemHoldEvent,
     ComponentItemRenderedEvent,
-    ComponentSelectionChangedEvent,
-    
+    ComponentSelectionChangedEvent
 } from './collection/ui.collection_widget.base';
 
 import {
     ComponentContentReadyEvent
-} from './widget/ui.widget'
+} from './widget/ui.widget';
 
 /**
  * @public

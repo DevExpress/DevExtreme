@@ -11,7 +11,8 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    ComponentEvent,
+    ComponentNativeEvent
 } from '../events/index';
 
 import {
@@ -28,116 +29,79 @@ import {
 
 /**
  * @public
-*/
-export interface ItemClickEvent {
-    readonly component: dxTreeView;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+ export type ContentReadyEvent = ComponentEvent<dxTreeView>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number | any;
-    readonly event?: TEvent;
     readonly node?: dxTreeViewNode;
 }
-
 /**
  * @public
-*/
-export interface ItemCollapsedEvent {
-    readonly component: dxTreeView;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ItemCollapsedEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
-    readonly event?: TEvent;
     readonly node?: dxTreeViewNode;
 }
-
 /**
  * @public
-*/
-export interface ItemContextMenuEvent {
-    readonly component: dxTreeView;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ItemContextMenuEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number | any;
-    readonly event?: TEvent;
     readonly node?: dxTreeViewNode;
 }
-
 /**
  * @public
-*/
-export interface ItemExpandedEvent {
-    readonly component: dxTreeView;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly itemData?: any;
-    readonly itemElement?: TElement;
-    readonly itemIndex?: number;
-    readonly event?: TEvent;
-    readonly node?: dxTreeViewNode;
-}
-
-/**
- * @public
-*/
-export interface ItemHoldEvent {
-    readonly component: dxTreeView;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly itemData?: any;
-    readonly itemElement?: TElement;
-    readonly itemIndex?: number;
-    readonly event?: TEvent;
-    readonly node?: dxTreeViewNode;
-}
-
-/**
- * @public
-*/
-export interface ItemRenderedEvent {
-    readonly component: dxTreeView;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ItemExpandedEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
-
 /**
  * @public
-*/
-export interface ItemSelectionChangedEvent {
-    readonly component: dxTreeView;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ItemHoldEvent = ComponentNativeEvent<dxTreeView> & {
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+    readonly itemIndex?: number;
+    readonly node?: dxTreeViewNode;
+}
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentNativeEvent<dxTreeView> & {
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+    readonly itemIndex?: number;
+    readonly node?: dxTreeViewNode;
+}
+/**
+ * @public
+ */
+export type ItemSelectionChangedEvent = ComponentEvent<dxTreeView> & {
     readonly node?: dxTreeViewNode;
     readonly itemElement?: TElement;
 }
-
 /**
  * @public
-*/
-export interface SelectAllValueChangedEvent {
-    readonly component: dxTreeView;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type SelectAllValueChangedEvent = ComponentEvent<dxTreeView> & {
     readonly value?: boolean;
 }
-
 /**
  * @public
-*/
-export interface SelectionChangedEvent {
-    readonly component: dxTreeView;
-    readonly element: TElement;
-    readonly model?: any;
-}
+ */
+export type SelectionChangedEvent = ComponentEvent<dxTreeView>;
 
 export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
     /**
@@ -633,7 +597,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
 * @docid
 * @inherits CollectionWidgetItem
 * @type object
-*/
+ */
 export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
      * @docid

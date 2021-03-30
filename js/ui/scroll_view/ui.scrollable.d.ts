@@ -11,32 +11,10 @@ import {
 } from '../../core/utils/deferred';
 
 import {
-    TEvent
+    ComponentNativeEvent
 } from '../../events/index';
 
-/**
- * @public
-*/
-export interface ScrollEvent<T = dxScrollable> {
-    readonly component: T;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly event?: TEvent;
-    readonly scrollOffset?: any;
-    readonly reachedLeft?: boolean;
-    readonly reachedRight?: boolean;
-    readonly reachedTop?: boolean;
-    readonly reachedBottom?: boolean;
-}
-
-/**
- * @public
-*/
-export interface UpdatedEvent<T = dxScrollable> {
-    readonly component: T;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly event?: TEvent;
+export interface ComponentScrollEvent<T = dxScrollable> extends ComponentNativeEvent<T> {
     readonly scrollOffset?: any;
     readonly reachedLeft?: boolean;
     readonly reachedRight?: boolean;
@@ -85,7 +63,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: ScrollEvent<T>) => void);
+    onScroll?: ((e: ComponentScrollEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -103,7 +81,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUpdated?: ((e: UpdatedEvent<T>) => void);
+    onUpdated?: ((e: ComponentScrollEvent<T>) => void);
     /**
      * @docid
      * @default false [for](non-touch_devices)

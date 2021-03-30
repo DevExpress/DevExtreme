@@ -7,7 +7,8 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    TEvent
+    TEvent,
+    ComponentEvent
 } from '../events/index';
 
 import PivotGridDataSource, {
@@ -18,16 +19,18 @@ import PivotGridDataSource, {
 import dxPopup from './popup';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
+    ComponentContentReadyEvent
 } from './widget/ui.widget';
 
 /**
  * @public
-*/
-export interface CellClickEvent {
-    readonly component: dxPivotGrid;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxPivotGrid>;
+/**
+ * @public
+ */
+export type CellClickEvent = ComponentEvent<dxPivotGrid> & {
     readonly area?: string;
     readonly cellElement?: TElement;
     readonly cell?: dxPivotGridPivotGridCell;
@@ -39,28 +42,20 @@ export interface CellClickEvent {
     readonly event?: TEvent;
     cancel?: boolean
 }
-
 /**
  * @public
-*/
-export interface CellPreparedEvent {
-    readonly component: dxPivotGrid;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type CellPreparedEvent  = ComponentEvent<dxPivotGrid> & {
     readonly area?: string;
     readonly cellElement?: TElement;
     readonly cell?: dxPivotGridPivotGridCell;
     readonly rowIndex?: number;
     readonly columnIndex?: number
 }
-
 /**
  * @public
-*/
-export interface ContextMenuPreparingEvent {
-    readonly component: dxPivotGrid;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGrid> & {
     readonly area?: string;
     readonly cell?: dxPivotGridPivotGridCell;
     readonly cellElement?: TElement;
@@ -72,31 +67,21 @@ export interface ContextMenuPreparingEvent {
     readonly field?: PivotGridDataSourceField;
     items?: Array<any>;
 }
-
 /**
  * @public
-*/
-export interface ExportedEvent {
-    readonly component: dxPivotGrid;
-    readonly element: TElement;
-    readonly model?: any;
-}
-
+ */
+export type ExportedEvent = ComponentEvent<dxPivotGrid>;
 /**
  * @public
-*/
-export interface ExportingEvent {
-    readonly component: dxPivotGrid;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ExportingEvent = ComponentEvent<dxPivotGrid> & {
     fileName?: string;
     cancel?: boolean;
 }
-
 /**
  * @public
-*/
-export interface FileSavingEvent {
+ */
+export type FileSavingEvent = {
     readonly component: dxPivotGrid;
     readonly element: TElement;
     readonly data?: Blob;
@@ -849,7 +834,7 @@ export default class dxPivotGrid extends Widget {
 /**
 * @docid
 * @type object
-*/
+ */
 export interface dxPivotGridPivotGridCell {
     /**
      * @docid
@@ -922,7 +907,7 @@ export interface dxPivotGridPivotGridCell {
 /**
 * @docid
 * @type object
-*/
+ */
 export interface dxPivotGridSummaryCell {
     /**
      * @docid

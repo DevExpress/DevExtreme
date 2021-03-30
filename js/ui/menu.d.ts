@@ -7,51 +7,70 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
+    ComponentItemClickEvent,
+    ComponentItemContextMenuEvent,
+    ComponentItemRenderedEvent,
+    ComponentSelectionChangedEvent
 } from './collection/ui.collection_widget.base';
 
 import dxMenuBase, {
     dxMenuBaseOptions
 } from './context_menu/ui.menu_base';
 
-/**
- * @public
-*/
-export interface SubmenuHiddenEvent {
-    readonly component: dxMenu;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly rootItem?: TElement;
-}
+import {
+    ComponentHidingEvent,
+    ComponentHiddenEvent,
+    ComponentShowingEvent,
+    ComponentShownEvent
+} from './overlay';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget';
 
 /**
  * @public
-*/
-export interface SubmenuHidingEvent {
-    readonly component: dxMenu;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly rootItem?: TElement;
-    cancel?: boolean;
-}
-
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxMenu>;
 /**
  * @public
-*/
-export interface SubmenuShowingEvent {
-    readonly component: dxMenu;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly rootItem?: TElement;
-}
-
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxMenu>;
 /**
  * @public
-*/
-export interface onSubmenuShownEvent {
-    readonly component: dxMenu;
-    readonly element: TElement;
-    readonly model?: any;
+ */
+export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxMenu>;
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentItemRenderedEvent<dxMenu>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxMenu>;
+/**
+ * @public
+ */
+export type SubmenuHiddenEvent = ComponentHiddenEvent<dxMenu> & {
+    readonly rootItem?: TElement;
+}
+/**
+ * @public
+ */
+export type SubmenuHidingEvent = ComponentHidingEvent<dxMenu> & {
+    readonly rootItem?: TElement;
+}
+/**
+ * @public
+ */
+export type SubmenuShowingEvent = ComponentShowingEvent<dxMenu> & {
+    readonly rootItem?: TElement;
+}
+/**
+ * @public
+ */
+export type SubmenuShownEvent = ComponentShownEvent<dxMenu> & {
     readonly rootItem?: TElement;
 }
 
@@ -135,7 +154,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuShown?: ((e: onSubmenuShownEvent) => void);
+    onSubmenuShown?: ((e: SubmenuShownEvent) => void);
     /**
      * @docid
      * @type Enums.Orientation
@@ -271,7 +290,7 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
 * @docid
 * @inherits dxMenuBaseItem
 * @type object
-*/
+ */
 export interface dxMenuItem extends dxMenuBaseItem {
     /**
      * @docid
