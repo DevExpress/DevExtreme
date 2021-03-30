@@ -3,4 +3,5 @@ extraction:
     index:
       include:
         - js
-        - themebuilder-scss/src
+        - themebuilder/data
+        - themebuilder/modules
