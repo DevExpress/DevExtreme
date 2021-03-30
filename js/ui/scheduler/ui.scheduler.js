@@ -383,7 +383,7 @@ class Scheduler extends Widget {
                 mode: 'standard'
             },
 
-            renovateRender: false,
+            renovateRender: true,
 
             _draggingMode: 'outlook',
 
@@ -1557,8 +1557,7 @@ class Scheduler extends Widget {
     }
 
     _isRenovatedRender(isVirtualScrolling) {
-        return (this.option('renovateRender') && hasWindow() && this.option('integrationOptions.renderedOnServer'))
-            || isVirtualScrolling;
+        return (this.option('renovateRender') && hasWindow()) || isVirtualScrolling;
     }
 
     _waitAsyncTemplate(callback) {
