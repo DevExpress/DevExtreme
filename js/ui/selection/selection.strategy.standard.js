@@ -187,7 +187,7 @@ export default SelectionStrategy.inherit({
         when(that._lastLoadDeferred).always(function() {
             let currentKeys = keys;
 
-            if(isMultiSelectEnabled && !isDeselect) {
+            if(isMultiSelectEnabled && !isDeselect && !isSelectAll) {
                 currentKeys = removeDuplicates(keys.concat(that._lastRequestData?.addedItems), that._lastRequestData?.removedItems);
                 currentKeys = uniqueValues(currentKeys);
             }
@@ -377,9 +377,9 @@ export default SelectionStrategy.inherit({
         this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
     },
 
-    isItemDataSelected: function(itemData) {
+    isItemDataSelected: function(itemData, checkPending) {
         const key = this.options.keyOf(itemData);
-        return this.isItemKeySelected(key);
+        return this.isItemKeySelected(key, checkPending);
     },
 
     isItemKeySelected: function(key, checkPending) {
