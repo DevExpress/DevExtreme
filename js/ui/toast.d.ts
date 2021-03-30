@@ -17,21 +17,29 @@ import {
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions,
-    ShownEvent,
-    HiddenEvent,
-    HidindEvent,
-    ShowingEvent
+    ComponentHidingEvent,
+    ComponentHiddenEvent,
+    ComponentShowingEvent,
+    ComponentShownEvent
 } from './overlay';
 
 /**
  * @public
-*/
-export {
-    ShownEvent,
-    HiddenEvent,
-    HidindEvent,
-    ShowingEvent
-}
+ */
+export type HidingEvent = ComponentHidingEvent<dxToast>;
+/**
+ * @public
+ */
+export type HiddenEvent = ComponentHiddenEvent<dxToast>;
+/**
+ * @public
+ */
+export type ShowingEvent = ComponentShowingEvent<dxToast>;
+/**
+ * @public
+ */
+export type ShownEvent = ComponentShownEvent<dxToast>;
+
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid

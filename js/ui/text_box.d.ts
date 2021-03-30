@@ -2,41 +2,81 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentValueChangedEvent
+} from './editor/editor';
+
 import dxTextEditor, {
     dxTextEditorOptions,
-    ChangeEvent,
-    ContentReadyEvent,
-    CopyEvent,
-    CutEvent,
-    EnterKeyEvent,
-    FocusInEvent,
-    FocusOutEvent,
-    InputEvent,
-    KeyDownEvent,
-    KeyPressEvent,
-    KeyUpEvent,
-    PasteEvent,
-    ValueChangedEvent
+    ComponentChangeEvent,
+    ComponentCopyEvent,
+    ComponentCutEvent,
+    ComponentEnterKeyEvent,
+    ComponentFocusInEvent,
+    ComponentFocusOutEvent,
+    ComponentInputEvent,
+    ComponentKeyDownEvent,
+    ComponentKeyPressEvent,
+    ComponentKeyUpEvent,
+    ComponentPasteEvent,
 } from './text_box/ui.text_editor.base';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    ChangeEvent,
-    ContentReadyEvent,
-    CopyEvent,
-    CutEvent,
-    EnterKeyEvent,
-    FocusInEvent,
-    FocusOutEvent,
-    InputEvent,
-    KeyDownEvent,
-    KeyPressEvent,
-    KeyUpEvent,
-    PasteEvent,
-    ValueChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type ChangeEvent = ComponentChangeEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type CopyEvent = ComponentCopyEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type CutEvent = ComponentCutEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type EnterKeyEvent = ComponentEnterKeyEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type FocusInEvent = ComponentFocusInEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type FocusOutEvent = ComponentFocusOutEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type InputEvent = ComponentInputEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type KeyDownEvent = ComponentKeyDownEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type KeyPressEvent = ComponentKeyPressEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type KeyUpEvent = ComponentKeyUpEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type PasteEvent = ComponentPasteEvent<dxTextBox>;
 
 export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
     /**

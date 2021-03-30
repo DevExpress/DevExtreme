@@ -8,19 +8,7 @@ import {
 
 import dxTextBox, {
     dxTextBoxOptions,
-    ChangeEvent,
-    ContentReadyEvent,
-    CopyEvent,
-    CutEvent,
-    EnterKeyEvent,
-    FocusInEvent,
-    FocusOutEvent,
-    InputEvent,
-    KeyDownEvent,
-    KeyPressEvent,
-    KeyUpEvent,
-    PasteEvent,
-    ValueChangedEvent
+
 } from '../text_box';
 
 import {
@@ -35,26 +23,11 @@ import {
     ComponentEvent
 } from '../../events/index';
 
-export interface ClosedEvent <T> extends ComponentEvent<T> {}
-export interface OpenedEvent <T> extends ComponentEvent<T> {}
-export interface DropDownButtonData {
-    readonly text?: string,
-    readonly icon?: string
-}
-export {
-    ChangeEvent,
-    ContentReadyEvent,
-    CopyEvent,
-    CutEvent,
-    EnterKeyEvent,
-    FocusInEvent,
-    FocusOutEvent,
-    InputEvent,
-    KeyDownEvent,
-    KeyPressEvent,
-    KeyUpEvent,
-    PasteEvent,
-    ValueChangedEvent
+export interface ComponentClosedEvent <T> extends ComponentEvent<T> {}
+export interface ComponentOpenedEvent <T> extends ComponentEvent<T> {}
+interface DropDownButtonData {
+    readonly text?: string;
+    readonly icon?: string;
 }
 
 export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
@@ -125,7 +98,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: ClosedEvent<T>) => void);
+    onClosed?: ((e: ComponentClosedEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -137,7 +110,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: OpenedEvent<T>) => void);
+    onOpened?: ((e: ComponentOpenedEvent<T>) => void);
     /**
      * @docid
      * @default false

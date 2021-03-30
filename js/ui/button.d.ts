@@ -12,26 +12,26 @@ import {
 
 import Widget, {
     WidgetOptions,
-    ContentReadyEvent
+    ComponentContentReadyEvent
 } from './widget/ui.widget';
 
 /**
  * @public
-*/
-export interface ButtonData {
-    readonly text?: string,
-    readonly icon?: string
+ */
+export type ButtonData = {
+    readonly text?: string;
+    readonly icon?: string;
 }
 /**
  * @public
-*/
-export interface ClickEvent<T> extends ComponentNativeEvent<T> {
-    validationGroup?: any
+ */
+export type ClickEvent = ComponentNativeEvent<dxButton> & {
+    validationGroup?: any;
 }
 /**
  * @public
-*/
-export { ContentReadyEvent }
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxButton>;
 
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
@@ -75,7 +75,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: ClickEvent<dxButton>) => void);
+    onClick?: ((e: ClickEvent) => void);
     /**
      * @docid
      * @type Enums.ButtonStylingMode

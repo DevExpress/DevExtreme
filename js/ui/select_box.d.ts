@@ -10,57 +10,123 @@ import {
     template
 } from '../core/templates/template';
 
-import dxDropDownList, {
-    dxDropDownListOptions,
-    ItemClickEvent,
-    ValueChangedEvent,
-    SelectionChangedEvent,
-    CutEvent,
-    CopyEvent,
-    InputEvent,
-    KeyUpEvent,
-    PasteEvent,
-    OpenedEvent,
-    ClosedEvent,
-    ChangeEvent,
-    FocusInEvent,
-    KeyDownEvent,
-    EnterKeyEvent,
-    FocusOutEvent,
-    KeyPressEvent,
-    ContentReadyEvent
-} from './drop_down_editor/ui.drop_down_list';
 import { ComponentEvent } from '../events/index';
+
+import {
+    ComponentItemClickEvent,
+    ComponentSelectionChangedEvent,
+    
+} from './collection/ui.collection_widget.base';
+
+import {
+    ComponentClosedEvent,
+    ComponentOpenedEvent
+} from './drop_down_editor/ui.drop_down_editor';
+
+import dxDropDownList, {
+    dxDropDownListOptions
+} from './drop_down_editor/ui.drop_down_list';
+
+import {
+    ComponentChangeEvent,
+    ComponentCopyEvent,
+    ComponentCutEvent,
+    ComponentEnterKeyEvent,
+    ComponentFocusInEvent,
+    ComponentFocusOutEvent,
+    ComponentInputEvent,
+    ComponentKeyDownEvent,
+    ComponentKeyPressEvent,
+    ComponentKeyUpEvent,
+    ComponentPasteEvent,
+} from './text_box/ui.text_editor.base';
+
+import {
+    ComponentValueChangedEvent
+} from './editor/editor';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
+
+export interface ComponentCustomItemCreatingEvent<T> extends ComponentEvent<T> {
+    readonly text?: string;
+    customItem?: string | any | TPromise<any>;
+}
 
 /**
  * @public
-*/
-export {
-    ItemClickEvent,
-    ValueChangedEvent,
-    SelectionChangedEvent,
-    CutEvent,
-    CopyEvent,
-    InputEvent,
-    KeyUpEvent,
-    PasteEvent,
-    OpenedEvent,
-    ClosedEvent,
-    ChangeEvent,
-    FocusInEvent,
-    KeyDownEvent,
-    EnterKeyEvent,
-    FocusOutEvent,
-    KeyPressEvent,
-    ContentReadyEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type ClosedEvent = ComponentClosedEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type OpenedEvent = ComponentOpenedEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type ChangeEvent = ComponentChangeEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type CopyEvent = ComponentCopyEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type CutEvent = ComponentCutEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type EnterKeyEvent = ComponentEnterKeyEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type FocusInEvent = ComponentFocusInEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type FocusOutEvent = ComponentFocusOutEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type InputEvent = ComponentInputEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type KeyDownEvent = ComponentKeyDownEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type KeyPressEvent = ComponentKeyPressEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type KeyUpEvent = ComponentKeyUpEvent<dxSelectBox>;
+/**
+ * @public
+ */
+export type PasteEvent = ComponentPasteEvent<dxSelectBox>;
 /**
  * @public
 */
-export interface CustomItemCreatingEvent<T> extends ComponentEvent<T> {
-    readonly text?: string,
-    customItem?: string | any | TPromise<any> 
-}
+export type CustomItemCreatingEvent = ComponentCustomItemCreatingEvent<dxSelectBox>;
+
 export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptions<T> {
     /**
      * @docid
@@ -93,7 +159,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomItemCreating?: ((e: CustomItemCreatingEvent<T>) => void);
+    onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
     /**
      * @docid
      * @default true

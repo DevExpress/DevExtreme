@@ -9,21 +9,29 @@ import DataSource, {
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ItemHoldEvent,
-    ItemClickEvent,
-    ItemRenderedEvent,
-    ItemContextMenuEvent
+    ComponentItemHoldEvent,
+    ComponentItemClickEvent,
+    ComponentItemRenderedEvent,
+    ComponentItemContextMenuEvent
 } from './collection/ui.collection_widget.base';
 
 /**
  * @public
-*/
-export {
-    ItemHoldEvent,
-    ItemClickEvent,
-    ItemRenderedEvent,
-    ItemContextMenuEvent
-}
+ */
+export type ItemHoldEvent = ComponentItemHoldEvent<dxTileView>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxTileView>;
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentItemRenderedEvent<dxTileView>;
+/**
+ * @public
+ */
+export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxTileView>;
+
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**
      * @docid

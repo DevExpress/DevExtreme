@@ -6,71 +6,130 @@ import {
     template
 } from '../core/templates/template';
 import { ComponentEvent } from '../events/index';
+
+import {
+    ComponentItemClickEvent,
+    ComponentSelectionChangedEvent,
+} from './collection/ui.collection_widget.base';
+
+import {
+    ComponentClosedEvent,
+    ComponentOpenedEvent
+} from './drop_down_editor/ui.drop_down_editor';
+
+import {
+    ComponentValueChangedEvent
+} from './editor/editor';
+
 import {
     SelectAllValueChangedEvent,
 } from './list';
 
 import dxSelectBox, {
     dxSelectBoxOptions,
-    CutEvent,
-    CopyEvent,
-    PasteEvent,
-    KeyUpEvent,
-    InputEvent,
-    ChangeEvent,
-    ClosedEvent,
-    OpenedEvent,
-    EnterKeyEvent,
-    KeyDownEvent,
-    FocusInEvent,
-    KeyPressEvent,
-    FocusOutEvent,
-    ItemClickEvent,
-    ContentReadyEvent,
-    ValueChangedEvent,
-    SelectionChangedEvent as SelectBoxSelectionChangedEvent,
-    CustomItemCreatingEvent
+    ComponentCustomItemCreatingEvent
 } from './select_box';
+
+import {
+    ComponentChangeEvent,
+    ComponentCopyEvent,
+    ComponentCutEvent,
+    ComponentEnterKeyEvent,
+    ComponentFocusInEvent,
+    ComponentFocusOutEvent,
+    ComponentInputEvent,
+    ComponentKeyDownEvent,
+    ComponentKeyPressEvent,
+    ComponentKeyUpEvent,
+    ComponentPasteEvent,
+} from './text_box/ui.text_editor.base';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    CutEvent,
-    CopyEvent,
-    PasteEvent,
-    KeyUpEvent,
-    InputEvent,
-    ChangeEvent,
-    ClosedEvent,
-    OpenedEvent,
-    EnterKeyEvent,
-    KeyDownEvent,
-    FocusInEvent,
-    KeyPressEvent,
-    FocusOutEvent,
-    ItemClickEvent,
-    ContentReadyEvent,
-    ValueChangedEvent,
-    CustomItemCreatingEvent,
-    SelectAllValueChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxTagBox>;
 /**
  * @public
-*/
-export interface SelectionChangedEvent<T> extends SelectBoxSelectionChangedEvent<T> {
-    readonly addedItems: Array<string | number | any>,
-    readonly removedItems: Array<string | number | any>
-}
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxTagBox>;
 /**
  * @public
-*/
-export interface MultiTagPreparingEvent<T> extends ComponentEvent<T> {
-    multiTagElement: TElement,
-    readonly selectedItems?: Array<string | number | any>,
-    readonly text?: string,
-    cancel?: boolean
+ */
+export type ClosedEvent = ComponentClosedEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type OpenedEvent = ComponentOpenedEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type ChangeEvent = ComponentChangeEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type CopyEvent = ComponentCopyEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type CutEvent = ComponentCutEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type EnterKeyEvent = ComponentEnterKeyEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type FocusInEvent = ComponentFocusInEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type FocusOutEvent = ComponentFocusOutEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type InputEvent = ComponentInputEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type KeyDownEvent = ComponentKeyDownEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type KeyPressEvent = ComponentKeyPressEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type KeyUpEvent = ComponentKeyUpEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type PasteEvent = ComponentPasteEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type CustomItemCreatingEvent = ComponentCustomItemCreatingEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxTagBox, string | number | any>;
+/**
+ * @public
+ */
+export type MultiTagPreparingEvent = ComponentEvent<dxTagBox> & {
+    multiTagElement: TElement;
+    readonly selectedItems?: Array<string | number | any>;
+    readonly text?: string;
+    cancel?: boolean;
 }
+
 export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     /**
      * @docid
@@ -116,7 +175,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMultiTagPreparing?: ((e: MultiTagPreparingEvent<dxTagBox>) => void);
+    onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
     /**
      * @docid
      * @default null
@@ -129,7 +188,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<dxTagBox>) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
     /**
      * @docid
      * @default null
@@ -143,7 +202,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent<dxTagBox>) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @type Enums.SelectAllMode

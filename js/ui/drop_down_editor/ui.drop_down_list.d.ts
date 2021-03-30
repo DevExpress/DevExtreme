@@ -13,48 +13,13 @@ import {
 } from '../editor/ui.data_expression';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions,
-    ChangeEvent,
-    ClosedEvent,
-    ContentReadyEvent,
-    CopyEvent,
-    CutEvent,
-    EnterKeyEvent,
-    FocusInEvent,
-    FocusOutEvent,
-    InputEvent,
-    KeyDownEvent,
-    KeyPressEvent,
-    KeyUpEvent,
-    OpenedEvent,
-    PasteEvent,
-    ValueChangedEvent
+    dxDropDownEditorOptions
 } from './ui.drop_down_editor';
 
 import {
-    ItemClickEvent,
-    SelectionChangedEvent
+    ComponentItemClickEvent,
+    ComponentSelectionChangedEvent
 } from '../collection/ui.collection_widget.base';
-
-export {
-    ChangeEvent,
-    ClosedEvent,
-    ContentReadyEvent,
-    CopyEvent,
-    CutEvent,
-    EnterKeyEvent,
-    FocusInEvent,
-    FocusOutEvent,
-    InputEvent,
-    ItemClickEvent,
-    KeyDownEvent,
-    KeyPressEvent,
-    KeyUpEvent,
-    OpenedEvent,
-    PasteEvent,
-    SelectionChangedEvent,
-    ValueChangedEvent
-}
 
 export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
     /**
@@ -113,7 +78,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent<T>) => void);
+    onItemClick?: ((e: ComponentItemClickEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -126,22 +91,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent<T>) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 value:object
-     * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field6 event:event
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
-     * @type_function_param1_field3 model:any
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onValueChanged?: ((e: ValueChangedEvent<T>) => void);
+    onSelectionChanged?: ((e: ComponentSelectionChangedEvent<T>) => void);
     /**
      * @docid
      * @default false

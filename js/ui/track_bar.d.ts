@@ -3,15 +3,9 @@ import {
 } from '../core/element';
 
 import Editor, {
-    EditorOptions,
-    ContentReadyEvent,
-    ValueChangedEvent
+    EditorOptions
 } from './editor/editor';
 
-export {
-    ContentReadyEvent,
-    ValueChangedEvent
-}
 export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
     /**
      * @docid

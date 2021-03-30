@@ -20,6 +20,10 @@ import {
 } from '../events/index';
 
 import {
+    ItemInfo
+} from './collection/ui.collection_widget.base';
+
+import {
     dxListItem
 } from './list';
 
@@ -28,34 +32,32 @@ import {
 } from './popup';
 
 import Widget, {
-    WidgetOptions,
-    ContentReadyEvent
+    ComponentContentReadyEvent,
+    WidgetOptions
 } from './widget/ui.widget';
 
 /**
  * @public
-*/
-export { ContentReadyEvent }
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxDropDownButton>;
 /**
  * @public
-*/
-export interface ButtonClickEvent<T> extends ComponentNativeEvent<T> {
-    readonly selectedItem?: any
+ */
+export type ButtonClickEvent = ComponentNativeEvent<dxDropDownButton> & {
+    readonly selectedItem?: any;
 }
 /**
  * @public
-*/
-export interface ItemClickEvent<T> extends ComponentNativeEvent<T> {
-    readonly itemData?: any,
-    itemElement?: TElement
-}
+ */
+export type ItemClickEvent = ComponentNativeEvent<dxDropDownButton> & ItemInfo;
 /**
  * @public
-*/
-export interface SelectionChangedEvent<T> extends ComponentNativeEvent<T> {
-    readonly item: any,
-    readonly previousItem: any
+ */
+export type SelectionChangedEvent = ComponentNativeEvent<dxDropDownButton> & {
+    readonly item: any;
+    readonly previousItem: any;
 }
+
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * @docid
@@ -163,7 +165,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onButtonClick?: ((e: ButtonClickEvent<dxDropDownButton>) => void) | string;
+    onButtonClick?: ((e: ButtonClickEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -178,7 +180,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent<dxDropDownButton>) => void) | string;
+    onItemClick?: ((e: ItemClickEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -192,7 +194,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent<dxDropDownButton>) => void) | string;
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | string;
     /**
      * @docid
      * @default false

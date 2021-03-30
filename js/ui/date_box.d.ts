@@ -3,54 +3,104 @@ import {
 } from '../core/element';
 
 import {
-    DisabledDateData,
+    ComponentDisabledDateData,
     dxCalendarOptions
 } from './calendar';
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    CutEvent,
-    CopyEvent,
-    InputEvent,
-    KeyUpEvent,
-    PasteEvent,
-    OpenedEvent,
-    ClosedEvent,
-    ChangeEvent,
-    FocusInEvent,
-    KeyDownEvent,
-    EnterKeyEvent,
-    FocusOutEvent,
-    KeyPressEvent,
-    ContentReadyEvent,
-    ValueChangedEvent
+    ComponentOpenedEvent,
+    ComponentClosedEvent
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
+    ComponentValueChangedEvent
+} from './editor/editor';
+
+import {
+    ComponentChangeEvent,
+    ComponentCopyEvent,
+    ComponentCutEvent,
+    ComponentEnterKeyEvent,
+    ComponentFocusInEvent,
+    ComponentFocusOutEvent,
+    ComponentInputEvent,
+    ComponentKeyDownEvent,
+    ComponentKeyPressEvent,
+    ComponentKeyUpEvent,
+    ComponentPasteEvent,
+} from './text_box/ui.text_editor.base';
+
+import {
+    ComponentContentReadyEvent,
     format
 } from './widget/ui.widget';
 
 /**
  * @public
-*/
-export {
-    CutEvent,
-    CopyEvent,
-    InputEvent,
-    KeyUpEvent,
-    PasteEvent,
-    OpenedEvent,
-    ClosedEvent,
-    ChangeEvent,
-    FocusInEvent,
-    KeyDownEvent,
-    EnterKeyEvent,
-    FocusOutEvent,
-    KeyPressEvent,
-    ContentReadyEvent,
-    ValueChangedEvent,
-    DisabledDateData
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type ClosedEvent = ComponentClosedEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type OpenedEvent = ComponentOpenedEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type ChangeEvent = ComponentChangeEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type CopyEvent = ComponentCopyEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type CutEvent = ComponentCutEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type EnterKeyEvent = ComponentEnterKeyEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type FocusInEvent = ComponentFocusInEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type FocusOutEvent = ComponentFocusOutEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type InputEvent = ComponentInputEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type KeyDownEvent = ComponentKeyDownEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type KeyPressEvent = ComponentKeyPressEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type KeyUpEvent = ComponentKeyUpEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type PasteEvent = ComponentPasteEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type DisabledDateData = ComponentDisabledDateData<dxDateBox>;
+
 export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     /**
      * @docid

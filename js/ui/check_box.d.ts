@@ -4,17 +4,22 @@ import {
 
 import Editor, {
     EditorOptions,
-    ContentReadyEvent,
-    ValueChangedEvent
+    ComponentValueChangedEvent
 } from './editor/editor';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    ContentReadyEvent,
-    ValueChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxCheckBox>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxCheckBox>;
+
 export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     /**
      * @docid

@@ -13,23 +13,42 @@ import DataSource, {
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ItemHoldEvent,
-    ItemClickEvent,
-    ItemRenderedEvent,
-    ItemContextMenuEvent,
-    SelectionChangedEvent
+    ComponentItemClickEvent,
+    ComponentItemContextMenuEvent,
+    ComponentItemHoldEvent,
+    ComponentItemRenderedEvent,
+    ComponentSelectionChangedEvent
 } from './collection/ui.collection_widget.base';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    ItemHoldEvent,
-    ItemClickEvent,
-    ItemRenderedEvent,
-    ItemContextMenuEvent,
-    SelectionChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxGallery>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxGallery>;
+/**
+ * @public
+ */
+export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxGallery>;
+/**
+ * @public
+ */
+export type ItemHoldEvent = ComponentItemHoldEvent<dxGallery>;
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentItemRenderedEvent<dxGallery>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxGallery>;
+
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     /**
      * @docid

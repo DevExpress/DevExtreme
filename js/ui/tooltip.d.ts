@@ -2,25 +2,42 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentHidingEvent,
+    ComponentHiddenEvent,
+    ComponentShowingEvent,
+    ComponentShownEvent
+} from './overlay';
+
 import dxPopover, {
-    dxPopoverOptions,
-    ShownEvent,
-    HidindEvent,
-    HiddenEvent,
-    ShowingEvent,
-    ContentReadyEvent
+    dxPopoverOptions
 } from './popover';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    ShownEvent,
-    HidindEvent,
-    HiddenEvent,
-    ShowingEvent,
-    ContentReadyEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxTooltip>;
+/**
+ * @public
+ */
+export type HidingEvent = ComponentHidingEvent<dxTooltip>;
+/**
+ * @public
+ */
+export type HiddenEvent = ComponentHiddenEvent<dxTooltip>;
+/**
+ * @public
+ */
+export type ShowingEvent = ComponentShowingEvent<dxTooltip>;
+/**
+ * @public
+ */
+export type ShownEvent = ComponentShownEvent<dxTooltip>;
+
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
 }
 /**

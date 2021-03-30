@@ -16,16 +16,15 @@ import DataSource, {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent,
-    GroupItemEvent
+    ComponentNativeEvent
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ItemRenderedEvent,
-    SelectionChangedEvent,
-    ContentReadyEvent
+    ComponentItemRenderedEvent,
+    ComponentSelectionChangedEvent,
+    ItemInfo
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -36,84 +35,101 @@ import {
     SearchBoxMixinOptions
 } from './widget/ui.search_box_mixin';
 
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
+
+interface GroupItemIndex {
+    group: number;
+    item: number;
+}
+interface GroupItemEvent extends ItemInfo {
+    readonly itemIndex: number | GroupItemIndex;
+}
+export type ComponentPageLoadingEvent<T> = ComponentEvent<T>;
+export type ComponentPullRefreshEvent<T> = ComponentEvent<T>;
+export interface ComponentScrollEvent<T> extends ComponentNativeEvent<T> {
+    readonly scrollOffset?: any;
+    readonly reachedLeft: boolean;
+    readonly reachedRight: boolean;
+    readonly reachedTop: boolean;
+    readonly reachedBottom: boolean;
+}
 
 /**
  * @public
-*/
-export {
-    ItemRenderedEvent,
-    SelectionChangedEvent,
-    ContentReadyEvent
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxList>;
+/**
+ * @public
+ */
+export type GroupRenderedEvent = ComponentEvent<dxList> & {
+    readonly groupData?: any;
+    groupElement?: TElement;
+    readonly groupIndex?: number;
 }
 /**
  * @public
-*/
-export interface GroupRenderedEvent<T> extends ComponentEvent<T> {
-    readonly groupData?: any,
-    groupElement?: TElement,
-    readonly groupIndex?: number
-}
-
-/**
- * @public
-*/
+ */
 export type ItemClickEvent = ComponentNativeEvent<dxList> & GroupItemEvent;
 /**
  * @public
-*/
+ */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxList> & GroupItemEvent;
 /**
  * @public
-*/
+ */
 export type ItemDeletedEvent = ComponentEvent<dxList> & GroupItemEvent;
 /**
  * @public
-*/
-export interface ItemDeletingEvent extends ComponentEvent<dxList>, GroupItemEvent {
-    cancel?: boolean | TPromise<void>
+ */
+export type ItemDeletingEvent = ComponentEvent<dxList> & GroupItemEvent & {
+    cancel?: boolean | TPromise<void>;
 }
 /**
  * @public
-*/
+ */
 export type ItemHoldEvent = ComponentNativeEvent<dxList> & GroupItemEvent;
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentItemRenderedEvent<dxList>;
+/**
+ * @public
+ */
+export type ItemReorderedEvent = ComponentEvent<dxList> & GroupItemEvent & {
+    readonly fromIndex: number;
+    readonly toIndex: number;
+}
+/**
+ * @public
+ */
+export type ItemSwipeEvent = ComponentNativeEvent<dxList> & GroupItemEvent & {
+    readonly direction: string;
+}
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxList>;
+/**
+ * @public
+ */
+export type PageLoadingEvent = ComponentPageLoadingEvent<dxList>;
+/**
+ * @public
+ */
+export type PullRefreshEvent = ComponentPullRefreshEvent<dxList>;
+/**
+ * @public
+ */
+export type ScrollEvent = ComponentScrollEvent<dxList>;
+/**
+ * @public
+ */
+export type SelectAllValueChangedEvent = ComponentEvent<dxList> & {
+    readonly value: boolean;
+}
 
-/**
- * @public
-*/
-export interface ItemReorderedEvent extends ComponentEvent<dxList>, GroupItemEvent {
-    readonly fromIndex: number,
-    readonly toIndex: number
-}
-/**
- * @public
-*/
-export interface ItemSwipeEvent extends ComponentNativeEvent<dxList>, GroupItemEvent {
-    readonly direction: string
-}
-/**
- * @public
-*/
-export interface PageLoadingEvent<T> extends ComponentEvent<T> {}
-/**
- * @public
-*/
-export interface PullRefreshEvent<T> extends ComponentEvent<T> {}
-/**
- * @public
-*/
-export interface ScrollEvent<T> extends ComponentNativeEvent<T> {
-    readonly scrollOffset?: any,
-    readonly reachedLeft: boolean,
-    readonly reachedRight: boolean,
-    readonly reachedTop: boolean,
-    readonly reachedBottom: boolean
-}
-/**
- * @public
-*/
-export interface SelectAllValueChangedEvent<T> extends ComponentEvent<T> {
-    readonly value: boolean
-}
 export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
     /**
      * @docid
@@ -272,7 +288,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onGroupRendered?: ((e: GroupRenderedEvent<dxList>) => void);
+    onGroupRendered?: ((e: GroupRenderedEvent) => void);
     /**
      * @docid
      * @default null
@@ -400,7 +416,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPageLoading?: ((e: PageLoadingEvent<dxList>) => void);
+    onPageLoading?: ((e: PageLoadingEvent) => void);
     /**
      * @docid
      * @default null
@@ -412,7 +428,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullRefresh?: ((e: PullRefreshEvent<dxList>) => void);
+    onPullRefresh?: ((e: PullRefreshEvent) => void);
     /**
      * @docid
      * @default null
@@ -430,7 +446,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: ScrollEvent<dxList>) => void);
+    onScroll?: ((e: ScrollEvent) => void);
     /**
      * @docid
      * @default null
@@ -443,7 +459,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<dxList>) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
     /**
      * @docid
      * @type Enums.ListPageLoadMode

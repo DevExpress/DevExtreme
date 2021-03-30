@@ -10,7 +10,7 @@ import {
     ComponentEvent
 } from '../../events/index';
 
-export interface ContentReadyEvent<T> extends ComponentEvent<T> {} 
+export type ComponentContentReadyEvent<T> = ComponentEvent<T>;
 
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**

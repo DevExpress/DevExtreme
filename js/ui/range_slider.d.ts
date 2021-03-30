@@ -3,28 +3,32 @@ import {
 } from '../core/element';
 
 import {
-    dxSliderBaseOptions,
-    ContentReadyEvent,
-    ValueChangedEvent as SliderValueChangedEvent
+    ComponentValueChangedEvent
+} from './editor/editor';
+
+import {
+    dxSliderBaseOptions
 } from './slider';
 
 import dxTrackBar from './track_bar';
 
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
+
 /**
  * @public
-*/
-export {
-    ContentReadyEvent,
-    ValueChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxRangeSlider>;
 /**
  * @public
-*/
-export interface ValueChangedEvent<T> extends SliderValueChangedEvent<T> {
-    readonly start?: number,
-    readonly end?: number,
-    readonly value?: Array<number>
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxRangeSlider> & {
+    readonly start?: number;
+    readonly end?: number;
+    readonly value?: Array<number>;
 }
+
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
      * @docid
@@ -53,7 +57,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent<dxRangeSlider>) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @default 40

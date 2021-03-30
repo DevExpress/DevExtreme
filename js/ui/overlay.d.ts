@@ -20,27 +20,15 @@ import {
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions,
-    ContentReadyEvent
+    WidgetOptions
 } from './widget/ui.widget';
-import {
-    ResizeEvent,
-    ResizeEndEvent,
-    ResizeStartEvent
-} from './resizable';
 
-export interface HiddenEvent<T> extends ComponentEvent<T> {}
-export interface HidindEvent<T> extends ComponentEvent<T> {
-    cancel?: boolean
+export interface ComponentHidingEvent<T> extends ComponentEvent<T> {
+    cancel?: boolean;
 }
-export interface ShowingEvent<T> extends ComponentEvent<T> {}
-export interface ShownEvent<T> extends ComponentEvent<T> {}
-export {
-    ContentReadyEvent,
-    ResizeEndEvent,
-    ResizeStartEvent,
-    ResizeEvent
-}
+export type ComponentHiddenEvent<T> = ComponentEvent<T>;
+export type ComponentShowingEvent<T> = ComponentEvent<T>;
+export type ComponentShownEvent<T> = ComponentEvent<T>;
 
 export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
@@ -136,7 +124,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: HiddenEvent<T>) => void);
+    onHidden?: ((e: ComponentHiddenEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -149,7 +137,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: HidindEvent<T>) => void);
+    onHiding?: ((e: ComponentHidingEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -161,7 +149,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: ShowingEvent<T>) => void);
+    onShowing?: ((e: ComponentShowingEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -173,7 +161,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: ShownEvent<T>) => void);
+    onShown?: ((e: ComponentShownEvent<T>) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }

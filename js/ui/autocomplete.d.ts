@@ -2,49 +2,112 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentItemClickEvent,
+    ComponentSelectionChangedEvent,
+    
+} from './collection/ui.collection_widget.base';
+
+import {
+    ComponentClosedEvent,
+    ComponentOpenedEvent
+} from './drop_down_editor/ui.drop_down_editor';
+
 import dxDropDownList, {
-    dxDropDownListOptions,
-    CutEvent,
-    CopyEvent,
-    InputEvent,
-    KeyUpEvent,
-    PasteEvent,
-    ChangeEvent,
-    ClosedEvent,
-    OpenedEvent,
-    FocusInEvent,
-    KeyDownEvent,
-    EnterKeyEvent,
-    FocusOutEvent,
-    KeyPressEvent,
-    ItemClickEvent,
-    ContentReadyEvent,
-    ValueChangedEvent,
-    SelectionChangedEvent
+    dxDropDownListOptions
 } from './drop_down_editor/ui.drop_down_list';
+
+import {
+    ComponentChangeEvent,
+    ComponentCopyEvent,
+    ComponentCutEvent,
+    ComponentEnterKeyEvent,
+    ComponentFocusInEvent,
+    ComponentFocusOutEvent,
+    ComponentInputEvent,
+    ComponentKeyDownEvent,
+    ComponentKeyPressEvent,
+    ComponentKeyUpEvent,
+    ComponentPasteEvent,
+} from './text_box/ui.text_editor.base';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget';
+
+import {
+    ComponentValueChangedEvent
+} from './editor/editor';
 
 /**
  * @public
-*/
-export {
-    CutEvent,
-    CopyEvent,
-    InputEvent,
-    KeyUpEvent,
-    PasteEvent,
-    ChangeEvent,
-    ClosedEvent,
-    OpenedEvent,
-    FocusInEvent,
-    KeyDownEvent,
-    EnterKeyEvent,
-    FocusOutEvent,
-    KeyPressEvent,
-    ItemClickEvent,
-    ContentReadyEvent,
-    ValueChangedEvent,
-    SelectionChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type ClosedEvent = ComponentClosedEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type OpenedEvent = ComponentOpenedEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type ChangeEvent = ComponentChangeEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type CopyEvent = ComponentCopyEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type CutEvent = ComponentCutEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type EnterKeyEvent = ComponentEnterKeyEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type FocusInEvent = ComponentFocusInEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type FocusOutEvent = ComponentFocusOutEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type InputEvent = ComponentInputEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type KeyDownEvent = ComponentKeyDownEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type KeyPressEvent = ComponentKeyPressEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type KeyUpEvent = ComponentKeyUpEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type PasteEvent = ComponentPasteEvent<dxAutocomplete>;
+
 export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
     /**
      * @docid

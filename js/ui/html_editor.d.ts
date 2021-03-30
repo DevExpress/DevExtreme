@@ -11,42 +11,45 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentNativeEvent,
-    TEvent
+    ComponentNativeEvent
 } from '../events/index';
 
 import Editor, {
-    EditorOptions,
-    ContentReadyEvent,
-    ValueChangedEvent
+    ComponentValueChangedEvent,
+    EditorOptions
 } from './editor/editor';
 
 import {
     dxToolbarItem
 } from './toolbar';
 
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
+
 /**
  * @public
-*/
-export {
-    ContentReadyEvent,
-    ValueChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxHtmlEditor>;
 /**
  * @public
-*/
-export interface FocusInEvent<T> extends ComponentNativeEvent<T> {}
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxHtmlEditor>;
 /**
  * @public
-*/
-export interface FocusOutEvent<T> extends ComponentNativeEvent<T> {}
+ */
+export type FocusInEvent = ComponentNativeEvent<dxHtmlEditor>;
 /**
  * @public
-*/
+ */
+export type FocusOutEvent = ComponentNativeEvent<dxHtmlEditor>;
+/**
+ * @public
+ */
 export interface MentionData {
-    readonly marker: string,
-    readonly id?: string | number,
-    readonly value?: any
+    readonly marker: string;
+    readonly id?: string | number;
+    readonly value?: any;
 }
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
@@ -96,7 +99,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: FocusInEvent<dxHtmlEditor>) => void);
+    onFocusIn?: ((e: FocusInEvent) => void);
     /**
      * @docid
      * @default null
@@ -109,7 +112,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: FocusOutEvent<dxHtmlEditor>) => void);
+    onFocusOut?: ((e: FocusOutEvent) => void);
     /**
      * @docid
      * @default ""

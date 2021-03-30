@@ -10,29 +10,29 @@ import {
     ComponentNativeEvent
 } from '../events/index';
 
-interface BaseResizeEvent<T> extends ComponentNativeEvent<T> {
-    readonly width: number,
-    readonly height: number,
+interface ComponentResizeEvent<T> extends ComponentNativeEvent<T> {
+    readonly width: number;
+    readonly height: number;
     handles: {
-        readonly left: boolean,
-        readonly top: boolean,
-        readonly right: boolean,
-        readonly bottom: boolean
+        readonly left: boolean;
+        readonly top: boolean;
+        readonly right: boolean;
+        readonly bottom: boolean;
     }
 }
 
 /**
  * @public
-*/
-export interface ResizeEvent<T> extends BaseResizeEvent<T> {}
+ */
+export type ResizeEvent = ComponentResizeEvent<dxResizable>;
 /**
  * @public
-*/
-export interface ResizeStartEvent<T> extends BaseResizeEvent<T> {}
+ */
+export type ResizeStartEvent = ComponentResizeEvent<dxResizable>;
 /**
  * @public
-*/
-export interface ResizeEndEvent<T> extends BaseResizeEvent<T> {}
+ */
+export type ResizeEndEvent = ComponentResizeEvent<dxResizable>;
 
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
@@ -93,7 +93,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: ResizeEvent<dxResizable>) => void);
+    onResize?: ((e: ResizeEvent) => void);
     /**
      * @docid
      * @default null
@@ -108,7 +108,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: ResizeEndEvent<dxResizable>) => void);
+    onResizeEnd?: ((e: ResizeEndEvent) => void);
     /**
      * @docid
      * @default null
@@ -123,7 +123,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: ResizeStartEvent<dxResizable>) => void);
+    onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
      * @docid
      * @type_function_return number|string

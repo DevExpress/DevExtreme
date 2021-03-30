@@ -18,41 +18,85 @@ import {
     TEvent
 } from '../events/index';
 
-import dxDropDownList, {
-    dxDropDownListOptions,
-    ClosedEvent,
-    OpenedEvent,
-    ItemClickEvent,
-    ContentReadyEvent,
-    ValueChangedEvent,
-    SelectionChangedEvent
-} from './drop_down_editor/ui.drop_down_list';
 import {
-    PageLoadingEvent,
-    PullRefreshEvent,
-    ScrollEvent
+    ComponentItemClickEvent,
+    ComponentSelectionChangedEvent,
+    
+} from './collection/ui.collection_widget.base';
+
+import {
+    ComponentValueChangedEvent
+} from './editor/editor';
+
+import {
+    ComponentClosedEvent,
+    ComponentOpenedEvent
+} from './drop_down_editor/ui.drop_down_editor';
+
+
+import dxDropDownList, {
+    dxDropDownListOptions
+} from './drop_down_editor/ui.drop_down_list';
+
+import {
+    ComponentPageLoadingEvent,
+    ComponentPullRefreshEvent,
+    ComponentScrollEvent
 } from './list';
 
 import {
     dxPopoverOptions,
 } from './popover';
-import { TitleRenderedEvent } from './popup';
+
+import {
+    ComponentTitleRenderedEvent
+} from './popup';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    ClosedEvent,
-    OpenedEvent,
-    ItemClickEvent,
-    ContentReadyEvent,
-    ValueChangedEvent,
-    SelectionChangedEvent,
-    PageLoadingEvent,
-    PullRefreshEvent,
-    ScrollEvent,
-    TitleRenderedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxLookup>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxLookup>;
+/**
+ * @public
+ */
+export type ClosedEvent = ComponentClosedEvent<dxLookup>;
+/**
+ * @public
+ */
+export type OpenedEvent = ComponentOpenedEvent<dxLookup>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxLookup>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxLookup>;
+/**
+ * @public
+ */
+export type TitleRenderedEvent = ComponentTitleRenderedEvent<dxLookup>;
+/**
+ * @public
+ */
+export type PageLoadingEvent = ComponentPageLoadingEvent<dxLookup>;
+/**
+ * @public
+ */
+export type PullRefreshEvent = ComponentPullRefreshEvent<dxLookup>;
+/**
+ * @public
+ */
+export type ScrollEvent = ComponentScrollEvent<dxLookup>;
+
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
@@ -230,7 +274,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    onTitleRendered?: ((e: TitleRenderedEvent<dxLookup>) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
      * @default null
@@ -245,7 +289,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: ValueChangedEvent<dxLookup>) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @type Enums.ListPageLoadMode

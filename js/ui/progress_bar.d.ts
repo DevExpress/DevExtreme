@@ -6,23 +6,31 @@ import {
     ComponentNativeEvent
 } from '../events/index';
 
+import {
+    ComponentValueChangedEvent
+} from './editor/editor';
+
 import dxTrackBar, {
-    dxTrackBarOptions,
-    ContentReadyEvent,
-    ValueChangedEvent
+    dxTrackBarOptions
 } from './track_bar';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    ContentReadyEvent,
-    ValueChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxProgressBar>;
 /**
  * @public
-*/
-export interface CompleteEvent<T> extends ComponentNativeEvent<T> {} 
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxProgressBar>;
+/**
+ * @public
+ */
+export type CompleteEvent = ComponentNativeEvent<dxProgressBar>;
+
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid
@@ -36,7 +44,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: CompleteEvent<dxProgressBar>) => void);
+    onComplete?: ((e: CompleteEvent) => void);
     /**
      * @docid
      * @default true

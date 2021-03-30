@@ -18,26 +18,42 @@ import {
     TEvent
 } from '../events/index';
 
+import {
+    ComponentHidingEvent,
+    ComponentHiddenEvent,
+    ComponentShowingEvent,
+    ComponentShownEvent
+} from './overlay';
+
 import dxPopup, {
     dxPopupAnimation,
-    dxPopupOptions,
-    ShownEvent,
-    HiddenEvent,
-    HidindEvent,
-    ShowingEvent,
-    ContentReadyEvent
+    dxPopupOptions
 } from './popup';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    ShownEvent,
-    HiddenEvent,
-    HidindEvent,
-    ShowingEvent,
-    ContentReadyEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxPopover>;
+/**
+ * @public
+ */
+export type HidingEvent = ComponentHidingEvent<dxPopover>;
+/**
+ * @public
+ */
+export type HiddenEvent = ComponentHiddenEvent<dxPopover>;
+/**
+ * @public
+ */
+export type ShowingEvent = ComponentShowingEvent<dxPopover>;
+/**
+ * @public
+ */
+export type ShownEvent = ComponentShownEvent<dxPopover>;
 
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**

@@ -13,23 +13,37 @@ import {
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions,
-    ShownEvent,
-    HidindEvent,
-    HiddenEvent,
-    ShowingEvent,
-    ContentReadyEvent
+    ComponentHidingEvent,
+    ComponentHiddenEvent,
+    ComponentShowingEvent,
+    ComponentShownEvent
 } from './overlay';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    ShownEvent,
-    HidindEvent,
-    HiddenEvent,
-    ShowingEvent,
-    ContentReadyEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxLoadPanel>;
+/**
+ * @public
+ */
+export type HidingEvent = ComponentHidingEvent<dxLoadPanel>;
+/**
+ * @public
+ */
+export type HiddenEvent = ComponentHiddenEvent<dxLoadPanel>;
+/**
+ * @public
+ */
+export type ShowingEvent = ComponentShowingEvent<dxLoadPanel>;
+/**
+ * @public
+ */
+export type ShownEvent = ComponentShownEvent<dxLoadPanel>;
+
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid

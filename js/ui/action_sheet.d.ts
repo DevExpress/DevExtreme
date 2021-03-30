@@ -18,30 +18,47 @@ import {
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ItemHoldEvent,
-    ItemClickEvent,
-    ItemRenderedEvent,
-    ContentReadyEvent,
-    SelectionChangedEvent,
-    ItemContextMenuEvent
+    ComponentItemClickEvent,
+    ComponentItemContextMenuEvent,
+    ComponentItemHoldEvent,
+    ComponentItemRenderedEvent,
+    ComponentSelectionChangedEvent,
+    
 } from './collection/ui.collection_widget.base';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
 
 /**
  * @public
-*/
-export {
-    ItemHoldEvent,
-    ItemClickEvent,
-    ItemRenderedEvent,
-    ContentReadyEvent,
-    SelectionChangedEvent,
-    ItemContextMenuEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxActionSheet>;
 /**
  * @public
-*/
-export interface CancelClickEvent<T> extends ComponentEvent<T> {
-    cancel?: boolean
+ */
+export type ItemClickEvent = ComponentItemClickEvent<dxActionSheet>;
+/**
+ * @public
+ */
+export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxActionSheet>;
+/**
+ * @public
+ */
+export type ItemHoldEvent = ComponentItemHoldEvent<dxActionSheet>;
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentItemRenderedEvent<dxActionSheet>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxActionSheet>;
+/**
+ * @public
+ */
+export type CancelClickEvent = ComponentEvent<dxActionSheet> & {
+    cancel?: boolean;
 }
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**
@@ -77,7 +94,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCancelClick?: ((e: CancelClickEvent<dxActionSheet>) => void) | string;
+    onCancelClick?: ((e: CancelClickEvent) => void) | string;
     /**
      * @docid
      * @default true

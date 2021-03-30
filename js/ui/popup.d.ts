@@ -18,35 +18,61 @@ import {
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions,
-    ShownEvent,
-    HidindEvent,
-    HiddenEvent,
-    ShowingEvent,
-    ContentReadyEvent,
-    ResizeEvent,
-    ResizeEndEvent,
-    ResizeStartEvent
+    ComponentHidingEvent,
+    ComponentHiddenEvent,
+    ComponentShowingEvent,
+    ComponentShownEvent
 } from './overlay';
+
+import {
+    ComponentResizeEvent
+} from './resizable';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
+
+export interface ComponentTitleRenderedEvent<T> extends ComponentEvent<T> {
+    titleElement: TElement
+}
 
 /**
  * @public
-*/
-export interface TitleRenderedEvent<T> extends ComponentEvent<T> {
-    titleElement: TElement
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxPopup>;
 /**
  * @public
-*/
-export {
-    ShownEvent,
-    HidindEvent,
-    HiddenEvent,
-    ShowingEvent,
-    ContentReadyEvent,
-    ResizeEvent,
-    ResizeEndEvent,
-    ResizeStartEvent
-}
+ */
+export type HidingEvent = ComponentHidingEvent<dxPopup>;
+/**
+ * @public
+ */
+export type HiddenEvent = ComponentHiddenEvent<dxPopup>;
+/**
+ * @public
+ */
+export type ShowingEvent = ComponentShowingEvent<dxPopup>;
+/**
+ * @public
+ */
+export type ShownEvent = ComponentShownEvent<dxPopup>;
+/**
+ * @public
+ */
+export type ResizeEvent = ComponentResizeEvent<dxPopup>;
+/**
+ * @public
+ */
+export type ResizeStartEvent = ComponentResizeEvent<dxPopup>;
+/**
+ * @public
+ */
+export type ResizeEndEvent = ComponentResizeEvent<dxPopup>;
+/**
+ * @public
+ */
+export type TitleRenderedEvent = ComponentTitleRenderedEvent<dxPopup>;
+
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
@@ -104,7 +130,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: ResizeEvent<T>) => void);
+    onResize?: ((e: ResizeEvent) => void);
     /**
      * @docid
      * @default null
@@ -116,7 +142,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: ResizeEndEvent<T>) => void);
+    onResizeEnd?: ((e: ResizeEndEvent) => void);
     /**
      * @docid
      * @default null
@@ -128,7 +154,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: ResizeStartEvent<T>) => void);
+    onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
      * @docid
      * @default null
@@ -141,7 +167,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: TitleRenderedEvent<T>) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function

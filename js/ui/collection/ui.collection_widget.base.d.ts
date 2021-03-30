@@ -12,25 +12,29 @@ import DataSource, {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent,
-    ItemEvent
+    ComponentNativeEvent
 } from '../../events/index';
 
 import Widget, {
-    WidgetOptions,
-    ContentReadyEvent
+    WidgetOptions
 } from '../widget/ui.widget';
 
-export { ContentReadyEvent }
 
-export interface ItemClickEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
-export interface ItemContextMenuEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
-export interface ItemHoldEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
-export interface ItemRenderedEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
+export interface ItemInfo {
+    readonly itemData?: any,
+    itemElement: TElement,
+}
+export interface ItemEvent extends ItemInfo {
+    readonly itemIndex: number;
+}
 
-export interface SelectionChangedEvent<T> extends ComponentEvent<T> {
-    readonly addedItems: Array<any>,
-    readonly removedItems: Array<any>
+export interface ComponentItemClickEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
+export interface ComponentItemContextMenuEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
+export interface ComponentItemHoldEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
+export interface ComponentItemRenderedEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
+export interface ComponentSelectionChangedEvent<T1, T2 = any> extends ComponentEvent<T1> {
+    readonly addedItems: Array<T2>;
+    readonly removedItems: Array<T2>;
 }
 
 export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
@@ -95,7 +99,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent<T>) => void) | string;
+    onItemClick?: ((e: ComponentItemClickEvent<T>) => void) | string;
     /**
      * @docid
      * @default null
@@ -111,7 +115,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: ItemContextMenuEvent<T>) => void);
+    onItemContextMenu?: ((e: ComponentItemContextMenuEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -127,7 +131,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: ItemHoldEvent<T>) => void);
+    onItemHold?: ((e: ComponentItemHoldEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -142,7 +146,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: ItemRenderedEvent<T>) => void);
+    onItemRendered?: ((e: ComponentItemRenderedEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -156,7 +160,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent<T>) => void);
+    onSelectionChanged?: ((e: ComponentSelectionChangedEvent<T>) => void);
     /**
      * @docid
      * @default -1

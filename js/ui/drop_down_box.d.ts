@@ -12,54 +12,104 @@ import DataSource, {
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    CutEvent,
-    CopyEvent,
-    PasteEvent,
-    KeyUpEvent,
-    InputEvent,
-    ChangeEvent,
-    ClosedEvent,
-    OpenedEvent,
-    EnterKeyEvent,
-    KeyDownEvent,
-    FocusInEvent,
-    KeyPressEvent,
-    FocusOutEvent,
-    ContentReadyEvent,
-    ValueChangedEvent
+    ComponentClosedEvent,
+    ComponentOpenedEvent
 } from './drop_down_editor/ui.drop_down_editor';
+
+import {
+    ComponentValueChangedEvent
+} from './editor/editor';
 
 import {
     DataExpressionMixinOptions
 } from './editor/ui.data_expression';
 
+import {
+    ComponentChangeEvent,
+    ComponentCopyEvent,
+    ComponentCutEvent,
+    ComponentEnterKeyEvent,
+    ComponentFocusInEvent,
+    ComponentFocusOutEvent,
+    ComponentInputEvent,
+    ComponentKeyDownEvent,
+    ComponentKeyPressEvent,
+    ComponentKeyUpEvent,
+    ComponentPasteEvent,
+} from './text_box/ui.text_editor.base';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
+
 /**
  * @public
-*/
-export {
-    CutEvent,
-    CopyEvent,
-    PasteEvent,
-    KeyUpEvent,
-    InputEvent,
-    ChangeEvent,
-    ClosedEvent,
-    OpenedEvent,
-    EnterKeyEvent,
-    KeyDownEvent,
-    FocusInEvent,
-    KeyPressEvent,
-    FocusOutEvent,
-    ContentReadyEvent,
-    ValueChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxDropDownBox>;
 /**
  * @public
-*/
-export interface ContentData {
-    component: dxDropDownBox,
-    readonly value?: any
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type ClosedEvent = ComponentClosedEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type OpenedEvent = ComponentOpenedEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type ChangeEvent = ComponentChangeEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type CopyEvent = ComponentCopyEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type CutEvent = ComponentCutEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type EnterKeyEvent = ComponentEnterKeyEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type FocusInEvent = ComponentFocusInEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type FocusOutEvent = ComponentFocusOutEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type InputEvent = ComponentInputEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type KeyDownEvent = ComponentKeyDownEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type KeyPressEvent = ComponentKeyPressEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type KeyUpEvent = ComponentKeyUpEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type PasteEvent = ComponentPasteEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type ContentData = {
+    component: dxDropDownBox;
+    readonly value?: any;
 }
+
 export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
     /**
      * @docid

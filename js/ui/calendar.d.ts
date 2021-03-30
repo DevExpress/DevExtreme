@@ -7,34 +7,41 @@ import {
 } from '../core/templates/template';
 
 import Editor, {
-    EditorOptions,
-    ContentReadyEvent,
-    ValueChangedEvent
+    ComponentValueChangedEvent,
+    EditorOptions
 } from './editor/editor';
+
+import {
+    ComponentContentReadyEvent
+} from './widget/ui.widget'
+
+export interface ComponentDisabledDateData<T> {
+    component: T;
+    readonly date: Date;
+    readonly view: string;
+}
 
 /**
  * @public
-*/
-export {
-    ContentReadyEvent,
-    ValueChangedEvent
-}
+ */
+export type ContentReadyEvent = ComponentContentReadyEvent<dxCalendar>;
 /**
  * @public
-*/
-export interface CellData {
+ */
+export type ValueChangedEvent = ComponentValueChangedEvent<dxCalendar>;
+/**
+ * @public
+ */
+export type CellData = {
     readonly date: Date,
     readonly view: string,
     readonly text?: string
 }
 /**
  * @public
-*/
-export interface DisabledDateData {
-    component: any,
-    readonly date: Date,
-    readonly view: string
-}
+ */
+export type DisabledDateData = ComponentDisabledDateData<dxCalendar>;
+
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
      * @docid
