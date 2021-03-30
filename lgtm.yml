@@ -1,0 +1,7 @@
+extraction:
+  javascript:
+    index:
+      exclude:
+        - /
+      include:
+        - js
