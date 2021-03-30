@@ -636,7 +636,7 @@ export const validatingModule = {
                     const { key, pageIndex } = change;
                     const validationData = this.getController('validating')._getValidationData(key);
 
-                    if(result && !validationData?.isValid) {
+                    if(result && !validationData?.isValid && this.option('scrolling.mode') !== 'virtual') {
                         result = pageIndex === this._pageIndex;
                     }
 

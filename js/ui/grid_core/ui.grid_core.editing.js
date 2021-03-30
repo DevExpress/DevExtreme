@@ -87,6 +87,7 @@ const ACTION_OPTION_NAMES = {
 const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
 
 const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
+const NEW_SCROLLING_MODE = 'scrolling.newMode';
 
 const createFailureHandler = function(deferred) {
     return function(arg) {
@@ -553,7 +554,8 @@ const EditingController = modules.ViewController.inherit((function() {
         getPopupContent: noop,
 
         _needInsertItem: function(change, changeType) {
-            const dataSource = this._dataController.dataSource();
+            const dataController = this._dataController;
+            const dataSource = dataController.dataSource();
             const scrollingMode = this.option('scrolling.mode');
             const pageIndex = dataSource.pageIndex();
             const beginPageIndex = dataSource.beginPageIndex ? dataSource.beginPageIndex() : pageIndex;
@@ -568,8 +570,16 @@ const EditingController = modules.ViewController.inherit((function() {
                         return change.pageIndex === endPageIndex || needInsertOnLastPosition && isLastPage;
                     case 'prepend':
                         return change.pageIndex === beginPageIndex;
-                    default:
+                    default: {
+                        const topItemIndex = dataController.topItemDataIndex?.();
+                        const bottomItemIndex = dataController.bottomItemDataIndex?.();
+
+                        if(this.option(NEW_SCROLLING_MODE) && isDefined(topItemIndex)) {
+                            return change.index >= topItemIndex && change.index <= bottomItemIndex || needInsertOnLastPosition && isLastPage;
+                        }
+
                         return change.pageIndex >= beginPageIndex && change.pageIndex <= endPageIndex || needInsertOnLastPosition && isLastPage;
+                    }
                 }
             }
 

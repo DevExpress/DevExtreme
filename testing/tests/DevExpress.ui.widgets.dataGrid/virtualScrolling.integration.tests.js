@@ -3135,6 +3135,111 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first page is rendered');
     });
+
+    QUnit.test('New mode. A modified row shold not jump to the top view port position on scroll', function(assert) {
+        // arrange
+        const items = generateDataSource(100);
+
+        const dataGrid = createDataGrid({
+            height: 350,
+            dataSource: items,
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            },
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        // assert
+        assert.equal($(dataGrid.element()).find('.dx-edit-row').length, 1, 'edit row is rendered');
+
+        dataGrid.getScrollable().scrollTo({ top: 250 });
+        this.clock.tick();
+
+        // assert
+        assert.equal($(dataGrid.element()).find('.dx-edit-row').length, 0, 'edit row is not rendered on scroll');
+    });
+
+    QUnit.test('New mode. Three new rows should be rendered on scroll', function(assert) {
+        // arrange
+        const items = generateDataSource(100);
+
+        const dataGrid = createDataGrid({
+            height: 350,
+            dataSource: items,
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            },
+            editing: {
+                mode: 'batch',
+                allowAdding: true,
+                changes: [
+                    {
+                        type: 'insert',
+                        key: 101,
+                        data: {},
+                        index: 0
+                    },
+                    {
+                        type: 'insert',
+                        key: 102,
+                        data: {},
+                        index: 50
+                    },
+                    {
+                        type: 'insert',
+                        key: 103,
+                        data: {},
+                        index: -1
+                    }
+                ]
+            }
+        });
+
+        this.clock.tick();
+
+        let $newRow = $(dataGrid.element()).find('.dx-row-inserted');
+
+        // assert
+        assert.equal($newRow.length, 1, 'the first new row is rendered');
+        assert.strictEqual($newRow.attr('aria-rowindex'), '1', 'the first new row index');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1650 });
+        this.clock.tick();
+        $newRow = $(dataGrid.element()).find('.dx-row-inserted');
+
+        // assert
+        assert.equal($newRow.length, 1, 'the second new row is rendered');
+        assert.strictEqual($newRow.attr('aria-rowindex'), '51', 'the second new row index');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 3202 });
+        this.clock.tick();
+        $newRow = $(dataGrid.element()).find('.dx-row-inserted');
+
+        // assert
+        assert.equal($newRow.length, 1, 'the third new row is rendered');
+        assert.strictEqual($newRow.attr('aria-rowindex'), '101', 'the third new row index');
+    });
 });
 
 
