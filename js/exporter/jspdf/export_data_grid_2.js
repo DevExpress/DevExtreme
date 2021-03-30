@@ -16,7 +16,7 @@ class PdfTable {
             const currentCell = cells[i];
             if(currentCell.drawLeftBorder === false) {
                 if(i >= 1) {
-                    cells[i - 1].drawRightBorder = 0;
+                    cells[i - 1].drawRightBorder = false;
                 }
             } else if(!isDefined(currentCell.drawLeftBorder)) {
                 if(i >= 1 && cells[i - 1].drawRightBorder === false) {
@@ -46,7 +46,7 @@ class PdfGrid {
         this._splitByColumns = splitByColumns ?? [];
         this._newPageTables = [];
         this._tables = [];
-        this._currentHorizontalTables;
+        this._currentHorizontalTables = null;
     }
 
     _addLastTableToNewPages() {
