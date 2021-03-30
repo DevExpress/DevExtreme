@@ -292,7 +292,7 @@ const Calendar = Editor.inherit({
         const dateForward = new Date(currentDate);
 
         while(isDateForwardInRange) {
-            if(isDateForwardInRange && !this._view.isDateDisabled(dateForward)) {
+            if(!this._view.isDateDisabled(dateForward)) {
                 currentDate = dateForward;
                 break;
             }
