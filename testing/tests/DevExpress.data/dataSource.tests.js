@@ -1969,11 +1969,11 @@ QUnit.module('live update', {
             pushAggregationTimeout: 150
         });
 
-        const dataSource1changedSpy = sinon.spy();
-        const dataSource2changedSpy = sinon.spy();
+        const changedSpy1 = sinon.spy();
+        const changedSpy2 = sinon.spy();
 
-        dataSource1.on('changed', dataSource1changedSpy);
-        dataSource2.on('changed', dataSource2changedSpy);
+        dataSource1.on('changed', changedSpy1);
+        dataSource2.on('changed', changedSpy2);
 
         store.push([
             { type: 'update', key: 1, data: { status: 'Changed value' } }
@@ -1981,8 +1981,8 @@ QUnit.module('live update', {
 
         this.clock.tick(100);
 
-        assert.strictEqual(dataSource1changedSpy.callCount, 0);
-        assert.strictEqual(dataSource2changedSpy.callCount, 0);
+        assert.strictEqual(changedSpy1.callCount, 0);
+        assert.strictEqual(changedSpy2.callCount, 0);
         assert.strictEqual(items[0].status, 'Initial value');
         assert.strictEqual(items[1].status, 'Initial value');
 
@@ -1992,15 +1992,15 @@ QUnit.module('live update', {
 
         this.clock.tick(50);
 
-        assert.strictEqual(dataSource1changedSpy.callCount, 1);
-        assert.strictEqual(dataSource2changedSpy.callCount, 0);
+        assert.strictEqual(changedSpy1.callCount, 1);
+        assert.strictEqual(changedSpy2.callCount, 0);
         assert.strictEqual(items[0].status, 'Changed value');
         assert.strictEqual(items[1].status, 'Initial value');
 
         this.clock.tick(50);
 
-        assert.strictEqual(dataSource1changedSpy.callCount, 2);
-        assert.strictEqual(dataSource2changedSpy.callCount, 1);
+        assert.strictEqual(changedSpy1.callCount, 2);
+        assert.strictEqual(changedSpy2.callCount, 1);
         assert.strictEqual(items[0].status, 'Changed value');
         assert.strictEqual(items[1].status, 'Changed value');
     });
