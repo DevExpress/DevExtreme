@@ -147,20 +147,37 @@ export default SelectionStrategy.inherit({
         return mode === 'all' || mode === 'multiple';
     },
 
+    _requestInProgress: function() {
+        return this._lastLoadDeferred?.state() === 'pending';
+    },
+
+    _concatRequestsItems: function(keys, isDeselect, oldRequestItems) {
+        const deselectedItems = isDeselect ? keys : [];
+
+        return {
+            addedItems: oldRequestItems.added.concat(removeDuplicates(keys, this.options.selectedItemKeys)),
+            removedItems: oldRequestItems.removed.concat(deselectedItems),
+            keys: keys
+        };
+    },
+
     _collectLastRequestData: function(keys, isDeselect, isSelectAll) {
         const isDeselectAll = isDeselect && isSelectAll;
-        let oldAddedItems = [];
-        let oldRemovedItems = [];
-        let lastRequestData = this._lastRequestData;
+        const oldRequestItems = {
+            added: [],
+            removed: []
+        };
+        const multiSelectEnabled = this._isMultiSelectEnabled();
+        let lastRequestData = multiSelectEnabled ? this._lastRequestData : {};
 
-        if(this._isMultiSelectEnabled()) {
-            if(this._lastLoadDeferred?.state() === 'pending') {
+        if(multiSelectEnabled) {
+            if(this._requestInProgress()) {
                 if(isDeselectAll) {
                     this._lastLoadDeferred.reject();
                     lastRequestData = {};
                 } else if(!isKeysEqual(keys, this.options.selectedItemKeys)) {
-                    oldAddedItems = this._lastRequestData.addedItems;
-                    oldRemovedItems = this._lastRequestData.removedItems;
+                    oldRequestItems.added = lastRequestData.addedItems;
+                    oldRequestItems.removed = lastRequestData.removedItems;
 
                     if(!isDeselect) {
                         this._lastLoadDeferred.reject();
@@ -170,15 +187,7 @@ export default SelectionStrategy.inherit({
                 }
             }
 
-            const deselectedItems = isDeselect ? keys : [];
-
-            lastRequestData = {
-                addedItems: oldAddedItems.concat(removeDuplicates(keys, this.options.selectedItemKeys)),
-                removedItems: oldRemovedItems.concat(deselectedItems),
-                keys: keys
-            };
-        } else {
-            lastRequestData = {};
+            lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems);
         }
 
         return lastRequestData;
@@ -395,7 +404,7 @@ export default SelectionStrategy.inherit({
 
     isItemKeySelected: function(key, checkPending) {
         let result;
-        if(checkPending && this._lastRequestData && this._lastLoadDeferred?.state() === 'pending') {
+        if(checkPending && this._lastRequestData && this._requestInProgress()) {
             result = this._lastRequestData.addedItems.indexOf(key) !== -1;
         }
 
