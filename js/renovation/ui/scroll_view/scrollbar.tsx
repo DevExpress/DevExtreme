@@ -18,7 +18,7 @@ import { isDxMouseWheelEvent } from '../../../events/utils/index';
 import { ScrollbarProps } from './scrollbar_props';
 import {
   DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS, TopPocketState,
-} from './scrollable_utils';
+} from './common/consts';
 
 import {
   dxPointerDown,

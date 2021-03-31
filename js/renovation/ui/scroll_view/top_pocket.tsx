@@ -19,7 +19,7 @@ import { combineClasses } from '../../utils/combine_classes';
 
 import {
   TopPocketState,
-} from './scrollable_utils';
+} from './common/consts';
 import {
   RefreshStrategy,
 } from './types.d';

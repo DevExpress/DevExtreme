@@ -12,7 +12,7 @@ import {
 } from '../scrollbar';
 
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
-import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TopPocketState } from '../scrollable_utils';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TopPocketState } from '../common/consts';
 import { ScrollbarProps } from '../scrollbar_props';
 
 describe('TopPocket', () => {

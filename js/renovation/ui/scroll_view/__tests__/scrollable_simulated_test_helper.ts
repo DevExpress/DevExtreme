@@ -222,7 +222,7 @@ class ScrollableTestHelper {
   }
 
   initScrollbarHandlerMocks(): void {
-    this.scrollBarHandlers = ['init', 'start', 'end', 'cancel', 'stop', 'scrollBy'];
+    this.scrollBarHandlers = ['init', 'start', 'end', 'cancel', 'stop', 'move', 'scrollBy', 'release'];
 
     this.scrollBarHandlers.forEach((handler) => {
       this[`${handler}HandlerMock`] = jest.fn();

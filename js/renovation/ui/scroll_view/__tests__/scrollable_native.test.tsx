@@ -14,13 +14,16 @@ import {
 } from '../scrollable_native';
 
 import {
+  ScrollDirection,
+} from '../scrollable_utils';
+
+import {
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_CONTENT_CLASS,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   DIRECTION_BOTH,
-  ScrollDirection,
-} from '../scrollable_utils';
+} from '../common/consts';
 
 import {
   createTargetElement, normalizeRtl, calculateRtlScrollLeft, createContainerRef, createElement,
@@ -229,7 +232,7 @@ describe('Native', () => {
         });
       });
 
-      it('effectUpdateScrollbarSize()', () => {
+      it('updateScrollbarSize()', () => {
         const viewModel = new Scrollable({});
         viewModel.containerClientWidth = 1;
         viewModel.containerClientHeight = 2;
@@ -254,7 +257,7 @@ describe('Native', () => {
         viewModel.containerRef = containerRef;
         viewModel.contentRef = contentRef;
 
-        viewModel.effectUpdateScrollbarSize();
+        viewModel.updateScrollbarSize();
 
         expect(viewModel.containerClientWidth).toEqual(10);
         expect(viewModel.containerClientHeight).toEqual(20);
@@ -262,7 +265,7 @@ describe('Native', () => {
         expect(viewModel.contentClientHeight).toEqual(40);
       });
 
-      it('effectUpdateScrollbarSize(), contentRef.current: null', () => {
+      it('updateScrollbarSize(), contentRef.current: null', () => {
         const viewModel = new Scrollable({});
         viewModel.containerClientWidth = 1;
         viewModel.containerClientHeight = 2;
@@ -284,7 +287,7 @@ describe('Native', () => {
         viewModel.containerRef = containerRef;
         viewModel.contentRef = contentRef;
 
-        viewModel.effectUpdateScrollbarSize();
+        viewModel.updateScrollbarSize();
 
         expect(viewModel.containerClientWidth).toEqual(10);
         expect(viewModel.containerClientHeight).toEqual(20);
@@ -292,7 +295,7 @@ describe('Native', () => {
         expect(viewModel.contentClientHeight).toEqual(4);
       });
 
-      it('effectUpdateScrollbarSize(), container.current: null', () => {
+      it('updateScrollbarSize(), container.current: null', () => {
         const viewModel = new Scrollable({});
         viewModel.containerClientWidth = 1;
         viewModel.containerClientHeight = 2;
@@ -314,7 +317,7 @@ describe('Native', () => {
         viewModel.containerRef = containerRef;
         viewModel.contentRef = contentRef;
 
-        viewModel.effectUpdateScrollbarSize();
+        viewModel.updateScrollbarSize();
 
         expect(viewModel.containerClientWidth).toEqual(1);
         expect(viewModel.containerClientHeight).toEqual(2);

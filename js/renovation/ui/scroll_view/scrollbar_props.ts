@@ -8,7 +8,7 @@ import {
 import { ScrollableDirection, ScrollableShowScrollbar } from './types.d';
 import { ScrollableInternalProps } from './scrollable_props';
 import { EventCallback } from '../common/event_callback';
-import { TopPocketState } from './scrollable_utils';
+import { TopPocketState } from './common/consts';
 
 @ComponentBindings()
 export class ScrollbarProps extends ScrollableInternalProps {

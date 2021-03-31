@@ -11,7 +11,7 @@ import { isDefined } from '../../../core/utils/type';
 
 import {
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
-} from './scrollable_utils';
+} from './common/consts';
 
 import messageLocalization from '../../../localization/message';
 

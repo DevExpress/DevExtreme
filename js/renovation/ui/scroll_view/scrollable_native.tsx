@@ -39,6 +39,9 @@ import {
   ensureLocation, ScrollDirection, normalizeCoordinate,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
+} from './scrollable_utils';
+
+import {
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   DIRECTION_BOTH,
@@ -49,7 +52,8 @@ import {
   SCROLLABLE_DISABLED_CLASS,
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_SCROLLBARS_HIDDEN,
-} from './scrollable_utils';
+} from './common/consts';
+
 import { Scrollbar } from './scrollbar';
 
 import {
@@ -395,7 +399,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollTop' : 'scrollLeft';
   }
 
-  @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
+  @Effect({ run: 'always' }) updateScrollbarSize(): void {
     this.updateSizes();
   }
 

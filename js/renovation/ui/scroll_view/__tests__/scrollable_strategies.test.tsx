@@ -15,8 +15,11 @@ import {
 
 import {
   ensureLocation,
-  SCROLLABLE_DISABLED_CLASS,
 } from '../scrollable_utils';
+
+import {
+  SCROLLABLE_DISABLED_CLASS,
+} from '../common/consts';
 
 import { Widget } from '../../common/widget';
 

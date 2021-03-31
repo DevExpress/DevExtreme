@@ -11,7 +11,7 @@ import {
 
 import {
   TopPocketState,
-} from '../scrollable_utils';
+} from '../common/consts';
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
