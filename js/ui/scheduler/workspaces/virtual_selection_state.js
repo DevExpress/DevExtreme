@@ -148,13 +148,13 @@ export default class VirtualSelectionState {
         } = daysAndIndexes;
 
         if(firstDay === lastDay) {
-            let _firstIndex = firstIndex;
-            let _lastIndex = lastIndex;
-            if(_firstIndex > _lastIndex) {
-                [_firstIndex, _lastIndex] = [_lastIndex, _firstIndex];
+            let validFirstIndex = firstIndex;
+            let validLastIndex = lastIndex;
+            if(validFirstIndex > validLastIndex) {
+                [validFirstIndex, validLastIndex] = [validLastIndex, validFirstIndex];
             }
 
-            return firstDay === day && index >= _firstIndex && index <= _lastIndex;
+            return firstDay === day && index >= validFirstIndex && index <= validLastIndex;
         } else {
             return (day === firstDay && index >= firstIndex)
                 || (day === lastDay && index <= lastIndex)
