@@ -384,7 +384,6 @@ export default SelectionStrategy.inherit({
 
     isItemKeySelected: function(key, checkPending) {
         let result;
-        checkPending = true;
         if(checkPending && this._lastRequestData && this._lastLoadDeferred?.state() === 'pending') {
             result = this._lastRequestData.addedItems.indexOf(key) !== -1;
         }
