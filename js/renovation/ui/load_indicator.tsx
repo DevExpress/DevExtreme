@@ -1,6 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, React,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
+
 /* eslint-disable-next-line import/named */
 import LegacyLoadIndicator from '../../ui/load_indicator';
 import { WidgetProps } from './common/widget';

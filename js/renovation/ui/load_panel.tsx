@@ -1,6 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, React, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
+
 /* eslint-disable-next-line import/named */
 import LegacyLoadPanel from '../../ui/load_panel';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
