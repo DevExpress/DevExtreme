@@ -1,3 +1,4 @@
+import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
 import devices from '../../../../core/devices';
@@ -5,6 +6,7 @@ import devices from '../../../../core/devices';
 import {
   TopPocket,
   viewFunction,
+  TopPocketProps,
 } from '../top_pocket';
 
 import {
@@ -18,6 +20,17 @@ jest.mock('../../../../core/devices', () => {
 });
 
 describe('TopPocket', () => {
+  describe('View', () => {
+    it('render pager with defaults', () => {
+      const props = new TopPocketProps();
+      const topPocket = mount<TopPocket>(<TopPocket {...props} />);
+
+      expect(topPocket.props()).toEqual({
+        pocketState: 0,
+      });
+    });
+  });
+
   describe('Structure', () => {
     each(['pullDown', 'swipeDown', 'simulated', undefined]).describe('RefreshStrategy: %o', (refreshStrategy) => {
       it('PullDown text elements', () => {

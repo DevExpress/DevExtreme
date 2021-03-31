@@ -34,17 +34,11 @@ const SCROLLVIEW_PULLDOWN_TEXT_CLASS = 'dx-scrollview-pull-down-text';
 const SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = 'dx-scrollview-pull-down-text-visible';
 const PULLDOWN_ICON_CLASS = 'dx-icon-pulldown';
 
-function getVisibleClass(currentState, expectedState): string | undefined {
-  return currentState === expectedState
-    ? SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS
-    : undefined;
-}
-
 export const viewFunction = (viewModel: TopPocket): JSX.Element => {
   const {
-    pullDownClasses,
-    pullingDownText, pulledDownText, refreshingText, refreshStrategy,
-    props: { useNative, pocketState, topPocketRef },
+    releaseVisibleClass, readyVisibleClass, refreshVisibleClass,
+    pullDownClasses, pullingDownText, pulledDownText, refreshingText, refreshStrategy,
+    props: { useNative, topPocketRef },
   } = viewModel;
 
   return (
@@ -57,13 +51,13 @@ export const viewFunction = (viewModel: TopPocket): JSX.Element => {
         </div>
         { refreshStrategy !== 'swipeDown' && (
         <div className={SCROLLVIEW_PULLDOWN_TEXT_CLASS}>
-          <div className={getVisibleClass(pocketState, TopPocketState.STATE_RELEASED)}>
+          <div className={releaseVisibleClass}>
             {pullingDownText}
           </div>
-          <div className={getVisibleClass(pocketState, TopPocketState.STATE_READY)}>
+          <div className={readyVisibleClass}>
             {pulledDownText}
           </div>
-          <div className={getVisibleClass(pocketState, TopPocketState.STATE_REFRESHING)}>
+          <div className={refreshVisibleClass}>
             {refreshingText}
           </div>
         </div>
@@ -95,6 +89,24 @@ export type TopPocketPropsType = TopPocketProps & Pick<ScrollableProps, 'useNati
 })
 
 export class TopPocket extends JSXComponent<TopPocketPropsType>() {
+  get releaseVisibleClass(): string | undefined {
+    return this.props.pocketState === TopPocketState.STATE_RELEASED
+      ? SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS
+      : undefined;
+  }
+
+  get readyVisibleClass(): string | undefined {
+    return this.props.pocketState === TopPocketState.STATE_READY
+      ? SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS
+      : undefined;
+  }
+
+  get refreshVisibleClass(): string | undefined {
+    return this.props.pocketState === TopPocketState.STATE_REFRESHING
+      ? SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS
+      : undefined;
+  }
+
   get refreshStrategy(): string {
     return this.props.refreshStrategy || (devices.real().platform === 'android' ? 'swipeDown' : 'pullDown');
   }

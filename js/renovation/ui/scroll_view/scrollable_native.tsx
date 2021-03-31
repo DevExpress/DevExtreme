@@ -224,6 +224,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   // }
 
   @Method()
+  /* istanbul ignore next */
   // eslint-disable-next-line class-methods-use-this
   release(): void {
     // TODO
@@ -439,6 +440,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
     this.clearHideScrollbarTimeout();
 
+    /* istanbul ignore next */
     this.hideScrollbarTimeout = setTimeout(() => {
       /* istanbul ignore next */
       this.needForceScrollbarsVisibility = false;
@@ -474,7 +476,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return (): void => dxScrollInit.off(this.wrapperRef.current, { namespace });
   }
 
-  getInitEventData(): any {
+  getInitEventData(): {
+    getDirection: (e: Event) => string | undefined;
+    validate: (e: Event) => boolean;
+    isNative: boolean;
+    scrollTarget: HTMLDivElement | null;
+  } {
     return {
       getDirection: this.tryGetAllowedDirection,
       validate: this.validate,
@@ -495,6 +502,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return (): void => dxScrollMove.off(this.wrapperRef.current, { namespace });
   }
 
+  /* istanbul ignore next */
   // eslint-disable-next-line
   handleInit(e): void {}
 
