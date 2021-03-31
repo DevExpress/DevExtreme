@@ -272,6 +272,8 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
+    sinon.stub(prototype, 'setTransform');
+
     // clips & patterns
     sinon.stub(prototype, 'clip');
     sinon.stub(prototype, 'save');
@@ -336,6 +338,8 @@ function teardownCanvasStub() {
 
     // createLinearGradient
     prototype.createLinearGradient.restore();
+
+    prototype.setTransform.restore();
 }
 
 function getData(markup, isFullMode) {
@@ -433,6 +437,45 @@ QUnit.test('Defined background', function(assert) {
             }, 'Background style');
         } finally {
             done();
+        }
+    });
+});
+
+QUnit.test('Defined background, devicePixelRatio is 2 (T892041)', function(assert) {
+    if(browser.msie) {
+        assert.ok(true, 'This test is not for IE/Edge');
+        return;
+    }
+
+    const that = this;
+    const tmpDevicePixelRatio = window.devicePixelRatio;
+    window.devicePixelRatio = 2;
+    const done = assert.async();
+    const context = window.CanvasRenderingContext2D.prototype;
+    const imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
+        {
+            width: 560,
+            height: 290,
+            margin: 10,
+            format: 'png',
+            backgroundColor: '#ff0000'
+        });
+
+    assert.expect(2);
+    $.when(imageBlob).done(function() {
+        try {
+            const backgroundElem = that.drawnElements[0];
+
+            assert.deepEqual(backgroundElem.args, {
+                x: -10,
+                y: -10,
+                width: 1140,
+                height: 600
+            }, 'Background args');
+            assert.deepEqual(context.setTransform.getCall(0).args, [2, 0, 0, 2, 0, 0], 'setTransform');
+        } finally {
+            done();
+            window.devicePixelRatio = tmpDevicePixelRatio;
         }
     });
 });
