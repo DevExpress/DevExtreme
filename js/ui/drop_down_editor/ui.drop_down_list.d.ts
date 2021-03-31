@@ -9,6 +9,7 @@ import {
 import DataSource from '../../data/data_source';
 
 import {
+    ComponentEvent,
     ComponentNativeEvent,
     ItemEvent
 } from '../../events';
