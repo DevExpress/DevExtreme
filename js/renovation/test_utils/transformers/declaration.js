@@ -1,6 +1,6 @@
-const { compileCode } = require('devextreme-generator/component-compiler');
-const { getTsConfig } = require('devextreme-generator/utils/typescript-utils');
-const generator = require('devextreme-generator/inferno-generator').default;
+const { compileCode } = require('@devextreme-generator/core');
+const { getTsConfig } = require('@devextreme-generator/build-helpers');
+const generator = require('@devextreme-generator/inferno').default;
 const ts = require('typescript');
 const path = require('path');
 const fs = require('fs');

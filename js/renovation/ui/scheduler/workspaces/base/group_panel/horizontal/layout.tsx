@@ -1,6 +1,6 @@
 import {
   Component, Fragment, JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { GroupRenderItem } from '../../../types.d';
 import { Row } from './row';
 import { GroupPanelLayoutProps } from '../group_panel_layout_props';

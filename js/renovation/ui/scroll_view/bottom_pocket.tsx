@@ -1,7 +1,7 @@
 import {
   JSXComponent,
   Component,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { isDefined } from '../../../core/utils/type';
 
 import {

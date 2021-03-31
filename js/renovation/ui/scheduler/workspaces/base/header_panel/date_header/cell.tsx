@@ -6,7 +6,7 @@ import {
   OneWay,
   JSXTemplate,
   Fragment,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { CellBaseProps } from '../../cell';
 import { DateTimeCellTemplateProps } from '../../../types.d';
 import { combineClasses } from '../../../../../../utils/combine_classes';

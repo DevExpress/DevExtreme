@@ -4,7 +4,7 @@ import {
   Ref,
   Method,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 // eslint-disable-next-line import/default
 import Themes from '../../../ui/themes';

@@ -4,7 +4,7 @@ import {
   JSXComponent,
   JSXTemplate,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { ContentTemplateProps, DateTimeCellTemplateProps } from '../../types.d';
 

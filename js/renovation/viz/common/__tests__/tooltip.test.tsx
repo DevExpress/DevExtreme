@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
 import { Tooltip, viewFunction as TooltipComponent } from '../tooltip';
 import {
   recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData, getCanvas, isTextEmpty,
@@ -170,24 +170,6 @@ describe('Render', () => {
     }, 180, { cornerRadius: 0, arrowWidth: 20 }, true);
   });
 
-  it('should render text with default props', () => {
-    const tooltip = shallow(<TooltipComponent {
-      ...{ ...props, props: { ...tooltipProps, font: undefined } } as any
-    }
-    /> as any);
-
-    expect(tooltip.find('TextSvgElement').props()).toMatchObject({
-      text: 'customized_text',
-      styles: {
-        fill: 'customized_font_color',
-        fontFamily: 'Segoe UI',
-        fontSize: 12,
-        fontWeight: 400,
-        opacity: 1,
-      },
-    });
-  });
-
   it('should render text with props', () => {
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
 
@@ -201,32 +183,6 @@ describe('Render', () => {
         fontWeight: 600,
       },
     });
-  });
-
-  it('should render shadow with default props', () => {
-    const tooltip = shallow(<TooltipComponent {
-      ...{ ...props, props: { ...tooltipProps, shadow: undefined } } as any
-    }
-    /> as any);
-
-    expect(tooltip.find('defs')).toHaveLength(1);
-    expect(tooltip.find('ShadowFilter').props()).toMatchObject({
-      id: 'filterId',
-      x: '-50%',
-      y: '-50%',
-      width: '200%',
-      height: '200%',
-      blur: 2,
-      color: '#000',
-      offsetX: 0,
-      offsetY: 4,
-      opacity: 0.4,
-    });
-    expect(tooltip.find('g').at(0).props()).toMatchObject({
-      filter: 'url(#filterId)',
-    });
-
-    expect(getFuncIri).toBeCalledWith('filterId');
   });
 
   it('should render shadow', () => {
@@ -921,18 +877,6 @@ describe('Logic', () => {
     });
 
     describe('border', () => {
-      it('should return default border props', () => {
-        const tooltip = new Tooltip({
-          data: { valueText: 'Tooltip value text' } as any,
-        });
-        expect(tooltip.border).toEqual({
-          dashStyle: 'solid',
-          stroke: '#d3d3d3',
-          strokeOpacity: undefined,
-          strokeWidth: 1,
-        });
-      });
-
       it('should return border options', () => {
         const tooltip = new Tooltip({
           data: { valueText: 'Tooltip value text' } as any,
@@ -984,16 +928,6 @@ describe('Logic', () => {
     });
 
     describe('margins', () => {
-      it('should return default margins props', () => {
-        const tooltip = new Tooltip({ });
-        expect(tooltip.margins).toEqual({
-          lm: 5,
-          tm: 1,
-          rm: 5,
-          bm: 9,
-        });
-      });
-
       it('should return margins', () => {
         const tooltip = new Tooltip({ shadow: { offsetX: 11, offsetY: 12, blur: 2 } as any });
         expect(tooltip.margins).toEqual({

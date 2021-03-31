@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
 import { PageSizeSmall, viewFunction as PageSizeSmallComponent } from '../small';
 import getElementComputedStyle from '../../../../utils/get_computed_style';
 

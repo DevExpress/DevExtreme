@@ -1,4 +1,4 @@
-import { Component, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { Component, JSXComponent } from '@devextreme-generator/declarations';
 import { DateTableLayoutBase } from '../../base/date_table/layout';
 import { LayoutProps } from '../../base/layout_props';
 import { MonthDateTableCell } from './cell';
