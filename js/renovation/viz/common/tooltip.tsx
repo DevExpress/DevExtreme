@@ -85,7 +85,7 @@ export const viewFunction = ({
   }
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
   const d = getCloudPoints(textSizeWithPaddings, correctedCoordinates, angle,
-    { cornerRadius: Number(cornerRadius), arrowWidth: Number(arrowWidth) }, true);
+    { cornerRadius, arrowWidth }, true);
   let styles = interactive ? {
     msUserSelect: 'text',
     MozUserSelect: 'auto',
@@ -95,8 +95,6 @@ export const viewFunction = ({
     ...styles,
     ...{ position: 'absolute' },
   };
-  const textFont = font || DEFAULT_FONT;
-  const cloudShadow = shadow || DEFAULT_SHADOW;
   return (
     <Portal container={container}>
       <div
@@ -121,11 +119,11 @@ export const viewFunction = ({
               y="-50%"
               width="200%"
               height="200%"
-              blur={cloudShadow.blur}
-              color={cloudShadow.color}
-              offsetX={cloudShadow.offsetX}
-              offsetY={cloudShadow.offsetY}
-              opacity={cloudShadow.opacity}
+              blur={shadow.blur}
+              color={shadow.color}
+              offsetX={shadow.offsetX}
+              offsetY={shadow.offsetY}
+              opacity={shadow.opacity}
             />
           </defs>
           <g
@@ -157,10 +155,10 @@ export const viewFunction = ({
                     text={customizedOptions.text}
                     styles={{
                       fill: customizedOptions.fontColor,
-                      fontFamily: textFont.family,
-                      fontSize: textFont.size,
-                      fontWeight: textFont.weight,
-                      opacity: textFont.opacity,
+                      fontFamily: font.family,
+                      fontSize: font.size,
+                      fontWeight: font.weight,
+                      opacity: font.opacity,
                       pointerEvents,
                     }}
                   />
@@ -178,10 +176,10 @@ export const viewFunction = ({
                 left: correctedCoordinates.x - cloudSize.x - textSize.width / 2,
                 top: correctedCoordinates.y - cloudSize.y - textSize.height / 2,
                 fill: customizedOptions.fontColor,
-                fontFamily: textFont.family,
-                fontSize: textFont.size,
-                fontWeight: textFont.weight,
-                opacity: textFont.opacity,
+                fontFamily: font.family,
+                fontSize: font.size,
+                fontWeight: font.weight,
+                opacity: font.opacity,
                 pointerEvents,
                 direction: rtl ? 'rtl' : 'ltr',
               }}
@@ -197,29 +195,29 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TooltipProps {
-  @OneWay() color? = '#fff';
+  @OneWay() color = '#fff';
 
-  @OneWay() border?: InitialBorder = DEFAULT_BORDER;
+  @OneWay() border: InitialBorder = DEFAULT_BORDER;
 
-  @OneWay() data?: TooltipData = {};
+  @OneWay() data: TooltipData = {};
 
   @ForwardRef() rootWidget?: RefObject<HTMLDivElement>;
 
-  @OneWay() paddingLeftRight? = 18;
+  @OneWay() paddingLeftRight = 18;
 
-  @OneWay() paddingTopBottom? = 15;
+  @OneWay() paddingTopBottom = 15;
 
-  @OneWay() x? = 0;
+  @OneWay() x = 0;
 
-  @OneWay() y? = 0;
+  @OneWay() y = 0;
 
-  @OneWay() cornerRadius? = 0;
+  @OneWay() cornerRadius = 0;
 
-  @OneWay() arrowWidth? = 20;
+  @OneWay() arrowWidth = 20;
 
-  @OneWay() arrowLength? = 10;
+  @OneWay() arrowLength = 10;
 
-  @OneWay() offset? = 0;
+  @OneWay() offset = 0;
 
   @OneWay() container?: Container;
 
@@ -231,25 +229,25 @@ export class TooltipProps {
 
   @OneWay() customizeTooltip?: CustomizeTooltipFn;
 
-  @OneWay() font?: Font = DEFAULT_FONT;
+  @OneWay() font: Font = DEFAULT_FONT;
 
-  @OneWay() shadow? = DEFAULT_SHADOW;
+  @OneWay() shadow = DEFAULT_SHADOW;
 
-  @OneWay() interactive? = false;
+  @OneWay() interactive = false;
 
-  @OneWay() enabled? = true;
+  @OneWay() enabled = true;
 
-  @OneWay() shared? = false;
+  @OneWay() shared = false;
 
-  @OneWay() location?: Location = 'center';
+  @OneWay() location: Location = 'center';
 
   @OneWay() zIndex?: number;
 
   @Template() contentTemplate?: (data: TooltipData) => JSX.Element;
 
-  @OneWay() visible? = false;
+  @OneWay() visible = false;
 
-  @OneWay() rtl? = false;
+  @OneWay() rtl = false;
 
   @OneWay() className?: string;
 
@@ -350,20 +348,19 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   get textSizeWithPaddings(): Required<Size> {
     const { paddingLeftRight, paddingTopBottom } = this.props;
     return {
-      width: this.textSize.width + (paddingLeftRight ?? 0) * 2,
-      height: this.textSize.height + (paddingTopBottom ?? 0) * 2,
+      width: this.textSize.width + paddingLeftRight * 2,
+      height: this.textSize.height + paddingTopBottom * 2,
     };
   }
 
   get border(): Border {
     const { border } = this.props;
-    const cloudBorder = border ?? DEFAULT_BORDER;
-    if (cloudBorder.visible) {
+    if (border.visible) {
       return {
-        stroke: cloudBorder.color,
-        strokeWidth: cloudBorder.width,
-        strokeOpacity: cloudBorder.opacity,
-        dashStyle: cloudBorder.dashStyle,
+        stroke: border.color,
+        strokeWidth: border.width,
+        strokeOpacity: border.opacity,
+        dashStyle: border.dashStyle,
       };
     }
     return {};
@@ -399,10 +396,9 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   get margins(): { lm: number; rm: number; tm: number; bm: number } {
     const { max } = Math;
     const { shadow } = this.props;
-    const cloudShadow = shadow ?? DEFAULT_SHADOW;
-    const xOff = cloudShadow.offsetX;
-    const yOff = cloudShadow.offsetY;
-    const blur = cloudShadow.blur * 2 + 1;
+    const xOff = shadow.offsetX;
+    const yOff = shadow.offsetY;
+    const blur = shadow.blur * 2 + 1;
     return {
       lm: max(blur - xOff, 0), // left margin
       rm: max(blur + xOff, 0), // right margin
@@ -431,11 +427,11 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     } = this.props;
     return recalculateCoordinates({
       canvas: this.canvas,
-      anchorX: Number(x),
-      anchorY: Number(y),
+      anchorX: x,
+      anchorY: y,
       size: this.textSizeWithPaddings,
-      offset: Number(offset),
-      arrowLength: Number(arrowLength),
+      offset,
+      arrowLength,
     });
   }
 
