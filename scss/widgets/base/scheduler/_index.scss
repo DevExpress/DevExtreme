@@ -1605,16 +1605,12 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-rtl & {
         margin: 0 $scheduler-left-column-width 0 0;
       }
-
-      .dx-rtl.dx-scheduler-small & {
-        margin: 0 $scheduler-small-size-element-offset 0 0;
-      }
     }
 
-    &.dx-scheduler-timeline {
-      .dx-rtl.dx-scheduler-small & {
-        .dx-scheduler-header-scrollable.dx-scrollable {
-          margin: 0 $scheduler-left-column-width 0 0;
+    &:not(.dx-scheduler-timeline) {
+      .dx-scheduler-header-scrollable.dx-scrollable {
+        .dx-rtl.dx-scheduler-small & {
+          margin: 0 $scheduler-small-size-element-offset 0 0;
         }
       }
     }
