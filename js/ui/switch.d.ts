@@ -3,11 +3,12 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent
+    ComponentEvent,
+    ComponentNativeEvent
 } from '../events';
 
 import Editor, {
-    ComponentValueChangedEvent,
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
 
@@ -18,7 +19,7 @@ export type ContentReadyEvent = ComponentEvent<dxSwitch>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxSwitch>;
+export type ValueChangedEvent = ComponentNativeEvent<dxSwitch> & ValueChangedInfo;
 
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**

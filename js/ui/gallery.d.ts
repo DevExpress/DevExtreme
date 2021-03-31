@@ -13,7 +13,7 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events';
 
 import CollectionWidget, {
@@ -29,19 +29,19 @@ export type ContentReadyEvent = ComponentEvent<dxGallery>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxGallery> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxGallery> & ItemEvent;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
 /**
  * @public
  */
-export type ItemHoldEvent = ComponentNativeEvent<dxGallery> & ItemEvent;
+export type ItemHoldEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentNativeEvent<dxGallery> & ItemEvent;
+export type ItemRenderedEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
 /**
  * @public
  */

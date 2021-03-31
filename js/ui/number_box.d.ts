@@ -13,7 +13,7 @@ import dxTextEditor, {
 } from './text_box/ui.text_editor.base';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 import {
@@ -27,7 +27,7 @@ export type ContentReadyEvent = ComponentEvent<dxNumberBox>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxNumberBox>;
+export type ValueChangedEvent = ComponentNativeEvent<dxNumberBox> & ValueChangedInfo;
 /**
  * @public
  */

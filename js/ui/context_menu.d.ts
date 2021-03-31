@@ -19,7 +19,7 @@ import {
     CancelableEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events';
 
 import dxMenuBase, {
@@ -41,15 +41,15 @@ export type ContentReadyEvent = ComponentEvent<dxContextMenu>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxContextMenu> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxContextMenu> & ItemEvent;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentNativeEvent<dxContextMenu> & ItemEvent;
+export type ItemRenderedEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
 /**
  * @public
  */

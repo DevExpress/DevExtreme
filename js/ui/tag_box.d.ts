@@ -10,7 +10,7 @@ import {
     CancelableEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events';
 
 import {
@@ -18,16 +18,12 @@ import {
 } from './collection/ui.collection_widget.base';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
-
-import {
-    SelectAllValueChangedEvent,
-} from './list';
 
 import dxSelectBox, {
     dxSelectBoxOptions,
-    ComponentCustomItemCreatingEvent
+    CustomItemCreatingInfo
 } from './select_box';
 
 /**
@@ -37,7 +33,7 @@ export type ContentReadyEvent = ComponentEvent<dxTagBox>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxTagBox>;
+export type ValueChangedEvent = ComponentNativeEvent<dxTagBox> & ValueChangedInfo;
 /**
  * @public
  */
@@ -49,7 +45,7 @@ export type OpenedEvent = ComponentEvent<dxTagBox>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxTagBox> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxTagBox> & ItemInfo;
 /**
  * @public
  */
@@ -97,11 +93,17 @@ export type PasteEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type CustomItemCreatingEvent = ComponentCustomItemCreatingEvent<dxTagBox>;
+export type CustomItemCreatingEvent = ComponentEvent<dxTagBox> & CustomItemCreatingInfo;
 /**
  * @public
  */
 export type SelectionChangedEvent = ComponentEvent<dxTagBox> & SelectionChangedInfo<string | number | any>;
+/**
+ * @public
+ */
+export type SelectAllValueChangedEvent = ComponentEvent<dxTagBox> & {
+    readonly value: boolean;
+}
 /**
  * @public
  */

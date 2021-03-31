@@ -29,7 +29,7 @@ export interface CancelableEvent {
     cancel?: boolean;
 }
 
-export interface ItemEvent {
+export interface ItemInfo {
     readonly itemData?: any;
     itemElement: TElement;
     readonly itemIndex: number;

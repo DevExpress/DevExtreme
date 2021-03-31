@@ -8,7 +8,7 @@ import {
 } from '../events';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 import dxTrackBar, {
@@ -22,7 +22,7 @@ export type ContentReadyEvent = ComponentEvent<dxProgressBar>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxProgressBar>;
+export type ValueChangedEvent = ComponentNativeEvent<dxProgressBar> & ValueChangedInfo;
 /**
  * @public
  */

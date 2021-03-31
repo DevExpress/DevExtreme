@@ -10,7 +10,7 @@ import {
     CancelableEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events';
 
 import {
@@ -29,15 +29,15 @@ export type ContentReadyEvent = ComponentEvent<dxMenu>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxMenu> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxMenu> & ItemEvent;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentNativeEvent<dxMenu> & ItemEvent;
+export type ItemRenderedEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
 /**
  * @public
  */

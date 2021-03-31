@@ -8,7 +8,7 @@ import {
 } from '../events';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 import dxTextEditor, {
@@ -22,7 +22,7 @@ export type ContentReadyEvent = ComponentEvent<dxTextBox>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxTextBox>;
+export type ValueChangedEvent = ComponentNativeEvent<dxTextBox> & ValueChangedInfo;
 /**
  * @public
  */

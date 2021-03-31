@@ -3,11 +3,12 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent
+    ComponentEvent,
+    ComponentNativeEvent
 } from '../events';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 import dxTrackBar, {
@@ -25,7 +26,7 @@ export type ContentReadyEvent = ComponentEvent<dxSlider>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxSlider>;
+export type ValueChangedEvent = ComponentNativeEvent<dxSlider> & ValueChangedInfo;
 
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**

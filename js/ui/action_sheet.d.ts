@@ -15,7 +15,7 @@ import {
     CancelableEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events/';
 
 import CollectionWidget, {
@@ -31,19 +31,19 @@ export type ContentReadyEvent = ComponentEvent<dxActionSheet>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxActionSheet> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxActionSheet> & ItemEvent;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
 /**
  * @public
  */
-export type ItemHoldEvent = ComponentNativeEvent<dxActionSheet> & ItemEvent;
+export type ItemHoldEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentNativeEvent<dxActionSheet> & ItemEvent;
+export type ItemRenderedEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
 /**
  * @public
  */

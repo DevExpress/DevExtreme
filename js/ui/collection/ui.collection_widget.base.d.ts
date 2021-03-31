@@ -13,7 +13,7 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../../events/';
 
 import Widget, {
@@ -87,7 +87,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ComponentNativeEvent<T> & ItemEvent) => void) | string;
+    onItemClick?: ((e: ComponentNativeEvent<T> & ItemInfo) => void) | string;
     /**
      * @docid
      * @default null
@@ -103,7 +103,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: ComponentNativeEvent<T> & ItemEvent) => void);
+    onItemContextMenu?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -119,7 +119,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: ComponentNativeEvent<T> & ItemEvent) => void);
+    onItemHold?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -134,7 +134,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: ComponentNativeEvent<T> & ItemEvent) => void);
+    onItemRendered?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null

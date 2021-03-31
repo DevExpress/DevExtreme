@@ -10,7 +10,7 @@ import Widget, {
     WidgetOptions
 } from '../widget/ui.widget';
 
-export interface ComponentValueChangedEvent<T> extends ComponentNativeEvent<T> {
+export interface ValueChangedInfo {
     readonly previousValue?: any;
     readonly value?: any;
 }
@@ -37,7 +37,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: ComponentValueChangedEvent<T>) => void);
+    onValueChanged?: ((e: ComponentNativeEvent<T> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false

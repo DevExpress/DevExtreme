@@ -5,7 +5,7 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events';
 
 import {
@@ -17,7 +17,7 @@ import dxDropDownList, {
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 /**
@@ -27,11 +27,11 @@ export type ContentReadyEvent = ComponentEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxAutocomplete>;
+export type ValueChangedEvent = ComponentNativeEvent<dxAutocomplete> & ValueChangedInfo;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxAutocomplete> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxAutocomplete> & ItemInfo;
 /**
  * @public
  */

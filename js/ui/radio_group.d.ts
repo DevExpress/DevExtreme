@@ -5,11 +5,12 @@ import {
 import DataSource from '../data/data_source';
 
 import {
-    ComponentEvent
+    ComponentEvent,
+    ComponentNativeEvent
 } from '../events';
 
 import Editor, {
-    ComponentValueChangedEvent,
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
 
@@ -24,7 +25,7 @@ export type ContentReadyEvent = ComponentEvent<dxRadioGroup>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxRadioGroup>;
+export type ValueChangedEvent = ComponentNativeEvent<dxRadioGroup> & ValueChangedInfo;
 
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**

@@ -10,7 +10,7 @@ import {
     ComponentNativeEvent
 } from '../events/';
 
-interface ComponentResizeEvent<T> extends ComponentNativeEvent<T> {
+interface ResizeInfo {
     readonly width: number;
     readonly height: number;
     handles: {
@@ -24,15 +24,15 @@ interface ComponentResizeEvent<T> extends ComponentNativeEvent<T> {
 /**
  * @public
  */
-export type ResizeEvent = ComponentResizeEvent<dxResizable>;
+export type ResizeEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
 /**
  * @public
  */
-export type ResizeStartEvent = ComponentResizeEvent<dxResizable>;
+export type ResizeStartEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
 /**
  * @public
  */
-export type ResizeEndEvent = ComponentResizeEvent<dxResizable>;
+export type ResizeEndEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
 
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**

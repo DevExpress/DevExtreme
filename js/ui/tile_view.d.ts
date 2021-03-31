@@ -8,7 +8,7 @@ import DataSource, {
 
 import {
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events';
 
 import CollectionWidget, {
@@ -19,19 +19,19 @@ import CollectionWidget, {
 /**
  * @public
  */
-export type ItemHoldEvent = ComponentNativeEvent<dxTileView> & ItemEvent;
+export type ItemHoldEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxTileView> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentNativeEvent<dxTileView> & ItemEvent;
+export type ItemRenderedEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxTileView> & ItemEvent;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
 
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**

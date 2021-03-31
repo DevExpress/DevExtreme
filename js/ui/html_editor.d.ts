@@ -16,7 +16,7 @@ import {
 } from '../events';
 
 import Editor, {
-    ComponentValueChangedEvent,
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
 
@@ -31,7 +31,7 @@ export type ContentReadyEvent = ComponentEvent<dxHtmlEditor>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxHtmlEditor>;
+export type ValueChangedEvent = ComponentNativeEvent<dxHtmlEditor> & ValueChangedInfo;
 /**
  * @public
  */

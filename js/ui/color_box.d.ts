@@ -16,7 +16,7 @@ import dxDropDownEditor, {
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 /**
@@ -26,7 +26,7 @@ export type ContentReadyEvent = ComponentEvent<dxColorBox>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxColorBox>;
+export type ValueChangedEvent = ComponentNativeEvent<dxColorBox> & ValueChangedInfo;
 /**
  * @public
  */

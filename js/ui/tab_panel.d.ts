@@ -13,7 +13,7 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events';
 
 import {
@@ -32,19 +32,19 @@ export type ContentReadyEvent = ComponentEvent<dxTabPanel>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxTabPanel> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxTabPanel> & ItemEvent;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
 /**
  * @public
  */
-export type ItemHoldEvent = ComponentNativeEvent<dxTabPanel> & ItemEvent;
+export type ItemHoldEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentNativeEvent<dxTabPanel> & ItemEvent;
+export type ItemRenderedEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
 /**
  * @public
  */

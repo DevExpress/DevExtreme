@@ -18,7 +18,7 @@ import {
     TEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events/';
 
 import CollectionWidget, {
@@ -34,19 +34,19 @@ export type ContentReadyEvent = ComponentEvent<dxAccordion>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxAccordion> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxAccordion> & ItemEvent;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 /**
  * @public
  */
-export type ItemHoldEvent = ComponentNativeEvent<dxAccordion> & ItemEvent;
+export type ItemHoldEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentNativeEvent<dxAccordion> & ItemEvent;
+export type ItemRenderedEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 /**
  * @public
  */

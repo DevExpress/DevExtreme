@@ -3,11 +3,12 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent
+    ComponentEvent,
+    ComponentNativeEvent
 } from '../events';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 import {
@@ -23,7 +24,7 @@ export type ContentReadyEvent = ComponentEvent<dxRangeSlider>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxRangeSlider> & {
+export type ValueChangedEvent = ComponentNativeEvent<dxRangeSlider> & ValueChangedInfo & {
     readonly start?: number;
     readonly end?: number;
     readonly value?: Array<number>;

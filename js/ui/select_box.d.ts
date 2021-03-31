@@ -13,7 +13,7 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events';
 
 import {
@@ -25,10 +25,10 @@ import dxDropDownList, {
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
-export interface ComponentCustomItemCreatingEvent<T> extends ComponentEvent<T> {
+export interface CustomItemCreatingInfo {
     readonly text?: string;
     customItem?: string | any | TPromise<any>;
 }
@@ -40,11 +40,11 @@ export type ContentReadyEvent = ComponentEvent<dxSelectBox>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxSelectBox>;
+export type ValueChangedEvent = ComponentNativeEvent<dxSelectBox> & ValueChangedInfo;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxSelectBox> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxSelectBox> & ItemInfo;
 /**
  * @public
  */
@@ -104,7 +104,7 @@ export type PasteEvent = ComponentNativeEvent<dxSelectBox>;
 /**
  * @public
 */
-export type CustomItemCreatingEvent = ComponentCustomItemCreatingEvent<dxSelectBox>;
+export type CustomItemCreatingEvent = ComponentEvent<dxSelectBox> & CustomItemCreatingInfo;
 
 export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptions<T> {
     /**

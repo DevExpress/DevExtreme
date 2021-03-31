@@ -3,12 +3,13 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent
+    ComponentEvent,
+    ComponentNativeEvent
 } from '../events';
 
 import Editor, {
     EditorOptions,
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 /**
@@ -18,7 +19,7 @@ export type ContentReadyEvent = ComponentEvent<dxCheckBox>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxCheckBox>;
+export type ValueChangedEvent = ComponentNativeEvent<dxCheckBox> & ValueChangedInfo;
 
 export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     /**

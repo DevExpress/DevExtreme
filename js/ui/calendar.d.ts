@@ -3,7 +3,8 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent
+    ComponentEvent,
+    ComponentNativeEvent
 } from '../events';
 
 import {
@@ -11,7 +12,7 @@ import {
 } from '../core/templates/template';
 
 import Editor, {
-    ComponentValueChangedEvent,
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
 
@@ -28,7 +29,7 @@ export type ContentReadyEvent = ComponentEvent<dxCalendar>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxCalendar>;
+export type ValueChangedEvent = ComponentNativeEvent<dxCalendar> & ValueChangedInfo;
 /**
  * @public
  */

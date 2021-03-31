@@ -17,7 +17,7 @@ import dxDropDownEditor, {
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 import {
@@ -31,7 +31,7 @@ export type ContentReadyEvent = ComponentEvent<dxDateBox>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxDateBox>;
+export type ValueChangedEvent = ComponentNativeEvent<dxDateBox> & ValueChangedInfo;
 /**
  * @public
  */

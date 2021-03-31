@@ -25,10 +25,10 @@ import dxOverlay, {
 } from './overlay';
 
 import {
-    ComponentResizeEvent
+    ResizeInfo
 } from './resizable';
 
-export interface ComponentTitleRenderedEvent<T> extends ComponentEvent<T> {
+export interface TitleRenderedInfo {
     titleElement: TElement
 }
 
@@ -55,19 +55,19 @@ export type ShownEvent = ComponentEvent<dxPopup>;
 /**
  * @public
  */
-export type ResizeEvent = ComponentResizeEvent<dxPopup>;
+export type ResizeEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
 /**
  * @public
  */
-export type ResizeStartEvent = ComponentResizeEvent<dxPopup>;
+export type ResizeStartEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
 /**
  * @public
  */
-export type ResizeEndEvent = ComponentResizeEvent<dxPopup>;
+export type ResizeEndEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
 /**
  * @public
  */
-export type TitleRenderedEvent = ComponentTitleRenderedEvent<dxPopup>;
+export type TitleRenderedEvent = ComponentEvent<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**

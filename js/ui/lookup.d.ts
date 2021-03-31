@@ -18,7 +18,7 @@ import {
     TEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ItemEvent
+    ItemInfo
 } from '../events';
 
 import {
@@ -26,7 +26,7 @@ import {
 } from './collection/ui.collection_widget.base';
 
 import {
-    ComponentValueChangedEvent
+    ValueChangedInfo
 } from './editor/editor';
 
 import dxDropDownList, {
@@ -34,7 +34,7 @@ import dxDropDownList, {
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    ComponentScrollEvent
+    ScrollInfo
 } from './list';
 
 import {
@@ -42,7 +42,7 @@ import {
 } from './popover';
 
 import {
-    ComponentTitleRenderedEvent
+    TitleRenderedInfo
 } from './popup';
 
 /**
@@ -52,7 +52,7 @@ export type ContentReadyEvent = ComponentEvent<dxLookup>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentValueChangedEvent<dxLookup>;
+export type ValueChangedEvent = ComponentNativeEvent<dxLookup> & ValueChangedInfo;
 /**
  * @public
  */
@@ -64,7 +64,7 @@ export type OpenedEvent = ComponentEvent<dxLookup>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxLookup> & ItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxLookup> & ItemInfo;
 /**
  * @public
  */
@@ -72,7 +72,7 @@ export type SelectionChangedEvent = ComponentEvent<dxLookup> & SelectionChangedI
 /**
  * @public
  */
-export type TitleRenderedEvent = ComponentTitleRenderedEvent<dxLookup>;
+export type TitleRenderedEvent = ComponentEvent<dxLookup> & TitleRenderedInfo;
 /**
  * @public
  */
@@ -84,7 +84,7 @@ export type PullRefreshEvent = ComponentEvent<dxLookup>;
 /**
  * @public
  */
-export type ScrollEvent = ComponentScrollEvent<dxLookup>;
+export type ScrollEvent = ComponentNativeEvent<dxLookup> & ScrollInfo;
 
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
