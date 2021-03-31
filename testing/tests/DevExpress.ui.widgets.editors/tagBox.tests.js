@@ -4077,7 +4077,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
     });
 
-    QUnit.test('TagBox should correctly quickly add remove the same item after search if dataSource is async (T978877)', function(assert) {
+    QUnit.test('TagBox should correctly quickly add remove the same item after search if dataSource is async', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             dataSource: getDSWithAsyncSearch(),
             valueExpr: 'id',
@@ -4110,7 +4110,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.deepEqual(tagBox.option('value'), ['item 1'], 'correctly items values');
     });
 
-    QUnit.test('TagBox should correctly quickly add remove items after search if dataSource is async (T978877)', function(assert) {
+    QUnit.test('TagBox should correctly quickly add remove items after search if dataSource is async', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             dataSource: getDSWithAsyncSearch(),
             valueExpr: 'id',
@@ -4146,7 +4146,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
     });
 
-    QUnit.test('TagBox should correctly add and remove selected items after search if dataSource is async and all old items has been already selected (T978877)', function(assert) {
+    QUnit.test('TagBox should correctly add and remove selected items after search if dataSource is async and all old items has been already selected', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             dataSource: getDSWithAsyncSearch(),
             valueExpr: 'id',

@@ -402,8 +402,9 @@ export default SelectionStrategy.inherit({
         return this.isItemKeySelected(key, checkPending);
     },
 
-    isItemKeySelected: function(key, checkPending) {
+    isItemKeySelected: function(key, options) {
         let result;
+        const checkPending = options?.checkPending;
         if(checkPending && this._lastRequestData && this._requestInProgress()) {
             result = this._lastRequestData.addedItems.indexOf(key) !== -1;
         }
