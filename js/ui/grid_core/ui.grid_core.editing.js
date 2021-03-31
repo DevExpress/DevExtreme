@@ -571,8 +571,8 @@ const EditingController = modules.ViewController.inherit((function() {
                     case 'prepend':
                         return change.pageIndex === beginPageIndex;
                     default: {
-                        const topItemIndex = dataController.topItemDataIndex?.();
-                        const bottomItemIndex = dataController.bottomItemDataIndex?.();
+                        const topItemIndex = dataController.topItemIndex?.();
+                        const bottomItemIndex = dataController.bottomItemIndex?.();
 
                         if(this.option(NEW_SCROLLING_MODE) && isDefined(topItemIndex)) {
                             return change.index >= topItemIndex && change.index <= bottomItemIndex || needInsertOnLastPosition && isLastPage;

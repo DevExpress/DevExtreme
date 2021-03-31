@@ -931,7 +931,12 @@ export const virtualScrollingModule = {
                         this.callBase.apply(this, arguments);
                         const rowsScrollController = this._rowsScrollController;
 
-                        if(rowsScrollController && !this.option(NEW_SCROLLING_MODE)) {
+                        if(this.option(NEW_SCROLLING_MODE) && isVirtualRowRendering(this)) {
+                            this._updateVisibleItems(change);
+                            return;
+                        }
+
+                        if(rowsScrollController) {
                             const visibleItems = this._visibleItems;
                             const isRefresh = change.changeType === 'refresh' || change.isLiveUpdate;
 
@@ -964,21 +969,20 @@ export const virtualScrollingModule = {
                                 updateItemIndices(visibleItems);
                             }
                         }
-
-                        if(this.option(NEW_SCROLLING_MODE) && isVirtualRowRendering(this)) {
-                            let visibleItems;
-                            if(isDefined(this._loadViewportParams)) {
-                                const { skipForCurrentPage } = this.getLoadPageParams();
-                                visibleItems = this._items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
-                                if(change.changeType !== 'update') {
-                                    change.items = visibleItems;
-                                }
-                            } else {
-                                visibleItems = [...this._items];
+                    },
+                    _updateVisibleItems: function(change) {
+                        let visibleItems;
+                        if(isDefined(this._loadViewportParams)) {
+                            const { skipForCurrentPage } = this.getLoadPageParams();
+                            visibleItems = this._items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
+                            if(change.changeType !== 'update') {
+                                change.items = visibleItems;
                             }
-
-                            this._visibleItems = updateItemIndices(visibleItems);
+                        } else {
+                            visibleItems = [...this._items];
                         }
+
+                        this._visibleItems = updateItemIndices(visibleItems);
                     },
                     _applyChange: function(change) {
                         const that = this;
