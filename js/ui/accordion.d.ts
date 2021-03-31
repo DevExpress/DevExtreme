@@ -18,6 +18,9 @@ import {
     TEvent,
     ComponentEvent,
     ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
     ItemInfo
 } from '../events/';
 
@@ -31,6 +34,14 @@ import CollectionWidget, {
  * @public
  */
 export type ContentReadyEvent = ComponentEvent<dxAccordion>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxAccordion>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxAccordion>;
 /**
  * @public
  */
@@ -50,10 +61,6 @@ export type ItemRenderedEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentEvent<dxAccordion> & SelectionChangedInfo;
-/**
- * @public
- */
 export type ItemTitleClickEvent = {
     readonly component: dxAccordion;
     readonly element: TElement;
@@ -63,6 +70,14 @@ export type ItemTitleClickEvent = {
     readonly itemIndex: number;
     readonly event: TEvent;
 }
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxAccordion>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentEvent<dxAccordion> & SelectionChangedInfo;
 
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**

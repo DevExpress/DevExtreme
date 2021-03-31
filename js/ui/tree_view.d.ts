@@ -12,8 +12,11 @@ import DataSource, {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
-} from '../events/index';
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
+} from '../events';
 
 import {
     CollectionWidgetItem
@@ -30,7 +33,15 @@ import {
 /**
  * @public
  */
- export type ContentReadyEvent = ComponentEvent<dxTreeView>;
+export type ContentReadyEvent = ComponentEvent<dxTreeView>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxTreeView>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxTreeView>;
 /**
  * @public
  */
@@ -92,6 +103,10 @@ export type ItemSelectionChangedEvent = ComponentEvent<dxTreeView> & {
     readonly node?: dxTreeViewNode;
     readonly itemElement?: TElement;
 }
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxTreeView>;
 /**
  * @public
  */

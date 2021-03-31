@@ -12,7 +12,10 @@ import DataSource, {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import dxDropDownEditor, {
@@ -30,23 +33,11 @@ import {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentEvent<dxDropDownBox>;
-/**
- * @public
- */
-export type ValueChangedEvent = ComponentNativeEvent<dxDropDownBox> & ValueChangedInfo;
+export type ChangeEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
 export type ClosedEvent = ComponentEvent<dxDropDownBox>;
-/**
- * @public
- */
-export type OpenedEvent = ComponentEvent<dxDropDownBox>;
-/**
- * @public
- */
-export type ChangeEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
@@ -55,6 +46,10 @@ export type CopyEvent = ComponentNativeEvent<dxDropDownBox>;
  * @public
  */
 export type CutEvent = ComponentNativeEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxDropDownBox>;
 /**
  * @public
  */
@@ -67,6 +62,10 @@ export type FocusInEvent = ComponentNativeEvent<dxDropDownBox>;
  * @public
  */
 export type FocusOutEvent = ComponentNativeEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxDropDownBox>;
 /**
  * @public
  */
@@ -86,7 +85,20 @@ export type KeyUpEvent = ComponentNativeEvent<dxDropDownBox>;
 /**
  * @public
  */
+export type OpenedEvent = ComponentEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxDropDownBox>;
+/**
+ * @public
+ */
 export type PasteEvent = ComponentNativeEvent<dxDropDownBox>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentNativeEvent<dxDropDownBox> & ValueChangedInfo;
+
 /**
  * @public
  */

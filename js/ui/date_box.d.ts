@@ -4,7 +4,10 @@ import {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import {
@@ -27,11 +30,7 @@ import {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentEvent<dxDateBox>;
-/**
- * @public
- */
-export type ValueChangedEvent = ComponentNativeEvent<dxDateBox> & ValueChangedInfo;
+export type ChangeEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
@@ -39,11 +38,7 @@ export type ClosedEvent = ComponentEvent<dxDateBox>;
 /**
  * @public
  */
-export type OpenedEvent = ComponentEvent<dxDateBox>;
-/**
- * @public
- */
-export type ChangeEvent = ComponentNativeEvent<dxDateBox>;
+export type ContentReadyEvent = ComponentEvent<dxDateBox>;
 /**
  * @public
  */
@@ -52,6 +47,10 @@ export type CopyEvent = ComponentNativeEvent<dxDateBox>;
  * @public
  */
 export type CutEvent = ComponentNativeEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxDateBox>;
 /**
  * @public
  */
@@ -64,6 +63,10 @@ export type FocusInEvent = ComponentNativeEvent<dxDateBox>;
  * @public
  */
 export type FocusOutEvent = ComponentNativeEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxDateBox>;
 /**
  * @public
  */
@@ -83,7 +86,20 @@ export type KeyUpEvent = ComponentNativeEvent<dxDateBox>;
 /**
  * @public
  */
+export type OpenedEvent = ComponentEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxDateBox>;
+/**
+ * @public
+ */
 export type PasteEvent = ComponentNativeEvent<dxDateBox>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentNativeEvent<dxDateBox> & ValueChangedInfo;
+
 /**
  * @public
  */

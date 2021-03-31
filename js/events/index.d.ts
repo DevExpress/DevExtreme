@@ -21,8 +21,33 @@ export interface ComponentEvent<T> {
 /**
  * @public
  */
-export interface ComponentNativeEvent<T> extends ComponentEvent<T> {
+export interface ComponentNativeEvent<T> {
+    component: T;
+    element: TElement;
+    model?: any;
     event?: TEvent;
+}
+/**
+ * @public
+ */
+export interface ComponentDisposingEvent<T> {
+    component?: T;
+}
+/**
+ * @public
+ */
+export interface ComponentInitializedEvent<T> {
+    component?: T;
+    element?: TElement;
+}
+/**
+ * @public
+ */
+export interface ComponentOptionChangedEvent<T> {
+    component?: T;
+    name?: string;
+    fullName?: string;
+    value?: any;
 }
 
 export interface Cancelable {

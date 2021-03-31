@@ -7,10 +7,12 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    TEvent,
     Cancelable,
     ComponentNativeEvent,
-    ComponentEvent
+    ComponentEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import PivotGridDataSource, {
@@ -27,10 +29,6 @@ import Widget, {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentEvent<dxPivotGrid>;
-/**
- * @public
- */
 export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & Cancelable & {
     readonly area?: string;
     readonly cellElement?: TElement;
@@ -44,13 +42,17 @@ export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & Cancelable & {
 /**
  * @public
  */
-export type CellPreparedEvent  = ComponentEvent<dxPivotGrid> & {
+export type CellPreparedEvent = ComponentEvent<dxPivotGrid> & {
     readonly area?: string;
     readonly cellElement?: TElement;
     readonly cell?: dxPivotGridPivotGridCell;
     readonly rowIndex?: number;
     readonly columnIndex?: number
 }
+/**
+ * @public
+ */
+export type ContentReadyEvent = ComponentEvent<dxPivotGrid>;
 /**
  * @public
  */
@@ -66,6 +68,10 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGrid> & {
     readonly field?: PivotGridDataSourceField;
     items?: Array<any>;
 }
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxPivotGrid>;
 /**
  * @public
  */
@@ -86,6 +92,14 @@ export type FileSavingEvent = Cancelable & {
     readonly format?: string;
     fileName?: string;
 }
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxPivotGrid>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxPivotGrid>;
 
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**

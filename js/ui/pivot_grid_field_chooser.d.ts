@@ -4,8 +4,11 @@ import {
 
 import {
     TEvent,
-    ComponentEvent
-} from '../events/';
+    ComponentEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
+} from '../events';
 
 import PivotGridDataSource, {
     PivotGridDataSourceField
@@ -28,6 +31,18 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGridFieldChooser> 
     readonly event?: TEvent;
     items?: Array<any>;
 }
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxPivotGridFieldChooser>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxPivotGridFieldChooser>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxPivotGridFieldChooser>;
 
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**

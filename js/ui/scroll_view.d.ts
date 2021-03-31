@@ -7,22 +7,30 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    ComponentEvent
-} from '../events/';
+    ComponentEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
+} from '../events';
 
 import dxScrollable, {
     dxScrollableOptions,
     ComponentScrollEvent
 } from './scroll_view/ui.scrollable';
 
+
 /**
  * @public
  */
-export type ScrollEvent = ComponentScrollEvent<dxScrollView>;
+export type DisposingEvent = ComponentDisposingEvent<dxScrollView>;
 /**
  * @public
  */
-export type UpdatedEvent = ComponentScrollEvent<dxScrollView>;
+export type InitializedEvent = ComponentInitializedEvent<dxScrollView>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxScrollView>;
 /**
  * @public
  */
@@ -31,6 +39,14 @@ export type PullDownEvent = ComponentEvent<dxScrollView>;
  * @public
  */
 export type ReachBottomEvent = ComponentEvent<dxScrollView>;
+/**
+ * @public
+ */
+export type ScrollEvent = ComponentScrollEvent<dxScrollView>;
+/**
+ * @public
+ */
+export type UpdatedEvent = ComponentScrollEvent<dxScrollView>;
 
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**

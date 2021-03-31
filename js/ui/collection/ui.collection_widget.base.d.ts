@@ -14,7 +14,7 @@ import {
     ComponentEvent,
     ComponentNativeEvent,
     ItemInfo
-} from '../../events/';
+} from '../../events';
 
 import Widget, {
     WidgetOptions

@@ -3,12 +3,44 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
-} from '../events/index';
+    TEvent,
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
+} from '../events';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/**
+ * @public
+ */
+export type ClickEvent = {
+    event?: TEvent;
+    component?: dxSpeedDialAction;
+    element?: TElement;
+    actionElement?: TElement
+}
+/**
+ * @public
+ */
+export type ContentReadyEvent = ComponentNativeEvent<dxSpeedDialAction> & {
+    actionElement?: TElement
+};
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxSpeedDialAction>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxSpeedDialAction>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxSpeedDialAction>;
 
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
@@ -43,7 +75,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { event?: TEvent, component?: dxSpeedDialAction, element?: TElement, actionElement?: TElement }) => void);
+    onClick?: ((e: ClickEvent) => void);
     /**
      * @docid
      * @default null
@@ -53,7 +85,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: TElement, model?: any, actionElement?: TElement }) => void);
+    onContentReady?: ((e: ContentReadyEvent) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

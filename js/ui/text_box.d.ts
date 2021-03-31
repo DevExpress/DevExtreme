@@ -4,7 +4,10 @@ import {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import {
@@ -18,15 +21,11 @@ import dxTextEditor, {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentEvent<dxTextBox>;
-/**
- * @public
- */
-export type ValueChangedEvent = ComponentNativeEvent<dxTextBox> & ValueChangedInfo;
-/**
- * @public
- */
 export type ChangeEvent = ComponentNativeEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type ContentReadyEvent = ComponentEvent<dxTextBox>;
 /**
  * @public
  */
@@ -35,6 +34,10 @@ export type CopyEvent = ComponentNativeEvent<dxTextBox>;
  * @public
  */
 export type CutEvent = ComponentNativeEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxTextBox>;
 /**
  * @public
  */
@@ -47,6 +50,10 @@ export type FocusInEvent = ComponentNativeEvent<dxTextBox>;
  * @public
  */
 export type FocusOutEvent = ComponentNativeEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxTextBox>;
 /**
  * @public
  */
@@ -66,7 +73,15 @@ export type KeyUpEvent = ComponentNativeEvent<dxTextBox>;
 /**
  * @public
  */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxTextBox>;
+/**
+ * @public
+ */
 export type PasteEvent = ComponentNativeEvent<dxTextBox>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentNativeEvent<dxTextBox> & ValueChangedInfo;
 
 export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
     /**

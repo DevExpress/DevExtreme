@@ -4,7 +4,10 @@ import {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import Editor, {
@@ -16,6 +19,18 @@ import Editor, {
  * @public
  */
 export type ContentReadyEvent = ComponentEvent<dxSwitch>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxSwitch>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxSwitch>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxSwitch>;
 /**
  * @public
  */

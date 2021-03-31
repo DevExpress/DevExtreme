@@ -13,6 +13,9 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
     ItemInfo
 } from '../events';
 
@@ -32,6 +35,14 @@ export type ContentReadyEvent = ComponentEvent<dxTabPanel>;
 /**
  * @public
  */
+export type DisposingEvent = ComponentDisposingEvent<dxTabPanel>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxTabPanel>;
+/**
+ * @public
+ */
 export type ItemClickEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
 /**
  * @public
@@ -45,6 +56,10 @@ export type ItemHoldEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
  * @public
  */
 export type ItemRenderedEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxTabPanel>;
 /**
  * @public
  */

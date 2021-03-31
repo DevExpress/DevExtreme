@@ -5,6 +5,9 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
     ItemInfo
 } from '../events';
 
@@ -23,19 +26,7 @@ import {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentEvent<dxAutocomplete>;
-/**
- * @public
- */
-export type ValueChangedEvent = ComponentNativeEvent<dxAutocomplete> & ValueChangedInfo;
-/**
- * @public
- */
-export type ItemClickEvent = ComponentNativeEvent<dxAutocomplete> & ItemInfo;
-/**
- * @public
- */
-export type SelectionChangedEvent = ComponentEvent<dxAutocomplete> & SelectionChangedInfo;
+export type ChangeEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
@@ -43,11 +34,7 @@ export type ClosedEvent = ComponentEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type OpenedEvent = ComponentEvent<dxAutocomplete>;
-/**
- * @public
- */
-export type ChangeEvent = ComponentNativeEvent<dxAutocomplete>;
+export type ContentReadyEvent = ComponentEvent<dxAutocomplete>;
 /**
  * @public
  */
@@ -56,6 +43,10 @@ export type CopyEvent = ComponentNativeEvent<dxAutocomplete>;
  * @public
  */
 export type CutEvent = ComponentNativeEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxAutocomplete>;
 /**
  * @public
  */
@@ -71,7 +62,15 @@ export type FocusOutEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
+export type InitializedEvent = ComponentInitializedEvent<dxAutocomplete>;
+/**
+ * @public
+ */
 export type InputEvent = ComponentNativeEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentNativeEvent<dxAutocomplete> & ItemInfo;
 /**
  * @public
  */
@@ -87,7 +86,23 @@ export type KeyUpEvent = ComponentNativeEvent<dxAutocomplete>;
 /**
  * @public
  */
+export type OpenedEvent = ComponentEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxAutocomplete>;
+/**
+ * @public
+ */
 export type PasteEvent = ComponentNativeEvent<dxAutocomplete>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentEvent<dxAutocomplete> & SelectionChangedInfo;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentNativeEvent<dxAutocomplete> & ValueChangedInfo;
 
 export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
     /**

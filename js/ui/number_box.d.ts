@@ -4,7 +4,10 @@ import {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import dxTextEditor, {
@@ -23,15 +26,11 @@ import {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentEvent<dxNumberBox>;
-/**
- * @public
- */
-export type ValueChangedEvent = ComponentNativeEvent<dxNumberBox> & ValueChangedInfo;
-/**
- * @public
- */
 export type ChangeEvent = ComponentNativeEvent<dxNumberBox>;
+/**
+ * @public
+ */
+export type ContentReadyEvent = ComponentEvent<dxNumberBox>;
 /**
  * @public
  */
@@ -40,6 +39,10 @@ export type CopyEvent = ComponentNativeEvent<dxNumberBox>;
  * @public
  */
 export type CutEvent = ComponentNativeEvent<dxNumberBox>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxNumberBox>;
 /**
  * @public
  */
@@ -52,6 +55,10 @@ export type FocusInEvent = ComponentNativeEvent<dxNumberBox>;
  * @public
  */
 export type FocusOutEvent = ComponentNativeEvent<dxNumberBox>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxNumberBox>;
 /**
  * @public
  */
@@ -71,7 +78,15 @@ export type KeyUpEvent = ComponentNativeEvent<dxNumberBox>;
 /**
  * @public
  */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxNumberBox>;
+/**
+ * @public
+ */
 export type PasteEvent = ComponentNativeEvent<dxNumberBox>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentNativeEvent<dxNumberBox> & ValueChangedInfo;
 
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**

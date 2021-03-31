@@ -15,19 +15,33 @@ import {
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
     ItemInfo
 } from '../events/';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions,
-    SelectionChangedInfo
+    CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
 
 /**
  * @public
  */
+export type CancelClickEvent = ComponentEvent<dxActionSheet> & Cancelable;
+/**
+ * @public
+ */
 export type ContentReadyEvent = ComponentEvent<dxActionSheet>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxActionSheet>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxActionSheet>;
 /**
  * @public
  */
@@ -47,11 +61,7 @@ export type ItemRenderedEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentEvent<dxActionSheet> & SelectionChangedInfo;
-/**
- * @public
- */
-export type CancelClickEvent = ComponentEvent<dxActionSheet> & Cancelable;
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxActionSheet>;
 
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**

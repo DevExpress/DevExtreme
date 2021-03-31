@@ -6,10 +6,52 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+  ComponentEvent,
+  ComponentNativeEvent,
+  ComponentDisposingEvent,
+  ComponentInitializedEvent,
+  ComponentOptionChangedEvent,
+  ItemInfo
+} from '../events';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
+
+/**
+ * @public
+ */
+export type ContentReadyEvent = ComponentEvent<dxResponsiveBox>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxResponsiveBox>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxResponsiveBox>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+/**
+ * @public
+ */
+export type ItemContextMenuEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+/**
+ * @public
+ */
+export type ItemHoldEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+/**
+ * @public
+ */
+export type ItemRenderedEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxResponsiveBox>;
 
 export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
     /**

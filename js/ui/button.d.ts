@@ -8,7 +8,10 @@ import {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events/';
 
 import Widget, {
@@ -32,6 +35,18 @@ export type ClickEvent = ComponentNativeEvent<dxButton> & {
  * @public
  */
 export type ContentReadyEvent = ComponentEvent<dxButton>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxButton>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxButton>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxButton>;
 
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**

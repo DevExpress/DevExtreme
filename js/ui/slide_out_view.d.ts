@@ -10,9 +10,28 @@ import {
     template
 } from '../core/templates/template';
 
+import {
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
+} from '../events';
+
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxSlideOutView>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxSlideOutView>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxSlideOutView>;
 
 export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**

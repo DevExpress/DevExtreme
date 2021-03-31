@@ -4,7 +4,10 @@ import {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import {
@@ -18,15 +21,27 @@ import dxTrackBar, {
 /**
  * @public
  */
+export type CompleteEvent = ComponentNativeEvent<dxProgressBar>;
+/**
+ * @public
+ */
 export type ContentReadyEvent = ComponentEvent<dxProgressBar>;
 /**
  * @public
  */
-export type ValueChangedEvent = ComponentNativeEvent<dxProgressBar> & ValueChangedInfo;
+export type DisposingEvent = ComponentDisposingEvent<dxProgressBar>;
 /**
  * @public
  */
-export type CompleteEvent = ComponentNativeEvent<dxProgressBar>;
+export type InitializedEvent = ComponentInitializedEvent<dxProgressBar>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxProgressBar>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentNativeEvent<dxProgressBar> & ValueChangedInfo;
 
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**

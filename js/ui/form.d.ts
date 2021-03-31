@@ -11,7 +11,10 @@ import {
 } from '../core/templates/template';
 
 import {
-    ComponentEvent
+    ComponentEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import dxButton, {
@@ -47,7 +50,11 @@ import Widget, {
 /**
  * @public
  */
- export type ContentReadyEvent = ComponentEvent<dxForm>;
+export type ContentReadyEvent = ComponentEvent<dxForm>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxForm>;
 /**
  * @public
  */
@@ -61,6 +68,14 @@ export type FieldDataChangedEvent = ComponentEvent<dxForm> & {
     readonly dataField?: string;
     readonly value?: any;
 }
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxForm>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxForm>;
 
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**

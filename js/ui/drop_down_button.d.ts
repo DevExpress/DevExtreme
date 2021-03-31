@@ -17,7 +17,10 @@ import DataSource, {
 import {
     TEvent,
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
 } from '../events';
 
 import {
@@ -35,13 +38,21 @@ import Widget, {
 /**
  * @public
  */
+export type ButtonClickEvent = ComponentNativeEvent<dxDropDownButton> & {
+    readonly selectedItem?: any;
+}
+/**
+ * @public
+ */
 export type ContentReadyEvent = ComponentEvent<dxDropDownButton>;
 /**
  * @public
  */
-export type ButtonClickEvent = ComponentNativeEvent<dxDropDownButton> & {
-    readonly selectedItem?: any;
-}
+export type DisposingEvent = ComponentDisposingEvent<dxDropDownButton>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxDropDownButton>;
 /**
  * @public
  */
@@ -49,6 +60,10 @@ export type ItemClickEvent = ComponentNativeEvent<dxDropDownButton> & {
     readonly itemData?: any;
     itemElement: TElement;
 };
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxDropDownButton>;
 /**
  * @public
  */

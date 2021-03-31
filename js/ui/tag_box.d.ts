@@ -10,6 +10,9 @@ import {
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
     ItemInfo
 } from '../events';
 
@@ -29,11 +32,7 @@ import dxSelectBox, {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentEvent<dxTagBox>;
-/**
- * @public
- */
-export type ValueChangedEvent = ComponentNativeEvent<dxTagBox> & ValueChangedInfo;
+export type ChangeEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
@@ -41,23 +40,15 @@ export type ClosedEvent = ComponentEvent<dxTagBox>;
 /**
  * @public
  */
-export type OpenedEvent = ComponentEvent<dxTagBox>;
+export type ContentReadyEvent = ComponentEvent<dxTagBox>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxTagBox> & ItemInfo;
+export type CustomItemCreatingEvent = ComponentEvent<dxTagBox> & CustomItemCreatingInfo;
 /**
  * @public
  */
-export type ChangeEvent = ComponentNativeEvent<dxTagBox>;
-/**
- * @public
- */
-export type CopyEvent = ComponentNativeEvent<dxTagBox>;
-/**
- * @public
- */
-export type CutEvent = ComponentNativeEvent<dxTagBox>;
+export type DisposingEvent = ComponentDisposingEvent<dxTagBox>;
 /**
  * @public
  */
@@ -73,7 +64,15 @@ export type FocusOutEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
+export type InitializedEvent = ComponentInitializedEvent<dxTagBox>;
+/**
+ * @public
+ */
 export type InputEvent = ComponentNativeEvent<dxTagBox>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentNativeEvent<dxTagBox> & ItemInfo;
 /**
  * @public
  */
@@ -89,15 +88,19 @@ export type KeyUpEvent = ComponentNativeEvent<dxTagBox>;
 /**
  * @public
  */
-export type PasteEvent = ComponentNativeEvent<dxTagBox>;
+export type MultiTagPreparingEvent = ComponentEvent<dxTagBox> & Cancelable & {
+    multiTagElement: TElement;
+    readonly selectedItems?: Array<string | number | any>;
+    readonly text?: string;
+}
 /**
  * @public
  */
-export type CustomItemCreatingEvent = ComponentEvent<dxTagBox> & CustomItemCreatingInfo;
+export type OpenedEvent = ComponentEvent<dxTagBox>;
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentEvent<dxTagBox> & SelectionChangedInfo<string | number | any>;
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxTagBox>;
 /**
  * @public
  */
@@ -107,11 +110,11 @@ export type SelectAllValueChangedEvent = ComponentEvent<dxTagBox> & {
 /**
  * @public
  */
-export type MultiTagPreparingEvent = ComponentEvent<dxTagBox> & Cancelable & {
-    multiTagElement: TElement;
-    readonly selectedItems?: Array<string | number | any>;
-    readonly text?: string;
-}
+export type SelectionChangedEvent = ComponentEvent<dxTagBox> & SelectionChangedInfo<string | number | any>;
+/**
+ * @public
+ */
+export type ValueChangedEvent = ComponentNativeEvent<dxTagBox> & ValueChangedInfo;
 
 export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     /**

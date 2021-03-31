@@ -11,10 +11,28 @@ import {
 } from '../core/utils/deferred';
 
 import {
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
+} from '../events';
+
+import {
     AsyncRule,
     ValidationRule
 } from './validation_rules';
 
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxValidator>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxValidator>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxValidator>;
 /**
  * @public
  */

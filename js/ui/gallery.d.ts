@@ -13,6 +13,9 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
     ItemInfo
 } from '../events';
 
@@ -29,6 +32,14 @@ export type ContentReadyEvent = ComponentEvent<dxGallery>;
 /**
  * @public
  */
+export type DisposingEvent = ComponentDisposingEvent<dxGallery>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxGallery>;
+/**
+ * @public
+ */
 export type ItemClickEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
 /**
  * @public
@@ -42,6 +53,10 @@ export type ItemHoldEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
  * @public
  */
 export type ItemRenderedEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxGallery>;
 /**
  * @public
  */

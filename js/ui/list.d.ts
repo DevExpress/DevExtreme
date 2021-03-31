@@ -17,6 +17,9 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
     ItemInfo
 } from '../events/';
 
@@ -55,11 +58,19 @@ export type ContentReadyEvent = ComponentEvent<dxList>;
 /**
  * @public
  */
+export type DisposingEvent = ComponentDisposingEvent<dxList>;
+/**
+ * @public
+ */
 export type GroupRenderedEvent = ComponentEvent<dxList> & {
     readonly groupData?: any;
     groupElement?: TElement;
     readonly groupIndex?: number;
 }
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxList>;
 /**
  * @public
  */
@@ -102,7 +113,7 @@ export type ItemSwipeEvent = ComponentNativeEvent<dxList> & ListItemInfo & {
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentEvent<dxList> & SelectionChangedInfo;
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxList>;
 /**
  * @public
  */
@@ -121,6 +132,10 @@ export type ScrollEvent = ComponentNativeEvent<dxList> & ScrollInfo;
 export type SelectAllValueChangedEvent = ComponentEvent<dxList> & {
     readonly value: boolean;
 }
+/**
+ * @public
+ */
+ export type SelectionChangedEvent = ComponentEvent<dxList> & SelectionChangedInfo;
 
 export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
     /**

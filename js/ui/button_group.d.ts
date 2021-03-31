@@ -7,16 +7,48 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
+    TEvent,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
+    ItemInfo
 } from '../events/index';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/**
+ * @public
+ */
+export type ContentReadyEvent = ComponentEvent<dxButtonGroup>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxButtonGroup>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxButtonGroup>;
+/**
+ * @public
+ */
+export type ItemClickEvent = ComponentNativeEvent<dxButtonGroup> & ItemInfo;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxButtonGroup>;
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentEvent<dxButtonGroup> & SelectionChangedInfo;
 
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
@@ -79,7 +111,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged

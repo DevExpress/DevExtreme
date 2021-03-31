@@ -11,6 +11,12 @@ import {
 } from '../core/utils/deferred';
 
 import {
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
+} from '../events';
+
+import {
     AsyncRule,
     CompareRule,
     CustomRule,
@@ -21,6 +27,19 @@ import {
     RequiredRule,
     StringLengthRule
 } from './validation_rules';
+
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxValidationGroup>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxValidationGroup>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxValidationGroup>;
 
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }

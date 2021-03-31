@@ -19,6 +19,9 @@ import {
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent,
     ItemInfo
 } from '../events';
 
@@ -41,6 +44,22 @@ export type ContentReadyEvent = ComponentEvent<dxContextMenu>;
 /**
  * @public
  */
+export type DisposingEvent = ComponentDisposingEvent<dxContextMenu>;
+/**
+ * @public
+ */
+export type HiddenEvent = ComponentEvent<dxContextMenu>;
+/**
+ * @public
+ */
+export type HidingEvent = ComponentEvent<dxContextMenu> & Cancelable;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxContextMenu>;
+/**
+ * @public
+ */
 export type ItemClickEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
 /**
  * @public
@@ -53,29 +72,25 @@ export type ItemRenderedEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentEvent<dxContextMenu> & SelectionChangedInfo;
-/**
- * @public
- */
-export type HidingEvent = ComponentEvent<dxContextMenu> & Cancelable;
-/**
- * @public
- */
-export type HiddenEvent = ComponentEvent<dxContextMenu>;
-/**
- * @public
- */
- export type ShowingEvent = ComponentEvent<dxContextMenu> & Cancelable;
-/**
- * @public
- */
-export type ShownEvent = ComponentEvent<dxContextMenu>;
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxContextMenu>;
 /**
  * @public
  */
 export type PositioningEvent = ComponentNativeEvent<dxContextMenu> & {
     readonly position: positionConfig;
 }
+/**
+ * @public
+ */
+export type SelectionChangedEvent = ComponentEvent<dxContextMenu> & SelectionChangedInfo;
+/**
+ * @public
+ */
+export type ShowingEvent = ComponentEvent<dxContextMenu> & Cancelable;
+/**
+ * @public
+ */
+export type ShownEvent = ComponentEvent<dxContextMenu>;
 
 /**
  * @public

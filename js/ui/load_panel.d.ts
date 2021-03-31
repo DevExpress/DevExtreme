@@ -4,7 +4,10 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent
+    ComponentEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import {
@@ -27,11 +30,23 @@ export type ContentReadyEvent = ComponentEvent<dxLoadPanel>;
 /**
  * @public
  */
+export type DisposingEvent = ComponentDisposingEvent<dxLoadPanel>;
+/**
+ * @public
+ */
 export type HidingEvent = ComponentEvent<dxLoadPanel> & Cancelable;
 /**
  * @public
  */
 export type HiddenEvent = ComponentEvent<dxLoadPanel>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxLoadPanel>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxLoadPanel>;
 /**
  * @public
  */

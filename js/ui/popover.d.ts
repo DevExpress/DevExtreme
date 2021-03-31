@@ -17,18 +17,26 @@ import {
 import {
     TEvent,
     Cancelable,
-    ComponentEvent
+    ComponentEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import dxPopup, {
     dxPopupAnimation,
-    dxPopupOptions
+    dxPopupOptions,
+    TitleRenderedInfo
 } from './popup';
 
 /**
  * @public
  */
 export type ContentReadyEvent = ComponentEvent<dxPopover>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxPopover>;
 /**
  * @public
  */
@@ -40,11 +48,23 @@ export type HiddenEvent = ComponentEvent<dxPopover>;
 /**
  * @public
  */
+export type InitializedEvent = ComponentInitializedEvent<dxPopover>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxPopover>;
+/**
+ * @public
+ */
 export type ShowingEvent = ComponentEvent<dxPopover>;
 /**
  * @public
  */
 export type ShownEvent = ComponentEvent<dxPopover>;
+/**
+ * @public
+ */
+export type TitleRenderedEvent = ComponentEvent<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**

@@ -6,7 +6,10 @@ import DataSource from '../data/data_source';
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events';
 
 import Editor, {
@@ -22,6 +25,18 @@ import {
  * @public
  */
 export type ContentReadyEvent = ComponentEvent<dxRadioGroup>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxRadioGroup>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxRadioGroup>;
+/**
+ * @public
+ */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxRadioGroup>;
 /**
  * @public
  */

@@ -8,8 +8,11 @@ import {
 
 import {
   ComponentEvent,
-  ComponentNativeEvent
-} from '../events/';
+  ComponentNativeEvent,
+  ComponentDisposingEvent,
+  ComponentInitializedEvent,
+  ComponentOptionChangedEvent
+} from '../events';
 
 import Widget, {
     WidgetOptions
@@ -19,6 +22,14 @@ import Widget, {
  * @public
  */
 export type ClickEvent = ComponentNativeEvent<dxMap>;
+/**
+ * @public
+ */
+export type DisposingEvent = ComponentDisposingEvent<dxMap>;
+/**
+ * @public
+ */
+export type InitializedEvent = ComponentInitializedEvent<dxMap>;
 /**
  * @public
  */
@@ -35,6 +46,16 @@ export type MarkerRemovedEvent = ComponentEvent<dxMap> & {
 /**
  * @public
  */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxMap>;
+/**
+ * @public
+ */
+export type ReadyEvent = ComponentEvent<dxMap> & {
+  originalMap: any;
+}
+/**
+ * @public
+ */
 export type RouteAddedEvent = ComponentEvent<dxMap> & {
   readonly options: any;
   originalRoute: any;
@@ -45,12 +66,7 @@ export type RouteAddedEvent = ComponentEvent<dxMap> & {
 export type RouteRemovedEvent = ComponentEvent<dxMap> & {
   readonly options?: any;
 }
-/**
- * @public
- */
-export type ReadyEvent = ComponentEvent<dxMap> & {
-  originalMap: any;
-}
+
 /**
  * @public
  */
