@@ -19,6 +19,9 @@ $(function () {
             type: "workWeek",
             name: 'Work Week',
             groupOrientation: "vertical"
+        }, {
+            type: 'month',
+            groupOrientation: 'vertical'
         }],
         startDayHour: 9,
         endDayHour: 18,

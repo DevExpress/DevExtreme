@@ -27,7 +27,7 @@ export default {
     return {
       dataSource: generateAppointments(),
       currentDate: new Date(2021, 1, 2),
-      views: ['workWeek', 'timelineWorkWeek'],
+      views: ['workWeek', 'timelineWorkWeek', 'month'],
       currentView: 'timelineWorkWeek',
       scrolling: {
         mode: 'virtual'

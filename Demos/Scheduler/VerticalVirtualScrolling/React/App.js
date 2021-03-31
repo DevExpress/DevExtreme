@@ -21,6 +21,9 @@ const views = [{
   type: 'workWeek',
   name: 'Work Week',
   groupOrientation: 'vertical'
+}, {
+  type: 'month',
+  groupOrientation: 'vertical'
 }];
 const scrolling = { mode: 'virtual' };
 const resourceData = generateResources();

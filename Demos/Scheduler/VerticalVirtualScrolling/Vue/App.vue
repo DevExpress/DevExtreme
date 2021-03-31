@@ -43,6 +43,10 @@ export default {
           name: 'Work Week',
           groupOrientation: 'vertical',
         },
+        {
+          type: 'month',
+          groupOrientation: 'vertical'
+        }
       ],
       scrolling: { mode: 'virtual' },
       groups: ['resourceId'],
