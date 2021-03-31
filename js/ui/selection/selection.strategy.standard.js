@@ -406,7 +406,7 @@ export default SelectionStrategy.inherit({
         let result;
         const checkPending = options?.checkPending;
         if(checkPending && this._lastRequestData && this._requestInProgress()) {
-            result = this._lastRequestData.addedItems.indexOf(key) !== -1;
+            result = this._lastRequestData.addedItems && this._lastRequestData.addedItems.indexOf(key) !== -1;
         }
 
         if(!result) {
