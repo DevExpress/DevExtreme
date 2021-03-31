@@ -58,7 +58,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         setupDataGridModules(this, [
             'data', 'columns', 'columnHeaders', 'rows',
-            'editorFactory', 'gridView', 'editing', 'editingRowBased', 'editingCellBased', 'focus',
+            'editorFactory', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'focus',
             'keyboardNavigation', 'validating', 'masterDetail', 'selection',
             'grouping'
         ], {
