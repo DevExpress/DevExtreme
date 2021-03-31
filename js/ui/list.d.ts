@@ -16,15 +16,14 @@ import DataSource, {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ItemEvent
 } from '../events/';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ComponentItemRenderedEvent,
-    ComponentSelectionChangedEvent,
-    ItemInfo
+    ComponentSelectionChangedEvent
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -35,12 +34,10 @@ import {
     SearchBoxMixinOptions
 } from './widget/ui.search_box_mixin';
 
-interface GroupItemIndex {
-    group: number;
-    item: number;
-}
-interface GroupItemEvent extends ItemInfo {
-    readonly itemIndex: number | GroupItemIndex;
+interface ListItemEvent {
+    readonly itemData?: any;
+    itemElement: TElement;
+    readonly itemIndex: number | { group: number; item: number; };
 }
 export interface ComponentScrollEvent<T> extends ComponentNativeEvent<T> {
     readonly scrollOffset?: any;
@@ -65,40 +62,40 @@ export type GroupRenderedEvent = ComponentEvent<dxList> & {
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxList> & GroupItemEvent;
+export type ItemClickEvent = ComponentNativeEvent<dxList> & ListItemEvent;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxList> & GroupItemEvent;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxList> & ListItemEvent;
 /**
  * @public
  */
-export type ItemDeletedEvent = ComponentEvent<dxList> & GroupItemEvent;
+export type ItemDeletedEvent = ComponentEvent<dxList> & ListItemEvent;
 /**
  * @public
  */
-export type ItemDeletingEvent = ComponentEvent<dxList> & GroupItemEvent & {
+export type ItemDeletingEvent = ComponentEvent<dxList> & ListItemEvent & {
     cancel?: boolean | TPromise<void>;
 }
 /**
  * @public
  */
-export type ItemHoldEvent = ComponentNativeEvent<dxList> & GroupItemEvent;
+export type ItemHoldEvent = ComponentNativeEvent<dxList> & ListItemEvent;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentItemRenderedEvent<dxList>;
+export type ItemRenderedEvent = ComponentNativeEvent<dxList> & ItemEvent;
 /**
  * @public
  */
-export type ItemReorderedEvent = ComponentEvent<dxList> & GroupItemEvent & {
+export type ItemReorderedEvent = ComponentEvent<dxList> & ListItemEvent & {
     readonly fromIndex: number;
     readonly toIndex: number;
 }
 /**
  * @public
  */
-export type ItemSwipeEvent = ComponentNativeEvent<dxList> & GroupItemEvent & {
+export type ItemSwipeEvent = ComponentNativeEvent<dxList> & ListItemEvent & {
     readonly direction: string;
 }
 /**

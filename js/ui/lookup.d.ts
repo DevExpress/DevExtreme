@@ -16,11 +16,12 @@ import {
 
 import {
     TEvent,
-    ComponentEvent
+    ComponentEvent,
+    ComponentNativeEvent,
+    ItemEvent
 } from '../events';
 
 import {
-    ComponentItemClickEvent,
     ComponentSelectionChangedEvent,
     
 } from './collection/ui.collection_widget.base';
@@ -64,7 +65,7 @@ export type OpenedEvent = ComponentEvent<dxLookup>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentItemClickEvent<dxLookup>;
+export type ItemClickEvent = ComponentNativeEvent<dxLookup> & ItemEvent;
 /**
  * @public
  */

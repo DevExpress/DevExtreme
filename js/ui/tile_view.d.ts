@@ -6,31 +6,32 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    ComponentNativeEvent,
+    ItemEvent
+} from '../events';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ComponentItemHoldEvent,
-    ComponentItemClickEvent,
-    ComponentItemRenderedEvent,
-    ComponentItemContextMenuEvent
 } from './collection/ui.collection_widget.base';
 
 /**
  * @public
  */
-export type ItemHoldEvent = ComponentItemHoldEvent<dxTileView>;
+export type ItemHoldEvent = ComponentNativeEvent<dxTileView> & ItemEvent;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentItemClickEvent<dxTileView>;
+export type ItemClickEvent = ComponentNativeEvent<dxTileView> & ItemEvent;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentItemRenderedEvent<dxTileView>;
+export type ItemRenderedEvent = ComponentNativeEvent<dxTileView> & ItemEvent;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxTileView>;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxTileView> & ItemEvent;
 
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**

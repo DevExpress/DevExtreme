@@ -12,26 +12,14 @@ import DataSource, {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ItemEvent
 } from '../../events/';
 
 import Widget, {
     WidgetOptions
 } from '../widget/ui.widget';
 
-
-export interface ItemInfo {
-    readonly itemData?: any,
-    itemElement: TElement,
-}
-export interface ItemEvent extends ItemInfo {
-    readonly itemIndex: number;
-}
-
-export interface ComponentItemClickEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
-export interface ComponentItemContextMenuEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
-export interface ComponentItemHoldEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
-export interface ComponentItemRenderedEvent<T> extends ComponentNativeEvent<T>, ItemEvent {}
 export interface ComponentSelectionChangedEvent<T1, T2 = any> extends ComponentEvent<T1> {
     readonly addedItems: Array<T2>;
     readonly removedItems: Array<T2>;
@@ -99,7 +87,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ComponentItemClickEvent<T>) => void) | string;
+    onItemClick?: ((e: ComponentNativeEvent<T> & ItemEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -115,7 +103,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: ComponentItemContextMenuEvent<T>) => void);
+    onItemContextMenu?: ((e: ComponentNativeEvent<T> & ItemEvent) => void);
     /**
      * @docid
      * @default null
@@ -131,7 +119,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: ComponentItemHoldEvent<T>) => void);
+    onItemHold?: ((e: ComponentNativeEvent<T> & ItemEvent) => void);
     /**
      * @docid
      * @default null
@@ -146,7 +134,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: ComponentItemRenderedEvent<T>) => void);
+    onItemRendered?: ((e: ComponentNativeEvent<T> & ItemEvent) => void);
     /**
      * @docid
      * @default null

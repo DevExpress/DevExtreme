@@ -11,17 +11,15 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
+    TEvent,
     ComponentEvent,
-    TEvent
+    ComponentNativeEvent,
+    ItemEvent
 } from '../events/';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ComponentItemClickEvent,
-    ComponentItemContextMenuEvent,
-    ComponentItemHoldEvent,
-    ComponentItemRenderedEvent,
     ComponentSelectionChangedEvent
 } from './collection/ui.collection_widget.base';
 
@@ -32,19 +30,19 @@ export type ContentReadyEvent = ComponentEvent<dxActionSheet>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentItemClickEvent<dxActionSheet>;
+export type ItemClickEvent = ComponentNativeEvent<dxActionSheet> & ItemEvent;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxActionSheet>;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxActionSheet> & ItemEvent;
 /**
  * @public
  */
-export type ItemHoldEvent = ComponentItemHoldEvent<dxActionSheet>;
+export type ItemHoldEvent = ComponentNativeEvent<dxActionSheet> & ItemEvent;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentItemRenderedEvent<dxActionSheet>;
+export type ItemRenderedEvent = ComponentNativeEvent<dxActionSheet> & ItemEvent;
 /**
  * @public
  */

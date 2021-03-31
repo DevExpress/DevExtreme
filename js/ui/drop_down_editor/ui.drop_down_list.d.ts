@@ -9,6 +9,11 @@ import {
 import DataSource from '../../data/data_source';
 
 import {
+    ComponentNativeEvent,
+    ItemEvent
+} from '../../events';
+
+import {
     DataExpressionMixinOptions
 } from '../editor/ui.data_expression';
 
@@ -17,7 +22,6 @@ import dxDropDownEditor, {
 } from './ui.drop_down_editor';
 
 import {
-    ComponentItemClickEvent,
     ComponentSelectionChangedEvent
 } from '../collection/ui.collection_widget.base';
 
@@ -78,7 +82,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ComponentItemClickEvent<T>) => void);
+    onItemClick?: ((e: ComponentNativeEvent<T> & ItemEvent) => void);
     /**
      * @docid
      * @default null

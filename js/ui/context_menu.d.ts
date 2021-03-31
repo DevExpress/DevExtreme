@@ -17,7 +17,8 @@ import DataSource, {
 import {
     TEvent,
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ItemEvent
 } from '../events';
 
 import dxMenuBase, {
@@ -29,9 +30,6 @@ import {
 } from './menu';
 
 import {
-    ComponentItemClickEvent,
-    ComponentItemContextMenuEvent,
-    ComponentItemRenderedEvent,
     ComponentSelectionChangedEvent
 } from './collection/ui.collection_widget.base';
 
@@ -46,15 +44,15 @@ export type ContentReadyEvent = ComponentEvent<dxContextMenu>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentItemClickEvent<dxContextMenu>;
+export type ItemClickEvent = ComponentNativeEvent<dxContextMenu> & ItemEvent;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxContextMenu>;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxContextMenu> & ItemEvent;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentItemRenderedEvent<dxContextMenu>;
+export type ItemRenderedEvent = ComponentNativeEvent<dxContextMenu> & ItemEvent;
 /**
  * @public
  */

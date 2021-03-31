@@ -14,15 +14,21 @@ export type TEvent = {} extends EventType ? dxEvent : EventType;
  * @public
  */
 export interface ComponentEvent<T> {
-    component: T,
-    element: TElement,
-    model?: any
+    component: T;
+    element: TElement;
+    model?: any;
 }
 /**
  * @public
  */
 export interface ComponentNativeEvent<T> extends ComponentEvent<T> {
-    event?: TEvent
+    event?: TEvent;
+}
+
+export interface ItemEvent {
+    readonly itemData?: any;
+    itemElement: TElement;
+    readonly itemIndex: number;
 }
 
 /**

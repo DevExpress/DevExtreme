@@ -12,11 +12,11 @@ import {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ItemEvent
 } from '../events';
 
 import {
-    ComponentItemClickEvent,
     ComponentSelectionChangedEvent,
     
 } from './collection/ui.collection_widget.base';
@@ -45,7 +45,7 @@ export type ValueChangedEvent = ComponentValueChangedEvent<dxSelectBox>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentItemClickEvent<dxSelectBox>;
+export type ItemClickEvent = ComponentNativeEvent<dxSelectBox> & ItemEvent;
 /**
  * @public
  */

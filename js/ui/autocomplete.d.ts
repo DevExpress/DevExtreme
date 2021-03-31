@@ -4,11 +4,11 @@ import {
 
 import {
     ComponentEvent,
-    ComponentNativeEvent
+    ComponentNativeEvent,
+    ItemEvent
 } from '../events';
 
 import {
-    ComponentItemClickEvent,
     ComponentSelectionChangedEvent,
     
 } from './collection/ui.collection_widget.base';
@@ -32,7 +32,7 @@ export type ValueChangedEvent = ComponentValueChangedEvent<dxAutocomplete>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentItemClickEvent<dxAutocomplete>;
+export type ItemClickEvent = ComponentNativeEvent<dxAutocomplete> & ItemEvent;
 /**
  * @public
  */

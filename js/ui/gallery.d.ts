@@ -11,16 +11,14 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent
+    ComponentEvent,
+    ComponentNativeEvent,
+    ItemEvent
 } from '../events';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ComponentItemClickEvent,
-    ComponentItemContextMenuEvent,
-    ComponentItemHoldEvent,
-    ComponentItemRenderedEvent,
     ComponentSelectionChangedEvent
 } from './collection/ui.collection_widget.base';
 
@@ -31,19 +29,19 @@ export type ContentReadyEvent = ComponentEvent<dxGallery>;
 /**
  * @public
  */
-export type ItemClickEvent = ComponentItemClickEvent<dxGallery>;
+export type ItemClickEvent = ComponentNativeEvent<dxGallery> & ItemEvent;
 /**
  * @public
  */
-export type ItemContextMenuEvent = ComponentItemContextMenuEvent<dxGallery>;
+export type ItemContextMenuEvent = ComponentNativeEvent<dxGallery> & ItemEvent;
 /**
  * @public
  */
-export type ItemHoldEvent = ComponentItemHoldEvent<dxGallery>;
+export type ItemHoldEvent = ComponentNativeEvent<dxGallery> & ItemEvent;
 /**
  * @public
  */
-export type ItemRenderedEvent = ComponentItemRenderedEvent<dxGallery>;
+export type ItemRenderedEvent = ComponentNativeEvent<dxGallery> & ItemEvent;
 /**
  * @public
  */
