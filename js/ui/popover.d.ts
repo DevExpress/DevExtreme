@@ -16,7 +16,7 @@ import {
 
 import {
     TEvent,
-    CancelableEvent,
+    Cancelable,
     ComponentEvent
 } from '../events';
 
@@ -32,7 +32,7 @@ export type ContentReadyEvent = ComponentEvent<dxPopover>;
 /**
  * @public
  */
-export type HidingEvent = ComponentEvent<dxPopover> & CancelableEvent;
+export type HidingEvent = ComponentEvent<dxPopover> & Cancelable;
 /**
  * @public
  */

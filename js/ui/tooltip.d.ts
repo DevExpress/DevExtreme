@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    CancelableEvent,
+    Cancelable,
     ComponentEvent
 } from '../events';
 
@@ -18,7 +18,7 @@ export type ContentReadyEvent = ComponentEvent<dxTooltip>;
 /**
  * @public
  */
-export type HidingEvent = ComponentEvent<dxTooltip> & CancelableEvent;
+export type HidingEvent = ComponentEvent<dxTooltip> & Cancelable;
 /**
  * @public
  */

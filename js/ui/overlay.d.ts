@@ -16,7 +16,7 @@ import {
 
 import {
     TEvent,
-    CancelableEvent,
+    Cancelable,
     ComponentEvent
 } from '../events';
 
@@ -131,7 +131,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: ComponentEvent<T> & CancelableEvent) => void);
+    onHiding?: ((e: ComponentEvent<T> & Cancelable) => void);
     /**
      * @docid
      * @default null

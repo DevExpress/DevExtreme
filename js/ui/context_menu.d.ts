@@ -16,7 +16,7 @@ import DataSource, {
 
 import {
     TEvent,
-    CancelableEvent,
+    Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
     ItemInfo
@@ -57,7 +57,7 @@ export type SelectionChangedEvent = ComponentEvent<dxContextMenu> & SelectionCha
 /**
  * @public
  */
-export type HidingEvent = ComponentEvent<dxContextMenu> & CancelableEvent;
+export type HidingEvent = ComponentEvent<dxContextMenu> & Cancelable;
 /**
  * @public
  */
@@ -65,7 +65,7 @@ export type HiddenEvent = ComponentEvent<dxContextMenu>;
 /**
  * @public
  */
- export type ShowingEvent = ComponentEvent<dxContextMenu> & CancelableEvent;
+ export type ShowingEvent = ComponentEvent<dxContextMenu> & Cancelable;
 /**
  * @public
  */

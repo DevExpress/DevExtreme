@@ -12,7 +12,7 @@ import {
 
 import {
     TEvent,
-    CancelableEvent,
+    Cancelable,
     ComponentEvent
 } from '../events';
 
@@ -24,7 +24,7 @@ import dxOverlay, {
 /**
  * @public
  */
-export type HidingEvent = ComponentEvent<dxToast> & CancelableEvent;
+export type HidingEvent = ComponentEvent<dxToast> & Cancelable;
 /**
  * @public
  */

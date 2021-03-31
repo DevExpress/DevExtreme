@@ -10,7 +10,7 @@ import {
     ComponentNativeEvent
 } from '../events/';
 
-interface ResizeInfo {
+export interface ResizeInfo {
     readonly width: number;
     readonly height: number;
     handles: {

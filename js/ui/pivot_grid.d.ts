@@ -8,7 +8,7 @@ import {
 
 import {
     TEvent,
-    CancelableEvent,
+    Cancelable,
     ComponentNativeEvent,
     ComponentEvent
 } from '../events';
@@ -31,7 +31,7 @@ export type ContentReadyEvent = ComponentEvent<dxPivotGrid>;
 /**
  * @public
  */
-export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & CancelableEvent & {
+export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & Cancelable & {
     readonly area?: string;
     readonly cellElement?: TElement;
     readonly cell?: dxPivotGridPivotGridCell;
@@ -73,13 +73,13 @@ export type ExportedEvent = ComponentEvent<dxPivotGrid>;
 /**
  * @public
  */
-export type ExportingEvent = ComponentEvent<dxPivotGrid> & CancelableEvent & {
+export type ExportingEvent = ComponentEvent<dxPivotGrid> & Cancelable & {
     fileName?: string;
 }
 /**
  * @public
  */
-export type FileSavingEvent = CancelableEvent & {
+export type FileSavingEvent = Cancelable & {
     readonly component: dxPivotGrid;
     readonly element: TElement;
     readonly data?: Blob;

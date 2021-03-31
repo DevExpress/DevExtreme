@@ -15,8 +15,9 @@ import {
 } from '../core/templates/template';
 
 import {
-    CancelableEvent,
-    ComponentEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent
 } from '../events';
 
 import dxOverlay, {
@@ -39,7 +40,7 @@ export type ContentReadyEvent = ComponentEvent<dxPopup>;
 /**
  * @public
  */
-export type HidingEvent = ComponentEvent<dxPopup> & CancelableEvent;
+export type HidingEvent = ComponentEvent<dxPopup> & Cancelable;
 /**
  * @public
  */

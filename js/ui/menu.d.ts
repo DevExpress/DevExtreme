@@ -7,7 +7,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    CancelableEvent,
+    Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
     ItemInfo
@@ -51,7 +51,7 @@ export type SubmenuHiddenEvent = ComponentEvent<dxMenu> & {
 /**
  * @public
  */
-export type SubmenuHidingEvent = ComponentEvent<dxMenu> & CancelableEvent & {
+export type SubmenuHidingEvent = ComponentEvent<dxMenu> & Cancelable & {
     readonly rootItem?: TElement;
 }
 /**
