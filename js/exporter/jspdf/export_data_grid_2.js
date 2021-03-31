@@ -140,6 +140,15 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
                 }
 
+                if(!isDefined(currentRow.height)) {
+                    throw 'row.height is required';
+                }
+                currentRow.forEach(cell => {
+                    if(!cell.skip && !cell.rect.h) {
+                        cell.rect.h = currentRow.height;
+                    }
+                });
+
                 pdfGrid.addRow(currentRow);
             }
 
