@@ -810,7 +810,7 @@ module('View Data Provider', {
                         );
                     });
 
-                    test('Should return correct index cell position if index is provided', function(assert) {
+                    test('Should return correct cell position if index is provided', function(assert) {
                         const { viewDataProvider } = this;
 
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24, 0, 29), false, 0);
