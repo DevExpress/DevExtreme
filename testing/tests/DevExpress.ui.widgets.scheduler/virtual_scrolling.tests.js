@@ -224,31 +224,12 @@ module('Virtual Scrolling', {
                 assert.equal(viewportWidth, expectedWidth, 'Viewport width is correct');
             });
 
-            test('document scroll event should be subscribed correctly if the "width" option is not defined', function(assert) {
-                const SCROLL_EVENT_NAME = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
-
+            test('document scroll event should not been subscribed if the "width" option is not defined', function(assert) {
                 const spyEventsOn = this.spy(eventsEngine, 'on');
 
                 this.prepareInstance({ width: null });
 
-                // TODO - determine subscribe windows scroll
-
-                assert.ok(spyEventsOn.calledOnce, 'scroll event subscribed once');
-                assert.equal(spyEventsOn.args[0][0], domAdapter.getDocument(), 'scroll event subscribed for document');
-                assert.equal(spyEventsOn.args[0][1], SCROLL_EVENT_NAME, 'scroll event name is correct');
-            });
-
-            test('document scroll event should be unsubscribed correctly if the "width" option is not defined', function(assert) {
-                const SCROLL_EVENT_NAME = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
-                const spyEventsOff = this.spy(eventsEngine, 'off');
-
-                this.prepareInstance({ width: null });
-
-                this.virtualScrollingDispatcher.dispose();
-
-                assert.ok(spyEventsOff.calledOnce, 'scroll event unsubscribed once');
-                assert.equal(spyEventsOff.args[0][0], domAdapter.getDocument(), 'scroll event unsubscribed from document');
-                assert.equal(spyEventsOff.args[0][1], SCROLL_EVENT_NAME, 'scroll event name is correct');
+                assert.notOk(spyEventsOn.calledOnce, 'scroll event subscribed once');
             });
 
             test('It should call _getTotalCellCount with correct parameters', function(assert) {
