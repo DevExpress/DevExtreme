@@ -21,7 +21,7 @@ import {
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ComponentSelectionChangedEvent
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
 /**
@@ -47,7 +47,7 @@ export type ItemRenderedEvent = ComponentNativeEvent<dxActionSheet> & ItemEvent;
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxActionSheet>;
+export type SelectionChangedEvent = ComponentEvent<dxActionSheet> & SelectionChangedInfo;
 /**
  * @public
  */

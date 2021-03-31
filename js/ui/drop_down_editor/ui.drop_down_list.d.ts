@@ -22,7 +22,7 @@ import dxDropDownEditor, {
 } from './ui.drop_down_editor';
 
 import {
-    ComponentSelectionChangedEvent
+    SelectionChangedInfo
 } from '../collection/ui.collection_widget.base';
 
 export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
@@ -95,7 +95,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: ComponentSelectionChangedEvent<T>) => void);
+    onSelectionChanged?: ((e: ComponentEvent<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default false

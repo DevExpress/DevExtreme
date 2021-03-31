@@ -23,7 +23,7 @@ import {
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    ComponentSelectionChangedEvent
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -101,7 +101,7 @@ export type ItemSwipeEvent = ComponentNativeEvent<dxList> & ListItemEvent & {
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxList>;
+export type SelectionChangedEvent = ComponentEvent<dxList> & SelectionChangedInfo;
 /**
  * @public
  */

@@ -9,8 +9,7 @@ import {
 } from '../events';
 
 import {
-    ComponentSelectionChangedEvent,
-    
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxDropDownList, {
@@ -36,7 +35,7 @@ export type ItemClickEvent = ComponentNativeEvent<dxAutocomplete> & ItemEvent;
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxAutocomplete>;
+export type SelectionChangedEvent = ComponentEvent<dxAutocomplete> & SelectionChangedInfo;
 /**
  * @public
  */

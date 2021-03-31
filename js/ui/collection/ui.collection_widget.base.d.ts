@@ -20,9 +20,9 @@ import Widget, {
     WidgetOptions
 } from '../widget/ui.widget';
 
-export interface ComponentSelectionChangedEvent<T1, T2 = any> extends ComponentEvent<T1> {
-    readonly addedItems: Array<T2>;
-    readonly removedItems: Array<T2>;
+export interface SelectionChangedInfo<T = any> {
+    readonly addedItems: Array<T>;
+    readonly removedItems: Array<T>;
 }
 
 export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
@@ -148,7 +148,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: ComponentSelectionChangedEvent<T>) => void);
+    onSelectionChanged?: ((e: ComponentEvent<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default -1

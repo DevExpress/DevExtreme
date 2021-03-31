@@ -14,7 +14,7 @@ import {
 } from '../events';
 
 import {
-    ComponentSelectionChangedEvent,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -101,7 +101,7 @@ export type CustomItemCreatingEvent = ComponentCustomItemCreatingEvent<dxTagBox>
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxTagBox, string | number | any>;
+export type SelectionChangedEvent = ComponentEvent<dxTagBox> & SelectionChangedInfo<string | number | any>;
 /**
  * @public
  */

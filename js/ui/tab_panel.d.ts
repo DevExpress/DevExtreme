@@ -17,7 +17,7 @@ import {
 } from '../events';
 
 import {
-    ComponentSelectionChangedEvent,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
 import dxMultiView, {
@@ -48,7 +48,7 @@ export type ItemRenderedEvent = ComponentNativeEvent<dxTabPanel> & ItemEvent;
 /**
  * @public
  */
-export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxTabPanel>;
+export type SelectionChangedEvent = ComponentEvent<dxTabPanel> & SelectionChangedInfo;
 /**
  * @public
  */
