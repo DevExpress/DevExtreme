@@ -2437,6 +2437,10 @@ $scheduler-appointment-form-label-padding: 20px;
       padding-left: $scheduler-timepanel-cell-offset;
       padding-right: 0;
 
+      .dx-scheduler-small & {
+        padding-left: $scheduler-timepanel-cell-offset * $scheduler-small-size-factor;
+      }
+
       &::after {
         right: auto;
         left: 0;
@@ -2610,6 +2614,20 @@ $scheduler-appointment-form-label-padding: 20px;
       &.dx-scheduler-work-space-grouped {
         .dx-scheduler-date-table {
           float: left;
+        }
+      }
+    }
+
+    &.dx-scheduler-small {
+      .dx-scheduler-work-space:not(.dx-scheduler-timeline):not(.dx-scheduler-work-space-month):not(.dx-scheduler-work-space-vertical-grouped):not(.dx-scheduler-work-space-both-scrollbar):not(.dx-scheduler-agenda) {
+        .dx-scheduler-date-table {
+          margin-right: -$scheduler-small-size-element-offset;
+        }
+      }
+
+      .dx-scheduler-work-space-month.dx-scheduler-work-space-both-scrollbar {
+        .dx-scheduler-header-scrollable.dx-scrollable {
+          margin: 0;
         }
       }
     }
