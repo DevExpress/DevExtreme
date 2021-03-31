@@ -383,3 +383,5 @@ export interface StringLengthRule {
      */
     type: 'stringLength';
 }
+
+export type ValidationRule = AsyncRule | CompareRule | CustomRule | EmailRule | NumericRule | PatternRule | RangeRule | RequiredRule | StringLengthRule;

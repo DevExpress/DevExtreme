@@ -12,14 +12,7 @@ import {
 
 import {
     AsyncRule,
-    CompareRule,
-    CustomRule,
-    EmailRule,
-    NumericRule,
-    PatternRule,
-    RangeRule,
-    RequiredRule,
-    StringLengthRule
+    ValidationRule
 } from './validation_rules';
 
 /**
@@ -29,9 +22,9 @@ export type ValidatedEvent = {
     name?: string;
     isValid?: boolean;
     value?: any;
-    validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
-    brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule;
-    brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+    validationRules?: Array<ValidationRule>;
+    brokenRule?: ValidationRule;
+    brokenRules?: ValidationRule;
     status?: 'valid' | 'invalid' | 'pending'
 }
 
@@ -106,7 +99,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+    validationRules?: Array<ValidationRule>;
 }
 /**
  * @docid
@@ -153,13 +146,13 @@ export interface dxValidatorResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule;
+    brokenRule?: ValidationRule;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+    brokenRules?: Array<ValidationRule>;
     /**
      * @docid
      * @type Promise<dxValidatorResult>
@@ -191,7 +184,7 @@ export interface dxValidatorResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+    validationRules?: Array<ValidationRule>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
