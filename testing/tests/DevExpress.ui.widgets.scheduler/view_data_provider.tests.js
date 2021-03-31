@@ -803,6 +803,34 @@ module('View Data Provider', {
                             '2nd cell position is correct'
                         );
                     });
+
+                    test('Should return correct index cell position if index is provided', function(assert) {
+                        const { viewDataProvider } = this;
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29), false, 0),
+                            { rowIndex: 1, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29), false, 0),
+                            { rowIndex: 3, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true, 0),
+                            { rowIndex: 0, cellIndex: 0 },
+                            '1st allDayPanel cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true, 0),
+                            { rowIndex: 2, cellIndex: 0 },
+                            '2st allDayPanel cell position is correct'
+                        );
+                    });
                 });
 
                 module('Horizontal Grouping', {
