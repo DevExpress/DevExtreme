@@ -14,14 +14,14 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   await t
     .click(scheduler.getAppointmentCollector('2').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
-    .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, 200, 50, { speed: 0.1 })
+    .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, 200, 50)
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-month.png', scheduler.workSpace))
     .ok();
 
   await t
     .click(scheduler.getAppointmentCollector('1').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
-    .drag(scheduler.appointmentTooltip.getListItem('Appointment 4').element, 350, 150, { speed: 0.1 })
+    .drag(scheduler.appointmentTooltip.getListItem('Appointment 4').element, 350, 150)
     .expect(await takeScreenshot('drag-n-drop-\'Appointment 4\'-from-tooltip-in-month.png', scheduler.workSpace))
     .ok()
 
@@ -47,6 +47,53 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   }],
   views: ['week'],
   currentView: 'week',
+  currentDate: new Date(2021, 4, 27),
+  startDayHour: 8,
+  height: 600,
+  width: 1000,
+}));
+
+test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .click(scheduler.getAppointmentCollector('2').element)
+    .expect(scheduler.appointmentTooltip.isVisible()).ok()
+    .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, -180, -30, { speed: 0.1 })
+    .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-month.png', scheduler.workSpace))
+    .ok();
+
+  await t
+    .click(scheduler.getAppointmentCollector('1').element)
+    .expect(scheduler.appointmentTooltip.isVisible()).ok()
+    .drag(scheduler.appointmentTooltip.getListItem('Appointment 4').element, 320, 150, { speed: 0.1 })
+    .expect(await takeScreenshot('drag-n-drop-\'Appointment 4\'-from-tooltip-in-month.png', scheduler.workSpace))
+    .ok()
+
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(() => createWidget('dxScheduler', {
+  dataSource: [{
+    text: 'Appointment 1',
+    startDate: new Date(2021, 4, 26, 9, 30),
+    endDate: new Date(2021, 4, 27, 12, 0),
+  }, {
+    text: 'Appointment 2',
+    startDate: new Date(2021, 4, 26, 9, 30),
+    endDate: new Date(2021, 4, 27, 12, 0),
+  }, {
+    text: 'Appointment 3',
+    startDate: new Date(2021, 4, 26, 9, 30),
+    endDate: new Date(2021, 4, 27, 11, 0),
+  }, {
+    text: 'Appointment 4',
+    startDate: new Date(2021, 4, 26, 9, 30),
+    endDate: new Date(2021, 4, 27, 12, 30),
+  }],
+  views: ['month'],
+  currentView: 'month',
   currentDate: new Date(2021, 4, 27),
   startDayHour: 8,
   height: 600,
