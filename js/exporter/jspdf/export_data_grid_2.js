@@ -133,21 +133,21 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 if(options.onRowExporting) {
                     const drawNewTableFromThisRow = {};
-                    options.onRowExporting({ drawNewTableFromThisRow, row: currentRow });
+                    const rowData = { row: currentRow };
+                    options.onRowExporting({ drawNewTableFromThisRow, rowData });
                     const { startNewTable, addPage, tableRect, splitToTablesByColumns } = drawNewTableFromThisRow;
                     if(startNewTable === true) {
                         pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true, splitToTablesByColumns);
                     }
-                }
 
-                if(!isDefined(currentRow.height)) {
-                    throw 'row.height is required';
-                }
-                currentRow.forEach(cell => {
-                    if(!cell.skip && !cell.rect.h) {
-                        cell.rect.h = currentRow.height;
+                    if(isDefined(rowData.rowHeight)) {
+                        currentRow.forEach(cell => {
+                            if(!cell.skip && !cell.rect.h) {
+                                cell.rect.h = rowData.rowHeight;
+                            }
+                        });
                     }
-                });
+                }
 
                 pdfGrid.addRow(currentRow);
             }

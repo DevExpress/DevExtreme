@@ -129,8 +129,8 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         const onCellExporting = ({ pdfCell }) => {
             pdfCell.rect = rect;
         };
-        const onRowExporting = ({ row }) => {
-            row.height = 20;
+        const onRowExporting = ({ rowData }) => {
+            rowData.rowHeight = 20;
         };
 
         const expectedLog = [
@@ -160,8 +160,8 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.drawTopBorder = false;
             pdfCell.drawBottomBorder = false;
         };
-        const onRowExporting = ({ row }) => {
-            row.height = 20;
+        const onRowExporting = ({ rowData }) => {
+            rowData.rowHeight = 20;
         };
 
         const expectedLog = [
@@ -192,11 +192,11 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = cellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 20;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 20;
             } else {
-                row.height = 24;
+                rowData.rowHeight = 24;
             }
         };
 
@@ -230,13 +230,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = cellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -270,8 +270,8 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            row.height = 16;
+        const onRowExporting = ({ rowData }) => {
+            rowData.rowHeight = 16;
         };
 
         const expectedLog = [
@@ -304,11 +304,11 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1') {
-                row.height = 20;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1') {
+                rowData.rowHeight = 20;
             }
         };
 
@@ -346,13 +346,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -393,13 +393,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -443,13 +443,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -492,13 +492,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -541,13 +541,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -593,13 +593,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -643,13 +643,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -697,13 +697,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'Band1') {
-                row.height = 16;
-            } else if(row[0].text === 'F1') {
-                row.height = 20;
-            } else if(row[0].text === 'f1_1') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'Band1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'f1_1') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -740,7 +740,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
 
         let cellIndex = 0;
         const pdfCellRects = [
-            { x: 10, y: 15, w: 90, h: 36 }, { x: 100, y: 15, w: 110 }, null,
+            { x: 10, y: 15, w: 90, h: 36 }, { x: 100, y: 15, w: 110 }, null, // TODO: remove "h: 36"
             null, { x: 100, y: 31, w: 50 }, { x: 150, y: 31, w: 60 },
             { x: 10, y: 51, w: 90 }, { x: 100, y: 51, w: 50 }, { x: 150, y: 51, w: 60 },
         ];
@@ -752,14 +752,14 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             }
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            const notEmptyCell = row.filter((cell) => cell.text)[0];
+        const onRowExporting = ({ rowData }) => {
+            const notEmptyCell = rowData.row.filter((cell) => cell.text)[0];
             if(notEmptyCell.text === 'F1') {
-                row.height = 16;
+                rowData.rowHeight = 16;
             } else if(notEmptyCell.text === 'F2') {
-                row.height = 20;
+                rowData.rowHeight = 20;
             } else if(notEmptyCell.text === 'f1_1') {
-                row.height = 24;
+                rowData.rowHeight = 24;
             }
         };
 
@@ -796,17 +796,17 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
 
         let cellIndex = 0;
-        const onRowExporting = ({ drawNewTableFromThisRow, row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v2_1') {
-                row.height = 24;
+        const onRowExporting = ({ drawNewTableFromThisRow, rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v2_1') {
+                rowData.rowHeight = 24;
                 drawNewTableFromThisRow.startNewTable = true;
                 drawNewTableFromThisRow.tableRect = { x: 60, y: 15, w: 40, h: 54 };
-            } else if(row[0].text === 'v3_1') {
-                row.height = 30;
+            } else if(rowData.row[0].text === 'v3_1') {
+                rowData.rowHeight = 30;
             }
         };
         const onCellExporting = ({ pdfCell }) => {
@@ -843,17 +843,17 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
 
         let cellIndex = 0;
-        const onRowExporting = ({ drawNewTableFromThisRow, row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v2_1') {
-                row.height = 24;
+        const onRowExporting = ({ drawNewTableFromThisRow, rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v2_1') {
+                rowData.rowHeight = 24;
                 drawNewTableFromThisRow.startNewTable = true;
                 drawNewTableFromThisRow.tableRect = { x: 60, y: 15, w: 40, h: 54 };
-            } else if(row[0].text === 'v3_1') {
-                row.height = 30;
+            } else if(rowData.row[0].text === 'v3_1') {
+                rowData.rowHeight = 30;
             }
         };
         const onCellExporting = ({ pdfCell }) => {
@@ -897,18 +897,18 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
 
         let cellIndex = 0;
-        const onRowExporting = ({ drawNewTableFromThisRow, row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v2_1') {
-                row.height = 24;
+        const onRowExporting = ({ drawNewTableFromThisRow, rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v2_1') {
+                rowData.rowHeight = 24;
                 drawNewTableFromThisRow.startNewTable = true;
                 drawNewTableFromThisRow.addPage = true;
                 drawNewTableFromThisRow.tableRect = { x: 10, y: 10, w: 40, h: 54 };
-            } else if(row[0].text === 'v3_1') {
-                row.height = 30;
+            } else if(rowData.row[0].text === 'v3_1') {
+                rowData.rowHeight = 30;
             }
         };
         const onCellExporting = ({ pdfCell }) => {
@@ -946,18 +946,18 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
 
         let cellIndex = 0;
-        const onRowExporting = ({ drawNewTableFromThisRow, row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v2_1') {
-                row.height = 24;
+        const onRowExporting = ({ drawNewTableFromThisRow, rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v2_1') {
+                rowData.rowHeight = 24;
                 drawNewTableFromThisRow.startNewTable = true;
                 drawNewTableFromThisRow.addPage = true;
                 drawNewTableFromThisRow.tableRect = { x: 10, y: 10, w: 40, h: 54 };
-            } else if(row[0].text === 'v3_1') {
-                row.height = 30;
+            } else if(rowData.row[0].text === 'v3_1') {
+                rowData.rowHeight = 30;
             }
         };
         const onCellExporting = ({ pdfCell }) => {
@@ -1014,8 +1014,8 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.drawBottomBorder = false;
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            row.height = 16;
+        const onRowExporting = ({ rowData }) => {
+            rowData.rowHeight = 16;
         };
 
         const expectedLog = [
@@ -1063,13 +1063,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.drawBottomBorder = false;
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -1121,13 +1121,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -1183,13 +1183,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.drawBottomBorder = false;
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -1244,13 +1244,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -1308,13 +1308,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -1369,13 +1369,13 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
         };
-        const onRowExporting = ({ row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
             }
         };
 
@@ -1424,14 +1424,14 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             { x: 10, y: 56, w: 40 }, { x: 11, y: 57, w: 50 }, { x: 12, y: 58, w: 60 },
             { x: 10, y: 80, w: 40 }, { x: 11, y: 80, w: 50 }, { x: 12, y: 80, w: 60 }
         ];
-        const onRowExporting = ({ drawNewTableFromThisRow, row }) => {
+        const onRowExporting = ({ drawNewTableFromThisRow, rowData }) => {
             // if(rowIndex === 2) { // TODO: change to something like "if(row.valuesByColumn["f1"] === "v1_2")"
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
 
                 drawNewTableFromThisRow.startNewTable = true;
                 drawNewTableFromThisRow.addPage = true;
@@ -1445,8 +1445,8 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
                     drawOnNewPage: true,
                     tableRect: { x: 12, y: 58, w: 60, h: 54 }
                 }];
-            } else if(row[0].text === 'v1_3') {
-                row.height = 30;
+            } else if(rowData.row[0].text === 'v1_3') {
+                rowData.rowHeight = 30;
             }
         };
         const onCellExporting = ({ gridCell, pdfCell }) => {
@@ -1512,19 +1512,19 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             { x: 10, y: 56, w: 40 }, { x: 11, y: 57, w: 50 }, { x: 12, y: 58, w: 60 },
             { x: 10, y: 80, w: 40 }, { x: 11, y: 80, w: 50 }, { x: 12, y: 80, w: 60 }
         ];
-        const onRowExporting = ({ drawNewTableFromThisRow, row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ drawNewTableFromThisRow, rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
 
                 drawNewTableFromThisRow.startNewTable = true;
                 drawNewTableFromThisRow.addPage = true;
                 drawNewTableFromThisRow.tableRect = { x: 10, y: 56, w: 40, h: 54 };
-            } else if(row[0].text === 'v1_3') {
-                row.height = 30;
+            } else if(rowData.row[0].text === 'v1_3') {
+                rowData.rowHeight = 30;
             }
         };
         const onCellExporting = ({ gridCell, pdfCell }) => {
@@ -1587,19 +1587,19 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             { x: 10, y: 56, w: 40 }, { x: 11, y: 57, w: 50 }, { x: 12, y: 58, w: 60 },
             { x: 10, y: 80, w: 40 }, { x: 11, y: 80, w: 50 }, { x: 12, y: 80, w: 60 }
         ];
-        const onRowExporting = ({ drawNewTableFromThisRow, row }) => {
-            if(row[0].text === 'F1') {
-                row.height = 16;
-            } else if(row[0].text === 'v1_1') {
-                row.height = 20;
-            } else if(row[0].text === 'v1_2') {
-                row.height = 24;
+        const onRowExporting = ({ drawNewTableFromThisRow, rowData }) => {
+            if(rowData.row[0].text === 'F1') {
+                rowData.rowHeight = 16;
+            } else if(rowData.row[0].text === 'v1_1') {
+                rowData.rowHeight = 20;
+            } else if(rowData.row[0].text === 'v1_2') {
+                rowData.rowHeight = 24;
 
                 drawNewTableFromThisRow.startNewTable = true;
                 drawNewTableFromThisRow.addPage = true;
                 drawNewTableFromThisRow.tableRect = { x: 10, y: 56, w: 40, h: 54 };
-            } else if(row[0].text === 'v1_3') {
-                row.height = 30;
+            } else if(rowData.row[0].text === 'v1_3') {
+                rowData.rowHeight = 30;
             }
         };
         const onCellExporting = ({ gridCell, pdfCell }) => {
