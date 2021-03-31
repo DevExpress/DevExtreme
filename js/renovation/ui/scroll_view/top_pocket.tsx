@@ -2,7 +2,7 @@ import {
   JSXComponent,
   Component,
   Fragment, InternalState,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import devices from '../../../core/devices';
 import { isDefined } from '../../../core/utils/type';
 

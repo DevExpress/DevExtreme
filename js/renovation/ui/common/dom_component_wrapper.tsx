@@ -10,7 +10,7 @@ import {
   Consumer,
   RefObject,
   Mutable,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import type DomComponent from '../../../core/dom_component';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { EventCallback } from './event_callback.d';

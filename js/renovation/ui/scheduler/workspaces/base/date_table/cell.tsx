@@ -5,7 +5,7 @@ import {
   JSXTemplate,
   Template,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import { ContentTemplateProps, DataCellTemplateProps } from '../../types.d';

@@ -3,7 +3,7 @@ import {
   JSXComponent,
   Effect,
   InternalState, ForwardRef, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { Page } from './page';
 import { PAGER_INFO_CLASS } from '../info';

@@ -7,7 +7,7 @@ import {
   RefObject,
   InternalState,
   Mutable,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 
 import { AnimatedScrollbar } from './animated_scrollbar';

@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 export const viewFunction = (viewModel: TooltipItemContent): JSX.Element => (
   <div

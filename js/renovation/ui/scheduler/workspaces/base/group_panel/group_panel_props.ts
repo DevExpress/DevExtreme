@@ -3,7 +3,7 @@ import {
   JSXTemplate,
   OneWay,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { GroupOrientation } from '../../../types.d';
 import {

@@ -1,6 +1,6 @@
 import {
   Event, OneWay, ComponentBindings,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 @ComponentBindings()
 export class BaseWidgetProps {

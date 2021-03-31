@@ -9,7 +9,7 @@ import {
   Mutable,
   InternalState,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';

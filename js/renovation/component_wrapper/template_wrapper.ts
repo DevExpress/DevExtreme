@@ -1,5 +1,4 @@
-import { InfernoComponent } from 'devextreme-generator/modules/inferno/base_component';
-import { InfernoEffect } from 'devextreme-generator/modules/inferno/effect';
+import { InfernoComponent, InfernoEffect } from '@devextreme/vdom';
 import { createElement } from 'inferno-create-element';
 import { createRef } from 'inferno';
 import $ from '../../core/renderer';

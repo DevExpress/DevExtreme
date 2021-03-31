@@ -3,7 +3,7 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { RectSvgElement } from './svg_rect';
 import { PathSvgElement } from './svg_path';
 import { normalizeEnum } from '../../../../viz/core/utils';

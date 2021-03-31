@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, ForwardRef, JSXComponent, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { WidgetProps } from './common/widget';
 import LegacyValidationMessage from '../../ui/validation_message';
 import { DomComponentWrapper } from './common/dom_component_wrapper';

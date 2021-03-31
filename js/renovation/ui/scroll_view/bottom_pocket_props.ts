@@ -1,7 +1,7 @@
 import {
   ComponentBindings,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 @ComponentBindings()
 export class BottomPocketProps {

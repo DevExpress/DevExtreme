@@ -5,7 +5,7 @@ import {
   OneWay,
   Ref,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import SvgGraphicsProps from './base_graphics_props';
 import {
   getGraphicExtraProps,
