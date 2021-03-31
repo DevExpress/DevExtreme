@@ -71,20 +71,20 @@ export default class FileManagerNotificationControl extends Widget {
         }
         if(!this._isProgressDrawerDisabled()) {
             const notificationManagerComponent = this._getProgressManagerComponent();
+            options.isActual = true;
             const defaultManager = new notificationManagerComponent(options);
             this._managerMap[defaultManager.getId()] = defaultManager;
         }
     }
 
-    _getNotificationManager(operationInfo, isActualRequired) {
-        if(isActualRequired && !this._isProgressDrawerDisabled()) {
-            for(const managerId in this._managerMap) {
-                if(Object.prototype.hasOwnProperty.call(this._managerMap, managerId) && managerId !== this._notificationManagerStubId) {
-                    return this._managerMap[managerId];
-                }
-            }
+    _getNotificationManager(operationInfo) {
+        let actualManagerId;
+        if(!operationInfo) {
+            actualManagerId = Object.keys(this._managerMap).filter(managerId => this._managerMap[managerId].isActual())[0];
+        } else {
+            actualManagerId = operationInfo[MANAGER_ID_NAME];
         }
-        return this._managerMap[operationInfo?.[MANAGER_ID_NAME]] || this._managerMap[this._notificationManagerStubId];
+        return this._managerMap[actualManagerId] || this._managerMap[this._notificationManagerStubId];
     }
 
     _clearManagerMap() {
@@ -95,7 +95,7 @@ export default class FileManagerNotificationControl extends Widget {
 
     tryShowProgressPanel() {
         const promise = new Deferred();
-        const notificationManager = this._getNotificationManager(null, true);
+        const notificationManager = this._getNotificationManager();
         if(notificationManager.isActionProgressStatusDefault() || this._isProgressDrawerOpened() || this._isProgressDrawerDisabled()) {
             return promise.resolve().promise();
         }
@@ -109,7 +109,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     addOperation(processingMessage, allowCancel, allowProgressAutoUpdate) {
-        const notificationManager = this._getNotificationManager(null, true);
+        const notificationManager = this._getNotificationManager();
         return notificationManager.addOperation(processingMessage, allowCancel, allowProgressAutoUpdate);
     }
 
@@ -197,7 +197,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _ensureProgressPanelCreated(container) {
-        const notificationManager = this._getNotificationManager(null, true);
+        const notificationManager = this._getNotificationManager();
         notificationManager.ensureProgressPanelCreated(container, {
             onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
             onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
@@ -237,7 +237,7 @@ export default class FileManagerNotificationControl extends Widget {
         if(!this.option('showNotificationPopup')) {
             return;
         }
-        const notificationManager = this._getNotificationManager(null, true);
+        const notificationManager = this._getNotificationManager();
         const $content = $('<div>');
 
         const $message = $('<div>')

@@ -73,7 +73,7 @@ const createNotificationControl = (context, options) => {
 
     context.clock.tick(400);
 
-    context.notificationControl._getNotificationManager(null, true)._progressPanel.option('logger', logger);
+    context.notificationControl._getNotificationManager()._progressPanel.option('logger', logger);
 };
 
 const createEditing = (context, options) => {
@@ -725,7 +725,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.clock.tick(3000);
 
-        const operationInfo = this.notificationControl._getNotificationManager(null, true)._progressPanel.getStoredInfos()[0];
+        const operationInfo = this.notificationControl._getNotificationManager()._progressPanel.getStoredInfos()[0];
         this.editing._fileUploader.cancelFileUpload(operationInfo.uploadSessionId, 1);
 
         this.clock.tick(10000);
@@ -748,7 +748,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.clock.tick(2600);
 
-        const operationInfo = this.notificationControl._getNotificationManager(null, true)._progressPanel.getStoredInfos()[0];
+        const operationInfo = this.notificationControl._getNotificationManager()._progressPanel.getStoredInfos()[0];
         this.editing._fileUploader.cancelFileUpload(operationInfo.uploadSessionId, 0);
 
         this.clock.tick(1000);
@@ -775,7 +775,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.clock.tick(3000);
 
-        const operationInfo = this.notificationControl._getNotificationManager(null, true)._progressPanel.getStoredInfos()[0];
+        const operationInfo = this.notificationControl._getNotificationManager()._progressPanel.getStoredInfos()[0];
         this.editing._onCancelUploadSession(operationInfo);
 
         this.clock.tick(10000);
@@ -802,7 +802,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
 
         this.clock.tick(2600);
 
-        const operationInfo = this.notificationControl._getNotificationManager(null, true)._progressPanel.getStoredInfos()[0];
+        const operationInfo = this.notificationControl._getNotificationManager()._progressPanel.getStoredInfos()[0];
         this.editing._fileUploader.cancelFileUpload(operationInfo.uploadSessionId, 0);
 
         this.clock.tick(10000);
@@ -844,7 +844,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
         this.clock.tick();
         assert.deepEqual(this.logger.getEntries(), [], 'error status persisted');
 
-        const panel = this.notificationControl._getNotificationManager(null, true)._progressPanel;
+        const panel = this.notificationControl._getNotificationManager()._progressPanel;
         panel._closeOperation(panel.getStoredInfos()[0]);
         const expectedEntries = [ { message: '', status: 'default', type: 'notification-onActionProgress' } ];
         assert.deepEqual(this.logger.getEntries(), expectedEntries, 'error status removed');
@@ -867,7 +867,7 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
         this.clock.tick();
         assert.deepEqual(this.logger.getEntries(), [], 'error status persisted');
 
-        const panel = this.notificationControl._getNotificationManager(null, true)._progressPanel;
+        const panel = this.notificationControl._getNotificationManager()._progressPanel;
         panel._closeOperation(panel.getStoredInfos()[0]);
         assert.deepEqual(this.logger.getEntries(), []);
 

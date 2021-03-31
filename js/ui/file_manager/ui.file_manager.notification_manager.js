@@ -20,14 +20,19 @@ const ACTION_PROGRESS_STATUS = {
 };
 
 class NotificationManagerBase {
-    constructor({ onActionProgressStatusChanged }) {
+    constructor({ onActionProgressStatusChanged, isActual }) {
         this._id = new Guid().toString();
+        this._isActual = isActual || false;
         this._actionProgressStatus = ACTION_PROGRESS_STATUS.default;
         this._raiseActionProgress = onActionProgressStatusChanged;
     }
 
     getId() {
         return this._id;
+    }
+
+    isActual() {
+        return this._isActual;
     }
 
     createErrorDetailsProgressBox($container, item, errorText) {
