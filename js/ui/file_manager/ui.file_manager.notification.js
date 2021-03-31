@@ -165,7 +165,7 @@ export default class FileManagerNotificationControl extends Widget {
 
     _dimensionChanged(dimension) {
         const notificationManager = this._getNotificationManager();
-        if(!(dimension && dimension === 'height') && notificationManager.isDimensionChanged()) {
+        if(!(dimension && dimension === 'height') && notificationManager.isDimensionChangeHandled()) {
             this._checkAdaptiveState();
         }
     }

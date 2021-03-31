@@ -51,10 +51,6 @@ class NotificationManagerBase {
         return this._actionProgressStatus === ACTION_PROGRESS_STATUS.default;
     }
 
-    isRealHandlerRequested(operationInfo) {
-        return operationInfo?.[this._managerId];
-    }
-
     _createDetailsItem($container, item) {
         const $detailsItem = $('<div>').appendTo($container);
         return this._createProgressBox($detailsItem, {
@@ -106,7 +102,7 @@ class NotificationManagerStub extends NotificationManagerBase {
 
     addOperationDetailsError() {}
 
-    isDimensionChanged() { return false; }
+    isDimensionChangeHandled() { return false; }
 
     ensureProgressPanelCreated() {}
 
@@ -183,7 +179,7 @@ class NotificationManager extends NotificationManagerBase {
         this._notifyError(errorInfo);
     }
 
-    isDimensionChanged() {
+    isDimensionChangeHandled() {
         if(this._progressPanel) {
             this._progressPanel.$element().detach();
         }
