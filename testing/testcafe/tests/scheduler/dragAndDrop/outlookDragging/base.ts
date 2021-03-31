@@ -15,14 +15,14 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
     .click(scheduler.getAppointmentCollector('2').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 3').element, 200, 50)
-    .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-month.png', scheduler.workSpace))
+    .expect(await takeScreenshot('drag-n-drop-\'Appointment 3\'-from-tooltip-in-week.png', scheduler.workSpace))
     .ok();
 
   await t
     .click(scheduler.getAppointmentCollector('1').element)
     .expect(scheduler.appointmentTooltip.isVisible()).ok()
     .drag(scheduler.appointmentTooltip.getListItem('Appointment 4').element, 350, 150)
-    .expect(await takeScreenshot('drag-n-drop-\'Appointment 4\'-from-tooltip-in-month.png', scheduler.workSpace))
+    .expect(await takeScreenshot('drag-n-drop-\'Appointment 4\'-from-tooltip-in-week.png', scheduler.workSpace))
     .ok()
 
     .expect(compareResults.isValid())
