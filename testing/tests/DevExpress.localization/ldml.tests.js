@@ -98,6 +98,7 @@ QUnit.module('date parser', () => {
         });
         checkFormat('yyyy \'m\'. MMMM d');
         checkFormat('MMM dd, yyyy [h:mm aaa]');
+        checkFormat('M/d/yyyy, HHmm'); // T960532
     });
 
     QUnit.test('dates are parsed correctly on DST start time (T869511)', function(assert) {

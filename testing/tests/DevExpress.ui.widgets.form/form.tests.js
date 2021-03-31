@@ -10,6 +10,8 @@ import themes from 'ui/themes';
 import device from 'core/devices';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import domAdapter from 'core/dom_adapter';
+import windowModule from 'core/utils/window';
+import Form from 'ui/form/ui.form.js';
 
 import 'ui/text_area';
 import 'ui/autocomplete';
@@ -28,6 +30,7 @@ const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
+const LAST_COL_CLASS = 'dx-last-col';
 
 QUnit.testStart(function() {
     const markup =
@@ -324,6 +327,11 @@ QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', f
 });
 
 QUnit.test('Hide helper text when validation message shows for material theme', function(assert) {
+    if(browser.msie && parseInt(browser.version) <= 11) {
+        assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+        return;
+    }
+
     const origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
 
@@ -3345,6 +3353,83 @@ QUnit.test('Form redraw layout when colCount is \'auto\' and an calculated colCo
     resizeCallbacks.fire();
 
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout');
+});
+
+function getColsCountFromDOM($form) {
+    let result = -1;
+
+    const $lastCol = $form.find(`.${LAST_COL_CLASS}`);
+    [1, 2, 3, 4].forEach(colCount => {
+        if($lastCol.hasClass(`dx-col-${colCount - 1}`)) {
+            result = colCount;
+        }
+    });
+
+    return result;
+}
+
+[
+    { screenWidth: 1500, expectedSize: 'lg' },
+    { screenWidth: 1000, expectedSize: 'md' },
+    { screenWidth: 900, expectedSize: 'sm' },
+    { screenWidth: 700, expectedSize: 'xs' },
+].forEach((testConfig) => {
+    QUnit.test(`Default implementation of screenByWidth. Screen size: ${testConfig.screenWidth}`, function(assert) {
+        const getDocumentElementStub = sinon.stub(domAdapter, 'getDocumentElement').returns({
+            clientWidth: testConfig.screenWidth
+        });
+
+        const config = {
+            colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
+            items: [
+                { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
+            ]
+        };
+
+        const $form = $('#form').dxForm(config);
+
+        const colsCount = getColsCountFromDOM($form);
+        assert.equal(colsCount, config.colCountByScreen[testConfig.expectedSize], 'form has correct columns count');
+        getDocumentElementStub.restore();
+    });
+});
+
+['globalOption', 'instanceOption'].forEach((optionType) => {
+    QUnit.test(`Setting screen by width. Use ${optionType}`, function(assert) {
+        const defaultCustomRules = Form._classCustomRules;
+
+        const globalOptionStub = sinon.stub().returns('xs');
+        const instanceOptionStub = sinon.stub().returns('xs');
+        const defaultFunctionStub = sinon.spy(windowModule, 'defaultScreenFactorFunc');
+
+        const config = {
+            colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
+            items: [
+                { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
+            ]
+        };
+
+        if(optionType === 'globalOption') {
+            Form.defaultOptions({
+                options: {
+                    screenByWidth: globalOptionStub
+                }
+            });
+        } else if(optionType === 'instanceOption') {
+            config['screenByWidth'] = instanceOptionStub;
+        }
+
+        const $form = $('#form').dxForm(config);
+        assert.equal(globalOptionStub.called, optionType === 'globalOption', 'global function is called');
+        assert.equal(instanceOptionStub.called, optionType === 'instanceOption', 'instance function is called');
+        assert.equal(defaultFunctionStub.called, 0, 'default function is called');
+
+        const colsCount = getColsCountFromDOM($form);
+        assert.equal(colsCount, 1, 'form has correct columns count');
+
+        Form._classCustomRules = defaultCustomRules;
+        defaultFunctionStub.restore();
+    });
 });
 
 QUnit.module('Form when rtlEnabled is true');

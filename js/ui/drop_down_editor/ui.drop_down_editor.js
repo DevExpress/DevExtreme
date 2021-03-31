@@ -274,7 +274,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _readOnlyPropValue: function() {
-        return !this.option('acceptCustomValue') || this.callBase();
+        return !this._isEditable() || this.callBase();
     },
 
     _cleanFocusState: function() {
@@ -446,10 +446,27 @@ const DropDownEditor = TextBox.inherit({
         }
 
         if(this.option('focusStateEnabled') && !focused(this._input())) {
+            this._resetCaretPosition();
+
             eventsEngine.trigger(this._input(), 'focus');
         }
 
         return true;
+    },
+
+    _resetCaretPosition: function(ignoreEditable = false) {
+        const inputElement = this._input().get(0);
+
+        if(inputElement) {
+            const { value } = inputElement;
+            const caretPosition = isDefined(value) && (ignoreEditable || this._isEditable()) ? value.length : 0;
+
+            this._caret({ start: caretPosition, end: caretPosition }, true);
+        }
+    },
+
+    _isEditable: function() {
+        return this.option('acceptCustomValue');
     },
 
     _toggleOpenState: function(isVisible) {
@@ -551,7 +568,7 @@ const DropDownEditor = TextBox.inherit({
 
     _popupInitializedHandler: function() {
         if(!this.option('onPopupInitialized')) {
-            return;
+            return null;
         }
 
         return (e) => {

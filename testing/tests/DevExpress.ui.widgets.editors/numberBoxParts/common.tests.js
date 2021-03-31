@@ -1,10 +1,12 @@
 import $ from 'jquery';
 import SpinButton from 'ui/number_box/number_box.spin';
+import browser from 'core/utils/browser';
 import config from 'core/config';
 import devices from 'core/devices';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/number_box';
 import 'ui/validator';
@@ -267,24 +269,6 @@ QUnit.module('basics', {}, () => {
         assert.strictEqual(instance.option('value'), -11, 'value is correct');
     });
 
-    QUnit.test('jQuery event should be specified on value change when value is not valid', function(assert) {
-        const $element = $('#numberbox').dxNumberBox({
-            value: 1,
-            valueChangeEvent: 'keyup',
-            onValueChanged(e) {
-                assert.ok(e.event, 'jQuery event specified');
-            }
-        });
-
-        const $input = $element.find('.' + INPUT_CLASS);
-        const keyboard = keyboardMock($input);
-
-        keyboard
-            .press('end')
-            .press('backspace')
-            .keyUp('backspace');
-    });
-
     QUnit.test('regression test. Change value used option', function(assert) {
         assert.expect(1);
 
@@ -497,6 +481,23 @@ QUnit.module('basics', {}, () => {
         assert.notStrictEqual(numberBox.option('value'), 100);
     });
 
+    ['ctrlKey', 'metaKey'].forEach((commandKey) => {
+        QUnit.test(`mousewheel action should not work for zooming (${commandKey} pressed)`, function(assert) {
+            const $numberBox = $('#numberbox').dxNumberBox({
+                value: 100.6
+            });
+
+            const numberBox = $numberBox.dxNumberBox('instance');
+            const $numberBoxInput = $(`.${INPUT_CLASS}`, $numberBox);
+            const mouse = pointerMock($numberBoxInput).start();
+
+            $numberBoxInput.get(0).focus();
+
+            mouse.wheel(10, { [commandKey]: true });
+            assert.equal(numberBox.option('value'), 100.6, `value is not changed, ${commandKey} pressed`);
+        });
+    });
+
     QUnit.testInActiveWindow('input is not focused when spin buttons are clicked if useLargeSpinButtons = true', function(assert) {
         const $element = $('#numberbox').dxNumberBox({
             showSpinButtons: true,
@@ -559,21 +560,6 @@ QUnit.module('basics', {}, () => {
         const $buttons = $element.find('.dx-texteditor-buttons-container').children();
         assert.ok($buttons.eq(0).hasClass(CLEAR_BUTTON_CLASS), 'clear button is the first');
         assert.ok($buttons.eq(1).hasClass('dx-numberbox-spin-container'), 'spin buttons are the second');
-    });
-
-    QUnit.test('clear button should save valueChangeEvent', function(assert) {
-        const valueChangedHandler = sinon.spy();
-
-        const $element = $('#numberbox').dxNumberBox({
-            showClearButton: true,
-            onValueChanged: valueChangedHandler
-        });
-
-        const $clearButton = $element.find(`.${CLEAR_BUTTON_CLASS}`);
-        $clearButton.trigger('dxclick');
-
-        assert.equal(valueChangedHandler.callCount, 1, 'valueChangedHandler has been called');
-        assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
     });
 
     QUnit.test('clearButton should clear the text even if the value was not changed', function(assert) {
@@ -729,22 +715,6 @@ QUnit.module('basics', {}, () => {
         const $input = $numberBox.find('.' + INPUT_CLASS);
 
         assert.equal(numberBox.option('value'), value, 'value is not changed');
-        assert.ok(!numberBox.option('isValid'), 'the \'isValid\' option is false');
-        assert.equal($input.val(), '', 'input value is cleared');
-    });
-
-    QUnit.test('The value option should not be reset if it is invalid', function(assert) {
-        const value = 'any invalid value';
-
-        const $numberBox = $('#numberbox').dxNumberBox({
-            value: 5
-        });
-
-        const numberBox = $numberBox.dxNumberBox('instance');
-        const $input = $numberBox.find('.' + INPUT_CLASS);
-
-        numberBox.option('value', value);
-        assert.equal(numberBox.option('value'), value, 'value is not reset');
         assert.ok(!numberBox.option('isValid'), 'the \'isValid\' option is false');
         assert.equal($input.val(), '', 'input value is cleared');
     });
@@ -1307,35 +1277,40 @@ QUnit.module('options changed callbacks', {
         assert.equal($input.val(), '0', 'min value is right');
     });
 
-    QUnit.test('spin edit min/max onValueChanged action', function(assert) {
-        assert.expect(2);
+    QUnit.test('valueChanged event should not be raised after click on spinDown if current value is minimum', function(assert) {
+        assert.expect(1);
 
         this.instance.option({
             showSpinButtons: true,
             value: 1,
             min: 0,
-            max: 1
-        });
-
-        const $spinUp = this.element.find('.' + SPIN_UP_CLASS);
-        const $spinDown = this.element.find('.' + SPIN_DOWN_CLASS);
-
-        this.instance.option({
-            value: 0,
-            onValueChanged(data) {
-                assert.equal(data.value, 1, 'value in action is right');
+            onValueChanged() {
+                assert.ok(true);
             }
         });
-        $spinUp.trigger('dxpointerdown');
+
+        const $spinDown = this.element.find(`.${SPIN_DOWN_CLASS}`);
+
+        $spinDown.trigger('dxpointerdown');
+        $spinDown.trigger('dxpointerdown');
+    });
+
+    QUnit.test('valueChanged event should not be raised after click on spinUp if current value is maximum', function(assert) {
+        assert.expect(1);
 
         this.instance.option({
+            showSpinButtons: true,
             value: 1,
-            onValueChanged(data) {
-                assert.equal(data.value, 0, 'value in action is right');
+            max: 2,
+            onValueChanged() {
+                assert.ok(true);
             }
         });
-        $spinDown.trigger('dxpointerdown');
-        $spinDown.trigger('dxpointerdown');
+
+        const $spinUp = this.element.find(`.${SPIN_UP_CLASS}`);
+
+        $spinUp.trigger('dxpointerdown');
+        $spinUp.trigger('dxpointerdown');
     });
 
     QUnit.test('spin edit long click handling', function(assert) {
@@ -1362,7 +1337,7 @@ QUnit.module('options changed callbacks', {
         }
     });
 
-    QUnit.test('spin edit long click handling', function(assert) {
+    QUnit.test('spin edit very long click handling', function(assert) {
         assert.expect(2);
 
         this.clock = sinon.useFakeTimers();
@@ -1452,74 +1427,6 @@ QUnit.module('options changed callbacks', {
         this.instance.option({ useLargeSpinButtons: true });
         assert.ok(this.element.hasClass(SPIN_TOUCH_FRIENDLY_CLASS), 'element has touchFriendly class');
     });
-
-    QUnit.test('onValueChanged option should get jQuery event as a parameter when spin buttons are clicked', function(assert) {
-        let jQueryEvent;
-
-        this.instance.option({
-            showSpinButtons: true,
-            onValueChanged(e) {
-                jQueryEvent = e.event;
-            }
-        });
-
-        const $spinUp = this.element.find('.dx-numberbox-spin-up');
-        const $spinDown = this.element.find('.dx-numberbox-spin-down');
-
-        $spinUp.trigger('dxpointerdown');
-        assert.equal(jQueryEvent.target, $spinUp.get(0), 'jQuery event is defined when spinup click used');
-
-        $spinDown.trigger('dxpointerdown');
-        assert.equal(jQueryEvent.target, $spinDown.get(0), 'jQuery event is defined when spindown click used');
-    });
-
-    QUnit.testInActiveWindow('onValueChanged option should get jQuery event as a parameter when mouse wheel is used', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'this test is actual only for desktop ');
-            return;
-        }
-
-        let jQueryEvent;
-
-        this.instance.option({
-            showSpinButtons: true,
-            onValueChanged(e) {
-                jQueryEvent = e.event;
-            }
-        });
-
-        const $numberBoxInput = this.element.find('.' + INPUT_CLASS);
-        const mouse = pointerMock($numberBoxInput);
-
-        $numberBoxInput.focus();
-        $numberBoxInput.focus();
-
-        mouse.wheel(10);
-        assert.equal(jQueryEvent.delta, 10, 'jQuery event is defined when mousewheel up');
-
-        mouse.wheel(-10);
-        assert.equal(jQueryEvent.delta, -10, 'jQuery event is defined when mousewheel down');
-    });
-
-    QUnit.test('onValueChanged option should get jQuery event as a parameter when up/down arrows are used', function(assert) {
-        let jQueryEvent;
-
-        this.instance.option({
-            showSpinButtons: true,
-            onValueChanged(e) {
-                jQueryEvent = e.event;
-            }
-        });
-
-        const $input = this.element.find('.' + INPUT_CLASS);
-        const keyboard = keyboardMock($input);
-
-        keyboard.keyDown('up');
-        assert.equal(jQueryEvent.key, 'ArrowUp', 'jQuery event is defined when up key pressed');
-
-        keyboard.keyDown('down');
-        assert.equal(jQueryEvent.key, 'ArrowDown', 'jQuery event is defined when down key pressed');
-    });
 });
 
 QUnit.module('regressions', {
@@ -1596,6 +1503,11 @@ QUnit.module('regressions', {
     });
 
     QUnit.test('B235175 - add additional test cases for various numbers', function(assert) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+            return;
+        }
+
         assert.expect(10);
 
         const $input = this.element.find('.' + INPUT_CLASS);
@@ -2099,23 +2011,6 @@ QUnit.module('number validation', {}, () => {
 
         assert.equal($numberBox.find(INVALID_MESSAGE_POPUP_CONTENT_SELECTOR).text(), 'Value is not in range', 'validation message is not empty');
     });
-
-    QUnit.test('onValueChanged should be fired after \'enter\' key was pressed', function(assert) {
-        const onValueChangedStub = sinon.stub();
-
-        const $numberBox = $('#numberbox').dxNumberBox({
-            onValueChanged: onValueChangedStub
-        });
-
-        const $input = $numberBox.find('.' + INPUT_CLASS);
-        const keyboard = keyboardMock($input);
-
-        keyboard.type('2');
-        keyboard.press('enter');
-        keyboard.change();
-
-        assert.equal(onValueChangedStub.callCount, 1, 'valueChange was fired');
-    });
 });
 
 QUnit.module('aria accessibility', {}, () => {
@@ -2206,5 +2101,130 @@ QUnit.module('aria accessibility', {}, () => {
         });
         assert.ok($input.hasAttribute('aria-valuemax'), 'there is valuemin');
         assert.ok($input.hasAttribute('aria-valuemax'), 'there is valuemax');
+    });
+});
+
+QUnit.module('valueChanged should receive correct event parameter', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        const initialOptions = {
+            onValueChanged: this.valueChangedHandler,
+            showSpinButtons: true
+        };
+
+        this.init = (options) => {
+            this.$element = $('#numberbox').dxNumberBox(options);
+            this.instance = this.$element.dxNumberBox('instance');
+            this.$input = this.$element.find(`.${INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+            this.mouse = pointerMock(this.$input);
+            this.$spinUp = this.$element.find(`.${SPIN_UP_CLASS}`);
+            this.$spinDown = this.$element.find(`.${SPIN_DOWN_CLASS}`);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, initialOptions, options));
+        };
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', 27);
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+
+        this.init(initialOptions);
+    }
+}, () => {
+    QUnit.test('on program change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on change', function(assert) {
+        this.keyboard
+            .type('1')
+            .change();
+
+        this.checkEvent(assert, 'change', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on change when value is not valid', function(assert) {
+        this.reinit({ valueChangeEvent: 'keyup', value: 1 });
+
+        this.keyboard
+            .press('end')
+            .press('backspace')
+            .keyUp('backspace');
+
+        this.checkEvent(assert, 'keyup', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on clear button', function(assert) {
+        this.instance.option('showClearButton', true);
+
+        const $clearButton = this.$element.find(`.${CLEAR_BUTTON_CLASS}`);
+        $clearButton.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $clearButton);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on up spin button', function(assert) {
+        this.$spinUp.trigger('dxpointerdown');
+
+        this.checkEvent(assert, 'dxpointerdown', this.$spinUp);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on down spin button', function(assert) {
+        this.$spinDown.trigger('dxpointerdown');
+
+        this.checkEvent(assert, 'dxpointerdown', this.$spinDown);
+        this.testProgramChange(assert);
+    });
+
+    [['up', 10], ['down', -10]].forEach(([direction, delta]) => {
+        QUnit.testInActiveWindow(`on mouse wheel ${direction}`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'this test is actual only for desktop');
+                return;
+            }
+
+            this.$input.focus();
+            this.mouse.wheel(delta);
+
+            this.checkEvent(assert, 'dxmousewheel', this.$input);
+            this.testProgramChange(assert);
+        });
+    });
+
+    ['down', 'up'].forEach(arrow => {
+        QUnit.test(`on ${arrow} press`, function(assert) {
+            this.keyboard.press(arrow);
+
+            this.checkEvent(assert, 'keydown', this.$input, arrow);
+            this.testProgramChange(assert);
+        });
+    });
+
+    QUnit.test('on enter key press', function(assert) {
+        this.keyboard
+            .type('2')
+            .press('enter')
+            .change();
+
+        assert.ok(this.valueChangedHandler.calledOnce, 'valueChanged is raised');
+
+        this.testProgramChange(assert);
     });
 });

@@ -190,31 +190,34 @@ const ColorBox = DropDownEditor.inherit({
             applyValueMode: that.option('applyValueMode'),
             focusStateEnabled: that.option('focusStateEnabled'),
             stylingMode: this.option('stylingMode'),
-            onEnterKeyPressed: function() {
+            onEnterKeyPressed: function({ event }) {
                 that._colorViewEnterKeyPressed = true;
                 if(that._colorView.option('value') !== that.option('value')) {
+                    that._saveValueChangeEvent(event);
                     that._applyNewColor(that._colorView.option('value'));
                     that.close();
                 }
             },
 
-            onValueChanged: function(args) {
-                if(colorUtils.makeRgba(args.value) === args.previousValue) {
-                    return;
-                }
-
+            onValueChanged: function({ event, value, previousValue }) {
                 const instantlyMode = that.option('applyValueMode') === 'instantly';
+                const isOldValue = colorUtils.makeRgba(value) === previousValue;
+                const changesApplied = instantlyMode || that._colorViewEnterKeyPressed;
+                const valueCleared = that._shouldSaveEmptyValue;
 
-                if(!instantlyMode && !that._colorViewEnterKeyPressed) {
+                if(isOldValue || !changesApplied || valueCleared) {
                     return;
                 }
 
-                that._applyNewColor(args.value);
+                if(event) {
+                    that._saveValueChangeEvent(event);
+                }
+                that._applyNewColor(value);
             }
         };
     },
 
-    _enterKeyHandler: function() {
+    _enterKeyHandler: function(e) {
         const newValue = this._input().val();
         const value = this.option('value');
         const oldValue = this.option('editAlphaChannel') ? colorUtils.makeRgba(value) : value;
@@ -230,12 +233,14 @@ const ColorBox = DropDownEditor.inherit({
 
         if(newValue !== oldValue) {
             this._applyColorFromInput(newValue);
+            this._saveValueChangeEvent(e);
             this.option('value', this.option('editAlphaChannel') ? colorUtils.makeRgba(newValue) : newValue);
         }
 
         if(this._colorView) {
             const colorViewValue = this._colorView.option('value');
             if(value !== colorViewValue) {
+                this._saveValueChangeEvent(e);
                 this.option('value', colorViewValue);
             }
         }
@@ -244,7 +249,8 @@ const ColorBox = DropDownEditor.inherit({
         return false;
     },
 
-    _applyButtonHandler: function() {
+    _applyButtonHandler: function(e) {
+        this._saveValueChangeEvent(e.event);
         this._applyNewColor(this._colorView.option('value'));
 
         this.callBase();
@@ -293,7 +299,11 @@ const ColorBox = DropDownEditor.inherit({
 
     _renderValue: function() {
         const value = this.option('value');
-        this.option('text', this.option('editAlphaChannel') ? colorUtils.makeRgba(value) : value);
+        const convertToColor = value !== null && this.option('editAlphaChannel');
+        const text = convertToColor ? colorUtils.makeRgba(value) : value;
+
+        this.option('text', text);
+
         return this.callBase();
     },
 
@@ -336,6 +346,11 @@ const ColorBox = DropDownEditor.inherit({
         return value;
     },
 
+    _clean: function() {
+        this.callBase();
+        delete this._shouldSaveEmptyValue;
+    },
+
     _optionChanged: function(args) {
         const value = args.value;
         const name = args.name;
@@ -350,7 +365,12 @@ const ColorBox = DropDownEditor.inherit({
                     this._$colorResultPreview.removeAttr('style');
                 }
 
+                if(value === null) {
+                    this._shouldSaveEmptyValue = true;
+                }
                 this._updateColorViewValue(value);
+                this._shouldSaveEmptyValue = false;
+
                 this.callBase(args);
                 break;
             case 'applyButtonText':

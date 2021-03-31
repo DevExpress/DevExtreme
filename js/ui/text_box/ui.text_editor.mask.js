@@ -131,12 +131,12 @@ const TextEditorMask = TextEditorBase.inherit({
         const input = this._input();
         const eventName = eventUtils.addNamespace(wheelEvent.name, this.NAME);
         const mouseWheelAction = this._createAction((function(e) {
-            if(focused(input)) {
-                const dxEvent = e.event;
+            const { event } = e;
 
-                this._onMouseWheel(dxEvent);
-                dxEvent.preventDefault();
-                dxEvent.stopPropagation();
+            if(focused(input) && !eventUtils.isCommandKeyPressed(event)) {
+                this._onMouseWheel(event);
+                event.preventDefault();
+                event.stopPropagation();
             }
         }).bind(this));
 
@@ -308,18 +308,22 @@ const TextEditorMask = TextEditorBase.inherit({
 
     _renderValue: function() {
         if(this._maskRulesChain) {
-            const text = this._maskRulesChain.text();
-
             this._showMaskPlaceholder();
 
             if(this._$hiddenElement) {
                 const value = this._maskRulesChain.value();
-                const hiddenElementValue = this._isMaskedValueMode() ? text : value;
+                const submitElementValue = !stringUtils.isEmpty(value) ?
+                    this._getPreparedValue() :
+                    '';
 
-                this._$hiddenElement.val(!stringUtils.isEmpty(value) ? hiddenElementValue : '');
+                this._$hiddenElement.val(submitElementValue);
             }
         }
         return this.callBase();
+    },
+
+    _getPreparedValue: function() {
+        return this._convertToValue().replace(/\s+$/, '');
     },
 
     _valueChangeEventHandler: function(e) {
@@ -330,7 +334,7 @@ const TextEditorMask = TextEditorBase.inherit({
 
         this._saveValueChangeEvent(e);
 
-        this.option('value', this._convertToValue().replace(/\s+$/, ''));
+        this.option('value', this._getPreparedValue());
     },
 
     _isControlKeyFired: function(e) {
@@ -446,7 +450,7 @@ const TextEditorMask = TextEditorBase.inherit({
         this._caret({ start: caret, end: caret });
     },
 
-    _caret: function(position) {
+    _caret: function(position, force) {
         const $input = this._input();
 
         if(!$input.length) {
@@ -456,7 +460,7 @@ const TextEditorMask = TextEditorBase.inherit({
         if(!arguments.length) {
             return caret($input);
         }
-        caret($input, position);
+        caret($input, position, force);
     },
 
     _hasSelection: function() {

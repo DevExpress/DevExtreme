@@ -26,13 +26,14 @@ testStart(() => {
 QUnit.module('event utils', () => {
     test('mouse support methods', function(assert) {
         const time = new Date().valueOf();
-        const e1 = nativePointerMock().eventMock('mousemove', {
+        const targetElement = $('#element');
+        const e1 = nativePointerMock(targetElement).eventMock('mousemove', {
             pageX: 1,
             pageY: 2,
             timeStamp: time,
             which: 2
         });
-        const e2 = nativePointerMock().eventMock('mousemove', {
+        const e2 = nativePointerMock(targetElement).eventMock('mousemove', {
             pageX: 2,
             pageY: 1,
             timeStamp: time + 50,
@@ -56,7 +57,8 @@ QUnit.module('event utils', () => {
 
     if(compare($.fn.jquery, [3]) < 0) {
         test('touch support methods', function(assert) {
-            const e1 = nativePointerMock().eventMock('touchmove', {
+            const targetElement = $('#element');
+            const e1 = nativePointerMock(targetElement).eventMock('touchmove', {
                 touches: [{
                     pageX: 1,
                     pageY: 2
@@ -74,14 +76,15 @@ QUnit.module('event utils', () => {
     }
 
     test('mspointer support methods', function(assert) {
-        const e1 = nativePointerMock().eventMock('MSPointerMove', {
+        const targetElement = $('#element');
+        const e1 = nativePointerMock(targetElement).eventMock('MSPointerMove', {
             pageX: 1,
             pageY: 2,
             timeStamp: new Date().valueOf(),
             pointerType: 2
         });
 
-        nativePointerMock().eventMock('MSPointerMove', {
+        nativePointerMock(targetElement).eventMock('MSPointerMove', {
             pageX: 1,
             pageY: 2
         });
@@ -94,14 +97,15 @@ QUnit.module('event utils', () => {
     });
 
     test('pointer support methods', function(assert) {
-        const e1 = nativePointerMock().eventMock('pointermove', {
+        const targetElement = $('#element');
+        const e1 = nativePointerMock(targetElement).eventMock('pointermove', {
             pageX: 1,
             pageY: 2,
             timeStamp: new Date().valueOf(),
             pointerType: 'touch'
         });
 
-        nativePointerMock().eventMock('pointermove', {
+        nativePointerMock(targetElement).eventMock('pointermove', {
             pageX: 1,
             pageY: 2
         });
@@ -114,14 +118,15 @@ QUnit.module('event utils', () => {
     });
 
     test('dxpointer support methods', function(assert) {
-        const e1 = nativePointerMock().eventMock('dxpointermove', {
+        const targetElement = $('#element');
+        const e1 = nativePointerMock(targetElement).eventMock('dxpointermove', {
             pageX: 1,
             pageY: 2,
             timeStamp: new Date().valueOf(),
             pointerType: 'touch'
         });
 
-        nativePointerMock().eventMock('dxpointermove', {
+        nativePointerMock(targetElement).eventMock('dxpointermove', {
             pageX: 1,
             pageY: 2
         });
@@ -581,11 +586,12 @@ QUnit.module('skip mousewheel event test', () => {
 });
 
 QUnit.module('skip mouse event tests', () => {
-    const needSkipMouseDown = element => {
-        const mouse = nativePointerMock(element);
+    const needSkipMouseDown = (element, selector) => {
+        const target = selector ? element.find(selector).first() : element;
+        const mouse = nativePointerMock(target);
         let needSkip;
 
-        element.on({
+        target.on({
             'mousedown': e => {
                 needSkip = needSkipEvent(e);
             }
@@ -609,7 +615,21 @@ QUnit.module('skip mouse event tests', () => {
         assert.ok(needSkipMouseDown(element));
     });
 
-    test('needSkipEvent returns false for div click', function(assert) {
+    test('needSkipEvent returns true for clicking the contenteditable', function(assert) {
+        const element = $(`
+        <div contenteditable="true">
+            <h1>Test</h1>
+            <div class="text">
+                <b>Bold</b>
+            </div>
+        </div>
+    `);
+        assert.ok(needSkipMouseDown(element, 'h1'));
+        assert.ok(needSkipMouseDown(element, '.text'));
+        assert.ok(needSkipMouseDown(element, 'b'));
+    });
+
+    test('needSkipEvent returns true for div click', function(assert) {
         const element = $('<div />');
         assert.ok(!needSkipMouseDown(element));
     });

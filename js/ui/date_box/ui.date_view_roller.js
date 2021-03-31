@@ -125,7 +125,7 @@ const DateViewRoller = Scrollable.inherit({
     },
 
     _renderSelectedValue: function(selectedIndex) {
-        const index = this._fitIndex(selectedIndex || this.option('selectedIndex'));
+        const index = this._fitIndex(selectedIndex ?? this.option('selectedIndex'));
 
         this._moveTo({ top: this._getItemPosition(index) });
         this._renderActiveStateItem();

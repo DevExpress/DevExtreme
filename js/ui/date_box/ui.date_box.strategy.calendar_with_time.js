@@ -30,6 +30,11 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         return dateLocalization.is24HourFormat(this.getDisplayFormat(this.dateBox.option('displayFormat')));
     },
 
+    _getContouredValue: function() {
+        const viewDate = this.callBase();
+        return this._updateDateTime(viewDate);
+    },
+
     _renderWidget: function() {
         this.callBase();
 
@@ -176,14 +181,18 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         }
     },
 
-    getValue: function() {
-        let date = this._widget.option('value');
+    _updateDateTime: function(date) {
         const time = this._timeView.option('value');
-
-        date = date ? new Date(date) : new Date();
         date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 
         return date;
+    },
+
+    getValue: function() {
+        let date = this._widget.option('value');
+        date = date ? new Date(date) : new Date();
+
+        return this._updateDateTime(date);
     },
 
     dispose: function() {

@@ -2,6 +2,7 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -552,6 +553,88 @@ QUnit.module('keyboard navigation', {
 
         keyboard.keyDown('right');
         assert.equal(instance.option('value'), false, 'value has been change');
+    });
+});
+
+QUnit.module('valueChanged handler should receive correct event parameter', {
+    beforeEach: function() {
+        fx.off = true;
+
+        this.valueChangedHandler = sinon.stub();
+        const initialOptions = {
+            onValueChanged: this.valueChangedHandler,
+            focusStateEnabled: true
+        };
+
+        this.init = (options) => {
+            this.$element = $('#switch').dxSwitch(options);
+            this.instance = this.$element.dxSwitch('instance');
+            this.keyboard = keyboardMock(this.$element);
+            this.pointer = pointerMock(this.$element);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, initialOptions, options));
+        };
+        this.testProgramChange = (assert) => {
+            const value = this.instance.option('value');
+            this.instance.option('value', !value);
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+
+        this.init(initialOptions);
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('on runtime change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click', function(assert) {
+        this.$element.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', this.$element);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on swipe', function(assert) {
+        this.pointer.start().swipeStart().swipeEnd(1);
+
+        this.checkEvent(assert, 'dxswipeend', this.$element);
+        this.testProgramChange(assert);
+    });
+
+    ['enter', 'space'].forEach(key => {
+        QUnit.test(`on ${key} press`, function(assert) {
+            this.keyboard.press(key);
+
+            this.checkEvent(assert, 'keydown', this.$element, key);
+            this.testProgramChange(assert);
+        });
+    });
+
+    ['right', 'left'].forEach(arrow => {
+        QUnit.test(`on ${arrow} arrow press`, function(assert) {
+            this.reinit({ value: arrow === 'left' ? true : false });
+
+            this.keyboard.press(arrow);
+
+            this.checkEvent(assert, 'keydown', this.$element, arrow);
+            this.testProgramChange(assert);
+        });
     });
 });
 

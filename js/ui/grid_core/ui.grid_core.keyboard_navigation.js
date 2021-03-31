@@ -960,8 +960,16 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _updateFocus: function(isRenderView) {
         const that = this;
         setTimeout(function() {
+            const editingController = that.getController('editing');
+            const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
+
+            if(!that.option('repaintChangesOnly') && isCellEditMode && editingController.hasChanges()) {
+                editingController._focusEditingCell();
+                return;
+            }
+
             let $cell = that._getFocusedCell();
-            const isEditing = that.getController('editing').isEditing();
+            const isEditing = editingController.isEditing();
 
             if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
                 if(that._hasSkipRow($cell.parent())) {
@@ -974,10 +982,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     }
                     if($cell.is('td') || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+                        const $focusedElementInsideCell = $cell.find(':focus');
+                        const isFocusedElementDefined = isElementDefined($focusedElementInsideCell);
                         if((isRenderView || !isCommandCell) && that.getController('editorFactory').focus()) {
-                            const $focusedElementInsideCell = $cell.find(':focus');
-                            !isElementDefined($focusedElementInsideCell) && that._focus($cell);
-                        } else if(that._isNeedFocus || that._isHiddenFocus) {
+                            !isFocusedElementDefined && that._focus($cell);
+                        } else if(!isFocusedElementDefined && (that._isNeedFocus || that._isHiddenFocus)) {
                             that._focus($cell, that._isHiddenFocus);
                         }
                         if(isEditing) {
@@ -1978,7 +1987,10 @@ module.exports = {
                     this.callBase(rowIndex);
                 },
                 addRow: function(parentKey) {
-                    this.getController('keyboardNavigation').setupFocusedView();
+                    const keyboardController = this.getController('keyboardNavigation');
+
+                    keyboardController.setupFocusedView();
+                    keyboardController.setCellFocusType();
 
                     return this.callBase.apply(this, arguments);
                 },
@@ -2006,7 +2018,7 @@ module.exports = {
                     this._keyboardNavigationController = this.getController('keyboardNavigation');
                 },
                 closeEditCell: function() {
-                    const keyboardNavigation = this.getController('keyboardNavigation');
+                    const keyboardNavigation = this._keyboardNavigationController;
                     keyboardNavigation._fastEditingStarted = false;
 
                     const result = this.callBase.apply(this, arguments);

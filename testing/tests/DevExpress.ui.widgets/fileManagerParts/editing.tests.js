@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
+import renderer from 'core/renderer';
 import browser from 'core/utils/browser';
 import { compare as compareVersion } from 'core/utils/version';
 import CustomFileSystemProvider from 'file_management/custom_provider';
@@ -195,9 +196,10 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.clock.tick(400);
 
         this.wrapper.getFolderNodes().eq(2).trigger('dxclick');
+        this.clock.tick(400);
         let togglesCount = this.wrapper.getFolderToggles().length;
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 2', 'sub folder selected');
-        assert.ok(togglesCount >= 2, 'specfied toggles shown');
+        assert.strictEqual(togglesCount, 2, 'specfied toggles shown');
 
         this.wrapper.getToolbarButton('New directory').trigger('dxclick');
         this.clock.tick(400);
@@ -772,6 +774,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok(notificationInfo.details[0].hasError, 'Info has error');
         assert.strictEqual(notificationInfo.details[0].errorText, `File '${newFileName}' already exists.`, 'Error text is correct');
     });
+
     test('refresh during upload does not prevent files from being shown before next refresh (T928871)', function(assert) {
         const operationDelay = 1000;
         const chunkSize = 50000;
@@ -779,7 +782,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
         fileManager.option({
             currentPath: 'Folder 1',
             fileSystemProvider: new SlowFileProvider({
-                operationDelay
+                operationDelay,
+                operationsToDelay: 'cud'
             }),
             upload: {
                 chunkSize
@@ -817,7 +821,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
         fileManager.option({
             currentPath: 'Folder 1/Folder 1.1',
             fileSystemProvider: new SlowFileProvider({
-                operationDelay
+                operationDelay,
+                operationsToDelay: 'cud'
             }),
             itemView: {
                 showFolders: true
@@ -832,7 +837,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
         // Select destination directory 'Folder 1/Folder 1.2'
-        this.wrapper.getFolderNodeByText('Folder 1.2', true).trigger('dxclick');
+        this.wrapper.getFolderNodes(true).eq(4).trigger('dxclick');
         this.wrapper.getDialogButton('Copy').trigger('dxclick');
 
         this.clock.tick(operationDelay + 1);
@@ -855,7 +860,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
         fileManager.option({
             currentPath: 'Folder 1/Folder 1.1',
             fileSystemProvider: new SlowFileProvider({
-                operationDelay
+                operationDelay,
+                operationsToDelay: 'cud'
             }),
             itemView: {
                 showFolders: true
@@ -870,7 +876,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getToolbarButton('Move to').trigger('dxclick');
         this.clock.tick(400);
         // Select destination directory 'Folder 1/Folder 1.2'
-        this.wrapper.getFolderNodeByText('Folder 1.2', true).trigger('dxclick');
+        this.wrapper.getFolderNodes(true).eq(4).trigger('dxclick');
         this.wrapper.getDialogButton('Move').trigger('dxclick');
 
         this.clock.tick(operationDelay + 1);
@@ -893,7 +899,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
         fileManager.option({
             currentPath: 'Folder 3',
             fileSystemProvider: new SlowFileProvider({
-                operationDelay
+                operationDelay,
+                operationsToDelay: 'cud'
             }),
             itemView: {
                 showFolders: true
@@ -1002,11 +1009,15 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('parent and all of selected folders must be disabled: copy folders in files area via toolbar (T939043)', function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+
         this.$element.dxFileManager('option', {
             selectionMode: 'multiple',
             itemView: {
                 showFolders: true
-            }
+            },
+            width: '1200px'
         });
         this.clock.tick(400);
         this.wrapper.getRowNameCellInDetailsView(1).trigger('dxhold');
@@ -1027,6 +1038,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
         assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
+        renderer.fn.width = originalFunc;
     });
 
     test('parent and selected folders must be disabled: copy folder in deep location (T939043)', function(assert) {
@@ -1157,5 +1169,206 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1-1.txt', 'it\'s target folder');
         assert.equal(this.wrapper.getDetailsItemName(1), 'File 1-2.jpg', 'it\'s target folder');
         assert.equal(this.wrapper.getDetailsItemName(2), 'File 1.txt', 'file copied to target folder');
+    });
+
+    test('treeView must remove expand node icon when removed the last subfolder of a collapsed folder - detailsView (T946436)', function(assert) {
+        const operationDelay = 400;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'crud'
+            }),
+            currentPath: 'Folder 1/Folder 1.1',
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(3 * operationDelay + 400);
+        this.wrapper.getFolderToggles().eq(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), false, '\'Folder 1.1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
+
+        assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1.1.1', 'has target folder');
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(3 * operationDelay + 400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 2, 'There are 2 node toggles left');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), null, '\'Folder 1.1\' toggle is absent');
+    });
+
+    test('treeView must remove expand node icon when removed the last subfolder of a collapsed folder - thumbnailsView (T946436)', function(assert) {
+        const operationDelay = 400;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'crud'
+            }),
+            currentPath: 'Folder 1/Folder 1.1',
+            itemView: {
+                showFolders: true,
+                mode: 'thumbnails'
+            }
+        });
+        this.clock.tick(3 * operationDelay + 400);
+        this.wrapper.getFolderToggles().eq(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), false, '\'Folder 1.1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
+
+        assert.equal(this.wrapper.getThumbnailsItemName(0), 'Folder 1.1.1', 'has target folder');
+        this.wrapper.findThumbnailsItem('Folder 1.1.1').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(3 * operationDelay + 400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 2, 'There are 2 node toggles left');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), null, '\'Folder 1.1\' toggle is absent');
+    });
+
+    test('treeView must update expand node icons on folder move - detailsView (T946436)', function(assert) {
+        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
+            assert.ok(true, 'This test not for IE + jQuery 3.x');
+            return;
+        }
+        const operationDelay = 400;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'crud'
+            }),
+            currentPath: 'Folder 1/Folder 1.1',
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(3 * operationDelay + 400);
+        this.wrapper.getFolderToggles().eq(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), false, '\'Folder 1.1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.2'), null, '\'Folder 1.2\' toggle is absent');
+
+        assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1.1.1', 'has target folder');
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getFolderNodes(true).eq(4).trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(3 * operationDelay + 400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles left');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), null, '\'Folder 1.1\' toggle is absent');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.2'), true, '\'Folder 1.2\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
+    });
+
+    test('treeView must update expand node icons on folder move - thumbnailsView (T946436)', function(assert) {
+        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
+            assert.ok(true, 'This test not for IE + jQuery 3.x');
+            return;
+        }
+        const operationDelay = 400;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'crud'
+            }),
+            currentPath: 'Folder 1/Folder 1.1',
+            itemView: {
+                showFolders: true,
+                mode: 'thumbnails'
+            }
+        });
+        this.clock.tick(3 * operationDelay + 400);
+        this.wrapper.getFolderToggles().eq(2).trigger('dxclick');
+        this.clock.tick(operationDelay + 400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), false, '\'Folder 1.1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.2'), null, '\'Folder 1.2\' toggle is absent');
+
+        assert.equal(this.wrapper.getThumbnailsItemName(0), 'Folder 1.1.1', 'has target folder');
+        this.wrapper.findThumbnailsItem('Folder 1.1.1').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getFolderNodes(true).eq(4).trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(3 * operationDelay + 400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles left');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), null, '\'Folder 1.1\' toggle is absent');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.2'), true, '\'Folder 1.2\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
+    });
+
+    test('treeView must update expand node icons on folder create - treeView (T946436)', function(assert) {
+        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
+            assert.ok(true, 'This test not for IE + jQuery 3.x');
+            return;
+        }
+        const operationDelay = 400;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'crud'
+            }),
+            itemView: { showFolders: true }
+        });
+        this.clock.tick(3 * operationDelay + 400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 2, 'There are 2 node toggles');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), false, '\'Folder 1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 2'), null, '\'Folder 2\' toggle is absent');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3'), null, '\'Folder 3\' toggle is absent');
+
+        this.wrapper.getFolderNode(3).trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        this.wrapper.getContextMenuItem('New directory').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Create').trigger('dxclick');
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 3, 'There are 3 node toggles');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), false, '\'Folder 1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 2'), null, '\'Folder 2\' toggle is absent');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3'), false, '\'Folder 3\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Untitled directory'), null, '\'Untitled directory\' toggle is absent');
     });
 });

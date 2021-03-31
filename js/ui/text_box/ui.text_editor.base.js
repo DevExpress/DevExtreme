@@ -336,7 +336,8 @@ const TextEditorBase = Editor.inherit({
             autocomplete: 'off'
         };
 
-        if(devices.real().ios) {
+        const { ios, mac } = devices.real();
+        if(ios || mac) {
             // WA to fix vAlign (T898735)
             // https://bugs.webkit.org/show_bug.cgi?id=142968
             defaultAttributes.placeholder = ' ';
@@ -364,7 +365,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderInputValue: function(value) {
-        value = value || this.option('value');
+        value = value ?? this.option('value');
 
         let text = this.option('text');
         const displayValue = this.option('displayValue');
@@ -414,6 +415,7 @@ const TextEditorBase = Editor.inherit({
     _togglePlaceholder: function(isEmpty) {
         this.$element()
             .find(`.${TEXTEDITOR_PLACEHOLDER_CLASS}`)
+            .eq(0)
             .toggleClass(STATE_INVISIBLE_CLASS, !isEmpty);
     },
 
@@ -582,6 +584,10 @@ const TextEditorBase = Editor.inherit({
         return this.element();
     },
 
+    _isInput: function(element) {
+        return element === this._input().get(0);
+    },
+
     _preventNestedFocusEvent: function(event) {
         if(event.isDefaultPrevented()) {
             return true;
@@ -590,7 +596,7 @@ const TextEditorBase = Editor.inherit({
         let result = this._isNestedTarget(event.relatedTarget);
 
         if(event.type === 'focusin') {
-            result = result && this._isNestedTarget(event.target);
+            result = result && this._isNestedTarget(event.target) && !this._isInput(event.target);
         }
 
         result && event.preventDefault();

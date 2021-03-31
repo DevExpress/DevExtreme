@@ -233,7 +233,7 @@ module.exports = SelectionStrategy.inherit({
                 return false;
             }
             for(let i = 0; i < keyField.length; i++) {
-                if(i > 0 && filter[i] !== 'and') {
+                if(i > 0 && filter[i * 2 - 1] !== 'and') {
                     return false;
                 }
                 if(!this._isSimpleKeyFilter(filter[i * 2], keyField[i])) {

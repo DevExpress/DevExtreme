@@ -11,7 +11,12 @@ import translator from '../../animation/translator';
 import Class from '../../core/class';
 import Animator from './animator';
 import devices from '../../core/devices';
-import { isDxMouseWheelEvent, addNamespace as addEventNamespace, normalizeKeyName } from '../../events/utils';
+import {
+    isDxMouseWheelEvent,
+    addNamespace as addEventNamespace,
+    normalizeKeyName,
+    isCommandKeyPressed
+} from '../../events/utils';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
 import Scrollbar from './ui.scrollbar';
 import { when, Deferred } from '../../core/utils/deferred';
@@ -1017,6 +1022,10 @@ const SimulatedStrategy = Class.inherit({
     },
 
     validate: function(e) {
+        if(isDxMouseWheelEvent(e) && isCommandKeyPressed(e)) {
+            return false;
+        }
+
         if(this.option('disabled')) {
             return false;
         }

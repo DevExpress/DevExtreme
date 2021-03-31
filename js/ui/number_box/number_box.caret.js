@@ -1,6 +1,7 @@
-const fitIntoRange = require('../../core/utils/math').fitIntoRange;
-const escapeRegExp = require('../../core/utils/common').escapeRegExp;
-const number = require('../../localization/number');
+import { fitIntoRange } from '../../core/utils/math';
+import { escapeRegExp } from '../../core/utils/common';
+import number from '../../localization/number';
+import { getRealSeparatorIndex, getNthOccurrence, splitByIndex } from './utils';
 
 const getCaretBoundaries = function(text, format) {
     if(typeof format === 'string') {
@@ -80,10 +81,11 @@ const getCaretAfterFormat = function(text, formatted, caret, format) {
 
     const point = number.getDecimalSeparator();
     const isSeparatorBasedText = isSeparatorBasedString(text);
-    const pointPosition = isSeparatorBasedText ? 0 : text.indexOf(point);
-    const newPointPosition = formatted.indexOf(point);
-    const textParts = isSeparatorBasedText ? text.split(text[pointPosition]) : text.split(point);
-    const formattedParts = formatted.split(point);
+    const realSeparatorOccurrenceIndex = getRealSeparatorIndex(format).occurrence;
+    const pointPosition = isSeparatorBasedText ? 0 : getNthOccurrence(text, point, realSeparatorOccurrenceIndex);
+    const newPointPosition = getNthOccurrence(formatted, point, realSeparatorOccurrenceIndex);
+    const textParts = splitByIndex(text, pointPosition);
+    const formattedParts = splitByIndex(formatted, newPointPosition);
     const isCaretOnFloat = pointPosition !== -1 && caret.start > pointPosition;
 
     if(isCaretOnFloat) {

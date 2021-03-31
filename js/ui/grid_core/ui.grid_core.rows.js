@@ -342,7 +342,7 @@ module.exports = {
 
                 _updateContent: function(newTableElement, change) {
                     const that = this;
-                    const tableElement = that._getTableElement();
+                    const tableElement = that.getTableElement();
                     const contentElement = that._findContentElement();
                     const changeType = change && change.changeType;
                     const executors = [];
@@ -401,7 +401,7 @@ module.exports = {
                             newTableElement.remove();
                             break;
                         default:
-                            that._setTableElement(newTableElement);
+                            that.setTableElement(newTableElement);
                             contentElement.addClass(that.addWidgetPrefix(CONTENT_CLASS));
                             that._renderContent(contentElement, newTableElement);
                             break;
@@ -481,7 +481,7 @@ module.exports = {
 
                 _updateRowHeight: function() {
                     const that = this;
-                    const $tableElement = that._getTableElement();
+                    const $tableElement = that.getTableElement();
                     const itemsCount = that._dataController.items().length;
 
                     if($tableElement && that._needUpdateRowHeight(itemsCount)) {
@@ -656,8 +656,8 @@ module.exports = {
                         }
                     };
 
-                    if(!isDefined(that._getTableElement())) {
-                        that._setTableElement($table);
+                    if(!isDefined(that.getTableElement())) {
+                        that.setTableElement($table);
                         that._renderScrollable(true);
                         that.resizeCompleted.add(resizeCompletedHandler);
                     } else {
@@ -1063,7 +1063,7 @@ module.exports = {
                 },
 
                 _getCellElementsCore: function(rowIndex) {
-                    const $cells = this.callBase(rowIndex);
+                    const $cells = this.callBase.apply(this, arguments);
 
                     if($cells) {
                         const groupCellIndex = $cells.filter('.' + GROUP_CELL_CLASS).index();
@@ -1083,7 +1083,7 @@ module.exports = {
                     const $contentElement = that._findContentElement();
                     const contentElementOffsetTop = $contentElement && $contentElement.offset().top;
                     const items = that._dataController.items();
-                    const tableElement = that._getTableElement();
+                    const tableElement = that.getTableElement();
 
                     if(items.length && tableElement) {
                         const rowElements = that._getRowElements(tableElement).filter(':visible');

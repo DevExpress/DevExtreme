@@ -1150,7 +1150,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
         const node = this._getNode(itemElement);
-        if(!node) {
+        if(!node || node.visible === false) {
             return false;
         }
 

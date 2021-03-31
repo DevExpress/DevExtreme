@@ -1378,6 +1378,62 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.strictEqual($($(dataGrid.$element()).find('.dx-error-row')).length, 0, 'no errors');
     });
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        [null, 'left', 'right'].forEach(fixedPosition => {
+            const fixedPositionText = fixedPosition === null ? 'not specified' : fixedPosition;
+            QUnit.testInActiveWindow(`${editMode} - Cells should be modified properly when fixedPosition is ${fixedPositionText} of a grouped column with showWhenGrouped enabled (T980535)`, function(assert) {
+                // act
+                const columns = [
+                    'field1',
+                    {
+                        dataField: 'field2',
+                        showWhenGrouped: true,
+                        groupIndex: 0
+                    },
+                    'field3'
+                ];
+
+                if(fixedPosition !== null) {
+                    columns[1].fixed = true;
+                    columns[1].fixedPosition = fixedPosition;
+                }
+
+                const dataGrid = createDataGrid({
+                    dataSource: [{ id: 1, field1: 'test1', field2: 'test2', field3: 'test3' }],
+                    keyExpr: 'id',
+                    columns,
+                    editing: {
+                        mode: editMode.toLowerCase(),
+                        allowUpdating: true
+                    },
+                    columnFixing: { enabled: true }
+                });
+
+                this.clock.tick();
+
+                for(let i = 1; i <= 3; i++) {
+                    // act
+                    let $cellElement = $(dataGrid.getCellElement(1, i));
+                    $cellElement.trigger('dxclick');
+                    this.clock.tick();
+                    $cellElement = $(dataGrid.getCellElement(1, i));
+
+                    // assert
+                    assert.ok($cellElement.hasClass('dx-focused'), `cell ${i} is focused after click`);
+                    assert.ok($cellElement.hasClass('dx-editor-cell'), `cell ${i} has an editor after click`);
+
+                    // act
+                    $cellElement.find('.dx-texteditor-input').val(i).trigger('change');
+                    dataGrid.closeEditCell();
+                    this.clock.tick();
+
+                    // assert
+                    assert.strictEqual(dataGrid.cellValue(1, i), `${i}`, `cell ${i} has modified value`);
+                }
+            });
+        });
+    });
 });
 
 QUnit.module('Editing', baseModuleConfig, () => {
@@ -2059,6 +2115,61 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.ok($firstCell.hasClass('dx-focused'), 'cell should be focused');
             assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell should be invalid');
         });
+    });
+
+    QUnit.test('The onRowValidating event handler should not accept redundant broken rules in Batch (T960813)', function(assert) {
+        // arrange
+        const validatedRowKeys = [];
+        const validatedMessages = [];
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'f11', field2: 'f21' },
+                { id: 2, field1: 'f12', field2: 'f22' },
+                { id: 3, field1: 'f13', field2: 'f23' },
+                { id: 4, field1: 'f14', field2: 'f24' }
+            ],
+            keyExpr: 'id',
+            paging: {
+                enabled: true,
+                pageSize: 2
+            },
+            onRowValidating: function(args) {
+                validatedRowKeys.push(args.key);
+
+                const rowBrokenRulesMessages = args.brokenRules.map(br => br.message);
+                validatedMessages.push(...rowBrokenRulesMessages);
+            },
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            columns: ['id', {
+                dataField: 'field1',
+                validationRules: [{ type: 'required' }]
+            }, {
+                dataField: 'field2',
+                validationRules: [{ type: 'required' }]
+            }],
+            loadingTimeout: undefined
+        });
+
+        // act
+        dataGrid.editCell(0, 1);
+        this.clock.tick();
+        dataGrid.cellValue(0, 1, '');
+        this.clock.tick();
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+        dataGrid.editCell(0, 2);
+        this.clock.tick();
+        dataGrid.cellValue(0, 2, '');
+        this.clock.tick();
+        dataGrid.saveEditData();
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(validatedRowKeys, [1, 3], 'validated row keys');
+        assert.deepEqual(validatedMessages, ['Field 1 is required', 'Field 2 is required'], 'broken rules messages');
     });
 });
 

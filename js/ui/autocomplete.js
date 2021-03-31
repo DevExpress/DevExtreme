@@ -40,12 +40,15 @@ const Autocomplete = DropDownList.inherit({
                 }
                 return true;
             },
-            enter: function() {
+            enter: function(e) {
                 if(!item) {
                     this.close();
                 }
-                parent.enter.apply(this, arguments);
-                return this.option('opened');
+                const opened = this.option('opened');
+                if(opened) {
+                    e.preventDefault();
+                }
+                return opened;
             }
         });
     },
@@ -112,12 +115,8 @@ const Autocomplete = DropDownList.inherit({
         return this.option('valueExpr');
     },
 
-    _popupConfig: function() {
-        return extend(this.callBase(), {
-            closeOnOutsideClick: (function(e) {
-                return !$(e.target).closest(this.$element()).length;
-            }).bind(this)
-        });
+    _closeOutsideDropDownHandler: function({ target }) {
+        return !$(target).closest(this.$element()).length;
     },
 
     _renderDimensions: function() {
@@ -136,6 +135,7 @@ const Autocomplete = DropDownList.inherit({
     },
 
     _listItemClickHandler: function(e) {
+        this._saveValueChangeEvent(e.event);
         const value = this._displayGetter(e.itemData);
         this.option('value', value);
         this.close();
