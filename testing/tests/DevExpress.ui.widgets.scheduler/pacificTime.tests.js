@@ -13,9 +13,6 @@ const pacificTimezoneOffset = 480; // TODO: Value in ms. Offset (UTC-08:00) Paci
 const summerDSTDate = new Date(2020, 2, 8); // TODO Daylight saving time will happen on this day in 2 A.M.(UTC -7 Pacific time)
 const winterDSTDate = new Date(2020, 10, 1); // TODO Daylight saving time will happen on this day in 2 A.M.(UTC -8 Pacific time)
 
-const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
-const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
-
 // This tests run only in (UTC-08:00) Pacific Time (US & Canada)
 // For run test locally, change timezone on desktop on (UTC-08:00) Pacific Time (US & Canada)
 if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
@@ -592,6 +589,9 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             fx.off = false;
         },
     }, () => {
+        const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
+        const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
+
         if(isDesktopEnvironment()) {
             const schedulerSettings = {
                 dataSource: [],
