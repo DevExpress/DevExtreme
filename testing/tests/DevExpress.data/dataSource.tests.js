@@ -1900,7 +1900,109 @@ QUnit.module('live update', {
         this.clock.tick(100);
 
         assert.equal(items[0].field, 3);
+    });
 
+    QUnit.test('aggregation works correctly in two DataSources with common store', function(assert) {
+        assert.expect(2);
+
+        const items = [
+            {
+                id: 1,
+                status: 'Initial value',
+            }
+        ];
+
+        const store = new ArrayStore({
+            key: 'id',
+            data: items
+        });
+
+        const dataSourceConfig = {
+            store,
+            reshapeOnPush: true,
+            pushAggregationTimeout: 100
+        };
+
+        const dataSource1 = new DataSource(dataSourceConfig);
+        const dataSource2 = new DataSource(dataSourceConfig);
+
+        dataSource1.on('changed', () => {
+            assert.strictEqual(items[0].status, 'Changed value');
+        });
+        dataSource2.on('changed', () => {
+            assert.strictEqual(items[0].status, 'Changed value');
+        });
+
+        store.push([
+            { type: 'update', key: 1, data: { status: 'Changed value' } }
+        ]);
+
+        this.clock.tick(100);
+    });
+
+    QUnit.test('aggregation works correctly in two DataSources with different pushAggregationTimeout values and common store', function(assert) {
+        const items = [
+            {
+                id: 1,
+                status: 'Initial value'
+            },
+            {
+                id: 2,
+                status: 'Initial value'
+            }
+        ];
+
+        const store = new ArrayStore({
+            key: 'id',
+            data: items
+        });
+
+        const dataSource1 = new DataSource({
+            store,
+            reshapeOnPush: true,
+            pushAggregationTimeout: 100
+        });
+
+        const dataSource2 = new DataSource({
+            store,
+            reshapeOnPush: true,
+            pushAggregationTimeout: 150
+        });
+
+        const changedSpy1 = sinon.spy();
+        const changedSpy2 = sinon.spy();
+
+        dataSource1.on('changed', changedSpy1);
+        dataSource2.on('changed', changedSpy2);
+
+        store.push([
+            { type: 'update', key: 1, data: { status: 'Changed value' } }
+        ]);
+
+        this.clock.tick(100);
+
+        assert.strictEqual(changedSpy1.callCount, 0);
+        assert.strictEqual(changedSpy2.callCount, 0);
+        assert.strictEqual(items[0].status, 'Initial value');
+        assert.strictEqual(items[1].status, 'Initial value');
+
+        store.push([
+            { type: 'update', key: 2, data: { status: 'Changed value' } }
+        ]);
+
+        this.clock.tick(50);
+
+        assert.strictEqual(changedSpy1.callCount, 1);
+        assert.strictEqual(changedSpy2.callCount, 0);
+        assert.strictEqual(items[0].status, 'Changed value');
+        assert.strictEqual(items[1].status, 'Initial value');
+
+        this.clock.tick(50);
+
+        assert.strictEqual(changedSpy1.callCount, 2);
+        assert.strictEqual(changedSpy2.callCount, 1);
+        assert.strictEqual(items[0].status, 'Changed value');
+        assert.strictEqual(items[1].status, 'Changed value');
     });
 
     QUnit.test('load is called with throttle when reshapeOnPush and pushAggregationTimeout is defined', function(assert) {
