@@ -332,7 +332,7 @@ export class Bullet extends JSXComponent(BulletProps) {
     return {
       ...tooltip,
       ...customProps,
-      enabled: tooltip.enabled !== false && this.tooltipEnabled,
+      enabled: tooltip.enabled && this.tooltipEnabled,
     };
   }
 
