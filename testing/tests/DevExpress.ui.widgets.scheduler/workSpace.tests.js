@@ -1518,10 +1518,11 @@ QUnit.module('Workspace Keyboard Navigation', () => {
             beforeEach: function() {
                 this.createInstance = (options, workSpaceName) => {
                     return $('#scheduler-work-space')[workSpaceName]({
-                        ...options,
+                        currentDate: new Date(2021, 0, 10),
                         scrolling: { mode: scrollingMode },
                         height: 1000,
                         renovateRender: scrollingMode === 'virtual',
+                        ...options,
                     });
                 };
             },
@@ -2430,10 +2431,11 @@ QUnit.module('Workspace Mouse Interaction', () => {
             beforeEach: function() {
                 this.createInstance = (options, workSpaceName) => {
                     return $('#scheduler-work-space')[workSpaceName]({
-                        ...options,
+                        currentDate: new Date(2021, 0, 10),
                         scrolling: { mode: scrollingMode },
                         renovateRender: scrollingMode === 'virtual',
                         height: 1000,
+                        ...options,
                     });
                 };
             },
@@ -2947,84 +2949,6 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 });
             });
 
-            QUnit.module('Mouse Multiselection with Grouping by Date', () => {
-                [{
-                    startCell: 4,
-                    endCell: 6,
-                    intermediateCells: [12],
-                    focusedCellsCount: 5,
-                    cellFromAnotherGroup: 7,
-                    workSpace: WORKSPACE_DAY,
-                }, {
-                    startCell: 15,
-                    endCell: 19,
-                    intermediateCells: [43, 45],
-                    focusedCellsCount: 9,
-                    cellFromAnotherGroup: 20,
-                    workSpace: WORKSPACE_WEEK,
-                }, {
-                    startCell: 19,
-                    endCell: 39,
-                    intermediateCells: [29],
-                    focusedCellsCount: 11,
-                    cellFromAnotherGroup: 24,
-                    workSpace: WORKSPACE_MONTH,
-                }].forEach(({
-                    startCell, endCell, intermediateCells,
-                    focusedCellsCount, cellFromAnotherGroup, workSpace,
-                }) => {
-                    QUnit.test(`Mouse Multiselection should work correctly with ${workSpace.name} when it is grouped by date`, function(assert) {
-                        const $element = this.createInstance({
-                            focusStateEnabled: true,
-                            onContentReady: function(e) {
-                                const scrollable = e.component.getScrollable();
-                                scrollable.option('scrollByContent', false);
-                                e.component.initDragBehavior();
-                                e.component._attachTablesEvents();
-                            },
-                            intervalCount: 2,
-                            groupOrientation: 'horizontal',
-                            groupByDate: true,
-                            startDayHour: 0,
-                            endDayHour: 2,
-                        }, workSpace.class);
-
-                        const instance = $element[workSpace.class]('instance');
-
-                        stubInvokeMethod(instance);
-                        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
-
-                        const cells = $element.find('.' + CELL_CLASS);
-                        const $table = $element.find('.dx-scheduler-date-table');
-
-                        pointerMock(cells.eq(startCell)).start().click();
-                        let cell = cells.eq(endCell).get(0);
-
-                        $($table).trigger($.Event('dxpointerdown', { target: cells.eq(startCell).get(0), which: 1, pointerType: 'mouse' }));
-                        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
-
-                        assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells is correct');
-                        assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is focused');
-                        assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is focused');
-                        intermediateCells.forEach((cell) => {
-                            assert.ok(cells.eq(cell).hasClass('dx-state-focused'), 'intermediate cell is focused');
-                        });
-
-                        cell = cells.eq(cellFromAnotherGroup).get(0);
-                        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
-
-                        assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells has not changed');
-                        assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is still focused');
-                        assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is still focused');
-                        intermediateCells.forEach((cell) => {
-                            assert.ok(cells.eq(cell).hasClass('dx-state-focused'), 'intermediate cell is still focused');
-                        });
-                        assert.notOk(cells.eq(cellFromAnotherGroup).hasClass('dx-state-focused'), 'cell from another group is not focused');
-
-                        $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
-                    });
-                });
-            });
             QUnit.test('Mouse Multiselection should work correctly when appointments'
                 + 'are grouped vertically by more than one resource and allDayPanel is enabled', function(assert) {
                 const $element = this.createInstance({

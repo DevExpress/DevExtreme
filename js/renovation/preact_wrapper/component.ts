@@ -5,10 +5,8 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import DOMComponent from '../../core/dom_component';
 import { extend } from '../../core/utils/extend';
-import { wrapElement, removeDifferentElements } from './utils';
+import { removeDifferentElements } from './utils';
 import { getPublicElement } from '../../core/element';
-
-const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
   if (options.hasOwnProperty(name) && options[name] === undefined) {
@@ -288,17 +286,13 @@ export default class PreactWrapper extends DOMComponent {
             }
           });
 
-          const $template = $(
+          $(
             template.render({
               container: getPublicElement($parent),
               model: data,
               ...(isFinite(index) ? { index } : {}),
             })
           );
-
-          if ($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-            wrapElement($parent, $template);
-          }
           const $newChildren = $parent.contents();
 
           return () => {
