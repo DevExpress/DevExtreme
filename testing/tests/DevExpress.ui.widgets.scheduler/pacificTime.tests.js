@@ -641,35 +641,35 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                     selectedCellCount: 6,
                     currentView: 'day',
                     mustBeSelectedCells: [4, 5, 6, 7],
-                    testDescription: 'Sells that cover dead zone of DST'
+                    testDescription: 'Cells that cover dead zone of DST'
                 }, {
                     firstCell: 21,
                     lastCell: 56,
                     selectedCellCount: 6,
                     currentView: 'week',
                     mustBeSelectedCells: [28, 35, 42, 49],
-                    testDescription: 'Sells that cover dead zone of DST'
+                    testDescription: 'Cells that cover dead zone of DST'
                 }, {
                     firstCell: 28,
                     lastCell: 29,
                     selectedCellCount: 17,
                     currentView: 'week',
                     mustBeSelectedCells: [28, 35, 42, 56],
-                    testDescription: 'Sells that cover dead zone of DST and part of next week'
+                    testDescription: 'Cells that cover dead zone of DST and part of next week'
                 }, {
                     firstCell: 3,
                     lastCell: 8,
                     selectedCellCount: 6,
                     currentView: 'timelineDay',
                     mustBeSelectedCells: [4, 5, 6, 7],
-                    testDescription: 'Sells that cover dead zone of DST'
+                    testDescription: 'Cells that cover dead zone of DST'
                 }, {
                     firstCell: 5,
                     lastCell: 9,
                     selectedCellCount: 5,
                     currentView: 'timelineWeek',
                     mustBeSelectedCells: [5, 6, 7, 8, 9],
-                    testDescription: 'Sells that starts on dead zone of DST'
+                    testDescription: 'Cells that start on dead zone of DST'
                 },
                 {
                     firstCell: 4,
@@ -684,7 +684,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                     selectedCellCount: 3,
                     currentView: 'week',
                     mustBeSelectedCells: [14, 21, 28],
-                    testDescription: 'Cells that ends on dead zone of DST'
+                    testDescription: 'Cells that end on dead zone of DST'
                 }, {
                     firstCell: 3,
                     lastCell: 5,
