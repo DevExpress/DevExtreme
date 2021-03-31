@@ -95,7 +95,7 @@ System.config({
         'devexpress-diagram': 'npm:devexpress-diagram',
         'devexpress-gantt': 'npm:devexpress-gantt',
         'devextreme-angular': 'npm:devextreme-angular',
-        'devextreme-generator': 'npm:devextreme-generator',
+        '@devextreme/vdom': 'npm:@devextreme/vdom',
         'inferno': 'npm:inferno/dist/inferno.min.js',
         'inferno-compat': 'npm:inferno-compat/dist/inferno-compat.min.js',
         'inferno-create-element': 'npm:inferno-create-element/dist/inferno-create-element.min.js',
@@ -113,7 +113,7 @@ System.config({
         'devextreme': {
             defaultExtension: 'js'
         },
-        'devextreme-generator': {
+        '@devextreme/vdom': {
             defaultExtension: 'js'
         },
         'devextreme/events/utils': {
