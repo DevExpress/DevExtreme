@@ -804,7 +804,7 @@ module('View Data Provider', {
                         );
                     });
 
-                    test('Should return correct index cell position if index is provided', function(assert) {
+                    test('Should return correct cell position if index is provided', function(assert) {
                         const { viewDataProvider } = this;
 
                         assert.deepEqual(
