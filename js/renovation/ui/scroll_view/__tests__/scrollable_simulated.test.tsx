@@ -30,6 +30,10 @@ import {
 } from '../scrollable_simulated';
 
 import {
+  ScrollableSimulatedProps,
+} from '../scrollable_simulated_props';
+
+import {
   createContainerRef,
 } from './utils';
 
@@ -49,6 +53,33 @@ jest.mock('../../../../core/devices', () => {
 });
 
 describe('Simulated', () => {
+  describe('View', () => {
+    it('render scrollable with defaults', () => {
+      const props = new ScrollableSimulatedProps();
+      const scrollable = mount<Scrollable>(<Scrollable {...props} />);
+
+      expect(scrollable.props()).toEqual({
+        bounceEnabled: true,
+        contentTranslateOffset: {
+          left: 0,
+          top: 0,
+        },
+        direction: 'vertical',
+        forceGeneratePockets: false,
+        inertiaEnabled: true,
+        needScrollViewContentWrapper: false,
+        needScrollViewLoadPanel: false,
+        pullDownEnabled: false,
+        reachBottomEnabled: false,
+        scrollByContent: true,
+        scrollByThumb: false,
+        showScrollbar: 'onScroll',
+        useKeyboard: true,
+        useNative: true,
+      });
+    });
+  });
+
   describe('Render', () => {
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
       each([true, false]).describe('AllowVertical: %o', (allowVertical) => {
@@ -63,18 +94,18 @@ describe('Simulated', () => {
                 },
               });
 
-              let expectedTouchAction = '';
+              let touchAction = '';
               if (allowVertical) {
-                expectedTouchAction = 'pan-x';
+                touchAction = 'pan-x';
               }
               if (allowHorizontal) {
-                expectedTouchAction = 'pan-y';
+                touchAction = 'pan-y';
               }
               if (allowVertical && allowHorizontal) {
-                expectedTouchAction = 'none';
+                touchAction = 'none';
               }
 
-              expect(helper.viewModel.containerStyles).toEqual({ touchAction: expectedTouchAction });
+              expect(helper.viewModel.containerStyles).toEqual({ touchAction });
             });
           });
         });
@@ -800,10 +831,12 @@ describe('Simulated', () => {
 
               const e = { ...defaultEvent, target };
 
+              const validateMoveResult = helper.viewModel.validateMove(e);
+
               if (!scrollByContent && !isScrollbarClicked) {
-                expect(helper.viewModel.validateMove(e)).toBe(false);
+                expect(validateMoveResult).toBe(false);
               } else {
-                expect(helper.viewModel.validateMove(e)).toBe(helper.viewModel.allowedDirection() !== undefined);
+                expect(validateMoveResult).toBe(helper.viewModel.allowedDirection() !== undefined);
               }
             });
           });
@@ -866,7 +899,9 @@ describe('Simulated', () => {
                       helper.viewModel.containerClientHeight = containerSize;
                       helper.viewModel.containerClientWidth = containerSize;
 
-                      let expectedDirectionResult = (containerSize < contentSize || bounceEnabled) ? direction : undefined;
+                      let expectedDirectionResult = (containerSize < contentSize || bounceEnabled)
+                        ? direction
+                        : undefined;
 
                       const e = { ...defaultEvent, shiftKey };
                       if (isDxWheelEvent) {
@@ -899,14 +934,15 @@ describe('Simulated', () => {
 
               const e = { ...defaultEvent, delta };
 
-              const expectedValidationResult = (scrollbarPosition < 0 && delta > 0) || (scrollbarPosition >= 0 && delta < 0) || scrollbarPosition === -50;
+              const expectedValidationResult = (scrollbarPosition < 0 && delta > 0)
+                || (scrollbarPosition >= 0 && delta < 0) || scrollbarPosition === -50;
 
               expect(helper.viewModel.validateWheelTimer).toBe(undefined);
 
               const actualResult = helper.viewModel.validateWheel(e);
               expect(actualResult).toBe(expectedValidationResult);
 
-              if (!((scrollbarPosition < 0 && delta > 0) || (scrollbarPosition >= 0 && delta < 0) || scrollbarPosition === -50)) {
+              if (!expectedValidationResult) {
                 expect(helper.viewModel.validateWheelTimer === undefined).toBe(true);
               } else {
                 expect(helper.viewModel.validateWheelTimer === undefined).toBe(false);
@@ -945,7 +981,11 @@ describe('Simulated', () => {
 
           each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
             it('validate(e), locked: false, disabled: false, bounceEnabled: false', () => {
-              const helper = new ScrollableTestHelper({ direction, bounceEnabled: false, disabled: false });
+              const helper = new ScrollableTestHelper({
+                direction,
+                bounceEnabled: false,
+                disabled: false,
+              });
 
               const e = { ...defaultEvent, type: isDxWheelEvent ? 'dxmousewheel' : undefined };
 
@@ -970,19 +1010,39 @@ describe('Simulated', () => {
 
         each([
           [{ top: 0, left: 0 }, {
-            scrollOffset: { top: -0, left: -0 }, reachedTop: true, reachedBottom: false, reachedLeft: true, reachedRight: false,
+            scrollOffset: { top: -0, left: -0 },
+            reachedTop: true,
+            reachedBottom: false,
+            reachedLeft: true,
+            reachedRight: false,
           }],
           [{ top: 1, left: 1 }, {
-            scrollOffset: { top: 1, left: 1 }, reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false,
+            scrollOffset: { top: 1, left: 1 },
+            reachedTop: false,
+            reachedBottom: false,
+            reachedLeft: false,
+            reachedRight: false,
           }],
           [{ top: 99, left: 99 }, {
-            scrollOffset: { top: 99, left: 99 }, reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false,
+            scrollOffset: { top: 99, left: 99 },
+            reachedTop: false,
+            reachedBottom: false,
+            reachedLeft: false,
+            reachedRight: false,
           }],
           [{ top: 100, left: 100 }, {
-            scrollOffset: { top: 100, left: 100 }, reachedTop: false, reachedBottom: true, reachedLeft: false, reachedRight: true,
+            scrollOffset: { top: 100, left: 100 },
+            reachedTop: false,
+            reachedBottom: true,
+            reachedLeft: false,
+            reachedRight: true,
           }],
           [{ top: 150, left: 150 }, {
-            scrollOffset: { top: 150, left: 150 }, reachedTop: false, reachedBottom: true, reachedLeft: false, reachedRight: true,
+            scrollOffset: { top: 150, left: 150 },
+            reachedTop: false,
+            reachedBottom: true,
+            reachedLeft: false,
+            reachedRight: true,
           }],
         ]).describe('ScrollOffset: %o', (scrollOffset, expected) => {
           it('onScroll event fires with correct arguments', () => {
@@ -1622,7 +1682,6 @@ describe('Simulated', () => {
         helper.checkContainerPosition(expect, {
           top: 100,
           left: 100,
-          // });
         });
       });
 

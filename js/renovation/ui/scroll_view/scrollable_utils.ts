@@ -1,11 +1,8 @@
 import {
-  isNumeric, isDefined, isPlainObject,
+  isNumeric, isPlainObject,
 } from '../../../core/utils/type';
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
 import { titleize } from '../../../core/utils/inflector';
-import getElementComputedStyle from '../../utils/get_computed_style';
-
-import { toNumber } from '../../utils/type_conversion';
 import { ensureDefined } from '../../../core/utils/common';
 
 import {
@@ -21,20 +18,9 @@ import {
   DIRECTION_BOTH,
 } from './common/consts';
 
-export function getElementWidth(element: Element | undefined): number {
-  return toNumber(getElementComputedStyle(element)?.width);
-}
-
-export function getElementHeight(element: Element | undefined): number {
-  return toNumber(getElementComputedStyle(element)?.height);
-}
-
-export function getElementStyle(
-  name: keyof CSSStyleDeclaration, element: Element | null,
-): number | string {
-  const computedStyle = getElementComputedStyle(element) || {};
-  return computedStyle[name];
-}
+import {
+  ScrollDirection,
+} from './utils/scroll_direction';
 
 export function ensureLocation(
   location: number | Partial<ScrollableLocation>,
@@ -57,32 +43,6 @@ function getRelativeLocation(element: HTMLElement): ScrollableLocation {
     targetElement = targetElement.offsetParent as HTMLElement;
   }
   return result;
-}
-
-export class ScrollDirection {
-  direction: ScrollableDirection;
-
-  readonly DIRECTION_HORIZONTAL = 'horizontal';
-
-  readonly DIRECTION_VERTICAL = 'vertical';
-
-  readonly DIRECTION_BOTH = 'both';
-
-  constructor(direction: ScrollableDirection) {
-    this.direction = direction ?? DIRECTION_VERTICAL;
-  }
-
-  get isHorizontal(): boolean {
-    return this.direction === DIRECTION_HORIZONTAL || this.direction === DIRECTION_BOTH;
-  }
-
-  get isVertical(): boolean {
-    return this.direction === DIRECTION_VERTICAL || this.direction === DIRECTION_BOTH;
-  }
-
-  get isBoth(): boolean {
-    return this.direction === DIRECTION_BOTH;
-  }
 }
 
 function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): number {
@@ -145,16 +105,13 @@ export function normalizeLocation(
   direction?: ScrollableDirection,
 ): Partial<ScrollableLocation> {
   if (isPlainObject(location)) {
-    const left = ensureDefined(location.left, location.x);
-    const top = ensureDefined(location.top, location.y);
-
     return {
-      left: isDefined(left) ? -left : undefined,
-      top: isDefined(top) ? -top : undefined,
+      left: -ensureDefined(location.left, location.x),
+      top: -ensureDefined(location.top, location.y),
     };
   }
 
-  const { isVertical, isHorizontal } = new ScrollDirection(direction || 'vertical');
+  const { isVertical, isHorizontal } = new ScrollDirection(direction);
   return {
     left: isHorizontal ? -location : undefined,
     top: isVertical ? -location : undefined,

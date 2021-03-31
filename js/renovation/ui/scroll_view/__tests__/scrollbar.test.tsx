@@ -1,3 +1,4 @@
+import React from 'react';
 import each from 'jest-each';
 import { mount } from 'enzyme';
 
@@ -16,6 +17,38 @@ import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TopPocketState } from '../com
 import { ScrollbarProps } from '../scrollbar_props';
 
 describe('TopPocket', () => {
+  it('render scrollbar with defaults', () => {
+    const props = new ScrollbarProps();
+    const scrollable = mount<Scrollbar>(<Scrollbar {...props} />);
+
+    expect(scrollable.props()).toEqual({
+      activeStateEnabled: false,
+      baseContainerSize: 0,
+      baseContentSize: 0,
+      bottomPocketSize: 0,
+      bounceEnabled: true,
+      containerSize: 0,
+      contentSize: 0,
+      direction: 'vertical',
+      expandable: true,
+      forceGeneratePockets: false,
+      forceVisibility: false,
+      isScrollableHovered: false,
+      needScrollViewContentWrapper: false,
+      needScrollViewLoadPanel: false,
+      pocketState: 0,
+      pullDownEnabled: false,
+      reachBottomEnabled: false,
+      scaleRatio: 1,
+      scrollByContent: true,
+      scrollByThumb: false,
+      scrollableOffset: 0,
+      showScrollbar: 'onScroll',
+      topPocketSize: 0,
+      useKeyboard: true,
+    });
+  });
+
   describe('Styles', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
       each(['never', 'always', 'onScroll', 'onHover', null, undefined]).describe('ShowScrollbar: %o', (showScrollbar) => {

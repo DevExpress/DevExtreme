@@ -25,11 +25,14 @@ import '../../../events/gesture/emitter.gesture.scroll';
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
-  normalizeLocation, ScrollDirection,
+  normalizeLocation,
   getElementLocation, getBoundaryProps,
-  getElementStyle,
   updateAllowedDirection,
 } from './scrollable_utils';
+
+import {
+  ScrollDirection,
+} from './utils/scroll_direction';
 
 import {
   DIRECTION_VERTICAL,
@@ -57,10 +60,9 @@ import {
   ScrollableDirection,
 } from './types.d';
 
-/* istanbul ignore next */
 import { getElementOffset } from './utils/get_element_offset';
-/* istanbul ignore next */
 import { getTranslateValues } from './utils/get_translate_values';
+import { getElementStyle } from './utils/get_element_style';
 
 import { TopPocket } from './top_pocket';
 import { BottomPocket } from './bottom_pocket';
@@ -908,7 +910,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     });
   }
 
-  /* istanbul ignore next */
   // eslint-disable-next-line class-methods-use-this
   tryGetDevicePixelRatio(): number | undefined {
     if (hasWindow()) {
@@ -917,7 +918,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return undefined;
   }
 
-  /* istanbul ignore next */
   scrollByPage(page: number): void {
     const { isVertical } = new ScrollDirection(this.wheelDirection());
     const distance: { left?: number; top?: number } = {};
@@ -931,7 +931,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.scrollBy(distance);
   }
 
-  /* istanbul ignore next */
   wheelDirection(e?: any): ScrollableDirection {
     switch (this.props.direction) {
       case DIRECTION_HORIZONTAL:

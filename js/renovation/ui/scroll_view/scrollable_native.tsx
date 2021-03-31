@@ -36,10 +36,14 @@ import {
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
 
 import {
-  ensureLocation, ScrollDirection, normalizeCoordinate,
+  ensureLocation, normalizeCoordinate,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
 } from './scrollable_utils';
+
+import {
+  ScrollDirection,
+} from './utils/scroll_direction';
 
 import {
   DIRECTION_VERTICAL,

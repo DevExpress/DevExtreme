@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import {
   ScrollDirection,
-} from '../scrollable_utils';
+} from '../utils/scroll_direction';
 
 import {
   ScrollableSimulated as Scrollable,

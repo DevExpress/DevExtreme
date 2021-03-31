@@ -21,7 +21,7 @@ jest.mock('../../../../core/devices', () => {
 
 describe('TopPocket', () => {
   describe('View', () => {
-    it('render pager with defaults', () => {
+    it('render topPocket with defaults', () => {
       const props = new TopPocketProps();
       const topPocket = mount<TopPocket>(<TopPocket {...props} />);
 

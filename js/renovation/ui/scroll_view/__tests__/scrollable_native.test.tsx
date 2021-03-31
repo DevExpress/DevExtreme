@@ -15,7 +15,7 @@ import {
 
 import {
   ScrollDirection,
-} from '../scrollable_utils';
+} from '../utils/scroll_direction';
 
 import {
   SCROLLABLE_SCROLLBAR_SIMULATED,

@@ -5,7 +5,7 @@ import {
   TwoWay,
 } from 'devextreme-generator/component_declaration/common';
 
-import { ScrollableDirection, ScrollableShowScrollbar } from './types.d';
+import { ScrollableDirection } from './types.d';
 import { ScrollableInternalProps } from './scrollable_props';
 import { EventCallback } from '../common/event_callback';
 import { TopPocketState } from './common/consts';
@@ -37,8 +37,6 @@ export class ScrollbarProps extends ScrollableInternalProps {
   @OneWay() scrollableOffset = 0;
 
   @OneWay() scrollByThumb = false;
-
-  @OneWay() scrollScrollbar: ScrollableShowScrollbar = 'onScroll';
 
   @OneWay() isScrollableHovered = false;
 
