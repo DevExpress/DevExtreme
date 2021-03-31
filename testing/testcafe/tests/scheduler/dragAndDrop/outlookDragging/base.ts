@@ -315,7 +315,7 @@ test('Basic drag-n-drop small appointments', async (t) => {
     .ok()
 
     .drag(draggableAppointment.element, 0, -170)
-    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-bottom.png', scheduler.workSpace))
+    .expect(await takeScreenshot('drag-n-drop-small-appoint-to-top.png', scheduler.workSpace))
     .ok()
 
     .expect(compareResults.isValid())
@@ -354,7 +354,7 @@ test('Basic drag-n-drop long appointments', async (t) => {
     .ok()
 
     .drag(draggableAppointment.element, 0, -70)
-    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-bottom.png', scheduler.workSpace))
+    .expect(await takeScreenshot('drag-n-drop-long-appoint-to-top.png', scheduler.workSpace))
     .ok()
 
     .expect(compareResults.isValid())
