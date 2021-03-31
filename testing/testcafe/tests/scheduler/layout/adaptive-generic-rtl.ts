@@ -56,32 +56,32 @@ const resources = [{
   });
 });
 
-// [false, true].forEach((crossScrollingEnabled) => {
-//   views
-//     .map((viewType) => ({
-//       type: viewType,
-//       groupOrientation: 'horizontal',
-//     }))
-//     .forEach((view) => {
-//       test(`Adaptive views layout test in generic theme (view='${view.type})', crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
-//         await t.expect(
-//           await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping-rtl).png`),
-//         ).ok();
-//       }).before(async (t) => {
-//         await t.resizeWindow(400, 600);
+[false, true].forEach((crossScrollingEnabled) => {
+  views
+    .map((viewType) => ({
+      type: viewType,
+      groupOrientation: 'horizontal',
+    }))
+    .forEach((view) => {
+      test(`Adaptive views layout test in generic theme (view='${view.type})', crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and rtl are used`, async (t) => {
+        await t.expect(
+          await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping-rtl).png`),
+        ).ok();
+      }).before(async (t) => {
+        await t.resizeWindow(400, 600);
 
-//         await createScheduler({
-//           views: [view],
-//           currentView: view,
-//           crossScrollingEnabled,
-//           groups: ['priorityId'],
-//           resources,
-//         });
-//       }).after(async (t) => {
-//         await t.resizeWindow(1200, 800);
-//       });
-//     });
-// });
+        await createScheduler({
+          views: [view],
+          currentView: view,
+          crossScrollingEnabled,
+          groups: ['priorityId'],
+          resources,
+        });
+      }).after(async (t) => {
+        await t.resizeWindow(1200, 800);
+      });
+    });
+});
 
 // [false, true].forEach((crossScrollingEnabled) => {
 //   views

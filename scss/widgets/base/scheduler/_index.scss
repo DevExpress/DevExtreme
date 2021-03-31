@@ -2625,7 +2625,8 @@ $scheduler-appointment-form-label-padding: 20px;
         }
       }
 
-      .dx-scheduler-work-space-month.dx-scheduler-work-space-both-scrollbar {
+      .dx-scheduler-work-space-month.dx-scheduler-work-space-both-scrollbar,
+      .dx-scheduler-timeline.dx-scheduler-work-space-both-scrollbar {
         .dx-scheduler-header-scrollable.dx-scrollable {
           margin: 0;
         }
