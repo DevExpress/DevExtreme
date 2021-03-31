@@ -640,58 +640,68 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                     lastCell: 8,
                     selectedCellCount: 6,
                     currentView: 'day',
-                    mustBeSelectedCells: [4, 5, 6, 7]
-                }, {
-                    firstCell: 4,
-                    lastCell: 5,
-                    selectedCellCount: 2,
-                    currentView: 'day',
-                    mustBeSelectedCells: [4, 5]
+                    mustBeSelectedCells: [4, 5, 6, 7],
+                    testDescription: 'Sells that cover dead zone of DST'
                 }, {
                     firstCell: 21,
                     lastCell: 56,
                     selectedCellCount: 6,
                     currentView: 'week',
-                    mustBeSelectedCells: [28, 35, 42, 49]
-                }, {
-                    firstCell: 14,
-                    lastCell: 28,
-                    selectedCellCount: 3,
-                    currentView: 'week',
-                    mustBeSelectedCells: [14, 21, 28]
+                    mustBeSelectedCells: [28, 35, 42, 49],
+                    testDescription: 'Sells that cover dead zone of DST'
                 }, {
                     firstCell: 28,
                     lastCell: 29,
                     selectedCellCount: 17,
                     currentView: 'week',
-                    mustBeSelectedCells: [28, 35, 42, 56]
+                    mustBeSelectedCells: [28, 35, 42, 56],
+                    testDescription: 'Sells that cover dead zone of DST and part of next week'
                 }, {
                     firstCell: 3,
                     lastCell: 8,
                     selectedCellCount: 6,
                     currentView: 'timelineDay',
-                    mustBeSelectedCells: [4, 5, 6, 7]
-                }, {
-                    firstCell: 3,
-                    lastCell: 5,
-                    selectedCellCount: 3,
-                    currentView: 'timelineDay',
-                    mustBeSelectedCells: [3, 4, 5]
-                }, {
-                    firstCell: 3,
-                    lastCell: 5,
-                    selectedCellCount: 3,
-                    currentView: 'timelineWeek',
-                    mustBeSelectedCells: [3, 4, 5]
+                    mustBeSelectedCells: [4, 5, 6, 7],
+                    testDescription: 'Sells that cover dead zone of DST'
                 }, {
                     firstCell: 5,
                     lastCell: 9,
                     selectedCellCount: 5,
                     currentView: 'timelineWeek',
-                    mustBeSelectedCells: [5, 6, 7, 8, 9]
+                    mustBeSelectedCells: [5, 6, 7, 8, 9],
+                    testDescription: 'Sells that starts on dead zone of DST'
                 },
-            ].forEach(({ firstCell, lastCell, selectedCellCount, currentView, mustBeSelectedCells }) => {
-                test(`Cells from DST dead zone should be selected when ${currentView} is used`, function(assert) {
+                {
+                    firstCell: 4,
+                    lastCell: 5,
+                    selectedCellCount: 2,
+                    currentView: 'day',
+                    mustBeSelectedCells: [4, 5],
+                    testDescription: 'Cells of dead zone of DST'
+                }, {
+                    firstCell: 14,
+                    lastCell: 28,
+                    selectedCellCount: 3,
+                    currentView: 'week',
+                    mustBeSelectedCells: [14, 21, 28],
+                    testDescription: 'Cells that ends on dead zone of DST'
+                }, {
+                    firstCell: 3,
+                    lastCell: 5,
+                    selectedCellCount: 3,
+                    currentView: 'timelineDay',
+                    mustBeSelectedCells: [3, 4, 5],
+                    testDescription: 'Cells that end on dead zone of DST'
+                }, {
+                    firstCell: 3,
+                    lastCell: 5,
+                    selectedCellCount: 3,
+                    currentView: 'timelineWeek',
+                    mustBeSelectedCells: [3, 4, 5],
+                    testDescription: 'Cells that end on dead zone of DST'
+                },
+            ].forEach(({ firstCell, lastCell, selectedCellCount, currentView, mustBeSelectedCells, testDescription }) => {
+                test(`${testDescription} should be selected when ${currentView} view is used`, function(assert) {
                     const scheduler = createWrapper(Object.assign({ currentView }, schedulerSettings));
 
                     scheduler.workSpace.selectCells(firstCell, lastCell);
