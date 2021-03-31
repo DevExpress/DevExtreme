@@ -3004,12 +3004,13 @@ QUnit.module('dxPivotGrid', {
                 const $headerArea = pivotGrid.$element().find(areaSelector);
                 const mainHeaderRect = $headerArea.get(0).getBoundingClientRect();
 
-                const prop = dimension === 'row' ? 'y' : 'x';
+                const prop = dimension === 'row' ? 'top' : 'left';
                 const virtualTableHeaderCells = $headerArea.eq(2).find('td');
+
                 for(let i = 0; i < virtualTableHeaderCells.length; i++) {
                     const cell = virtualTableHeaderCells.get(i);
                     if(cell.getBoundingClientRect()[prop] >= mainHeaderRect[prop]) {
-                        return cell.innerText;
+                        return cell.innerText.trim();
                     }
                 }
                 return undefined;
@@ -3025,7 +3026,7 @@ QUnit.module('dxPivotGrid', {
 
             QUnit.test(`PivotGrid -> scrollTo() -> expandHeader -> collapseHeader (T984139). UseNative: ${useNative}, expandDimension: ${dimension}`, function(assert) {
                 const store = [];
-                for(let i = 0; i < 2000; i++) {
+                for(let i = 0; i < 200; i++) {
                     store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
                 }
 
@@ -3047,7 +3048,8 @@ QUnit.module('dxPivotGrid', {
                 this.clock.tick(100);
                 checkFirstVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
-                pivotGrid._dataArea.groupElement().dxScrollable('instance').scrollTo({ left: 2000, top: 2000 });
+                const scrollDistance = browser.msie ? 1980 : 2000; // there is a difference in font size for IE
+                pivotGrid._dataArea.groupElement().dxScrollable('instance').scrollTo({ left: scrollDistance, top: 2000 });
                 this.clock.tick(100);
 
                 const expectedRow = 60;
@@ -3070,7 +3072,7 @@ QUnit.module('dxPivotGrid', {
 
             QUnit.test(`PivotGrid -> scrollTo() -> subField.visible=false -> subField.visible=true (T984139). UseNative: ${useNative}, expandDimension: ${dimension}`, function(assert) {
                 const store = [];
-                for(let i = 0; i < 2000; i++) {
+                for(let i = 0; i < 200; i++) {
                     store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
                 }
 
@@ -3091,7 +3093,8 @@ QUnit.module('dxPivotGrid', {
                 this.clock.tick(100);
                 checkFirstVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
-                pivotGrid._dataArea.groupElement().dxScrollable('instance').scrollTo({ left: 2000, top: 2000 });
+                const scrollDistance = browser.msie ? 1980 : 2000; // there is a difference in font size for IE
+                pivotGrid._dataArea.groupElement().dxScrollable('instance').scrollTo({ left: scrollDistance, top: 2000 });
                 this.clock.tick(100);
                 const expectedRow = 60;
                 const expectedColumn = dimension === 'row' ? 58 : 47;
