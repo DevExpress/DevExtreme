@@ -800,11 +800,19 @@ export const virtualScrollingModule = {
                             return isItemCountableByDataSource(item, that._dataSource);
                         };
 
+                        const isItemNonCountable = function(item) {
+                            return !isItemCountable(item);
+                        };
+
                         that._rowsScrollController = new VirtualScrollController(that.component, {
                             pageSize: function() {
                                 return that.getRowPageSize();
                             },
                             totalItemsCount: function() {
+                                if(that.option(NEW_SCROLLING_MODE)) {
+                                    return that.totalItemsCount() + that._items.filter(isItemNonCountable).length;
+                                }
+
                                 return isVirtualMode(that) ? that.totalItemsCount() : that._items.filter(isItemCountable).length;
                             },
                             hasKnownLastPage: function() {
@@ -919,6 +927,7 @@ export const virtualScrollingModule = {
                     },
                     _updateItemsCore: function(change) {
                         const delta = this.getRowIndexDelta();
+
                         this.callBase.apply(this, arguments);
                         const rowsScrollController = this._rowsScrollController;
 
@@ -1149,10 +1158,10 @@ export const virtualScrollingModule = {
 
                         this.callBase.apply(this, arguments);
                     },
-                    topItemDataIndex: function() {
+                    topItemIndex: function() {
                         return this._loadViewportParams?.skip;
                     },
-                    bottomItemDataIndex: function() {
+                    bottomItemIndex: function() {
                         const viewportParams = this._loadViewportParams;
                         return viewportParams && viewportParams.skip + viewportParams.take;
                     }
