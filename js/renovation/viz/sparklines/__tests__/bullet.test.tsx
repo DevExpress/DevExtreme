@@ -277,7 +277,7 @@ describe('Bullet', () => {
         it('should be ignored if the "enabled" of tooltip props is false', () => {
           const bullet = new Bullet({
             disabled: false,
-            tooltip: { enabled: false },
+            tooltip: { enabled: false } as any,
           });
 
           expect(bullet.tooltipEffect()).toBe(undefined);
@@ -289,7 +289,7 @@ describe('Bullet', () => {
           const bullet = new Bullet({
             value: 10,
             target: 15,
-            tooltip: { enabled: true },
+            tooltip: { enabled: true } as any,
           });
           bullet.widgetRef = React.createRef() as any;
           const baseRef = {} as any;
@@ -305,7 +305,7 @@ describe('Bullet', () => {
           const bullet = new Bullet({
             value: 10,
             target: 15,
-            tooltip: { enabled: true },
+            tooltip: { enabled: true } as any,
           });
           const baseRef = {} as any;
           bullet.widgetRef = { svg: jest.fn(() => baseRef) } as any;
@@ -584,7 +584,7 @@ describe('Bullet', () => {
             arrowWidth: 25,
             arrowLength: 15,
             offset: 10,
-          };
+          } as any;
           (generateCustomizeTooltipCallback as jest.Mock).mockReturnValue(customizeTooltipFn);
           const bullet = new Bullet({ value, target, tooltip });
           bullet.canvasState = { width: 200, height: 100 } as ClientRect;
