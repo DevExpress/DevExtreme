@@ -1,108 +1,5 @@
 import { isDefined } from '../../core/utils/type';
-
-class PdfTable {
-    constructor(drawTableBorder, rect) {
-        this.drawTableBorder = drawTableBorder;
-        this.rect = rect;
-        this.rows = [];
-    }
-
-    addRow(cells) {
-        if(!isDefined(cells)) {
-            throw 'cells is required';
-        }
-        this.rows.push(cells);
-        for(let i = 0; i < cells.length; i++) {
-            const currentCell = cells[i];
-            if(currentCell.drawLeftBorder === false) {
-                if(i >= 1) {
-                    cells[i - 1].drawRightBorder = false;
-                }
-            } else if(!isDefined(currentCell.drawLeftBorder)) {
-                if(i >= 1 && cells[i - 1].drawRightBorder === false) {
-                    currentCell.drawLeftBorder = false;
-                }
-            }
-
-            if(currentCell.drawTopBorder === false) {
-                if(this.rows.length >= 2) {
-                    this.rows[this.rows.length - 2][i].drawBottomBorder = false;
-                }
-            } else if(!isDefined(currentCell.drawTopBorder)) {
-                if(this.rows.length >= 2 && this.rows[this.rows.length - 2][i].drawBottomBorder === false) {
-                    currentCell.drawTopBorder = false;
-                }
-            }
-        }
-    }
-
-    drawTo(doc) {
-        drawTable(doc, this);
-    }
-}
-
-class PdfGrid {
-    constructor(splitByColumns) {
-        this._splitByColumns = splitByColumns ?? [];
-        this._newPageTables = [];
-        this._tables = [];
-        this._currentHorizontalTables = null;
-    }
-
-    _addLastTableToNewPages() {
-        this._newPageTables.push(this._currentHorizontalTables[this._currentHorizontalTables.length - 1]);
-    }
-
-    startNewTable(drawTableBorder, firstTableRect, firstTableOnNewPage, splitByColumns) {
-        this._currentHorizontalTables = [
-            new PdfTable(drawTableBorder, firstTableRect)
-        ];
-        if(firstTableOnNewPage) {
-            this._addLastTableToNewPages();
-        }
-
-        if(isDefined(splitByColumns)) {
-            this._splitByColumns = splitByColumns;
-        }
-
-        if(isDefined(this._splitByColumns)) {
-            this._splitByColumns.forEach((splitByColumn) => {
-                this._currentHorizontalTables.push(
-                    new PdfTable(drawTableBorder, splitByColumn.tableRect)
-                );
-                if(splitByColumn.drawOnNewPage) {
-                    this._addLastTableToNewPages();
-                }
-            });
-        }
-
-        this._tables.push(...this._currentHorizontalTables);
-    }
-
-    addRow(cells) {
-        let currentTableIndex = 0;
-        let currentTableCells = [];
-        for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-            const isNewTableColumn = this._splitByColumns.filter((splitByColumn) => splitByColumn.columnIndex === cellIndex)[0];
-            if(isNewTableColumn) {
-                this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells);
-                currentTableIndex++;
-                currentTableCells = [];
-            }
-            currentTableCells.push(cells[cellIndex]);
-        }
-        this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells);
-    }
-
-    drawTo(doc) {
-        this._tables.forEach((table) => {
-            if(this._newPageTables.indexOf(table) !== -1) {
-                doc.addPage();
-            }
-            table.drawTo(doc);
-        });
-    }
-}
+import PdfGrid from './export.pdf_grid';
 
 function exportDataGrid(doc, dataGrid, options) {
     if(!isDefined(options.rect)) {
@@ -151,7 +48,7 @@ function exportDataGrid(doc, dataGrid, options) {
                 pdfGrid.addRow(currentRow);
             }
 
-            pdfGrid.drawTo(doc);
+            pdfGrid.drawTo(doc, drawTable);
             resolve();
         });
     });
