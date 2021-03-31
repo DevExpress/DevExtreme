@@ -102,7 +102,7 @@ class NotificationManagerStub extends NotificationManagerBase {
 
     addOperationDetailsError() {}
 
-    isDimensionChangeHandled() { return false; }
+    handleDimensionChanged() { return false; }
 
     ensureProgressPanelCreated() {}
 
@@ -179,7 +179,7 @@ class NotificationManager extends NotificationManagerBase {
         this._notifyError(errorInfo);
     }
 
-    isDimensionChangeHandled() {
+    handleDimensionChanged() {
         if(this._progressPanel) {
             this._progressPanel.$element().detach();
         }
