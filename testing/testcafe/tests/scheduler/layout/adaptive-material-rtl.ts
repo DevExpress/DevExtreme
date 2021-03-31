@@ -36,7 +36,7 @@ const resources = [{
   label: 'Priority',
 }];
 
-[true].forEach((crossScrollingEnabled) => {
+[true, false].forEach((crossScrollingEnabled) => {
   views.forEach((view) => {
     test(`Adaptive views layout test in material theme (view='${view})', crossScrollingEnabled=${crossScrollingEnabled} and rtl`, async (t) => {
       await t.expect(
@@ -56,7 +56,7 @@ const resources = [{
   });
 });
 
-[true].forEach((crossScrollingEnabled) => {
+[true, false].forEach((crossScrollingEnabled) => {
   views
     .map((viewType) => ({
       type: viewType,
@@ -83,7 +83,7 @@ const resources = [{
     });
 });
 
-[true].forEach((crossScrollingEnabled) => {
+[true, false].forEach((crossScrollingEnabled) => {
   views
     .map((viewType) => ({
       type: viewType,
