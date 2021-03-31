@@ -5,7 +5,7 @@ import { mount } from 'enzyme';
 import each from 'jest-each';
 import {
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { setWindow } from '../../../../core/utils/window';
 import {
   SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,

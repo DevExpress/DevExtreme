@@ -3,7 +3,7 @@ import each from 'jest-each';
 import { mount } from 'enzyme';
 import {
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import devices from '../../../../core/devices';
 import {
   clear as clearEventHandlers, emit, defaultEvent,

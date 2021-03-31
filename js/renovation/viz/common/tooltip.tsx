@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState, Portal,
   RefObject, Method, Template, Event, ForwardRef,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { combineClasses } from '../../utils/combine_classes';
 
 import { PathSvgElement } from './renderers/svg_path';

@@ -3,7 +3,7 @@ import {
   OneWay,
   Event,
   TwoWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { ScrollableDirection } from './types.d';
 import { ScrollableInternalProps } from './scrollable_props';

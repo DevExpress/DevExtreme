@@ -8,7 +8,7 @@ import {
   InternalState,
   Mutable,
   ForwardRef,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from './load_panel';
 

@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import each from 'jest-each';
 import {
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { isDefined } from '../../../../core/utils/type';
 
 // eslint-disable-next-line import/first

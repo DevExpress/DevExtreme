@@ -4,7 +4,7 @@ import {
   ComponentBindings,
   OneWay,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { isDefined } from '../../../core/utils/type';
 import messageLocalization from '../../../localization/message';

@@ -1043,9 +1043,9 @@ export const validatingModule = {
                         let $nextFixedRowElement;
                         let $groupCellElement;
                         const isFixedColumns = this._rowsView.isFixedColumns();
-                        const isFormEditMode = this._editingController.isFormEditMode();
+                        const isFormOrPopupEditMode = this._editingController.isFormOrPopupEditMode();
 
-                        if(isFixedColumns && !isFormEditMode) {
+                        if(isFixedColumns && !isFormOrPopupEditMode) {
                             const nextRowOptions = $cell.closest('.dx-row').next().data('options');
 
                             if(nextRowOptions && nextRowOptions.rowType === 'group') {
@@ -1338,7 +1338,7 @@ export const validatingModule = {
                     });
                 },
                 _cellPrepared: function($cell, parameters) {
-                    if(!this.getController('editing').isFormEditMode()) {
+                    if(!this.getController('editing').isFormOrPopupEditMode()) {
                         this.getController('validating').createValidator(parameters, $cell);
                     }
 

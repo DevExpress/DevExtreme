@@ -2,7 +2,7 @@ import React from 'react';
 import each from 'jest-each';
 import { mount } from 'enzyme';
 
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
 } from '../../../test_utils/events_mock';

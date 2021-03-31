@@ -1,6 +1,6 @@
 import {
   Component, JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { ResizableContainer } from './resizable_container';
 import { PagerProps } from './common/pager_props';

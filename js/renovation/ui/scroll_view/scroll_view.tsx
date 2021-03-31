@@ -4,7 +4,7 @@ import {
   Ref,
   Method,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { current, isMaterial } from '../../../ui/themes';
 import { isDefined } from '../../../core/utils/type';

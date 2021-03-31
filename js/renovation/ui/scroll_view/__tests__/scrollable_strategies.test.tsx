@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import {
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,

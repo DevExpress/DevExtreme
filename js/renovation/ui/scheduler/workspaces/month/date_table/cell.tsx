@@ -1,7 +1,7 @@
 import {
   Component,
   JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import {
   DateTableCellBase,

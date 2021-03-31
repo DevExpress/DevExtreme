@@ -7,7 +7,7 @@ import {
   Effect,
   Method,
   Mutable,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';

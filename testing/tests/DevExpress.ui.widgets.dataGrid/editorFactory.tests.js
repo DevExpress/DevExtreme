@@ -1332,7 +1332,7 @@ QUnit.module('Focus', {
         ];
 
         that.setupDataGrid = function() {
-            setupDataGridModules(that, ['data', 'rows', 'columns', 'editorFactory', 'editing', 'editingCellBased', 'validating', 'masterDetail'], {
+            setupDataGridModules(that, ['data', 'rows', 'columns', 'editorFactory', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'validating', 'masterDetail'], {
                 initViews: true,
                 controllers: {
                     columns: new MockColumnsController(that.columns),

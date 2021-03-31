@@ -5,7 +5,7 @@ import {
   OneWay,
   ForwardRef,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { LoadIndicator } from '../load_indicator';
 import { isDefined } from '../../../core/utils/type';
 

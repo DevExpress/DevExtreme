@@ -1,4 +1,4 @@
-import { CSSAttributes } from 'devextreme-generator/component_declaration/common';
+import { CSSAttributes } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../utils/combine_classes';
 import { Group, GroupedViewData, TimePanelData } from './types.d';
 import { GroupOrientation } from '../types.d';

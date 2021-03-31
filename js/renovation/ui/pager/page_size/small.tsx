@@ -1,6 +1,6 @@
 import {
   ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, Ref, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { SelectBox } from '../../select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
