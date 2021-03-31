@@ -3016,7 +3016,7 @@ QUnit.module('dxPivotGrid', {
                 return undefined;
             }
 
-            function checkTopLeftVisibleHeaderCellTexts(pivotGrid, expected, message) {
+            function checkLeftTopVisibleHeaderCellTexts(pivotGrid, expected, message) {
                 const firstVisibleRowHeaderText = getTopLeftVisibleHeaderCellText(pivotGrid, 'row');
                 const firstVisibleColumnHeaderText = getTopLeftVisibleHeaderCellText(pivotGrid, 'column');
 
@@ -3024,9 +3024,9 @@ QUnit.module('dxPivotGrid', {
                 QUnit.assert.equal(firstVisibleColumnHeaderText, expected.column, `column ${message}`);
             }
 
-            function tryTriggerScrollEventAndWait(scrollable) {
+            function tryTriggerScrollEventAndWait(scrollable, clock) {
                 useNative && $(scrollable._container()).trigger('scroll');
-                this.clock.tick(100);
+                clock.tick(100);
             }
 
             QUnit.test(`PivotGrid -> scrollTo() -> expandHeader -> collapseHeader (T984139). UseNative: ${useNative}, expandDimension: ${dimension}`, function(assert) {
@@ -3051,28 +3051,28 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 this.clock.tick(100);
-                checkTopLeftVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
                 const scrollDistance = browser.msie ? 1980 : 2000; // there is a difference in font size for IE
                 const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
                 scrollable.scrollTo({ left: scrollDistance, top: 2000 });
-                tryTriggerScrollEventAndWait(scrollable);
+                tryTriggerScrollEventAndWait(scrollable, this.clock);
 
                 const expectedRow = 60;
                 const expectedColumn = dimension === 'row' ? 58 : 47;
-                checkTopLeftVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after scrolling');
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after scrolling');
 
                 const nodeToExpand = 65;
                 const getExpandedCells = () => pivotGrid.$element().find('.dx-pivotgrid-expanded');
 
                 pivotGrid.getDataSource().expandHeaderItem(dimension, [nodeToExpand]);
-                tryTriggerScrollEventAndWait(scrollable);
-                checkTopLeftVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after expanding');
+                tryTriggerScrollEventAndWait(scrollable, this.clock);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after expanding');
                 assert.strictEqual(getExpandedCells().length, 2);
 
                 pivotGrid.getDataSource().collapseHeaderItem(dimension, [nodeToExpand]);
-                tryTriggerScrollEventAndWait(scrollable);
-                checkTopLeftVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after collapsing');
+                tryTriggerScrollEventAndWait(scrollable, this.clock);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after collapsing');
                 assert.strictEqual(getExpandedCells().length, 0);
             });
 
@@ -3097,27 +3097,27 @@ QUnit.module('dxPivotGrid', {
                     }
                 });
                 this.clock.tick(100);
-                checkTopLeftVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
                 const scrollDistance = browser.msie ? 1980 : 2000; // there is a difference in font size for IE
                 const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
                 scrollable.scrollTo({ left: scrollDistance, top: 2000 });
-                tryTriggerScrollEventAndWait(scrollable);
+                tryTriggerScrollEventAndWait(scrollable, this.clock);
 
                 const expectedRow = 60;
                 const expectedColumn = dimension === 'row' ? 58 : 47;
-                checkTopLeftVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after scrolling');
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after scrolling');
 
                 const dataSource = pivotGrid.getDataSource();
                 dataSource.field('subField', { visible: false });
                 dataSource.load();
-                tryTriggerScrollEventAndWait(scrollable);
-                checkTopLeftVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: dimension === 'row' ? expectedColumn : expectedColumn + 1 }, 'after changing visible to a false value');
+                tryTriggerScrollEventAndWait(scrollable, this.clock);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: dimension === 'row' ? expectedColumn : expectedColumn + 1 }, 'after changing visible to a false value');
 
                 dataSource.field('subField', { visible: true });
                 dataSource.load();
-                tryTriggerScrollEventAndWait(scrollable);
-                checkTopLeftVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after changing visible to a true value');
+                tryTriggerScrollEventAndWait(scrollable, this.clock);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: expectedRow, column: expectedColumn }, 'after changing visible to a true value');
             });
         });
     });
