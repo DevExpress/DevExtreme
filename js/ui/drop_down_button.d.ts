@@ -21,10 +21,6 @@ import {
 } from '../events';
 
 import {
-    ItemInfo
-} from './collection/ui.collection_widget.base';
-
-import {
     dxListItem
 } from './list';
 
@@ -49,7 +45,10 @@ export type ButtonClickEvent = ComponentNativeEvent<dxDropDownButton> & {
 /**
  * @public
  */
-export type ItemClickEvent = ComponentNativeEvent<dxDropDownButton> & ItemInfo;
+export type ItemClickEvent = ComponentNativeEvent<dxDropDownButton> & {
+    readonly itemData?: any;
+    itemElement: TElement;
+};
 /**
  * @public
  */
