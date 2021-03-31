@@ -581,11 +581,9 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
 
     module('Cells selection with DST', {
         beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
             fx.off = true;
         },
         afterEach: function() {
-            this.clock.restore();
             fx.off = false;
         },
     }, () => {
@@ -702,7 +700,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                 },
             ].forEach(({ firstCell, lastCell, selectedCellCount, currentView, mustBeSelectedCells, testDescription }) => {
                 test(`${testDescription} should be selected when ${currentView} view is used`, function(assert) {
-                    const scheduler = createWrapper(Object.assign({ currentView }, schedulerSettings));
+                    const scheduler = createWrapper({ ...schedulerSettings, currentView });
 
                     scheduler.workSpace.selectCells(firstCell, lastCell);
 
