@@ -8,6 +8,8 @@ import {
 
 import {
     TEvent,
+    CancelableEvent,
+    ComponentNativeEvent,
     ComponentEvent
 } from '../events';
 
@@ -29,7 +31,7 @@ export type ContentReadyEvent = ComponentEvent<dxPivotGrid>;
 /**
  * @public
  */
-export type CellClickEvent = ComponentEvent<dxPivotGrid> & {
+export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & CancelableEvent & {
     readonly area?: string;
     readonly cellElement?: TElement;
     readonly cell?: dxPivotGridPivotGridCell;
@@ -38,8 +40,6 @@ export type CellClickEvent = ComponentEvent<dxPivotGrid> & {
     readonly columnFields?: Array<PivotGridDataSourceField>;
     readonly rowFields?: Array<PivotGridDataSourceField>;
     readonly dataFields?: Array<PivotGridDataSourceField>;
-    readonly event?: TEvent;
-    cancel?: boolean
 }
 /**
  * @public
@@ -73,20 +73,18 @@ export type ExportedEvent = ComponentEvent<dxPivotGrid>;
 /**
  * @public
  */
-export type ExportingEvent = ComponentEvent<dxPivotGrid> & {
+export type ExportingEvent = ComponentEvent<dxPivotGrid> & CancelableEvent & {
     fileName?: string;
-    cancel?: boolean;
 }
 /**
  * @public
  */
-export type FileSavingEvent = {
+export type FileSavingEvent = CancelableEvent & {
     readonly component: dxPivotGrid;
     readonly element: TElement;
     readonly data?: Blob;
     readonly format?: string;
     fileName?: string;
-    cancel?: boolean;
 }
 
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {

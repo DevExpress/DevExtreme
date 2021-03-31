@@ -16,16 +16,13 @@ import {
 
 import {
     TEvent,
+    CancelableEvent,
     ComponentEvent
 } from '../events';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
-
-export interface ComponentHidingEvent<T> extends ComponentEvent<T> {
-    cancel?: boolean;
-}
 
 export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
@@ -134,7 +131,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: ComponentHidingEvent<T>) => void);
+    onHiding?: ((e: ComponentEvent<T> & CancelableEvent) => void);
     /**
      * @docid
      * @default null

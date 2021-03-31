@@ -3,12 +3,9 @@ import {
 } from '../core/element';
 
 import {
+    CancelableEvent,
     ComponentEvent
 } from '../events';
-
-import {
-    ComponentHidingEvent,
-} from './overlay';
 
 import dxPopover, {
     dxPopoverOptions
@@ -21,7 +18,7 @@ export type ContentReadyEvent = ComponentEvent<dxTooltip>;
 /**
  * @public
  */
-export type HidingEvent = ComponentHidingEvent<dxTooltip>;
+export type HidingEvent = ComponentEvent<dxTooltip> & CancelableEvent;
 /**
  * @public
  */

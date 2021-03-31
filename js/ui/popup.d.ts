@@ -15,13 +15,13 @@ import {
 } from '../core/templates/template';
 
 import {
+    CancelableEvent,
     ComponentEvent
 } from '../events';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions,
-    ComponentHidingEvent,
+    dxOverlayOptions
 } from './overlay';
 
 import {
@@ -39,7 +39,7 @@ export type ContentReadyEvent = ComponentEvent<dxPopup>;
 /**
  * @public
  */
-export type HidingEvent = ComponentHidingEvent<dxPopup>;
+export type HidingEvent = ComponentEvent<dxPopup> & CancelableEvent;
 /**
  * @public
  */

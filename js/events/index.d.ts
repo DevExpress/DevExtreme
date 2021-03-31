@@ -25,6 +25,10 @@ export interface ComponentNativeEvent<T> extends ComponentEvent<T> {
     event?: TEvent;
 }
 
+export interface CancelableEvent {
+    cancel?: boolean;
+}
+
 export interface ItemEvent {
     readonly itemData?: any;
     itemElement: TElement;

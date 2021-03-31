@@ -3,6 +3,7 @@ import {
 } from '../core/element';
 
 import {
+    CancelableEvent,
     ComponentEvent
 } from '../events';
 
@@ -16,8 +17,7 @@ import {
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions,
-    ComponentHidingEvent,
+    dxOverlayOptions
 } from './overlay';
 
 /**
@@ -27,7 +27,7 @@ export type ContentReadyEvent = ComponentEvent<dxLoadPanel>;
 /**
  * @public
  */
-export type HidingEvent = ComponentHidingEvent<dxLoadPanel>;
+export type HidingEvent = ComponentEvent<dxLoadPanel> & CancelableEvent;
 /**
  * @public
  */

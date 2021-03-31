@@ -16,12 +16,9 @@ import {
 
 import {
     TEvent,
+    CancelableEvent,
     ComponentEvent
 } from '../events';
-
-import {
-    ComponentHidingEvent,
-} from './overlay';
 
 import dxPopup, {
     dxPopupAnimation,
@@ -35,7 +32,7 @@ export type ContentReadyEvent = ComponentEvent<dxPopover>;
 /**
  * @public
  */
-export type HidingEvent = ComponentHidingEvent<dxPopover>;
+export type HidingEvent = ComponentEvent<dxPopover> & CancelableEvent;
 /**
  * @public
  */

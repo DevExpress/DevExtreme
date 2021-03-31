@@ -7,6 +7,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
+    CancelableEvent,
     ComponentEvent,
     ComponentNativeEvent,
     ItemEvent
@@ -20,10 +21,6 @@ import {
 import dxMenuBase, {
     dxMenuBaseOptions
 } from './context_menu/ui.menu_base';
-
-import {
-    ComponentHidingEvent,
-} from './overlay';
 
 /**
  * @public
@@ -54,7 +51,7 @@ export type SubmenuHiddenEvent = ComponentEvent<dxMenu> & {
 /**
  * @public
  */
-export type SubmenuHidingEvent = ComponentHidingEvent<dxMenu> & {
+export type SubmenuHidingEvent = ComponentEvent<dxMenu> & CancelableEvent & {
     readonly rootItem?: TElement;
 }
 /**

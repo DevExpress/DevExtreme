@@ -12,6 +12,7 @@ import DataSource, {
 
 import {
     TEvent,
+    CancelableEvent,
     ComponentEvent,
     ComponentNativeEvent,
     ItemEvent
@@ -50,9 +51,8 @@ export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxActionSheet
 /**
  * @public
  */
-export type CancelClickEvent = ComponentEvent<dxActionSheet> & {
-    cancel?: boolean;
-}
+export type CancelClickEvent = ComponentEvent<dxActionSheet> & CancelableEvent;
+
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**
      * @docid

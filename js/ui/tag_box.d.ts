@@ -7,6 +7,7 @@ import {
 } from '../core/templates/template';
 
 import {
+    CancelableEvent,
     ComponentEvent,
     ComponentNativeEvent,
     ItemEvent
@@ -104,11 +105,10 @@ export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxTagBox, str
 /**
  * @public
  */
-export type MultiTagPreparingEvent = ComponentEvent<dxTagBox> & {
+export type MultiTagPreparingEvent = ComponentEvent<dxTagBox> & CancelableEvent & {
     multiTagElement: TElement;
     readonly selectedItems?: Array<string | number | any>;
     readonly text?: string;
-    cancel?: boolean;
 }
 
 export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {

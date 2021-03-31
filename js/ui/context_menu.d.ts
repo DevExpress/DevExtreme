@@ -16,6 +16,7 @@ import DataSource, {
 
 import {
     TEvent,
+    CancelableEvent,
     ComponentEvent,
     ComponentNativeEvent,
     ItemEvent
@@ -32,10 +33,6 @@ import {
 import {
     ComponentSelectionChangedEvent
 } from './collection/ui.collection_widget.base';
-
-import {
-    ComponentHidingEvent,
-} from './overlay';
 
 /**
  * @public
@@ -60,7 +57,7 @@ export type SelectionChangedEvent = ComponentSelectionChangedEvent<dxContextMenu
 /**
  * @public
  */
-export type HidingEvent = ComponentHidingEvent<dxContextMenu>;
+export type HidingEvent = ComponentEvent<dxContextMenu> & CancelableEvent;
 /**
  * @public
  */
@@ -68,9 +65,7 @@ export type HiddenEvent = ComponentEvent<dxContextMenu>;
 /**
  * @public
  */
- export type ShowingEvent = ComponentEvent<dxContextMenu> & {
-    cancel?: boolean;
-}
+ export type ShowingEvent = ComponentEvent<dxContextMenu> & CancelableEvent;
 /**
  * @public
  */
