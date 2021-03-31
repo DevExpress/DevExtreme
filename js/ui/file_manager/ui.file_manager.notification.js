@@ -78,12 +78,7 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _getNotificationManager(operationInfo) {
-        let actualManagerId;
-        if(!operationInfo) {
-            actualManagerId = Object.keys(this._managerMap).filter(managerId => this._managerMap[managerId].isActual())[0];
-        } else {
-            actualManagerId = operationInfo[MANAGER_ID_NAME];
-        }
+        const actualManagerId = operationInfo?.[MANAGER_ID_NAME] || this._getActualNotificationManagerId();
         return this._managerMap[actualManagerId] || this._managerMap[this._notificationManagerStubId];
     }
 
@@ -91,6 +86,10 @@ export default class FileManagerNotificationControl extends Widget {
         const stubManager = this._managerMap[this._notificationManagerStubId];
         delete this._managerMap;
         this._managerMap = { [this._notificationManagerStubId]: stubManager };
+    }
+
+    _getActualNotificationManagerId() {
+        return Object.keys(this._managerMap).filter(managerId => this._managerMap[managerId].isActual())[0];
     }
 
     tryShowProgressPanel() {
@@ -218,7 +217,10 @@ export default class FileManagerNotificationControl extends Widget {
         return this._progressDrawer.option('opened');
     }
 
-    _hidePopup() {
+    _hidePopup(forceHide) {
+        if(!this.option('showNotificationPopup') && !forceHide) {
+            return;
+        }
         this._getNotificationPopup().hide();
     }
 
@@ -338,7 +340,7 @@ export default class FileManagerNotificationControl extends Widget {
                 break;
             case 'showNotificationPopup':
                 if(!args.value) {
-                    this._hidePopup();
+                    this._hidePopup(true);
                 }
                 break;
             case 'onActionProgress':
