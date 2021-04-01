@@ -14,7 +14,8 @@ export default {
   'base-danger': '@brand-danger',
 
   'base-link-color': '@link-color',
-  'base-hover-color': '@table-bg-hover',
+  'base-hover-color': '@table-bg-accent',
+  'base-hover-bg': '@table-bg-hover',
 
   'button-normal-color': '@btn-default-color',
   'button-normal-bg': '@btn-default-bg',

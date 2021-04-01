@@ -14,7 +14,8 @@ export default {
   'base-danger': '$danger',
 
   'base-link-color': '$link-color',
-  'base-hover-color': '$table-hover-bg',
+  'base-hover-color': '$table-hover-color',
+  'base-hover-bg': '$table-hover-bg',
 
   'button-normal-bg': '$light',
   'button-normal-border-color': '$light',
