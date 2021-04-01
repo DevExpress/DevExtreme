@@ -800,11 +800,19 @@ export const virtualScrollingModule = {
                             return isItemCountableByDataSource(item, that._dataSource);
                         };
 
+                        const isItemNonCountable = function(item) {
+                            return !isItemCountable(item);
+                        };
+
                         that._rowsScrollController = new VirtualScrollController(that.component, {
                             pageSize: function() {
                                 return that.getRowPageSize();
                             },
                             totalItemsCount: function() {
+                                if(that.option(NEW_SCROLLING_MODE)) {
+                                    return that.totalItemsCount() + that._items.filter(isItemNonCountable).length;
+                                }
+
                                 return isVirtualMode(that) ? that.totalItemsCount() : that._items.filter(isItemCountable).length;
                             },
                             hasKnownLastPage: function() {
@@ -919,10 +927,16 @@ export const virtualScrollingModule = {
                     },
                     _updateItemsCore: function(change) {
                         const delta = this.getRowIndexDelta();
+
                         this.callBase.apply(this, arguments);
                         const rowsScrollController = this._rowsScrollController;
 
-                        if(rowsScrollController && !this.option(NEW_SCROLLING_MODE)) {
+                        if(this.option(NEW_SCROLLING_MODE) && isVirtualRowRendering(this)) {
+                            this._updateVisibleItems(change);
+                            return;
+                        }
+
+                        if(rowsScrollController) {
                             const visibleItems = this._visibleItems;
                             const isRefresh = change.changeType === 'refresh' || change.isLiveUpdate;
 
@@ -955,12 +969,20 @@ export const virtualScrollingModule = {
                                 updateItemIndices(visibleItems);
                             }
                         }
-
-                        if(this.option(NEW_SCROLLING_MODE) && isVirtualRowRendering(this) && isDefined(this._loadViewportParams)) {
+                    },
+                    _updateVisibleItems: function(change) {
+                        let visibleItems;
+                        if(isDefined(this._loadViewportParams)) {
                             const { skipForCurrentPage } = this.getLoadPageParams();
-                            const visibleItems = this._items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
-                            change.items = this._visibleItems = updateItemIndices(visibleItems);
+                            visibleItems = this._items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
+                            if(change.changeType !== 'update') {
+                                change.items = visibleItems;
+                            }
+                        } else {
+                            visibleItems = [...this._items];
                         }
+
+                        this._visibleItems = updateItemIndices(visibleItems);
                     },
                     _applyChange: function(change) {
                         const that = this;
@@ -996,9 +1018,6 @@ export const virtualScrollingModule = {
                         }
                     },
                     items: function(allItems) {
-                        if(this.option(NEW_SCROLLING_MODE)) {
-                            return this._items;
-                        }
                         return allItems ? this._items : (this._visibleItems || this._items);
                     },
                     getRowIndexDelta: function() {
@@ -1142,6 +1161,13 @@ export const virtualScrollingModule = {
                         rowsScrollController && rowsScrollController.dispose();
 
                         this.callBase.apply(this, arguments);
+                    },
+                    topItemIndex: function() {
+                        return this._loadViewportParams?.skip;
+                    },
+                    bottomItemIndex: function() {
+                        const viewportParams = this._loadViewportParams;
+                        return viewportParams && viewportParams.skip + viewportParams.take;
                     }
                 };
 

@@ -29,7 +29,7 @@ const setupModule = function() {
     ];
 
     that.setupTreeList = function() {
-        setupTreeListModules(that, ['data', 'columns', 'headerPanel', 'editing', 'columnChooser'], {
+        setupTreeListModules(that, ['data', 'columns', 'headerPanel', 'editing', 'editingCellBased', 'columnChooser'], {
             initViews: true,
             controllers: {
                 columns: new MockColumnsController(that.columns),

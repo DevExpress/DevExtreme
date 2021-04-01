@@ -167,7 +167,7 @@
     "systemjs-plugin-css": "0.1.33",
     "systemjs-plugin-json": "0.2.2",
     "systemjs-plugin-text": "0.0.8",
-    "testcafe": "^1.2.0",
+    "testcafe": "^1.12.0",
     "through2": "^2.0.1",
     "ts-jest": "^24.3.0",
     "typescript": "~3.9.7",

@@ -7,7 +7,7 @@ import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getPublicElement } from '../../../core/element';
 import { extend } from '../../../core/utils/extend';
 import { each } from '../../../core/utils/iterator';
-import { getBoundingRect } from '../../../core/utils/position';
+import { getBoundingRect, getElementsFromPoint } from '../../../core/utils/position';
 import messageLocalization from '../../../localization/message';
 import dateLocalization from '../../../localization/date';
 import { noop } from '../../../core/utils/common';
@@ -622,7 +622,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolling: {
                 mode: 'standard',
             },
-            renovateRender: false,
+            renovateRender: true,
             height: undefined,
             draggingMode: 'outlook'
         });
@@ -3648,14 +3648,13 @@ const createDragBehaviorConfig = (
         const isWideAppointment = appointmentWidth > getCellWidth();
 
         const draggableElement = locate($(state.dragElement).parent());
-        const document = domAdapter.getDocument();
 
         const newX = draggableElement.left + mouseIndent;
         const newY = draggableElement.top + mouseIndent;
 
         const elements = isWideAppointment ?
-            document.elementsFromPoint(newX, newY) :
-            document.elementsFromPoint(newX + appointmentWidth / 2, newY);
+            getElementsFromPoint(newX, newY) :
+            getElementsFromPoint(newX + appointmentWidth / 2, newY);
 
         const droppableCell = elements.find(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1);
 

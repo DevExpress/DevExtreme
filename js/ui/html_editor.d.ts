@@ -353,13 +353,6 @@ export default class dxHtmlEditor extends Editor {
      * @public
      */
     undo(): void;
-    /**
-     * @docid
-     * @publicName update()
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    update(): void;
 }
 
 /**
