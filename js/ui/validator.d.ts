@@ -114,6 +114,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     validationGroup?: string;
     /**
      * @docid
+     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -161,12 +162,14 @@ export default class dxValidator extends DOMComponent {
 export interface dxValidatorResult {
     /**
      * @docid
+     * @type RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     brokenRule?: ValidationRule;
     /**
      * @docid
+     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -199,6 +202,7 @@ export interface dxValidatorResult {
     status?: 'valid' | 'invalid' | 'pending';
     /**
      * @docid
+     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */

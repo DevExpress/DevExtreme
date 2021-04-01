@@ -17,6 +17,9 @@ export interface ComponentOptions<T = Component> {
   onDisposing?: ((e: ComponentDisposingEvent<T>) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
+   * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 element:TElement
    * @default null
    * @prevFileNamespace DevExpress.core
    * @public
@@ -24,6 +27,11 @@ export interface ComponentOptions<T = Component> {
   onInitialized?: ((e: ComponentInitializedEvent<T>) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
+   * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 name:string
+   * @type_function_param1_field3 fullName:string
+   * @type_function_param1_field4 value:any
    * @default null
    * @action
    * @prevFileNamespace DevExpress.core
