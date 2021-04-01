@@ -1929,7 +1929,7 @@
     ]
   },
   {
-    "Name": "Html Editor (CTP)",
+    "Name": "Html Editor",
     "Equivalents": "dxHtmlEditor, dx-htmleditor",
     "Groups": [
       {
@@ -1941,8 +1941,7 @@
             "Name": "Overview",
             "DocUrl": "Guide/UI_Components/HtmlEditor/Overview/",
             "Widget": "HtmlEditor",
-            "DemoType": "Web",
-            "Badge": "Updated"
+            "DemoType": "Web"
           }
         ]
       },
@@ -2000,8 +1999,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       }
