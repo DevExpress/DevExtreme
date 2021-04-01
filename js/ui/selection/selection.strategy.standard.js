@@ -151,42 +151,70 @@ module.exports = SelectionStrategy.inherit({
         return mode === 'all' || mode === 'multiple';
     },
 
+    _requestInProgress: function() {
+        return this._lastLoadDeferred?.state() === 'pending';
+    },
+
+    _concatRequestsItems: function(keys, isDeselect, oldRequestItems) {
+        const deselectedItems = isDeselect ? keys : [];
+
+        return {
+            addedItems: oldRequestItems.added.concat(arrayUtils.removeDuplicates(keys, this.options.selectedItemKeys)),
+            removedItems: oldRequestItems.removed.concat(deselectedItems),
+            keys: keys
+        };
+    },
+
+    _collectLastRequestData: function(keys, isDeselect, isSelectAll) {
+        const isDeselectAll = isDeselect && isSelectAll;
+        const oldRequestItems = {
+            added: [],
+            removed: []
+        };
+        const multiSelectEnabled = this._isMultiSelectEnabled();
+        let lastRequestData = multiSelectEnabled ? this._lastRequestData : {};
+
+        if(multiSelectEnabled) {
+            if(this._requestInProgress()) {
+                if(isDeselectAll) {
+                    this._lastLoadDeferred.reject();
+                    lastRequestData = {};
+                } else if(!isKeysEqual(keys, this.options.selectedItemKeys)) {
+                    oldRequestItems.added = lastRequestData.addedItems;
+                    oldRequestItems.removed = lastRequestData.removedItems;
+
+                    if(!isDeselect) {
+                        this._lastLoadDeferred.reject();
+                    }
+                } else {
+                    lastRequestData = {};
+                }
+            }
+
+            lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems);
+        }
+
+        return lastRequestData;
+    },
+
+    _updateKeysByLastRequestData: function(keys, isDeselect, isSelectAll) {
+        let currentKeys = keys;
+        if(this._isMultiSelectEnabled() && !isDeselect && !isSelectAll) {
+            currentKeys = arrayUtils.removeDuplicates(keys.concat(this._lastRequestData?.addedItems), this._lastRequestData?.removedItems);
+            currentKeys = arrayUtils.uniqueValues(currentKeys);
+        }
+
+        return currentKeys;
+    },
+
     _loadSelectedItems: function(keys, isDeselect, isSelectAll) {
         const that = this;
         const deferred = new Deferred();
-        const isMultiSelectEnabled = this._isMultiSelectEnabled();
 
-        let oldAddedItems = [];
-        let oldRemovedItems = [];
-
-        if(isMultiSelectEnabled) {
-            if(that._lastLoadDeferred?.state() === 'pending' && !isKeysEqual(keys, this.options.selectedItemKeys)) {
-                oldAddedItems = this._lastRequestData.addedItems;
-                oldRemovedItems = this._lastRequestData.removedItems;
-
-                if(!isDeselect) {
-                    that._lastLoadDeferred.reject();
-                }
-            } else {
-                this._lastRequestData = {};
-            }
-
-            const deselectedItems = isDeselect ? keys : [];
-
-            this._lastRequestData = {
-                addedItems: oldAddedItems.concat(arrayUtils.removeDuplicates(keys, this.options.selectedItemKeys)),
-                removedItems: oldRemovedItems.concat(deselectedItems),
-                keys: keys
-            };
-        }
+        this._lastRequestData = this._collectLastRequestData(keys, isDeselect, isSelectAll);
 
         when(that._lastLoadDeferred).always(function() {
-            let currentKeys = keys;
-
-            if(isMultiSelectEnabled && !isDeselect) {
-                currentKeys = arrayUtils.removeDuplicates(keys.concat(that._lastRequestData?.addedItems), that._lastRequestData?.removedItems);
-                currentKeys = arrayUtils.uniqueValues(currentKeys);
-            }
+            const currentKeys = that._updateKeysByLastRequestData(keys, isDeselect, isSelectAll);
 
             that._loadSelectedItemsCore(currentKeys, isDeselect, isSelectAll)
                 .done(deferred.resolve)
@@ -352,6 +380,15 @@ module.exports = SelectionStrategy.inherit({
         }
     },
 
+    _isItemSelectionInProgress: function(key, checkPending) {
+        const shouldCheckPending = checkPending && this._lastRequestData && this._requestInProgress();
+        if(shouldCheckPending) {
+            return this._lastRequestData.addedItems && this._lastRequestData.addedItems.indexOf(key) !== -1;
+        } else {
+            return false;
+        }
+    },
+
     _getKeyHash: function(key) {
         return this.options.equalByReference ? key : getKeyHash(key);
     },
@@ -373,16 +410,21 @@ module.exports = SelectionStrategy.inherit({
         this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
     },
 
-    isItemDataSelected: function(itemData) {
+    isItemDataSelected: function(itemData, options = {}) {
         const key = this.options.keyOf(itemData);
-        return this.isItemKeySelected(key);
+        return this.isItemKeySelected(key, options);
     },
 
-    isItemKeySelected: function(key) {
-        const keyHash = this._getKeyHash(key);
-        const index = this._indexOfSelectedItemKey(keyHash);
+    isItemKeySelected: function(key, options = {}) {
+        let result = this._isItemSelectionInProgress(key, options.checkPending);
 
-        return index !== -1;
+        if(!result) {
+            const keyHash = this._getKeyHash(key);
+            const index = this._indexOfSelectedItemKey(keyHash);
+            result = index !== -1;
+        }
+
+        return result;
     },
 
     getSelectAllState: function(visibleOnly) {
