@@ -6036,6 +6036,14 @@ declare module DevExpress.ui {
          */
         import(data: string, updateExistingItemsOnly?: boolean): void;
         /**
+         * [descr:dxDiagram.scrollToItems(items: Array<dxDiagramItem>)]
+         */
+        scrollToItems(items: Array<dxDiagramItem>): void;
+        /**
+         * [descr:dxDiagram.setSelectedItems(items: Array<dxDiagramItem>)]
+         */
+        setSelectedItems(items: Array<dxDiagramItem>): void;
+        /**
          * [descr:dxDiagram.updateToolbox()]
          */
         updateToolbox(): void;
