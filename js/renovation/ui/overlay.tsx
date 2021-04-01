@@ -31,7 +31,7 @@ export class OverlayProps extends WidgetProps {
 
   @OneWay() templatesRenderAsynchronously? = false;
 
-  @OneWay() shading?= true;
+  @OneWay() shading? = true;
 
   @OneWay() width?: number | string | (() => number| string);
 
@@ -53,7 +53,7 @@ export class OverlayProps extends WidgetProps {
 
   @OneWay() _checkParentVisibility? = false;
 
-  @OneWay() rtlEnabled?= false;
+  @OneWay() rtlEnabled? = false;
 
   @OneWay() contentTemplate?: template | ((contentElement: TElement) => string | TElement) = 'content';
 
