@@ -2218,7 +2218,7 @@ QUnit.module('Export menu', {
     beforeEach: function() {
         this.setupModules = function(options, initDefaultOptions) {
             this.options = options.options;
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'headerPanel', 'editing', 'stateStoring', 'export', 'editorFactory', 'search', 'columnChooser', 'grouping'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'headerPanel', 'editing', 'editingCellBased', 'stateStoring', 'export', 'editorFactory', 'search', 'columnChooser', 'grouping'], {
                 initViews: true,
                 initDefaultOptions: initDefaultOptions,
                 options: options

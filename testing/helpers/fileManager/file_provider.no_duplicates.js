@@ -26,12 +26,12 @@ export default class NoDuplicatesFileProvider extends CustomFileSystemProvider {
         return this._parentDir();
     }
 
-    _executeIfItemNotExists(onSuccess, errorId, itemName) {
+    _executeIfItemNotExists(onSuccess, errorCode, itemName) {
         const promise = new Deferred();
         this.getItems(this.parentDir).then(items => {
             const duplicateItems = items.filter(i => i.name === itemName);
             if(duplicateItems.length !== 0) {
-                promise.reject({ errorId }).promise();
+                promise.reject({ errorCode }).promise();
             } else {
                 promise.resolve(onSuccess()).promise();
             }

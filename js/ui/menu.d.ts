@@ -44,17 +44,17 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     items?: Array<dxMenuItem>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuHidden?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => any);
+    onSubmenuHidden?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @type_function_param1_field5 cancel:boolean
@@ -62,27 +62,27 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuHiding?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement, cancel?: boolean }) => any);
+    onSubmenuHiding?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuShowing?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => any);
+    onSubmenuShowing?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSubmenuShown?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => any);
+    onSubmenuShown?: ((e: { component?: dxMenu, element?: TElement, model?: any, rootItem?: TElement }) => void);
     /**
      * @docid
      * @type Enums.Orientation

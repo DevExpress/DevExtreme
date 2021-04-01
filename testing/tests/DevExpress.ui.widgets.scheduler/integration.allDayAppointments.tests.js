@@ -45,7 +45,7 @@ QUnit.module('Integration: allDay appointments', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler({ _draggingMode: 'default', ...options }).dxScheduler('instance');
         };
 
         this.clock = sinon.useFakeTimers();
@@ -579,7 +579,8 @@ QUnit.module('Integration: allDay appointments', {
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    width: 600
                 });
 
                 const $appointment1 = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
@@ -665,6 +666,9 @@ QUnit.module('Integration: allDay appointments', {
                             ]
                         }
                     ],
+                    scrolling: {
+                        orientation: 'vertical'
+                    },
                     height: 600
                 });
 
@@ -707,7 +711,10 @@ QUnit.module('Integration: allDay appointments', {
                                 { id: 2, text: 'two' }
                             ]
                         }
-                    ]
+                    ],
+                    scrolling: {
+                        orientation: 'vertical'
+                    }
                 });
 
                 const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
@@ -780,7 +787,7 @@ QUnit.module('Integration: allDay appointments', {
                 assert.equal($dropDown.length, 0, 'Dropdown appointment was removed');
             });
 
-            QUnit.test('If there are not groups, \'.dx-scrollable-content\' should be a resizable area for all-day appointment', function(assert) {
+            QUnit.test('If there are not groups, ".dx-scrollable-content" should be a resizable area for all-day appointment', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     views: ['week'],
@@ -792,7 +799,10 @@ QUnit.module('Integration: allDay appointments', {
                         allDay: true,
                         startDate: new Date(2015, 6, 10, 0),
                         endDate: new Date(2015, 6, 10, 0, 30)
-                    }]
+                    }],
+                    scrolling: {
+                        orientation: 'vertical'
+                    }
                 });
 
                 const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
@@ -1254,7 +1264,8 @@ QUnit.module('Integration: allDay appointments', {
                     currentDate: new Date(2015, 2, 4),
                     currentView: 'month',
                     dataSource: data,
-                    maxAppointmentsPerCell: 1
+                    maxAppointmentsPerCell: 1,
+                    width: 600
                 });
 
                 this.clock.tick();
@@ -1348,7 +1359,10 @@ QUnit.module('Integration: allDay appointments', {
                 this.createInstance({
                     currentDate: new Date(2015, 4, 25),
                     views: ['week'],
-                    currentView: 'week'
+                    currentView: 'week',
+                    scrolling: {
+                        orientation: 'vertical'
+                    }
                 });
 
                 this.instance.option('dataSource', [
@@ -1426,7 +1440,8 @@ QUnit.module('Integration: allDay appointments', {
                             ]
                         }
                     ],
-                    height: 600
+                    height: 600,
+                    width: 600
                 });
 
                 const allDayPanelHeight = $(this.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0).get(0).getBoundingClientRect().height;

@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import { prepareTableValue } from './utils.js';
+import { isObject } from 'core/utils/type';
 
 const { test, module: testModule } = QUnit;
 
@@ -97,6 +98,14 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(selection.length, 2, 'Correct length');
     });
 
+    test('quill getSelection gets correct arguments', function(assert) {
+        this.createEditor();
+        const getSelectionSpy = sinon.spy(this.instance.getQuillInstance(), 'getSelection');
+        this.instance.getSelection(true);
+
+        assert.deepEqual(getSelectionSpy.lastCall.args[0], true, 'Quill getSelection() gets correct arguments');
+    });
+
     test('format', function(assert) {
         this.createEditor();
         this.instance.setSelection(1, 2);
@@ -127,12 +136,45 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), '<h1>Test 1</h1><h1>Test 2</h1><p>Test 3</p>', 'just block format applied');
     });
 
+    test('getBounds', function(assert) {
+        this.createEditor();
+        this.instance.option({
+            'value': '<p><b>Test Test</b></p>',
+            'width': 400,
+            'height': 200
+        });
+        const getBoundsSpy = sinon.spy(this.instance.getQuillInstance(), 'getBounds');
+
+        const bounds = this.instance.getBounds(2, 7);
+
+        assert.ok(getBoundsSpy.calledOnce, 'Quill getBounds() should triggered on the editor\'s getBounds()');
+        assert.deepEqual(getBoundsSpy.lastCall.args, [2, 7], 'Quill getBounds() gets correct arguments');
+        assert.ok(isObject(bounds), 'bounds object is returned');
+    });
+
     test('getFormat', function(assert) {
         this.createEditor();
         this.instance.option('value', '<p><b>Test Test</b></p>');
 
         const format = this.instance.getFormat(1, 2);
         assert.deepEqual(format, { bold: true }, 'correct format');
+    });
+
+    test('getFormat for current selection', function(assert) {
+        this.createEditor();
+        this.instance.option('value', '<p>Test <b>Test</b></p>');
+        this.instance.setSelection(6, 2);
+
+        const format = this.instance.getFormat();
+        assert.deepEqual(format, { bold: true }, 'correct format');
+    });
+
+    test('getText', function(assert) {
+        this.createEditor();
+        this.instance.option('value', '<p><b>Test Test</b></p>');
+
+        const text = this.instance.getText(2, 5);
+        assert.strictEqual(text, 'st Te', 'correct text');
     });
 
     test('removeFormat', function(assert) {
@@ -162,6 +204,14 @@ testModule('API', moduleConfig, () => {
         this.createEditor();
         this.instance.insertText(1, 'one');
         this.instance.insertText(6, 'two', { italic: true });
+
+        assert.strictEqual(this.instance.option('value'), '<p>Tonees<em>two</em>t 1</p><p>Test 2</p><p>Test 3</p>', 'insert simple and formatted text');
+    });
+
+    test('insertText with simple arguments', function(assert) {
+        this.createEditor();
+        this.instance.insertText(1, 'one');
+        this.instance.insertText(6, 'two', 'italic', true);
 
         assert.strictEqual(this.instance.option('value'), '<p>Tonees<em>two</em>t 1</p><p>Test 2</p><p>Test 3</p>', 'insert simple and formatted text');
     });
@@ -256,6 +306,15 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(testModule.getEditor(), this.instance);
     });
 
+    test('\'update\' method should call the quill\'s update', function(assert) {
+        this.createEditor();
+        const updateSpy = sinon.spy(this.instance.getQuillInstance(), 'update');
+
+        this.instance.update();
+
+        assert.ok(updateSpy.calledOnce, 'Quill update() should triggered on the editor\'s update()');
+    });
+
     test('\'focus\' method should call the quill\'s focus', function(assert) {
         this.createEditor();
         const focusSpy = sinon.spy(this.instance.getQuillInstance(), 'focus');
@@ -263,6 +322,28 @@ testModule('API', moduleConfig, () => {
         this.instance.focus();
 
         assert.ok(focusSpy.calledOnce, 'Quill focus() should triggered on the editor\'s focus()');
+    });
+
+    test('\'blur\' method should call the quill\'s blur', function(assert) {
+        this.createEditor();
+        const blurSpy = sinon.spy(this.instance.getQuillInstance(), 'blur');
+
+        this.instance.blur();
+
+        assert.ok(blurSpy.calledOnce, 'Quill blur() should triggered on the editor\'s blur()');
+    });
+
+    test('\'blur\' method should not remove focus from additional htmlEditor element', function(assert) {
+        this.createEditor();
+        const internalElement = $('<input type="button">');
+        const blurSpy = sinon.spy();
+        internalElement.appendTo(this.instance.element());
+        internalElement.on('blur', blurSpy);
+
+        internalElement.focus();
+        this.instance.blur();
+
+        assert.strictEqual(blurSpy.callCount, 0, 'custom internal element blur() should not triggered on the editor\'s blur()');
     });
 
     test('change value via \'option\' method should correctly update content', function(assert) {

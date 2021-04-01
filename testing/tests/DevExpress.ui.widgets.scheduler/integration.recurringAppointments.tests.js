@@ -38,9 +38,11 @@ supportedScrollingModes.forEach(scrollingMode => {
                     $.extend(
                         {
                             height: 600,
+                            width: 800,
                             scrolling: {
                                 mode: scrollingMode
-                            }
+                            },
+                            _draggingMode: 'default'
                         },
                         options
                     )
@@ -246,7 +248,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                     allowMultiple: false,
                     dataSource: [{ id: 1 }, { id: 2 }]
                 }],
-                recurrenceEditMode: 'series'
+                recurrenceEditMode: 'series',
+                width: 600
             });
 
             const updatedItem = {
@@ -341,7 +344,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                     allowMultiple: false,
                     dataSource: [{ id: 1 }, { id: 2 }]
                 }],
-                recurrenceEditMode: 'occurrence'
+                recurrenceEditMode: 'occurrence',
+                width: 600
             });
 
             const updatedItem = {
@@ -983,7 +987,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 startDayHour: 8,
                 endDayHour: 19,
                 currentDate: new Date(2015, 2, 16),
-                dataSource: dataSource
+                dataSource: dataSource,
+                width: 600
             });
 
             this.instance.option('currentDate', new Date(2015, 2, 23));
@@ -1018,7 +1023,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 views: ['week'],
                 currentView: 'week',
                 currentDate: new Date(2017, 7, 10),
-                recurrenceEditMode: 'series'
+                recurrenceEditMode: 'series',
+                width: 600
             });
 
             this.instance.updateAppointment(task, newTask);
@@ -1075,7 +1081,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 views: ['month'],
                 currentView: 'month',
                 currentDate: new Date(2015, 4, 25),
-                recurrenceEditMode: 'single'
+                recurrenceEditMode: 'single',
+                width: 600
             });
 
             this.instance.updateAppointment(task, newTask);
@@ -1135,7 +1142,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }],
                 currentDate: new Date(2017, 9, 17),
                 views: ['month'],
-                currentView: 'month'
+                currentView: 'month',
+                width: 600
             });
             const $appointments = this.instance.$element().find('.dx-scheduler-appointment');
             const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').outerWidth();
@@ -1197,7 +1205,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentView: 'week',
                 currentDate: new Date(2019, 9, 26),
                 startDayHour: 9,
-                height: 600
+                height: 600,
+                width: 600
             });
 
             let $appointments = this.instance.$element().find('.dx-scheduler-appointment');
@@ -1225,7 +1234,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }],
                 currentDate: new Date(2017, 9, 17),
                 views: ['month'],
-                currentView: 'month'
+                currentView: 'month',
+                width: 600
             });
 
             const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
@@ -1254,7 +1264,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                             { id: 2, text: 'two' }
                         ]
                     }
-                ]
+                ],
+                width: 800
             });
 
             const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
@@ -1278,7 +1289,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                     currentView: 'month',
                     currentDate: new Date(2018, 2, 30),
                     timeZone: 'Australia/Sydney',
-                    height: 600
+                    height: 600,
+                    width: 600
                 });
 
                 const $appointments = this.instance.$element().find('.dx-scheduler-appointment');
@@ -1335,7 +1347,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                     currentView: 'week',
                     currentDate: new Date(2018, 4, 23),
                     timeZone: 'Etc/UTC',
-                    height: 2000
+                    height: 2000,
+                    width: 800
                 });
 
                 $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger('dxclick').trigger('dxclick');
@@ -1372,6 +1385,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentView: 'month',
                 currentDate: new Date(2018, 4, 21),
                 height: 700,
+                width: 800,
                 firstDayOfWeek: 3,
             });
 
@@ -1430,7 +1444,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentDate: new Date(2019, 9, 20),
                 firstDayOfWeek: 1,
                 startDayHour: 6,
-                height: 600
+                height: 600,
+                width: 800
             });
 
             assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
@@ -1458,7 +1473,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentView: 'month',
                 currentDate: new Date(2019, 9, 20),
                 startDayHour: 6,
-                height: 600
+                height: 600,
+                width: 800
             });
 
             assert.equal(this.scheduler.appointments.getAppointmentCount(), 10, 'Appointment occurrences are rendered');
@@ -1488,7 +1504,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentDate: new Date(2019, 9, 20),
                 firstDayOfWeek: 1,
                 startDayHour: 6,
-                height: 600
+                height: 600,
+                width: 800
             });
 
             assert.equal(this.scheduler.appointments.getAppointmentCount(), 10, 'Appointment is rendered');
@@ -1519,7 +1536,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                     currentDate: new Date(2019, 9, 20),
                     firstDayOfWeek: firstDayOfWeek,
                     startDayHour: 6,
-                    height: 600
+                    height: 600,
+                    width: 800
                 });
 
                 assert.equal(this.scheduler.appointments.getAppointmentCount(), 12, 'Appointment is rendered');
@@ -1552,7 +1570,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentDate: new Date(2019, 9, 20),
                 startDayHour: 6,
                 firstDayOfWeek: 1,
-                height: 600
+                height: 600,
+                width: 800
             });
 
             assert.equal(this.scheduler.appointments.getAppointmentCount(), 12, 'Appointment occurrences are rendered');
@@ -1849,6 +1868,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     views: ['week'],
                     currentView: 'week',
                     height: 600,
+                    width: 1000,
                     dataSource: [{
                         text: 'Recurrence',
                         startDate: apptStartDate,

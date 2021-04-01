@@ -102,7 +102,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     items?: Array<dxTreeViewItem>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -113,10 +113,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent, node?: dxTreeViewNode }) => any);
+    onItemClick?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent, node?: dxTreeViewNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -127,10 +127,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemCollapsed?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent, node?: dxTreeViewNode }) => any);
+    onItemCollapsed?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent, node?: dxTreeViewNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -141,10 +141,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent, node?: dxTreeViewNode }) => any);
+    onItemContextMenu?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number | any, event?: TEvent, node?: dxTreeViewNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -155,10 +155,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemExpanded?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent, node?: dxTreeViewNode }) => any);
+    onItemExpanded?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent, node?: dxTreeViewNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -169,10 +169,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent, node?: dxTreeViewNode }) => any);
+    onItemHold?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent, node?: dxTreeViewNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -182,10 +182,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, node?: dxTreeViewNode }) => any);
+    onItemRendered?: ((e: { component?: dxTreeView, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, node?: dxTreeViewNode }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeViewNode
      * @type_function_param1_field5 itemElement:dxElement
@@ -193,26 +193,26 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: TElement, model?: any, node?: dxTreeViewNode, itemElement?: TElement }) => any);
+    onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: TElement, model?: any, node?: dxTreeViewNode, itemElement?: TElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: TElement, model?: any, value?: boolean }) => any);
+    onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: TElement, model?: any, value?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      * @override
      */
-    onSelectionChanged?: ((e: { component?: dxTreeView, element?: TElement, model?: any }) => any);
+    onSelectionChanged?: ((e: { component?: dxTreeView, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default 'parentId'

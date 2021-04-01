@@ -20,7 +20,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     isValid?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
@@ -29,7 +29,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
+    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => void);
     /**
      * @docid
      * @default false

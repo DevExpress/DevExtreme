@@ -59,7 +59,7 @@ function setupDataGrid(that, $dataGridContainer) {
         initViews: true
     };
 
-    dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'editingFormBased', 'validating',
+    dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'validating',
         'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'summary', 'gridView'], that.setupOptions);
 }
 

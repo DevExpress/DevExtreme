@@ -51,12 +51,12 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onContentReady?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default 0

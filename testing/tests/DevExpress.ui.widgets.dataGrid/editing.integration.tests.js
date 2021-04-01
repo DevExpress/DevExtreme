@@ -2378,6 +2378,36 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.deepEqual(validatedMessages, ['Field 1 is required', 'Field 2 is required'], 'broken rules messages');
     });
 
+    QUnit.testInActiveWindow('Batch - saveEditData after change cell value from invalid to valid if key is complex (T984377)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, id2: 1, field1: 'test12' },
+                { id: 1, id2: 2, field1: 'test22' }
+            ],
+            keyExpr: ['id1', 'id2'],
+            columns: [{
+                dataField: 'field1',
+                validationRules: [{ type: 'required' }]
+            }],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            loadingTimeout: undefined
+        });
+
+        // act
+        dataGrid.editCell(0, 'field1');
+        dataGrid.cellValue(0, 'field1', '');
+        dataGrid.cellValue(0, 'field1', '123');
+        dataGrid.saveEditData();
+
+        // assert
+        assert.notOk(dataGrid.hasEditData(), 'changes are saved');
+        assert.equal(dataGrid.cellValue(0, 'field1'), '123', 'cell value is changed');
+    });
+
     ['Cell', 'Batch'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - Data row should be removed(marked as removed) when a new row is rendered (T978455)`, function(assert) {
             // arrange
@@ -4919,8 +4949,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                             data: { field: 'test' },
                             key,
                             type: 'insert',
-                            index: -1,
-                            pageIndex: 0
+                            index: -1
                         }];
                         const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
                         const dataGrid = $('#dataGrid').dxDataGrid({
@@ -5041,7 +5070,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                             data: { field: 'test' },
                             key,
                             type: 'insert',
-                            index: -1
+                            index: -1,
+                            pageIndex: -1
                         }];
                         const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
                         const dataGrid = $('#dataGrid').dxDataGrid({

@@ -190,10 +190,12 @@
                     'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
                     'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
+                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
                     'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/artifacts/js/dx-gantt.js")',
                     'exceljs': '@Url.Content("~/node_modules/exceljs/dist/exceljs.js")',
+                    'fflate': '@Url.Content("~/node_modules/fflate/esm/browser.js")',
                     'jspdf': '@Url.Content("~/node_modules/jspdf/dist/jspdf.es.js")',
                     'jspdf-autotable': '@Url.Content("~/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
                     'turndown': '@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")',
@@ -211,11 +213,9 @@
                     'plugin-babel': '@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")',
                     'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
                 },
-                paths: {
-                    'devextreme-generator/modules/inferno/*': '@Url.Content("~/node_modules/devextreme-generator/modules/inferno/*")'
-                },
                 packages: {
-                    'devextreme-generator/modules/inferno/': {
+                    '@@devextreme/vdom': {
+                        main: './dist/index.js',
                         defaultExtension: 'js',
                         format: 'cjs'
                     },

@@ -51,25 +51,25 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     items?: Array<dxContextMenuItem>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => any);
+    onHidden?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => any);
+    onHiding?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 position:positionConfig
@@ -77,25 +77,25 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPositioning?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, event?: TEvent, position?: positionConfig }) => any);
+    onPositioning?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, event?: TEvent, position?: positionConfig }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => any);
+    onShowing?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => any);
+    onShown?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }

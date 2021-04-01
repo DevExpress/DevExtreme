@@ -39,23 +39,19 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     /**
      * @docid
      * @action
-     * @extends Action
+     * @default null
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onDisposing?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 name:string
-     * @type_function_param1_field5 fullName:string
-     * @type_function_param1_field6 value:any
      * @action
-     * @extends Action
+     * @default null
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: TElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
+    onOptionChanged?: ((e: { component?: T, element?: TElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
     /**
      * @docid
      * @default false
@@ -121,7 +117,7 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    static getInstance(element: TElement): DOMComponent;
+    static getInstance(element: TElement<Element>): DOMComponent;
 
     $element(): TElement;
     _getTemplate(template: unknown): FunctionTemplate;

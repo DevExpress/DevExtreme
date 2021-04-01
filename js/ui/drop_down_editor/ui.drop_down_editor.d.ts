@@ -77,20 +77,20 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | TElement);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onClosed?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onOpened?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default false

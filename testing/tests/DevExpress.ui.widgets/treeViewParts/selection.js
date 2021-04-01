@@ -170,6 +170,100 @@ module('selection common', () => {
             assert.step('Test completed');
         }
     });
+
+    [
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] }
+    ].forEach((config) => {
+        test(`Select hidden node. SelectionMode: single, items: ${JSON.stringify(config.items)}, action: ${config.action.toString()} (T982103)`, function(assert) {
+            const wrapper = createInstance({
+                selectionMode: 'single',
+                items: config.items
+            });
+
+
+            const result = config.action(wrapper.instance);
+            assert.equal(result, config.expectedResult, 'result is correct');
+            wrapper.checkSelectedKeys(config.expectedKeys, 'item1 is selected');
+        });
+    });
+
+    [
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: false }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: false, expectedKeys: [1] },
+        { items: [{ id: 0, visible: false, selected: true }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0, 1] },
+        { items: [{ id: 0, visible: true, selected: false }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [1] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: false, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: false, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: false, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: true, selected: false }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [0, 1] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(0), expectedResult: true, expectedKeys: [0, 1] },
+        { items: [{ id: 0, visible: true, selected: true }, { id: 1, visible: true, selected: true }], action: (tree) => tree.selectItem(1), expectedResult: true, expectedKeys: [0, 1] }
+    ].forEach((config) => {
+        test(`Select hidden node. SelectionMode: multiple, items: ${JSON.stringify(config.items)}, action: ${config.action.toString()} (T982103)`, function(assert) {
+            const wrapper = createInstance({
+                selectionMode: 'multiple',
+                items: config.items
+            });
+
+
+            const result = config.action(wrapper.instance);
+            assert.equal(result, config.expectedResult, 'result is correct');
+            wrapper.checkSelectedKeys(config.expectedKeys, 'item1 is selected');
+        });
+    });
 });
 
 module('Selection mode', () => {

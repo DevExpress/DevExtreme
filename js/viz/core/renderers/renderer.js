@@ -411,7 +411,6 @@ function makeEqualAreaSegments(short, long, type) {
 
 function baseCss(that, styles) {
     const elemStyles = that._styles;
-    let str = '';
     let key;
     let value;
 
@@ -428,10 +427,11 @@ function baseCss(that, styles) {
         // The alternative is to *delete* entries in the previous cycle, but it is *delete*!
         value = elemStyles[key];
         if(value) {
-            str += key + ':' + value + ';';
+            that.element.style[key] = value;
+        } else if(value === null) {
+            that.element.style[key] = '';
         }
     }
-    str && that.element.setAttribute('style', str);
     return that;
 }
 

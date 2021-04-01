@@ -3135,6 +3135,224 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first page is rendered');
     });
+
+    QUnit.test('New mode. A modified row shold not jump to the top view port position on scroll', function(assert) {
+        // arrange
+        const items = generateDataSource(100);
+
+        const dataGrid = createDataGrid({
+            height: 350,
+            dataSource: items,
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            },
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        // assert
+        assert.equal($(dataGrid.element()).find('.dx-edit-row').length, 1, 'edit row is rendered');
+
+        dataGrid.getScrollable().scrollTo({ top: 250 });
+        this.clock.tick();
+
+        // assert
+        assert.equal($(dataGrid.element()).find('.dx-edit-row').length, 0, 'edit row is not rendered on scroll');
+    });
+
+    QUnit.test('New mode. Three new rows should be rendered on scroll', function(assert) {
+        // arrange
+        const items = generateDataSource(100);
+
+        const dataGrid = createDataGrid({
+            height: 350,
+            dataSource: items,
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            },
+            editing: {
+                mode: 'batch',
+                allowAdding: true,
+                changes: [
+                    {
+                        type: 'insert',
+                        key: 101,
+                        data: {},
+                        index: 0
+                    },
+                    {
+                        type: 'insert',
+                        key: 102,
+                        data: {},
+                        index: 50
+                    },
+                    {
+                        type: 'insert',
+                        key: 103,
+                        data: {},
+                        index: -1
+                    }
+                ]
+            }
+        });
+
+        this.clock.tick();
+
+        let $newRow = $(dataGrid.element()).find('.dx-row-inserted');
+
+        // assert
+        assert.equal($newRow.length, 1, 'the first new row is rendered');
+        assert.strictEqual($newRow.attr('aria-rowindex'), '1', 'the first new row index');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1650 });
+        this.clock.tick();
+        $newRow = $(dataGrid.element()).find('.dx-row-inserted');
+
+        // assert
+        assert.equal($newRow.length, 1, 'the second new row is rendered');
+        assert.strictEqual($newRow.attr('aria-rowindex'), '51', 'the second new row index');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 3300 });
+        this.clock.tick();
+        $newRow = $(dataGrid.element()).find('.dx-row-inserted');
+
+        // assert
+        assert.equal($newRow.length, 1, 'the third new row is rendered');
+        assert.strictEqual($newRow.attr('aria-rowindex'), '101', 'the third new row index');
+    });
+
+    QUnit.test('New mode. Detail rows should be rendered', function(assert) {
+        // arrange
+        const items = generateDataSource(100);
+
+        const dataGrid = createDataGrid({
+            height: 350,
+            dataSource: items,
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            },
+            masterDetail: {
+                enabled: true,
+                template: function(container, options) {
+                    $('<div>')
+                        .addClass('myclass')
+                        .text(options.key)
+                        .appendTo(container);
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(1);
+        this.clock.tick();
+        let $detailRow = $(dataGrid.getRowElement(1));
+
+        // assert
+        assert.ok($detailRow.hasClass('dx-master-detail-row'), 'the first detail row is rendered');
+        assert.strictEqual($detailRow.find('.myclass').text(), '1', 'the first detail row text');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1650 });
+        this.clock.tick();
+        dataGrid.expandRow(50);
+        this.clock.tick();
+        $detailRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50) + 1));
+
+        // assert
+        assert.ok($detailRow.hasClass('dx-master-detail-row'), 'the second detail row is rendered');
+        assert.strictEqual($detailRow.find('.myclass').text(), '50', 'the second detail row text');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 3300 });
+        this.clock.tick();
+        dataGrid.expandRow(100);
+        this.clock.tick();
+        $detailRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100) + 1));
+
+        // assert
+        assert.ok($detailRow.hasClass('dx-master-detail-row'), 'the third detail row is rendered');
+        assert.strictEqual($detailRow.find('.myclass').text(), '100', 'the third detail row text');
+    });
+
+    QUnit.test('New mode. Adaptive rows should be rendered', function(assert) {
+        // arrange
+        const items = generateDataSource(100);
+
+        const dataGrid = createDataGrid({
+            height: 350,
+            width: 300,
+            dataSource: items,
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            },
+            columnHidingEnabled: true,
+            customizeColumns: function(columns) {
+                columns[0].width = 250;
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        $(dataGrid.getRowElement(0)).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
+        this.clock.tick();
+        let $adaptiveRow = $(dataGrid.getRowElement(1));
+
+        // assert
+        assert.ok($adaptiveRow.hasClass('dx-adaptive-detail-row'), 'the first adaptive row is rendered');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1650 });
+        this.clock.tick();
+        $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50))).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
+        this.clock.tick();
+        $adaptiveRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(50) + 1));
+
+        // assert
+        assert.ok($adaptiveRow.hasClass('dx-adaptive-detail-row'), 'the second detail row is rendered');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 3300 });
+        this.clock.tick();
+        $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100))).find('.dx-command-adaptive .dx-datagrid-adaptive-more').trigger('dxclick');
+        this.clock.tick();
+        $adaptiveRow = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(100) + 1));
+
+        // assert
+        assert.ok($adaptiveRow.hasClass('dx-adaptive-detail-row'), 'the third detail row is rendered');
+    });
 });
 
 

@@ -171,7 +171,8 @@ module('Integration: Appointment scroll', {
                         store: []
                     }),
                     currentView: 'week',
-                    height: 300
+                    height: 300,
+                    width: 600
                 });
 
                 const appointment = { startDate: new Date(2015, 1, 9, 21), endDate: new Date(2015, 1, 9, 22), text: 'caption 2' };
@@ -221,7 +222,10 @@ module('Integration: Appointment scroll', {
                         store: []
                     }),
                     currentView: 'week',
-                    height: 500
+                    height: 500,
+                    scrolling: {
+                        orientation: 'vertical'
+                    }
                 });
 
                 this.instance.getWorkSpaceScrollable().scrollBy(220);
@@ -248,7 +252,8 @@ module('Integration: Appointment scroll', {
                     }),
                     currentView: 'week',
                     height: 500,
-                    showAllDayPanel: false
+                    showAllDayPanel: false,
+                    width: 600
                 });
 
                 this.instance.getWorkSpaceScrollable().scrollBy(140);

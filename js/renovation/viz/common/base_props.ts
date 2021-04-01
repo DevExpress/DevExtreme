@@ -4,7 +4,7 @@ import {
   Slot,
   Event,
   TwoWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import {
   Margin,
   Size,

@@ -300,7 +300,7 @@ QUnit.module('Keyboard keys', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'editingFormBased', 'keyboardNavigation', 'masterDetail'], { initViews: true });
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'editingRowBased', 'editingFormBased', 'keyboardNavigation', 'masterDetail'], { initViews: true });
 
         // act
         this.gridView.render($('#container'));
@@ -2489,7 +2489,7 @@ QUnit.module('Keyboard keys', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'keyboardNavigation'], { initViews: true });
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'editingCellBased', 'keyboardNavigation'], { initViews: true });
 
         // act
         this.gridView.render($('#container'));
@@ -2538,7 +2538,7 @@ QUnit.module('Keyboard keys', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'keyboardNavigation'], { initViews: true });
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'editingCellBased', 'keyboardNavigation'], { initViews: true });
 
         // act
         this.gridView.render($('#container'));
@@ -2589,7 +2589,7 @@ QUnit.module('Keyboard keys', {
                     }
                 };
 
-                setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'keyboardNavigation', 'focus'], { initViews: true });
+                setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'keyboardNavigation', 'focus'], { initViews: true });
 
                 // act
                 this.gridView.render($('#container'));
@@ -2607,7 +2607,7 @@ QUnit.module('Keyboard keys', {
                 this.clock.tick();
 
                 // assert
-                assert.roughEqual($('#container .dx-datagrid-focus-overlay').outerWidth(), $('#container td').eq(1).outerWidth(), 0.51, 'focus overlay is not visible');
+                assert.roughEqual($('#container .dx-datagrid-focus-overlay').outerWidth(), $('#container td').eq(1).outerWidth(), 1.01, 'focus overlay is not visible');
                 assert.ok($('.dx-focused').is('td'), 'focused element is td');
             });
         });

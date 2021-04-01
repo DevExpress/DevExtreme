@@ -440,7 +440,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     };
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyLink
@@ -449,10 +449,10 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyLink }) => any) | string;
+    onLinkClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyLink }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:dxSankeyLink
      * @notUsedInTheme
@@ -460,10 +460,10 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyLink }) => any);
+    onLinkHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyLink }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyNode
@@ -472,10 +472,10 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyNode }) => any) | string;
+    onNodeClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyNode }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:dxSankeyNode
      * @notUsedInTheme
@@ -483,7 +483,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyNode }) => any);
+    onNodeHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyNode }) => void);
     /**
      * @docid
      * @extends CommonVizPalette

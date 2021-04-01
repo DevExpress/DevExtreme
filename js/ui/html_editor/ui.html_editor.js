@@ -545,12 +545,16 @@ const HtmlEditor = Editor.inherit({
         return this._quillInstance;
     },
 
-    getSelection: function() {
-        return this._applyQuillMethod('getSelection');
+    getSelection: function(focus) {
+        return this._applyQuillMethod('getSelection', arguments);
     },
 
     setSelection: function(index, length) {
         this._applyQuillMethod('setSelection', arguments);
+    },
+
+    getText: function(index, length) {
+        return this._applyQuillMethod('getText', arguments);
     },
 
     format: function(formatName, formatValue) {
@@ -591,6 +595,10 @@ const HtmlEditor = Editor.inherit({
         return this._applyQuillMethod('getLength');
     },
 
+    getBounds: function(index, length) {
+        return this._applyQuillMethod('getBounds', arguments);
+    },
+
     delete: function(index, length) {
         this._applyQuillMethod('deleteText', arguments);
     },
@@ -611,10 +619,17 @@ const HtmlEditor = Editor.inherit({
         return this._formDialog.popupOption.apply(this._formDialog, arguments);
     },
 
+    update: function() {
+        this._applyQuillMethod('update');
+    },
+
     focus: function() {
         this.callBase();
-
         this._applyQuillMethod('focus');
+    },
+
+    blur: function() {
+        this._applyQuillMethod('blur');
     }
 });
 
