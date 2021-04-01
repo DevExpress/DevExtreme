@@ -2888,7 +2888,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const currentDayStartTime = currentDayStart.getTime();
         const minTime = this._firstViewDate.getTime();
 
-        return (currentDateTime > minTime)
+        return (currentDateTime > minTime && cellDuration <= 60)
             ? ((currentDateTime - currentDayStartTime) % cellDuration) / cellDuration
             : 0;
     }
