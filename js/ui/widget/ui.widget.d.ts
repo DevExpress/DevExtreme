@@ -6,6 +6,10 @@ import {
     TElement
 } from '../../core/element';
 
+import {
+    ComponentEvent
+} from '../../events/index';
+
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**
      * @docid
@@ -60,7 +64,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: ContentReadyEvent<T>) => void);
+    onContentReady?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default 0
