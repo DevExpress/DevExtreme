@@ -15,6 +15,10 @@ import {
 } from '../../events';
 
 import {
+    ValueChangedInfo
+} from '../editor/editor';
+
+import {
     DataExpressionMixinOptions
 } from '../editor/ui.data_expression';
 
@@ -97,6 +101,21 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @public
      */
     onSelectionChanged?: ((e: ComponentEvent<T> & SelectionChangedInfo) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 value:object
+     * @type_function_param1_field5 previousValue:object
+     * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onValueChanged?: ((e:  ComponentNativeEvent<T> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
