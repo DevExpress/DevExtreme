@@ -209,7 +209,8 @@ const Editor = Widget.inherit({
         if(this._$validationMessage) {
             this._$validationMessage.remove();
             this.setAria('describedby', null);
-            this._$validationMessage = null;
+            this._$validationMessage = undefined;
+            this._validationMessage = undefined;
         }
     },
 
