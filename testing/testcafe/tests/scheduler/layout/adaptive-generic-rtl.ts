@@ -13,6 +13,7 @@ const createScheduler = async (
     dataSource: createDataSetForScreenShotTests(),
     currentDate: new Date(2020, 6, 15),
     height: 600,
+    width: 350,
     rtlEnabled: true,
     ...additionalProps,
   }, true);
@@ -43,7 +44,7 @@ const resources = [{
         await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-rtl).png`),
       ).ok();
     }).before(async (t) => {
-      await t.resizeWindow(400, 600);
+      // await t.resizeWindow(400, 600);
 
       await createScheduler({
         views: [view],
@@ -51,7 +52,7 @@ const resources = [{
         crossScrollingEnabled,
       });
     }).after(async (t) => {
-      await t.resizeWindow(1200, 800);
+      // await t.resizeWindow(1200, 800);
     });
   });
 });
@@ -68,7 +69,7 @@ const resources = [{
           await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping-rtl).png`),
         ).ok();
       }).before(async (t) => {
-        await t.resizeWindow(400, 600);
+        // await t.resizeWindow(400, 600);
 
         await createScheduler({
           views: [view],
@@ -78,7 +79,7 @@ const resources = [{
           resources,
         });
       }).after(async (t) => {
-        await t.resizeWindow(1200, 800);
+        // await t.resizeWindow(1200, 800);
       });
     });
 });
@@ -95,7 +96,7 @@ const resources = [{
           await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping-rtl).png`),
         ).ok();
       }).before(async (t) => {
-        await t.resizeWindow(400, 600);
+        // await t.resizeWindow(400, 600);
 
         await createScheduler({
           views: [view],
@@ -105,7 +106,7 @@ const resources = [{
           resources,
         });
       }).after(async (t) => {
-        await t.resizeWindow(1200, 800);
+        // await t.resizeWindow(1200, 800);
       });
     });
 });
