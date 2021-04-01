@@ -152,6 +152,9 @@ System.config({
       defaultExtension: 'js'
     }
   },
+  packageConfigPaths: [
+    "npm:@devextreme/*/package.json",
+  ],
   babelOptions: {
     sourceMaps: false,
     stage0: true

@@ -136,6 +136,7 @@ System.config({
         }
     },
     packageConfigPaths: [
+        "npm:@devextreme/*/package.json",
         "npm:@angular/*/package.json",
         "npm:@angular/common/*/package.json",
         "npm:rxjs/package.json",
