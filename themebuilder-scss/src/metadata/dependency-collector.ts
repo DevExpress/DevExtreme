@@ -5,6 +5,10 @@ import { readFileSync, existsSync } from 'fs';
 import cabinet from 'filing-cabinet';
 import precinct from 'precinct';
 import WidgetsHandler from '../modules/widgets-handler';
+import {
+  AstComment, WidgetItem, SyntaxTree,
+  ScriptsDependencyCache, FlatStylesDependencies, ScriptsDependencyTree,
+} from '../types/types';
 
 const stylesRegex = /\sSTYLE (.*)/;
 

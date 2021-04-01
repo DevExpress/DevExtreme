@@ -3,6 +3,7 @@ import {
   resolve, relative, join, dirname,
 } from 'path';
 import MetadataGenerator from './generator';
+import { FileInfo, ThemesMetadata, FlatStylesDependencies } from '../types/types';
 
 export default class MetadataCollector {
   generator = new MetadataGenerator();
@@ -60,7 +61,8 @@ export default class MetadataCollector {
     const browsersListString = MetadataCollector.getStringFromObject(browsersList);
     const dependenciesString = MetadataCollector.getStringFromObject(dependencies);
 
-    const metaContent = `export const metadata: ThemesMetadata = ${metaString};
+    const metaContent = `import { ThemesMetadata, FlatStylesDependencies } from '../../types/types';
+export const metadata: ThemesMetadata = ${metaString};
 export const version: string = '${version}';
 export const browsersList: Array<string> = ${browsersListString};
 export const dependencies: FlatStylesDependencies = ${dependenciesString};

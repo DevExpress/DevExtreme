@@ -1,3 +1,5 @@
+import { SwatchSass } from '../types/types';
+
 const SWATCH_SELECTOR_PREFIX = '.dx-swatch-';
 
 export default class PreCompiler {

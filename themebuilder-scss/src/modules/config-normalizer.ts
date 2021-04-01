@@ -3,6 +3,7 @@
 import commands from './commands';
 import themes from './themes';
 import Logger from './logger';
+import { ConfigSettings } from '../types/types';
 
 const DEFAULT_OUT_COLOR_SCHEME = 'custom-scheme';
 

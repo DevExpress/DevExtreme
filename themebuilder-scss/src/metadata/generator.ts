@@ -1,3 +1,5 @@
+import { MetaItem, ThemesMetadata } from '../types/types';
+
 export default class MetadataGenerator {
   metadata: ThemesMetadata = {
     generic: [],

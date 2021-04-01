@@ -1,4 +1,4 @@
-interface MetaItem {
+export interface MetaItem {
   Key?: string;
   Name?: string;
   Value?: string;
@@ -7,21 +7,21 @@ interface MetaItem {
   [key: string]: string;
 }
 
-interface ThemesMetadata {
+export interface ThemesMetadata {
   generic: MetaItem[];
   material: MetaItem[];
 }
 
-interface ConfigMetaItem {
+export interface ConfigMetaItem {
   key: string;
   value: string;
 }
 
-interface LessCompilerInterface {
+export interface LessCompilerInterface {
   render: Function;
 }
 
-interface ConfigSettings {
+export interface ConfigSettings {
   themeName?: string;
   colorScheme?: string;
   makeSwatch?: boolean;
@@ -51,12 +51,12 @@ interface ConfigSettings {
   out?: string;
 }
 
-interface CompilerResult {
+export interface CompilerResult {
   result: import('node-sass').Result;
   changedVariables: { [key: string]: string };
 }
 
-interface PackageResult {
+export interface PackageResult {
   css: string;
   compiledMetadata: { [key: string]: string };
   widgets: string[];
@@ -65,71 +65,71 @@ interface PackageResult {
   version?: string;
 }
 
-interface Metadata {
+export interface Metadata {
   metadata: ThemesMetadata;
   version: string;
 }
 
-interface FileInfo {
+export interface FileInfo {
   path: string;
   content: string;
 }
 
-interface WidgetItem {
+export interface WidgetItem {
   widgetName: string;
   widgetImportString: string;
 }
 
-interface WidgetHandlerResult {
+export interface WidgetHandlerResult {
   widgets: string[];
   unusedWidgets: string[];
   indexContent: string;
 }
 
-interface SwatchSass {
+export interface SwatchSass {
   sass: string;
   selector: string;
 }
 
-interface ScriptsDependencyTree {
+export interface ScriptsDependencyTree {
   widget: string;
   dependencies: { [key: string]: ScriptsDependencyTree };
 }
 
-interface ScriptsDependencyCache {
+export interface ScriptsDependencyCache {
   [key: string]: ScriptsDependencyTree;
 }
 
-interface FlatStylesDependencies {
+export interface FlatStylesDependencies {
   [key: string]: string[];
 }
 
-interface AstComment {
+export interface AstComment {
   value: string;
 }
 
-interface SyntaxTree {
+export interface SyntaxTree {
   comments?: AstComment[];
 }
 
-interface DartCompilerConfig {
+export interface DartCompilerConfig {
   data: string;
   file: string;
   index: string;
   items: ConfigMetaItem[];
 }
 
-interface DartCompilerKeepAliveConfig {
+export interface DartCompilerKeepAliveConfig {
   keepAlive: boolean;
 }
 
-interface DartCompilerResult {
+export interface DartCompilerResult {
   changedVariables?: { [key: string]: string };
   css?: string;
   error?: string;
 }
 
-interface SocketEventListener {
+export interface SocketEventListener {
   name: string;
   handler: (e?: Error) => void;
 }
