@@ -20,6 +20,10 @@ import dxDropDownList, {
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
+    DropDownButtonDataModel
+} from './drop_down_editor/ui.drop_down_editor';
+
+import {
     ValueChangedInfo
 } from './editor/editor';
 
@@ -103,6 +107,11 @@ export type SelectionChangedEvent = ComponentEvent<dxAutocomplete> & SelectionCh
  * @public
  */
 export type ValueChangedEvent = ComponentNativeEvent<dxAutocomplete> & ValueChangedInfo;
+
+/**
+ * @public
+ */
+export type DropDownButtonData = DropDownButtonDataModel;
 
 export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
     /**

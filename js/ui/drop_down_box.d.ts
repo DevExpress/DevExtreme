@@ -19,7 +19,8 @@ import {
 } from '../events';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    DropDownButtonDataModel
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
@@ -106,6 +107,10 @@ export type ContentData = {
     component: dxDropDownBox;
     readonly value?: any;
 }
+/**
+ * @public
+ */
+export type DropDownButtonData = DropDownButtonDataModel;
 
 export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
     /**

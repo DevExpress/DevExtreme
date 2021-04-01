@@ -23,7 +23,7 @@ import {
     ComponentEvent
 } from '../../events/';
 
-interface DropDownButtonData {
+export interface DropDownButtonDataModel {
     readonly text?: string;
     readonly icon?: string;
 }
@@ -84,7 +84,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonData, contentElement: TElement) => string | TElement);
+    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonDataModel, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null

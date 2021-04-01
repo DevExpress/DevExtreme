@@ -16,7 +16,8 @@ import {
 } from './calendar';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    DropDownButtonDataModel
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
@@ -104,6 +105,10 @@ export type ValueChangedEvent = ComponentNativeEvent<dxDateBox> & ValueChangedIn
  * @public
  */
 export type DisabledDateData = ComponentDisabledDateData<dxDateBox>;
+/**
+ * @public
+ */
+export type DropDownButtonData = DropDownButtonDataModel;
 
 export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     /**

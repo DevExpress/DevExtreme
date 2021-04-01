@@ -15,7 +15,8 @@ import {
 } from '../core/templates/template';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    DropDownButtonDataModel
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
@@ -90,6 +91,11 @@ export type PasteEvent = ComponentNativeEvent<dxColorBox>;
  * @public
  */
 export type ValueChangedEvent = ComponentNativeEvent<dxColorBox> & ValueChangedInfo;
+
+/**
+ * @public
+ */
+export type DropDownButtonData = DropDownButtonDataModel;
 
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**

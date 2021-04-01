@@ -23,6 +23,10 @@ import {
     SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
+import {
+    DropDownButtonDataModel
+} from './drop_down_editor/ui.drop_down_editor';
+
 import dxDropDownList, {
     dxDropDownListOptions
 } from './drop_down_editor/ui.drop_down_list';
@@ -120,6 +124,11 @@ export type SelectionChangedEvent = ComponentEvent<dxSelectBox> & SelectionChang
  * @public
  */
 export type ValueChangedEvent = ComponentNativeEvent<dxSelectBox> & ValueChangedInfo;
+
+/**
+ * @public
+ */
+export type DropDownButtonData = DropDownButtonDataModel;
 
 export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptions<T> {
     /**
