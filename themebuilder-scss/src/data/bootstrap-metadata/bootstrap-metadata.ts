@@ -15,7 +15,6 @@ export default {
 
   'base-link-color': '@link-color',
   'base-hover-color': '@table-bg-accent',
-  'base-hover-bg': '@table-bg-hover',
 
   'button-normal-color': '@btn-default-color',
   'button-normal-bg': '@btn-default-bg',
