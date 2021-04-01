@@ -406,13 +406,13 @@ export default SelectionStrategy.inherit({
         this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
     },
 
-    isItemDataSelected: function(itemData, options) {
+    isItemDataSelected: function(itemData, options = {}) {
         const key = this.options.keyOf(itemData);
         return this.isItemKeySelected(key, options);
     },
 
-    isItemKeySelected: function(key, options) {
-        let result = this._isItemSelectionInProgress(key, options?.checkPending);
+    isItemKeySelected: function(key, options = {}) {
+        let result = this._isItemSelectionInProgress(key, options.checkPending);
 
         if(!result) {
             const keyHash = this._getKeyHash(key);
