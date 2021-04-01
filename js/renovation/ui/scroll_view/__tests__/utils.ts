@@ -10,7 +10,7 @@ import {
 
 import {
   SCROLLABLE_CONTENT_CLASS,
-} from '../scrollable_utils';
+} from '../common/consts';
 
 export function createElement({
   location,
