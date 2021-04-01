@@ -30,10 +30,11 @@ export type ContentReadyEvent = ComponentEvent<dxCalendar>;
  * @public
  */
 export type ValueChangedEvent = ComponentNativeEvent<dxCalendar> & ValueChangedInfo;
+
 /**
  * @public
  */
-export type CellData = {
+export type CellTemplateData = {
     readonly date: Date,
     readonly view: string,
     readonly text?: string
@@ -64,7 +65,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((itemData: CellData, itemIndex: number, itemElement: TElement) => string | TElement);
+    cellTemplate?: template | ((itemData: CellTemplateData, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default undefined

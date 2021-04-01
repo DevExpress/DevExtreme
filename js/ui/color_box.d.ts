@@ -16,7 +16,7 @@ import {
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    DropDownButtonDataModel
+    DropDownButtonTemplateDataModel
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
@@ -95,7 +95,7 @@ export type ValueChangedEvent = ComponentNativeEvent<dxColorBox> & ValueChangedI
 /**
  * @public
  */
-export type DropDownButtonData = DropDownButtonDataModel;
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**

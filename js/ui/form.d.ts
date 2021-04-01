@@ -77,6 +77,24 @@ export type InitializedEvent = ComponentInitializedEvent<dxForm>;
  */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxForm>;
 
+/**
+ * @public
+ */
+export type GroupItemTemplateData = {
+    component?: dxForm;
+    formData?: any;
+}
+/**
+ * @public
+ */
+export type SimpleItemTemplateData = {
+    component?: dxForm;
+    dataField?: string;
+    editorOptions?: any;
+    editorType?: string;
+    name?: string;
+}
+
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
@@ -561,7 +579,7 @@ export interface dxFormGroupItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: { component?: dxForm, formData?: any }, itemElement: TElement) => string | TElement);
+    template?: template | ((data: GroupItemTemplateData, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default true
@@ -702,7 +720,7 @@ export interface dxFormSimpleItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: TElement) => string | TElement);
+    template?: template | ((data: SimpleItemTemplateData, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default undefined

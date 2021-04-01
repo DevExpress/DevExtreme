@@ -17,7 +17,7 @@ import {
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    DropDownButtonDataModel
+    DropDownButtonTemplateDataModel
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
@@ -108,7 +108,7 @@ export type DisabledDateData = ComponentDisabledDateData<dxDateBox>;
 /**
  * @public
  */
-export type DropDownButtonData = DropDownButtonDataModel;
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     /**

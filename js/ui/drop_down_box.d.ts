@@ -20,7 +20,7 @@ import {
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    DropDownButtonDataModel
+    DropDownButtonTemplateDataModel
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
@@ -103,14 +103,14 @@ export type ValueChangedEvent = ComponentNativeEvent<dxDropDownBox> & ValueChang
 /**
  * @public
  */
-export type ContentData = {
+export type ContentTemplateData = {
     component: dxDropDownBox;
     readonly value?: any;
 }
 /**
  * @public
  */
-export type DropDownButtonData = DropDownButtonDataModel;
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
     /**
@@ -131,7 +131,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((templateData: ContentData, contentElement: TElement) => string | TElement);
+    contentTemplate?: template | ((templateData: ContentTemplateData, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null

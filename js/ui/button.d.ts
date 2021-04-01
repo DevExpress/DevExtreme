@@ -21,13 +21,6 @@ import Widget, {
 /**
  * @public
  */
-export type ButtonData = {
-    readonly text?: string;
-    readonly icon?: string;
-}
-/**
- * @public
- */
 export type ClickEvent = ComponentNativeEvent<dxButton> & {
     validationGroup?: any;
 }
@@ -47,6 +40,14 @@ export type InitializedEvent = ComponentInitializedEvent<dxButton>;
  * @public
  */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxButton>;
+
+/**
+ * @public
+ */
+export type TemplateData = {
+    readonly text?: string;
+    readonly icon?: string;
+}
 
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
@@ -110,7 +111,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((buttonData: ButtonData, contentElement: TElement) => string | TElement);
+    template?: template | ((data: TemplateData, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default ""

@@ -59,7 +59,7 @@ export type ValueChangedEvent = ComponentNativeEvent<dxHtmlEditor> & ValueChange
 /**
  * @public
  */
-export interface MentionData {
+export interface MentionTemplateData {
     readonly marker: string;
     readonly id?: string | number;
     readonly value?: any;
@@ -504,7 +504,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((mentionData: MentionData, contentElement: TElement) => string | TElement);
+    template?: template | ((mentionData: MentionTemplateData, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default "this"
