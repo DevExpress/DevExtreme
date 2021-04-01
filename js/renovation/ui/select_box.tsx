@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, Event, OneWay, TwoWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { WidgetProps } from './common/widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
@@ -34,6 +34,10 @@ export class SelectBoxProps extends WidgetProps {
   @OneWay() valueExpr?: string;
 
   @Event() valueChange?: EventCallback<any>;
+
+  @OneWay() focusStateEnabled?: boolean = true;
+
+  @OneWay() hoverStateEnabled?: boolean = true;
 }
 @Component({
   defaultOptionRules: null,

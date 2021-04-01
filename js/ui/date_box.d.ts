@@ -1,4 +1,8 @@
 import {
+    TElement
+} from '../core/element';
+
+import {
     dxCalendarOptions
 } from './calendar';
 
@@ -159,8 +163,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
  * @public
  */
 export default class dxDateBox extends dxDropDownEditor {
-    constructor(element: Element, options?: dxDateBoxOptions)
-    constructor(element: JQuery, options?: dxDateBoxOptions)
+    constructor(element: TElement, options?: dxDateBoxOptions)
     /**
      * @docid
      * @publicName close()
@@ -177,15 +180,6 @@ export default class dxDateBox extends dxDropDownEditor {
     open(): void;
 }
 
-declare global {
-interface JQuery {
-    dxDateBox(): JQuery;
-    dxDateBox(options: "instance"): dxDateBox;
-    dxDateBox(options: string): any;
-    dxDateBox(options: string, ...params: any[]): any;
-    dxDateBox(options: dxDateBoxOptions): JQuery;
-}
-}
 export type Options = dxDateBoxOptions;
 
 /** @deprecated use Options instead */

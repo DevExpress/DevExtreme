@@ -9,7 +9,7 @@ import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
 import { isDefined, isRenderer } from '../../core/utils/type';
 
-import { InfernoEffectHost } from "devextreme-generator/modules/inferno/effect_host";
+import { InfernoEffectHost } from "@devextreme/vdom";
 import { TemplateWrapper } from "./template_wrapper";
 
 

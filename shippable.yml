@@ -15,12 +15,14 @@ env:
     - TARGET=test CONSTEL=ui.editors TZ='PST8PDT'
     - TARGET=test CONSTEL=ui.editors TZ='Japan'
     - TARGET=test CONSTEL=ui.editors TZ='Australia/ACT'
+    - TARGET=test CONSTEL=ui.editors TZ='Europe/London'
     - TARGET=test CONSTEL=ui.grid
     - TARGET=test CONSTEL=ui.grid TZ='PST8PDT'
     - TARGET=test CONSTEL=ui.scheduler
     - TARGET=test CONSTEL=ui.scheduler TZ='PST8PDT'
     - TARGET=test CONSTEL=ui.scheduler TZ='Japan'
     - TARGET=test CONSTEL=ui.scheduler TZ='Australia/ACT'
+    - TARGET=test CONSTEL=ui.scheduler TZ='Europe/London'
     - TARGET=test CONSTEL=viz
     - TARGET=test CONSTEL=renovation
     - TARGET=test PERF=true JQUERY=true NO_HEADLESS=true

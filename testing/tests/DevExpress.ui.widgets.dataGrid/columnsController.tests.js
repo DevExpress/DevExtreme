@@ -86,7 +86,7 @@ const processColumnsForCompare = function(columns, parameterNames, ignoreParamet
 const setupModule = function(moduleNames) {
     executeAsyncMock.setup();
 
-    dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'filterRow', 'masterDetail'].concat(moduleNames || []), {
+    dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'editingRowBased', 'filterRow', 'masterDetail'].concat(moduleNames || []), {
         controllers: {
             data: new dataGridMocks.MockDataController({ items: [] })
         }

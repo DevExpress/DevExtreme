@@ -2,6 +2,10 @@ import {
     animationConfig
 } from '../../animation/fx';
 
+import {
+  TElement
+} from '../../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../../data/data_source';
@@ -121,8 +125,7 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxMenuBase extends HierarchicalCollectionWidget {
-    constructor(element: Element, options?: dxMenuBaseOptions)
-    constructor(element: JQuery, options?: dxMenuBaseOptions)
+    constructor(element: TElement, options?: dxMenuBaseOptions)
     /**
      * @docid
      * @publicName selectItem(itemElement)

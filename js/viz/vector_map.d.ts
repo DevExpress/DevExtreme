@@ -1,7 +1,5 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -17,7 +15,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -508,7 +506,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     maxZoomFactor?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 center:Array<number>
      * @notUsedInTheme
@@ -516,10 +514,10 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onCenterChanged?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, center?: Array<number> }) => any);
+    onCenterChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, center?: Array<number> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:MapLayerElement
@@ -528,10 +526,10 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, event?: event, target?: MapLayerElement }) => any) | string;
+    onClick?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, event?: TEvent, target?: MapLayerElement }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement
      * @notUsedInTheme
@@ -539,10 +537,10 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement }) => any);
+    onSelectionChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -550,10 +548,10 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
+    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -561,10 +559,10 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
+    onTooltipShown?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 zoomFactor:number
      * @notUsedInTheme
@@ -572,7 +570,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, zoomFactor?: number }) => any);
+    onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, zoomFactor?: number }) => void);
     /**
      * @docid
      * @default true
@@ -697,7 +695,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
@@ -707,7 +705,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: TElement) => string | TElement);
 }
 
 export interface dxVectorMapLegends extends BaseLegend {
@@ -785,7 +783,7 @@ export interface dxVectorMapLegends extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid dxVectorMapOptions.legends.source
      * @notUsedInTheme
@@ -817,7 +815,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: MapLayerElement, element: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((info: MapLayerElement, element: TElement) => string | TElement);
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
      * @type_function_param1 info:MapLayerElement
@@ -844,8 +842,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxVectorMap extends BaseWidget {
-    constructor(element: Element, options?: dxVectorMapOptions)
-    constructor(element: JQuery, options?: dxVectorMapOptions)
+    constructor(element: TElement, options?: dxVectorMapOptions)
     /**
      * @docid
      * @publicName center()
@@ -960,15 +957,6 @@ export default class dxVectorMap extends BaseWidget {
     zoomFactor(zoomFactor: number): void;
 }
 
-declare global {
-interface JQuery {
-    dxVectorMap(): JQuery;
-    dxVectorMap(options: "instance"): dxVectorMap;
-    dxVectorMap(options: string): any;
-    dxVectorMap(options: string, ...params: any[]): any;
-    dxVectorMap(options: dxVectorMapOptions): JQuery;
-}
-}
 export type Options = dxVectorMapOptions;
 
 /** @deprecated use Options instead */

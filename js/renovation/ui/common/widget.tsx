@@ -12,7 +12,7 @@ import {
   Consumer,
   ForwardRef,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import '../../../events/click';
 import '../../../events/hover';
 

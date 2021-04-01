@@ -60,21 +60,15 @@ class ExcelJSTestHelper {
         });
     }
 
-    checkFont(cellsArray) {
+    checkCellStyle(cellsArray) {
         this._iterateCells(cellsArray, (cellArgs) => {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
 
-            assert.deepEqual(this.worksheet.getCell(row, column).font, excelCell.font, `this.worksheet.getCell(${row}, ${column}).font`);
-        });
-    }
-
-    checkAlignment(cellsArray) {
-        this._iterateCells(cellsArray, (cellArgs) => {
-            const { excelCell } = cellArgs;
-            const { row, column } = excelCell.address;
-
-            assert.deepEqual(this.worksheet.getCell(row, column).alignment, excelCell.alignment, `this.worksheet.getCell(${row}, ${column}).alignment`);
+            const sourceCell = this.worksheet.getCell(row, column);
+            for(const propertyName in sourceCell.style) {
+                assert.deepEqual(sourceCell.style[propertyName], excelCell[propertyName], `this.worksheet.getCell(${row}, ${column}).${propertyName}`);
+            }
         });
     }
 
@@ -146,12 +140,12 @@ class ExcelJSTestHelper {
 
     checkCellFormat(cellsArray) {
         this._iterateCells(cellsArray, (cellArgs) => {
-            const { address, dataType, type, numberFormat } = cellArgs.excelCell;
+            const { address, dataType, type, numFmt } = cellArgs.excelCell;
             const { row, column } = address;
 
             assert.deepEqual(typeof this.worksheet.getCell(row, column).value, dataType, `typeof this.worksheet.getCell(${row}, ${column}).value`);
             assert.deepEqual(this.worksheet.getCell(row, column).type, type, `this.worksheet.getCell(${row}, ${column}).type`);
-            assert.deepEqual(this.worksheet.getCell(row, column).numFmt, numberFormat, `this.worksheet.getCell(${row}, ${column}).numFmt`);
+            assert.deepEqual(this.worksheet.getCell(row, column).numFmt, numFmt, `this.worksheet.getCell(${row}, ${column}).numFmt`);
         });
     }
 }

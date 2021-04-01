@@ -2,10 +2,8 @@ import {
     animationConfig
 } from '../animation/fx';
 
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -13,7 +11,11 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TPromise
+} from '../core/utils/deferred';
+
+import {
+    TEvent
 } from '../events/index';
 
 import Widget, {
@@ -39,7 +41,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default "content"
@@ -48,7 +50,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default true
@@ -105,38 +107,38 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     minWidth?: number | string | (() => number | string);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onHidden?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: T, element?: dxElement, model?: any, cancel?: boolean }) => any);
+    onHiding?: ((e: { component?: T, element?: TElement, model?: any, cancel?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onShowing?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onShown?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }
@@ -201,8 +203,7 @@ export interface dxOverlayAnimation {
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxOverlay extends Widget {
-    constructor(element: Element, options?: dxOverlayOptions)
-    constructor(element: JQuery, options?: dxOverlayOptions)
+    constructor(element: TElement, options?: dxOverlayOptions)
     /**
      * @docid
      * @publicName content()
@@ -210,7 +211,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): dxElement;
+    content(): TElement;
     /**
      * @docid
      * @publicName hide()
@@ -218,7 +219,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): Promise<boolean> & JQueryPromise<boolean>;
+    hide(): TPromise<boolean>;
     /**
      * @docid
      * @publicName repaint()
@@ -233,7 +234,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): Promise<boolean> & JQueryPromise<boolean>;
+    show(): TPromise<boolean>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -242,7 +243,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): Promise<boolean> & JQueryPromise<boolean>;
+    toggle(showing: boolean): TPromise<boolean>;
 }
 
 /**

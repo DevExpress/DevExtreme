@@ -7,7 +7,11 @@ import {
 } from '../animation/position';
 
 import {
-    event
+    TElement
+} from '../core/element';
+
+import {
+    TEvent
 } from '../events/index';
 
 import dxOverlay, {
@@ -40,7 +44,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default true
@@ -147,19 +151,9 @@ export interface dxToastAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxToast extends dxOverlay {
-    constructor(element: Element, options?: dxToastOptions)
-    constructor(element: JQuery, options?: dxToastOptions)
+    constructor(element: TElement, options?: dxToastOptions)
 }
 
-declare global {
-interface JQuery {
-    dxToast(): JQuery;
-    dxToast(options: "instance"): dxToast;
-    dxToast(options: string): any;
-    dxToast(options: string, ...params: any[]): any;
-    dxToast(options: dxToastOptions): JQuery;
-}
-}
 export type Options = dxToastOptions;
 
 /** @deprecated use Options instead */

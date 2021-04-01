@@ -1,6 +1,6 @@
 import {
   Component, JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { GroupPanelHorizontalCell } from './cell';
 import { GroupPanelRowProps } from '../row_props';
 

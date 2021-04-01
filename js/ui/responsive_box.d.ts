@@ -1,3 +1,7 @@
+import {
+  TElement
+} from '../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -126,8 +130,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
  * @public
  */
 export default class dxResponsiveBox extends CollectionWidget {
-    constructor(element: Element, options?: dxResponsiveBoxOptions)
-    constructor(element: JQuery, options?: dxResponsiveBoxOptions)
+    constructor(element: TElement, options?: dxResponsiveBoxOptions)
 }
 
 /**
@@ -173,15 +176,6 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
     } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
 }
 
-declare global {
-interface JQuery {
-    dxResponsiveBox(): JQuery;
-    dxResponsiveBox(options: "instance"): dxResponsiveBox;
-    dxResponsiveBox(options: string): any;
-    dxResponsiveBox(options: string, ...params: any[]): any;
-    dxResponsiveBox(options: dxResponsiveBoxOptions): JQuery;
-}
-}
 export type Options = dxResponsiveBoxOptions;
 
 /** @deprecated use Options instead */

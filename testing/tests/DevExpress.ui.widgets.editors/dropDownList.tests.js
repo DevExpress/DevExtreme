@@ -148,6 +148,34 @@ QUnit.module('focus policy', {
 
         assert.equal(setFocusPolicySpy.callCount, 1, 'setFocusPollicy called once');
     });
+
+    [false, true].forEach((searchEnabled) => {
+        [false, true].forEach((acceptCustomValue) => {
+            const isEditable = acceptCustomValue || searchEnabled;
+            const position = isEditable ? 'end' : 'beginning';
+            const testTitle = `caret should be set to the ${position} of the text after click on the dropDown button when ` +
+                `"acceptCustomValue" is ${acceptCustomValue} and "searchEnabled" is ${searchEnabled} (T976700)`;
+
+            QUnit.testInActiveWindow(testTitle, function(assert) {
+                const value = '1234567890abcdefgh';
+                this.instance.option({
+                    items: [value],
+                    showDropDownButton: true,
+                    acceptCustomValue,
+                    searchEnabled,
+                    value
+                });
+                const $dropDownButton = this.$element.find('.dx-dropdowneditor-button');
+                const input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`).get(0);
+                const expectedPosition = isEditable ? value.length : 0;
+
+                $dropDownButton.trigger('dxclick');
+
+                assert.strictEqual(input.selectionStart, expectedPosition, 'correct start position');
+                assert.strictEqual(input.selectionEnd, expectedPosition, 'correct end position');
+            });
+        });
+    });
 });
 
 QUnit.module('keyboard navigation', {

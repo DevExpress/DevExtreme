@@ -215,7 +215,8 @@ module('Integration: Appointment filtering', {
                     scrolling: {
                         mode: scrollingMode
                     },
-                    height: 1200
+                    height: 1200,
+                    width: 600
                 });
 
                 assert.equal(scheduler.appointments.getAppointmentCount(), 9, `Appointment count should be equals to ${model.length} items`);

@@ -12,7 +12,7 @@ import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 
-import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 const createInstance = function(options) {
     const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
@@ -23,7 +23,6 @@ import translator from 'animation/translator';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
-import dragEvents from 'events/drag';
 import { DataSource } from 'data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
@@ -37,7 +36,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+            this.scheduler = createWrapper(options);
+            this.instance = this.scheduler.instance;
         };
         this.getAppointmentColor = function($task, checkedProperty) {
             checkedProperty = checkedProperty || 'backgroundColor';
@@ -1079,6 +1079,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
     QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Day', function(assert) {
         this.createInstance({
+            _draggingMode: 'default',
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 1, 12),
@@ -1107,10 +1108,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             showAllDayPanel: false
         });
 
-        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-
-        $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(10).trigger(dragEvents.enter);
-        pointerMock($appointment).start().down().move(10, 10).up();
+        this.scheduler.appointmentList[0].drag.toCell(10);
 
         this.clock.tick();
         const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
@@ -1147,13 +1145,11 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             ],
             startDayHour: 12,
             endDayHour: 16,
-            showAllDayPanel: false
+            showAllDayPanel: false,
+            _draggingMode: 'default'
         });
 
-        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-
-        $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(75).trigger(dragEvents.enter);
-        pointerMock($appointment).start().down().move(10, 10).up();
+        this.scheduler.appointmentList[0].drag.toCell(75);
 
         this.clock.tick();
         const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');

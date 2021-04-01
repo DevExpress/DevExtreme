@@ -202,13 +202,12 @@ const ColorBox = DropDownEditor.inherit({
             },
 
             onValueChanged: function({ event, value, previousValue }) {
-                if(colorUtils.makeRgba(value) === previousValue) {
-                    return;
-                }
-
                 const instantlyMode = that.option('applyValueMode') === 'instantly';
+                const isOldValue = colorUtils.makeRgba(value) === previousValue;
+                const changesApplied = instantlyMode || that._colorViewEnterKeyPressed;
+                const valueCleared = that._shouldSaveEmptyValue;
 
-                if(!instantlyMode && !that._colorViewEnterKeyPressed) {
+                if(isOldValue || !changesApplied || valueCleared) {
                     return;
                 }
 
@@ -302,7 +301,11 @@ const ColorBox = DropDownEditor.inherit({
 
     _renderValue: function() {
         const value = this.option('value');
-        this.option('text', this.option('editAlphaChannel') ? colorUtils.makeRgba(value) : value);
+        const convertToColor = value !== null && this.option('editAlphaChannel');
+        const text = convertToColor ? colorUtils.makeRgba(value) : value;
+
+        this.option('text', text);
+
         return this.callBase();
     },
 
@@ -345,6 +348,11 @@ const ColorBox = DropDownEditor.inherit({
         return value;
     },
 
+    _clean: function() {
+        this.callBase();
+        delete this._shouldSaveEmptyValue;
+    },
+
     _optionChanged: function(args) {
         const value = args.value;
         const name = args.name;
@@ -359,7 +367,12 @@ const ColorBox = DropDownEditor.inherit({
                     this._$colorResultPreview.removeAttr('style');
                 }
 
+                if(value === null) {
+                    this._shouldSaveEmptyValue = true;
+                }
                 this._updateColorViewValue(value);
+                this._shouldSaveEmptyValue = false;
+
                 this.callBase(args);
                 break;
             case 'applyButtonText':

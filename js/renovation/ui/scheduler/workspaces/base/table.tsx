@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay, Slot,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { addHeightToStyle } from '../utils';
 import { VirtualRow } from './virtual-row';
 

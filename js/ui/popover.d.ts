@@ -6,10 +6,16 @@ import {
     positionConfig
 } from '../animation/position';
 
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    event
+    TPromise
+} from '../core/utils/deferred';
+
+import {
+    TEvent
 } from '../events/index';
 
 import dxPopup, {
@@ -34,7 +40,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default "auto"
@@ -107,10 +113,11 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     showTitle?: boolean;
     /**
      * @docid
+     * @default Window
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | TElement;
     /**
      * @docid
      * @default "auto"
@@ -146,9 +153,8 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
  * @public
  */
 export default class dxPopover extends dxPopup {
-    constructor(element: Element, options?: dxPopoverOptions)
-    constructor(element: JQuery, options?: dxPopoverOptions)
-    show(): Promise<boolean> & JQueryPromise<boolean>;
+    constructor(element: TElement, options?: dxPopoverOptions)
+    show(): TPromise<boolean>;
     /**
      * @docid
      * @publicName show(target)
@@ -157,18 +163,9 @@ export default class dxPopover extends dxPopup {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(target: string | Element | JQuery): Promise<boolean> & JQueryPromise<boolean>;
+    show(target: string | TElement): TPromise<boolean>;
 }
 
-declare global {
-interface JQuery {
-    dxPopover(): JQuery;
-    dxPopover(options: "instance"): dxPopover;
-    dxPopover(options: string): any;
-    dxPopover(options: string, ...params: any[]): any;
-    dxPopover(options: dxPopoverOptions): JQuery;
-}
-}
 export type Options = dxPopoverOptions;
 
 /** @deprecated use Options instead */

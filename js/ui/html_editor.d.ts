@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -11,7 +11,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import Editor, {
@@ -60,24 +60,24 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     name?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: event }) => any);
+    onFocusIn?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: event }) => any);
+    onFocusOut?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => void);
     /**
      * @docid
      * @default ""
@@ -127,8 +127,14 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
  * @public
  */
 export default class dxHtmlEditor extends Editor {
-    constructor(element: Element, options?: dxHtmlEditorOptions)
-    constructor(element: JQuery, options?: dxHtmlEditorOptions)
+    constructor(element: TElement, options?: dxHtmlEditorOptions)
+    /**
+     * @docid
+     * @publicName blur()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    blur(): void;
     /**
      * @docid
      * @publicName clearHistory()
@@ -207,6 +213,24 @@ export default class dxHtmlEditor extends Editor {
     get(componentPath: string): any;
     /**
      * @docid
+     * @publicName getBounds(index, length)
+     * @param1 index:number
+     * @param2 length:number
+     * @return Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getBounds(index: number, length: number): any;
+    /**
+     * @docid
+     * @publicName getFormat()
+     * @return Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getFormat(): any;
+    /**
+     * @docid
      * @publicName getFormat(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -243,11 +267,21 @@ export default class dxHtmlEditor extends Editor {
     /**
      * @docid
      * @publicName getSelection()
+     * @param1 focus:boolean|undefined
      * @return Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelection(): any;
+    getSelection(focus?: boolean|undefined): any;
+    /**
+     * @docid
+     * @publicName getText(index, length)
+     * @param1 index:number
+     * @param2 length:number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getText(index: number, length: number): string;
     /**
      * @docid
      * @publicName insertEmbed(index, type, config)
@@ -258,6 +292,17 @@ export default class dxHtmlEditor extends Editor {
      * @public
      */
     insertEmbed(index: number, type: string, config: any): void;
+    /**
+     * @docid
+     * @publicName insertText(index, text, formatName, formatValue)
+     * @param1 index:number
+     * @param2 text:string
+     * @param3 formatName:Enums.HtmlEditorFormat|string
+     * @param4 formatValue:any
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    insertText(index: number, text: string, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
      * @publicName insertText(index, text, formats)
@@ -362,7 +407,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default "@"
@@ -404,7 +449,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: dxElement) => string | Element | JQuery);
+    template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default "this"
@@ -424,7 +469,7 @@ export interface dxHtmlEditorToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | TElement;
     /**
      * @docid
      * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
@@ -490,15 +535,6 @@ export interface dxHtmlEditorVariables {
     escapeChar?: string | Array<string>;
 }
 
-declare global {
-interface JQuery {
-    dxHtmlEditor(): JQuery;
-    dxHtmlEditor(options: "instance"): dxHtmlEditor;
-    dxHtmlEditor(options: string): any;
-    dxHtmlEditor(options: string, ...params: any[]): any;
-    dxHtmlEditor(options: dxHtmlEditorOptions): JQuery;
-}
-}
 export type Options = dxHtmlEditorOptions;
 
 /** @deprecated use Options instead */

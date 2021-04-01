@@ -81,7 +81,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         _getValidationData: function(key, create) {
-            let validationData = this._validationState.filter(data => data.key === key)[0];
+            let validationData = this._validationState.filter(data => equalByValue(data.key, key))[0];
 
             if(!validationData && create) {
                 validationData = { key, isValid: true };
@@ -428,7 +428,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         isCurrentValidatorProcessing: function({ rowKey, columnIndex }) {
-            return this._currentCellValidator && this._currentCellValidator.option('validationGroup').key === rowKey
+            return this._currentCellValidator && equalByValue(this._currentCellValidator.option('validationGroup').key, rowKey)
                 && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
         },
 
@@ -636,7 +636,7 @@ export const validatingModule = {
                     const { key, pageIndex } = change;
                     const validationData = this.getController('validating')._getValidationData(key);
 
-                    if(result && !validationData?.isValid) {
+                    if(result && !validationData?.isValid && this.option('scrolling.mode') !== 'virtual') {
                         result = pageIndex === this._pageIndex;
                     }
 
@@ -1043,9 +1043,9 @@ export const validatingModule = {
                         let $nextFixedRowElement;
                         let $groupCellElement;
                         const isFixedColumns = this._rowsView.isFixedColumns();
-                        const isFormEditMode = this._editingController.isFormEditMode();
+                        const isFormOrPopupEditMode = this._editingController.isFormOrPopupEditMode();
 
-                        if(isFixedColumns && !isFormEditMode) {
+                        if(isFixedColumns && !isFormOrPopupEditMode) {
                             const nextRowOptions = $cell.closest('.dx-row').next().data('options');
 
                             if(nextRowOptions && nextRowOptions.rowType === 'group') {
@@ -1338,7 +1338,7 @@ export const validatingModule = {
                     });
                 },
                 _cellPrepared: function($cell, parameters) {
-                    if(!this.getController('editing').isFormEditMode()) {
+                    if(!this.getController('editing').isFormOrPopupEditMode()) {
                         this.getController('validating').createValidator(parameters, $cell);
                     }
 

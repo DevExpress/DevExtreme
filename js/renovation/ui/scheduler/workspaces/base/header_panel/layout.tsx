@@ -6,7 +6,7 @@ import {
   JSXTemplate,
   OneWay,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import {
   DateHeaderData,
   DateTimeCellTemplateProps,

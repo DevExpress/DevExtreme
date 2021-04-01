@@ -40,7 +40,7 @@ function createGridView(options, userOptions) {
         showColumnHeaders: true
     }, userOptions);
 
-    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail', 'selection'],
+    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editingCellBased', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail', 'selection'],
         {
             initViews: true,
             controllers: {
@@ -673,7 +673,7 @@ QUnit.module('Grid view', {
         const pagerView = gridView.getView('pagerView');
 
         // B232626
-        assert.strictEqual(Math.round(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight()), 100);
+        assert.roughEqual(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight(), 1.01, 100);
         assert.notStrictEqual(columnsHeaderViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(rowsViewViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(pagerView.getHeight(), 0);

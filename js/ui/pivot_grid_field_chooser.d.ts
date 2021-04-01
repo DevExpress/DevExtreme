@@ -1,11 +1,9 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import PivotGridDataSource, {
@@ -124,12 +122,12 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @type_function_param1_field5 area:string
      * @type_function_param1_field6 field:PivotGridDataSourceOptions.fields
      * @type_function_param1_field7 event:event
-     * @extends Action
+     * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: dxElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: event }) => any);
+    onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: TElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: TEvent }) => void);
     /**
      * @docid
      * @default 500
@@ -191,8 +189,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
  * @public
  */
 export default class dxPivotGridFieldChooser extends Widget {
-    constructor(element: Element, options?: dxPivotGridFieldChooserOptions)
-    constructor(element: JQuery, options?: dxPivotGridFieldChooserOptions)
+    constructor(element: TElement, options?: dxPivotGridFieldChooserOptions)
     /**
      * @docid
      * @publicName applyChanges()
@@ -224,15 +221,6 @@ export default class dxPivotGridFieldChooser extends Widget {
     updateDimensions(): void;
 }
 
-declare global {
-interface JQuery {
-    dxPivotGridFieldChooser(): JQuery;
-    dxPivotGridFieldChooser(options: "instance"): dxPivotGridFieldChooser;
-    dxPivotGridFieldChooser(options: string): any;
-    dxPivotGridFieldChooser(options: string, ...params: any[]): any;
-    dxPivotGridFieldChooser(options: dxPivotGridFieldChooserOptions): JQuery;
-}
-}
 export type Options = dxPivotGridFieldChooserOptions;
 
 /** @deprecated use Options instead */

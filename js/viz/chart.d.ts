@@ -1,11 +1,9 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -929,7 +927,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     negativesAsZeroes?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 argument:Date|Number|string
@@ -938,10 +936,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, argument?: Date | number | string }) => any) | string;
+    onArgumentAxisClick?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, argument?: Date | number | string }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
@@ -950,10 +948,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, target?: chartSeriesObject }) => any) | string;
+    onLegendClick?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, target?: chartSeriesObject }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
@@ -962,10 +960,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesClick?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, target?: chartSeriesObject }) => any) | string;
+    onSeriesClick?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, target?: chartSeriesObject }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
@@ -973,10 +971,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesHoverChanged?: ((e: { component?: dxChart, element?: dxElement, model?: any, target?: chartSeriesObject }) => any);
+    onSeriesHoverChanged?: ((e: { component?: dxChart, element?: TElement, model?: any, target?: chartSeriesObject }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
@@ -984,10 +982,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesSelectionChanged?: ((e: { component?: dxChart, element?: dxElement, model?: any, target?: chartSeriesObject }) => any);
+    onSeriesSelectionChanged?: ((e: { component?: dxChart, element?: TElement, model?: any, target?: chartSeriesObject }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
@@ -1004,10 +1002,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomEnd?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
+    onZoomEnd?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
@@ -1019,7 +1017,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomStart?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
+    onZoomStart?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => void);
     /**
      * @docid
      * @type Object|Array<Object>
@@ -2002,7 +2000,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((data: object, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((data: object, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid dxChartOptions.commonAxisSettings.label.alignment
      * @type Enums.HorizontalAlignment
@@ -2860,8 +2858,7 @@ export interface dxChartValueAxisTitle extends dxChartCommonAxisSettingsTitle {
  * @public
  */
 export default class dxChart extends BaseChart {
-    constructor(element: Element, options?: dxChartOptions)
-    constructor(element: JQuery, options?: dxChartOptions)
+    constructor(element: TElement, options?: dxChartOptions)
     /**
      * @docid
      * @publicName getArgumentAxis()
@@ -2952,7 +2949,7 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxChartAnnotationConfig|any
@@ -2962,7 +2959,7 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: TElement) => string | TElement);
 }
 
 /**
@@ -5730,15 +5727,6 @@ export interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCo
     customizeText?: ((pointInfo: any) => string);
 }
 
-declare global {
-interface JQuery {
-    dxChart(): JQuery;
-    dxChart(options: "instance"): dxChart;
-    dxChart(options: string): any;
-    dxChart(options: string, ...params: any[]): any;
-    dxChart(options: dxChartOptions): JQuery;
-}
-}
 export type Options = dxChartOptions;
 
 /** @deprecated use Options instead */

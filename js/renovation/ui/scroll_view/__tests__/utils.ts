@@ -1,6 +1,6 @@
 import {
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import {
   ScrollableLocation,
@@ -10,7 +10,7 @@ import {
 
 import {
   SCROLLABLE_CONTENT_CLASS,
-} from '../scrollable_utils';
+} from '../common/consts';
 
 export function createElement({
   location,

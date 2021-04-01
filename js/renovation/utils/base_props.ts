@@ -1,10 +1,10 @@
 import {
   Event, OneWay, ComponentBindings,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 @ComponentBindings()
 export class BaseWidgetProps {
-  @OneWay() accessKey?: string | null = null;
+  @OneWay() accessKey?: string;
 
   @OneWay() activeStateEnabled?: boolean = false;
 

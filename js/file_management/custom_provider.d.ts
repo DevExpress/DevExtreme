@@ -5,6 +5,10 @@ import FileSystemProviderBase, {
 import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
 
+import {
+    TPromise
+} from '../core/utils/deferred';
+
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**
      * @docid
@@ -15,7 +19,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => TPromise<any> | any);
 
     /**
      * @docid
@@ -25,7 +29,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => TPromise<any> | any);
 
     /**
      * @docid
@@ -35,7 +39,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    createDirectory?: ((parentDirectory: FileSystemItem, name: string) => Promise<any> | JQueryPromise<any> | any);
+    createDirectory?: ((parentDirectory: FileSystemItem, name: string) => TPromise<any> | any);
 
     /**
      * @docid
@@ -44,7 +48,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    deleteItem?: ((item: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    deleteItem?: ((item: FileSystemItem) => TPromise<any> | any);
 
     /**
      * @docid
@@ -61,7 +65,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItems?: ((parentDirectory: FileSystemItem) => Promise<Array<any>> | JQueryPromise<Array<any>> | Array<any>);
+    getItems?: ((parentDirectory: FileSystemItem) => TPromise<Array<any>> | Array<any>);
 
     /**
      * @docid
@@ -70,7 +74,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItemsContent?: ((items: Array<FileSystemItem>) => Promise<any> | JQueryPromise<any> | any);
+    getItemsContent?: ((items: Array<FileSystemItem>) => TPromise<any> | any);
 
     /**
      * @docid
@@ -87,7 +91,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => TPromise<any> | any);
 
     /**
      * @docid
@@ -97,7 +101,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    renameItem?: ((item: FileSystemItem, newName: string) => Promise<any> | JQueryPromise<any> | any);
+    renameItem?: ((item: FileSystemItem, newName: string) => TPromise<any> | any);
 
     /**
      * @docid
@@ -108,7 +112,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    uploadFileChunk?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    uploadFileChunk?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => TPromise<any> | any);
 }
 
 /**

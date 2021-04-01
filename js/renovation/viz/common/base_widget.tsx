@@ -9,7 +9,7 @@ import {
   Fragment,
   RefObject,
   ComponentBindings,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { isDefined } from '../../../core/utils/type';
 import { combineClasses } from '../../utils/combine_classes';
 import { BaseWidgetProps } from './base_props';

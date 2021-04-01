@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Page, viewFunction as PageComponent } from '../page';
+import { Page, PageProps, viewFunction as PageComponent } from '../page';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../../common/consts';
 
 describe('Small pager pages', () => {
@@ -18,18 +18,23 @@ describe('Small pager pages', () => {
   describe('Logic', () => {
     describe('className', () => {
       it('default', () => {
-        const component = new Page({ index: 0 });
+        const props = new PageProps();
+        const component = new Page(props);
         expect(component.className).toBe(PAGER_PAGE_CLASS);
       });
 
       it('selected', () => {
-        const component = new Page({ index: 0, selected: true });
+        const props = new PageProps();
+        props.selected = true;
+        const component = new Page(props);
         expect(component.className).toBe(`${PAGER_PAGE_CLASS} ${PAGER_SELECTION_CLASS}`);
       });
 
       it('custom class', () => {
-        const component = new Page({ index: 0, className: 'custom' });
-        expect(component.className).toBe(`${PAGER_PAGE_CLASS} custom`);
+        const props = new PageProps();
+        props.className = 'custom';
+        const component = new Page(props);
+        expect(component.className).toBe('custom');
       });
     });
 

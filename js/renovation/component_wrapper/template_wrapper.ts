@@ -1,14 +1,11 @@
-import { InfernoComponent } from 'devextreme-generator/modules/inferno/base_component';
-import { InfernoEffect } from 'devextreme-generator/modules/inferno/effect';
+import { InfernoComponent, InfernoEffect } from '@devextreme/vdom';
 import { createElement } from 'inferno-create-element';
 import { createRef } from 'inferno';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
-import { removeDifferentElements, wrapElement } from './utils';
+import { removeDifferentElements } from './utils';
 import Number from '../../core/polyfills/number';
-
-const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 interface TemplateProps { template: any; model: { data: any; index: number } }
 
@@ -34,17 +31,11 @@ export class TemplateWrapper extends InfernoComponent<TemplateProps> {
       }
     });
 
-    const $template = $(
-      this.props.template.render({
-        container: getPublicElement($parent),
-        model: data,
-        ...(Number.isFinite(index) ? { index } : {}),
-      }),
-    );
-
-    if ($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-      wrapElement($parent, $template);
-    }
+    this.props.template.render({
+      container: getPublicElement($parent),
+      model: data,
+      ...(Number.isFinite(index) ? { index } : {}),
+    });
 
     return (): void => {
       // NOTE: order is important

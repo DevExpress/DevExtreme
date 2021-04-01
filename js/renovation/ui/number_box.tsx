@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, React,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 /* eslint-disable-next-line import/named */
 import LegacyNumberBox from '../../ui/number_box';
 import { WidgetProps } from './common/widget';
@@ -46,6 +46,10 @@ export class NumberBoxProps extends WidgetProps {
   @TwoWay() value: number | null = 0;
 
   @Event() valueChange?: EventCallback<number>;
+
+  @OneWay() focusStateEnabled?: boolean = true;
+
+  @OneWay() hoverStateEnabled?: boolean = true;
 }
 
 @Component({

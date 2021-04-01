@@ -1,5 +1,109 @@
 import { isDefined } from '../../core/utils/type';
 
+class PdfTable {
+    constructor(drawTableBorder, rect) {
+        this.drawTableBorder = drawTableBorder;
+        this.rect = rect;
+        this.rows = [];
+    }
+
+    addRow(cells) {
+        if(!isDefined(cells)) {
+            throw 'cells is required';
+        }
+        this.rows.push(cells);
+        for(let i = 0; i < cells.length; i++) {
+            const currentCell = cells[i];
+            if(currentCell.drawLeftBorder === false) {
+                if(i >= 1) {
+                    cells[i - 1].drawRightBorder = false;
+                }
+            } else if(!isDefined(currentCell.drawLeftBorder)) {
+                if(i >= 1 && cells[i - 1].drawRightBorder === false) {
+                    currentCell.drawLeftBorder = false;
+                }
+            }
+
+            if(currentCell.drawTopBorder === false) {
+                if(this.rows.length >= 2) {
+                    this.rows[this.rows.length - 2][i].drawBottomBorder = false;
+                }
+            } else if(!isDefined(currentCell.drawTopBorder)) {
+                if(this.rows.length >= 2 && this.rows[this.rows.length - 2][i].drawBottomBorder === false) {
+                    currentCell.drawTopBorder = false;
+                }
+            }
+        }
+    }
+
+    drawTo(doc) {
+        drawTable(doc, this);
+    }
+}
+
+class PdfGrid {
+    constructor(splitByColumns) {
+        this._splitByColumns = splitByColumns ?? [];
+        this._newPageTables = [];
+        this._tables = [];
+        this._currentHorizontalTables = null;
+    }
+
+    _addLastTableToNewPages() {
+        this._newPageTables.push(this._currentHorizontalTables[this._currentHorizontalTables.length - 1]);
+    }
+
+    startNewTable(drawTableBorder, firstTableRect, firstTableOnNewPage, splitByColumns) {
+        this._currentHorizontalTables = [
+            new PdfTable(drawTableBorder, firstTableRect)
+        ];
+        if(firstTableOnNewPage) {
+            this._addLastTableToNewPages();
+        }
+
+        if(isDefined(splitByColumns)) {
+            this._splitByColumns = splitByColumns;
+        }
+
+        if(isDefined(this._splitByColumns)) {
+            this._splitByColumns.forEach((splitByColumn) => {
+                this._currentHorizontalTables.push(
+                    new PdfTable(drawTableBorder, splitByColumn.tableRect)
+                );
+                if(splitByColumn.drawOnNewPage) {
+                    this._addLastTableToNewPages();
+                }
+            });
+        }
+
+        this._tables.push(...this._currentHorizontalTables);
+    }
+
+    addRow(cells) {
+        let currentTableIndex = 0;
+        let currentTableCells = [];
+        for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+            const isNewTableColumn = this._splitByColumns.filter((splitByColumn) => splitByColumn.columnIndex === cellIndex)[0];
+            if(isNewTableColumn) {
+                this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells);
+                currentTableIndex++;
+                currentTableCells = [];
+            }
+            currentTableCells.push(cells[cellIndex]);
+        }
+        this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells);
+    }
+
+    drawTo(doc) {
+        this._tables.forEach((table) => {
+            if(this._newPageTables.indexOf(table) !== -1) {
+                doc.addPage();
+            }
+            table.drawTo(doc);
+        });
+    }
+}
+
 function exportDataGrid(doc, dataGrid, options) {
     if(!isDefined(options.rect)) {
         throw 'options.rect is required';
@@ -7,84 +111,45 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-            const tables = [];
-            let table = {
-                rect: options.rect,
-                drawTableBorder: options.drawTableBorder,
-                rows: []
-            };
-            tables.push(table);
-
             const columns = dataProvider.getColumns();
-            const dataRowsCount = dataProvider.getRowsCount();
-            for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                if(options.onRowExporting) {
-                    const drawNewTableFromThisRow = {};
-                    options.onRowExporting({ drawNewTableFromThisRow });
-                    const { startNewTable, addPage, tableRect } = drawNewTableFromThisRow;
-                    if(startNewTable === true) {
-                        if(!isDefined(tableRect)) {
-                            throw 'tableRect is required';
-                        }
-                        table = {
-                            rect: tableRect,
-                            drawTableBorder: options.drawTableBorder,
-                            rows: []
-                        };
-                        if(addPage === true) {
-                            table.drawOnNewPage = true;
-                        }
-                        tables.push(table);
-                    }
-                }
+            const pdfGrid = new PdfGrid(options.splitToTablesByColumns);
 
-                const row = [];
-                table.rows.push(row);
+            pdfGrid.startNewTable(options.drawTableBorder, options.rect);
+
+            const dataRowsCount = dataProvider.getRowsCount();
+
+            for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
+                const currentRow = [];
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
                     const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
                     const pdfCell = {
                         text: cellData.value
                     };
-
                     if(options.onCellExporting) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
+                    currentRow.push(pdfCell);
+                }
 
-                    row.push(pdfCell);
-
-                    if(pdfCell.drawLeftBorder === false) {
-                        if(row.length > 1) {
-                            row[row.length - 2].drawRightBorder = 0;
-                        }
-                    } else if(!isDefined(pdfCell.drawLeftBorder)) {
-                        if(row.length > 1 && row[row.length - 2].drawRightBorder === false) {
-                            pdfCell.drawLeftBorder = false;
-                        }
-                    }
-
-                    if(pdfCell.drawTopBorder === false) {
-                        if(table.rows.length > 1) {
-                            table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder = false;
-                        }
-                    } else if(!isDefined(pdfCell.drawTopBorder)) {
-                        if(table.rows.length > 1 && table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder === false) {
-                            pdfCell.drawTopBorder = false;
-                        }
+                if(options.onRowExporting) {
+                    const drawNewTableFromThisRow = {};
+                    options.onRowExporting({ drawNewTableFromThisRow, row: currentRow });
+                    const { startNewTable, addPage, tableRect, splitToTablesByColumns } = drawNewTableFromThisRow;
+                    if(startNewTable === true) {
+                        pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true, splitToTablesByColumns);
                     }
                 }
+
+                pdfGrid.addRow(currentRow);
             }
 
-            tables.forEach((table) => {
-                if(table.drawOnNewPage === true) {
-                    doc.addPage();
-                }
-                drawTable(doc, table);
-            });
+            pdfGrid.drawTo(doc);
             resolve();
         });
     });
 }
 
+// this function is large and will grow
 function drawTable(doc, table) {
     if(!isDefined(doc)) {
         throw 'doc is required';

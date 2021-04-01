@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
@@ -46,7 +46,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
     loadingIndicator?: BaseGaugeLoadingIndicator;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -54,10 +54,10 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: dxElement, model?: any, target?: any }) => any);
+    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -65,7 +65,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: dxElement, model?: any, target?: any }) => any);
+    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
      * @type object
@@ -180,7 +180,7 @@ export interface BaseGaugeRangeContainer {
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.color
        * @prevFileNamespace DevExpress.viz
-       * 
+       *
        */
       color?: string,
       /**
@@ -399,7 +399,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: TElement) => string | TElement);
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -427,8 +427,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export class BaseGauge extends BaseWidget {
-    constructor(element: Element, options?: BaseGaugeOptions)
-    constructor(element: JQuery, options?: BaseGaugeOptions)
+    constructor(element: TElement, options?: BaseGaugeOptions)
     /**
      * @docid
      * @publicName subvalues()

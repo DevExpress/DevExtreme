@@ -5,8 +5,8 @@ const file = require('gulp-file');
 const del = require('del');
 const path = require('path');
 const fs = require('fs');
-const { generateComponents } = require('devextreme-generator/component-compiler');
-const { InfernoGenerator } = require('devextreme-generator/inferno-generator/inferno-generator');
+const { generateComponents } = require('@devextreme-generator/build-helpers');
+const { InfernoGenerator } = require('@devextreme-generator/inferno');
 const ts = require('gulp-typescript');
 const plumber = require('gulp-plumber');
 const gulpIf = require('gulp-if');
@@ -24,7 +24,6 @@ const generator = new InfernoGenerator();
 
 const jQueryComponentsGlob = 'js/renovation/**/*.j.tsx';
 
-const renovation = env.USE_RENOVATION;
 const esmPackage = env.BUILD_ESM_PACKAGE;
 
 const SRC = [
@@ -36,7 +35,7 @@ const SRC = [
 ];
 
 const IGNORE_PATHS_BY_FRAMEWORKS = {
-    vue: ['!js/renovation/viz/**/*'],
+    vue: [],
     react: [],
     angular: []
 };
@@ -102,11 +101,8 @@ function generateInfernoComponents(distPath = './', babelConfig = transpileConfi
             }))
             .pipe(gulpIf(isNotDTS, babel(babelConfig)))
             .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PATH)))
-            .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PROD_PATH)))
-            .pipe(gulpIf(renovation, gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH)))
-            // dev is true only for 'generate-components-watch'. 'generate-components-watch' used in launch for qunit
-            // without renovation flag ui/renovation is clear after build:r
-            .pipe(gulpIf(renovation || dev, gulp.dest(context.TRANSPILED_RENOVATION_PATH)))
+            .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_RENOVATION_PATH)))
+            .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH)))
             .pipe(gulpIf(esmPackage, gulp.dest(path.join(context.TRANSPILED_PROD_ESM_PATH, distPath))))
             .on('end', function() {
                 done(!dev && errors.length || undefined);
@@ -169,7 +165,7 @@ function addGenerationTask(
     babelGeneratedFiles = true
 ) {
     const frameworkDest = `artifacts/${frameworkName}`;
-    const generator = require(`devextreme-generator/${frameworkName}-generator`).default;
+    const generator = require(`@devextreme-generator/${frameworkName}`).default;
     let tsProject = () => () => { };
     if(compileTs) {
         tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);

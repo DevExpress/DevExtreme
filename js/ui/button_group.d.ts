@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -7,7 +7,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -28,7 +28,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    buttonTemplate?: template | ((buttonData: any, buttonContent: dxElement) => string | Element | JQuery);
+    buttonTemplate?: template | ((buttonData: any, buttonContent: TElement) => string | TElement);
     /**
      * @docid
      * @default true
@@ -58,7 +58,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     keyExpr?: string | Function;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -68,10 +68,10 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxButtonGroup, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    onItemClick?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
@@ -79,7 +79,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+    onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => void);
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
@@ -120,8 +120,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
  * @public
  */
 export default class dxButtonGroup extends Widget {
-    constructor(element: Element, options?: dxButtonGroupOptions)
-    constructor(element: JQuery, options?: dxButtonGroupOptions)
+    constructor(element: TElement, options?: dxButtonGroupOptions)
 }
 
 /**
@@ -152,15 +151,6 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
-declare global {
-interface JQuery {
-    dxButtonGroup(): JQuery;
-    dxButtonGroup(options: "instance"): dxButtonGroup;
-    dxButtonGroup(options: string): any;
-    dxButtonGroup(options: string, ...params: any[]): any;
-    dxButtonGroup(options: dxButtonGroupOptions): JQuery;
-}
-}
 export type Options = dxButtonGroupOptions;
 
 /** @deprecated use Options instead */

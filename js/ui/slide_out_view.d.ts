@@ -1,8 +1,10 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     template
@@ -20,7 +22,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: dxElement) => any);
+    contentTemplate?: template | ((contentElement: TElement) => any);
     /**
      * @docid
      * @type Enums.SlideOutMenuPosition
@@ -36,7 +38,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuTemplate?: template | ((menuElement: dxElement) => any);
+    menuTemplate?: template | ((menuElement: TElement) => any);
     /**
      * @docid
      * @default false
@@ -62,8 +64,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
  * @public
  */
 export default class dxSlideOutView extends Widget {
-    constructor(element: Element, options?: dxSlideOutViewOptions)
-    constructor(element: JQuery, options?: dxSlideOutViewOptions)
+    constructor(element: TElement, options?: dxSlideOutViewOptions)
     /**
      * @docid
      * @publicName content()
@@ -71,7 +72,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): dxElement;
+    content(): TElement;
     /**
      * @docid
      * @publicName hideMenu()
@@ -79,7 +80,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hideMenu(): Promise<void> & JQueryPromise<void>;
+    hideMenu(): TPromise<void>;
     /**
      * @docid
      * @publicName menuContent()
@@ -87,7 +88,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuContent(): dxElement;
+    menuContent(): TElement;
     /**
      * @docid
      * @publicName showMenu()
@@ -95,7 +96,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showMenu(): Promise<void> & JQueryPromise<void>;
+    showMenu(): TPromise<void>;
     /**
      * @docid
      * @publicName toggleMenuVisibility()
@@ -103,18 +104,9 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
+    toggleMenuVisibility(): TPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxSlideOutView(): JQuery;
-    dxSlideOutView(options: "instance"): dxSlideOutView;
-    dxSlideOutView(options: string): any;
-    dxSlideOutView(options: string, ...params: any[]): any;
-    dxSlideOutView(options: dxSlideOutViewOptions): JQuery;
-}
-}
 export type Options = dxSlideOutViewOptions;
 
 /** @deprecated use Options instead */

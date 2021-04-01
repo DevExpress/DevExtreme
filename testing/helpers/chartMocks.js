@@ -1090,7 +1090,7 @@ export const MockAxis = function(renderOptions) {
         customPositionIsAvailable() {
             return false;
         },
-        hasCustomPosition() {
+        hasNonBoundaryPosition() {
             return false;
         },
         getResolvedBoundaryPosition() {

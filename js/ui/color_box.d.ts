@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -49,7 +49,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: string, fieldElement: dxElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((value: string, fieldElement: TElement) => string | TElement);
     /**
      * @docid
      * @default 1
@@ -74,19 +74,9 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
  * @public
  */
 export default class dxColorBox extends dxDropDownEditor {
-    constructor(element: Element, options?: dxColorBoxOptions)
-    constructor(element: JQuery, options?: dxColorBoxOptions)
+    constructor(element: TElement, options?: dxColorBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxColorBox(): JQuery;
-    dxColorBox(options: "instance"): dxColorBox;
-    dxColorBox(options: string): any;
-    dxColorBox(options: string, ...params: any[]): any;
-    dxColorBox(options: dxColorBoxOptions): JQuery;
-}
-}
 export type Options = dxColorBoxOptions;
 
 /** @deprecated use Options instead */

@@ -29,6 +29,7 @@ import * as polarMethods from './polar_axes';
 import createConstantLine from './constant_line';
 import createStrip from './strip';
 import { Deferred, when } from '../../core/utils/deferred';
+import { calculateCanvasMargins, measureLabels } from './axes_utils';
 
 const convertTicksToValues = constants.convertTicksToValues;
 const _math = Math;
@@ -154,12 +155,6 @@ function updateTicksPosition(ticks, options, animate) {
 function updateGridsPosition(ticks, animate) {
     callAction(ticks, 'updateGridPosition', animate);
 }
-export const measureLabels = function(items) {
-    items.forEach(function(item) {
-        const label = item.getContentContainer();
-        item.labelBBox = label ? label.getBBox() : { x: 0, y: 0, width: 0, height: 0 };
-    });
-};
 
 function cleanUpInvalidTicks(ticks) {
     let i = ticks.length - 1;
@@ -288,31 +283,6 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
 function getConstantLineSharpDirection(coord, axisCanvas) {
     return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
-
-export const calculateCanvasMargins = function(bBoxes, canvas) {
-    const cLeft = canvas.left;
-    const cTop = canvas.top;
-    const cRight = canvas.width - canvas.right;
-    const cBottom = canvas.height - canvas.bottom;
-    return bBoxes
-        .reduce(function(margins, bBox) {
-            if(!bBox || bBox.isEmpty) {
-                return margins;
-            }
-            return {
-                left: _max(margins.left, cLeft - bBox.x),
-                top: _max(margins.top, cTop - bBox.y),
-                right: _max(margins.right, bBox.x + bBox.width - cRight),
-                bottom: _max(margins.bottom, bBox.y + bBox.height - cBottom)
-            };
-        }, {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
-        });
-};
-
 export const Axis = function(renderSettings) {
     const that = this;
 
@@ -378,7 +348,7 @@ Axis.prototype = {
 
     resolveOverlappingForCustomPositioning: _noop,
 
-    hasCustomPosition() {
+    hasNonBoundaryPosition() {
         return false;
     },
 
@@ -392,7 +362,7 @@ Axis.prototype = {
 
     getAxisSharpDirection() {
         const position = this.getResolvedBoundaryPosition();
-        return this.hasCustomPosition() || position !== BOTTOM && position !== RIGHT ? 1 : -1;
+        return this.hasNonBoundaryPosition() || position !== BOTTOM && position !== RIGHT ? 1 : -1;
     },
 
     getSharpDirectionByCoords(coords) {
@@ -816,24 +786,15 @@ Axis.prototype = {
 
     getMargins: function() {
         const that = this;
-        if(that.hasCustomPosition()) {
-            return {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            };
-        }
-
-        const options = that._options;
-        const position = options.position;
-        const placeholderSize = options.placeholderSize;
+        const { position, offset, customPosition, placeholderSize, grid, tick, crosshairMargin } = that._options;
+        const isDefinedCustomPositionOption = isDefined(customPosition);
+        const boundaryPosition = that.getResolvedBoundaryPosition();
         const canvas = that.getCanvas();
         const cLeft = canvas.left;
         const cTop = canvas.top;
         const cRight = canvas.width - canvas.right;
         const cBottom = canvas.height - canvas.bottom;
-        const edgeMarginCorrection = _max(options.grid.visible && options.grid.width || 0, options.tick.visible && options.tick.width || 0);
+        const edgeMarginCorrection = _max(grid.visible && grid.width || 0, tick.visible && tick.width || 0);
         const constantLineAboveSeries = that._axisConstantLineGroups.above;
         const constantLineUnderSeries = that._axisConstantLineGroups.under;
         const boxes = [that._axisElementsGroup,
@@ -860,8 +821,11 @@ Axis.prototype = {
 
         const margins = calculateCanvasMargins(boxes, canvas);
 
-        margins[position] += options.crosshairMargin;
+        margins[position] += crosshairMargin;
 
+        if(that.hasNonBoundaryPosition() && isDefinedCustomPositionOption) {
+            margins[boundaryPosition] = 0;
+        }
         if(placeholderSize) {
             margins[position] = placeholderSize;
         }
@@ -873,6 +837,13 @@ Axis.prototype = {
             if(!that._isHorizontal && canvas.bottom < edgeMarginCorrection && margins.bottom < edgeMarginCorrection) {
                 margins.bottom = edgeMarginCorrection;
             }
+        }
+
+        if(!isDefinedCustomPositionOption && isDefined(offset)) {
+            const moveByOffset = that.customPositionIsBoundary() &&
+                ((offset > 0 && (boundaryPosition === LEFT || boundaryPosition === TOP)) ||
+                (offset < 0 && (boundaryPosition === RIGHT || boundaryPosition === BOTTOM)));
+            margins[boundaryPosition] -= moveByOffset ? offset : 0;
         }
 
         return margins;
@@ -2082,7 +2053,7 @@ Axis.prototype = {
         callAction(this._majorTicks, 'animateLabels');
     },
 
-    updateSize: function(canvas, animate, updateTitle = true) {
+    updateSize(canvas, animate, updateTitle = true) {
         const that = this;
         that.updateCanvas(canvas);
 
@@ -2096,13 +2067,13 @@ Axis.prototype = {
         that.applyMargins();
 
         const animationEnabled = !that._firstDrawing && animate;
-        const options = this._options;
+        const options = that._options;
 
         initTickCoords(that._majorTicks);
         initTickCoords(that._minorTicks);
         initTickCoords(that._boundaryTicks);
 
-        if(this._resetApplyingAnimation && !this._firstDrawing) {
+        if(that._resetApplyingAnimation && !that._firstDrawing) {
             that._resetStartCoordinates();
         }
 
@@ -2110,7 +2081,7 @@ Axis.prototype = {
         cleanUpInvalidTicks(that._minorTicks);
         cleanUpInvalidTicks(that._boundaryTicks);
 
-        if(this._axisElement) {
+        if(that._axisElement) {
             that._updateAxisElementPosition();
         }
 
@@ -2138,8 +2109,11 @@ Axis.prototype = {
         if(!that._translator.getBusinessRange().isEmpty()) {
             that._firstDrawing = false;
         }
-        this._resetApplyingAnimation = false;
+        that._resetApplyingAnimation = false;
+        that._updateLabelsPosition();
     },
+
+    _updateLabelsPosition: _noop,
 
     prepareAnimation() {
         const that = this;

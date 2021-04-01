@@ -1,5 +1,5 @@
 import {
-    dxElement, dxSVGElement
+    TElement
 } from '../core/element';
 
 import {
@@ -98,7 +98,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomCommand?: ((e: { component?: dxDiagram, element?: dxElement, name?: string }) => any);
+    onCustomCommand?: ((e: { component?: dxDiagram, element?: TElement, name?: string }) => void);
     /**
      * @docid
      * @type_function_param1 container:dxSVGElement
@@ -107,7 +107,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customShapeTemplate?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any);
+    customShapeTemplate?: template | ((container: TElement<SVGElement>, data: { item?: dxDiagramShape }) => any);
     /**
      * @docid
      * @type_function_param1 container:dxSVGElement
@@ -116,7 +116,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customShapeToolboxTemplate?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any);
+    customShapeToolboxTemplate?: template | ((container: TElement<SVGElement>, data: { item?: dxDiagramShape }) => any);
     /**
      * @docid
      * @default []
@@ -268,7 +268,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       * @type_function_param2 data:object
       * @type_function_param2_field1 item:dxDiagramShape
       */
-      template?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any),
+      template?: template | ((container: TElement<SVGElement>, data: { item?: dxDiagramShape }) => any),
       /**
       * @docid
       * @prevFileNamespace DevExpress.ui
@@ -321,7 +321,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       * @type_function_param2 data:object
       * @type_function_param2_field1 item:dxDiagramShape
       */
-      toolboxTemplate?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any),
+      toolboxTemplate?: template | ((container: TElement<SVGElement>, data: { item?: dxDiagramShape }) => any),
       /**
       * @docid
       * @prevFileNamespace DevExpress.ui
@@ -789,37 +789,37 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     hasChanges?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, item?: dxDiagramItem }) => any);
+    onItemClick?: ((e: { component?: dxDiagram, element?: TElement, model?: any, item?: dxDiagramItem }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDblClick?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, item?: dxDiagramItem }) => any);
+    onItemDblClick?: ((e: { component?: dxDiagram, element?: TElement, model?: any, item?: dxDiagramItem }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 items:Array<dxDiagramItem>
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, items?: Array<dxDiagramItem> }) => any);
+    onSelectionChanged?: ((e: { component?: dxDiagram, element?: TElement, model?: any, items?: Array<dxDiagramItem> }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 operation:Enums.DiagramModelOperation
      * @type_function_param1_field5 args:dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs
@@ -829,10 +829,10 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRequestEditOperation?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs, reason?: 'checkUIElementAvailability' | 'modelModification', allowed?: boolean }) => any);
+    onRequestEditOperation?: ((e: { component?: dxDiagram, element?: TElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints', args?: dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs, reason?: 'checkUIElementAvailability' | 'modelModification', allowed?: boolean }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 changes:Array<any>
      * @type_function_param1_field5 allowed:boolean
@@ -840,7 +840,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, changes?: any[], allowed?: boolean }) => any);
+    onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: TElement, model?: any, changes?: any[], allowed?: boolean }) => void);
     /**
      * @docid
      * @default "white"
@@ -1150,8 +1150,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
  * @public
  */
 export default class dxDiagram extends Widget {
-    constructor(element: Element, options?: dxDiagramOptions)
-    constructor(element: JQuery, options?: dxDiagramOptions)
+    constructor(element: TElement, options?: dxDiagramOptions)
     /**
      * @docid
      * @publicName getNodeDataSource()
@@ -1186,6 +1185,38 @@ export default class dxDiagram extends Widget {
      * @public
      */
     getItemById(id: string): dxDiagramItem;
+    /**
+     * @docid
+     * @publicName getItems()
+     * @return Array<dxDiagramItem>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+     getItems(): Array<dxDiagramItem>;
+    /**
+     * @docid
+     * @publicName getSelectedItems()
+     * @return Array<dxDiagramItem>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+     getSelectedItems(): Array<dxDiagramItem>;
+    /**
+     * @docid
+     * @publicName setSelectedItems(items: Array<dxDiagramItem>)
+     * @param1 items:Array<dxDiagramItem>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+     setSelectedItems(items): void;
+    /**
+     * @docid
+     * @publicName scrollToItems(items: Array<dxDiagramItem>)
+     * @param1 items:Array<dxDiagramItem>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+     scrollToItems(items): void;
     /**
      * @docid
      * @publicName export()
@@ -1398,7 +1429,7 @@ export interface dxDiagramShape extends dxDiagramItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    containerExpanded?: boolean;    
+    containerExpanded?: boolean;
 }
 
 /**
@@ -1731,15 +1762,6 @@ export interface dxDiagramMoveShapeArgs {
    };
 }
 
-declare global {
-interface JQuery {
-    dxDiagram(): JQuery;
-    dxDiagram(options: "instance"): dxDiagram;
-    dxDiagram(options: string): any;
-    dxDiagram(options: string, ...params: any[]): any;
-    dxDiagram(options: dxDiagramOptions): JQuery;
-}
-}
 export type Options = dxDiagramOptions;
 
 /** @deprecated use Options instead */

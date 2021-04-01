@@ -130,21 +130,23 @@ QUnit.module('Nested scrollable styles', () => {
                 display: config.showScrollbar === 'never' ? 'none' : 'block'
             };
 
-            if(!config.outerUseNative) {
-                if(config.outerDirection === 'both') {
-                    checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLBAR_HORIZONTAL_CLASS}`), expectedSimulated, 'outerScrollable');
-                    checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLBAR_VERTICAL_CLASS}`), expectedSimulated, 'outerScrollable');
-                } else {
-                    checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`), expectedSimulated, 'outerScrollable');
-                }
+            const checkStyles = function(scrollableElement, direction, message) {
+                if(direction === 'both') {
+                    const horizontalScrollbars = scrollableElement.querySelectorAll(`.${SCROLLBAR_HORIZONTAL_CLASS}`);
+                    const verticalScrollbars = scrollableElement.querySelectorAll(`.${SCROLLBAR_VERTICAL_CLASS}`);
 
-            } else if(!config.innerUseNative) {
-                if(config.innerDirection === 'both') {
-                    checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLBAR_HORIZONTAL_CLASS}`), expectedSimulated, 'outerScrollable');
-                    checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLBAR_VERTICAL_CLASS}`), expectedSimulated, 'outerScrollable');
+                    checkElementStyles(horizontalScrollbars[horizontalScrollbars.length - 1], expectedSimulated, message);
+                    checkElementStyles(verticalScrollbars[verticalScrollbars.length - 1], expectedSimulated, message);
                 } else {
-                    checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`), expectedSimulated, 'innerScrollable');
+                    const scrollbars = scrollableElement.querySelectorAll(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
+                    checkElementStyles(scrollbars[scrollbars.length - 1], expectedSimulated, message);
                 }
+            };
+
+            if(!config.outerUseNative) {
+                checkStyles(outerScrollableElement, config.outerDirection, 'outerScrollable');
+            } else if(!config.innerUseNative) {
+                checkStyles(innerScrollableElement, config.innerDirection, 'innerScrollable');
             } else {
                 assert.ok(true);
             }

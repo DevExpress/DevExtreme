@@ -15,7 +15,7 @@ const scrollingOrientations = {
     horizontal: 'horizontal',
     both: 'both'
 };
-const DefaultScrollingOrientation = scrollingOrientations.vertical;
+const DefaultScrollingOrientation = scrollingOrientations.both;
 
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
@@ -29,6 +29,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     get workspace() { return this._workspace; }
+    get isRTL() { return this.workspace._isRTL(); }
 
     get renderer() { return this._renderer; }
 
@@ -75,7 +76,11 @@ export default class VirtualScrollingDispatcher {
     }
 
     get leftVirtualCellsCount() {
-        return this.horizontalScrollingState?.virtualItemCountBefore > 0
+        const virtualItemsCount = !this.isRTL
+            ? this.horizontalScrollingState?.virtualItemCountBefore
+            : this.horizontalScrollingState?.virtualItemCountAfter;
+
+        return virtualItemsCount > 0
             ? 1
             : 0;
     }
@@ -200,11 +205,13 @@ export default class VirtualScrollingDispatcher {
     }
 
     _attachScrollableEvents() {
-        if(this.height || this.width) {
-            this._attachScrollableScroll();
-        }
-        if(!this.height || !this.width) {
-            this._attachWindowScroll();
+        if(this.horizontalScrollingAllowed || this.verticalScrollingAllowed) {
+            if(this.height || this.horizontalScrollingAllowed) {
+                this._attachScrollableScroll();
+            }
+            if(!this.height) {
+                this._attachWindowScroll();
+            }
         }
     }
 
@@ -511,9 +518,15 @@ class VirtualScrollingBase {
         const needAddItems = isAppend || isPrepend;
 
         if(needAddItems) {
-            state.virtualItemSizeBefore = virtualItemSizeBefore;
-            state.virtualItemSizeAfter = virtualItemSizeAfter;
+            this._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
         }
+    }
+
+    _updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter) {
+        const { state } = this;
+
+        state.virtualItemSizeBefore = virtualItemSizeBefore;
+        state.virtualItemSizeAfter = virtualItemSizeAfter;
     }
 }
 
@@ -555,6 +568,8 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
         });
     }
 
+    get isRTL() { return this.workspace._isRTL(); }
+
     getTotalItemCount() {
         return this.workspace._getTotalCellCount(this.groupCount, this.isVerticalGrouping);
     }
@@ -567,6 +582,17 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
             cellCount: this.state.itemCount,
             cellWidth: this.state.itemSize
         };
+    }
+
+    _updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter) {
+        if(!this.isRTL) {
+            super._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
+        } else {
+            const { state } = this;
+
+            state.virtualItemSizeAfter = virtualItemSizeBefore;
+            state.virtualItemSizeBefore = virtualItemSizeAfter;
+        }
     }
 }
 

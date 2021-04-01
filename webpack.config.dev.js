@@ -16,13 +16,12 @@ module.exports = Object.assign({
                         options: transpileConfig.cjs,
                     },
                     {
-                        loader: 'devextreme-generator/webpack-loader',
+                        loader: '@devextreme-generator/build-helpers/dist/webpack-loader',
                         options: {
                             platform: 'inferno',
                             defaultOptionsModule: 'js/core/options/utils',
                             jqueryComponentRegistratorModule: 'js/core/component_registrator',
                             jqueryBaseComponentModule: 'js/renovation/component_wrapper/component',
-                            modulesPath: 'devextreme-generator/modules/inferno',
                             tsConfig: path.resolve('build/gulp/generator/ts-configs/inferno.tsconfig.json')
                         },
                     },

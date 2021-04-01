@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -193,7 +193,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     loadingIndicator?: dxBarGaugeLoadingIndicator;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -201,10 +201,10 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxBarGauge, element?: dxElement, model?: any, target?: any }) => any);
+    onTooltipHidden?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -212,7 +212,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxBarGauge, element?: dxElement, model?: any, target?: any }) => any);
+    onTooltipShown?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
     /**
      * @docid
      * @extends CommonVizPalette
@@ -315,7 +315,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid dxBarGaugeOptions.legend.visible
      * @default false
@@ -345,7 +345,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: TElement) => string | TElement);
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -375,8 +375,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxBarGauge extends BaseWidget {
-    constructor(element: Element, options?: dxBarGaugeOptions)
-    constructor(element: JQuery, options?: dxBarGaugeOptions)
+    constructor(element: TElement, options?: dxBarGaugeOptions)
     /**
      * @docid
      * @publicName values()
@@ -395,15 +394,6 @@ export default class dxBarGauge extends BaseWidget {
     values(values: Array<number>): void;
 }
 
-declare global {
-interface JQuery {
-    dxBarGauge(): JQuery;
-    dxBarGauge(options: "instance"): dxBarGauge;
-    dxBarGauge(options: string): any;
-    dxBarGauge(options: string, ...params: any[]): any;
-    dxBarGauge(options: dxBarGaugeOptions): JQuery;
-}
-}
 export type Options = dxBarGaugeOptions;
 
 /** @deprecated use Options instead */

@@ -126,6 +126,12 @@ const StoreEventNames = {
     UPDATED: 'onAppointmentUpdated'
 };
 
+const RECURRENCE_EDITING_MODE = {
+    SERIES: 'editSeries',
+    OCCURENCE: 'editOccurence',
+    CANCEL: 'cancel',
+};
+
 class Scheduler extends Widget {
     get appointmentFilter() { return new AppointmentFilter(this); }
 
@@ -377,7 +383,9 @@ class Scheduler extends Widget {
                 mode: 'standard'
             },
 
-            renovateRender: false,
+            renovateRender: true,
+
+            _draggingMode: 'outlook',
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: 'bottom',
@@ -741,6 +749,9 @@ class Scheduler extends Widget {
                 break;
             case 'renovateRender':
                 this._updateOption('workSpace', name, value);
+                break;
+            case '_draggingMode':
+                this._workSpace.option('draggingMode', value);
                 break;
             default:
                 super._optionChanged(args);
@@ -1180,6 +1191,8 @@ class Scheduler extends Widget {
 
     _dispose() {
         this._appointmentTooltip && this._appointmentTooltip.dispose();
+        this._recurrenceDialog?.hide(RECURRENCE_EDITING_MODE.CANCEL);
+
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
 
@@ -1481,13 +1494,15 @@ class Scheduler extends Widget {
         const scrolling = this.option('scrolling');
         const isVirtualScrolling = scrolling.mode === 'virtual' ||
             currentViewOptions.scrolling?.mode === 'virtual';
-        const isHorizontalVirtualScrollingOrientation = isVirtualScrolling &&
-            ['horizontal', 'both'].filter(item =>
-                scrolling.orientation === item ||
-                currentViewOptions.scrolling?.orientation === item
-            ).length > 0;
+        const horizontalVirtualScrollingAllowed = isVirtualScrolling &&
+            (
+                !isDefined(scrolling.orientation) ||
+                ['horizontal', 'both'].filter(
+                    item => scrolling.orientation === item || currentViewOptions.scrolling?.orientation === item
+                ).length > 0
+            );
         const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
-            isHorizontalVirtualScrollingOrientation;
+            horizontalVirtualScrollingAllowed;
 
         const result = extend({
             noDataText: this.option('noDataText'),
@@ -1516,7 +1531,10 @@ class Scheduler extends Widget {
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
             scrolling,
-            renovateRender: this.option('renovateRender') || isVirtualScrolling
+            draggingMode: this.option('_draggingMode'),
+
+            // TODO: SSR does not work correctly with renovated render
+            renovateRender: this._isRenovatedRender(isVirtualScrolling),
         }, currentViewOptions);
 
         result.observer = this;
@@ -1536,6 +1554,10 @@ class Scheduler extends Widget {
         result.dateCellTemplate = result.dateCellTemplate ? this._getTemplate(result.dateCellTemplate) : null;
 
         return result;
+    }
+
+    _isRenovatedRender(isVirtualScrolling) {
+        return (this.option('renovateRender') && hasWindow()) || isVirtualScrolling;
     }
 
     _waitAsyncTemplate(callback) {
@@ -1681,9 +1703,13 @@ class Scheduler extends Widget {
                     dragEvent.cancel = new Deferred();
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
-                    .done(result => {
-                        result && callback();
-                        !result && this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+                    .done((editingMode) => {
+                        editingMode === RECURRENCE_EDITING_MODE.SERIES && callback();
+
+                        editingMode === RECURRENCE_EDITING_MODE.OCCURENCE && this._excludeAppointmentFromSeries(
+                            targetAppointment, singleAppointment, exceptionDate,
+                            isDeleted, isPopupEditing, dragEvent,
+                        );
                     })
                     .fail(() => this._appointments.moveAppointmentBack(dragEvent));
         }
@@ -1745,15 +1771,22 @@ class Scheduler extends Widget {
         const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
         const occurrenceText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteOccurrence' : 'dxScheduler-confirmRecurrenceEditOccurrence');
 
-        return customDialog({
+        this._recurrenceDialog = customDialog({
             messageHtml: message,
             showCloseButton: true,
             showTitle: true,
             buttons: [
-                { text: seriesText, onClick: function() { return true; } },
-                { text: occurrenceText, onClick: function() { return false; } }
-            ]
-        }).show();
+                { text: seriesText, onClick: function() { return RECURRENCE_EDITING_MODE.SERIES; } },
+                { text: occurrenceText, onClick: function() { return RECURRENCE_EDITING_MODE.OCCURENCE; } }
+            ],
+            popupOptions: {
+                onHidden: (e) => {
+                    e.component.$element().remove();
+                },
+            },
+        });
+
+        return this._recurrenceDialog.show();
     }
 
     _getUpdatedData(rawAppointment) {

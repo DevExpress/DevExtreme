@@ -10,7 +10,7 @@ import {
   Ref,
   RefObject,
   Consumer,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { LabelAlignment } from './types.d';
 import SvgGraphicsProps from './base_graphics_props';
 import {

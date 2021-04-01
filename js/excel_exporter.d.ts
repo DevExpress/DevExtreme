@@ -1,3 +1,4 @@
+import { TPromise } from './core/utils/deferred';
 import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
 import dxPivotGrid, { dxPivotGridPivotGridCell } from './ui/pivot_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
@@ -195,6 +196,18 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @public
      */
     component?: dxPivotGrid;
+      /**
+     * @docid
+     * @default true
+     * @public
+     */
+    mergeRowFieldValues?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    mergeColumnFieldValues?: boolean;
     /**
      * @docid
      * @type_function_param1 options:Object
@@ -216,7 +229,7 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
  * @prevFileNamespace DevExpress
  * @public
  */
-export function exportDataGrid(options: ExcelExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
+export function exportDataGrid(options: ExcelExportDataGridProps): TPromise<CellRange>;
 
 /**
  * @docid excelExporter.exportPivotGrid
@@ -229,4 +242,4 @@ export function exportDataGrid(options: ExcelExportDataGridProps): Promise<CellR
  * @prevFileNamespace DevExpress
  * @public
  */
-export function exportPivotGrid(options: ExcelExportPivotGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
+export function exportPivotGrid(options: ExcelExportPivotGridProps): TPromise<CellRange>;

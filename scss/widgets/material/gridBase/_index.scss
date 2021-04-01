@@ -1105,13 +1105,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     border-top: $datagrid-border;
   }
 
-  .dx-#{$widget-name}-pager {
-    &.dx-widget {
-      font-size: $material-grid-base-footer-font-size;
-      color: $datagrid-columnchooser-item-color;
-    }
-  }
-
   .dx-#{$widget-name}-summary-item {
     color: $datagrid-summary-color;
   }

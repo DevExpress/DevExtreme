@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
 import { current } from '../../../ui/themes';

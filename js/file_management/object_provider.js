@@ -11,7 +11,8 @@ import Errors from '../ui/widget/ui.errors';
 import JSZip from 'jszip';
 
 import FileSystemProviderBase from './provider_base';
-import ErrorCode from './errors';
+import FileSystemError from './error';
+import ErrorCode from './error_codes';
 import { pathCombine } from './utils';
 
 const window = getWindow();
@@ -192,10 +193,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
 
     _validateDirectoryExists(directoryInfo) {
         if(!this._isFileItemExists(directoryInfo) || this._isDirGetter(directoryInfo.fileItem)) {
-            throw {
-                errorId: ErrorCode.DirectoryNotFound,
-                fileItem: directoryInfo
-            };
+            throw new FileSystemError(ErrorCode.DirectoryNotFound, directoryInfo);
         }
     }
 
@@ -209,10 +207,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
             currentPath = pathCombine(currentPath, info.name);
             const pathKey = this._getDataObjectKey(info.key, currentPath);
             if(pathKey === itemKey) {
-                throw {
-                    errorId: ErrorCode.Other,
-                    fileItem: item
-                };
+                throw new FileSystemError(ErrorCode.Other, item);
             }
         });
     }
@@ -304,10 +299,8 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
 
         const result = this._findFileItemObj(item.getFullPathInfo());
         if(!result) {
-            throw {
-                errorId: item.isDirectory ? ErrorCode.DirectoryNotFound : ErrorCode.FileNotFound,
-                fileItem: item
-            };
+            const errorCode = item.isDirectory ? ErrorCode.DirectoryNotFound : ErrorCode.FileNotFound;
+            throw new FileSystemError(errorCode, item);
         }
         return result;
     }

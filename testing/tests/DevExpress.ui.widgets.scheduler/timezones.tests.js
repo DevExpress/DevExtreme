@@ -996,6 +996,7 @@ module('Scheduler grid', moduleConfig, () => {
         }].forEach(({ timeZone, startDate, endDate }) => {
             test(`Drag n drop should work right in week view if timezone='${timeZone}'`, function(assert) {
                 const scheduler = createWrapper({
+                    _draggingMode: 'default',
                     currentDate: new Date(2015, 11, 23),
                     views: ['week'],
                     currentView: 'week',
@@ -1051,6 +1052,7 @@ module('Scheduler grid', moduleConfig, () => {
             }].forEach(({ startDayHour, endDayHour }) => {
                 test(`Drag n drop should work right in month view if timezone='${timeZone}' and startDayHour=${startDayHour}, endDayHour=${endDayHour}`, function(assert) {
                     const scheduler = createWrapper({
+                        _draggingMode: 'default',
                         currentDate: new Date(2015, 11, 23),
                         views: ['month'],
                         currentView: 'month',
@@ -1104,6 +1106,7 @@ module('Scheduler grid', moduleConfig, () => {
             const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
             try {
                 const scheduler = createWrapper({
+                    _draggingMode: 'default',
                     currentDate: new Date(2015, 11, 25),
                     startDayHour: 16,
                     views: ['week'],
@@ -1165,6 +1168,7 @@ module('Scheduler grid', moduleConfig, () => {
         });
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
             editing: true,
@@ -1196,6 +1200,7 @@ module('Scheduler grid', moduleConfig, () => {
             const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
             try {
                 const scheduler = createWrapper({
+                    _draggingMode: 'default',
                     currentDate: new Date(2016, 5, 25),
                     startDayHour: 16,
                     views: ['day'],
@@ -1324,6 +1329,7 @@ module('Scheduler grid', moduleConfig, () => {
     [true, false].forEach((renovateRender) => {
         test(`Appointment with custom tz that isn't equal to scheduler tz should be dragged correctly when renovateRender is ${renovateRender} (T392414)`, function(assert) {
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 currentDate: new Date(2015, 4, 25),
                 startDayHour: 6,
                 views: ['day'],

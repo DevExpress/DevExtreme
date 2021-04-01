@@ -1,9 +1,9 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import Widget, {
@@ -43,17 +43,17 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: dxElement, actionElement?: dxElement }) => any);
+    onClick?: ((e: { event?: TEvent, component?: dxSpeedDialAction, element?: TElement, actionElement?: TElement }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 actionElement:dxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: dxElement, model?: any, actionElement?: dxElement }) => any);
+    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: TElement, model?: any, actionElement?: TElement }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -70,19 +70,9 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @public
  */
 export default class dxSpeedDialAction extends Widget {
-    constructor(element: Element, options?: dxSpeedDialActionOptions)
-    constructor(element: JQuery, options?: dxSpeedDialActionOptions)
+    constructor(element: TElement, options?: dxSpeedDialActionOptions)
 }
 
-declare global {
-interface JQuery {
-    dxSpeedDialAction(): JQuery;
-    dxSpeedDialAction(options: "instance"): dxSpeedDialAction;
-    dxSpeedDialAction(options: string): any;
-    dxSpeedDialAction(options: string, ...params: any[]): any;
-    dxSpeedDialAction(options: dxSpeedDialActionOptions): JQuery;
-}
-}
 export type Options = dxSpeedDialActionOptions;
 
 /** @deprecated use Options instead */

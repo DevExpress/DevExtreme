@@ -6,7 +6,7 @@ import renderer from 'core/renderer';
 import browser from 'core/utils/browser';
 import { compare as compareVersion } from 'core/utils/version';
 import CustomFileSystemProvider from 'file_management/custom_provider';
-import ErrorCode from 'file_management/errors';
+import ErrorCode from 'file_management/error_codes';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader, getDropFileEvent } from '../../../helpers/fileManagerHelpers.js';
 import NoDuplicatesFileProvider from '../../../helpers/fileManager/file_provider.no_duplicates.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
@@ -1645,5 +1645,51 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 2'), null, '\'Folder 2\' toggle is absent');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3'), false, '\'Folder 3\' toggle is closed');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Untitled directory'), null, '\'Untitled directory\' toggle is absent');
+    });
+
+    test('the notification popup cannot be shown if showPopup option is false', function(assert) {
+        this.fileManager.option('notifications.showPopup', false);
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.notOk(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is hidden');
+    });
+
+    test('the notification popup hides if to set showPopup option false when popup is shown', function(assert) {
+        this.fileManager.option('notifications.showPopup', true);
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.ok(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is visible');
+
+        this.fileManager.option('notifications.showPopup', false);
+        this.clock.tick(400);
+
+        assert.notOk(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is hidden');
     });
 });
