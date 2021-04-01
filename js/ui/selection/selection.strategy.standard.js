@@ -376,6 +376,15 @@ export default SelectionStrategy.inherit({
         }
     },
 
+    _isItemSelectionInProgress: function(key, checkPending) {
+        const shouldCheckPending = checkPending && this._lastRequestData && this._requestInProgress();
+        if(shouldCheckPending) {
+            return this._lastRequestData.addedItems && this._lastRequestData.addedItems.indexOf(key) !== -1;
+        } else {
+            return false;
+        }
+    },
+
     _getKeyHash: function(key) {
         return this.options.equalByReference ? key : getKeyHash(key);
     },
@@ -397,17 +406,13 @@ export default SelectionStrategy.inherit({
         this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
     },
 
-    isItemDataSelected: function(itemData, checkPending) {
+    isItemDataSelected: function(itemData, options) {
         const key = this.options.keyOf(itemData);
-        return this.isItemKeySelected(key, checkPending);
+        return this.isItemKeySelected(key, options);
     },
 
     isItemKeySelected: function(key, options) {
-        let result;
-        const checkPending = options?.checkPending;
-        if(checkPending && this._lastRequestData && this._requestInProgress()) {
-            result = this._lastRequestData.addedItems && this._lastRequestData.addedItems.indexOf(key) !== -1;
-        }
+        let result = this._isItemSelectionInProgress(key, options?.checkPending);
 
         if(!result) {
             const keyHash = this._getKeyHash(key);
