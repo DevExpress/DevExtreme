@@ -4424,6 +4424,31 @@ declare module DevExpress.ui {
         text?: string;
     }
     /**
+     * [descr:GridBaseEditingChange]
+     */
+    export interface GridBaseEditingChange {
+        /**
+         * [descr:GridBaseEditingChange.data]
+         */
+        data: any;
+        /**
+         * [descr:GridBaseEditingChange.index]
+         */
+        index?: number;
+        /**
+         * [descr:GridBaseEditingChange.key]
+         */
+        key: any;
+        /**
+         * [descr:GridBaseEditingChange.pageIndex]
+         */
+        pageIndex?: number;
+        /**
+         * [descr:GridBaseEditingChange.type]
+         */
+        type: 'insert' | 'update' | 'remove';
+    }
+    /**
      * [descr:HierarchicalCollectionWidgetOptions]
      */
     export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {

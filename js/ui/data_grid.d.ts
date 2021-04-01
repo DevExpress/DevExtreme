@@ -1534,11 +1534,30 @@ export interface GridBaseEditing {
     useIcons?: boolean;
 }
 
-export interface GridBaseEditingChange {
+/**
+  * @docid
+  * @prevFileNamespace DevExpress.ui
+  */
+ export interface GridBaseEditingChange {
+  /**
+   * @docid
+   */
   key: any;
+  /**
+   * @docid
+   */
   type: 'insert' | 'update' | 'remove';
+  /**
+   * @docid
+   */
   data: object;
+  /**
+   * @docid
+   */
   index?: number;
+  /**
+   * @docid
+   */
   pageIndex?: number;
 }
 
