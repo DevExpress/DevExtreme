@@ -8326,10 +8326,6 @@ declare module DevExpress.ui {
          * [descr:dxHtmlEditor.undo()]
          */
         undo(): void;
-        /**
-         * [descr:dxHtmlEditor.update()]
-         */
-        update(): void;
     }
     /**
      * [descr:dxHtmlEditorMediaResizing]
