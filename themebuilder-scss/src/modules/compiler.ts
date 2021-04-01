@@ -2,7 +2,6 @@ import * as sass from 'sass';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 import DartClient from './dart-client';
-import { ThemesMetadata, ConfigMetaItem, CompilerResult } from '../types/types';
 
 export enum ImportType {
   Index,

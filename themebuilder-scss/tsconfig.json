@@ -18,10 +18,7 @@
                 "node_modules/*",
                 "src/types/*"
             ]
-        },
-        "typeRoots": [
-          "./src/types"
-        ]
+        }
     },
     "include": [
         "src/modules/*",

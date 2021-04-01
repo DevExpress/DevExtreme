@@ -6,7 +6,6 @@ import PostCompiler from './post-compiler';
 import BootstrapExtractor from './bootstrap-extractor';
 // eslint-disable-next-line import/extensions
 import { version, dependencies } from '../data/metadata/dx-theme-builder-metadata';
-import { ConfigSettings, PackageResult } from '../types/types';
 
 export default class CompileManager {
   compiler = new Compiler();

@@ -1,6 +1,5 @@
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
-import { WidgetItem, WidgetHandlerResult, FlatStylesDependencies } from '../types/types';
 
 const widgetListComment = '// public widgets';
 

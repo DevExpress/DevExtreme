@@ -3,7 +3,6 @@ import less from 'less';
 import { promises as fs } from 'fs';
 import bootstrap3meta from '../data/bootstrap-metadata/bootstrap-metadata';
 import bootstrap4meta from '../data/bootstrap-metadata/bootstrap4-metadata';
-import { ConfigMetaItem } from '../types/types';
 
 export default class BootstrapExtractor {
   compiler: (input: string) => Promise<string>;
