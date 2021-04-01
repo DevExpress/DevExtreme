@@ -232,6 +232,10 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
     }
 
+    getToolbarRefreshButton(isFileSelectionToolbar) {
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}[title='Refresh']`).eq(isFileSelectionToolbar ? 1 : 0);
+    }
+
     getToolbarSeparators() {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM_CLASS}:visible`);
     }
