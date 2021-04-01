@@ -102,15 +102,15 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     //     this._pullDownAction();
     // },
 
-    _reachBottomHandler: function() {
-        this._loadingIndicator(false);
-        this._reachBottomLoading();
-    },
+    // _reachBottomHandler: function() {
+    //     this._loadingIndicator(false);
+    //     this._reachBottomLoading();
+    // },
 
-    _reachBottomLoading: function() {
-        this.startLoading();
-        this._reachBottomAction();
-    },
+    // _reachBottomLoading: function() {
+    //     this.startLoading();
+    //     this._reachBottomAction();
+    // },
 
     // _releaseHandler: function() {
     //     this.finishLoading();
@@ -168,14 +168,14 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         return $(this.content()).height() > this._$container.height();
     },
 
-    refresh: function() {
-        if(!this.hasActionSubscription('onPullDown')) {
-            return;
-        }
+    // refresh: function() {
+    //     if(!this.hasActionSubscription('onPullDown')) {
+    //         return;
+    //     }
 
-        this._strategy.pendingRelease();
-        this._pullDownLoading();
-    },
+    //     this._strategy.pendingRelease();
+    //     this._pullDownLoading();
+    // },
 
     // startLoading: function() {
     //     if(this._loadingIndicator() && this.$element().is(':visible')) {

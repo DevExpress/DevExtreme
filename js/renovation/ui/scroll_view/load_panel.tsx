@@ -3,6 +3,7 @@ import {
   Component,
   ComponentBindings,
   OneWay,
+  Ref,
   RefObject,
 } from '@devextreme-generator/declarations';
 
@@ -32,7 +33,7 @@ export const viewFunction = (viewModel: ScrollViewLoadPanel): JSX.Element => {
 
 @ComponentBindings()
 export class ScrollViewLoadPanelProps {
-  @OneWay() targetElement?: RefObject<HTMLDivElement>;
+  @Ref() targetElement?: RefObject<HTMLDivElement>;
 
   @OneWay() refreshingText?: string;
 }

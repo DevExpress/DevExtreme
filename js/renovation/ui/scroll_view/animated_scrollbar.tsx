@@ -213,19 +213,19 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   scrollStep(delta: number): void {
-    return this.scrollbar.scrollStep(delta);
+    this.scrollbar.scrollStep(delta);
   }
 
   moveScrollbar(location?: number): void {
-    return this.scrollbar.moveScrollbar(location);
+    this.scrollbar.moveScrollbar(location);
   }
 
   stopComplete(): void {
-    return this.scrollbar.stopComplete();
+    this.scrollbar.stopComplete();
   }
 
   scrollComplete(): void {
-    return this.scrollbar.scrollComplete();
+    this.scrollbar.scrollComplete();
   }
 
   @Method()
@@ -298,7 +298,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.releaseHandler();
   }
 
-  get scrollbar(): Scrollbar {
+  get scrollbar(): any { // technical limitation in the generator
     return this.scrollbarRef.current!;
   }
 }
