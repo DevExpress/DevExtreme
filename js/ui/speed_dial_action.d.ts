@@ -4,7 +4,7 @@ import {
 
 import {
     TEvent,
-    ComponentNativeEvent,
+    ComponentEvent,
     ComponentDisposingEvent,
     ComponentInitializedEvent,
     ComponentOptionChangedEvent
@@ -26,7 +26,7 @@ export type ClickEvent = {
 /**
  * @public
  */
-export type ContentReadyEvent = ComponentNativeEvent<dxSpeedDialAction> & {
+export type ContentReadyEvent = ComponentEvent<dxSpeedDialAction> & {
     actionElement?: TElement
 };
 /**

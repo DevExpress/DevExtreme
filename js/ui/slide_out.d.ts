@@ -60,11 +60,11 @@ export type ItemRenderedEvent = ComponentNativeEvent<dxSlideOut> & ItemInfo;
 /**
  * @public
  */
-export type MenuGroupRenderedEvent = ComponentEvent<dxSlideOut> & ItemInfo;
+export type MenuGroupRenderedEvent = ComponentEvent<dxSlideOut>;
 /**
  * @public
  */
-export type MenuItemRenderedEvent = ComponentEvent<dxSlideOut> & ItemInfo;
+export type MenuItemRenderedEvent = ComponentEvent<dxSlideOut>;
 /**
  * @public
  */
