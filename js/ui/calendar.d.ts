@@ -16,7 +16,7 @@ import Editor, {
     EditorOptions
 } from './editor/editor';
 
-export interface ComponentDisabledDateData<T> {
+export interface ComponentDisabledDate<T> {
     component: T;
     readonly date: Date;
     readonly view: string;
@@ -42,7 +42,7 @@ export type CellTemplateData = {
 /**
  * @public
  */
-export type DisabledDateData = ComponentDisabledDateData<dxCalendar>;
+export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
@@ -84,7 +84,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    disabledDates?: Array<Date> | ((data: DisabledDateData) => boolean);
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
     /**
      * @docid
      * @type Enums.FirstDayOfWeek

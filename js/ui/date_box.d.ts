@@ -11,7 +11,7 @@ import {
 } from '../events';
 
 import {
-    ComponentDisabledDateData,
+    ComponentDisabledDate,
     dxCalendarOptions
 } from './calendar';
 
@@ -104,7 +104,7 @@ export type ValueChangedEvent = ComponentNativeEvent<dxDateBox> & ValueChangedIn
 /**
  * @public
  */
-export type DisabledDateData = ComponentDisabledDateData<dxDateBox>;
+export type DisabledDate = ComponentDisabledDate<dxDateBox>;
 /**
  * @public
  */
@@ -164,7 +164,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    disabledDates?: Array<Date> | ((data: DisabledDateData) => boolean);
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
     /**
      * @docid
      * @default null
