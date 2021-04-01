@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests } from './utils';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Scheduler: Generic theme layout`
+fixture`Scheduler: Adaptive Generic theme layout`
   .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (
