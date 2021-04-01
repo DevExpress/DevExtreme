@@ -212,7 +212,7 @@
   "jest": {
     "modulePathIgnorePatterns": [
       "node_modules"
-    ],
-    "pre-commit": "lint-staged"
-  }
+    ]
+  },
+  "pre-commit": "lint-staged"
 }
