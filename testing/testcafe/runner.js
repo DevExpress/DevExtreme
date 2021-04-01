@@ -23,7 +23,7 @@ createTestCafe('localhost', 1437, 1438)
         const runner = testCafe.createRunner()
             .browsers(args.browsers.split(' '))
 
-            .src(['./testing/testcafe/tests/scheduler/layout/adaptive-material-rtl.ts']);
+            .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
         if(args.concurrency > 0) {
             runner.concurrency(args.concurrency);

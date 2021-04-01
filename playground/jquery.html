@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.material.blue.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -28,66 +27,15 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
-
 <body>
-    <div id="scheduler"></div>
+    <div id="button"></div>
     <script>
-        $(function () {
-            $("#scheduler").dxScheduler({
-                views: [{
-                    type: 'day',
-                    groupOrientation: 'vertical',
-                }, {
-                    type: 'week',
-                    groupOrientation: 'vertical',
-                }, {
-                    type: 'workWeek',
-                    groupOrientation: 'vertical',
-                }, {
-                    type: 'month',
-                    groupOrientation: 'vertical',
-                }, {
-                    type: 'timelineDay',
-                    groupOrientation: 'vertical',
-                }, {
-                    type: 'timelineWeek',
-                    groupOrientation: 'vertical',
-                }, {
-                    type: 'timelineWorkWeek',
-                    groupOrientation: 'vertical',
-                }, {
-                    type: 'timelineMonth',
-                    groupOrientation: 'vertical',
-                }, {
-                    type: 'agenda',
-                    groupOrientation: 'vertical',
-                }],
-                currentView: 'day',
-                crossScrollingEnabled: false,
-                rtlEnabled: true,
-                groups: ["priorityId"],
-                resources: [
-                    {
-                        fieldExpr: "priorityId",
-                        allowMultiple: false,
-                        dataSource: [
-                            {
-                                text: "Low Priority",
-                                id: 1,
-                                color: "#1e90ff"
-                            }, {
-                                text: "High Priority",
-                                id: 2,
-                                color: "#ff9747"
-                            }
-                        ],
-                        label: "Priority"
-                    }
-                ],
-                height: 1000,
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
 </body>
-
 </html>
