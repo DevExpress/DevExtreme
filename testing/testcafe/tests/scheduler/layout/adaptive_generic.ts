@@ -41,7 +41,7 @@ const resources = [{
     const scheduler = new Scheduler('#container');
 
     views.forEach(async (view) => {
-      await scheduler.option('currentView', view);
+      scheduler.option('currentView', view);
 
       await t.expect(
         await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}).png`),
@@ -71,7 +71,7 @@ const resources = [{
     const scheduler = new Scheduler('#container');
 
     views.forEach(async (view) => {
-      await scheduler.option('currentView', view);
+      scheduler.option('currentView', view);
 
       await t.expect(
         await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping).png`),
@@ -103,7 +103,7 @@ const resources = [{
     const scheduler = new Scheduler('#container');
 
     views.forEach(async (view) => {
-      await scheduler.option('currentView', view);
+      scheduler.option('currentView', view);
 
       await t.expect(
         await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping).png`),
