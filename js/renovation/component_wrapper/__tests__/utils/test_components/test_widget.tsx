@@ -10,6 +10,7 @@ import {
   Ref,
   RefObject,
 } from '@devextreme-generator/declarations';
+import { combineClasses } from '../../../../utils/combine_classes';
 import {
   keyboard,
 } from '../../../../../events/short';
@@ -106,6 +107,10 @@ export default class TestWidget extends JSXComponent(TestWidgetProps) {
   }
 
   get className(): string {
-    return `dx-test-widget ${this.restAttributes.className}`;
+    return combineClasses({
+      'dx-test-widget': true,
+      [String(this.restAttributes.classes)]: !!this.restAttributes.classes,
+      [String(this.restAttributes.className)]: !!this.restAttributes.className,
+    });
   }
 }

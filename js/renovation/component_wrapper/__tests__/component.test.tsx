@@ -110,6 +110,72 @@ describe('Misc cases', () => {
 });
 
 describe('Widget\'s container manipulations', () => {
+  describe('classes', () => {
+    it('should add widget class', () => {
+      $('#component').dxTestWidget({});
+
+      expect($('#component')[0].className).toBe('dx-test-widget');
+    });
+
+    it('should save container initial classes', () => {
+      $('#component').addClass('test-class');
+      $('#component').addClass('dx-test-class');
+      $('#component').dxTestWidget({});
+
+      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
+
+      $('#component').dxTestWidget('repaint');
+      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
+    });
+
+    it('should save classes, added in runtime', () => {
+      $('#component').dxTestWidget({});
+      $('#component').addClass('test-class');
+      $('#component').addClass('dx-test-class');
+
+      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
+
+      $('#component').dxTestWidget('repaint');
+      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
+    });
+
+    it('should allow to remove initial classes', () => {
+      $('#component').addClass('test-class');
+      $('#component').addClass('dx-test-class');
+      $('#component').dxTestWidget({});
+
+      $('#component').removeClass('dx-test-class');
+
+      $('#component').dxTestWidget('repaint');
+      expect($('#component')[0].className).toBe('dx-test-widget test-class');
+    });
+
+    it('should allow to remove added classes', () => {
+      $('#component').dxTestWidget({});
+      $('#component').addClass('test-class');
+      $('#component').addClass('dx-test-class');
+
+      $('#component').removeClass('dx-test-class');
+
+      $('#component').dxTestWidget('repaint');
+      expect($('#component')[0].className).toBe('dx-test-widget test-class');
+    });
+
+    it('should allow to switch widget classes', () => {
+      $('#component').dxTestWidget({});
+      $('#component').addClass('test-class');
+      $('#component').addClass('dx-test-class');
+
+      $('#component').removeClass('dx-test-widget');
+      $('#component').dxTestWidget('repaint');
+      expect($('#component')[0].className).toBe('test-class dx-test-class');
+
+      $('#component').addClass('dx-test-widget');
+      $('#component').dxTestWidget('repaint');
+      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
+    });
+  });
+
   it('repaint redraws component 2 times', () => {
     $('#component').css('width', '123px');
     $('#component').css('height', '456px');
@@ -130,7 +196,7 @@ describe('Widget\'s container manipulations', () => {
     });
 
     expect(subscribeEffect.mock.calls[2][0]).toMatchObject({
-      className: 'custom-css-class',
+      className: 'dx-test-widget custom-css-class',
       style: { width: '123px', height: '456px' },
     });
   });
@@ -206,23 +272,6 @@ describe('Widget\'s container manipulations', () => {
     });
   });
 
-  it('keep passing custom class and attributes (with id) props on repaint', () => {
-    $('#component').attr('id', 'my-id');
-    $('#my-id').addClass('custom-css-class');
-    $('#my-id').addClass('dx-custom-css-class');
-    $('#my-id').attr('data-custom-attr', 'attr-value');
-    $('#my-id').dxTestWidget({});
-
-    $('#my-id').dxTestWidget('repaint');
-
-    expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
-      id: 'my-id',
-      className: 'custom-css-class dx-custom-css-class',
-      class: '',
-      'data-custom-attr': 'attr-value',
-    });
-  });
-
   it('pass updated custom class on repaint', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
@@ -234,41 +283,9 @@ describe('Widget\'s container manipulations', () => {
     $('#my-id').dxTestWidget('repaint');
 
     expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
-      className: 'custom-css-class custom-css-class2 dx-custom-css-class',
+      className: 'dx-test-widget custom-css-class dx-custom-css-class custom-css-class2',
       class: '',
     });
-  });
-
-  it('should save only initial "dx-" custom classes', () => {
-    $('#component').attr('id', 'my-id');
-    $('#my-id').addClass('custom-css-class');
-    $('#my-id').dxTestWidget({});
-
-    $('#my-id').addClass('dx-custom-css-class');
-
-    $('#my-id').dxTestWidget('repaint');
-
-    expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
-      className: 'custom-css-class',
-      class: '',
-    });
-  });
-
-  it('should pass empty string if no classes present on element', () => {
-    $('#component').dxTestWidget({});
-
-    $('#component').dxTestWidget('repaint');
-
-    expect($('#component').dxTestWidget('getLastPassedProps')).toMatchObject({
-      class: '',
-      className: '',
-    });
-
-    expect($('#component').dxTestWidget('getLastReceivedProps')).toMatchObject({
-      class: '',
-      className: '',
-    });
-    expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
   it('widget does not show className option', () => {
@@ -285,16 +302,6 @@ describe('Widget\'s container manipulations', () => {
     $('#my-id').dxTestWidget({ elementAttr: { id: 'attr-id' } });
 
     expect($('#attr-id').dxTestWidget('getLastReceivedProps').id).toBe('attr-id');
-  });
-
-  it('merge unique css classes from elementAttr option with container class', () => {
-    $('#component').addClass('custom-css-class attr-class');
-
-    $('#component').dxTestWidget({ elementAttr: { class: 'attr-css-class attr-class' } });
-
-    const { className } = $('#component').dxTestWidget('getLastReceivedProps');
-
-    expect(className).toBe('custom-css-class attr-class attr-css-class');
   });
 
   it('keep elementAttr option untouched', () => {
