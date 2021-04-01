@@ -383,7 +383,7 @@ class Scheduler extends Widget {
                 mode: 'standard'
             },
 
-            renovateRender: false,
+            renovateRender: true,
 
             _draggingMode: 'outlook',
 
@@ -1531,8 +1531,10 @@ class Scheduler extends Widget {
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
             scrolling,
-            renovateRender: this.option('renovateRender') || isVirtualScrolling,
-            draggingMode: this.option('_draggingMode')
+            draggingMode: this.option('_draggingMode'),
+
+            // TODO: SSR does not work correctly with renovated render
+            renovateRender: this._isRenovatedRender(isVirtualScrolling),
         }, currentViewOptions);
 
         result.observer = this;
@@ -1552,6 +1554,10 @@ class Scheduler extends Widget {
         result.dateCellTemplate = result.dateCellTemplate ? this._getTemplate(result.dateCellTemplate) : null;
 
         return result;
+    }
+
+    _isRenovatedRender(isVirtualScrolling) {
+        return (this.option('renovateRender') && hasWindow()) || isVirtualScrolling;
     }
 
     _waitAsyncTemplate(callback) {
