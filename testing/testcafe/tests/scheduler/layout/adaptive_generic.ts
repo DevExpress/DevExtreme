@@ -40,13 +40,14 @@ const resources = [{
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
 
-    views.forEach(async (view) => {
-      scheduler.option('currentView', view);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const view of views) {
+      await scheduler.option('currentView', view);
 
       await t.expect(
         await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}).png`),
       ).ok();
-    });
+    }
   }).before(async (t) => {
     await t.resizeWindow(400, 600);
 
@@ -70,13 +71,14 @@ const resources = [{
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
 
-    views.forEach(async (view) => {
-      scheduler.option('currentView', view);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const view of views) {
+      await scheduler.option('currentView', view);
 
       await t.expect(
         await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping).png`),
       ).ok();
-    });
+    }
   }).before(async (t) => {
     await t.resizeWindow(400, 600);
 
@@ -102,13 +104,14 @@ const resources = [{
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
 
-    views.forEach(async (view) => {
-      scheduler.option('currentView', view);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const view of views) {
+      await scheduler.option('currentView', view);
 
       await t.expect(
         await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping).png`),
       ).ok();
-    });
+    }
   }).before(async (t) => {
     await t.resizeWindow(400, 600);
 
