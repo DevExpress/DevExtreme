@@ -47,46 +47,36 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxForm>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxForm>;
-/**
- * @public
- */
+
+/** @public */
 export type EditorEnterKeyEvent = ComponentEvent<dxForm> & {
     readonly dataField?: string;
 }
-/**
- * @public
- */
+
+/** @public */
 export type FieldDataChangedEvent = ComponentEvent<dxForm> & {
     readonly dataField?: string;
     readonly value?: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxForm>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxForm>;
 
-/**
- * @public
- */
+/** @public */
 export type GroupItemTemplateData = {
     component?: dxForm;
     formData?: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export type SimpleItemTemplateData = {
     component?: dxForm;
     dataField?: string;

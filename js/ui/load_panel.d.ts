@@ -23,37 +23,28 @@ import dxOverlay, {
     dxOverlayOptions
 } from './overlay';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxLoadPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxLoadPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type HidingEvent = ComponentEvent<dxLoadPanel> & Cancelable;
-/**
- * @public
- */
+
+/** @public */
 export type HiddenEvent = ComponentEvent<dxLoadPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxLoadPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxLoadPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type ShowingEvent = ComponentEvent<dxLoadPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type ShownEvent = ComponentEvent<dxLoadPanel>;
 
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {

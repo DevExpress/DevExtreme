@@ -20,37 +20,28 @@ import CollectionWidget, {
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxBox>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxBox> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxBox> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemHoldEvent = ComponentNativeEvent<dxBox> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemRenderedEvent = ComponentNativeEvent<dxBox> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxBox>;
 
 export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {

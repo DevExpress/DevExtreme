@@ -28,59 +28,46 @@ import dxMultiView, {
     dxMultiViewOptions
 } from './multi_view';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxTabPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxTabPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxTabPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemHoldEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemRenderedEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxTabPanel>;
-/**
- * @public
- */
+
+/** @public */
 export type SelectionChangedEvent = ComponentEvent<dxTabPanel> & SelectionChangedInfo;
-/**
- * @public
- */
+
+/** @public */
 export type TitleClickEvent = ComponentNativeEvent<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
 }
-/**
- * @public
- */
+
+/** @public */
 export type TitleHoldEvent = ComponentNativeEvent<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
 }
-/**
- * @public
- */
+
+/** @public */
 export type TitleRenderedEvent = ComponentEvent<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;

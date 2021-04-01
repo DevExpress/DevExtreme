@@ -18,69 +18,52 @@ import dxTextEditor, {
     dxTextEditorOptions
 } from './text_box/ui.text_editor.base';
 
-/**
- * @public
- */
+/** @public */
 export type ChangeEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type CopyEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type CutEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type FocusInEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type FocusOutEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InputEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyDownEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyPressEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyUpEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type PasteEvent = ComponentNativeEvent<dxTextBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxTextBox> & ValueChangedInfo;
 
 export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {

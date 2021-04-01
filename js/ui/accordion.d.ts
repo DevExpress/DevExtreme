@@ -30,37 +30,28 @@ import CollectionWidget, {
     SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxAccordion>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxAccordion>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxAccordion>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemHoldEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemRenderedEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemTitleClickEvent = {
     readonly component: dxAccordion;
     readonly element: TElement;
@@ -70,13 +61,11 @@ export type ItemTitleClickEvent = {
     readonly itemIndex: number;
     readonly event: TEvent;
 }
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxAccordion>;
-/**
- * @public
- */
+
+/** @public */
 export type SelectionChangedEvent = ComponentEvent<dxAccordion> & SelectionChangedInfo;
 
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {

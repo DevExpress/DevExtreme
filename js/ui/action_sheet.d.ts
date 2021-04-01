@@ -26,41 +26,31 @@ import CollectionWidget, {
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
 
-/**
- * @public
- */
+/** @public */
 export type CancelClickEvent = ComponentEvent<dxActionSheet> & Cancelable;
-/**
- * @public
- */
+
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxActionSheet>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxActionSheet>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxActionSheet>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemHoldEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemRenderedEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxActionSheet>;
 
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {

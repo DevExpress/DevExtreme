@@ -18,32 +18,24 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ClickEvent = ComponentNativeEvent<dxButton> & {
     validationGroup?: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxButton>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxButton>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxButton>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxButton>;
 
-/**
- * @public
- */
+/** @public */
 export type TemplateData = {
     readonly text?: string;
     readonly icon?: string;

@@ -13,21 +13,16 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxLoadIndicator>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxLoadIndicator>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxLoadIndicator>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxLoadIndicator>;
 
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {

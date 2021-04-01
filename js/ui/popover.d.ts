@@ -29,41 +29,31 @@ import dxPopup, {
     TitleRenderedInfo
 } from './popup';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxPopover>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxPopover>;
-/**
- * @public
- */
+
+/** @public */
 export type HidingEvent = ComponentEvent<dxPopover> & Cancelable;
-/**
- * @public
- */
+
+/** @public */
 export type HiddenEvent = ComponentEvent<dxPopover>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxPopover>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxPopover>;
-/**
- * @public
- */
+
+/** @public */
 export type ShowingEvent = ComponentEvent<dxPopover>;
-/**
- * @public
- */
+
+/** @public */
 export type ShownEvent = ComponentEvent<dxPopover>;
-/**
- * @public
- */
+
+/** @public */
 export type TitleRenderedEvent = ComponentEvent<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {

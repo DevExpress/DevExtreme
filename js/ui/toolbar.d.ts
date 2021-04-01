@@ -24,37 +24,28 @@ import CollectionWidget, {
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxToolbar>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxToolbar>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxToolbar>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemHoldEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemRenderedEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxToolbar>;
 
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {

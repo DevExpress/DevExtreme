@@ -30,92 +30,78 @@ import {
     SearchBoxMixinOptions
 } from './widget/ui.search_box_mixin';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxTreeView>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxTreeView>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxTreeView>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ItemCollapsedEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ItemExpandedEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ItemHoldEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ItemRenderedEvent = ComponentNativeEvent<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ItemSelectionChangedEvent = ComponentEvent<dxTreeView> & {
     readonly node?: dxTreeViewNode;
     readonly itemElement?: TElement;
 }
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxTreeView>;
-/**
- * @public
- */
+
+/** @public */
 export type SelectAllValueChangedEvent = ComponentEvent<dxTreeView> & {
     readonly value?: boolean;
 }
-/**
- * @public
- */
+
+/** @public */
 export type SelectionChangedEvent = ComponentEvent<dxTreeView>;
 
 export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {

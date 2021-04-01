@@ -25,59 +25,46 @@ import dxMenuBase, {
     dxMenuBaseOptions
 } from './context_menu/ui.menu_base';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxMenu>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxMenu>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxMenu>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemRenderedEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxMenu>;
-/**
- * @public
- */
+
+/** @public */
 export type SelectionChangedEvent = ComponentEvent<dxMenu> & SelectionChangedInfo;
-/**
- * @public
- */
+
+/** @public */
 export type SubmenuHiddenEvent = ComponentEvent<dxMenu> & {
     readonly rootItem?: TElement;
 }
-/**
- * @public
- */
+
+/** @public */
 export type SubmenuHidingEvent = ComponentEvent<dxMenu> & Cancelable & {
     readonly rootItem?: TElement;
 }
-/**
- * @public
- */
+
+/** @public */
 export type SubmenuShowingEvent = ComponentEvent<dxMenu> & {
     readonly rootItem?: TElement;
 }
-/**
- * @public
- */
+
+/** @public */
 export type SubmenuShownEvent = ComponentEvent<dxMenu> & {
     readonly rootItem?: TElement;
 }

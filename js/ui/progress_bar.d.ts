@@ -18,29 +18,22 @@ import dxTrackBar, {
     dxTrackBarOptions
 } from './track_bar';
 
-/**
- * @public
- */
+/** @public */
 export type CompleteEvent = ComponentNativeEvent<dxProgressBar>;
-/**
- * @public
- */
+
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxProgressBar>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxProgressBar>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxProgressBar>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxProgressBar>;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxProgressBar> & ValueChangedInfo;
 
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {

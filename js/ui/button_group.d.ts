@@ -25,29 +25,22 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxButtonGroup>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxButtonGroup>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxButtonGroup>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxButtonGroup> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxButtonGroup>;
-/**
- * @public
- */
+
+/** @public */
 export type SelectionChangedEvent = ComponentEvent<dxButtonGroup> & SelectionChangedInfo;
 
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {

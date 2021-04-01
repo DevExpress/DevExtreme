@@ -26,9 +26,7 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & Cancelable & {
     readonly area?: string;
     readonly cellElement?: TElement;
@@ -39,9 +37,8 @@ export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & Cancelable & {
     readonly rowFields?: Array<PivotGridDataSourceField>;
     readonly dataFields?: Array<PivotGridDataSourceField>;
 }
-/**
- * @public
- */
+
+/** @public */
 export type CellPreparedEvent = ComponentEvent<dxPivotGrid> & {
     readonly area?: string;
     readonly cellElement?: TElement;
@@ -49,13 +46,11 @@ export type CellPreparedEvent = ComponentEvent<dxPivotGrid> & {
     readonly rowIndex?: number;
     readonly columnIndex?: number
 }
-/**
- * @public
- */
+
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxPivotGrid>;
-/**
- * @public
- */
+
+/** @public */
 export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGrid> & {
     readonly area?: string;
     readonly cell?: dxPivotGridPivotGridCell;
@@ -68,23 +63,19 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGrid> & {
     readonly field?: PivotGridDataSourceField;
     items?: Array<any>;
 }
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxPivotGrid>;
-/**
- * @public
- */
+
+/** @public */
 export type ExportedEvent = ComponentEvent<dxPivotGrid>;
-/**
- * @public
- */
+
+/** @public */
 export type ExportingEvent = ComponentEvent<dxPivotGrid> & Cancelable & {
     fileName?: string;
 }
-/**
- * @public
- */
+
+/** @public */
 export type FileSavingEvent = Cancelable & {
     readonly component: dxPivotGrid;
     readonly element: TElement;
@@ -92,13 +83,11 @@ export type FileSavingEvent = Cancelable & {
     readonly format?: string;
     fileName?: string;
 }
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxPivotGrid>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxPivotGrid>;
 
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {

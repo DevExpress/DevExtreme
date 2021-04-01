@@ -21,17 +21,13 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxDrawer>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxDrawer>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxDrawer>;
 
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {

@@ -21,21 +21,16 @@ import {
     ValidationRule
 } from './validation_rules';
 
-/**
- * @public
- */
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxValidator>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxValidator>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxValidator>;
-/**
- * @public
- */
+
+/** @public */
 export type ValidatedEvent = {
     name?: string;
     isValid?: boolean;

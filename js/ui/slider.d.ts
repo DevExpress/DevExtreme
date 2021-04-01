@@ -22,25 +22,19 @@ import {
     format
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxSlider>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxSlider>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxSlider>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxSlider>;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxSlider> & ValueChangedInfo;
 
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {

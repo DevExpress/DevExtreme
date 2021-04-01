@@ -36,53 +36,40 @@ export interface TitleRenderedInfo {
     titleElement: TElement
 }
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxPopup>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxPopup>;
-/**
- * @public
- */
+
+/** @public */
 export type HidingEvent = ComponentEvent<dxPopup> & Cancelable;
-/**
- * @public
- */
+
+/** @public */
 export type HiddenEvent = ComponentEvent<dxPopup>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxPopup>;
-/**
- * @public
- */
+
+/** @public */
 export type ShownEvent = ComponentEvent<dxPopup>;
-/**
- * @public
- */
+
+/** @public */
 export type ResizeEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ResizeStartEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ResizeEndEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxPopup>;
-/**
- * @public
- */
+
+/** @public */
 export type ShowingEvent = ComponentEvent<dxPopup>;
-/**
- * @public
- */
+
+/** @public */
 export type TitleRenderedEvent = ComponentEvent<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {

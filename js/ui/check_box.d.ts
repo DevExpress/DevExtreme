@@ -15,25 +15,19 @@ import Editor, {
     ValueChangedInfo
 } from './editor/editor';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxCheckBox>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxCheckBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxCheckBox>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxCheckBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxCheckBox> & ValueChangedInfo;
 
 export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {

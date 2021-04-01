@@ -14,37 +14,28 @@ import dxPopover, {
     dxPopoverOptions
 } from './popover';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxTooltip>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxTooltip>;
-/**
- * @public
- */
+
+/** @public */
 export type HidingEvent = ComponentEvent<dxTooltip> & Cancelable;
-/**
- * @public
- */
+
+/** @public */
 export type HiddenEvent = ComponentEvent<dxTooltip>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxTooltip>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxTooltip>;
-/**
- * @public
- */
+
+/** @public */
 export type ShowingEvent = ComponentEvent<dxTooltip>;
-/**
- * @public
- */
+
+/** @public */
 export type ShownEvent = ComponentEvent<dxTooltip>;
 
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {

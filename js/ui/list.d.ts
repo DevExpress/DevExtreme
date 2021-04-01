@@ -51,91 +51,72 @@ export interface ScrollInfo {
     readonly reachedBottom: boolean;
 }
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxList>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxList>;
-/**
- * @public
- */
+
+/** @public */
 export type GroupRenderedEvent = ComponentEvent<dxList> & {
     readonly groupData?: any;
     groupElement?: TElement;
     readonly groupIndex?: number;
 }
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxList>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxList> & ListItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxList> & ListItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemDeletedEvent = ComponentEvent<dxList> & ListItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemDeletingEvent = ComponentEvent<dxList> & ListItemInfo & {
     cancel?: boolean | TPromise<void>;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ItemHoldEvent = ComponentNativeEvent<dxList> & ListItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemRenderedEvent = ComponentNativeEvent<dxList> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemReorderedEvent = ComponentEvent<dxList> & ListItemInfo & {
     readonly fromIndex: number;
     readonly toIndex: number;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ItemSwipeEvent = ComponentNativeEvent<dxList> & ListItemInfo & {
     readonly direction: string;
 }
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxList>;
-/**
- * @public
- */
+
+/** @public */
 export type PageLoadingEvent = ComponentEvent<dxList>;
-/**
- * @public
- */
+
+/** @public */
 export type PullRefreshEvent = ComponentEvent<dxList>;
-/**
- * @public
- */
+
+/** @public */
 export type ScrollEvent = ComponentNativeEvent<dxList> & ScrollInfo;
-/**
- * @public
- */
+
+/** @public */
 export type SelectAllValueChangedEvent = ComponentEvent<dxList> & {
     readonly value: boolean;
 }
-/**
- * @public
- */
- export type SelectionChangedEvent = ComponentEvent<dxList> & SelectionChangedInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxList> & SelectionChangedInfo;
 
 export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
     /**

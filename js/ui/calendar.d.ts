@@ -22,26 +22,20 @@ export interface ComponentDisabledDate<T> {
     readonly view: string;
 }
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxCalendar>;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxCalendar> & ValueChangedInfo;
 
-/**
- * @public
- */
+/** @public */
 export type CellTemplateData = {
     readonly date: Date,
     readonly view: string,
     readonly text?: string
 }
-/**
- * @public
- */
+
+/** @public */
 export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {

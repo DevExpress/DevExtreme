@@ -31,85 +31,64 @@ import {
     DataExpressionMixinOptions
 } from './editor/ui.data_expression';
 
-/**
- * @public
- */
+/** @public */
 export type ChangeEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ClosedEvent = ComponentEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type CopyEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type CutEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type FocusInEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type FocusOutEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InputEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyDownEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyPressEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyUpEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type OpenedEvent = ComponentEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type PasteEvent = ComponentNativeEvent<dxDropDownBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxDropDownBox> & ValueChangedInfo;
 
-/**
- * @public
- */
+/** @public */
 export type ContentTemplateData = {
     component: dxDropDownBox;
     readonly value?: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {

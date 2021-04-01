@@ -28,17 +28,13 @@ import {
     StringLengthRule
 } from './validation_rules';
 
-/**
- * @public
- */
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxValidationGroup>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxValidationGroup>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxValidationGroup>;
 
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {

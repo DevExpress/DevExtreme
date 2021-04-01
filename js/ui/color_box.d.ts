@@ -23,78 +23,58 @@ import {
     ValueChangedInfo
 } from './editor/editor';
 
-/**
- * @public
- */
+/** @public */
 export type ChangeEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ClosedEvent = ComponentEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type CopyEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type CutEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type FocusInEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type FocusOutEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InputEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyDownEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyPressEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyUpEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type OpenedEvent = ComponentEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type PasteEvent = ComponentNativeEvent<dxColorBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxColorBox> & ValueChangedInfo;
 
-/**
- * @public
- */
+/** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {

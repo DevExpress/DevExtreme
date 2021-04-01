@@ -10,39 +10,33 @@ export interface EventType { }
  */
 export type TEvent = {} extends EventType ? dxEvent : EventType;
 
-/**
- * @public
- */
+/** @public */
 export interface ComponentEvent<T> {
     component: T;
     element: TElement;
     model?: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export interface ComponentNativeEvent<T> {
     component: T;
     element: TElement;
     model?: any;
     event?: TEvent;
 }
-/**
- * @public
- */
+
+/** @public */
 export interface ComponentDisposingEvent<T> {
     component?: T;
 }
-/**
- * @public
- */
+
+/** @public */
 export interface ComponentInitializedEvent<T> {
     component?: T;
     element?: TElement;
 }
-/**
- * @public
- */
+
+/** @public */
 export interface ComponentOptionChangedEvent<T> {
     component?: T;
     name?: string;

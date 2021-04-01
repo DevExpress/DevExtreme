@@ -24,29 +24,22 @@ export interface ResizeInfo {
     }
 }
 
-/**
- * @public
- */
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxResizable>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxResizable>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxResizable>;
-/**
- * @public
- */
+
+/** @public */
 export type ResizeEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ResizeStartEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ResizeEndEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
 
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {

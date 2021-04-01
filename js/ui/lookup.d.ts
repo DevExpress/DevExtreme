@@ -48,57 +48,43 @@ import {
     TitleRenderedInfo
 } from './popup';
 
-/**
- * @public
- */
+/** @public */
 export type ClosedEvent = ComponentEvent<dxLookup>;
-/**
- * @public
- */
+
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxLookup>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxLookup>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxLookup>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxLookup> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type OpenedEvent = ComponentEvent<dxLookup>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxLookup>;
-/**
- * @public
- */
+
+/** @public */
 export type PageLoadingEvent = ComponentEvent<dxLookup>;
-/**
- * @public
- */
+
+/** @public */
 export type PullRefreshEvent = ComponentEvent<dxLookup>;
-/**
- * @public
- */
+
+/** @public */
 export type ScrollEvent = ComponentNativeEvent<dxLookup> & ScrollInfo;
-/**
- * @public
- */
+
+/** @public */
 export type SelectionChangedEvent = ComponentEvent<dxLookup> & SelectionChangedInfo;
-/**
- * @public
- */
+
+/** @public */
 export type TitleRenderedEvent = ComponentEvent<dxLookup> & TitleRenderedInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxLookup> & ValueChangedInfo;
 
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {

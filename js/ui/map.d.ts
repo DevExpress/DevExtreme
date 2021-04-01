@@ -18,58 +18,46 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ClickEvent = ComponentNativeEvent<dxMap>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxMap>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxMap>;
-/**
- * @public
- */
+
+/** @public */
 export type MarkerAddedEvent = ComponentEvent<dxMap> & {
   readonly options: any;
   originalMarker: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export type MarkerRemovedEvent = ComponentEvent<dxMap> & {
   readonly options?: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxMap>;
-/**
- * @public
- */
+
+/** @public */
 export type ReadyEvent = ComponentEvent<dxMap> & {
   originalMap: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export type RouteAddedEvent = ComponentEvent<dxMap> & {
   readonly options: any;
   originalRoute: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export type RouteRemovedEvent = ComponentEvent<dxMap> & {
   readonly options?: any;
 }
 
-/**
- * @public
- */
+/** @public */
 export interface MapLocation {
     /**
      * @docid

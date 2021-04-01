@@ -14,32 +14,26 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ClickEvent = {
     event?: TEvent;
     component?: dxSpeedDialAction;
     element?: TElement;
     actionElement?: TElement
 }
-/**
- * @public
- */
+
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxSpeedDialAction> & {
     actionElement?: TElement
 };
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxSpeedDialAction>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxSpeedDialAction>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxSpeedDialAction>;
 
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {

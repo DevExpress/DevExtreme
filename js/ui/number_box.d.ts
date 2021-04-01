@@ -23,69 +23,52 @@ import {
     format
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ChangeEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type CopyEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type CutEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type FocusInEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type FocusOutEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type InputEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyDownEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyPressEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type KeyUpEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type PasteEvent = ComponentNativeEvent<dxNumberBox>;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxNumberBox> & ValueChangedInfo;
 
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {

@@ -21,29 +21,22 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxDeferRendering>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxDeferRendering>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxDeferRendering>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxDeferRendering>;
-/**
- * @public
- */
+
+/** @public */
 export type RenderedEvent = ComponentEvent<dxDeferRendering>;
-/**
- * @public
- */
+
+/** @public */
 export type ShownEvent = ComponentEvent<dxDeferRendering>;
 
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {

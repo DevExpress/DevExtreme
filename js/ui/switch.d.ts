@@ -15,25 +15,19 @@ import Editor, {
     EditorOptions
 } from './editor/editor';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxSwitch>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxSwitch>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxSwitch>;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxSwitch>;
-/**
- * @public
- */
+
+/** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxSwitch> & ValueChangedInfo;
 
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {

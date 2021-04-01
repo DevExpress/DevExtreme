@@ -37,64 +37,48 @@ import {
     SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
-/**
- * @public
- */
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxContextMenu>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxContextMenu>;
-/**
- * @public
- */
+
+/** @public */
 export type HiddenEvent = ComponentEvent<dxContextMenu>;
-/**
- * @public
- */
+
+/** @public */
 export type HidingEvent = ComponentEvent<dxContextMenu> & Cancelable;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxContextMenu>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemContextMenuEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ItemRenderedEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxContextMenu>;
-/**
- * @public
- */
+
+/** @public */
 export type PositioningEvent = ComponentNativeEvent<dxContextMenu> & {
     readonly position: positionConfig;
 }
-/**
- * @public
- */
+
+/** @public */
 export type SelectionChangedEvent = ComponentEvent<dxContextMenu> & SelectionChangedInfo;
-/**
- * @public
- */
+
+/** @public */
 export type ShowingEvent = ComponentEvent<dxContextMenu> & Cancelable;
-/**
- * @public
- */
+
+/** @public */
 export type ShownEvent = ComponentEvent<dxContextMenu>;
 
-/**
- * @public
- */
+/** @public */
 export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid

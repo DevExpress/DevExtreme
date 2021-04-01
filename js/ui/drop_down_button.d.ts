@@ -35,38 +35,30 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-/**
- * @public
- */
+/** @public */
 export type ButtonClickEvent = ComponentNativeEvent<dxDropDownButton> & {
     readonly selectedItem?: any;
 }
-/**
- * @public
- */
+
+/** @public */
 export type ContentReadyEvent = ComponentEvent<dxDropDownButton>;
-/**
- * @public
- */
+
+/** @public */
 export type DisposingEvent = ComponentDisposingEvent<dxDropDownButton>;
-/**
- * @public
- */
+
+/** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxDropDownButton>;
-/**
- * @public
- */
+
+/** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxDropDownButton> & {
     readonly itemData?: any;
     itemElement: TElement;
 };
-/**
- * @public
- */
+
+/** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxDropDownButton>;
-/**
- * @public
- */
+
+/** @public */
 export type SelectionChangedEvent = ComponentNativeEvent<dxDropDownButton> & {
     readonly item: any;
     readonly previousItem: any;
