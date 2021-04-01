@@ -30,6 +30,10 @@ import {
     template
 } from '../core/templates/template';
 
+import {
+    TPromise
+} from '../core/utils/deferred';
+
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
@@ -861,6 +865,15 @@ export default class dxGantt extends Widget {
      * @public
      */
     scrollToDate(date: Date | Number | string): void;
+    /**
+     * @docid 
+     * @publicName exportToPdf(options)
+     * @param1 options:object
+     * @return Promise<any>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    exportToPdf(options: any): TPromise<any>;
 }
 
 /**
