@@ -2,7 +2,7 @@ import {
   ComponentBindings,
   OneWay,
   Event,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { ScrollableDirection, ScrollableShowScrollbar } from './types.d';
 import { ScrollableInternalProps } from './scrollable_props';

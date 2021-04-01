@@ -6,7 +6,7 @@ import {
   Fragment,
   Template,
   JSXTemplate,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
 import { CellBase } from '../cell';

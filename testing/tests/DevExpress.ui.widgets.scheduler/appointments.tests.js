@@ -147,9 +147,13 @@ const moduleOptions = {
             }
         };
 
-        this.instance = $('#scheduler-appointments').dxSchedulerAppointments({ observer: observer }).dxSchedulerAppointments('instance');
+        this.instance = $('#scheduler-appointments').dxSchedulerAppointments({
+            observer: observer
+        }).dxSchedulerAppointments('instance');
 
-        this.workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({}).dxSchedulerWorkSpaceWeek('instance');
+        this.workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+            draggingMode: 'default'
+        }).dxSchedulerWorkSpaceWeek('instance');
         this.workspaceInstance.getWorkArea().append(this.instance.$element());
 
         const schedulerMock = {

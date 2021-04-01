@@ -62,10 +62,10 @@ module('Integration: Appointments in Month view', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options,
-                {
-                    height: options && options.height || 600
-                })
+            this.instance = $('#scheduler').dxScheduler($.extend({
+                height: 600,
+                width: 800
+            }, options)
             ).dxScheduler('instance');
 
             this.clock.tick(300);
@@ -269,7 +269,8 @@ module('Integration: Appointments in Month view', {
                                 { id: 2, text: 'two' }
                             ]
                         }
-                    ]
+                    ],
+                    width: 600
                 });
 
                 const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
@@ -315,7 +316,8 @@ module('Integration: Appointments in Month view', {
                     currentDate: new Date(2015, 1, 14),
                     dataSource: [appointment],
                     views: ['month'],
-                    currentView: 'month'
+                    currentView: 'month',
+                    width: 600
                 });
 
                 this.instance.option('currentDate', new Date(2015, 2, 14));
@@ -694,7 +696,12 @@ module('Integration: Appointments in Month view', {
 
                 $('#scheduler').css('zoom', 1.25);
 
-                const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
+                const data = [{
+                    text: 'Two Weeks App (Jan 6 - Jan 19)',
+                    startDate: new Date(2020, 0, 6),
+                    endDate: new Date(2020, 0, 19, 12),
+                    typeId: 1
+                }];
 
                 const scheduler = createWrapper({
                     dataSource: data,
@@ -702,6 +709,7 @@ module('Integration: Appointments in Month view', {
                     firstDayOfWeek: 1,
                     currentView: 'month',
                     currentDate: new Date(2020, 0, 1),
+                    crossScrollingEnabled: true,
                     scrolling: {
                         mode: scrollingMode
                     },

@@ -2,7 +2,7 @@ import {
   Component,
   JSXComponent,
   JSXTemplate,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { isVerticalGroupOrientation } from '../../utils';
 import { GroupPanelProps } from './group_panel_props';
 import { GroupPanelVerticalLayout } from './vertical/layout';

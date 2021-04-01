@@ -6,7 +6,7 @@ import {
   OneWay,
   Slot,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { getGroupCellClasses } from '../utils';
 import { ContentTemplateProps } from '../types.d';
 

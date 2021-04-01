@@ -26,6 +26,7 @@ const setupModule = function() {
         'filterRow',
         'search',
         'editing',
+        'editingRowBased',
         'editingFormBased',
         'editingCellBased',
         'grouping',
@@ -3656,7 +3657,7 @@ const setupVirtualRenderingModule = function() {
         dataSource: array
     };
 
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail'], {
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'editingRowBased', 'editingCellBased', 'grouping', 'headerFilter', 'masterDetail'], {
         initDefaultOptions: true,
         options: options
     });
@@ -4858,13 +4859,19 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // act
         this.dataController.setViewportPosition(500);
         this.clock.tick();
+        const visibleItems = this.dataController.items();
+        const loadedItems = this.dataController.items(true);
 
         // assert
         assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 5 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
         assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
-        assert.deepEqual(this.dataController.items()[0].data, { id: 21, name: 'Name 21' }, 'first loaded item');
-        assert.deepEqual(this.dataController.items()[29].data, { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.equal(loadedItems.length, 30, 'loaded items count');
+        assert.deepEqual(loadedItems[0].data, { id: 21, name: 'Name 21' }, 'first loaded item');
+        assert.deepEqual(loadedItems[29].data, { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.equal(visibleItems.length, 16, 'visible items count');
+        assert.deepEqual(visibleItems[0].data, { id: 26, name: 'Name 26' }, 'first visible item');
+        assert.deepEqual(visibleItems[15].data, { id: 41, name: 'Name 41' }, 'last visible item');
     });
 });
 
@@ -11238,7 +11245,7 @@ QUnit.module('Summary with Editing', {
         };
 
         this.setupDataGridModules = function(options) {
-            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing'], options);
+            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing', 'editingRowBased', 'editingCellBased'], options);
         };
 
         this.getTotalValues = function() {

@@ -47,7 +47,7 @@ function setupTreeList(that, $treeListContainer) {
         initViews: true
     };
 
-    treeListMocks.setupTreeListModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'masterDetail', 'editing', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'gridView'], that.setupOptions);
+    treeListMocks.setupTreeListModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'masterDetail', 'editing', 'editingRowBased', 'editingCellBased', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'gridView'], that.setupOptions);
 }
 
 QUnit.module('API', {

@@ -222,24 +222,25 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
     _createExtremeRecurrenceDates(rawAppointment) {
         const dateRange = this.scheduler._workSpace.getDateRange();
-
-        const startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
+        let startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
             ? dateUtils.trimTime(dateRange[0])
             : dateRange[0];
+        let endViewDate = dateRange[1];
 
         const commonTimeZone = this.scheduler.option('timeZone');
+        if(commonTimeZone) {
+            startViewDate = this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' });
+            endViewDate = this.timeZoneCalculator.createDate(endViewDate, { path: 'fromGrid' });
 
-        const minRecurrenceDate = commonTimeZone
-            ? this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' })
-            : startViewDate;
-
-        const maxRecurrenceDate = commonTimeZone
-            ? this.timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' })
-            : dateRange[1];
+            const daylightOffset = timeZoneUtils.getDaylightOffsetInMs(startViewDate, endViewDate);
+            if(daylightOffset) {
+                endViewDate = new Date(endViewDate.getTime() + daylightOffset);
+            }
+        }
 
         return [
-            minRecurrenceDate,
-            maxRecurrenceDate
+            startViewDate,
+            endViewDate
         ];
     }
 

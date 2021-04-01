@@ -192,6 +192,10 @@ const Map = Widget.inherit({
         this._rendered = {};
     },
 
+    _useTemplates: function() {
+        return false;
+    },
+
     _checkOption: function(option) {
         const value = this.option(option);
 

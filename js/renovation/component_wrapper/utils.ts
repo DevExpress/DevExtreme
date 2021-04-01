@@ -16,21 +16,6 @@ export function getAriaName(name: string): string {
     : `aria-${name}`;
 }
 
-// NOTE: function for jQuery templates
-export const wrapElement = ($element, $wrapper): any => {
-  const { attributes } = $wrapper.get(0);
-  const children = $wrapper.contents();
-
-  addAttributes($element, attributes);
-
-  $wrapper.remove();
-  each(children, (_, child) => {
-    $element.append(child);
-  });
-
-  return children;
-};
-
 export const removeDifferentElements = ($children, $newChildren): void => {
   each($newChildren, (__, element) => {
     let hasComponent = false;

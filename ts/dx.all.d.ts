@@ -2684,6 +2684,14 @@ declare module DevExpress.excelExporter {
          * [descr:ExcelExportPivotGridProps.customizeCell]
          */
         customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeColumnFieldValues]
+         */
+        mergeColumnFieldValues?: boolean;
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeRowFieldValues]
+         */
+        mergeRowFieldValues?: boolean;
     }
     /**
      * [descr:ExcelPivotGridCell]
@@ -2798,6 +2806,23 @@ declare module DevExpress.fileManagement {
      */
     export class CustomFileSystemProvider extends FileSystemProviderBase {
         constructor(options?: CustomFileSystemProviderOptions)
+    }
+    /**
+     * [descr:FileSystemError]
+     */
+    export interface FileSystemError {
+        /**
+         * [descr:FileSystemError.errorCode]
+         */
+        errorCode?: number;
+        /**
+         * [descr:FileSystemError.errorText]
+         */
+        errorText?: string;
+        /**
+         * [descr:FileSystemError.fileSystemItem]
+         */
+        fileSystemItem?: FileSystemItem;
     }
     /**
      * [descr:FileSystemItem]
@@ -3666,7 +3691,7 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.pager]
          */
-        pager?: { allowedPageSizes?: Array<number> | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
+        pager?: { allowedPageSizes?: Array<number | 'all'> | 'auto', displayMode?: 'adaptive' | 'compact' | 'full', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
         /**
          * [descr:GridBaseOptions.paging]
          */
@@ -5970,9 +5995,17 @@ declare module DevExpress.ui {
          */
         getItemByKey(key: any): dxDiagramItem;
         /**
+         * [descr:dxDiagram.getItems()]
+         */
+        getItems(): Array<dxDiagramItem>;
+        /**
          * [descr:dxDiagram.getNodeDataSource()]
          */
         getNodeDataSource(): DevExpress.data.DataSource;
+        /**
+         * [descr:dxDiagram.getSelectedItems()]
+         */
+        getSelectedItems(): Array<dxDiagramItem>;
         /**
          * [descr:dxDiagram.import(data, updateExistingItemsOnly)]
          */
@@ -6772,6 +6805,10 @@ declare module DevExpress.ui {
          * [descr:dxFileManagerOptions.itemView]
          */
         itemView?: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        /**
+         * [descr:dxFileManagerOptions.notifications]
+         */
+        notifications?: { showPanel?: boolean, showPopup?: boolean };
         /**
          * [descr:dxFileManagerOptions.onContextMenuItemClick]
          */
@@ -8190,6 +8227,10 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxHtmlEditorOptions)
         constructor(element: JQuery, options?: dxHtmlEditorOptions)
         /**
+         * [descr:dxHtmlEditor.blur()]
+         */
+        blur(): void;
+        /**
          * [descr:dxHtmlEditor.clearHistory()]
          */
         clearHistory(): void;
@@ -8222,6 +8263,14 @@ declare module DevExpress.ui {
          */
         get(componentPath: string): any;
         /**
+         * [descr:dxHtmlEditor.getBounds(index, length)]
+         */
+        getBounds(index: number, length: number): any;
+        /**
+         * [descr:dxHtmlEditor.getFormat()]
+         */
+        getFormat(): any;
+        /**
          * [descr:dxHtmlEditor.getFormat(index, length)]
          */
         getFormat(index: number, length: number): any;
@@ -8240,11 +8289,19 @@ declare module DevExpress.ui {
         /**
          * [descr:dxHtmlEditor.getSelection()]
          */
-        getSelection(): any;
+        getSelection(focus?: boolean): any;
+        /**
+         * [descr:dxHtmlEditor.getText(index, length)]
+         */
+        getText(index: number, length: number): void;
         /**
          * [descr:dxHtmlEditor.insertEmbed(index, type, config)]
          */
         insertEmbed(index: number, type: string, config: any): void;
+        /**
+         * [descr:dxHtmlEditor.insertText(index, text, formatName, formatValue)]
+         */
+        insertText(index: number, text: string, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
         /**
          * [descr:dxHtmlEditor.insertText(index, text, formats)]
          */
@@ -8269,6 +8326,10 @@ declare module DevExpress.ui {
          * [descr:dxHtmlEditor.undo()]
          */
         undo(): void;
+        /**
+         * [descr:dxHtmlEditor.update()]
+         */
+        update(): void;
     }
     /**
      * [descr:dxHtmlEditorMediaResizing]

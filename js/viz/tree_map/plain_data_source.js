@@ -15,7 +15,7 @@ proto._processDataSourceItems = function(items) {
     let item;
 
     if(!idField || !parentField || items.length === 0) {
-        return { items: items, isPlain: true };
+        return { items: items, isPlain: false };
     }
 
     for(i = 0; i < items.length; i++) {

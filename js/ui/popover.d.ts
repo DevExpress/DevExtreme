@@ -156,6 +156,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     showTitle?: boolean;
     /**
      * @docid
+     * @default Window
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -26,10 +26,10 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
 
     _getChunkWidths(geometry) {
         const firstChunkWidth = geometry.reducedWidth;
-        const fullChunksWidth = Math.round(geometry.sourceAppointmentWidth);
+        const fullChunksWidth = Math.floor(geometry.sourceAppointmentWidth);
         const widthWithoutFirstChunk = fullChunksWidth - firstChunkWidth;
 
-        return [geometry.reducedWidth, Math.round(geometry.sourceAppointmentWidth), widthWithoutFirstChunk];
+        return [geometry.reducedWidth, fullChunksWidth, widthWithoutFirstChunk];
     }
 
     _getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition) {

@@ -82,8 +82,13 @@ const PagerView = modules.View.inherit({
         if(isDefined(pagerOptions.infoText)) {
             options.infoText = pagerOptions.infoText;
         }
-
-        that._createComponent($element, Pager, options);
+        if(hasWindow()) {
+            that._createComponent($element, Pager, options);
+        } else {
+            $element
+                .addClass('dx-pager')
+                .html('<div class="dx-pages"><div class="dx-page"></div></div>');
+        }
     },
 
     getPageSizes: function() {

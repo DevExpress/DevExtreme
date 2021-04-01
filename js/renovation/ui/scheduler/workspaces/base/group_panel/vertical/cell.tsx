@@ -1,6 +1,6 @@
 import {
   Component, JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { GroupPanelCellProps } from '../cell_props';
 
 export const viewFunction = (viewModel: GroupPanelVerticalCell): JSX.Element => {

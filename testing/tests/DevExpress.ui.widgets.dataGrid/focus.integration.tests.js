@@ -1643,6 +1643,61 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
         });
     });
+
+    QUnit.testInActiveWindow('New mode. The modified cell frame should not be rendered for an unmodified cell in a new row in Batch', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    ID: i + 1,
+                    Name: `Name ${i + 1}`,
+                    Description: `Description ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            remoteOperations: true,
+            height: 300,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true
+            },
+            columns: ['Name', 'Description']
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.addRow();
+        this.clock.tick();
+        dataGrid.addRow();
+        this.clock.tick();
+        dataGrid.cellValue(0, 0, 'test');
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'the first cell is modified');
+
+        // act
+        $(dataGrid.getCellElement(0, 1)).trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'the second cell is not modified');
+
+        // act
+        $(dataGrid.getCellElement(1, 0)).trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass('dx-cell-modified'), 'the third cell is not modified');
+    });
 });
 
 QUnit.module('View\'s focus', {
@@ -3522,6 +3577,112 @@ QUnit.module('View\'s focus', {
             $inputElement.remove();
         });
     });
+
+    QUnit.testInActiveWindow('Cell - An editable invalid cell should not lose focus when other cells are clicked (T983590)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { ID: 1, Field1: 'Field11', Field2: 'Field12' },
+                { ID: 2, Field1: 'Field21', Field2: 'Field22' }
+            ],
+            keyExpr: 'ID',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'Field1',
+                    validationRules: [{ type: 'required' }],
+                    setCellValue: function(newData, value, currentRowData) {
+                        newData.Field1 = value;
+                    }
+                },
+                {
+                    dataField: 'Field2',
+                    allowEditing: false,
+                    validationRules: [{ type: 'required' }]
+                }
+            ],
+        });
+        this.clock.tick();
+
+        for(let i = 0; i < 2; i++) {
+            for(let j = 0; j < 2; j++) {
+                // act
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                this.clock.tick();
+
+                if(i === 0 && j === 0) {
+                    $(this.dataGrid.getCellElement(i, j)).find('.dx-texteditor-input').val('').trigger('change');
+                    this.clock.tick();
+                }
+
+                // assert
+                assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), `the first cell is rendered as invalid when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), `the first cell is focused when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.element()).find('.dx-revert-button').is(':visible'), `revert button is visible when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.element()).find('.dx-datagrid-invalid-message .dx-overlay-content').is(':visible'), `validation message is visible when the {${i}, ${j}} cell is clicked`);
+            }
+        }
+    });
+
+    QUnit.testInActiveWindow('Cell - An editable invalid cell in a new row should not lose focus when other cells are clicked (T983590)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { ID: 1, Field1: 'Field11', Field2: 'Field12' }
+            ],
+            keyExpr: 'ID',
+            editing: {
+                mode: 'cell',
+                allowAdding: true
+            },
+            columns: [
+                {
+                    dataField: 'Field1',
+                    validationRules: [{ type: 'required' }],
+                    setCellValue: function(newData, value, currentRowData) {
+                        newData.Field1 = value;
+                    }
+                },
+                {
+                    dataField: 'Field2',
+                    allowEditing: false,
+                    validationRules: [{ type: 'required' }]
+                }
+            ],
+        });
+        this.clock.tick();
+
+        $(this.dataGrid.element()).find('.dx-datagrid-addrow-button').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok(this.dataGrid.getVisibleRows()[0].isNewRow, 'the first new row');
+        assert.notOk($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), 'the first cell is rendered as valid');
+        assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'the first cell is focused');
+
+        for(let i = 0; i < 2; i++) {
+            for(let j = 0; j < 2; j++) {
+                if(i === 0 && j === 0) {
+                    continue;
+                }
+
+                // act
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                this.clock.tick();
+
+                // assert
+                assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), `the first cell is rendered as invalid when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.element()).find('.dx-revert-button').is(':visible'), `revert button is visible when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.element()).find('.dx-datagrid-invalid-message .dx-overlay-content').is(':visible'), `validation message is visible when the {${i}, ${j}} cell is clicked`);
+            }
+        }
+
+        assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'the first cell is still focused');
+    });
+
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
