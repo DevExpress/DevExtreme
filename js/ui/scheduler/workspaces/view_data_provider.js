@@ -277,8 +277,22 @@ class ViewDataGenerator {
         };
     }
 
-    _generateDateHeaderMap(completeDateHeaderMap, options) {
-        return completeDateHeaderMap.map(headerRow => headerRow.slice(0)); // TODO: virtualization
+    _generateDateHeaderData(completeDateHeaderMap, options) {
+        const {
+            startCellIndex,
+            leftVirtualCellWidth,
+            rightVirtualCellWidth,
+            cellCount,
+            totalCellCount,
+        } = options;
+
+        return {
+            dataMap: completeDateHeaderMap.map(headerRow => headerRow.slice(startCellIndex, cellCount)),
+            leftVirtualCellWidth,
+            rightVirtualCellWidth,
+            leftVirtualCellCount: startCellIndex,
+            rightVirtualCellCount: totalCellCount - startCellIndex - cellCount,
+        };
     }
 
     _generateTimePanelData(completeTimePanelMap, options) {
@@ -817,8 +831,8 @@ export default class ViewDataProvider {
     get viewDataMap() { return this._viewDataMap; }
     set viewDataMap(value) { this._viewDataMap = value; }
 
-    get dateHeaderMap() { return this._dateHeaderMap; }
-    set dateHeaderMap(value) { this._dateHeaderMap = value; }
+    get dateHeaderData() { return this._dateHeaderData; }
+    set dateHeaderData(value) { this._dateHeaderData = value; }
 
     get timePanelData() { return this._timePanelData; }
     set timePanelData(value) { this._timePanelData = value; }
@@ -848,7 +862,10 @@ export default class ViewDataProvider {
             this._workspace,
         );
 
-        this.dateHeaderMap = viewDataGenerator._generateDateHeaderMap(this.completeDateHeaderMap, renderOptions);
+        const data = viewDataGenerator._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
+        // console.log(data === this.dateHeaderData);
+        this.dateHeaderData = data;
+        // console.log(this.dateHeaderData);
         this.timePanelData = viewDataGenerator._generateTimePanelData(
             this.completeTimePanelMap,
             renderOptions,

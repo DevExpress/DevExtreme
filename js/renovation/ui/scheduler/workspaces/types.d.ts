@@ -120,3 +120,11 @@ interface ResourceCellTemplateData {
 export interface ResourceCellTemplateProps extends BaseTemplateProps {
   data: ResourceCellTemplateData;
 }
+
+export interface DateHeaderData {
+  dataMap: DateHeaderCellData[][];
+  leftVirtualCellWidth: number;
+  rightVirtualCellWidth: number;
+  leftVirtualCellCount: number;
+  rightVirtualCellCount: number;
+}

@@ -1090,7 +1090,19 @@ class SchedulerWorkSpace extends WidgetObserver {
             .last()
             .find('th');
 
-        let width = cellWidth * $headerCells.length;
+        const virtualState = this.virtualScrollingDispatcher?.getRenderState() || {};
+
+        const groupCount = this._getGroupCount();
+        const {
+            startCellIndex = 0,
+            cellCount = this._getTotalCellCount(groupCount),
+        } = virtualState;
+        const totalCellCount = this._getTotalCellCount(groupCount);
+
+        const leftVirtualCellCount = startCellIndex;
+        const rightVirtualCellCount = totalCellCount - cellCount - startCellIndex;
+
+        let width = cellWidth * ($headerCells.length + leftVirtualCellCount + rightVirtualCellCount);
 
         if(width < minWidth) {
             width = minWidth;
@@ -1385,7 +1397,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.renovatedHeaderPanelComponent,
             'renovatedHeaderPanel',
             {
-                dateHeaderMap: this.viewDataProvider.dateHeaderMap,
+                dateHeaderData: this.viewDataProvider.dateHeaderData,
                 dateCellTemplate: this.option('dateCellTemplate'),
                 timeCellTemplate: this.option('timeCellTemplate'),
                 groups: this.option('groups'),
@@ -1412,7 +1424,19 @@ class SchedulerWorkSpace extends WidgetObserver {
             });
             this[componentName] = component;
         } else {
+            let optionValue;
+            if(componentName === 'renovatedHeaderPanel') {
+                optionValue = component.option('dateHeaderData');
+                // console.log(optionValue);
+                debugger;
+            }
             component.option(viewModel);
+
+            if(componentName === 'renovatedHeaderPanel') {
+                console.log(optionValue === component.option('dateHeaderData'));
+                component.option('dateHeaderData.dataMap[0][0]', { text: 'aaaaaaaaaaa' });
+                // console.log(component.option('dateHeaderData'));
+            }
         }
     }
 

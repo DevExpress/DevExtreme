@@ -8,6 +8,8 @@ export const viewFunction = ({
     className,
     leftVirtualCellWidth,
     rightVirtualCellWidth,
+    leftVirtualCellCount,
+    rightVirtualCellCount,
     children,
     styles,
   },
@@ -19,13 +21,19 @@ export const viewFunction = ({
     style={styles}
   >
     {hasLeftVirtualCell && (
-      <VirtualCell width={leftVirtualCellWidth} />
+      <VirtualCell
+        width={leftVirtualCellWidth}
+        colSpan={leftVirtualCellCount}
+      />
     )}
 
     {children}
 
     {hasRightVirtualCell && (
-      <VirtualCell width={rightVirtualCellWidth} />
+      <VirtualCell
+        width={rightVirtualCellWidth}
+        colSpan={rightVirtualCellCount}
+      />
     )}
   </tr>
 );
@@ -37,6 +45,10 @@ export class RowProps {
   @OneWay() leftVirtualCellWidth = 0;
 
   @OneWay() rightVirtualCellWidth = 0;
+
+  @OneWay() leftVirtualCellCount = 0;
+
+  @OneWay() rightVirtualCellCount = 0;
 
   @OneWay() styles?: CSSAttributes;
 
