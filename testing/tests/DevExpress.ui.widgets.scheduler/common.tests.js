@@ -573,6 +573,41 @@ QUnit.module('Initialization', {
         assert.equal(scheduler.appointments.getTitleText(1), 'Pushed Appointment', 'Pushed appointment is rerendered');
     });
 
+    QUnit.test('Push API should work correctly for the wrong data item (T986087)', function(assert) {
+        const data = [{
+            id: 0,
+            text: 'Test Appointment',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }];
+
+        const { instance } = createWrapper({
+            dataSource: {
+                pushAggregationTimeout: 0,
+                reshapeOnPush: true,
+                load: () => data,
+                key: 'id'
+            },
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2017, 4, 25)
+        });
+
+        const dataSource = instance.getDataSource();
+
+        [null, undefined].forEach((wrongData) => {
+            try {
+                dataSource.store().push([{ type: 'update', key: 123, data: wrongData }]);
+
+                const dataSourceItems = instance.getDataSource().items();
+
+                assert.equal(dataSourceItems.length, 1, `Item count is correct for '${wrongData}' data`);
+            } catch(e) {
+                assert.ok(false, e.message);
+            }
+        });
+    });
+
     QUnit.test('the \'update\' method of store should have key as arg is store has the \'key\' field', function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10)
