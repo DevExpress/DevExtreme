@@ -1,8 +1,14 @@
 import { compareScreenshot } from '../../../helpers/screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { createDataSetForScreenShotTests } from './utils';
 import Scheduler from '../../../model/scheduler';
+import {
+  createDataSetForScreenShotTests,
+  resourceDataSource,
+  views,
+  verticalViews,
+  horizontalViews,
+} from './utils';
 
 fixture`Scheduler: Adaptive Generic theme layout in RTL`
   .page(url(__dirname, '../../container.html'));
@@ -19,25 +25,13 @@ const createScheduler = async (
   }, true);
 };
 
-const views = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
-
-const resources = [{
-  fieldExpr: 'priorityId',
-  dataSource: [
-    {
-      text: 'Low Priority',
-      id: 0,
-      color: '#24ff50',
-    }, {
-      text: 'High Priority',
-      id: 1,
-      color: '#ff9747',
-    },
-  ],
-  label: 'Priority',
-}];
-
 [false, true].forEach((crossScrollingEnabled) => {
+  // TODO: There is a bug in RTL in timeline views even without adaptivity which breaks markup.
+  // We should test timeline views too after we reowrk our markup
+  const lastVerticalView = crossScrollingEnabled ? 4 : 8;
+
+  const verticalViewsForRTL = verticalViews.slice(0, lastVerticalView);
+
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} in RTL`, async (t) => {
     const scheduler = new Scheduler('#container');
 
@@ -61,12 +55,6 @@ const resources = [{
     await t.resizeWindow(1200, 800);
   });
 
-  const horizontalViews = views
-    .map((viewType) => ({
-      type: viewType,
-      groupOrientation: 'horizontal',
-    }));
-
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t) => {
     const scheduler = new Scheduler('#container');
 
@@ -86,41 +74,32 @@ const resources = [{
       currentView: 'day',
       crossScrollingEnabled,
       groups: ['priorityId'],
-      resources,
+      resources: resourceDataSource,
     });
   }).after(async (t) => {
     await t.resizeWindow(1200, 800);
   });
 
-  const verticalViews = views
-    // TODO: There is a bug in RTL in timeline views even without adaptivity which breaks markup.
-    // We should test timeline views too after we reowrk our markup
-    .slice(0, 4)
-    .map((viewType) => ({
-      type: viewType,
-      groupOrientation: 'vertical',
-    }));
-
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const view of views) {
-      await scheduler.option('currentView', view);
+    for (const view of verticalViewsForRTL) {
+      await scheduler.option('currentView', view.type);
 
       await t.expect(
-        await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping-rtl).png`),
+        await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping-rtl).png`),
       ).ok();
     }
   }).before(async (t) => {
     await t.resizeWindow(400, 600);
 
     await createScheduler({
-      views: verticalViews,
+      views: verticalViewsForRTL,
       currentView: 'day',
       crossScrollingEnabled,
       groups: ['priorityId'],
-      resources,
+      resources: resourceDataSource,
     });
   }).after(async (t) => {
     await t.resizeWindow(1200, 800);
