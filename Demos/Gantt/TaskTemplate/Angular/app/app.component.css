@@ -1,0 +1,84 @@
+#gantt {
+    height: 700px;
+}
+
+.custom-task-color-0 {
+    background-color: #5C57C9;
+}
+
+.custom-task-color-1 {
+    background-color: #35B86B;
+}
+
+.custom-task-color-2 {
+    background-color: #4796CE;
+}
+
+.custom-task-color-3 {
+    background-color: #CE4776;
+}
+
+.custom-task-color-4 {
+    background-color: #CE5B47;
+}
+
+.custom-task-color-5 {
+    background-color: #F78119;
+}
+
+.custom-task-color-6 {
+    background-color: #9F47CE;
+}
+
+.custom-task {
+    max-height: 48px;
+    height: 100%;
+    display: block;
+    overflow: hidden;
+}
+
+.custom-task-wrapper {
+    padding: 8px;
+    color: #fff;
+}
+
+.custom-task-wrapper > * {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.custom-task-img-wrapper {
+    float: left;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin: 8px;
+    background-color: #fff;
+    overflow: hidden;
+}
+.custom-task-img {
+    width: 32px;
+}
+
+.custom-task-title {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.custom-task-row {
+    font-size: 11px;
+}
+
+.custom-task-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 4px;
+    background: rgba(0, 0, 0, .3);
+}
+
+.dx-gantt .dx-row {
+    height: 63px;
+}

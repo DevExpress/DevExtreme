@@ -1,0 +1,32 @@
+<div id="demo-container">
+    <div class="widget-container">
+        <dx-gantt 
+            taskListWidth="300"
+            height="700"
+            scaleType="days"
+            taskContentTemplate="taskContentTemplate">
+
+            <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+            <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+            <dxo-resources [dataSource]="resources"></dxo-resources>
+            <dxo-resource-assignments [dataSource]="resourceAssignments"></dxo-resource-assignments>
+
+            <dxi-column dataField="title" caption="Subject" [width]="200"></dxi-column>
+            <dxi-column dataField="start" caption="Start Date" dataType="date" [width]="50"></dxi-column>
+            <dxi-column dataField="end" caption="End Date" dataType="date" [width]="50"></dxi-column>
+
+            <dxo-editing [enabled]="false"></dxo-editing>
+            <div *dxTemplate="let item of 'taskContentTemplate'" class="custom-task {{getTaskColor(item.taskData.id)}}" style.width="{{item.taskSize.width}}px">
+                <div class="custom-task-img-wrapper">
+                    <img class="custom-task-img" attr.src={{getImagePath(item.taskData.id)}}/>
+                </div>
+                <div class="custom-task-wrapper">
+                    <div class="custom-task-title">{{item.taskData.title}}</div>
+                    <div class="custom-task-row">{{item.taskResources[0].text}}</div>
+                </div>
+                <div class="custom-task-progress" style.width="{{item.taskData.progress}}%"></div>
+            </div>
+        </dx-gantt>
+    </div>
+</div>
+

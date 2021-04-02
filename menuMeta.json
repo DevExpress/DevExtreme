@@ -3373,7 +3373,21 @@
           {
             "Title": "Chart Appearance",
             "Name": "ChartAppearance",
-            "Badge": "Updated",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          },
+          {
+            "Title": "Task Template",
+            "Name": "TaskTemplate",
+            "Badge": "New",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
@@ -3402,7 +3416,6 @@
           {
             "Title": "Context Menu",
             "Name": "ContextMenu",
-            "Badge": "New",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
