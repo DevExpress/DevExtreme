@@ -1214,11 +1214,12 @@ class Gantt extends Widget {
     _getTaskContentTemplateFunc(taskContentTemplateOption) {
         const isTaskShowing = true;
         const template = taskContentTemplateOption && this._getTemplate(taskContentTemplateOption);
-        const createTemplateFunction = template && ((container, item) => {
+        const createTemplateFunction = template && ((container, item, callback, index) => {
             item.taskData = this.getTaskDataByCoreData(item.taskData);
             template.render({
                 model: item,
-                container: getPublicElement($(container))
+                container: getPublicElement($(container)),
+                onRendered: () => { callback(container, index); }
             });
             return isTaskShowing;
         });
