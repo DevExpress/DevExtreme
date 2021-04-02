@@ -197,11 +197,11 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                 });
 
                 if(view === 'week') {
-                    const actualAppointmentTop = scheduler.appointmentList[0].position.top;
+                    const actualAppointmentTop = scheduler.appointments.getAppointment(0).position().top;
 
                     assert.equal(actualAppointmentTop, appointmentTop, 'Correct top coordinate');
                 } else {
-                    const actualAppointmentLeft = scheduler.appointmentList[0].position.left;
+                    const actualAppointmentLeft = scheduler.appointments.getAppointment(0).position().left;
 
                     assert.equal(actualAppointmentLeft, appointmentLeft, 'Correct left coordinate');
                 }
