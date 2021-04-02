@@ -784,6 +784,10 @@ Axis.prototype = {
         }
     },
 
+    isFirstDrawing() {
+        return this._firstDrawing;
+    },
+
     getMargins: function() {
         const that = this;
         const { position, offset, customPosition, placeholderSize, grid, tick, crosshairMargin } = that._options;
