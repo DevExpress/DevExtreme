@@ -11,7 +11,7 @@ import {
 } from './utils';
 
 fixture`Scheduler: Adaptive Material theme layout in RTL`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, './material.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
