@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   ComponentBindings, JSXComponent, OneWay, Component, Fragment,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { LightButton } from '../common/light_button';
 import { FullPageSize } from '../common/types.d';

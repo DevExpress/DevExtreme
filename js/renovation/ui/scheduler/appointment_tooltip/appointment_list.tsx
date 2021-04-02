@@ -6,7 +6,7 @@ import {
   Template,
   Event,
   JSXTemplate,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import noop from '../../../utils/noop';
 import { List } from '../../list';
 import { TooltipItemLayout } from './item_layout';

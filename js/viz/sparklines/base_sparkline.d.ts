@@ -31,22 +31,22 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
     loadingIndicator?: BaseWidgetLoadingIndicator;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any }) => any);
+    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz

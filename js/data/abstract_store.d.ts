@@ -27,7 +27,7 @@ export interface StoreOptions<T = Store> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onInserted?: ((values: any, key: any | string | number) => any);
+    onInserted?: ((values: any, key: any | string | number) => void);
     /**
      * @docid
      * @type_function_param1 values:object
@@ -35,7 +35,7 @@ export interface StoreOptions<T = Store> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onInserting?: ((values: any) => any);
+    onInserting?: ((values: any) => void);
     /**
      * @docid
      * @type_function_param1 result:Array<any>
@@ -43,7 +43,7 @@ export interface StoreOptions<T = Store> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoaded?: ((result: Array<any>) => any);
+    onLoaded?: ((result: Array<any>) => void);
     /**
      * @docid
      * @type_function_param1 loadOptions:LoadOptions
@@ -51,7 +51,7 @@ export interface StoreOptions<T = Store> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions) => any);
+    onLoading?: ((loadOptions: LoadOptions) => void);
     /**
      * @docid
      * @action
@@ -73,7 +73,7 @@ export interface StoreOptions<T = Store> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onPush?: ((changes: Array<any>) => any);
+    onPush?: ((changes: Array<any>) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -81,7 +81,7 @@ export interface StoreOptions<T = Store> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onRemoved?: ((key: any | string | number) => any);
+    onRemoved?: ((key: any | string | number) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -89,16 +89,7 @@ export interface StoreOptions<T = Store> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onRemoving?: ((key: any | string | number) => any);
-    /**
-     * @docid
-     * @type_function_param1 key:object|string|number
-     * @type_function_param2 values:object
-     * @action
-     * @prevFileNamespace DevExpress.data
-     * @public
-     */
-    onUpdated?: ((key: any | string | number, values: any) => any);
+    onRemoving?: ((key: any | string | number) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -107,7 +98,16 @@ export interface StoreOptions<T = Store> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onUpdating?: ((key: any | string | number, values: any) => any);
+    onUpdated?: ((key: any | string | number, values: any) => void);
+    /**
+     * @docid
+     * @type_function_param1 key:object|string|number
+     * @type_function_param2 values:object
+     * @action
+     * @prevFileNamespace DevExpress.data
+     * @public
+     */
+    onUpdating?: ((key: any | string | number, values: any) => void);
 }
 /**
  * @docid

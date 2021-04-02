@@ -187,6 +187,7 @@ module('Events', {
             };
 
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 dataSource: [appointment],
                 currentView: 'day',
                 currentDate: new Date(2021, 2, 25),
@@ -331,6 +332,7 @@ module('Events', {
             });
 
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
                 },
@@ -870,6 +872,7 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
                 currentView: 'week',
                 recurrenceEditMode: 'occurrence',
                 currentDate: new Date(2017, 4, 22),
+                _draggingMode: 'default',
                 onAppointmentAdding: e => {
                     assert.equal(e.appointmentData.id, undefined, 'key property \'id\' shouldn\'t exist in appointment on onAppointmentAdding event');
                 },

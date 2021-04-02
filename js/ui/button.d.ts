@@ -45,7 +45,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     icon?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 validationGroup:object
@@ -53,7 +53,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxButton, element?: TElement, model?: any, event?: TEvent, validationGroup?: any }) => any);
+    onClick?: ((e: { component?: dxButton, element?: TElement, model?: any, event?: TEvent, validationGroup?: any }) => void);
     /**
      * @docid
      * @type Enums.ButtonStylingMode

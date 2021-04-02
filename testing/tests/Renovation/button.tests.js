@@ -94,17 +94,6 @@ QUnit.test('should render dom node', function(assert) {
     assert.strictEqual(element.find('#custom-template').length, 1, 'render custom template');
 });
 
-QUnit.test('should replace content if has "dx-template-wrapper" class', function(assert) {
-    const element = this.Button({
-        template: (data, container) => {
-            return $('<span>')
-                .addClass('dx-template-wrapper')
-                .get(0);
-        },
-    });
-    assert.ok(element.find('.dx-button-content').hasClass('dx-template-wrapper'), 'template has "dx-button-content" class');
-});
-
 QUnit.test('should rerender template in runtime', function(assert) {
     const template = (data, container) => $('<div id="custom-template">');
     const templateNew = (data, container) => $('<div id="new-template">');

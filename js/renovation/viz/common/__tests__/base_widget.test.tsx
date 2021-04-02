@@ -117,23 +117,197 @@ describe('BaseWidget', () => {
           widget.containerRef = React.createRef() as any;
           expect(widget.contentReadyEffect.bind(widget)).not.toThrow();
         });
-      });
 
-      describe('setRootElementRef', () => {
-        it('rootElementRef should be init', () => {
-          const widget = new BaseWidget({ rootElementRef: { current: null } } as any);
-          const element = {} as HTMLDivElement;
-          widget.containerRef = React.createRef() as any;
-          widget.containerRef.current = element;
-          widget.setRootElementRef();
-          expect(widget.props.rootElementRef.current).toEqual(element);
+        describe('setCanvas', () => {
+          it('should set empty canvas by default', () => {
+            const widget = new BaseWidget({ canvas: DEFAULT_CANVAS } as any);
+            widget.containerRef = React.createRef() as any;
+            widget.contentReadyEffect();
+
+            expect(widget.props.canvas).toEqual(DEFAULT_CANVAS);
+          });
+
+          it('should set size from props (props.size)', () => {
+            const widget = new BaseWidget({ size: { width: 600, height: 400 } } as any);
+            widget.containerRef = React.createRef() as any;
+            widget.contentReadyEffect();
+
+            expect(widget.props.canvas).toMatchObject({
+              width: 600,
+              height: 400,
+            });
+          });
+
+          it('should set size from container element', () => {
+            (getElementComputedStyle as jest.Mock).mockReturnValue({
+              width: '400px',
+              paddingLeft: '10px',
+              paddingRight: '10px',
+              height: '300px',
+              paddingTop: '10px',
+              paddingBottom: '10px',
+            });
+            const widget = new BaseWidget({ } as any);
+            widget.containerRef = React.createRef() as any;
+            widget.contentReadyEffect();
+
+            expect(widget.props.canvas).toMatchObject({
+              width: 380,
+              height: 280,
+            });
+          });
+
+          it('should set default canvas from props (props.defaultCanvas)', () => {
+            (getElementComputedStyle as jest.Mock).mockReturnValue({
+              width: '0px',
+              paddingLeft: '0px',
+              paddingRight: '0px',
+              height: '0px',
+              paddingTop: '0px',
+              paddingBottom: '0px',
+            });
+            const defaultCanvas: ClientRect = {
+              width: 500,
+              height: 300,
+              left: 10,
+              right: 20,
+              top: 30,
+              bottom: 40,
+            };
+            const widget = new BaseWidget({ defaultCanvas } as any);
+            widget.containerRef = React.createRef() as any;
+            widget.contentReadyEffect();
+
+            expect(widget.props.canvas).toEqual({
+              width: 500,
+              height: 300,
+              left: 10,
+              right: 20,
+              top: 30,
+              bottom: 40,
+            });
+          });
+
+          it('should set merged size from props.size and container element', () => {
+            (getElementComputedStyle as jest.Mock).mockReturnValue({
+              width: '400px',
+              paddingLeft: '0px',
+              paddingRight: '0px',
+              height: '300px',
+              paddingTop: '0px',
+              paddingBottom: '0px',
+            });
+            const widget = new BaseWidget({
+              size: { width: 600 },
+              canvas: { ...DEFAULT_CANVAS, width: 300, height: 100 },
+            } as any);
+            widget.containerRef = React.createRef() as any;
+            widget.contentReadyEffect();
+
+            expect(widget.props.canvas).toMatchObject({
+              width: 600,
+              height: 300,
+            });
+          });
+
+          it('should set merged canvas from props (size, margin and defaultCanvas)', () => {
+            const defaultCanvas: ClientRect = {
+              width: 500,
+              height: 300,
+              left: 10,
+              right: 20,
+              top: 30,
+              bottom: 40,
+            };
+            const widget = new BaseWidget({
+              size: { width: 600 },
+              defaultCanvas,
+              margin: {
+                left: 20,
+                top: 40,
+              },
+            } as any);
+            widget.containerRef = React.createRef() as any;
+            widget.contentReadyEffect();
+
+            expect(widget.props.canvas).toEqual({
+              width: 600,
+              height: 300,
+              left: 20,
+              right: 20,
+              top: 40,
+              bottom: 40,
+            });
+          });
+
+          it('should set merged size from props (size is not valid, and defaultCanvas)', () => {
+            const defaultCanvas: ClientRect = {
+              ...DEFAULT_CANVAS,
+              width: 500,
+              height: 300,
+            };
+            const widget = new BaseWidget({
+              size: {
+                width: -600,
+                height: -400,
+              },
+              defaultCanvas,
+            } as any);
+            widget.containerRef = React.createRef() as any;
+            widget.contentReadyEffect();
+
+            expect(widget.props.canvas).toEqual(defaultCanvas);
+          });
+
+          it('should set default canvas from props (if any side is negative)', () => {
+            const defaultCanvas: ClientRect = {
+              width: 500,
+              height: 300,
+              left: 10,
+              right: 20,
+              top: 30,
+              bottom: 40,
+            };
+            const widget = new BaseWidget({
+              size: { width: 600, height: 400 },
+              defaultCanvas,
+              margin: {
+                top: 300,
+                bottom: 100,
+                left: 200,
+                right: 400,
+              },
+            } as any);
+            widget.containerRef = React.createRef() as any;
+            widget.contentReadyEffect();
+
+            expect(widget.props.canvas).toEqual({
+              width: 500,
+              height: 300,
+              left: 10,
+              right: 20,
+              top: 30,
+              bottom: 40,
+            });
+          });
         });
+      });
+    });
+
+    describe('setRootElementRef', () => {
+      it('rootElementRef should be init', () => {
+        const widget = new BaseWidget({ rootElementRef: { current: null } } as any);
+        const element = {} as HTMLDivElement;
+        widget.containerRef = React.createRef() as any;
+        widget.containerRef.current = element;
+        widget.setRootElementRef();
+        expect(widget.props.rootElementRef.current).toEqual(element);
       });
     });
   });
 
   describe('Methods', () => {
-    describe('svg method', () => {
+    describe('svg', () => {
       it('should return svg root element', () => {
         const widget = new BaseWidget({ } as any);
         const root = { } as SVGElement;
@@ -144,8 +318,10 @@ describe('BaseWidget', () => {
       });
     });
   });
+});
 
-  describe('Logic', () => {
+describe('Logic', () => {
+  describe('Getters', () => {
     describe('cssClasses', () => {
       it('should add default classes', () => {
         const widget = new BaseWidget({ } as any);
@@ -178,199 +354,23 @@ describe('BaseWidget', () => {
       });
     });
 
-    describe('setCanvas', () => {
-      it('should get empty canvas by default', () => {
-        const widget = new BaseWidget({ canvas: DEFAULT_CANVAS } as any);
-        widget.containerRef = React.createRef() as any;
-        widget.setCanvas();
-
-        expect(widget.props.canvas).toEqual(DEFAULT_CANVAS);
-      });
-
-      it('should get size from props (props.size)', () => {
-        const widget = new BaseWidget({ size: { width: 600, height: 400 } } as any);
-        widget.containerRef = React.createRef() as any;
-        widget.setCanvas();
-
-        expect(widget.props.canvas).toMatchObject({
-          width: 600,
-          height: 400,
-        });
-      });
-
-      it('should get size from container element', () => {
-        (getElementComputedStyle as jest.Mock).mockReturnValue({
-          width: '400px',
-          paddingLeft: '10px',
-          paddingRight: '10px',
-          height: '300px',
-          paddingTop: '10px',
-          paddingBottom: '10px',
-        });
-        const widget = new BaseWidget({ } as any);
-        widget.containerRef = React.createRef() as any;
-        widget.setCanvas();
-
-        expect(widget.props.canvas).toMatchObject({
-          width: 380,
-          height: 280,
-        });
-      });
-
-      it('should get default canvas from props (props.defaultCanvas)', () => {
-        (getElementComputedStyle as jest.Mock).mockReturnValue({
-          width: '0px',
-          paddingLeft: '0px',
-          paddingRight: '0px',
-          height: '0px',
-          paddingTop: '0px',
-          paddingBottom: '0px',
-        });
-        const defaultCanvas: ClientRect = {
-          width: 500,
-          height: 300,
-          left: 10,
-          right: 20,
-          top: 30,
-          bottom: 40,
-        };
-        const widget = new BaseWidget({ defaultCanvas } as any);
-        widget.containerRef = React.createRef() as any;
-        widget.setCanvas();
-
-        expect(widget.props.canvas).toEqual({
-          width: 500,
-          height: 300,
-          left: 10,
-          right: 20,
-          top: 30,
-          bottom: 40,
-        });
-      });
-
-      it('should get merged size from props.size and container element', () => {
-        (getElementComputedStyle as jest.Mock).mockReturnValue({
-          width: '400px',
-          paddingLeft: '0px',
-          paddingRight: '0px',
-          height: '300px',
-          paddingTop: '0px',
-          paddingBottom: '0px',
-        });
-        const widget = new BaseWidget({
-          size: { width: 600 },
-          canvas: { ...DEFAULT_CANVAS, width: 300, height: 100 },
-        } as any);
-        widget.containerRef = React.createRef() as any;
-        widget.setCanvas();
-
-        expect(widget.props.canvas).toMatchObject({
-          width: 600,
-          height: 300,
-        });
-      });
-
-      it('should get merged canvas from props (size, margin and defaultCanvas)', () => {
-        const defaultCanvas: ClientRect = {
-          width: 500,
-          height: 300,
-          left: 10,
-          right: 20,
-          top: 30,
-          bottom: 40,
-        };
-        const widget = new BaseWidget({
-          size: { width: 600 },
-          defaultCanvas,
-          margin: {
-            left: 20,
-            top: 40,
-          },
-        } as any);
-        widget.containerRef = React.createRef() as any;
-        widget.setCanvas();
-
-        expect(widget.props.canvas).toEqual({
-          width: 600,
-          height: 300,
-          left: 20,
-          right: 20,
-          top: 40,
-          bottom: 40,
-        });
-      });
-
-      it('should get merged size from props (size is not valid, and defaultCanvas)', () => {
-        const defaultCanvas: ClientRect = {
-          ...DEFAULT_CANVAS,
-          width: 500,
-          height: 300,
-        };
-        const widget = new BaseWidget({
-          size: {
-            width: -600,
-            height: -400,
-          },
-          defaultCanvas,
-        } as any);
-        widget.containerRef = React.createRef() as any;
-        widget.setCanvas();
-
-        expect(widget.props.canvas).toEqual(defaultCanvas);
-      });
-
-      it('should get default canvas from props (if any side is negative)', () => {
-        const defaultCanvas: ClientRect = {
-          width: 500,
-          height: 300,
-          left: 10,
-          right: 20,
-          top: 30,
-          bottom: 40,
-        };
-        const widget = new BaseWidget({
-          size: { width: 600, height: 400 },
-          defaultCanvas,
-          margin: {
-            top: 300,
-            bottom: 100,
-            left: 200,
-            right: 400,
-          },
-        } as any);
-        widget.containerRef = React.createRef() as any;
-        widget.setCanvas();
-
-        expect(widget.props.canvas).toEqual({
-          width: 500,
-          height: 300,
-          left: 10,
-          right: 20,
-          top: 30,
-          bottom: 40,
-        });
-      });
-    });
-
     describe('shouldRenderConfigProvider', () => {
-      it('should call utils method resolveRtlEnabledDefinition', () => {
+      it('should return result of utils method resolveRtlEnabledDefinition', () => {
         (resolveRtlEnabledDefinition as jest.Mock).mockReturnValue(true);
-        const widget = new BaseWidget({ } as any);
-        const { shouldRenderConfigProvider } = widget;
+        const widget = new BaseWidget({ rtlEnabled: true } as any);
 
-        expect(shouldRenderConfigProvider).toBe(true);
-        expect(resolveRtlEnabledDefinition).toHaveBeenCalledTimes(1);
+        expect(widget.shouldRenderConfigProvider).toBe(true);
+        expect(resolveRtlEnabledDefinition).toBeCalledWith(true, undefined);
       });
     });
 
     describe('rtlEnabled', () => {
-      it('should call utils method resolveRtlEnabled', () => {
+      it('should return result of utils method resolveRtlEnabled', () => {
         (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
-        const widget = new BaseWidget({ } as any);
-        const { rtlEnabled } = widget;
+        const widget = new BaseWidget({ rtlEnabled: true } as any);
 
-        expect(rtlEnabled).toBe(false);
-        expect(resolveRtlEnabled).toHaveBeenCalledTimes(1);
+        expect(widget.rtlEnabled).toBe(false);
+        expect(resolveRtlEnabled).toBeCalledWith(true, undefined);
       });
     });
   });

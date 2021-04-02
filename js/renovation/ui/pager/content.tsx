@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component, ComponentBindings, JSXComponent, OneWay, ForwardRef, Provider, Effect, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { InfoText } from './info';
 import { PageIndexSelector } from './pages/page_index_selector';

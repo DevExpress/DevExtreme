@@ -43,14 +43,14 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     items?: Array<string | dxActionSheetItem | any>;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCancelClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, cancel?: boolean }) => any) | string;
+    onCancelClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, cancel?: boolean }) => void) | string;
     /**
      * @docid
      * @default true
@@ -155,7 +155,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, event?: TEvent }) => any) | string;
+    onClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, event?: TEvent }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType
