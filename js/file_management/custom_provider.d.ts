@@ -56,7 +56,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    downloadItems?: ((items: Array<FileSystemItem>) => any);
+    downloadItems?: ((items: Array<FileSystemItem>) => void);
 
     /**
      * @docid

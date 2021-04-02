@@ -29,7 +29,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeModules?: ((config: any) => any);
+    customizeModules?: ((config: any) => void);
     /**
      * @docid
      * @default true
@@ -353,13 +353,6 @@ export default class dxHtmlEditor extends Editor {
      * @public
      */
     undo(): void;
-    /**
-     * @docid
-     * @publicName update()
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    update(): void;
 }
 
 /**

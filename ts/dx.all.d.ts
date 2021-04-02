@@ -3615,11 +3615,11 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.onEditCanceled]
          */
-        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<any> }) => any);
+        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => any);
         /**
          * [descr:GridBaseOptions.onEditCanceling]
          */
-        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<any>, cancel?: boolean }) => any);
+        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<GridBaseEditingChange>, cancel?: boolean }) => any);
         /**
          * [descr:GridBaseOptions.onInitNewRow]
          */
@@ -3675,11 +3675,11 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.onSaved]
          */
-        onSaved?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<any> }) => any);
+        onSaved?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => any);
         /**
          * [descr:GridBaseOptions.onSaving]
          */
-        onSaving?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<any>, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
+        onSaving?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<GridBaseEditingChange>, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
         /**
          * [descr:GridBaseOptions.onSelectionChanged]
          */
@@ -3768,7 +3768,7 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.editing.changes]
          */
-        changes?: Array<any>;
+        changes?: Array<GridBaseEditingChange>;
         /**
          * [descr:GridBaseOptions.editing.confirmDelete]
          */
@@ -4422,6 +4422,31 @@ declare module DevExpress.ui {
          * [descr:GridBaseColumnButton.text]
          */
         text?: string;
+    }
+    /**
+     * [descr:GridBaseEditingChange]
+     */
+    export interface GridBaseEditingChange {
+        /**
+         * [descr:GridBaseEditingChange.data]
+         */
+        data: any;
+        /**
+         * [descr:GridBaseEditingChange.index]
+         */
+        index?: number;
+        /**
+         * [descr:GridBaseEditingChange.key]
+         */
+        key: any;
+        /**
+         * [descr:GridBaseEditingChange.pageIndex]
+         */
+        pageIndex?: number;
+        /**
+         * [descr:GridBaseEditingChange.type]
+         */
+        type: 'insert' | 'update' | 'remove';
     }
     /**
      * [descr:HierarchicalCollectionWidgetOptions]
@@ -6010,6 +6035,14 @@ declare module DevExpress.ui {
          * [descr:dxDiagram.import(data, updateExistingItemsOnly)]
          */
         import(data: string, updateExistingItemsOnly?: boolean): void;
+        /**
+         * [descr:dxDiagram.scrollToItems(items: Array<dxDiagramItem>)]
+         */
+        scrollToItems(items: Array<dxDiagramItem>): void;
+        /**
+         * [descr:dxDiagram.setSelectedItems(items: Array<dxDiagramItem>)]
+         */
+        setSelectedItems(items: Array<dxDiagramItem>): void;
         /**
          * [descr:dxDiagram.updateToolbox()]
          */
@@ -7989,7 +8022,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttOptions.taskContentTemplate]
          */
-        taskContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, item: { cellSize?: any, isMilestone?: boolean, taskData?: any, taskHTML?: any, taskPosition?: any, taskResources?: Array<any>, taskSize?: any }) => string | DevExpress.core.TElement);
+        taskContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, item: { cellSize?: any, isMilestone?: boolean, taskData?: any, taskHTML?: any, taskPosition?: any, taskResources?: Array<any>, taskSize?: any }) => string | Element | JQuery);
         /**
          * [descr:dxGanttOptions.taskListWidth]
          */
@@ -8001,7 +8034,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttOptions.taskTooltipContentTemplate]
          */
-        taskTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => string | DevExpress.core.TElement);
+        taskTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => string | Element | JQuery);
         /**
          * [descr:dxGanttOptions.tasks]
          */
@@ -8037,6 +8070,10 @@ declare module DevExpress.ui {
          * [descr:dxGantt.deleteTask(key)]
          */
         deleteTask(key: any): void;
+        /**
+         * [descr:dxGantt.exportToPdf(options)]
+         */
+        exportToPdf(options: any): Promise<any> & JQueryPromise<any>;
         /**
          * [descr:dxGantt.getDependencyData(key)]
          */
@@ -8326,10 +8363,6 @@ declare module DevExpress.ui {
          * [descr:dxHtmlEditor.undo()]
          */
         undo(): void;
-        /**
-         * [descr:dxHtmlEditor.update()]
-         */
-        update(): void;
     }
     /**
      * [descr:dxHtmlEditorMediaResizing]

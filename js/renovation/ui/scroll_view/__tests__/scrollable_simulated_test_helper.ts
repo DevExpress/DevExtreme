@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import {
   ScrollDirection,
-} from '../scrollable_utils';
+} from '../utils/scroll_direction';
 
 import {
   ScrollableSimulated as Scrollable,
@@ -205,6 +205,9 @@ class ScrollableTestHelper {
         },
       });
 
+      scrollbar.updateMinOffset();
+      scrollbar.minLimit = scrollbar.minOffset;
+
       return scrollbar;
     };
 
@@ -219,7 +222,7 @@ class ScrollableTestHelper {
   }
 
   initScrollbarHandlerMocks(): void {
-    this.scrollBarHandlers = ['init', 'start', 'end', 'cancel', 'stop', 'scrollBy'];
+    this.scrollBarHandlers = ['init', 'start', 'end', 'cancel', 'stop', 'move', 'scrollBy', 'release'];
 
     this.scrollBarHandlers.forEach((handler) => {
       this[`${handler}HandlerMock`] = jest.fn();
@@ -282,6 +285,19 @@ class ScrollableTestHelper {
     }
   }
 
+  callScrollbarMethod(method: string): void {
+    const { horizontalScrollbarRef, verticalScrollbarRef } = this.viewModel;
+
+    if (this.isBoth) {
+      horizontalScrollbarRef.current![method]();
+      verticalScrollbarRef.current![method]();
+    } else if (this.isVertical) {
+      verticalScrollbarRef.current![method]();
+    } else if (this.isHorizontal) {
+      horizontalScrollbarRef.current![method]();
+    }
+  }
+
   initContainerPosition({ top, left }: { top: number; left: number }): void {
     this.viewModel.containerRef.current!.scrollTop = top;
     this.viewModel.containerRef.current!.scrollLeft = left;
@@ -307,12 +323,12 @@ class ScrollableTestHelper {
   checkScrollTransform(jestExpect: (any) => any,
     { vertical, horizontal }: { vertical: string; horizontal: string }): void {
     if (this.isBoth) {
-      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
-      jestExpect(this.getScrollbars().at(1).instance().styles).toHaveProperty('transform', vertical);
+      jestExpect(this.getScrollbars().at(0).instance().scrollStyles).toHaveProperty('transform', horizontal);
+      jestExpect(this.getScrollbars().at(1).instance().scrollStyles).toHaveProperty('transform', vertical);
     } else if (this.isVertical) {
-      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', vertical);
+      jestExpect(this.getScrollbars().at(0).instance().scrollStyles).toHaveProperty('transform', vertical);
     } else if (this.isHorizontal) {
-      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
+      jestExpect(this.getScrollbars().at(0).instance().scrollStyles).toHaveProperty('transform', horizontal);
     }
   }
 
@@ -372,8 +388,8 @@ class ScrollableTestHelper {
 
   // eslint-disable-next-line class-methods-use-this
   getContainerRefMock({
-    clientWidth = 100, clientHeight = 100, scrollTop = 50, scrollLeft = 50, offsetWidth = 300,
-    offsetHeight = 300, scrollWidth = 600, scrollHeight = 600,
+    clientWidth = 100, clientHeight = 100, scrollTop = 50, scrollLeft = 50, offsetWidth = 100,
+    offsetHeight = 100, scrollWidth = 600, scrollHeight = 600,
   }: { [key: string]: number }): any {
     return {
       current: {

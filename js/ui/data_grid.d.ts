@@ -715,22 +715,22 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<any>
+     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
      * @default null
      * @action
      * @public
      */
-    onEditCanceled?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<any> }) => void);
+    onEditCanceled?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<any>
+     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
      * @type_function_param1_field5 cancel:boolean
      * @default null
      * @action
      * @public
      */
-    onEditCanceling?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<any>, cancel?: boolean }) => void);
+    onEditCanceling?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange>, cancel?: boolean }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -886,23 +886,23 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<any>
+     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
      * @default null
      * @action
      * @public
      */
-    onSaved?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<any> }) => void);
+    onSaved?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<any>
+     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
      * @type_function_param1_field5 promise:Promise<void>
      * @type_function_param1_field6 cancel:boolean
      * @default null
      * @action
      * @public
      */
-    onSaving?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<any>, promise?: TPromise<void>, cancel?: boolean }) => void);
+    onSaving?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange>, promise?: TPromise<void>, cancel?: boolean }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1459,7 +1459,7 @@ export interface GridBaseEditing {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    changes?: Array<any>;
+    changes?: Array<GridBaseEditingChange>;
     /**
      * @docid GridBaseOptions.editing.editColumnName
      * @default null
@@ -1533,6 +1533,35 @@ export interface GridBaseEditing {
      */
     useIcons?: boolean;
 }
+
+/**
+  * @docid
+  * @prevFileNamespace DevExpress.ui
+  */
+ export interface GridBaseEditingChange {
+  /**
+   * @docid
+   */
+  key: any;
+  /**
+   * @docid
+   * @type Enums.GridDataChangeType
+   */
+  type: 'insert' | 'update' | 'remove';
+  /**
+   * @docid
+   */
+  data: object;
+  /**
+   * @docid
+   */
+  index?: number;
+  /**
+   * @docid
+   */
+  pageIndex?: number;
+}
+
 export interface GridBaseEditingTexts {
     /**
      * @docid GridBaseOptions.editing.texts.addRow
@@ -2766,7 +2795,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
+    customizeColumns?: ((columns: Array<dxDataGridColumn>) => void);
     /**
      * @docid
      * @deprecated
@@ -2775,7 +2804,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
+    customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -2812,7 +2841,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
        * @type_function_param1_field10 numberFormat:string
        * @type_function_param1_field11 gridCell:ExcelDataGridCell
        */
-      customizeExcelCell?: ((options: { component?: dxDataGrid, horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: ExcelDataGridCell }) => any),
+      customizeExcelCell?: ((options: { component?: dxDataGrid, horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: ExcelDataGridCell }) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -3458,7 +3487,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
        * @type_function_param1_field5 totalValue:any
        * @type_function_param1_field6 groupIndex:number
        */
-      calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any, groupIndex?: number }) => any),
+      calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any, groupIndex?: number }) => void),
       /**
        * @docid
        * @type Array<object>

@@ -30,6 +30,10 @@ import {
     template
 } from '../core/templates/template';
 
+import {
+    TPromise
+} from '../core/utils/deferred';
+
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
@@ -656,6 +660,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @docid
      * @type_function_param1 container:dxElement
      * @type_function_param2 task:any
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -671,6 +676,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param2_field5 taskPosition:object
      * @type_function_param2_field6 taskResources:Array<object>
      * @type_function_param2_field7 taskSize:object
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -861,6 +867,15 @@ export default class dxGantt extends Widget {
      * @public
      */
     scrollToDate(date: Date | Number | string): void;
+    /**
+     * @docid 
+     * @publicName exportToPdf(options)
+     * @param1 options:object
+     * @return Promise<any>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    exportToPdf(options: any): TPromise<any>;
 }
 
 /**
