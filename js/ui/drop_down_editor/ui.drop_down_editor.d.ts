@@ -21,7 +21,7 @@ import {
 
 import {
     ComponentEvent
-} from '../../events/';
+} from '../../events/index';
 
 export interface DropDownButtonTemplateDataModel {
     readonly text?: string;

@@ -4,7 +4,7 @@ import {
 
 import {
     ComponentNativeEvent
-} from '../../events/';
+} from '../../events/index';
 
 import dxButton, {
     dxButtonOptions
