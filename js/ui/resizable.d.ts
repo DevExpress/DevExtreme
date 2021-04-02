@@ -11,7 +11,7 @@ import {
     ComponentDisposingEvent,
     ComponentInitializedEvent,
     ComponentOptionChangedEvent
-} from '../events';
+} from '../events/index';
 
 export interface ResizeInfo {
     readonly width: number;

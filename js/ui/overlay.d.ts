@@ -18,7 +18,7 @@ import {
     TEvent,
     Cancelable,
     ComponentEvent
-} from '../events';
+} from '../events/index';
 
 import Widget, {
     WidgetOptions

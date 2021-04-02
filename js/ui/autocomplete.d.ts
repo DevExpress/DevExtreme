@@ -9,7 +9,7 @@ import {
     ComponentInitializedEvent,
     ComponentOptionChangedEvent,
     ItemInfo
-} from '../events';
+} from '../events/index';
 
 import {
     SelectionChangedInfo,

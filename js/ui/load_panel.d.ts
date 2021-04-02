@@ -8,7 +8,7 @@ import {
     ComponentDisposingEvent,
     ComponentInitializedEvent,
     ComponentOptionChangedEvent
-} from '../events';
+} from '../events/index';
 
 import {
     animationConfig

@@ -5,7 +5,7 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent
-} from '../events';
+} from '../events/index';
 
 import {
     template

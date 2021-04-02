@@ -2,7 +2,7 @@ import {
   ComponentDisposingEvent,
   ComponentInitializedEvent,
   ComponentOptionChangedEvent
-} from '../events';
+} from '../events/index';
 
 export interface ComponentOptions<T = Component> {
   /**
