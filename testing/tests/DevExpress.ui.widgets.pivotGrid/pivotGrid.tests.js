@@ -3006,14 +3006,14 @@ QUnit.module('dxPivotGrid', {
                 const $rowsHeaderArea = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers');
                 const $columnsHeaderArea = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers');
 
-                const rowsRect = $rowsHeaderArea.get(0).getBoundingClientRect();
-                const columnsRect = $columnsHeaderArea.get(0).getBoundingClientRect();
+                const rowsAreaRect = $rowsHeaderArea.get(0).getBoundingClientRect();
+                const columnsAreaRect = $columnsHeaderArea.get(0).getBoundingClientRect();
 
-                const expectedRowsCellRect = getHeaderCellByText($rowsHeaderArea, expected.row.toString()).getBoundingClientRect();
-                const expectedColumnsCellRect = getHeaderCellByText($columnsHeaderArea, expected.column.toString()).getBoundingClientRect();
+                const expectedRowCellRect = getHeaderCellByText($rowsHeaderArea, expected.row.toString()).getBoundingClientRect();
+                const expectedColumnCellRect = getHeaderCellByText($columnsHeaderArea, expected.column.toString()).getBoundingClientRect();
 
-                QUnit.assert.roughEqual(rowsRect.top, expectedRowsCellRect.top, 15, `expected row position ${message}`);
-                QUnit.assert.roughEqual(columnsRect.left, expectedColumnsCellRect.left, 15, `expected column position ${message}`);
+                QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 15, `expected row position ${message}`);
+                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 15, `expected column position ${message}`);
             }
 
             function tryTriggerScrollEventAndWait(scrollable, clock) {
