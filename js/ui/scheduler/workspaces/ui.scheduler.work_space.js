@@ -2689,12 +2689,13 @@ class SchedulerWorkSpace extends WidgetObserver {
             currentDayStart.setHours(this.option('startDayHour'), 0, 0, 0);
         }
 
+        const timeZoneDifference = dateUtils.getTimezonesDifference(date, currentDayStart);
         const currentDateTime = date.getTime();
         const currentDayStartTime = currentDayStart.getTime();
         const minTime = this._firstViewDate.getTime();
 
         return (currentDateTime > minTime)
-            ? ((currentDateTime - currentDayStartTime) % cellDuration) / cellDuration
+            ? ((currentDateTime - currentDayStartTime + timeZoneDifference) % cellDuration) / cellDuration
             : 0;
     }
 
