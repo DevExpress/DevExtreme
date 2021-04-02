@@ -8022,7 +8022,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttOptions.taskContentTemplate]
          */
-        taskContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, item: { cellSize?: any, isMilestone?: boolean, taskData?: any, taskHTML?: any, taskPosition?: any, taskResources?: Array<any>, taskSize?: any }) => string | DevExpress.core.TElement);
+        taskContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, item: { cellSize?: any, isMilestone?: boolean, taskData?: any, taskHTML?: any, taskPosition?: any, taskResources?: Array<any>, taskSize?: any }) => string | Element | JQuery);
         /**
          * [descr:dxGanttOptions.taskListWidth]
          */
@@ -8034,7 +8034,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttOptions.taskTooltipContentTemplate]
          */
-        taskTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => string | DevExpress.core.TElement);
+        taskTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => string | Element | JQuery);
         /**
          * [descr:dxGanttOptions.tasks]
          */
