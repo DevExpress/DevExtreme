@@ -1545,6 +1545,7 @@ export interface GridBaseEditing {
   key: any;
   /**
    * @docid
+   * @type Enums.GridDataChangeType
    */
   type: 'insert' | 'update' | 'remove';
   /**
