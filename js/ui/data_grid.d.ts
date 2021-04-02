@@ -2794,7 +2794,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
+    customizeColumns?: ((columns: Array<dxDataGridColumn>) => void);
     /**
      * @docid
      * @deprecated
@@ -2803,7 +2803,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
+    customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -2840,7 +2840,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
        * @type_function_param1_field10 numberFormat:string
        * @type_function_param1_field11 gridCell:ExcelDataGridCell
        */
-      customizeExcelCell?: ((options: { component?: dxDataGrid, horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: ExcelDataGridCell }) => any),
+      customizeExcelCell?: ((options: { component?: dxDataGrid, horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: ExcelDataGridCell }) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -3486,7 +3486,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
        * @type_function_param1_field5 totalValue:any
        * @type_function_param1_field6 groupIndex:number
        */
-      calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any, groupIndex?: number }) => any),
+      calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any, groupIndex?: number }) => void),
       /**
        * @docid
        * @type Array<object>

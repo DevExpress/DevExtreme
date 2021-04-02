@@ -99,7 +99,7 @@ export interface PdfExportDataGridProps {
      * @type_function_param1_field2 pdfCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any}) => any);
+    customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any}) => void);
      /**
      * @docid
      * @public

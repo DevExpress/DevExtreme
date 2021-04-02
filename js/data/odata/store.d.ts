@@ -31,7 +31,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
+    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.data
@@ -47,7 +47,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
     /**
      * @docid
      * @default {}
