@@ -1208,7 +1208,7 @@ export default class dxDiagram extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     setSelectedItems(items): void;
+     setSelectedItems(items: Array<dxDiagramItem>): void;
     /**
      * @docid
      * @publicName scrollToItems(items: Array<dxDiagramItem>)
@@ -1216,7 +1216,7 @@ export default class dxDiagram extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     scrollToItems(items): void;
+     scrollToItems(items: Array<dxDiagramItem>): void;
     /**
      * @docid
      * @publicName export()
