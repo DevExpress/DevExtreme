@@ -1412,11 +1412,21 @@ class Gantt extends Widget {
     }
 
     // export
+    exportToPdf(options) {
+        const fullOptions = extend({}, options);
+        fullOptions.docCreateMethod ??= window['jspdf']?.['jsPDF'] ?? window['jsPDF'];
+        fullOptions.format ??= 'a4';
+        return new Promise((resolve) => {
+            const doc = this._ganttView?._ganttViewCore.exportToPdf(fullOptions);
+            resolve(doc);
+        });
+    }
     getTreeListTableStyle() {
         const table = this._treeList._$element.find('.dx-treelist-table').get(0);
         const style = window.getComputedStyle(table);
         return {
             color: style.color,
+            backgroundColor: style.backgroundColor,
             fontSize: style.fontSize,
             fontFamily: style.fontFamily,
             fontWeight: style.fontWeight,

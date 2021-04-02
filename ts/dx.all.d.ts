@@ -8071,6 +8071,10 @@ declare module DevExpress.ui {
          */
         deleteTask(key: any): void;
         /**
+         * [descr:dxGantt.exportToPdf(options)]
+         */
+        exportToPdf(options: any): Promise<any> & JQueryPromise<any>;
+        /**
          * [descr:dxGantt.getDependencyData(key)]
          */
         getDependencyData(key: any): any;
