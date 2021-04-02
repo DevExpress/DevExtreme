@@ -1,4 +1,4 @@
-import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { initTestMarkup, createWrapper, isDesktopEnvironment, CLASSES } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import browser from 'core/utils/browser';
@@ -577,5 +577,145 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
 
             assert.expect(2);
         });
+    });
+
+    module('Cells selection with DST', {
+        beforeEach: function() {
+            fx.off = true;
+        },
+        afterEach: function() {
+            fx.off = false;
+        },
+    }, () => {
+        const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
+        const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
+
+        if(isDesktopEnvironment()) {
+            const schedulerSettings = {
+                dataSource: [],
+                views: ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'],
+                currentDate: new Date(2021, 2, 14),
+                scrolling: {
+                    mode: 'virtual'
+                },
+                startDayHour: 0,
+                endDayHour: 10,
+                height: 600,
+                width: 1500,
+            };
+
+            [
+                {
+                    cell: 28,
+                    currentView: 'week'
+                }, {
+                    cell: 5,
+                    currentView: 'day'
+                }, {
+                    cell: 5,
+                    currentView: 'timelineDay'
+                }, {
+                    cell: 5,
+                    currentView: 'timelineWeek'
+                }
+            ].forEach(({ cell, currentView }) => {
+                test(`Correct cell should be selected when ${currentView} view is used`, function(assert) {
+                    const scheduler = createWrapper(Object.assign({ currentView }, schedulerSettings));
+                    scheduler.workSpace.selectCells(cell, cell);
+
+                    const selectedCell = scheduler.workSpace.getCell(cell);
+                    const selectedCells = scheduler.workSpace.getSelectedCells();
+
+                    assert.equal(selectedCells.length, 1, 'selected exacly one cell');
+                    assert.ok(selectedCell.hasClass(SELECTED_CELL_CLASS), 'the cell is selected');
+                    assert.ok(selectedCell.hasClass(FOCUSED_CELL_CLASS), 'the cell is focused');
+                });
+            });
+
+            [
+                {
+                    firstCell: 3,
+                    lastCell: 8,
+                    selectedCellCount: 6,
+                    currentView: 'day',
+                    mustBeSelectedCells: [4, 5, 6, 7],
+                    testDescription: 'Cells that cover dead zone of DST'
+                }, {
+                    firstCell: 21,
+                    lastCell: 56,
+                    selectedCellCount: 6,
+                    currentView: 'week',
+                    mustBeSelectedCells: [28, 35, 42, 49],
+                    testDescription: 'Cells that cover dead zone of DST'
+                }, {
+                    firstCell: 28,
+                    lastCell: 29,
+                    selectedCellCount: 17,
+                    currentView: 'week',
+                    mustBeSelectedCells: [28, 35, 42, 56],
+                    testDescription: 'Cells that cover dead zone of DST and part of next week'
+                }, {
+                    firstCell: 3,
+                    lastCell: 8,
+                    selectedCellCount: 6,
+                    currentView: 'timelineDay',
+                    mustBeSelectedCells: [4, 5, 6, 7],
+                    testDescription: 'Cells that cover dead zone of DST'
+                }, {
+                    firstCell: 5,
+                    lastCell: 9,
+                    selectedCellCount: 5,
+                    currentView: 'timelineWeek',
+                    mustBeSelectedCells: [5, 6, 7, 8, 9],
+                    testDescription: 'Cells that start on dead zone of DST'
+                },
+                {
+                    firstCell: 4,
+                    lastCell: 5,
+                    selectedCellCount: 2,
+                    currentView: 'day',
+                    mustBeSelectedCells: [4, 5],
+                    testDescription: 'Cells of dead zone of DST'
+                }, {
+                    firstCell: 14,
+                    lastCell: 28,
+                    selectedCellCount: 3,
+                    currentView: 'week',
+                    mustBeSelectedCells: [14, 21, 28],
+                    testDescription: 'Cells that end on dead zone of DST'
+                }, {
+                    firstCell: 3,
+                    lastCell: 5,
+                    selectedCellCount: 3,
+                    currentView: 'timelineDay',
+                    mustBeSelectedCells: [3, 4, 5],
+                    testDescription: 'Cells that end on dead zone of DST'
+                }, {
+                    firstCell: 3,
+                    lastCell: 5,
+                    selectedCellCount: 3,
+                    currentView: 'timelineWeek',
+                    mustBeSelectedCells: [3, 4, 5],
+                    testDescription: 'Cells that end on dead zone of DST'
+                },
+            ].forEach(({ firstCell, lastCell, selectedCellCount, currentView, mustBeSelectedCells, testDescription }) => {
+                test(`${testDescription} should be selected when ${currentView} view is used`, function(assert) {
+                    const scheduler = createWrapper({ ...schedulerSettings, currentView });
+
+                    scheduler.workSpace.selectCells(firstCell, lastCell);
+
+                    const cells = scheduler.workSpace.getCells();
+                    const selectedCells = scheduler.workSpace.getSelectedCells();
+
+                    assert.equal(selectedCells.length, selectedCellCount, 'the amount of selected cells is correct');
+                    assert.ok(cells.eq(firstCell).hasClass(SELECTED_CELL_CLASS), 'the first cell is selected');
+                    assert.ok(cells.eq(lastCell).hasClass(SELECTED_CELL_CLASS), 'the last cell is selected');
+                    assert.ok(cells.eq(lastCell).hasClass(FOCUSED_CELL_CLASS), 'the last cell is focused');
+                    mustBeSelectedCells.forEach(index => {
+                        assert.ok(cells.eq(index).hasClass(SELECTED_CELL_CLASS), 'the cell from dead zone is selected');
+                    });
+                });
+            });
+        }
     });
 }
