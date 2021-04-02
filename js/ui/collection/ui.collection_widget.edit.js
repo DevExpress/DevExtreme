@@ -542,7 +542,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _isItemSelected: function(index) {
         const key = this._getKeyByIndex(index);
-        return this._selection.isItemSelected(key);
+        return this._selection.isItemSelected(key, { checkPending: true });
     },
 
     _optionChanged: function(args) {
@@ -751,7 +751,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
         const key = this._getKeyByIndex(itemIndex);
 
-        if(!this._selection.isItemSelected(key)) {
+        if(!this._selection.isItemSelected(key, { checkPending: true })) {
             return;
         }
 
