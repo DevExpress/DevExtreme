@@ -161,6 +161,52 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                 assert.equal(scheduler.appointments.getAppointmentCount(), appointmentCount - 1, 'appointment count should be reduced');
             });
         });
+
+        [{
+            cellDuration: 120,
+            appointmentTop: 100,
+            view: 'week',
+            startDate: new Date(2020, 2, 8, 4),
+        }, {
+            cellDuration: 90,
+            appointmentTop: 150,
+            view: 'week',
+            startDate: new Date(2020, 2, 8, 4, 30),
+        }, {
+            cellDuration: 120,
+            appointmentLeft: 400,
+            view: 'timelineWeek',
+            startDate: new Date(2020, 2, 8, 4),
+        }, {
+            cellDuration: 90,
+            appointmentLeft: 600,
+            view: 'timelineWeek',
+            startDate: new Date(2020, 2, 8, 4, 30),
+        }].forEach(({ cellDuration, appointmentTop, appointmentLeft, view, startDate }) => {
+            test(`Appointments should be rendered correctly after DST when cellDuration is ${cellDuration} in ${view}`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: [{
+                        startDate,
+                        endDate: new Date(2020, 2, 8, 6),
+                        text: 'Test Appointment',
+                    }],
+                    currentDate: summerDSTDate,
+                    views: [view],
+                    currentView: view,
+                    cellDuration,
+                });
+
+                if(view === 'week') {
+                    const actualAppointmentTop = scheduler.appointments.getAppointment(0).position().top;
+
+                    assert.equal(actualAppointmentTop, appointmentTop, 'Correct top coordinate');
+                } else {
+                    const actualAppointmentLeft = scheduler.appointments.getAppointment(0).position().left;
+
+                    assert.equal(actualAppointmentLeft, appointmentLeft, 'Correct left coordinate');
+                }
+            });
+        });
     });
 
     module('Time panel should have correct dates value in case DST', moduleConfig, () => {
