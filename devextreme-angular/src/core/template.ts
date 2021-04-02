@@ -66,11 +66,11 @@ export class DxTemplateDirective {
             });
         } else {
             childView = this.renderTemplate(renderData);
-            // =========== WORKAROUND =============
-            // https://github.com/angular/angular/issues/12243
-            childView['detectChanges']();
-            // =========== /WORKAROUND =============
         }
+        // =========== WORKAROUND =============
+        // https://github.com/angular/angular/issues/12243
+        childView['detectChanges']();
+        // =========== /WORKAROUND =============
 
         childView.rootNodes.forEach((element) => {
             if (element.nodeType === 1) {

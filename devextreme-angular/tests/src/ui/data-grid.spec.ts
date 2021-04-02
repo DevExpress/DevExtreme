@@ -406,4 +406,33 @@ describe('Nested DxDataGrid', () => {
             }, 1000);
         }, 1000);
     });
+
+    it('should render a template with data when zone is stable (T869744)', (done) => {
+        TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+                template: `
+                    <dx-data-grid
+                        [dataSource]="dataSource"
+                        keyExpr="id">
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                        <dxi-column dataField="string" cellTemplate="cellTemplate"></dxi-column>
+
+                        <div *dxTemplate="let data of 'cellTemplate'">
+                            <div class="my-template">{{data.value}}</div>
+                        </div>
+                    </dx-data-grid>
+                `
+            }
+        });
+
+        let fixture = TestBed.createComponent(TestContainerComponent);
+        fixture.detectChanges();
+
+        setTimeout(() => {
+            let instance = fixture.componentInstance.innerWidgets.first.instance;
+            let element = instance.element().querySelector('.my-template');
+            expect(element.textContent).toBe('String');
+            done();
+        }, 1000);
+    });
 });
