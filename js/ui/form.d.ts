@@ -123,7 +123,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => any);
+    customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void);
     /**
      * @docid
      * @default {}

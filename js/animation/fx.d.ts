@@ -19,7 +19,7 @@ export interface animationConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    complete?: (($element: TElement, config: any) => any);
+    complete?: (($element: TElement, config: any) => void);
     /**
      * @docid
      * @default 0
@@ -70,7 +70,7 @@ export interface animationConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    start?: (($element: TElement, config: any) => any);
+    start?: (($element: TElement, config: any) => void);
     /**
      * @docid
      * @default {}

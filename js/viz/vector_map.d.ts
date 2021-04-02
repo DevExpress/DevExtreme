@@ -319,7 +319,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       * @type_function_param1 elements:Array<MapLayerElement>
       * @notUsedInTheme
       */
-      customize?: ((elements: Array<MapLayerElement>) => any),
+      customize?: ((elements: Array<MapLayerElement>) => void),
       /**
       * @docid
       * @prevFileNamespace DevExpress.viz

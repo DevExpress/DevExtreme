@@ -45,6 +45,8 @@ export class OverlayProps extends WidgetProps {
     type: 'pop', duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 },
   };
 
+  @OneWay() position?: any;
+
   @OneWay() visible?: boolean = false;
 
   @OneWay() container?: string | Element;

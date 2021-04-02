@@ -1479,7 +1479,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         data.forEach((cellData) => {
-            const { groups, startDate, allDay } = cellData;
+            const { groups, startDate, allDay, index } = cellData;
             let { groupIndex } = cellData;
 
             if(!groupIndex) {
@@ -1490,7 +1490,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const coordinates = this.isVirtualScrolling()
                 ? this.viewDataProvider.findCellPositionInMap(
-                    groupIndex, startDate, allDay,
+                    { groupIndex, startDate, isAllDay: allDay, index }
                 )
                 : this.getCoordinatesByDate(startDate, groupIndex, allDay);
 
@@ -2795,7 +2795,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         let position;
 
         if(this.isVirtualScrolling()) {
-            const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
+            const cellInfo = { groupIndex, startDate: date, isAllDay: inAllDayRow };
+            const positionByMap = this.viewDataProvider.findCellPositionInMap(cellInfo);
             if(!positionByMap) {
                 return undefined;
             }
@@ -2884,12 +2885,13 @@ class SchedulerWorkSpace extends WidgetObserver {
             currentDayStart.setHours(this.option('startDayHour'), 0, 0, 0);
         }
 
+        const timeZoneDifference = dateUtils.getTimezonesDifference(date, currentDayStart);
         const currentDateTime = date.getTime();
         const currentDayStartTime = currentDayStart.getTime();
         const minTime = this._firstViewDate.getTime();
 
         return (currentDateTime > minTime)
-            ? ((currentDateTime - currentDayStartTime) % cellDuration) / cellDuration
+            ? ((currentDateTime - currentDayStartTime + timeZoneDifference) % cellDuration) / cellDuration
             : 0;
     }
 

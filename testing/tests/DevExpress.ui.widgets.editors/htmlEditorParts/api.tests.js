@@ -306,15 +306,6 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(testModule.getEditor(), this.instance);
     });
 
-    test('\'update\' method should call the quill\'s update', function(assert) {
-        this.createEditor();
-        const updateSpy = sinon.spy(this.instance.getQuillInstance(), 'update');
-
-        this.instance.update();
-
-        assert.ok(updateSpy.calledOnce, 'Quill update() should triggered on the editor\'s update()');
-    });
-
     test('\'focus\' method should call the quill\'s focus', function(assert) {
         this.createEditor();
         const focusSpy = sinon.spy(this.instance.getQuillInstance(), 'focus');
