@@ -1037,7 +1037,7 @@ describe('Simulated', () => {
               [{ top: 100, left: 100 }, {
                 scrollOffset: { top: 100, left: 100 },
                 reachedTop: false,
-                reachedBottom: true,
+                reachedBottom: !(reachBottomEnabled && pullDownEnabled),
                 reachedLeft: false,
                 reachedRight: true,
               }],
