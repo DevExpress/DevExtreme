@@ -60,9 +60,7 @@ const resources = [{
   }).after(async (t) => {
     await t.resizeWindow(1200, 800);
   });
-});
 
-[false, true].forEach((crossScrollingEnabled) => {
   const horizontalViews = views
     .map((viewType) => ({
       type: viewType,
@@ -93,10 +91,11 @@ const resources = [{
   }).after(async (t) => {
     await t.resizeWindow(1200, 800);
   });
-});
 
-[false, true].forEach((crossScrollingEnabled) => {
   const verticalViews = views
+    // TODO: There is a bug in RTL in timeline views even without adaptivity which breaks markup.
+    // We should test timeline views too after we reowrk our markup
+    .slice(0, 4)
     .map((viewType) => ({
       type: viewType,
       groupOrientation: 'vertical',
