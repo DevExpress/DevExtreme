@@ -14,6 +14,9 @@ import { normalizeKeyName } from 'events/utils/index';
 import 'ui/text_box/ui.text_editor';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
+const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
+const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const INPUT_CLASS = 'dx-texteditor-input';
 const CONTAINER_CLASS = 'dx-texteditor-container';
 const DISABLED_CLASS = 'dx-state-disabled';
@@ -460,6 +463,70 @@ QUnit.module('general', {}, () => {
         });
 
         assert.ok($textEditor.hasClass('dx-editor-underlined'));
+
+        themes.isMaterial = realIsMaterial;
+    });
+});
+
+QUnit.module('label option', {}, () => {
+    QUnit.test('render in Generic theme', function(assert) {
+        const $container = $('#texteditor');
+        const textEditor = $container
+            .dxTextEditor()
+            .dxTextEditor('instance');
+
+        assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 0, 'a label does not render if the option is not specified');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+
+        textEditor.option('label', 'label');
+        assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 1, 'a label renders if the option is specified');
+        assert.ok($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+
+        textEditor.option('labelMode', 'floating');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
+        assert.ok($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container has floating class');
+
+        textEditor.option('labelMode', 'hidden');
+        assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 0, 'a label does not render if label mode is hidden');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+
+    });
+
+    QUnit.test('render in Material theme', function(assert) {
+        const realIsMaterial = themes.isMaterial;
+        themes.isMaterial = () => {
+            return true;
+        };
+        const $container = $('#texteditor');
+        const textEditor = $container
+            .dxTextEditor()
+            .dxTextEditor('instance');
+
+
+        assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 0, 'a label does not render if the option is not specified');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+
+        textEditor.option('label', 'label');
+        assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 1, 'a label renders if the option is specified');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+        assert.ok($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container has floating class');
+
+        textEditor.option('labelMode', 'floating');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+        assert.ok($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container has floating class');
+
+        textEditor.option('labelMode', 'static');
+        assert.ok($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+
+        textEditor.option('labelMode', 'hidden');
+        assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 0, 'a label does not render if label mode is hidden');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+        assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
 
         themes.isMaterial = realIsMaterial;
     });

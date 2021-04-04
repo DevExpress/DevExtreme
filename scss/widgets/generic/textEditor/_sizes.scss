@@ -3,11 +3,14 @@
 // adduse
 
 $generic-texteditor-clear-icon-oversize: null !default;
+$generic-texteditor-label-size: null !default;
 
 @if $size == "default" {
   $generic-texteditor-clear-icon-oversize: 2px !default;
+  $generic-texteditor-label-size: 12px !default;
 }
 
 @else if $size == "compact" {
   $generic-texteditor-clear-icon-oversize: 1px !default;
+  $generic-texteditor-label-size: 10px !default;
 }

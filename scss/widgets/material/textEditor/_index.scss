@@ -17,6 +17,7 @@ $material-base-standard-texteditor-input-horizontal-padding: 0;
 $material-texteditor-icon-container-size: $material-base-icon-size - 2px;
 $material-texteditor-invalid-badge-size: $material-invalid-badge-size + 2 * $material-invalid-badge-horizontal-padding;
 $material-editor-custom-button-margin: 5px;
+$material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms, font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 
 @mixin dx-texteditor-icon() {
@@ -144,6 +145,20 @@ $material-editor-custom-button-margin: 5px;
 
   &::after {
     @include dx-texteditor-borders-position();
+  }
+
+  &.dx-state-focused,
+  &.dx-state-focused.dx-state-hover {
+    .dx-texteditor-label {
+      color: $base-accent;
+      font-size: $material-texteditor-label-font-size;
+    }
+
+    &.dx-invalid {
+      .dx-texteditor-label {
+        color: $base-invalid-color;
+      }
+    }
   }
 
   &.dx-state-focused,
@@ -336,6 +351,382 @@ $material-editor-custom-button-margin: 5px;
   font-size: $material-texteditor-font-size;
 }
 
+.dx-texteditor-label {
+  position: absolute;
+  top: 0;
+  font-size: $material-texteditor-label-font-size;
+  color: $texteditor-label-color;
+
+  .dx-invalid & {
+    color: $base-invalid-color;
+  }
+
+  .dx-rtl & {
+    left: auto;
+    right: 0;
+  }
+}
+
+.dx-editor-filled {
+  $input-vertical-diff: 6px;
+  $label-transform: translate(0, floor($material-filled-texteditor-input-top-padding / 2));
+
+  .dx-texteditor-label {
+    left: $material-filled-texteditor-input-horizontal-padding;
+  }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    .dx-texteditor-input {
+      padding-top: $material-filled-texteditor-input-top-padding + $input-vertical-diff;
+      padding-bottom: $material-filled-texteditor-input-bottom-padding - $input-vertical-diff;
+    }
+
+    .dx-texteditor-label {
+      transform: $label-transform;
+      font-size: $material-texteditor-label-font-size;
+    }
+
+    .dx-placeholder {
+      top: $input-vertical-diff;
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty {
+      .dx-placeholder {
+        display: none;
+      }
+
+      .dx-texteditor-label {
+        transition: $material-editor-label-transition;
+        transform: translate(0, $material-filled-texteditor-input-top-padding);
+        font-size: $material-texteditor-font-size;
+      }
+    }
+
+    &.dx-state-focused {
+      .dx-placeholder {
+        display: block;
+      }
+
+      .dx-texteditor-label {
+        transform: $label-transform;
+        font-size: $material-texteditor-label-font-size;
+      }
+    }
+  }
+}
+
+.dx-editor-outlined {
+  $label-offset-y: $material-texteditor-label-font-size / 2;
+  $label-default-transform: translate(0, $material-filled-texteditor-input-top-padding);
+
+  @mixin dx-state($borderColor, $shadowOffset) {
+    border-top-color: transparent;
+    box-shadow: inset #{$shadowOffset}px 0 $borderColor, inset -#{$shadowOffset}px 0 $borderColor, inset 0 -#{$shadowOffset}px $borderColor;
+    outline: none;
+
+    .dx-texteditor-label {
+      width: 100%;
+
+      span {
+        transform: translate(0, -$label-offset-y);
+        font-size: $material-texteditor-label-font-size;
+      }
+
+      &::before,
+      &::after {
+        border-top-color: $borderColor;
+        box-shadow: inset 0 #{$shadowOffset}px $borderColor;
+      }
+    }
+  }
+
+  .dx-texteditor-label {
+    display: flex;
+    max-height: 2px;
+
+    span {
+      position: relative;
+      font-size: $material-texteditor-font-size;
+      padding: 0 4px;
+    }
+
+    &::after,
+    &::before {
+      content: "";
+      display: block;
+      box-sizing: border-box;
+      margin-top: 0;
+      border-top: solid 0;
+      border-top-color: $texteditor-border-color;
+      min-width: $material-filled-texteditor-input-horizontal-padding - 4px;
+      height: 2px;
+      box-shadow: inset 0 0 transparent;
+    }
+
+    &::before {
+      border-left: solid 1px transparent;
+      border-radius: $texteditor-input-border-radius 0;
+    }
+
+    &::after {
+      flex-grow: 1;
+      border-right: solid 1px transparent;
+      border-radius: 0 $texteditor-input-border-radius;
+    }
+  }
+
+  &.dx-texteditor-with-label {
+    &.dx-state-hover {
+      @include dx-state($texteditor-hover-border-color, 1);
+
+      &.dx-invalid {
+        @include dx-state($texteditor-invalid-focused-border-color, 1);
+      }
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty {
+      border-top-color: $texteditor-border-color;
+      box-shadow: inset 0 0 0 1px $texteditor-border-color;
+
+      &.dx-invalid {
+        border-top-color: $base-invalid-faded-border-color;
+        box-shadow: inset 0 0 0 1px $base-invalid-faded-border-color;
+      }
+
+      .dx-placeholder {
+        display: none;
+      }
+
+      &.dx-state-hover {
+        border-top-color: $texteditor-hover-border-color;
+        box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
+
+        .dx-texteditor-label {
+          span {
+            transform: $label-default-transform;
+            font-size: $material-texteditor-font-size;
+          }
+        }
+
+        &.dx-invalid {
+          border-top-color: $texteditor-invalid-focused-border-color;
+          box-shadow: inset 0 0 0 1px $texteditor-invalid-focused-border-color;
+        }
+      }
+
+      .dx-texteditor-label {
+        width: 0;
+
+        span {
+          transition: $material-editor-label-transition;
+          transform: $label-default-transform;
+          font-size: $material-texteditor-font-size;
+        }
+
+        &::before,
+        &::after {
+          border-top-color: transparent;
+          box-shadow: inset 0 2px transparent;
+        }
+      }
+    }
+
+    &.dx-state-hover {
+      &:not(.dx-texteditor-empty) {
+        @include dx-state($texteditor-hover-border-color, 1);
+
+        &.dx-invalid {
+          @include dx-state($texteditor-invalid-focused-border-color, 1);
+        }
+      }
+    }
+  }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    border-top-color: transparent;
+    box-shadow:
+      inset 1px 0 $texteditor-border-color,
+      inset -1px 0 $texteditor-border-color,
+      inset 0 -1px $texteditor-border-color;
+    outline: none;
+
+    &.dx-invalid {
+      box-shadow:
+        inset 1px 0 $texteditor-invalid-faded-border-color,
+        inset -1px 0 $texteditor-invalid-faded-border-color,
+        inset 0 -1px $texteditor-invalid-faded-border-color;
+
+      .dx-texteditor-label {
+        &::before,
+        &::after {
+          border-top-color: $texteditor-invalid-faded-border-color;
+          box-shadow: inset 0 1px $texteditor-invalid-faded-border-color;
+        }
+      }
+    }
+
+    .dx-texteditor-container {
+      overflow: visible;
+    }
+
+    .dx-texteditor-label {
+      width: 100%;
+
+      span {
+        transform: translate(0, -$label-offset-y);
+        font-size: $material-texteditor-label-font-size;
+      }
+
+      &::before,
+      &::after {
+        border-top-color: $texteditor-border-color;
+        box-shadow: inset 0 1px $texteditor-border-color;
+      }
+    }
+
+    &.dx-state-focused,
+    &.dx-state-focused.dx-state-hover {
+      @include dx-state($texteditor-focused-border-color, 2);
+
+      &.dx-invalid {
+        @include dx-state($texteditor-invalid-focused-border-color, 2);
+      }
+
+      .dx-placeholder {
+        display: block;
+      }
+    }
+  }
+}
+
+.dx-editor-underlined {
+  $input-vertical-diff: 2px;
+  $input-top-padding: $material-standard-texteditor-input-top-padding + $input-vertical-diff;
+  $label-transform: translate(0, -$input-vertical-diff);
+
+  .dx-texteditor-label {
+    left: 0;
+  }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    .dx-texteditor-label {
+      transform: $label-transform;
+    }
+
+    .dx-texteditor-input {
+      padding-top: $input-top-padding;
+      padding-bottom: $material-standard-texteditor-input-bottom-padding - $input-vertical-diff;
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty {
+      .dx-placeholder {
+        display: none;
+      }
+
+      .dx-texteditor-label {
+        transition: $material-editor-label-transition;
+        transform: translate(0, $input-top-padding);
+        font-size: $material-texteditor-font-size;
+      }
+    }
+
+    &.dx-state-focused {
+      .dx-texteditor-label {
+        transform: $label-transform;
+        font-size: $material-texteditor-label-font-size;
+      }
+
+      .dx-placeholder {
+        top: $input-vertical-diff;
+        display: block;
+      }
+    }
+  }
+
+  .dx-texteditor-buttons-container {
+    > .dx-button.dx-button-mode-text {
+      height: $material-underlined-editor-button-height;
+      margin: 1px $material-editor-custom-button-margin 3px;
+
+      .dx-button-content {
+        display: flex;
+        justify-content: center;
+        padding-top: $material-button-vertical-padding - 1px;
+
+        .dx-icon {
+          align-self: center;
+          margin-top: 1px;
+        }
+      }
+
+      &.dx-button-has-text {
+        .dx-button-content .dx-icon {
+          margin-top: 3px;
+        }
+      }
+
+      &:not(.dx-button-has-text) {
+        min-width: $material-underlined-editor-button-height;
+
+        .dx-button-content {
+          padding: 2px;
+        }
+      }
+    }
+
+    &:first-child {
+      > .dx-button {
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+
+    &:last-child {
+      > .dx-button {
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      &:first-child {
+        > .dx-button {
+          &:first-child {
+            margin-left: $material-editor-custom-button-margin;
+            margin-right: 0;
+          }
+        }
+      }
+
+      &:last-child {
+        > .dx-button {
+          &:first-child {
+            margin-left: $material-editor-custom-button-margin;
+            margin-right: $material-editor-custom-button-margin;
+          }
+
+          &:last-child {
+            margin-left: 0;
+            margin-right: $material-editor-custom-button-margin;
+          }
+        }
+      }
+    }
+  }
+}
+
+
 .dx-texteditor-input {
   margin: 0;
   background-color: transparent;
@@ -448,81 +839,6 @@ $material-editor-custom-button-margin: 5px;
         > .dx-numberbox-spin-container:last-child {
           margin-left: 8px;
           margin-right: 0;
-        }
-      }
-    }
-  }
-}
-
-.dx-editor-underlined {
-  .dx-texteditor-buttons-container {
-    > .dx-button.dx-button-mode-text {
-      height: $material-underlined-editor-button-height;
-      margin: 1px $material-editor-custom-button-margin 3px;
-
-      .dx-button-content {
-        display: flex;
-        justify-content: center;
-        padding-top: $material-button-vertical-padding - 1px;
-
-        .dx-icon {
-          align-self: center;
-          margin-top: 1px;
-        }
-      }
-
-      &.dx-button-has-text {
-        .dx-button-content .dx-icon {
-          margin-top: 3px;
-        }
-      }
-
-      &:not(.dx-button-has-text) {
-        min-width: $material-underlined-editor-button-height;
-
-        .dx-button-content {
-          padding: 2px;
-        }
-      }
-    }
-
-    &:first-child {
-      > .dx-button {
-        &:first-child {
-          margin-left: 0;
-        }
-      }
-    }
-
-    &:last-child {
-      > .dx-button {
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      &:first-child {
-        > .dx-button {
-          &:first-child {
-            margin-left: $material-editor-custom-button-margin;
-            margin-right: 0;
-          }
-        }
-      }
-
-      &:last-child {
-        > .dx-button {
-          &:first-child {
-            margin-left: $material-editor-custom-button-margin;
-            margin-right: $material-editor-custom-button-margin;
-          }
-
-          &:last-child {
-            margin-left: 0;
-            margin-right: $material-editor-custom-button-margin;
-          }
         }
       }
     }

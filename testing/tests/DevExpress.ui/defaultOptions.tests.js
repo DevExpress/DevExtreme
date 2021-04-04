@@ -242,6 +242,29 @@ testComponentDefaults(TextEditor,
     }
 );
 
+testComponentDefaults(TextEditor,
+    {},
+    {
+        labelMode: 'floating'
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(TextEditor,
+    [
+        { platform: 'generic' }
+    ],
+    {
+        labelMode: 'static'
+    }
+);
+
 testComponentDefaults(DropDownEditor,
     [
         { platform: 'generic' }
