@@ -3012,8 +3012,8 @@ QUnit.module('dxPivotGrid', {
                 const expectedRowCellRect = getHeaderCellByText($rowsHeaderArea, expected.row.toString()).getBoundingClientRect();
                 const expectedColumnCellRect = getHeaderCellByText($columnsHeaderArea, expected.column.toString()).getBoundingClientRect();
 
-                QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 15, `expected row position ${message}`);
-                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 15, `expected column position ${message}`);
+                QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 16, `expected row position ${message}`);
+                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 16, `expected column position ${message}`);
             }
 
             function tryTriggerScrollEventAndWait(scrollable, clock) {
@@ -3045,7 +3045,7 @@ QUnit.module('dxPivotGrid', {
                 this.clock.tick(100);
                 checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
-                const scrollDistance = browser.msie ? 1950 : 1988; // there is a difference in font size for IE
+                const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
                 const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
                 scrollable.scrollTo({ left: scrollDistance, top: 2000 });
                 tryTriggerScrollEventAndWait(scrollable, this.clock);
@@ -3091,7 +3091,7 @@ QUnit.module('dxPivotGrid', {
                 this.clock.tick(100);
                 checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
-                const scrollDistance = browser.msie ? 1950 : 1988; // there is a difference in font size for IE
+                const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
                 const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
                 scrollable.scrollTo({ left: scrollDistance, top: 2000 });
                 tryTriggerScrollEventAndWait(scrollable, this.clock);
