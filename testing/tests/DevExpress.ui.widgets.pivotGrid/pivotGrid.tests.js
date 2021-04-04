@@ -3091,7 +3091,7 @@ QUnit.module('dxPivotGrid', {
                 this.clock.tick(100);
                 checkLeftTopVisibleHeaderCellTexts(pivotGrid, { row: '1', column: '1' }, 'after initialization');
 
-                const scrollDistance = browser.msie ? 1950 : 1990; // there is a difference in font size for IE
+                const scrollDistance = browser.msie ? 1950 : 1998; // there is a difference in font size for IE
                 const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
                 scrollable.scrollTo({ left: scrollDistance, top: 2000 });
                 tryTriggerScrollEventAndWait(scrollable, this.clock);
