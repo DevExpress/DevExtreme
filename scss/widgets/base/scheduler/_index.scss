@@ -841,12 +841,6 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-timeline {
-    .dx-scheduler-date-table {
-      .dx-scheduler-small & {
-        margin-left: 0;
-      }
-    }
-
     .dx-scheduler-date-time-indicator {
       width: $scheduler-time-indicator-size;
       top: 0;
@@ -1164,6 +1158,10 @@ $scheduler-appointment-form-label-padding: 20px;
       border-spacing: 0;
       border-collapse: separate;
       margin-left: 0;
+
+      .dx-scheduler-small & {
+        margin-left: 0;
+      }
     }
 
     .dx-scheduler-header-panel-cell:not(.dx-scheduler-header-panel-week-cell),
