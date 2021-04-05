@@ -53,7 +53,6 @@ $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !defaul
 $texteditor-filled-invalid-background: null !default;
 $texteditor-border-radius: $base-border-radius !default;
 $texteditor-input-border-radius: $base-border-radius !default;
-$texteditor-label-color: null !default;
 
 @if $color == "carmine" {
   $texteditor-placeholder-color: $base-label-color !default;
@@ -62,7 +61,6 @@ $texteditor-label-color: null !default;
   $texteditor-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $texteditor-button-clear-icon-color: $base-icon-color !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.1) !default;
-  $texteditor-label-color: $texteditor-placeholder-color;
 }
 
 @if $color == "contrast" {
@@ -72,7 +70,6 @@ $texteditor-label-color: null !default;
   $texteditor-placeholder-color: $base-text-color !default;
   $texteditor-button-clear-icon-color: $base-icon-color !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.2) !default;
-  $texteditor-label-color: $texteditor-placeholder-color;
 }
 
 @if $color == "dark" {
@@ -82,7 +79,6 @@ $texteditor-label-color: null !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
   $texteditor-button-clear-icon-color: darken($texteditor-color, 40%) !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.2) !default;
-  $texteditor-label-color: $texteditor-placeholder-color;
 }
 
 @if $color == "darkmoon" {
@@ -92,7 +88,6 @@ $texteditor-label-color: null !default;
   $texteditor-placeholder-color: darken($base-label-color, 17%) !default; // #c1c7c9 => #919ea3
   $texteditor-button-clear-icon-color: $base-icon-color !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.2) !default;
-  $texteditor-label-color: $texteditor-placeholder-color;
 }
 
 @if $color == "darkviolet" {
@@ -102,7 +97,6 @@ $texteditor-label-color: null !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
   $texteditor-button-clear-icon-color: $base-icon-color !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.2) !default;
-  $texteditor-label-color: $texteditor-placeholder-color;
 }
 
 @if $color == "greenmist" {
@@ -112,7 +106,6 @@ $texteditor-label-color: null !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
   $texteditor-button-clear-icon-color: $base-icon-color !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.1) !default;
-  $texteditor-label-color: $texteditor-placeholder-color;
 }
 
 @if $color == "light" {
@@ -122,7 +115,6 @@ $texteditor-label-color: null !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
   $texteditor-button-clear-icon-color: lighten($texteditor-color, 40%) !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.1) !default;
-  $texteditor-label-color: $texteditor-placeholder-color;
 }
 
 @if $color == "softblue" {
@@ -132,5 +124,6 @@ $texteditor-label-color: null !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
   $texteditor-button-clear-icon-color: $base-icon-color !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.1) !default;
-  $texteditor-label-color: $texteditor-placeholder-color;
 }
+
+$texteditor-label-color: $texteditor-placeholder-color;
