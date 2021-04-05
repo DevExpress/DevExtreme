@@ -4926,7 +4926,6 @@
           {
             "Title": "Custom Drop Zone",
             "Name": "CustomDropzone",
-            "Badge": "New",
             "DocUrl": "",
             "Widget": "FileUploader"
           }
