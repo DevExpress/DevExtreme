@@ -151,6 +151,10 @@ $scheduler-appointment-form-label-padding: 20px;
   $agenda-appointment-title-font-size: $agenda-appointment-title-font-size
 );
 
+@function calculate-small-left-column-size($size) {
+  @return $size + $scheduler-left-column-width * $scheduler-small-size-factor;
+}
+
 @mixin dx-scheduler-group-mixin($padding) {
   .dx-scrollable {
     &.dx-scheduler-date-table-scrollable,
@@ -409,7 +413,7 @@ $scheduler-appointment-form-label-padding: 20px;
     margin-left: -($size + $scheduler-left-column-width);
 
     .dx-scheduler-small & {
-      margin-left: floor(-($size + $scheduler-left-column-width * $scheduler-small-size-factor));
+      margin-left: floor(-1 * calculate-small-left-column-size($size));
     }
 
     .dx-scheduler-virtual-row::before,
@@ -418,7 +422,7 @@ $scheduler-appointment-form-label-padding: 20px;
       width: $size + $scheduler-left-column-width;
 
       .dx-scheduler-small & {
-        width: $size + $scheduler-left-column-width * $scheduler-small-size-factor;
+        width: calculate-small-left-column-size($size);
       }
     }
 
@@ -433,7 +437,7 @@ $scheduler-appointment-form-label-padding: 20px;
       width: $size + $scheduler-left-column-width;
 
       .dx-scheduler-small & {
-        width: $size + $scheduler-left-column-width * $scheduler-small-size-factor;
+        width: calculate-small-left-column-size($size);
       }
     }
   }
@@ -448,7 +452,7 @@ $scheduler-appointment-form-label-padding: 20px;
       margin-left: $size + $scheduler-left-column-width + 1px + $offset;
 
       .dx-scheduler-small & {
-        margin-left: $size + $scheduler-left-column-width * $scheduler-small-size-factor + 1px + $offset;
+        margin-left: calculate-small-left-column-size($size) + 1px + $offset;
       }
     }
 
@@ -469,7 +473,7 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-small & {
         .dx-scheduler-date-table-scrollable,
         .dx-scheduler-header-scrollable.dx-scrollable {
-          margin: 0 $size + $scheduler-left-column-width * $scheduler-small-size-factor + 1px + $offset 0 0;
+          margin: 0 calculate-small-left-column-size($size) + 1px + $offset 0 0;
         }
       }
     }
