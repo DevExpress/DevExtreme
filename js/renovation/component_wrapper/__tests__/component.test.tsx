@@ -196,7 +196,7 @@ describe('Widget\'s container manipulations', () => {
     });
 
     expect(subscribeEffect.mock.calls[2][0]).toMatchObject({
-      className: 'dx-test-widget custom-css-class',
+      className: 'custom-css-class',
       style: { width: '123px', height: '456px' },
     });
   });
@@ -283,7 +283,7 @@ describe('Widget\'s container manipulations', () => {
     $('#my-id').dxTestWidget('repaint');
 
     expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
-      className: 'dx-test-widget custom-css-class dx-custom-css-class custom-css-class2',
+      className: 'custom-css-class custom-css-class2 dx-custom-css-class',
       class: '',
     });
   });
