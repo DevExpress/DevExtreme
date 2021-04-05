@@ -467,10 +467,7 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       .dx-scheduler-small & {
-        .dx-scheduler-date-table-scrollable {
-          margin-right: $size + $scheduler-left-column-width * $scheduler-small-size-factor + 1px + $offset;
-        }
-
+        .dx-scheduler-date-table-scrollable,
         .dx-scheduler-header-scrollable.dx-scrollable {
           margin: 0 $size + $scheduler-left-column-width * $scheduler-small-size-factor + 1px + $offset 0 0;
         }
@@ -1158,10 +1155,6 @@ $scheduler-appointment-form-label-padding: 20px;
       border-spacing: 0;
       border-collapse: separate;
       margin-left: 0;
-
-      .dx-scheduler-small & {
-        margin-left: 0;
-      }
     }
 
     .dx-scheduler-header-panel-cell:not(.dx-scheduler-header-panel-week-cell),
@@ -2653,6 +2646,12 @@ $scheduler-appointment-form-label-padding: 20px;
           }
         }
       }
+    }
+  }
+
+  .dx-scheduler-small {
+    .dx-scheduler-timeline .dx-scheduler-date-table {
+      margin-left: 0;
     }
   }
 }
