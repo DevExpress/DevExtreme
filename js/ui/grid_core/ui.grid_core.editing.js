@@ -1596,7 +1596,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     rowIndices: [oldEditRowIndex, rowIndex]
                 });
             } else {
-                this.saveEditData();
+                return this.saveEditData();
             }
         },
         undeleteRow: function(rowIndex) {
