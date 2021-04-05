@@ -697,7 +697,9 @@ class GroupedDataMapProvider {
             : startDate;
     }
 
-    findCellPositionInMap(groupIndex, startDate, isAllDay) {
+    findCellPositionInMap(cellInfo) {
+        const { groupIndex, startDate, isAllDay, index } = cellInfo;
+
         const startTime = isAllDay
             ? dateUtils.trimTime(startDate).getTime()
             : startDate.getTime();
@@ -731,7 +733,7 @@ class GroupedDataMapProvider {
                 const cell = row[cellIndex];
                 const { cellData } = cell;
 
-                if(cellData.groupIndex === groupIndex) {
+                if(this._isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
                     if(isStartDateInCell(cellData)) {
                         return cell.position;
                     }
@@ -740,6 +742,11 @@ class GroupedDataMapProvider {
         }
 
         return undefined;
+    }
+
+    _isSameGroupIndexAndIndex(cellData, groupIndex, index) {
+        return cellData.groupIndex === groupIndex
+            && (index === undefined || cellData.index === index);
     }
 
     getCellsGroup(groupIndex) {
@@ -915,8 +922,8 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex, startDate);
     }
 
-    findCellPositionInMap(groupIndex, startDate, isAllDay) {
-        return this._groupedDataMapProvider.findCellPositionInMap(groupIndex, startDate, isAllDay);
+    findCellPositionInMap(cellInfo) {
+        return this._groupedDataMapProvider.findCellPositionInMap(cellInfo);
     }
 
     getCellsGroup(groupIndex) {
