@@ -18,7 +18,6 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
     }
 
     getItems(path) {
-        this._raiseGetItemsError('MY CUSTOM ERROR Message');
         return this._provider.getItems(path);
     }
 
@@ -130,12 +129,6 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
         }
     }
 
-    _raiseGetItemsError(errorText) {
-        if(this._raiseErrorMode === 'getItems') {
-            this._raiseErrorCore(null, errorText);
-        }
-    }
-
     _raiseError(item, index) {
         if(!this._needRaiseError()) {
             return;
@@ -172,12 +165,11 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
         return deferred.promise();
     }
 
-    _raiseErrorCore(fileItem, errorText) {
+    _raiseErrorCore(fileItem) {
         fileItem = fileItem || null;
         throw {
             errorId: ErrorCode.Other,
-            fileItem,
-            errorText
+            fileItem
         };
     }
 
