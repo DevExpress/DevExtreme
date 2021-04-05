@@ -1,8 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { titleize } from '../../../../core/utils/inflector';
 import {
   ScrollDirection,
-} from '../scrollable_utils';
+} from '../utils/scroll_direction';
 
 import {
   ScrollableSimulated as Scrollable,
@@ -14,8 +15,19 @@ import {
   ScrollableBoundary,
 } from '../types.d';
 
+import {
+  SCROLLABLE_CONTAINER_CLASS,
+  SCROLLABLE_CONTENT_CLASS,
+  SCROLLABLE_SCROLL_CLASS,
+  SCROLLVIEW_BOTTOM_POCKET_CLASS,
+  SCROLLVIEW_TOP_POCKET_CLASS,
+} from '../common/consts';
+
 import { Scrollbar, ScrollbarPropsType } from '../scrollbar';
 import { ScrollableSimulatedPropsType } from '../scrollable_simulated_props';
+
+const TOP_POCKET_HEIGHT = 80;
+const BOTTOM_POCKET_HEIGHT = 55;
 
 class ScrollableTestHelper {
   direction: ScrollableDirection;
@@ -44,21 +56,21 @@ class ScrollableTestHelper {
 
   scrollBarHandlers?: string[];
 
-  constructor(args: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
+  constructor(props: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.viewModel = new Scrollable({
-      ...args,
+      ...props,
       contentTranslateOffset: { top: 0, left: 0 },
     }) as any;
     this.viewModel.scrollableRef = React.createRef();
     this.viewModel.containerRef = React.createRef();
     this.viewModel.contentRef = React.createRef();
     this.viewModel.wrapperRef = React.createRef();
+    this.viewModel.topPocketRef = React.createRef();
+    this.viewModel.bottomPocketRef = React.createRef();
     this.viewModel.verticalScrollbarRef = React.createRef();
     this.viewModel.horizontalScrollbarRef = React.createRef();
 
-    this.viewModel.wrapperRef.current = {} as HTMLDivElement;
-
-    this.direction = args.direction || 'vertical';
+    this.direction = props.direction || 'vertical';
 
     const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.direction);
     this.isVertical = isVertical;
@@ -71,23 +83,51 @@ class ScrollableTestHelper {
     this.viewModel.containerRef.current = this.getContainerElement();
     this.viewModel.contentRef.current = this.getContentElement();
 
-    const { contentSize = 200, containerSize = 100, overflow = 'hidden' } = args;
+    const { contentSize = 200, containerSize = 100, overflow = 'hidden' } = props;
+    let contentHeight = contentSize;
 
-    this.initStyles(this.viewModel.containerRef.current!, containerSize, contentSize);
-    this.initStyles(this.viewModel.contentRef.current!, contentSize, contentSize, overflow);
-    this.initStyles(this.viewModel.scrollableRef.current!, containerSize, contentSize);
+    if (props.pullDownEnabled) {
+      contentHeight += TOP_POCKET_HEIGHT;
+
+      this.viewModel.topPocketRef.current = this.getTopPocketElement();
+      Object.defineProperties(this.viewModel.topPocketRef.current, {
+        clientWidth: { configurable: true, get() { return 100; } },
+        clientHeight: { configurable: true, get() { return TOP_POCKET_HEIGHT; } },
+      });
+    }
+    if (props.reachBottomEnabled) {
+      contentHeight += BOTTOM_POCKET_HEIGHT;
+
+      this.viewModel.bottomPocketRef.current = this.getBottomPocketElement();
+      Object.defineProperties(this.viewModel.bottomPocketRef.current, {
+        clientWidth: { configurable: true, get() { return 100; } },
+        clientHeight: { configurable: true, get() { return BOTTOM_POCKET_HEIGHT; } },
+      });
+    }
+
+    this.initStyles(this.viewModel.containerRef.current,
+      { width: containerSize, height: containerSize },
+      { width: contentSize, height: contentHeight });
+    this.initStyles(this.viewModel.contentRef.current,
+      { width: contentSize, height: contentHeight },
+      { width: contentSize, height: contentHeight }, overflow);
+    this.initStyles(this.viewModel.scrollableRef.current,
+      { width: containerSize, height: containerSize },
+      { width: contentSize, height: contentHeight });
+
+    this.viewModel.updateSizes();
   }
 
   // eslint-disable-next-line class-methods-use-this
   initStyles(
-    receivedElement: HTMLDivElement,
-    size: number,
-    scrollSize: number,
+    element: HTMLDivElement,
+    size: { width: number; height: number },
+    scrollSize: { width: number; height: number },
     overflow?: string,
   ): HTMLDivElement {
-    const element = receivedElement;
+    const el = element;
 
-    Object.defineProperties(window.HTMLElement.prototype, {
+    Object.defineProperties(el, {
       offsetHeight: {
         get() { return parseFloat(window.getComputedStyle(this).height) || 0; },
       },
@@ -96,11 +136,11 @@ class ScrollableTestHelper {
       },
       scrollHeight: {
         configurable: true,
-        get() { return scrollSize || 0; },
+        get() { return scrollSize.height || 0; },
       },
       scrollWidth: {
         configurable: true,
-        get() { return scrollSize || 0; },
+        get() { return scrollSize.width || 0; },
       },
       clientWidth: {
         configurable: true,
@@ -108,23 +148,27 @@ class ScrollableTestHelper {
       },
       clientHeight: {
         configurable: true,
-        get() { return parseFloat(window.getComputedStyle(this).width) || 0; },
+        get() { return parseFloat(window.getComputedStyle(this).height) || 0; },
       },
     });
 
-    ['width', 'height', 'outerWidth', 'outerHeight'].forEach((prop) => {
-      element.style[prop] = `${size}px`;
+    ['width', 'height'].forEach((prop) => {
+      el.style[prop] = `${size[prop]}px`;
+    });
+
+    ['outerWidth', 'outerHeight'].forEach((prop) => {
+      el.style[prop] = `${size[`outer${titleize(prop)}`]}px`;
     });
 
     if (overflow) {
       ['overflowX', 'overflowY'].forEach((prop) => {
-        element.style[prop] = overflow;
+        el.style[prop] = overflow;
       });
     }
 
-    element.getBoundingClientRect = () => ({ width: size, height: size } as DOMRect);
+    el.getBoundingClientRect = () => ({ width: size.width, height: size.height } as DOMRect);
 
-    return element;
+    return el;
   }
 
   getScrollable(): any {
@@ -132,11 +176,19 @@ class ScrollableTestHelper {
   }
 
   getContainerElement(): HTMLDivElement {
-    return this.scrollable.find('.dx-scrollable-container').getDOMNode();
+    return this.scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`).getDOMNode();
   }
 
   getContentElement(): HTMLDivElement {
-    return this.scrollable.find('.dx-scrollable-content').getDOMNode();
+    return this.scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`).getDOMNode();
+  }
+
+  getTopPocketElement(): HTMLDivElement {
+    return this.scrollable.find(`.${SCROLLVIEW_TOP_POCKET_CLASS}`).getDOMNode();
+  }
+
+  getBottomPocketElement(): HTMLDivElement {
+    return this.scrollable.find(`.${SCROLLVIEW_BOTTOM_POCKET_CLASS}`).getDOMNode();
   }
 
   getScrollableRef(): any {
@@ -148,11 +200,11 @@ class ScrollableTestHelper {
   }
 
   getVerticalScroll(): any {
-    return this.scrollable.find('.dx-scrollbar-vertical .dx-scrollable-scroll');
+    return this.scrollable.find(`.dx-scrollbar-vertical .${SCROLLABLE_SCROLL_CLASS}`);
   }
 
   getHorizontalScroll(): any {
-    return this.scrollable.find('.dx-scrollbar-horizontal .dx-scrollable-scroll');
+    return this.scrollable.find(`.dx-scrollbar-horizontal .${SCROLLABLE_SCROLL_CLASS}`);
   }
 
   getVerticalScrollElement(): any {
@@ -205,6 +257,9 @@ class ScrollableTestHelper {
         },
       });
 
+      scrollbar.updateMinOffset();
+      scrollbar.minLimit = scrollbar.minOffset;
+
       return scrollbar;
     };
 
@@ -219,7 +274,7 @@ class ScrollableTestHelper {
   }
 
   initScrollbarHandlerMocks(): void {
-    this.scrollBarHandlers = ['init', 'start', 'end', 'cancel', 'stop', 'scrollBy'];
+    this.scrollBarHandlers = ['init', 'start', 'end', 'cancel', 'stop', 'move', 'scrollBy', 'release'];
 
     this.scrollBarHandlers.forEach((handler) => {
       this[`${handler}HandlerMock`] = jest.fn();
@@ -282,6 +337,19 @@ class ScrollableTestHelper {
     }
   }
 
+  callScrollbarMethod(method: string): void {
+    const { horizontalScrollbarRef, verticalScrollbarRef } = this.viewModel;
+
+    if (this.isBoth) {
+      horizontalScrollbarRef.current![method]();
+      verticalScrollbarRef.current![method]();
+    } else if (this.isVertical) {
+      verticalScrollbarRef.current![method]();
+    } else if (this.isHorizontal) {
+      horizontalScrollbarRef.current![method]();
+    }
+  }
+
   initContainerPosition({ top, left }: { top: number; left: number }): void {
     this.viewModel.containerRef.current!.scrollTop = top;
     this.viewModel.containerRef.current!.scrollLeft = left;
@@ -307,12 +375,12 @@ class ScrollableTestHelper {
   checkScrollTransform(jestExpect: (any) => any,
     { vertical, horizontal }: { vertical: string; horizontal: string }): void {
     if (this.isBoth) {
-      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
-      jestExpect(this.getScrollbars().at(1).instance().styles).toHaveProperty('transform', vertical);
+      jestExpect(this.getScrollbars().at(0).instance().scrollStyles).toHaveProperty('transform', horizontal);
+      jestExpect(this.getScrollbars().at(1).instance().scrollStyles).toHaveProperty('transform', vertical);
     } else if (this.isVertical) {
-      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', vertical);
+      jestExpect(this.getScrollbars().at(0).instance().scrollStyles).toHaveProperty('transform', vertical);
     } else if (this.isHorizontal) {
-      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
+      jestExpect(this.getScrollbars().at(0).instance().scrollStyles).toHaveProperty('transform', horizontal);
     }
   }
 
@@ -372,8 +440,8 @@ class ScrollableTestHelper {
 
   // eslint-disable-next-line class-methods-use-this
   getContainerRefMock({
-    clientWidth = 100, clientHeight = 100, scrollTop = 50, scrollLeft = 50, offsetWidth = 300,
-    offsetHeight = 300, scrollWidth = 600, scrollHeight = 600,
+    clientWidth = 100, clientHeight = 100, scrollTop = 50, scrollLeft = 50, offsetWidth = 100,
+    offsetHeight = 100, scrollWidth = 600, scrollHeight = 600,
   }: { [key: string]: number }): any {
     return {
       current: {

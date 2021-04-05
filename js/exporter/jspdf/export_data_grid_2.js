@@ -132,11 +132,19 @@ function exportDataGrid(doc, dataGrid, options) {
                 }
 
                 if(options.onRowExporting) {
-                    const drawNewTableFromThisRow = {};
-                    options.onRowExporting({ drawNewTableFromThisRow, row: currentRow });
-                    const { startNewTable, addPage, tableRect, splitToTablesByColumns } = drawNewTableFromThisRow;
+                    const args = { drawNewTableFromThisRow: {}, rowCells: currentRow };
+                    options.onRowExporting(args);
+                    const { startNewTable, addPage, tableRect, splitToTablesByColumns } = args.drawNewTableFromThisRow;
                     if(startNewTable === true) {
                         pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true, splitToTablesByColumns);
+                    }
+
+                    if(isDefined(args.rowHeight)) {
+                        currentRow.forEach(cell => {
+                            if(!cell.skip && !cell.rect.h) {
+                                cell.rect.h = args.rowHeight;
+                            }
+                        });
                     }
                 }
 

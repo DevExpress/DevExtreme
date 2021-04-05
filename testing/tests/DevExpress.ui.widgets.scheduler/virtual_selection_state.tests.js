@@ -11,6 +11,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 24),
                 groups: 'group_2',
                 groupIndex: 2,
+                index: 1,
             },
         },
         {
@@ -20,6 +21,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 25),
                 groups: 'group_2',
                 groupIndex: 2,
+                index: 2,
             },
         },
         {
@@ -29,6 +31,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 24),
                 groups: 'group_3',
                 groupIndex: 3,
+                index: 5,
             },
         },
         {
@@ -38,6 +41,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 25),
                 groups: 'group_3',
                 groupIndex: 3,
+                index: 6,
             },
         },
     ],
@@ -49,6 +53,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 24, 0, 30),
                 groups: 'group_2',
                 groupIndex: 2,
+                index: 2,
             },
         },
         {
@@ -58,6 +63,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 25, 0, 30),
                 groups: 'group_2',
                 groupIndex: 2,
+                index: 4,
             },
         },
         {
@@ -67,6 +73,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 24, 1, 30),
                 groups: 'group_3',
                 groupIndex: 3,
+                index: 6,
             },
         },
         {
@@ -76,6 +83,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 25, 1, 30),
                 groups: 'group_3',
                 groupIndex: 3,
+                index: 7,
             },
         },
     ]],
@@ -87,6 +95,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 24),
                 groups: 'group_2',
                 groupIndex: 2,
+                index: 1,
             },
         },
         {
@@ -96,6 +105,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 25),
                 groups: 'group_2',
                 groupIndex: 2,
+                index: 2,
             },
         },
     ],
@@ -107,6 +117,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 24, 0, 30),
                 groups: 'group_2',
                 groupIndex: 2,
+                index: 3,
             },
         },
         {
@@ -116,6 +127,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 25, 0, 30),
                 groups: 'group_2',
                 groupIndex: 2,
+                index: 4,
             },
         },
     ],
@@ -127,6 +139,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 24),
                 groups: 'group_3',
                 groupIndex: 3,
+                index: 6,
             },
         },
         {
@@ -136,6 +149,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 25),
                 groups: 'group_3',
                 groupIndex: 3,
+                index: 7,
             },
         },
     ],
@@ -146,7 +160,8 @@ const testViewDataMap = {
                 startDate: new Date(2020, 7, 24, 1, 0),
                 endDate: new Date(2020, 7, 24, 1, 30),
                 groups: 'group_3',
-                groupIndex: 3
+                groupIndex: 3,
+                index: 8,
             },
         },
         {
@@ -156,6 +171,7 @@ const testViewDataMap = {
                 endDate: new Date(2020, 7, 25, 1, 30),
                 groups: 'group_3',
                 groupIndex: 3,
+                index: 9,
             },
         },
     ]],

@@ -405,9 +405,13 @@ class AppointmentModel {
                     const itemExists = items.filter(item => item[keyName] === pushItem.key).length !== 0;
 
                     if(itemExists) {
-                        this._updatedAppointmentKeys.push({ key: keyName, value: pushItem.key });
+                        this._updatedAppointmentKeys.push({
+                            key: keyName,
+                            value: pushItem.key
+                        });
                     } else {
-                        items.push(pushItem.data);
+                        const { data } = pushItem;
+                        data && items.push(data);
                     }
                 });
 
