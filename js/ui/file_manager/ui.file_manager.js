@@ -72,6 +72,8 @@ class FileManager extends Widget {
         this.$element().addClass(FILE_MANAGER_CLASS);
 
         this._createNotificationControl();
+        this._createEditing();
+        this._createAdaptivityControl();
 
         this._initCommandManager();
         this._setItemsViewAreaActive(false);
@@ -88,15 +90,12 @@ class FileManager extends Widget {
             onActionProgress: e => this._onActionProgress(e),
             positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`
         });
-        this._editing.option('notificationControl', this._notificationControl);
     }
 
     _createWrapper(container) {
         this._$wrapper = $('<div>')
             .addClass(FILE_MANAGER_WRAPPER_CLASS)
             .appendTo(container);
-
-        this._createEditing();
 
         const $toolbar = $('<div>').appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
@@ -106,8 +105,6 @@ class FileManager extends Widget {
             itemViewMode: this.option('itemView').mode,
             onItemClick: (args) => this._actions.onToolbarItemClick(args)
         });
-
-        this._createAdaptivityControl();
     }
 
     _createAdaptivityControl() {
@@ -133,6 +130,7 @@ class FileManager extends Widget {
                 getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
             },
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
+            notificationControl: this._notificationControl,
             uploadDropZonePlaceholderContainer: this.$element(),
             onSuccess: ({ updatedOnlyFiles }) => this._redrawComponent(updatedOnlyFiles),
             onCreating: () => this._setItemsViewAreaActive(false),
@@ -757,7 +755,7 @@ class FileManager extends Widget {
     }
 
     _getSelectedItemInfos() {
-        return this._itemView.getSelectedItems();
+        return this._itemView ? this._itemView.getSelectedItems() : [];
     }
 
     refresh() {
