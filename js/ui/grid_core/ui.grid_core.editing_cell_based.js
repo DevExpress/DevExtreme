@@ -476,7 +476,7 @@ export default {
                             rowIndices: [oldEditRowIndex, rowIndex]
                         });
                     } else {
-                        this.callBase.apply(this, arguments);
+                        return this.callBase.apply(this, arguments);
                     }
                 },
 
