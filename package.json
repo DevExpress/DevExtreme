@@ -29,7 +29,7 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
-    "@devextreme/vdom": "^1.0.2",
+    "@devextreme/vdom": "1.0.2",
     "devexpress-diagram": "2.1.12",
     "devexpress-gantt": "2.1.17",
     "devextreme-quill": "~0.10.3",
