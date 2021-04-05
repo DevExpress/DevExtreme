@@ -60,14 +60,14 @@ $texteditor-label-color: null !default;
 
 @if $mode == "light" {
   $texteditor-placeholder-color: lighten($texteditor-color, 58%) !default;
-  $texteditor-label-color: lighten($texteditor-color, 58%) !default;
+  $texteditor-label-color: $texteditor-placeholder-color;
   $texteditor-button-clear-icon-color: lighten($texteditor-color, 46%) !default;
   $texteditor-button-clear-icon-color-bg: lighten($texteditor-color, 76%) !default;
 }
 
 @if $mode == "dark" {
   $texteditor-placeholder-color: darken($texteditor-color, 50%) !default;
-  $texteditor-label-color: darken($texteditor-color, 50%) !default;
+  $texteditor-label-color: $texteditor-placeholder-color;
   $texteditor-button-clear-icon-color: darken($texteditor-color, 76%) !default;
   $texteditor-button-clear-icon-color-bg: darken($texteditor-color, 34%) !default;
 }

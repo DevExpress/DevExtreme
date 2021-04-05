@@ -264,15 +264,16 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
 
 
 .dx-editor-outlined {
-  $label-offset-y: $generic-texteditor-label-size / 2;
+  $border-width: 1px;
+  $label-offset-y: ($border-width + $generic-base-font-size) / 2;
   $label-default-transform: translate(0, $generic-base-inline-borderedwidget-top-padding);
 
   @mixin dx-state($borderColor) {
     border-color: transparent;
     box-shadow:
-      inset 1px 0 $borderColor,
-      inset -1px 0 $borderColor,
-      inset 0 -1px $borderColor;
+      inset #{$border-width} 0 $borderColor,
+      inset -#{$border-width} 0 $borderColor,
+      inset 0 -#{$border-width} $borderColor;
     outline: none;
 
     .dx-texteditor-label {
@@ -285,7 +286,7 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
 
       &::before,
       &::after {
-        box-shadow: inset 0 1px $borderColor;
+        box-shadow: inset 0 #{$border-width} $borderColor;
       }
     }
   }
@@ -313,13 +314,13 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
     }
 
     &::before {
-      border-left: solid 1px transparent;
+      border-left: solid $border-width transparent;
       border-radius: $texteditor-input-border-radius 0;
     }
 
     &::after {
       flex-grow: 1;
-      border-right: solid 1px transparent;
+      border-right: solid $border-width transparent;
       border-radius: 0 $texteditor-input-border-radius;
     }
   }
@@ -336,10 +337,10 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
 
   &.dx-texteditor-with-floating-label {
     &.dx-texteditor-empty {
-      box-shadow: inset 0 0 0 1px $texteditor-border-color;
+      box-shadow: inset 0 0 0 $border-width $texteditor-border-color;
 
       &.dx-invalid {
-        box-shadow: inset 0 0 0 1px $base-invalid-faded-border-color;
+        box-shadow: inset 0 0 0 $border-width $base-invalid-faded-border-color;
       }
 
       .dx-placeholder {
@@ -347,7 +348,7 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
       }
 
       &.dx-state-hover {
-        box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
+        box-shadow: inset 0 0 0 $border-width $texteditor-hover-border-color;
 
         .dx-texteditor-label {
           span {
@@ -357,7 +358,7 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
         }
 
         &.dx-invalid {
-          box-shadow: inset 0 0 0 1px $texteditor-invalid-focused-border-color;
+          box-shadow: inset 0 0 0 $border-width $texteditor-invalid-focused-border-color;
         }
       }
 
@@ -372,7 +373,7 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
 
         &::before,
         &::after {
-          box-shadow: inset 0 1px transparent;
+          box-shadow: inset 0 $border-width transparent;
         }
       }
     }
