@@ -539,11 +539,11 @@ const createTestData = () => {
             { message: '', status: 'progress', type: 'notification-onActionProgress' },
             { details: [{ commonText: '', imageUrl: 'folder' }], operationId: 1, type: 'progress-addOperationDetails' },
             { errorText: 'MY CUSTOM ERROR Message', operationId: 1, type: 'progress-completeSingleOperationWithError' },
-            { errorText: 'MY CUSTOM ERROR Message', type: 'progress-_renderError' },
-            { message: 'The directory cannot be opened', status: 'error', type: 'notification-onActionProgress' },
-            { errorText: 'MY CUSTOM ERROR Message', item: { commonText: '', imageUrl: 'folder' }, type: 'notification_manager-createErrorDetailsProgressBox' },
-            { errorText: 'MY CUSTOM ERROR Message', type: 'notification_manager-renderError' },
+            { errorText: 'MY CUSTOM ERROR Message', type: 'progress-renderError' },
+            { errorText: 'MY CUSTOM ERROR Message', item: { commonText: '', imageUrl: 'folder' }, type: 'progress-createErrorDetailsProgressBox' },
+            { errorText: 'MY CUSTOM ERROR Message', type: 'progress-renderError' },
             { commonText: 'The directory cannot be opened', detailsText: 'MY CUSTOM ERROR Message', errorMode: true, type: 'notification-_showPopup' },
+            { message: 'The directory cannot be opened', status: 'error', type: 'notification-onActionProgress' },
             { commonText: 'The directory cannot be opened', isError: true, operationId: 1, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' }
         ]
