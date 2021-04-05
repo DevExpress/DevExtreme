@@ -147,6 +147,18 @@ const startDeleteItems = (context, deleteItemCount, endIndex) => {
     return deferred.promise();
 };
 
+const startGetItems = (context) => {
+    const deferred = new Deferred();
+    const controller = context.controller;
+    const selectedDir = controller.getCurrentDirectory();
+
+    controller
+        .getDirectoryContents(selectedDir)
+        .then(items => deferred.resolve(items, items.length), error => deferred.resolve(error));
+
+    return deferred.promise();
+};
+
 const createTestData = () => {
     return {
 
@@ -522,6 +534,20 @@ const createTestData = () => {
             { errorMode: true, commonText: 'Item was not uploaded', detailsText: 'Upload file 1.txtUnspecified error.', type: 'notification-_showPopup' },
             { operationId: 1, commonText: 'Item was not uploaded', isError: true, type: 'progress-completeOperation' },
             { message: '', status: 'error', type: 'notification-onActionProgress' }
+        ],
+
+        'get directory items with error': [
+            { allowProgressAutoUpdate: true, commonText: '', operationId: 1, type: 'progress-addOperation' },
+            { message: '', status: 'progress', type: 'notification-onActionProgress' },
+            { details: [{ commonText: '', imageUrl: 'folder' }], operationId: 1, type: 'progress-addOperationDetails' },
+            { errorText: 'MY CUSTOM ERROR Message', operationId: 1, type: 'progress-completeSingleOperationWithError' },
+            { errorText: 'MY CUSTOM ERROR Message', type: 'progress-_renderError' },
+            { message: 'The directory cannot be opened', status: 'error', type: 'notification-onActionProgress' },
+            { errorText: 'MY CUSTOM ERROR Message', item: { commonText: '', imageUrl: 'folder' }, type: 'notification_manager-createErrorDetailsProgressBox' },
+            { errorText: 'MY CUSTOM ERROR Message', type: 'notification_manager-renderError' },
+            { commonText: 'The directory cannot be opened', detailsText: 'MY CUSTOM ERROR Message', errorMode: true, type: 'notification-_showPopup' },
+            { commonText: 'The directory cannot be opened', isError: true, operationId: 1, type: 'progress-completeOperation' },
+            { message: '', status: 'error', type: 'notification-onActionProgress' }
         ]
 
     };
@@ -878,6 +904,23 @@ QUnit.module('Editing progress tests', moduleConfig, () => {
         panel._closeOperation(panel.getStoredInfos()[1]);
         const expectedEntries = [ { message: '', status: 'default', type: 'notification-onActionProgress' } ];
         assert.deepEqual(this.logger.getEntries(), expectedEntries, 'error status removed');
+    });
+
+    test('get directory items with error', function(assert) {
+        prepareEnvironment(this, {
+            provider: { raiseErrorMode: 'getItems' }
+        });
+
+        const done = assert.async();
+        const expectedEvents = createTestData()['get directory items with error'];
+
+        startGetItems(this)
+            .done(() => {
+                assert.deepEqual(this.logger.getEntries(), expectedEvents, 'progress events raised');
+                done();
+            });
+
+        this.clock.tick(10000);
     });
 
 });
