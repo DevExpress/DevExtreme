@@ -284,6 +284,7 @@ const Editor = Widget.inherit({
 
         data(element, VALIDATION_TARGET, null);
         clearTimeout(this.showValidationMessageTimeout);
+        this._disposeValidationMessage();
         this.callBase();
     },
 
