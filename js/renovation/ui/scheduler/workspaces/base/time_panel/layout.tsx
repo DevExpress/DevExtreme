@@ -6,7 +6,7 @@ import {
   Fragment,
   Template,
   JSXTemplate,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
 import { CellBase } from '../cell';
@@ -22,6 +22,7 @@ import { GroupOrientation } from '../../../types.d';
 
 export const viewFunction = ({
   props: {
+    groupOrientation,
     timePanelData,
     timeCellTemplate,
   },
@@ -40,7 +41,7 @@ export const viewFunction = ({
   >
     {timePanelData
       .groupedData.map(({ dateTable, groupIndex }, index) => (
-        <Fragment key={getKeyByGroup(groupIndex)}>
+        <Fragment key={getKeyByGroup(groupIndex, groupOrientation)}>
           {getIsGroupedAllDayPanel(timePanelData, index) && (
             <Row>
               <CellBase className="dx-scheduler-time-panel-title-cell">

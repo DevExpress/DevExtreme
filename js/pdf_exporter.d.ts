@@ -1,3 +1,4 @@
+import { TPromise } from './core/utils/deferred';
 import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
@@ -98,7 +99,7 @@ export interface PdfExportDataGridProps {
      * @type_function_param1_field2 pdfCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any}) => any);
+    customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any}) => void);
      /**
      * @docid
      * @public
@@ -117,4 +118,4 @@ export interface PdfExportDataGridProps {
  * @prevFileNamespace DevExpress
  * @public
  */
-export function exportDataGrid(options: PdfExportDataGridProps): Promise<void> & JQueryPromise<void>;
+export function exportDataGrid(options: PdfExportDataGridProps): TPromise<void>;

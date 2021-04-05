@@ -2,7 +2,7 @@ import {
   Component,
   Fragment,
   JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { Row } from '../../../base/row';
 import { isHorizontalGroupOrientation } from '../../../utils';
 import { DateHeaderCell } from '../../../base/header_panel/date_header/cell';
@@ -69,8 +69,8 @@ export const viewFunction = ({
 })
 export class TimelineDateHeaderLayout extends JSXComponent(DateHeaderLayoutProps) {
   get isHorizontalGrouping(): boolean {
-    const { groupOrientation, groups } = this.props;
+    const { groupOrientation, groups, groupByDate } = this.props;
 
-    return isHorizontalGroupOrientation(groups, groupOrientation);
+    return isHorizontalGroupOrientation(groups, groupOrientation) && !groupByDate;
   }
 }

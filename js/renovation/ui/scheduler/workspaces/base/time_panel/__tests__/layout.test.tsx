@@ -302,7 +302,7 @@ describe('TimePanelLayout', () => {
       expect(getKeyByGroup)
         .toHaveBeenCalledTimes(1);
       expect(getKeyByGroup)
-        .toHaveBeenCalledWith(2);
+        .toHaveBeenCalledWith(2, undefined);
     });
   });
 

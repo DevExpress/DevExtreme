@@ -2,21 +2,19 @@ import React, { createRef } from 'react';
 // Should be before component import
 import { mount } from 'enzyme';
 // import { create as mount } from 'react-test-renderer';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
 } from '../../../test_utils/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
-import { isFakeClickEvent } from '../../../../events/utils/index';
 import { ConfigProvider } from '../../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
-  isFakeClickEvent: jest.fn(),
 }));
 jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null }));
 jest.mock('../../../utils/resolve_rtl');
@@ -99,78 +97,6 @@ describe('Widget', () => {
     });
 
     describe('Effects', () => {
-      describe('accessKeyEffect', () => {
-        const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() };
-
-        beforeEach(() => {
-          (isFakeClickEvent as any).mockImplementation(() => true);
-        });
-
-        it('should subscribe to click event', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(true);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(1);
-        });
-
-        it('should not change state if click event is not fake', () => {
-          (isFakeClickEvent as any).mockImplementation(() => false);
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should return unsubscribe callback', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          const detach = widget.accessKeyEffect() as DisposeEffectReturn;
-
-          expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
-          detach();
-          expect(getEventHandlers(EVENT.dxClick).length).toBe(0);
-        });
-
-        it('should not subscribe if widget is disabled', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: true });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should not subscribe if widget is not focusable', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: false, disabled: false });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should not subscribe if widget does not have accessKey', () => {
-          const widget = new Widget({ focusStateEnabled: true, disabled: false });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-      });
-
       describe('activeEffect', () => {
         const onActive = jest.fn();
         const onInactive = jest.fn();
@@ -677,7 +603,7 @@ describe('Widget', () => {
 
       describe('attributes', () => {
         it('should return ARIA labels', () => {
-          const widget = new Widget({ visible: false, aria: { id: 10, role: 'button', level: 100 } });
+          const widget = new Widget({ visible: false, aria: { id: '10', role: 'button', level: '100' } });
 
           expect(widget.attributes).toEqual({
             'aria-hidden': 'true', id: '10', role: 'button', 'aria-level': '100', 'rest-attributes': 'restAttributes',
@@ -861,7 +787,7 @@ describe('Widget', () => {
       const defaultProps = new WidgetProps();
 
       expect(defaultProps).toEqual({
-        accessKey: null,
+        accessKey: undefined,
         activeStateEnabled: false,
         disabled: false,
         focusStateEnabled: false,

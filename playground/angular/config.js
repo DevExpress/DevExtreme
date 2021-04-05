@@ -31,6 +31,8 @@ System.config({
 
         'rxjs': 'npm:rxjs@6.3.3',
         'rxjs/operators': 'npm:rxjs@6.3.3/operators',
+        'inferno': 'npm:inferno/dist/inferno.min.js',
+        'inferno-create-element': 'npm:inferno-create-element/dist/inferno-create-element.min.js',
 
         'jszip': 'npm:jszip@3.1.3/dist/jszip.min.js',
         'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.js',

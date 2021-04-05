@@ -2,7 +2,8 @@
 import React, { createRef, forwardRef } from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
+import { createTestRef } from '../../../test_utils/create_ref';
 import { PagerContent, PagerContentProps, viewFunction as PagerContentComponent } from '../content';
 import { PageIndexSelector } from '../pages/page_index_selector';
 import { PageSizeSelector } from '../page_size/selector';
@@ -10,7 +11,13 @@ import { InfoText } from '../info';
 import { Widget } from '../../common/widget';
 import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
 
-jest.mock('../../../../ui/shared/accessibility', () => ({ registerKeyboardAction: jest.fn() }));
+let mockInstance;
+
+jest.mock('../../../../ui/shared/accessibility', () => ({
+  registerKeyboardAction: jest.fn((_, instance) => {
+    mockInstance = instance;
+  }),
+}));
 jest.mock('../pages/page_index_selector', () => ({ PageIndexSelector: () => null }));
 jest.mock('../page_size/selector', () => ({ PageSizeSelector: forwardRef(() => null) }));
 jest.mock('../info', () => ({ InfoText: forwardRef(() => null) }));
@@ -38,6 +45,7 @@ describe('PagerContent', () => {
         pagesContainerVisible: true,
         isLargeDisplayMode: true,
         infoVisible: true,
+        pageIndexSelectorVisible: true,
         props: componentProps,
         restAttributes: { 'rest-attribute': {}, className: 'className' },
       } as Partial<PagerContent> as PagerContent;
@@ -139,6 +147,22 @@ describe('PagerContent', () => {
       expect(pagesContainer).toHaveLength(1);
     });
 
+    it('pageIndexSelectorVisible = false', () => {
+      const rootElementRef = { current: {} } as RefObject<HTMLElement>;
+      const tree = mount(<PagerContentComponent
+        {...{
+          pagesContainerVisible: true,
+          pageIndexSelectorVisible: false,
+          props: {
+            rootElementRef,
+          },
+        } as Partial<PagerContent> as any}
+      /> as any).childAt(0);
+      const pagesContainer = tree.childAt(0);
+      expect(tree.find(PageIndexSelector)).toHaveLength(0);
+      expect(pagesContainer).toHaveLength(1);
+    });
+
     it('showPageSizes = false', () => {
       const rootElementRef = { current: {} } as RefObject<HTMLDivElement>;
       const props = {
@@ -163,6 +187,7 @@ describe('PagerContent', () => {
         pagesContainerVisible: true,
         isLargeDisplayMode: true,
         infoVisible: true,
+        pageIndexSelectorVisible: true,
         widgetRootElementRef,
         props: {
           rtlEnabled: false,
@@ -190,7 +215,7 @@ describe('PagerContent', () => {
     });
 
     it('setRootElementRef, hasnt rootElementRef', () => {
-      const component = new PagerContent({ } as PagerContentProps);
+      const component = new PagerContent({} as PagerContentProps);
       component.widgetRootElementRef = { current: {} } as RefObject<HTMLElement>;
       component.setRootElementRef();
       expect(component.props.rootElementRef?.current).toBeUndefined();
@@ -204,7 +229,7 @@ describe('PagerContent', () => {
         pageCount: 1,
         pagesNavigatorVisible: 'auto',
       } as PagerContentProps);
-      component.widgetRootElementRef = { current: rootElement };
+      component.widgetRootElementRef = createTestRef(rootElement);
       component.keyboardAction.registerKeyboardAction(element, action);
       expect(registerKeyboardAction).toBeCalledWith(
         'pager',
@@ -217,11 +242,39 @@ describe('PagerContent', () => {
         undefined,
         action,
       );
-      const fakeComponent = (registerKeyboardAction as jest.Mock).mock.calls[0][1];
-      expect(fakeComponent.element()).toBe(rootElement);
-      expect(fakeComponent.option()).toBe(false);
+      expect(mockInstance.element()).toBe(rootElement);
+      expect(mockInstance.option()).toBe(false);
       // eslint-disable-next-line no-underscore-dangle
-      expect(fakeComponent._createActionByOption()).toEqual(expect.any(Function));
+      expect(mockInstance._createActionByOption()).toEqual(expect.any(Function));
+    });
+
+    it('keyboardAction provider _createActionByOption if onKeyDown prop is defined', () => {
+      const element = {} as HTMLElement;
+      const action = () => { };
+      const onKeyDownArgs = {};
+      const onKeyDownMock = jest.fn();
+      const component = new PagerContent({
+        onKeyDown: onKeyDownMock as any,
+      } as PagerContentProps);
+
+      component.keyboardAction.registerKeyboardAction(element, action);
+
+      // eslint-disable-next-line no-underscore-dangle
+      mockInstance._createActionByOption()(onKeyDownArgs);
+
+      expect(onKeyDownMock).toHaveBeenCalledWith(onKeyDownArgs);
+    });
+
+    it('keyboardAction provider _createActionByOption if onKeyDown prop is not defined', () => {
+      const element = {} as HTMLElement;
+      const action = () => { };
+      const component = new PagerContent({
+      } as PagerContentProps);
+
+      component.keyboardAction.registerKeyboardAction(element, action);
+
+      // eslint-disable-next-line no-underscore-dangle
+      expect(mockInstance._createActionByOption()()).toBeUndefined();
     });
 
     describe('pagesContainerVisible', () => {
@@ -280,6 +333,15 @@ describe('PagerContent', () => {
         } as PagerContentProps);
         expect(component.pagesContainerVisibility).toBeUndefined();
       });
+    });
+
+    it('pageIndexSelectorVisible', () => {
+      const component = new PagerContent({
+        pageSize: 0,
+      } as PagerContentProps);
+      expect(component.pageIndexSelectorVisible).toBe(false);
+      component.props.pageSize = 10;
+      expect(component.pageIndexSelectorVisible).toBe(true);
     });
 
     describe('className', () => {

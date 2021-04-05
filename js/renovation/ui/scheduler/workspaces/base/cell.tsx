@@ -6,7 +6,7 @@ import {
   OneWay,
   Slot,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { getGroupCellClasses } from '../utils';
 import { ContentTemplateProps } from '../types.d';
 
@@ -15,8 +15,6 @@ export const viewFunction = (viewModel: CellBase): JSX.Element => {
 
   return (
     <td
-    // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
       className={viewModel.classes}
     >
       {!ContentTemplate && viewModel.props.children}

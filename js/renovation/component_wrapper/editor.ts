@@ -5,6 +5,7 @@ import { extend } from '../../core/utils/extend';
 import $ from '../../core/renderer';
 import { data } from '../../core/element_data';
 import Callbacks from '../../core/utils/callbacks';
+import OldEditor from '../../ui/editor/editor';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
@@ -68,15 +69,16 @@ export default class Editor extends Component {
     );
   }
 
-  _bindInnerWidgetOptions(innerWidget, optionsContainer): void {
-    const syncOptions = (): any => this._options.silent(optionsContainer, extend({},
-      innerWidget.option()));
+  _bindInnerWidgetOptions(innerWidget: Component, optionsContainer: unknown): void {
+    const syncOptions = (): void => (this as unknown as { _options })
+      ._options.silent(optionsContainer, extend({},
+        innerWidget.option()));
 
     syncOptions();
     innerWidget.on('optionChanged', syncOptions);
   }
 
-  _optionChanged(option: any = {}): void {
+  _optionChanged(option: { name?; value?; previousValue? } = {}): void {
     const { name, value, previousValue } = option;
 
     if (name && this._getActionConfigs()[name]) {
@@ -96,7 +98,8 @@ export default class Editor extends Component {
       case 'validationError':
       case 'validationErrors':
       case 'validationStatus':
-        this.option(ValidationEngine.synchronizeValidationOptions(option, this.option()));
+        this.option((ValidationEngine as unknown as ({ synchronizeValidationOptions }))
+          .synchronizeValidationOptions(option, this.option()));
         break;
       default:
         super._optionChanged(option);
@@ -117,3 +120,7 @@ export default class Editor extends Component {
     clearTimeout(this.showValidationMessageTimeout);
   }
 }
+
+const prevIsEditor = (OldEditor as unknown as { isEditor }).isEditor;
+(OldEditor as unknown as { isEditor })
+  .isEditor = (instance): boolean => prevIsEditor(instance) || instance instanceof Editor;

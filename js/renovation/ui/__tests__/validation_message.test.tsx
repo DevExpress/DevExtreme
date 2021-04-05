@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
+import { createTestRef } from '../../test_utils/create_ref';
 import LegacyValidationMessage from '../../../ui/validation_message';
 import { viewFunction as ValidationMessageView, ValidationMessageProps, ValidationMessage } from '../validation_message';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
@@ -10,7 +11,7 @@ jest.mock('../../../ui/validation_message', () => jest.fn());
 describe('ValidationMessage', () => {
   describe('View', () => {
     it('View render', () => {
-      const rootElementRef = { } as HTMLDivElement;
+      const rootElementRef = createTestRef();
       const componentProps = new ValidationMessageProps();
       const props = {
         props: { rootElementRef },
@@ -31,10 +32,7 @@ describe('ValidationMessage', () => {
   describe('Logic', () => {
     it('componentProps', () => {
       const props = new ValidationMessageProps();
-      const validationMessage = new ValidationMessage({
-        ...props,
-        rootElementRef: {} as unknown as HTMLDivElement,
-      });
+      const validationMessage = new ValidationMessage({ ...props });
 
       expect(validationMessage.componentProps).toMatchObject(props);
     });

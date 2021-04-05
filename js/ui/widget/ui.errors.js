@@ -319,5 +319,10 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1015
     */
-    W1015: 'The "cellDuration" should divide the range from the "startDayHour" to the "endDayHour" into even intervals'
+    W1015: 'The "cellDuration" should divide the range from the "startDayHour" to the "endDayHour" into even intervals',
+
+    /**
+    * @name ErrorsUIWidgets.W1016
+    */
+    W1016: 'The \'{0}\' field in the HTML Editor toolbar item configuration was renamed to \'{1}\'. Please make a corresponding change in your code.'
 });

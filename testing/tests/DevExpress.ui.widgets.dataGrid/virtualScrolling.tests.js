@@ -3,7 +3,7 @@ import 'ui/scroll_view/ui.scrollable';
 
 import $ from 'jquery';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
-import virtualScrollingCore, { VirtualScrollController } from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
+import virtualScrollingCore, { VirtualScrollController, getPixelRatio } from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import renderer from 'core/renderer';
@@ -546,7 +546,7 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(this.scrollController.beginPageIndex(), mockDataSource.pageCount() / 2);
         assert.strictEqual(this.scrollController.endPageIndex(), mockDataSource.pageCount() / 2 + 1);
 
-        assert.strictEqual(this.scrollController.getContentOffset(), browser.msie ? 2000000 : (browser.mozilla ? 4000000 : 7500000));
+        assert.strictEqual(this.scrollController.getContentOffset() * getPixelRatio(window), browser.msie ? 2000000 : (browser.mozilla ? 4000000 : 7500000));
         assert.ok(mockDataSource.load.called);
 
         assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
@@ -840,6 +840,7 @@ QUnit.module('Subscribe to external scrollable events', {
     // act, assert
         assert.equal(virtualScrollingCore.getContentHeightLimit({ msie: true }), 4000000, 'content height limit for ie');
         assert.equal(virtualScrollingCore.getContentHeightLimit({ mozilla: true }), 8000000, 'content height limit for firefox');
+        virtualScrollingCore._setPixelRatioFn(function() { return 1; });
         assert.equal(virtualScrollingCore.getContentHeightLimit({}), 15000000, 'content height limit for other browsers');
         virtualScrollingCore._setPixelRatioFn(function() { return 2; });
         assert.equal(virtualScrollingCore.getContentHeightLimit({}), 7500000, 'content height limit depends on devicePixelRatio for other browsers'); // T692460

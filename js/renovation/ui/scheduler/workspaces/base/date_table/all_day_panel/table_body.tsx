@@ -5,7 +5,7 @@ import {
   JSXTemplate,
   OneWay,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { Row } from '../../row';
 import { AllDayPanelCell as Cell } from './cell';
 import {
@@ -16,8 +16,6 @@ import { combineClasses } from '../../../../../../utils/combine_classes';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
   <Row
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
     leftVirtualCellWidth={viewModel.props.leftVirtualCellWidth}
     rightVirtualCellWidth={viewModel.props.rightVirtualCellWidth}
     className={viewModel.classes}

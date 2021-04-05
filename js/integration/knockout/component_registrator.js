@@ -18,7 +18,7 @@ if(ko) {
     const editorsBindingHandlers = [];
     const registerComponentKoBinding = function(componentName, componentClass) {
 
-        if(componentClass.subclassOf(Editor)) {
+        if(Editor.isEditor(componentClass.prototype)) {
             editorsBindingHandlers.push(componentName);
         }
 
@@ -32,10 +32,10 @@ if(ko) {
                 const isBindingPropertyPredicateName = knockoutConfig && knockoutConfig.isBindingPropertyPredicateName;
                 let isBindingPropertyPredicate;
                 let ctorOptions = {
-                    onInitializing: function() {
+                    onInitializing: function(options) {
                         optionsByReference = this._getOptionsByReference();
 
-                        ko.computed(function() {
+                        ko.computed(() => {
                             const model = ko.unwrap(valueAccessor());
 
                             if(component) {
@@ -48,6 +48,8 @@ if(ko) {
 
                             if(component) {
                                 component.endUpdate();
+                            } else {
+                                model?.onInitializing?.call(this, options);
                             }
 
                         }, null, { disposeWhenNodeIsRemoved: domNode });

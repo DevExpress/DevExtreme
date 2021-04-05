@@ -268,6 +268,18 @@ class AppointmentModel {
                    (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
     }
 
+    _createAllDayAppointmentFilter(filterOptions) {
+        const {
+            viewStartDayHour,
+            viewEndDayHour
+        } = filterOptions;
+        const that = this;
+
+        return [[
+            (appointment) => that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour)
+        ]];
+    }
+
     _createCombinedFilter(filterOptions, timeZoneCalculator) {
         const dataAccessors = this._dataAccessors;
         const min = new Date(filterOptions.min);
@@ -393,9 +405,13 @@ class AppointmentModel {
                     const itemExists = items.filter(item => item[keyName] === pushItem.key).length !== 0;
 
                     if(itemExists) {
-                        this._updatedAppointmentKeys.push({ key: keyName, value: pushItem.key });
+                        this._updatedAppointmentKeys.push({
+                            key: keyName,
+                            value: pushItem.key
+                        });
                     } else {
-                        items.push(pushItem.data);
+                        const { data } = pushItem;
+                        data && items.push(data);
                     }
                 });
 
@@ -496,11 +512,25 @@ class AppointmentModel {
 
     filterLoadedAppointments(filterOption, timeZoneCalculator) {
         const combinedFilter = this._createAppointmentFilter(filterOption, timeZoneCalculator);
-        return query(this.getPreparedDataItems()).filter(combinedFilter).toArray();
+        return query(this.getPreparedDataItems())
+            .filter(combinedFilter)
+            .toArray();
+    }
+
+    filterAllDayAppointments(filterOption) {
+        const combinedFilter = this._createAllDayAppointmentFilter(filterOption);
+        return query(this.getPreparedDataItems())
+            .filter(combinedFilter)
+            .toArray();
     }
 
     getPreparedDataItems() {
-        const dataItems = this._dataSource.items();
+        const dataItems = this._dataSource?.items();
+
+        if(!dataItems) {
+            return [];
+        }
+
         return map(dataItems, (item) => {
             const startDate = new Date(this._dataAccessors.getter.startDate(item));
             const endDate = new Date(this._dataAccessors.getter.endDate(item));

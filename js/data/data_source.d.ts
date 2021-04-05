@@ -1,4 +1,6 @@
-import '../jquery_augmentation';
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import Store, {
     StoreOptions
@@ -51,7 +53,7 @@ export interface DataSourceOptions {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onChanged?: ((e: { changes?: Array<any> }) => any);
+    onChanged?: ((e: { changes?: Array<any> }) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -60,7 +62,7 @@ export interface DataSourceOptions {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoadError?: ((error: { message?: string }) => any);
+    onLoadError?: ((error: { message?: string }) => void);
     /**
      * @docid
      * @type_function_param1 isLoading:boolean
@@ -68,7 +70,7 @@ export interface DataSourceOptions {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoadingChanged?: ((isLoading: boolean) => any);
+    onLoadingChanged?: ((isLoading: boolean) => void);
     /**
      * @docid
      * @default 20
@@ -259,7 +261,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(): Promise<any> & JQueryPromise<any>;
+    load(): TPromise<any>;
     /**
      * @docid
      * @publicName loadOptions()
@@ -361,7 +363,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    reload(): Promise<any> & JQueryPromise<any>;
+    reload(): TPromise<any>;
     /**
      * @docid
      * @publicName requireTotalCount()

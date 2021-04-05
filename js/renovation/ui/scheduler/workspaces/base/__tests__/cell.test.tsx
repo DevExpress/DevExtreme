@@ -17,13 +17,6 @@ describe('DateTableCellBase', () => {
       props: { ...viewModel.props },
     }));
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { customAttribute: 'customAttribute' } });
-
-      expect(cell.prop('customAttribute'))
-        .toBe('customAttribute');
-    });
-
     it('should combine `className` with predefined classes', () => {
       const cell = render({ classes: 'some-classes' });
 

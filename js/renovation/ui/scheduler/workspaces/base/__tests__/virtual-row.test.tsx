@@ -28,15 +28,8 @@ describe('VirtualRow', () => {
 
       expect(row.is('.custom-class'))
         .toBe(true);
-      expect(row.prop('style'))
+      expect(row.prop('styles'))
         .toBe('style');
-    });
-
-    it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(row.prop('custom-attribute'))
-        .toBe('customAttribute');
     });
 
     it('should render virtual cells', () => {

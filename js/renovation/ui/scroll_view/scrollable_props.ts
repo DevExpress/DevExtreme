@@ -1,6 +1,6 @@
 import {
   ComponentBindings, OneWay, Slot, Event,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { EventCallback } from '../common/event_callback.d';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
 
@@ -22,13 +22,23 @@ export class ScrollableInternalProps {
 
   @OneWay() classes?: string;
 
+  @OneWay() pullDownEnabled = false;
+
+  @OneWay() reachBottomEnabled = false;
+
   @OneWay() forceGeneratePockets = false;
 
   @OneWay() needScrollViewContentWrapper = false;
 
+  @OneWay() needScrollViewLoadPanel = false;
+
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
 
   @Event() onUpdated?: EventCallback<ScrollEventArgs>;
+
+  @Event() onPullDown?: EventCallback<unknown>;
+
+  @Event() onReachBottom?: EventCallback<unknown>;
 }
 
 @ComponentBindings()

@@ -317,8 +317,15 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
   }
 
-  .dx-#{$widget-name}-edit-popup .dx-error-message {
-    padding: $material-grid-base-cell-padding;
+  .dx-#{$widget-name}-edit-popup {
+    .dx-scrollable-container {
+      margin-left: -10px;
+      padding-left: 10px;
+    }
+
+    .dx-error-message {
+      padding: $material-grid-base-cell-padding;
+    }
   }
 
   .dx-#{$widget-name}-headers,
@@ -1096,13 +1103,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
   .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
-  }
-
-  .dx-#{$widget-name}-pager {
-    &.dx-widget {
-      font-size: $material-grid-base-footer-font-size;
-      color: $datagrid-columnchooser-item-color;
-    }
   }
 
   .dx-#{$widget-name}-summary-item {

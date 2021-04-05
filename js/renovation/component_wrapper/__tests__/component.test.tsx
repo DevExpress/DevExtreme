@@ -496,6 +496,16 @@ describe('templates and slots', () => {
     expect($('#component')[0].innerHTML).toBe('<span>Update slot</span>');
   });
 
+  it('change option when anonymous template exists', () => {
+    const slotContent = $('<span>').html('Default slot');
+    $('#component').append(slotContent);
+    $('#component').dxTemplatedTestWidget({});
+
+    expect(() => $('#component')
+      .dxTemplatedTestWidget('instance')
+      .option('someOption', 'newValue')).not.toThrow();
+  });
+
   describe('template function parameters', () => {
     it('template without index', () => {
       const template = jest.fn();
@@ -617,15 +627,16 @@ describe('templates and slots', () => {
     expect(templateRoot.innerHTML).toBe('<div>second custom template</div>');
   });
 
-  it('replace root with template if it returns .dx-template-wrapper node', () => {
+  it('should not replace root with template if it returns .dx-template-wrapper node', () => {
+    const template = $('<div>').addClass('dx-template-wrapper').text('TemplateContent');
     $('#component').dxTemplatedTestWidget({
       template() {
-        return '<div class="dx-template-wrapper">Template content</div>';
+        return template;
       },
     });
+    const root = $('#component').children('.templates-root')[0];
 
-    expect($('#component').children('.dx-template-wrapper')[0])
-      .toBe($('#component').children('.templates-root')[0]);
+    expect($(root.firstChild)[0]).toBe(template[0]);
   });
 });
 

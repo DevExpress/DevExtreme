@@ -59,7 +59,7 @@ function setupDataGrid(that, $dataGridContainer) {
         initViews: true
     };
 
-    dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'editingFormBased', 'validating',
+    dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'validating',
         'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'summary', 'gridView'], that.setupOptions);
 }
 
@@ -3873,9 +3873,7 @@ QUnit.module('Editing', {
         // act
         this.editingController.addRow();
 
-        assert.strictEqual(args.length, 4, 'onRowPrepared call count');
-        assert.strictEqual(args[2].rowType, 'data', 'data row');
-        assert.strictEqual(args[3].rowType, 'detailAdaptive', 'adaptive detail row');
+        assert.strictEqual(args.length, 2, 'onRowPrepared call count');
     });
 });
 

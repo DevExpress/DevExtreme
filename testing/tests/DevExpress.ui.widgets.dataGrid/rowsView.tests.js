@@ -87,7 +87,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
         }
     };
 
-    setupDataGridModules(mockDataGrid, ['data', 'virtualScrolling', 'columns', 'grouping', 'rows', 'pager', 'selection', 'editing', 'editorFactory', 'summary', 'masterDetail', 'keyboardNavigation', 'search', 'contextMenu'], {
+    setupDataGridModules(mockDataGrid, ['data', 'virtualScrolling', 'columns', 'grouping', 'rows', 'pager', 'selection', 'editing', 'editingRowBased', 'editingCellBased', 'editorFactory', 'summary', 'masterDetail', 'keyboardNavigation', 'search', 'contextMenu'], {
         initViews: true,
         controllers: {
             columns: columnsController,
@@ -5512,7 +5512,7 @@ QUnit.module('Rows view with real dataController and columnController', {
                 }
             };
 
-            this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editingFormBased', 'editorFactory', 'masterDetail', 'search']);
+            this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editorFactory', 'masterDetail', 'search']);
             this.rowsView.render($testElement);
             clock.tick();
 
@@ -6879,7 +6879,7 @@ QUnit.module('Scrollbar', {
         rowsView.render($('#container').css({ width: 100, height: 100 }));
 
         // arrange
-        if(devices.real().deviceType === 'desktop') {
+        if(devices.real().deviceType === 'desktop' && !devices.real().mac) {
             assert.ok(rowsView.getScrollbarWidth() > 0, 'scrollbar width more 0 for desktop');
         } else {
             assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');

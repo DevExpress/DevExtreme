@@ -363,7 +363,9 @@ const DateBoxMask = DateBoxBase.inherit({
 
         if(text) {
             this._dateParts = renderDateParts(text, this._regExpInfo);
-            this._isFocused() && this._selectNextPart();
+            if(!this._input().is(':hidden')) {
+                this._selectNextPart();
+            }
         }
     },
 

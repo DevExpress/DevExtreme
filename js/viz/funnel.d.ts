@@ -1,7 +1,5 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -18,7 +16,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -444,7 +442,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     neckWidth?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
@@ -452,10 +450,10 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, item?: dxFunnelItem }) => any);
+    onHoverChanged?: ((e: { component?: dxFunnel, element?: TElement, model?: any, item?: dxFunnelItem }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
@@ -464,10 +462,10 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onItemClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
+    onItemClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
@@ -476,10 +474,10 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
+    onLegendClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => void) | string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
@@ -487,7 +485,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, item?: dxFunnelItem }) => any);
+    onSelectionChanged?: ((e: { component?: dxFunnel, element?: TElement, model?: any, item?: dxFunnelItem }) => void);
     /**
      * @docid
      * @extends CommonVizPalette
@@ -581,7 +579,7 @@ export interface dxFunnelLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid dxFunnelOptions.legend.visible
      * @default false
@@ -605,7 +603,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: TElement) => string | TElement);
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
@@ -630,8 +628,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxFunnel extends BaseWidget {
-    constructor(element: Element, options?: dxFunnelOptions)
-    constructor(element: JQuery, options?: dxFunnelOptions)
+    constructor(element: TElement, options?: dxFunnelOptions)
     /**
      * @docid
      * @publicName clearSelection()
@@ -735,15 +732,6 @@ export interface dxFunnelItem {
     value?: number;
 }
 
-declare global {
-interface JQuery {
-    dxFunnel(): JQuery;
-    dxFunnel(options: "instance"): dxFunnel;
-    dxFunnel(options: string): any;
-    dxFunnel(options: string, ...params: any[]): any;
-    dxFunnel(options: dxFunnelOptions): JQuery;
-}
-}
 export type Options = dxFunnelOptions;
 
 /** @deprecated use Options instead */

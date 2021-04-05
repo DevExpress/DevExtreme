@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 import { viewFunction as TableBodyView } from '../table_body';
 import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';
@@ -67,6 +68,7 @@ describe('DateTableBody', () => {
         props={{
           viewData,
           cellTemplate,
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
           ...viewModel.props,
         }}
       /> as any,
@@ -233,9 +235,9 @@ describe('DateTableBody', () => {
       expect(getKeyByGroup)
         .toHaveBeenCalledTimes(2);
       expect(getKeyByGroup)
-        .toHaveBeenNthCalledWith(1, 3);
+        .toHaveBeenNthCalledWith(1, 3, VERTICAL_GROUP_ORIENTATION);
       expect(getKeyByGroup)
-        .toHaveBeenNthCalledWith(2, 4);
+        .toHaveBeenNthCalledWith(2, 4, VERTICAL_GROUP_ORIENTATION);
     });
   });
 });

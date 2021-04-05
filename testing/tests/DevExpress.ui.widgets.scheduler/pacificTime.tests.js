@@ -1,4 +1,4 @@
-import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { initTestMarkup, createWrapper, isDesktopEnvironment, CLASSES } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import browser from 'core/utils/browser';
@@ -161,6 +161,52 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                 assert.equal(scheduler.appointments.getAppointmentCount(), appointmentCount - 1, 'appointment count should be reduced');
             });
         });
+
+        [{
+            cellDuration: 120,
+            appointmentTop: 100,
+            view: 'week',
+            startDate: new Date(2020, 2, 8, 4),
+        }, {
+            cellDuration: 90,
+            appointmentTop: 150,
+            view: 'week',
+            startDate: new Date(2020, 2, 8, 4, 30),
+        }, {
+            cellDuration: 120,
+            appointmentLeft: 400,
+            view: 'timelineWeek',
+            startDate: new Date(2020, 2, 8, 4),
+        }, {
+            cellDuration: 90,
+            appointmentLeft: 600,
+            view: 'timelineWeek',
+            startDate: new Date(2020, 2, 8, 4, 30),
+        }].forEach(({ cellDuration, appointmentTop, appointmentLeft, view, startDate }) => {
+            test(`Appointments should be rendered correctly after DST when cellDuration is ${cellDuration} in ${view}`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: [{
+                        startDate,
+                        endDate: new Date(2020, 2, 8, 6),
+                        text: 'Test Appointment',
+                    }],
+                    currentDate: summerDSTDate,
+                    views: [view],
+                    currentView: view,
+                    cellDuration,
+                });
+
+                if(view === 'week') {
+                    const actualAppointmentTop = scheduler.appointmentList[0].position.top;
+
+                    assert.equal(actualAppointmentTop, appointmentTop, 'Correct top coordinate');
+                } else {
+                    const actualAppointmentLeft = scheduler.appointmentList[0].position.left;
+
+                    assert.equal(actualAppointmentLeft, appointmentLeft, 'Correct left coordinate');
+                }
+            });
+        });
     });
 
     module('Time panel should have correct dates value in case DST', moduleConfig, () => {
@@ -184,50 +230,127 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             { view: 'timelineWeek', times: expectedAllTimes }
         ];
 
-        module('timeCellTemplate', () => {
-            const expectedDateResults = (() => {
-                const result = [];
-                let startHours = 0;
-                let currentDate = new Date(summerDSTDate);
+        const expectedDateResults = (() => {
+            const result = [];
+            let startHours = 0;
+            let currentDate = new Date(summerDSTDate);
 
-                while(currentDate.getDate() < 9) {
-                    result.push(new Date(currentDate));
-                    startHours += 0.5;
-                    currentDate = new Date(new Date(summerDSTDate).setHours(startHours - (startHours % 1), startHours % 1 * 60));
-                }
+            while(currentDate.getDate() < 9) {
+                result.push(new Date(currentDate));
+                startHours += 0.5;
+                currentDate = new Date(new Date(summerDSTDate).setHours(startHours - (startHours % 1), startHours % 1 * 60));
+            }
 
-                return result;
-            })();
+            return result;
+        })();
 
-            testCases.forEach(testCase => {
-                test(`arguments should be valid in '${testCase.view}' view`, function(assert) {
-                    let index = 0;
+        [true, false].forEach((renovateRender) => {
+            module('timeCellTemplate', () => {
+                testCases.forEach(testCase => {
+                    test(`arguments should be valid in '${testCase.view}' view when renovateRender is ${renovateRender}`, function(assert) {
+                        let index = 0;
 
-                    createWrapper({
-                        dataSource: [],
-                        timeCellTemplate: arg => {
-                            if(index < expectedAllTimes.length) {
-                                assert.equal(arg.date.valueOf(), expectedDateResults[index].valueOf(), 'arg.date should be valid');
-                                assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
+                        createWrapper({
+                            dataSource: [],
+                            timeCellTemplate: arg => {
+                                if(index < expectedAllTimes.length) {
+                                    assert.equal(arg.date.valueOf(), expectedDateResults[index].valueOf(), 'arg.date should be valid');
+                                    assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
 
-                                index++;
-                            }
-                        },
-                        views: testCases.map(testCases => testCases.view),
-                        currentView: testCase.view,
-                        startDayHour: 0,
-                        currentDate: summerDSTDate,
-                        height: 600
+                                    index++;
+                                }
+                            },
+                            views: testCases.map(testCases => testCases.view),
+                            currentView: testCase.view,
+                            startDayHour: 0,
+                            currentDate: summerDSTDate,
+                            height: 600,
+                            renovateRender,
+                        });
+
+                        assert.expect(expectedAllTimes.length * 2);
                     });
 
-                    assert.expect(expectedAllTimes.length * 2);
+                    test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
+                        let index = 0;
+
+                        const validExpectedDateResults = expectedDateResults.slice(4);
+                        const times = testCase.times.slice(4);
+
+                        createWrapper({
+                            dataSource: [],
+                            timeCellTemplate: ({ date, text }) => {
+                                if(index < validExpectedDateResults.length) {
+                                    assert.equal(date.valueOf(), validExpectedDateResults[index].valueOf(), 'correct date');
+                                    assert.equal(text, times[index], 'correct text');
+
+                                    index++;
+                                }
+                            },
+                            views: testCases.map(testCases => testCases.view),
+                            currentView: testCase.view,
+                            startDayHour: 2,
+                            currentDate: summerDSTDate,
+                            height: 600,
+                            renovateRender,
+                        });
+
+                        assert.expect(times.length * 2);
+                    });
                 });
+            });
+
+            module('dataCellTemplate', () => {
+                testCases
+                    .map(testCase => {
+                        return ({
+                            ...testCase,
+                            isDivideIndex: testCase.view === 'week',
+                        });
+                    })
+                    .forEach((testCase) => {
+                        // TODO: we should decide what startDate we should use for "dead time" - one hour before it or one hour after
+                        test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
+                            let index = 0;
+
+                            const validExpectedDateResults = expectedDateResults.slice(4);
+
+                            createWrapper({
+                                dataSource: [],
+                                dataCellTemplate: ({ startDate, allDay }) => {
+                                    if(allDay) {
+                                        return undefined;
+                                    }
+
+                                    const correctedIndex = testCase.isDivideIndex
+                                        ? Math.floor(index / 7)
+                                        : index;
+                                    const isValidIndex = testCase.isDivideIndex
+                                        ? index % 7 === 0
+                                        : true;
+
+                                    if(correctedIndex < validExpectedDateResults.length && isValidIndex) {
+                                        assert.equal(startDate.valueOf(), validExpectedDateResults[correctedIndex].valueOf(), 'correct date');
+                                    }
+                                    index++;
+                                },
+                                views: testCases.map(testCases => testCases.view),
+                                currentView: testCase.view,
+                                startDayHour: 2,
+                                currentDate: summerDSTDate,
+                                height: 600,
+                                renovateRender,
+                            });
+
+                            assert.expect(validExpectedDateResults.length);
+                        });
+                    });
             });
         });
 
-        module('Time panel render(T852308, T860281)', () => {
+        module('Time panel render', () => {
             testCases.forEach(testCase => {
-                test(`Time value in time panel should be correct in ${testCase.view}`, function(assert) {
+                test(`Time value in time panel should be correct in ${testCase.view} (T852308, T860281)`, function(assert) {
                     const scheduler = createWrapper({
                         dataSource: [],
                         views: testCases.map(testCases => testCases.view),
@@ -246,11 +369,69 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
 
                     assert.expect(testCase.times.length + 1);
                 });
+
+                test(`Time value in time panel should be correct in ${testCase.view} when startViewDate is during DST change`, function(assert) {
+                    const times = testCase.times.slice(4);
+
+                    const scheduler = createWrapper({
+                        dataSource: [],
+                        views: testCases.map(testCases => testCases.view),
+                        currentView: testCase.view,
+                        startDayHour: 2,
+                        currentDate: summerDSTDate,
+                        height: 600
+                    });
+
+                    const currentTimeResults = scheduler.timePanel.getTimeValues();
+
+                    assert.ok(currentTimeResults.length >= times.length, 'Correct number of time values');
+                    for(let i = 0; i < times.length; i += 1) {
+                        assert.equal(currentTimeResults[i], times[i], 'Current time value should be equal expected');
+                    }
+
+                    assert.expect(times.length + 1);
+                });
             });
         });
     });
 
     module('Common', moduleConfig, () => {
+        [{
+            currentDate: new Date(2021, 2, 14),
+            text: 'summer time'
+        }, {
+            currentDate: new Date(2021, 10, 7),
+            text: 'winter time'
+        }].forEach(({ currentDate, text }) => {
+            test(`If local time zone and scheduler time zone equal by declaration, then should be valid display appointments(skip scheduler timezone engine), ${text}`, function(assert) {
+                const etalonDateText = '10:30 AM - 12:00 PM';
+                const scheduler = createWrapper({
+                    currentDate,
+                    timeZone: 'America/Tijuana',
+                    dataSource: [{
+                        text: 'Website Re-Design Plan',
+                        startDate: new Date('2021-02-24T18:30:00.000Z'),
+                        endDate: new Date('2021-02-24T20:00:00.000Z'),
+                        recurrenceRule: 'FREQ=DAILY'
+                    }],
+                    views: ['week'],
+                    currentView: 'week',
+                    firstDayOfWeek: 5,
+                    startDayHour: 9,
+                    height: 600
+                });
+
+                scheduler.appointmentList.forEach(appointment => {
+                    assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+                    appointment.click();
+
+                    assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+                });
+
+                assert.expect(14);
+            });
+        });
+
         [{
             startDate: '2020-05-03T08:00:00.000Z',
             endDate: '2020-05-03T09:00:00.000Z',
@@ -284,9 +465,55 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             });
         });
 
+        [{
+            view: 'day',
+            left: 100,
+            top: 100,
+        }, {
+            view: 'week',
+            left: 100,
+            top: 100,
+        }, {
+            view: 'timelineDay',
+            left: 400,
+            top: 26,
+        }, {
+            view: 'timelineWeek',
+            left: 400,
+            top: 26,
+        }].forEach(({ view, left, top }) => {
+            test(`Appointments should be rendered corrrectly when startViewDate is during DST change in ${view}`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: [{
+                        startDate: new Date(2020, 2, 8, 3),
+                        endDate: new Date(2020, 2, 8, 4),
+                    }],
+                    views: [view],
+                    currentView: view,
+                    height: 600,
+                    currentDate: summerDSTDate,
+                    startDayHour: 2,
+                });
+
+                assert.equal(scheduler.appointmentList.length, 1, 'one appointment has been rendered');
+
+                const element = scheduler.appointmentList[0].getElement();
+
+                assert.roughEqual(element.position().left, left, 1, 'correct left position');
+                assert.roughEqual(element.position().top, top, 1, 'correct top position');
+            });
+        });
+
+        test('timeZoneUtils.isEqualLocalTimeZoneByDeclaration should be return right value', function(assert) {
+            assert.ok(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/Tijuana', new Date(2021, 6, 6)), 'should be return true, both timezone have same declaration');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/Los_Angeles', new Date(2021, 6, 6)), 'should be return true');
+            assert.notOk(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/New_York', new Date(2021, 6, 6)), 'should be return false');
+        });
+
         test('timeZoneUtils.isEqualLocalTimeZone should be return right value', function(assert) {
-            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Los_Angeles'), 'should be return true');
-            assert.notOk(timeZoneUtils.isEqualLocalTimeZone('America/New_York'), 'should be return false');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Tijuana', new Date(2021, 6, 6)), 'should be return true, both timezone have same declaration');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Los_Angeles', new Date(2021, 6, 6)), 'should be return true');
+            assert.notOk(timeZoneUtils.isEqualLocalTimeZone('America/New_York', new Date(2021, 6, 6)), 'should be return false');
         });
 
         module('Today and current day in calendar', () => {
@@ -396,5 +623,145 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
 
             assert.expect(2);
         });
+    });
+
+    module('Cells selection with DST', {
+        beforeEach: function() {
+            fx.off = true;
+        },
+        afterEach: function() {
+            fx.off = false;
+        },
+    }, () => {
+        const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
+        const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
+
+        if(isDesktopEnvironment()) {
+            const schedulerSettings = {
+                dataSource: [],
+                views: ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'],
+                currentDate: new Date(2021, 2, 14),
+                scrolling: {
+                    mode: 'virtual'
+                },
+                startDayHour: 0,
+                endDayHour: 10,
+                height: 600,
+                width: 1500,
+            };
+
+            [
+                {
+                    cell: 28,
+                    currentView: 'week'
+                }, {
+                    cell: 5,
+                    currentView: 'day'
+                }, {
+                    cell: 5,
+                    currentView: 'timelineDay'
+                }, {
+                    cell: 5,
+                    currentView: 'timelineWeek'
+                }
+            ].forEach(({ cell, currentView }) => {
+                test(`Correct cell should be selected when ${currentView} view is used`, function(assert) {
+                    const scheduler = createWrapper(Object.assign({ currentView }, schedulerSettings));
+                    scheduler.workSpace.selectCells(cell, cell);
+
+                    const selectedCell = scheduler.workSpace.getCell(cell);
+                    const selectedCells = scheduler.workSpace.getSelectedCells();
+
+                    assert.equal(selectedCells.length, 1, 'selected exacly one cell');
+                    assert.ok(selectedCell.hasClass(SELECTED_CELL_CLASS), 'the cell is selected');
+                    assert.ok(selectedCell.hasClass(FOCUSED_CELL_CLASS), 'the cell is focused');
+                });
+            });
+
+            [
+                {
+                    firstCell: 3,
+                    lastCell: 8,
+                    selectedCellCount: 6,
+                    currentView: 'day',
+                    mustBeSelectedCells: [4, 5, 6, 7],
+                    testDescription: 'Cells that cover dead zone of DST'
+                }, {
+                    firstCell: 21,
+                    lastCell: 56,
+                    selectedCellCount: 6,
+                    currentView: 'week',
+                    mustBeSelectedCells: [28, 35, 42, 49],
+                    testDescription: 'Cells that cover dead zone of DST'
+                }, {
+                    firstCell: 28,
+                    lastCell: 29,
+                    selectedCellCount: 17,
+                    currentView: 'week',
+                    mustBeSelectedCells: [28, 35, 42, 56],
+                    testDescription: 'Cells that cover dead zone of DST and part of next week'
+                }, {
+                    firstCell: 3,
+                    lastCell: 8,
+                    selectedCellCount: 6,
+                    currentView: 'timelineDay',
+                    mustBeSelectedCells: [4, 5, 6, 7],
+                    testDescription: 'Cells that cover dead zone of DST'
+                }, {
+                    firstCell: 5,
+                    lastCell: 9,
+                    selectedCellCount: 5,
+                    currentView: 'timelineWeek',
+                    mustBeSelectedCells: [5, 6, 7, 8, 9],
+                    testDescription: 'Cells that start on dead zone of DST'
+                },
+                {
+                    firstCell: 4,
+                    lastCell: 5,
+                    selectedCellCount: 2,
+                    currentView: 'day',
+                    mustBeSelectedCells: [4, 5],
+                    testDescription: 'Cells of dead zone of DST'
+                }, {
+                    firstCell: 14,
+                    lastCell: 28,
+                    selectedCellCount: 3,
+                    currentView: 'week',
+                    mustBeSelectedCells: [14, 21, 28],
+                    testDescription: 'Cells that end on dead zone of DST'
+                }, {
+                    firstCell: 3,
+                    lastCell: 5,
+                    selectedCellCount: 3,
+                    currentView: 'timelineDay',
+                    mustBeSelectedCells: [3, 4, 5],
+                    testDescription: 'Cells that end on dead zone of DST'
+                }, {
+                    firstCell: 3,
+                    lastCell: 5,
+                    selectedCellCount: 3,
+                    currentView: 'timelineWeek',
+                    mustBeSelectedCells: [3, 4, 5],
+                    testDescription: 'Cells that end on dead zone of DST'
+                },
+            ].forEach(({ firstCell, lastCell, selectedCellCount, currentView, mustBeSelectedCells, testDescription }) => {
+                test(`${testDescription} should be selected when ${currentView} view is used`, function(assert) {
+                    const scheduler = createWrapper({ ...schedulerSettings, currentView });
+
+                    scheduler.workSpace.selectCells(firstCell, lastCell);
+
+                    const cells = scheduler.workSpace.getCells();
+                    const selectedCells = scheduler.workSpace.getSelectedCells();
+
+                    assert.equal(selectedCells.length, selectedCellCount, 'the amount of selected cells is correct');
+                    assert.ok(cells.eq(firstCell).hasClass(SELECTED_CELL_CLASS), 'the first cell is selected');
+                    assert.ok(cells.eq(lastCell).hasClass(SELECTED_CELL_CLASS), 'the last cell is selected');
+                    assert.ok(cells.eq(lastCell).hasClass(FOCUSED_CELL_CLASS), 'the last cell is focused');
+                    mustBeSelectedCells.forEach(index => {
+                        assert.ok(cells.eq(index).hasClass(SELECTED_CELL_CLASS), 'the cell from dead zone is selected');
+                    });
+                });
+            });
+        }
     });
 }

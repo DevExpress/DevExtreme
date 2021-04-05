@@ -316,6 +316,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     scrollToTime() { return noop(); }
 
+    _createAllDayPanelElements() {}
+
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
     }

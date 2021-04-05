@@ -1,8 +1,10 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     template
@@ -76,7 +78,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => any);
+    customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void);
     /**
      * @docid
      * @default {}
@@ -110,17 +112,17 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     minColWidth?: number;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorEnterKey?: ((e: { component?: dxForm, element?: dxElement, model?: any, dataField?: string }) => any);
+    onEditorEnterKey?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @type_function_param1_field5 value:object
@@ -128,7 +130,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFieldDataChanged?: ((e: { component?: dxForm, element?: dxElement, model?: any, dataField?: string, value?: any }) => any);
+    onFieldDataChanged?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string, value?: any }) => void);
     /**
      * @docid
      * @default "optional"
@@ -217,8 +219,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
  * @public
  */
 export default class dxForm extends Widget {
-    constructor(element: Element, options?: dxFormOptions)
-    constructor(element: JQuery, options?: dxFormOptions)
+    constructor(element: TElement, options?: dxFormOptions)
     /**
      * @docid
      * @publicName getButton(name)
@@ -296,7 +297,7 @@ export default class dxForm extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): Promise<void> & JQueryPromise<void>;
+    updateDimensions(): TPromise<void>;
     /**
      * @docid
      * @publicName validate()
@@ -517,7 +518,7 @@ export interface dxFormGroupItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: { component?: dxForm, formData?: any }, itemElement: dxElement) => string | Element | JQuery);
+    template?: template | ((data: { component?: dxForm, formData?: any }, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default true
@@ -658,7 +659,7 @@ export interface dxFormSimpleItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: dxElement) => string | Element | JQuery);
+    template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default undefined
@@ -784,7 +785,7 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:dxElement
        * @default undefined
        */
-      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: dxElement) => any),
+      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: TElement) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -793,7 +794,7 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:dxElement
        * @default undefined
        */
-      template?: template | ((tabData: any, tabIndex: number, tabElement: dxElement) => any),
+      template?: template | ((tabData: any, tabIndex: number, tabElement: TElement) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -817,15 +818,6 @@ export interface dxFormTabbedItem {
     visibleIndex?: number;
 }
 
-declare global {
-interface JQuery {
-    dxForm(): JQuery;
-    dxForm(options: "instance"): dxForm;
-    dxForm(options: string): any;
-    dxForm(options: string, ...params: any[]): any;
-    dxForm(options: dxFormOptions): JQuery;
-}
-}
 export type Options = dxFormOptions;
 
 /** @deprecated use Options instead */

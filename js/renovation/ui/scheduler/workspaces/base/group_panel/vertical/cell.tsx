@@ -1,6 +1,6 @@
 import {
   Component, JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { GroupPanelCellProps } from '../cell_props';
 
 export const viewFunction = (viewModel: GroupPanelVerticalCell): JSX.Element => {
@@ -9,8 +9,6 @@ export const viewFunction = (viewModel: GroupPanelVerticalCell): JSX.Element => 
   return (
     <div
       className={`dx-scheduler-group-header ${viewModel.props.className}`}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
     >
       {!!CellTemplate && (
         <CellTemplate

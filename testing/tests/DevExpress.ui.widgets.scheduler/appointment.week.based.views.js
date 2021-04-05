@@ -342,7 +342,7 @@ module('Integration: Appointment Day, Week views', {
                 }, 10);
             });
 
-            test('Task should be placed in right group', function(assert) {
+            test('Task should be placed in correct group', function(assert) {
                 const data = new DataSource({
                     store: [{ text: 'Item 1', ownerId: 2, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30) }]
                 });
@@ -354,7 +354,8 @@ module('Integration: Appointment Day, Week views', {
                         field: 'ownerId',
                         dataSource: [{ id: 1, text: 'John' }, { id: 2, text: 'Mike' }]
                     }],
-                    width: 700
+                    crossScrollingEnabled: true,
+                    width: 1700
                 });
 
                 const workSpace = this.instance.getWorkSpace();
@@ -362,7 +363,7 @@ module('Integration: Appointment Day, Week views', {
 
                 this.instance.option('dataSource', data);
 
-                const itemShift = ($('.dx-scheduler-date-table').outerWidth() - $('.dx-scheduler-time-panel').outerWidth()) * 0.5 + $('.dx-scheduler-time-panel').outerWidth();
+                const itemShift = ($('.dx-scheduler-date-table').outerWidth()) * 0.5;
 
                 try {
                     const value = spy.returnValues[0];
@@ -421,7 +422,8 @@ module('Integration: Appointment Day, Week views', {
                                 { id: 2, text: 'mr. Bale', color: '#CB289F' }
                             ]
                         }
-                    ]
+                    ],
+                    width: 800
                 });
 
                 const tasks = this.instance.$element().find('.' + APPOINTMENT_CLASS);
@@ -1011,7 +1013,8 @@ module('Integration: Appointment Day, Week views', {
                     views: ['week'],
                     startDayHour: 20,
                     currentView: 'week',
-                    firstDayOfWeek: 1
+                    firstDayOfWeek: 1,
+                    width: 1600
                 });
 
                 const $appointmentTail = $(this.instance.$element()).find('.dx-scheduler-work-space .dx-scheduler-appointment').eq(1);
@@ -1062,6 +1065,7 @@ module('Integration: Appointment Day, Week views', {
                         currentView: viewName,
                         currentDate: new Date(2017, 4, 25),
                         height: 600,
+                        width: 3000
                     });
 
                     assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
@@ -1086,6 +1090,7 @@ module('Integration: Appointment Day, Week views', {
                     startDayHour: 9,
                     height: 800,
                     width: 500,
+                    crossScrollingEnabled: true,
                     maxAppointmentsPerCell: 1,
                 });
 
@@ -1094,7 +1099,7 @@ module('Integration: Appointment Day, Week views', {
                 const tailCoords = translator.locate(this.scheduler.appointments.compact.getButton(1));
 
                 assert.strictEqual(tailCoords.top, 0, 'Appointment top is correct');
-                assert.roughEqual(tailCoords.left, 240, 2, 'Appointment left is correct');
+                assert.roughEqual(tailCoords.left, 196, 2, 'Appointment left is correct');
             });
 
             test('targetedAppointmentData should have valid targeted resource on onAppointmentClick event', function(assert) {

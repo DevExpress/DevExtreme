@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { createRef } from 'react';
 import { mount, shallow } from 'enzyme';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
 import { renderTemplate } from '../../../utils/render_template';

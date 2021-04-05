@@ -118,7 +118,7 @@ testModule('Toolbar integration', {
         const instance = $('#htmlEditor').dxHtmlEditor({
             value: '<p>test</p>',
             toolbar: {
-                items: [{ formatName: 'color', locateInMenu: 'always' }],
+                items: [{ name: 'color', locateInMenu: 'always' }],
                 multiline: false
             },
             onValueChanged: (e) => {
@@ -299,7 +299,7 @@ testModule('Toolbar integration', {
 
     test('SelectBox should keep selected value after format applying', function(assert) {
         $('#htmlEditor').dxHtmlEditor({
-            toolbar: { items: [{ formatName: 'size', formatValues: ['10px', '11px'] }] }
+            toolbar: { items: [{ name: 'size', acceptedValues: ['10px', '11px'] }] }
         });
 
         const $formatWidget = $('#htmlEditor').find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);

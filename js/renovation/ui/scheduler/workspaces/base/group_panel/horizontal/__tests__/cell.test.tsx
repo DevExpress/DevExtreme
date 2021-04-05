@@ -36,13 +36,6 @@ describe('GroupPanel Horizontal Cell', () => {
         .toBe(3);
     });
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(cell.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should rendeer content', () => {
       const cell = render({ props: { text: 'Test text' } });
       const content = cell.find('.dx-scheduler-group-header-content');

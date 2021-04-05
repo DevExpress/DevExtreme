@@ -2,18 +2,11 @@ import $ from '../../core/renderer';
 import { hasWindow } from '../../core/utils/window';
 import registerComponent from '../../core/component_registrator';
 import { getPublicElement } from '../../core/element';
-import { extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
 import PullDownStrategy from './ui.scroll_view.native.pull_down';
 import SwipeDownStrategy from './ui.scroll_view.native.swipe_down';
 import SimulatedStrategy from './ui.scroll_view.simulated';
 import Scrollable from './ui.scrollable';
-import LoadIndicator from '../load_indicator';
-import LoadPanel from '../load_panel';
-
-const SCROLLVIEW_CLASS = 'dx-scrollview';
-
-const SCROLLVIEW_LOADPANEL = SCROLLVIEW_CLASS + '-loadpanel';
 
 const refreshStrategies = {
     pullDown: PullDownStrategy,
@@ -35,57 +28,12 @@ const scrollViewServerConfig = {
 };
 
 const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
-
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            onPullDown: null,
-            onReachBottom: null,
-        });
-    },
-
     _init: function() {
         this.callBase();
-        this._loadingIndicatorEnabled = true;
-    },
-
-    _initScrollableMarkup: function() {
-        this._initBottomPocket();
-        this._initLoadPanel();
-    },
-
-    _initBottomPocket: function() {
-        const $loadIndicator = new LoadIndicator($('<div>')).$element();
-
-        this._updateReachBottomText();
-
-        // eslint-disable-next-line no-undef
-        $reachBottom
-            // eslint-disable-next-line no-undef
-            .append($loadContainer.append($loadIndicator));
-    },
-
-    _initLoadPanel: function() {
-        const $loadPanelElement = $('<div>')
-            .addClass(SCROLLVIEW_LOADPANEL)
-            .appendTo(this.$element());
-
-        const loadPanelOptions = {
-            shading: false,
-            delay: 400,
-            message: this.option('refreshingText'),
-            position: {
-                of: this.$element()
-            }
-        };
-
-        this._loadPanel = this._createComponent($loadPanelElement, LoadPanel, loadPanelOptions);
-    },
-
-    _updateReachBottomText: function() {
-        this._$reachBottomText.text(this.option('reachBottomText'));
     },
 
     _createStrategy: function() {
+        const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
         // eslint-disable-next-line no-undef
         const strategyClass = refreshStrategies[strategyName];
         if(!strategyClass) {
@@ -98,18 +46,10 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         this._strategy.reachBottomCallbacks.add(this._reachBottomHandler.bind(this));
     },
 
-    _createActions: function() {
-        this.callBase();
-        this._pullDownAction = this._createActionByOption('onPullDown');
-        this._reachBottomAction = this._createActionByOption('onReachBottom');
-        this._tryRefreshPocketState();
-    },
-
-    _tryRefreshPocketState: function() {
-        this._pullDownEnable(this.hasActionSubscription('onPullDown'));
-        this._reachBottomEnable(this.hasActionSubscription('onReachBottom'));
-
-    },
+    // _createActions: function() {
+    //     this.callBase();
+    //     this._tryRefreshPocketState();
+    // },
 
     on: function(eventName) {
         const result = this.callBase.apply(this, arguments);
@@ -121,61 +61,61 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         return result;
     },
 
-    _pullDownEnable: function(enabled) {
-        if(arguments.length === 0) {
-            return this._pullDownEnabled;
-        }
+    // _pullDownEnable: function(enabled) {
+    //     if(arguments.length === 0) {
+    //         return this._pullDownEnabled;
+    //     }
 
-        if(this._$pullDown && this._strategy) {
-            this._$pullDown.toggle(enabled);
-            this._strategy.pullDownEnable(enabled);
-            this._pullDownEnabled = enabled;
-        }
-    },
+    //     if(this._$pullDown && this._strategy) {
+    //         this._$pullDown.toggle(enabled);
+    //         this._strategy.pullDownEnable(enabled);
+    //         this._pullDownEnabled = enabled;
+    //     }
+    // },
 
-    _reachBottomEnable: function(enabled) {
-        if(arguments.length === 0) {
-            return this._reachBottomEnabled;
-        }
+    // _reachBottomEnable: function(enabled) {
+    //     if(arguments.length === 0) {
+    //         return this._reachBottomEnabled;
+    //     }
 
-        if(this._$reachBottom && this._strategy) {
-            this._$reachBottom.toggle(enabled);
-            this._strategy.reachBottomEnable(enabled);
-            this._reachBottomEnabled = enabled;
-        }
-    },
+    //     if(this._$reachBottom && this._strategy) {
+    //         this._$reachBottom.toggle(enabled);
+    //         this._strategy.reachBottomEnable(enabled);
+    //         this._reachBottomEnabled = enabled;
+    //     }
+    // },
 
-    _pullDownHandler: function() {
-        this._loadingIndicator(false);
-        this._pullDownLoading();
-    },
+    // _pullDownHandler: function() {
+    //     this._loadingIndicator(false);
+    //     this._pullDownLoading();
+    // },
 
-    _loadingIndicator: function(value) {
-        if(arguments.length < 1) {
-            return this._loadingIndicatorEnabled;
-        }
-        this._loadingIndicatorEnabled = value;
-    },
+    // _loadingIndicator: function(value) {
+    //     if(arguments.length < 1) {
+    //         return this._loadingIndicatorEnabled;
+    //     }
+    //     this._loadingIndicatorEnabled = value;
+    // },
 
-    _pullDownLoading: function() {
-        this.startLoading();
-        this._pullDownAction();
-    },
+    // _pullDownLoading: function() {
+    //     this.startLoading();
+    //     this._pullDownAction();
+    // },
 
-    _reachBottomHandler: function() {
-        this._loadingIndicator(false);
-        this._reachBottomLoading();
-    },
+    // _reachBottomHandler: function() {
+    //     this._loadingIndicator(false);
+    //     this._reachBottomLoading();
+    // },
 
-    _reachBottomLoading: function() {
-        this.startLoading();
-        this._reachBottomAction();
-    },
+    // _reachBottomLoading: function() {
+    //     this.startLoading();
+    //     this._reachBottomAction();
+    // },
 
-    _releaseHandler: function() {
-        this.finishLoading();
-        this._loadingIndicator(true);
-    },
+    // _releaseHandler: function() {
+    //     this.finishLoading();
+    //     this._loadingIndicator(true);
+    // },
 
     _optionChanged: function(args) {
         switch(args.name) {
@@ -195,10 +135,6 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
             default:
                 this.callBase(args);
         }
-    },
-
-    isEmpty: function() {
-        return !$(this.content()).children().length;
     },
 
     content: function() {
@@ -232,26 +168,26 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         return $(this.content()).height() > this._$container.height();
     },
 
-    refresh: function() {
-        if(!this.hasActionSubscription('onPullDown')) {
-            return;
-        }
+    // refresh: function() {
+    //     if(!this.hasActionSubscription('onPullDown')) {
+    //         return;
+    //     }
 
-        this._strategy.pendingRelease();
-        this._pullDownLoading();
-    },
+    //     this._strategy.pendingRelease();
+    //     this._pullDownLoading();
+    // },
 
-    startLoading: function() {
-        if(this._loadingIndicator() && this.$element().is(':visible')) {
-            this._loadPanel.show();
-        }
-        this._lock();
-    },
+    // startLoading: function() {
+    //     if(this._loadingIndicator() && this.$element().is(':visible')) {
+    //         this._loadPanel.show();
+    //     }
+    //     this._lock();
+    // },
 
-    finishLoading: function() {
-        this._loadPanel.hide();
-        this._unlock();
-    },
+    // finishLoading: function() {
+    //     this._loadPanel.hide();
+    //     this._unlock();
+    // },
 
     _dispose: function() {
         this._strategy.dispose();

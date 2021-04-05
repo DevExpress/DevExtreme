@@ -1,4 +1,6 @@
-import '../../jquery_augmentation';
+import {
+    TPromise
+} from '../../core/utils/deferred';
 
 export interface ODataContextOptions {
     /**
@@ -14,7 +16,7 @@ export interface ODataContextOptions {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
+    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.data
@@ -36,7 +38,7 @@ export interface ODataContextOptions {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.data
@@ -90,7 +92,7 @@ export default class ODataContext {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
+    get(operationName: string, params: any): TPromise<any>;
     /**
      * @docid
      * @publicName invoke(operationName, params, httpMethod)
@@ -101,7 +103,7 @@ export default class ODataContext {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
+    invoke(operationName: string, params: any, httpMethod: any): TPromise<void>;
     /**
      * @docid
      * @publicName objectLink(entityAlias, key)

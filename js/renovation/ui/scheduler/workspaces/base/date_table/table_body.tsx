@@ -2,7 +2,7 @@ import {
   Component,
   JSXComponent,
   Fragment,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { Row } from '../row';
 import { ViewCellData } from '../../types.d';
 import {
@@ -15,6 +15,7 @@ import { DateTableLayoutProps } from './layout_props';
 export const viewFunction = ({
   props: {
     viewData,
+    groupOrientation,
     dataCellTemplate,
     cellTemplate: Cell,
   },
@@ -22,7 +23,7 @@ export const viewFunction = ({
   <Fragment>
     {viewData
       .groupedData.map(({ dateTable, allDayPanel, groupIndex }, index) => (
-        <Fragment key={getKeyByGroup(groupIndex)}>
+        <Fragment key={getKeyByGroup(groupIndex, groupOrientation)}>
           {getIsGroupedAllDayPanel(viewData, index) && (
             <AllDayPanelTableBody
               viewData={allDayPanel}

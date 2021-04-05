@@ -154,7 +154,7 @@ QUnit.test('Scheduler work space should have a single type class', function(asse
     QUnit.test(`Pointer down on workspace cell should focus cell in ${scrollingMode} mode`, function(assert) {
         this.createInstance({
             currentDate: new Date(2015, 1, 10),
-            scrolling: { mode: scrollingMode, type: 'both' },
+            scrolling: { mode: scrollingMode, orientation: 'both' },
         });
 
         const $firstCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0);
@@ -618,6 +618,8 @@ QUnit.test('Cell data should be applied when resources are loaded', function(ass
     this.createInstance({
         currentView: 'day',
         groups: ['owner'],
+        startDayHour: 10,
+        endDayHour: 12,
         resources: [
             {
                 fieldExpr: 'owner',
@@ -625,7 +627,7 @@ QUnit.test('Cell data should be applied when resources are loaded', function(ass
                     load: function() {
                         const d = $.Deferred();
                         setTimeout(function() {
-                            d.resolve([{ id: 1 }]);
+                            d.resolve([{ id: 1 }, { id: 2 }]);
                         }, 300);
                         return d.promise();
                     }
@@ -633,9 +635,16 @@ QUnit.test('Cell data should be applied when resources are loaded', function(ass
             }
         ],
         dataSource: [],
-        onContentReady: function(e) {
-            const groups = e.component.$element().find('.dx-scheduler-date-table-cell').data('dxCellData').groups;
-            assert.deepEqual(groups, { owner: 1 });
+        onContentReady: (e) => {
+            if(!e.component.option('renovateRender')) {
+                const groups = e.component.$element().find('.dx-scheduler-date-table-cell').data('dxCellData').groups;
+                assert.deepEqual(groups, { owner: 1 });
+            }
+
+            const cellCount = this.scheduler.workSpace.getCells().length;
+
+            assert.equal(cellCount, 8, 'Correct cell count');
+
             done();
         }
     });
@@ -785,35 +794,58 @@ QUnit.test('Data cell should has right content when dataCellTemplate option was 
     assert.ok($element.find('.new-custom-class').length > 0, 'class is ok');
 });
 
-QUnit.test('dataCellTemplate should have correct options', function(assert) {
-    let templateOptions;
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`dataCellTemplate should have correct options when renovateRender is ${renovateRender}`, function(assert) {
+        let templateOptions;
 
-    this.createInstance({
-        currentView: 'week',
-        startDayHour: 5,
-        currentDate: new Date(2016, 8, 5),
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                fieldExpr: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dataCellTemplate: function(itemData, index, $container) {
-            if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell-template-wrapper')) templateOptions = itemData;
-        }
+        this.createInstance({
+            currentView: 'week',
+            startDayHour: 5,
+            currentDate: new Date(2016, 8, 5),
+            firstDayOfWeek: 0,
+            groups: ['ownerId'],
+            resources: [
+                {
+                    fieldExpr: 'ownerId',
+                    dataSource: [
+                        { id: 1, text: 'John' },
+                        { id: 2, text: 'Mike' }
+                    ]
+                }
+            ],
+            dataCellTemplate: function(itemData, index, $container) {
+                if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell') && !templateOptions) {
+                    templateOptions = itemData;
+                }
+            },
+            renovateRender,
+        });
+
+        assert.equal(templateOptions.text, '', 'text options is ok');
+        assert.equal(templateOptions.startDate.getTime(), new Date(2016, 8, 7, 5).getTime(), 'startDate option is ok');
+        assert.equal(templateOptions.endDate.getTime(), new Date(2016, 8, 7, 5, 30).getTime(), 'endDate option is ok');
+        assert.deepEqual(templateOptions.groups, {
+            'ownerId': 1
+        }, 'Resources option is ok');
     });
 
-    assert.equal(templateOptions.text, '', 'text options is ok');
-    assert.equal(templateOptions.startDate.getTime(), new Date(2016, 8, 7, 5).getTime(), 'startDate option is ok');
-    assert.equal(templateOptions.endDate.getTime(), new Date(2016, 8, 7, 5, 30).getTime(), 'endDate option is ok');
-    assert.deepEqual(templateOptions.groups, {
-        'ownerId': 1
-    }, 'Resources option is ok');
+    QUnit.test(`dataCellTemplate for all-day panel should take cellElement with correct geometry(T453520) when renovateRender is ${renovateRender}`, function(assert) {
+        assert.expect(2);
+        this.createInstance({
+            currentView: 'week',
+            views: ['week'],
+            height: 700,
+            width: 700,
+            dataSource: [],
+            dataCellTemplate: function(cellData, cellIndex, cellElement) {
+                if(cellData.allDay && !cellIndex) {
+                    assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Data cell width is OK');
+                    assert.roughEqual($(cellElement).outerHeight(), 24, 1.001, 'Data cell height is OK');
+                }
+            },
+            renovateRender,
+        });
+    });
 });
 
 QUnit.test('dataCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
@@ -826,25 +858,8 @@ QUnit.test('dataCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         dataCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellData.allDay && !cellIndex) {
-                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 81, 1.001, 'Data cell width is OK');
-                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 48, 'Data cell height is OK');
-            }
-        }
-    });
-});
-
-QUnit.test('dataCellTemplate for all-day panel should take cellElement with correct geometry(T453520)', function(assert) {
-    assert.expect(2);
-    this.createInstance({
-        currentView: 'week',
-        views: ['week'],
-        height: 700,
-        width: 700,
-        dataSource: [],
-        dataCellTemplate: function(cellData, cellIndex, cellElement) {
-            if(cellData.allDay && !cellIndex) {
-                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Data cell width is OK');
-                assert.roughEqual($(cellElement).outerHeight(), 24, 1.001, 'Data cell height is OK');
+                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 85, 1.001, 'Data cell width is OK');
+                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Data cell height is OK');
             }
         }
     });
@@ -986,16 +1001,14 @@ QUnit.test('DateTimeIndicator should show correct time in current time zone', fu
         height: 600
     });
 
-    const $initialIndicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(24);
     const indicatorPositionBefore = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
-    assert.ok($initialIndicationCell.children().eq(0).hasClass('dx-scheduler-date-time-indicator'), 'Indicator was placed in a right cell');
+    const cellHeight = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0).get(0).getBoundingClientRect().height;
 
     this.instance.option('timeZone', 'Asia/Yekaterinburg');
-    const $indicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(38);
+
     const indicatorPositionAfter = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
 
-    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top, 'indicator has correct position');
-    assert.ok($indicationCell.children().eq(0).hasClass('dx-scheduler-date-time-indicator'), 'Indicator was placed in a right cell');
+    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * 2, 'indicator has correct position');
 });
 
 QUnit.test('Tables should take css class after width calculation(T491453)', function(assert) {
@@ -1216,7 +1229,7 @@ QUnit.test('WorkSpace should be refreshed after groups changed', function(assert
             showAllDayPanel: true,
             currentDate: new Date(2018, 3, 11),
             height: 600,
-            scrolling: { mode: scrollingMode, type: 'both' },
+            scrolling: { mode: scrollingMode, orientation: 'both' },
         });
 
         const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
@@ -1581,7 +1594,7 @@ if(devices.real().deviceType === 'desktop') {
                             height: 600,
                             width: 1000,
                             editing: { allowDragging: false },
-                            scrolling: { mode: 'virtual', type: 'both' },
+                            scrolling: { mode: 'virtual', orientation: 'both' },
                         });
 
                         const $cells = instance.workSpace.getCells();
@@ -1611,7 +1624,7 @@ if(devices.real().deviceType === 'desktop') {
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
                 width: 1000,
-                scrolling: { mode: 'virtual', type: 'both' },
+                scrolling: { mode: 'virtual', orientation: 'both' },
             });
 
             checkSelection(assert, scheduler, 0, 5);
@@ -1629,7 +1642,7 @@ if(devices.real().deviceType === 'desktop') {
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
                 width: 1000,
-                scrolling: { mode: 'virtual', type: 'both' },
+                scrolling: { mode: 'virtual', orientation: 'both' },
                 resources,
                 groups: ['ownerId'],
             });
@@ -1658,7 +1671,7 @@ if(devices.real().deviceType === 'desktop') {
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
                 width: 1000,
-                scrolling: { mode: 'virtual', type: 'both' },
+                scrolling: { mode: 'virtual', orientation: 'both' },
                 resources,
                 groups: ['ownerId'],
             });
@@ -1688,7 +1701,7 @@ if(devices.real().deviceType === 'desktop') {
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
                 width: 1000,
-                scrolling: { mode: 'virtual', type: 'both' },
+                scrolling: { mode: 'virtual', orientation: 'both' },
                 resources,
                 groups: ['ownerId'],
             });
@@ -1717,7 +1730,7 @@ if(devices.real().deviceType === 'desktop') {
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
                 width: 1000,
-                scrolling: { mode: 'virtual', type: 'both' },
+                scrolling: { mode: 'virtual', orientation: 'both' },
             });
 
             scheduler.workSpace.selectCells(0, 5);
@@ -2020,28 +2033,13 @@ QUnit.module('Cell Templates in renovated views', () => {
 
     [{
         viewType: 'day',
-        expectedTemplateOptions: [allDayCells[0], dataCells[0]],
+        expectedTemplateOptions: [dataCells[0], allDayCells[0]],
     }, {
         viewType: 'week',
-        expectedTemplateOptions: [...allDayCells, ...dataCells],
+        expectedTemplateOptions: [...dataCells, ...allDayCells],
     }, {
         viewType: 'workWeek',
         expectedTemplateOptions: [{
-            ...allDayCells[1],
-            index: 0,
-        }, {
-            ...allDayCells[2],
-            index: 1,
-        }, {
-            ...allDayCells[3],
-            index: 2,
-        }, {
-            ...allDayCells[4],
-            index: 3,
-        }, {
-            ...allDayCells[5],
-            index: 4,
-        }, {
             ...dataCells[1],
             index: 0,
         }, {
@@ -2055,6 +2053,21 @@ QUnit.module('Cell Templates in renovated views', () => {
             index: 3,
         }, {
             ...dataCells[5],
+            index: 4,
+        }, {
+            ...allDayCells[1],
+            index: 0,
+        }, {
+            ...allDayCells[2],
+            index: 1,
+        }, {
+            ...allDayCells[3],
+            index: 2,
+        }, {
+            ...allDayCells[4],
+            index: 3,
+        }, {
+            ...allDayCells[5],
             index: 4,
         }],
     }].forEach(({ viewType, expectedTemplateOptions }) => {
@@ -2600,7 +2613,7 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
         showAllDayPanel: true,
         currentDate: new Date(2020, 8, 21),
         height: 300,
-        scrolling: { mode: 'virtual', type: 'both' },
+        scrolling: { mode: 'virtual', orientation: 'both' },
     });
     scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
@@ -2642,7 +2655,7 @@ QUnit.test('"onOptionChanged" should not be called on scroll when virtual scroll
         showAllDayPanel: true,
         currentDate: new Date(2020, 8, 21),
         height: 300,
-        scrolling: { mode: 'virtual', type: 'both' },
+        scrolling: { mode: 'virtual', orientation: 'both' },
         onOptionChanged: () => {
             onOptionChangedCalls += 1;
         },
@@ -2686,7 +2699,7 @@ if(devices.real().deviceType === 'desktop') {
             showAllDayPanel: true,
             currentDate: new Date(2020, 8, 20),
             height: 300,
-            scrolling: { mode: 'virtual', type: 'both' },
+            scrolling: { mode: 'virtual', orientation: 'both' },
         });
 
         const { instance } = scheduler;
@@ -2726,25 +2739,6 @@ if(devices.real().deviceType === 'desktop') {
 }
 
 QUnit.module('Cell Templates', () => {
-    const baseConfig = {
-        currentView: 'day',
-        currentDate: new Date(2020, 10, 19),
-        resources: [{
-            fieldExpr: 'priority',
-            allowMultiple: false,
-            dataSource: [{
-                text: 'Low Priority',
-                id: 1
-            }, {
-                text: 'High Priority',
-                id: 2
-            }],
-            label: 'Priority',
-        }],
-        startDayHour: 10,
-        endDayHour: 12,
-    };
-
     const viewsBase = [{
         type: 'day',
         dateCellCount: 2,
@@ -2786,6 +2780,26 @@ QUnit.module('Cell Templates', () => {
     };
 
     [true, false].forEach((isRenovatedView) => {
+        const baseConfig = {
+            currentView: 'day',
+            currentDate: new Date(2020, 10, 19),
+            resources: [{
+                fieldExpr: 'priority',
+                allowMultiple: false,
+                dataSource: [{
+                    text: 'Low Priority',
+                    id: 1
+                }, {
+                    text: 'High Priority',
+                    id: 2
+                }],
+                label: 'Priority',
+            }],
+            startDayHour: 10,
+            endDayHour: 12,
+            renovateRender: isRenovatedView,
+        };
+
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
             assert.expect(totalDateCells * 2);
 
@@ -2849,21 +2863,26 @@ QUnit.module('Cell Templates', () => {
                 groupOrientation: 'horizontal',
             }));
             let cellCountPerGroup = 2;
+            let currentCellIndex = 0;
 
             const scheduler = createWrapper({
                 ...baseConfig,
                 views,
-                dateCellTemplate: ({ groups, groupIndex }, index) => {
-                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+                dateCellTemplate: ({ groups, groupIndex }) => {
+                    const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
                     assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+
+                    currentCellIndex += 1;
                 },
                 groups: ['priority'],
             });
 
             viewsBase.forEach(({ type, dateCellCount }) => {
                 cellCountPerGroup = dateCellCount;
+                currentCellIndex = 0;
+
                 scheduler.instance.option('currentView', type);
             });
         });
@@ -2891,21 +2910,26 @@ QUnit.module('Cell Templates', () => {
                 groupOrientation: 'vertical',
             }));
             let cellCountPerGroup = 4;
+            let currentCellIndex = 0;
 
             const scheduler = createWrapper({
                 ...baseConfig,
                 views,
-                timeCellTemplate: ({ groups, groupIndex }, index) => {
-                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
                     assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+
+                    currentCellIndex += 1;
                 },
                 groups: ['priority'],
             });
 
             viewsBase.slice(0, 3).forEach(({ type, timeCellCount }) => {
                 cellCountPerGroup = timeCellCount;
+                currentCellIndex = 0;
+
                 scheduler.instance.option('currentView', type);
             });
         });
@@ -2984,22 +3008,26 @@ QUnit.module('Cell Templates', () => {
                 groupOrientation: 'horizontal',
             }));
             let cellCountPerGroup = 8;
+            let currentCellIndex = 0;
 
             const scheduler = createWrapper({
                 ...baseConfig,
                 views,
                 currentView: 'timelineDay',
-                timeCellTemplate: ({ groups, groupIndex }, index) => {
-                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
                     assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+
+                    currentCellIndex += 1;
                 },
                 groups: ['priority'],
             });
 
             viewsBase.slice(3, 6).forEach(({ type, timeCellCount }) => {
                 cellCountPerGroup = timeCellCount;
+                currentCellIndex = 0;
                 scheduler.instance.option('currentView', type);
             });
         });
@@ -3237,13 +3265,9 @@ QUnit.module('Resource Cell Template', () => {
                     }
                 });
 
-                const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
                 const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-                const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
                 const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
 
-                !isRenovatedRender
-                    && assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
                 assert.equal(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight, 'dateTableScrollable element padding bottom');
                 assert.equal(parseInt($dateTableScrollable.css('marginBottom'), 10), -schedulerHeaderPanelHeight, 'dateTableScrollable element margin bottom');
             });

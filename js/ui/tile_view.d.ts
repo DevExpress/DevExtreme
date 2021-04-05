@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -97,8 +101,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
  * @public
  */
 export default class dxTileView extends CollectionWidget {
-    constructor(element: Element, options?: dxTileViewOptions)
-    constructor(element: JQuery, options?: dxTileViewOptions)
+    constructor(element: TElement, options?: dxTileViewOptions)
     /**
      * @docid
      * @publicName scrollPosition()
@@ -131,15 +134,6 @@ export interface dxTileViewItem extends CollectionWidgetItem {
     widthRatio?: number;
 }
 
-declare global {
-interface JQuery {
-    dxTileView(): JQuery;
-    dxTileView(options: "instance"): dxTileView;
-    dxTileView(options: string): any;
-    dxTileView(options: string, ...params: any[]): any;
-    dxTileView(options: dxTileViewOptions): JQuery;
-}
-}
 export type Options = dxTileViewOptions;
 
 /** @deprecated use Options instead */

@@ -12,13 +12,6 @@ describe('AllDayPanelCell', () => {
       />,
     );
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { customAttribute: 'customAttribute' } });
-
-      expect(cell.prop('customAttribute'))
-        .toBe('customAttribute');
-    });
-
     it('should be rendered correctly', () => {
       const cell = render({ props: { className: 'test-class' } });
 

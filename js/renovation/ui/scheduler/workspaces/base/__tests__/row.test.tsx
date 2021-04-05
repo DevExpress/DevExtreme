@@ -23,13 +23,6 @@ describe('RowBase', () => {
         .toBe(true);
     });
 
-    it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(row.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render children', () => {
       const row = render({ props: { children: <div className="child" /> } });
 
@@ -71,7 +64,7 @@ describe('RowBase', () => {
           props: {
             leftVirtualCellWidth: 100,
             rightVirtualCellWidth: 200,
-            children: <td className="child" width={50} />,
+            children: <td className="child" style={{ width: 50 }} />,
           },
           hasLeftVirtualCell: option.hasLeftVirtualCell,
           hasRightVirtualCell: option.hasRightVirtualCell,
@@ -88,7 +81,10 @@ describe('RowBase', () => {
           expect(child.is(selector))
             .toBe(true);
 
-          expect(child.prop('width'))
+          const width = selector === VirtualCell
+            ? child.getElement().props.width
+            : child.getElement().props.style.width;
+          expect(width)
             .toEqual(expected.widths[index]);
         });
       });

@@ -31,13 +31,6 @@ describe('GroupPanel Vertical Row', () => {
         .toBe(true);
     });
 
-    it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(row.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render cells and pass correct props to them', () => {
       const cellTemplate = (): null => null;
       const row = render({ props: { cellTemplate } });

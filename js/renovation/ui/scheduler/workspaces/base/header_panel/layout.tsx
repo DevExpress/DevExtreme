@@ -5,7 +5,7 @@ import {
   JSXTemplate,
   OneWay,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import {
   DateHeaderCellData,
   DateTimeCellTemplateProps,
@@ -44,6 +44,7 @@ export const viewFunction = ({
     )}
     {isRenderDateHeader && (
       <DateHeader
+        groupByDate={groupByDate}
         dateHeaderMap={dateHeaderMap}
         groupOrientation={groupOrientation}
         groups={groups}

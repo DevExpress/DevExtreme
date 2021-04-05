@@ -205,7 +205,14 @@ class ViewDataGenerator {
             horizontalGroupCount,
             cellCountInGroupRow,
             groupOrientation,
+            getDateHeaderDate,
         } = options;
+
+        const dates = [];
+
+        for(let dateIndex = 0; dateIndex < cellCountInGroupRow; dateIndex += 1) {
+            dates.push(getDateHeaderDate(dateIndex));
+        }
 
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const columnCount = completeViewDataMap[index].length;
@@ -219,12 +226,13 @@ class ViewDataGenerator {
 
         return slicedByColumnsData.map(({
             startDate,
+            endDate,
             isFirstGroupCell,
             isLastGroupCell,
             ...restProps
         }, index) => ({
             ...restProps,
-            startDate,
+            startDate: dates[index % cellCountInGroupRow],
             text: getDateHeaderText(index % cellCountInGroupRow),
             today: dateUtils.sameDate(startDate, today),
             colSpan,
@@ -233,8 +241,37 @@ class ViewDataGenerator {
         }));
     }
 
-    _getCompleteTimePanelMap(completeViewDataMap) {
-        return completeViewDataMap.map((row) => row[0]);
+    _getCompleteTimePanelMap(options, completeViewDataMap) {
+        const {
+            rowCountInGroup,
+            getTimeCellDate,
+        } = options;
+
+        const times = [];
+
+        for(let rowIndex = 0; rowIndex < rowCountInGroup; rowIndex += 1) {
+            times.push(getTimeCellDate(rowIndex));
+        }
+
+        let allDayRowsCount = 0;
+
+        return completeViewDataMap.map((row, index) => {
+            const {
+                allDay, startDate, endDate, ...restCellProps
+            } = row[0];
+
+            if(allDay) {
+                allDayRowsCount += 1;
+            }
+
+            const timeIndex = (index - allDayRowsCount) % rowCountInGroup;
+
+            return {
+                ...restCellProps,
+                allDay,
+                startDate: allDay ? startDate : times[timeIndex],
+            };
+        });
     }
 
     _generateViewDataMap(completeViewDataMap, options) {
@@ -660,7 +697,9 @@ class GroupedDataMapProvider {
             : startDate;
     }
 
-    findCellPositionInMap(groupIndex, startDate, isAllDay) {
+    findCellPositionInMap(cellInfo) {
+        const { groupIndex, startDate, isAllDay, index } = cellInfo;
+
         const startTime = isAllDay
             ? dateUtils.trimTime(startDate).getTime()
             : startDate.getTime();
@@ -694,7 +733,7 @@ class GroupedDataMapProvider {
                 const cell = row[cellIndex];
                 const { cellData } = cell;
 
-                if(cellData.groupIndex === groupIndex) {
+                if(this._isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
                     if(isStartDateInCell(cellData)) {
                         return cell.position;
                     }
@@ -703,6 +742,11 @@ class GroupedDataMapProvider {
         }
 
         return undefined;
+    }
+
+    _isSameGroupIndexAndIndex(cellData, groupIndex, index) {
+        return cellData.groupIndex === groupIndex
+            && (index === undefined || cellData.index === index);
     }
 
     getCellsGroup(groupIndex) {
@@ -836,7 +880,7 @@ export default class ViewDataProvider {
             this.completeDateHeaderMap = viewDataGenerator
                 ._getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
             this.completeTimePanelMap = viewDataGenerator
-                ._getCompleteTimePanelMap(this.completeViewDataMap);
+                ._getCompleteTimePanelMap(renderOptions, this.completeViewDataMap);
         }
 
         this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
@@ -878,8 +922,8 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex, startDate);
     }
 
-    findCellPositionInMap(groupIndex, startDate, isAllDay) {
-        return this._groupedDataMapProvider.findCellPositionInMap(groupIndex, startDate, isAllDay);
+    findCellPositionInMap(cellInfo) {
+        return this._groupedDataMapProvider.findCellPositionInMap(cellInfo);
     }
 
     getCellsGroup(groupIndex) {

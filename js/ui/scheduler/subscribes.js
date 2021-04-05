@@ -15,7 +15,6 @@ import utils from './utils';
 import { getFieldExpr as getResourceFieldExpr } from './resources/utils';
 
 const toMs = dateUtils.dateToMilliseconds;
-const HOUR_MS = toMs('hour');
 
 const subscribes = {
     getTimeZoneCalculator: function() {
@@ -460,97 +459,6 @@ const subscribes = {
 
     renderAppointments: function() {
         this._renderAppointments();
-    },
-
-    prerenderFilter: function() {
-        const dateRange = this.getWorkSpace().getDateRange();
-        const resources = this._resourcesManager.getResourcesData();
-        const startDayHour = this._getCurrentViewOption('startDayHour');
-        const endDayHour = this._getCurrentViewOption('endDayHour');
-
-        let allDay;
-
-        if(!this.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
-            allDay = false;
-        }
-
-        return this._appointmentModel.filterLoadedAppointments({
-            startDayHour,
-            endDayHour,
-            viewStartDayHour: startDayHour,
-            viewEndDayHour: endDayHour,
-            min: dateRange[0],
-            max: dateRange[1],
-            resources: resources,
-            allDay: allDay,
-            firstDayOfWeek: this.getFirstDayOfWeek(),
-            recurrenceException: this._getRecurrenceException.bind(this),
-        }, this.timeZoneCalculator);
-    },
-
-    prerenderFilterVirtual: function() {
-        const workspace = this.getWorkSpace();
-        const isCalculateStartAndEndDayHour = workspace.isDateAndTimeView;
-        const checkIntersectViewport = workspace.isDateAndTimeView && workspace.viewDirection === 'horizontal';
-
-        const isAllDayWorkspace = !this._workSpace.supportAllDayRow();
-        const showAllDayAppointments = this.option('showAllDayPanel') || isAllDayWorkspace;
-
-        const { viewDataProvider } = workspace;
-        const endViewDate = workspace.getEndViewDateByEndDayHour();
-        const filterOptions = [];
-
-        const groupsInfo = viewDataProvider.getCompletedGroupsInfo();
-        groupsInfo.forEach((item) => {
-            const groupIndex = item.groupIndex;
-            const groupStartDate = item.startDate;
-
-            const groupEndDate = new Date(Math.min(item.endDate, endViewDate));
-            const viewStartDayHour = this._getCurrentViewOption('startDayHour');
-            const viewEndDayHour = this._getCurrentViewOption('endDayHour');
-            const startDayHour = isCalculateStartAndEndDayHour
-                ? groupStartDate.getHours()
-                : viewStartDayHour;
-            const endDayHour = isCalculateStartAndEndDayHour
-                ? (startDayHour + groupStartDate.getMinutes() / 60 + (groupEndDate - groupStartDate) / HOUR_MS)
-                : viewEndDayHour;
-
-            const resources = this.fire('_getPrerenderFilterResources', groupIndex);
-
-            const allDayPanel = viewDataProvider.getAllDayPanel(groupIndex);
-            // TODO split by workspace strategies
-            const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && allDayPanel?.length > 0);
-
-            filterOptions.push({
-                isVirtualScrolling: true,
-                startDayHour,
-                endDayHour,
-                viewStartDayHour,
-                viewEndDayHour,
-                min: groupStartDate,
-                max: groupEndDate,
-                allDay: supportAllDayAppointment,
-                resources,
-                firstDayOfWeek: this.getFirstDayOfWeek(),
-                recurrenceException: this._getRecurrenceException.bind(this),
-                checkIntersectViewport
-            });
-        });
-
-        const result = this._appointmentModel.filterLoadedVirtualAppointments(
-            filterOptions,
-            this.timeZoneCalculator,
-            workspace._getGroupCount()
-        );
-
-        return result;
-    },
-    _getPrerenderFilterResources: function(groupIndex) {
-        const { viewDataProvider } = this.getWorkSpace();
-
-        const cellGroup = viewDataProvider.getCellsGroup(groupIndex);
-
-        return this._resourcesManager.getResourcesDataByGroups([cellGroup]);
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {

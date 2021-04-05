@@ -3275,7 +3275,7 @@ QUnit.module('Selection with views', {
         };
 
         this.setup = function() {
-            setupDataGridModules(this, ['data', 'columns', 'selection', 'columnHeaders', 'rows', 'editorFactory', 'editing'], {
+            setupDataGridModules(this, ['data', 'columns', 'selection', 'columnHeaders', 'rows', 'editorFactory', 'editing', 'editingCellBased'], {
                 initViews: true
             });
         };

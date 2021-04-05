@@ -40,7 +40,7 @@ function createGridView(options, userOptions) {
         showColumnHeaders: true
     }, userOptions);
 
-    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail', 'selection'],
+    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editingCellBased', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail', 'selection'],
         {
             initViews: true,
             controllers: {
@@ -553,7 +553,7 @@ QUnit.module('Grid view', {
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
         const device = devices.real();
 
-        if(device.ios || device.android || (device.deviceType !== 'desktop')) {
+        if(device.ios || device.mac || device.android || (device.deviceType !== 'desktop')) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
@@ -673,7 +673,7 @@ QUnit.module('Grid view', {
         const pagerView = gridView.getView('pagerView');
 
         // B232626
-        assert.strictEqual(Math.round(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight()), 100);
+        assert.roughEqual(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight(), 1.01, 100);
         assert.notStrictEqual(columnsHeaderViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(rowsViewViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(pagerView.getHeight(), 0);
@@ -807,7 +807,7 @@ QUnit.module('Grid view', {
         const headersTable = gridView.getView('columnHeadersView')._tableElement;
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
 
-        if(device.ios || device.android || (device.deviceType !== 'desktop')) {
+        if(device.ios || device.mac || device.android || (device.deviceType !== 'desktop')) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
@@ -2116,12 +2116,16 @@ QUnit.module('Fixed columns', {
         this.createGridView = createGridView;
     },
     afterEach: function() {
-        this.dispose();
+        this.dispose && this.dispose();
     }
 }, () => {
 
     if(devices.real().deviceType === 'desktop') {
         QUnit.test('Draw grid view with a native scrolling', function(assert) {
+            if(devices.real().mac) {
+                assert.ok(true, 'test is not actual for mac');
+                return;
+            }
             // arrange
             this.defaultOptions.columnsController = new MockColumnsController([
                 { caption: 'Column 1', width: 100, fixed: true },

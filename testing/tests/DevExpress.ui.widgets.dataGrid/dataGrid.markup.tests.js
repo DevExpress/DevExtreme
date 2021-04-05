@@ -187,12 +187,13 @@ QUnit.module('DataGrid markup', {
         });
 
         this.clock.tick(30);
+        const hasWindow = windowUtils.hasWindow();
         const $pagerView = $element.find('.dx-datagrid-pager');
         assert.equal($pagerView.length, 1, 'pager view is rendered');
         assert.ok($pagerView.hasClass('dx-pager'), 'pager is rendered');
-        assert.equal($pagerView.children().length, windowUtils.hasWindow() ? 2 : 1, 'pager content is rendered');
-        assert.equal($pagerView.find('.dx-pages .dx-page').length, windowUtils.hasWindow() ? 2 : 1, 'page size count');
-        assert.equal($pagerView.find('.dx-pages .dx-page').eq(0).text(), windowUtils.hasWindow() ? '1' : '', 'page size text');
+        assert.equal($pagerView.children().length, hasWindow ? 2 : 1, 'pager content is rendered');
+        assert.equal($pagerView.find('.dx-pages .dx-page').length, hasWindow ? 2 : 1, 'page size count');
+        assert.equal($pagerView.find('.dx-pages .dx-page').eq(0).text(), hasWindow ? '1' : '', 'page size text');
     });
 
     QUnit.test('markup with virtual columns', function(assert) {

@@ -1,12 +1,11 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 import { GroupPanelCellProps } from '../cell_props';
 
 export const viewFunction = ({
   classes,
-  restAttributes,
   props: {
     cellTemplate: CellTemplate,
     data,
@@ -18,8 +17,6 @@ export const viewFunction = ({
   },
 }: GroupPanelHorizontalCell): JSX.Element => (
   <th
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={classes}
     colSpan={colSpan}
   >

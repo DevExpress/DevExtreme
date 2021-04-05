@@ -10,7 +10,6 @@ import dxPolarChart from 'viz/polar_chart';
 import baseChartModule from 'viz/chart_components/base_chart';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import vizUtils from 'viz/core/utils.js';
 
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -61,25 +60,67 @@ function createChartInstance(options, chartContainer) {
 
 QUnit.module('dxChart', moduleSetup);
 
-QUnit.test('Check existing properties in styles', function(assert) {
-    this.$container.addClass('chart');
+QUnit.test('chart in container with height from style', function(assert) {
+    const container = $('<div>').appendTo('#container');
+    container.addClass('chart');
 
     const style = $(`<style>
-        #${this.$container.attr('id')}{
-            width: 1000px;
-        }
         .chart {
             height: 600px;
         }
     </style>`);
 
     style.appendTo('head');
+    try {
+        container.dxChart({
+            dataSource: [{
+                month: 'arg1',
+                avgT: 9.8,
+                maxT: 15.5,
+                val: 109
+            }, {
+                month: 'arg2',
+                avgT: 19.8,
+                maxT: 115.5,
+                val: 1109
+            }],
+            commonSeriesSettings: {
+                argumentField: 'month'
+            },
+            panes: [{
+                name: 'topPane',
+                height: 200
+            }, {
+                name: 'bottomPane',
+                height: 200
+            },
+            {
+                name: 'middlePane',
+                height: 200
+            }],
+            defaultPane: 'bottomPane',
+            series: [{
+                valueField: 'maxT',
+                pane: 'middlePane',
+            }, {
+                pane: 'topPane',
+                valueField: 'avgT',
+            }, {
+                valueField: 'prec',
+            }
+            ],
+            title: 'some title',
+            valueAxis: [{
+                pane: 'bottomPane',
+            }, {
+                pane: 'topPane',
+            }],
+        }).dxChart('instance');
 
-    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], 'height'));
-    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], 'width'));
-    assert.notOk(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], 'position'));
-
-    style.remove();
+        assert.strictEqual(container.find('.dxc-title').length, 0);
+    } finally {
+        style.remove();
+    }
 });
 
 QUnit.test('T244164', function(assert) {
@@ -3933,7 +3974,7 @@ QUnit.test('Value axis. Set customPosition and offset options', function(assert)
     assert.ok(chart.getValueAxis('axis2')._majorTicks[0].label.attr('translateY') < 0);
 
     chart.option('valueAxis[1].offset', -18);
-    assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 970, 5);
+    assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 980, 5);
 
     chart.option('valueAxis[1].offset', 18);
     assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 990, 5);
@@ -3941,6 +3982,31 @@ QUnit.test('Value axis. Set customPosition and offset options', function(assert)
     chart.option('valueAxis[0].offset', 50);
     chart.option('valueAxis[0].customPosition', 'abcd');
     assert.roughEqual(chart.getValueAxis('axis0')._axisPosition, 132, 8);
+});
+
+QUnit.test('Value axis. Set small values for the offset option (T980159, T971769)', function(assert) {
+    const chart = this.createChart({});
+
+    chart.option('valueAxis[2].offset', -9);
+    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 112, 6);
+
+    chart.option('valueAxis[2].offset', 9);
+    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 120, 6);
+
+    chart.option('valueAxis[2].offset', 0);
+    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 112, 6);
+});
+
+QUnit.test('Value axis. No space is added for labels on the edge of the axis argument', function(assert) {
+    const chart = this.createChart({
+        legend: { horizontalAlignment: 'right' },
+        argumentAxis: { visualRange: [303, 700] }
+    });
+
+    chart.option('valueAxis[0].offset', 30);
+    chart.option('valueAxis[2].offset', 30);
+
+    assert.ok(chart.getArgumentAxis()._majorTicks[0].label.element.getBBox().x < 0);
 });
 
 QUnit.testStart(function() {
@@ -3988,6 +4054,31 @@ QUnit.test('Zoom and pan', function(assert) {
 
     assert.equal(valAxis1._axisPosition, chart.getValueAxis('axis0')._axisPosition);
     assert.roughEqual(valAxis1._axisShift, 37, 5);
+});
+
+QUnit.test('Zoom and pan when set small values for the offset option (T980159)', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: [300, 700]
+        }
+    });
+    const valAxis2 = chart.getValueAxis('axis2');
+
+    chart.option('valueAxis[2].offset', 9);
+    assert.roughEqual(valAxis2._axisPosition, 120, 6);
+
+    const $root = $(chart._renderer.root.element);
+    $root.trigger(new $.Event('dxdragstart', { pageX: 200, pageY: 250 }));
+    $root.trigger(new $.Event('dxdrag', { offset: { x: -100, y: 0 } }));
+    $root.trigger(new $.Event('dxdragend', {}));
+
+    assert.roughEqual(valAxis2._axisPosition, 120, 6);
+
+    $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
+    $root.trigger(new $.Event('dxdrag', { offset: { x: 150, y: 0 } }));
+    $root.trigger(new $.Event('dxdragend', {}));
+
+    assert.roughEqual(valAxis2._axisPosition, 120, 6);
 });
 
 QUnit.test('Argument axis. Set customPositionAxis option', function(assert) {
@@ -4058,12 +4149,12 @@ QUnit.test('Custom position is set for argument and value axis (T889092)', funct
         }
     });
 
-    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 538, 2);
+    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 540, 7);
     assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
 
     chart.option('valueAxis.customPosition', -21);
 
-    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 490, 5);
+    assert.roughEqual(chart.getArgumentAxis()._axisPosition, 540, 7);
     assert.roughEqual(chart._valueAxes[0]._axisPosition, 144, 6);
 });
 
@@ -4147,4 +4238,101 @@ QUnit.test('Resolve overlapping: labels', function(assert) {
     assert.equal(valAxis2._majorTicks[4].mark.attr('translateX'), -6);
     assert.ok(argAxis._majorTicks[5].label.attr('translateY') < 0);
     assert.equal(argAxis._majorTicks[5].mark.attr('translateY'), -6);
+});
+
+QUnit.test('Resolve orthogonal labels overlapping: axis moves to the opposite position (relative to default), and the orthogonal mark moves across the axis (left to right)', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            customPositionAxis: 'axis2',
+            visualRange: [300, 710],
+            customPosition: 319.5
+        }
+    });
+
+    chart.option('valueAxis[2]', {
+        visualRange: [310, 330],
+        offset: 1200
+    });
+
+    assert.equal(chart.getValueAxis('axis2')._majorTicks[6].mark.attr('translateX'), 6);
+});
+
+QUnit.test('Resolve orthogonal labels overlapping: axis moves to the opposite position (relative to default), and the orthogonal mark moves across the axis (top to bottom)', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            position: 'top',
+            offset: 1200
+        }
+    });
+
+    chart.option('valueAxis[0]', {
+        endOnTick: false,
+        visualRange: [444.5, 455],
+        offset: 450
+    });
+
+    assert.equal(chart.getArgumentAxis()._majorTicks[5].mark.attr('translateY'), 6);
+});
+
+QUnit.test('Reset axes animation before adjusting position of vertical axes (fix incorrect moving of axis elements)', function(assert) {
+    function generateDataSource() {
+        let x1; let x2; let y1; let y2; let i;
+        const ds = [];
+        for(i = 0; i < 20; i++) {
+            x1 = random(-15, 15);
+            y1 = random(-15, 15);
+
+            ds.push({ x1: x1, y1: y1, x2: x2, y2: y2 });
+        }
+        for(i = 0; i < 20; i++) {
+            x2 = random(-15, 15);
+            y2 = random(-15, 15);
+
+            ds.push({ x1: x1, y1: y1, x2: x2, y2: y2 });
+        }
+        return ds;
+    }
+
+    function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    this.options = {
+        size: {
+            width: 820,
+            height: 440
+        },
+        dataSource: generateDataSource(),
+        commonSeriesSettings: {
+            type: 'scatter'
+        },
+        series: [{
+            argumentField: 'x1',
+            valueField: 'y1'
+        }, {
+            argumentField: 'x2',
+            valueField: 'y2',
+        }],
+        argumentAxis: {
+            customPosition: 0,
+            visualRange: [-20, 20]
+        },
+        valueAxis: {
+            customPosition: 0,
+            endOnTick: false,
+            visualRange: [-20, 20]
+        },
+        legend: {
+            visible: false
+        }
+    };
+    const chart = this.createChart({});
+    const axis = chart.getValueAxis();
+
+    chart.option('dataSource', generateDataSource());
+    const tickAnimationSegments = axis._majorTicks[0].mark.animation.params.segments;
+
+    assert.strictEqual(tickAnimationSegments.from[0][1], tickAnimationSegments.to[0][1]);
+    assert.strictEqual(axis._majorTicks[0].mark.getBBox().x, tickAnimationSegments.to[0][1]);
+    assert.strictEqual(tickAnimationSegments.to[1][1] - axis._axisPosition, 1);
 });

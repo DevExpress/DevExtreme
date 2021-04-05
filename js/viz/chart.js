@@ -1,6 +1,7 @@
 import { noop } from '../core/utils/common';
 import { extend as _extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
+import { hasWindow } from '../core/utils/window';
 import { each as _each } from '../core/utils/iterator';
 import registerComponent from '../core/component_registrator';
 import { prepareSegmentRectPoints } from './utils';
@@ -8,8 +9,8 @@ import {
     map as _map, getLog, getCategoriesInfo,
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
     normalizePanesHeight,
-    checkElementHasPropertyFromStyleSheet,
-    rangesAreEqual
+    rangesAreEqual,
+    isRelativeHeightPane
 } from './core/utils';
 import { type, isDefined as _isDefined } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
@@ -175,6 +176,11 @@ function getHorizontalAxesMargins(axes, getMarginsFunc) {
         margins.left = pickMax('left', paneMargins, margins);
         margins.right = pickMax('right', paneMargins, margins);
 
+        const orthogonalAxis = axis.getOrthogonalAxis?.();
+        if(orthogonalAxis && orthogonalAxis.customPositionIsAvailable() &&
+            (!axis.customPositionIsBoundaryOrthogonalAxis() || !orthogonalAxis.customPositionEqualsToPredefined())) {
+            margins[orthogonalAxis.getResolvedBoundaryPosition()] = 0;
+        }
         return margins;
     }, { panes: {} });
 }
@@ -233,8 +239,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
             return space;
         }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - canvases[paneNames[paneNames.length - 1]][getOriginalField(startMargin)]) - PANE_PADDING * (paneNames.length - 1);
 
-        const totalCustomSpace = Object.keys(sizes).reduce((prev, key) => prev + (sizes[key].unit ? sizes[key].height : 0), 0);
-        emptySpace -= totalCustomSpace;
+        emptySpace -= Object.keys(sizes).reduce((prev, key) => prev + (!isRelativeHeightPane(sizes[key]) ? sizes[key].height : 0), 0);
 
         paneNames.reduce((offset, pane) => {
             const canvas = canvases[pane];
@@ -242,7 +247,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
 
             offset -= getMaxMargin(endMargin, verticalMargins, horizontalMargins, pane);
             canvas[endMargin] = firstPane[sizeField] - offset;
-            offset -= paneSize.unit ? paneSize.height : Math.floor(emptySpace * paneSize.height);
+            offset -= !isRelativeHeightPane(paneSize) ? paneSize.height : Math.floor(emptySpace * paneSize.height);
             canvas[startMargin] = offset;
             offset -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, pane) + PANE_PADDING;
 
@@ -453,6 +458,11 @@ const dxChart = AdvancedChart.inherit({
         this.callBase();
     },
 
+    _init() {
+        this._containerInitialHeight = hasWindow() ? this._$element.height() : 0;
+        this.callBase();
+    },
+
     _correctAxes: function() {
         this._correctValueAxes(true);
     },
@@ -545,8 +555,9 @@ const dxChart = AdvancedChart.inherit({
         return this._argumentAxes.concat(this._valueAxes);
     },
 
-    _resetAxesAnimation(isFirstDrawing) {
-        this._getAllAxes().forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
+    _resetAxesAnimation(isFirstDrawing, isHorizontal) {
+        const axes = _isDefined(isHorizontal) ? (isHorizontal ^ this._isRotated() ? this._argumentAxes : this._valueAxes) : this._getAllAxes();
+        axes.forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
     },
 
     // for async templates. Should be fixed
@@ -909,6 +920,7 @@ const dxChart = AdvancedChart.inherit({
         const horizontalElements = rotated ? that._valueAxes : extendedArgAxes;
         const allAxes = verticalAxes.concat(horizontalAxes);
         const allElements = allAxes.concat(scrollBar);
+        const verticalAxesFirstDrawing = verticalAxes.some(v => v.isFirstDrawing());
 
         that._normalizePanesHeight();
         that._updatePanesCanvases(drawOptions);
@@ -972,8 +984,9 @@ const dxChart = AdvancedChart.inherit({
 
         const visibleSeries = that._getVisibleSeries();
         const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
+        const axesIsAnimated = axisAnimationEnabled(drawOptions, pointsToAnimation);
 
-        performActionOnAxes(allElements, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+        performActionOnAxes(allElements, 'updateSize', panesCanvases, axesIsAnimated);
 
         horizontalElements.forEach(shiftAxis('top', 'bottom'));
         verticalElements.forEach(shiftAxis('left', 'right'));
@@ -989,7 +1002,7 @@ const dxChart = AdvancedChart.inherit({
         });
 
         verticalAxes.forEach((axis, i) => {
-            if(axis.hasWrap && axis.hasWrap()) {
+            if(axis.hasWrap?.()) {
                 const title = axis.getTitle();
                 const newTitleWidth = title ? title.bBox.width : 0;
                 const offset = newTitleWidth - oldTitlesWidth[i];
@@ -1008,7 +1021,8 @@ const dxChart = AdvancedChart.inherit({
         });
 
         if(verticalAxes.some(v => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition)) {
-            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, false);
+            axesIsAnimated && that._resetAxesAnimation(verticalAxesFirstDrawing, false);
+            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, axesIsAnimated);
         }
 
         horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));
@@ -1068,7 +1082,7 @@ const dxChart = AdvancedChart.inherit({
                 const realSize = that.getSize();
                 const customSize = that.option('size');
                 const container = that._$element[0];
-                const containerHasStyledHeight = !!container.style.height || checkElementHasPropertyFromStyleSheet(container, 'height');
+                const containerHasStyledHeight = !!parseInt(container.style.height) || that._containerInitialHeight !== 0;
 
                 if(!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
                     that._forceResize(realSize.width, realSize.height + needVerticalSpace);
@@ -1137,7 +1151,7 @@ const dxChart = AdvancedChart.inherit({
             const argAxisLabelPosition = argumentAxis.getOptions().label?.position;
             const scrollBarPosition = that._scrollBar.getOptions().position;
 
-            return argumentAxis.hasCustomPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
+            return argumentAxis.hasNonBoundaryPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
         }
 
         return false;
@@ -1325,13 +1339,11 @@ const dxChart = AdvancedChart.inherit({
     _applyClipRectsForAxes() {
         const that = this;
         const axes = that._getAllAxes();
-        const customPositionAxes = axes.filter(a => a.hasCustomPosition());
         const chartCanvasClipRectID = that._getCanvasClipRectID();
 
         for(let i = 0; i < axes.length; i++) {
             const elementsClipRectID = that._getElementsClipRectID(axes[i].pane);
-            const canvasClipRectID = customPositionAxes.indexOf(axes[i]) >= 0 ? elementsClipRectID : chartCanvasClipRectID;
-            axes[i].applyClipRects(elementsClipRectID, canvasClipRectID);
+            axes[i].applyClipRects(elementsClipRectID, chartCanvasClipRectID);
         }
     },
 

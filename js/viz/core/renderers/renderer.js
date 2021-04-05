@@ -411,7 +411,6 @@ function makeEqualAreaSegments(short, long, type) {
 
 function baseCss(that, styles) {
     const elemStyles = that._styles;
-    let str = '';
     let key;
     let value;
 
@@ -428,10 +427,11 @@ function baseCss(that, styles) {
         // The alternative is to *delete* entries in the previous cycle, but it is *delete*!
         value = elemStyles[key];
         if(value) {
-            str += key + ':' + value + ';';
+            that.element.style[key] = value;
+        } else if(value === null) {
+            that.element.style[key] = '';
         }
     }
-    str && that.element.setAttribute('style', str);
     return that;
 }
 
@@ -1003,7 +1003,7 @@ function setEllipsis(text, ellipsisMaxWidth, options) {
     }
 }
 
-function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
+function wordWrap(text, maxWidth, ellipsisMaxWidth, options, lastStepBreakIndex) {
     const wholeText = text.value;
     let breakIndex;
     if(options.wordWrap !== 'none') {
@@ -1013,7 +1013,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     let restLines = [];
     let restText;
 
-    if(isFinite(breakIndex)) {
+    if(isFinite(breakIndex) && !(lastStepBreakIndex === 0 && breakIndex === 0)) {
         setNewText(text, breakIndex, '');
 
         const newTextOffset = wholeText[breakIndex] === ' ' ? 1 : 0;
@@ -1038,7 +1038,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
             restText.stroke && (restText.stroke.textContent = restString);
 
             if(restText.endBox > maxWidth) {
-                restLines = wordWrap(restText, maxWidth, ellipsisMaxWidth, options);
+                restLines = wordWrap(restText, maxWidth, ellipsisMaxWidth, options, breakIndex);
                 if(!restLines.length) {
                     return [];
                 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { createTestRef } from '../../test_utils/create_ref';
 import { NumberBox, NumberBoxProps, viewFunction as NumberBoxView } from '../number_box';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import LegacyNumberBox from '../../../ui/number_box';
@@ -9,7 +10,7 @@ jest.mock('../../../ui/number_box', () => jest.fn());
 describe('NumberBox', () => {
   describe('View', () => {
     it('default render', () => {
-      const rootElementRef = { } as HTMLDivElement;
+      const rootElementRef = createTestRef();
       const componentProps = new NumberBoxProps();
       const props = {
         props: { ...componentProps, rootElementRef },

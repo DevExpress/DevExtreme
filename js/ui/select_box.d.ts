@@ -1,8 +1,10 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     template
@@ -29,10 +31,9 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: dxElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: TElement) => string | TElement);
     /**
      * @docid
-     * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 text:string
      * @type_function_param1_field5 customItem:string|object|Promise<any>
@@ -41,7 +42,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomItemCreating?: ((e: { component?: T, element?: dxElement, model?: any, text?: string, customItem?: string | any | Promise<any> | JQueryPromise<any> }) => any);
+    onCustomItemCreating?: ((e: { component?: T, element?: TElement, model?: any, text?: string, customItem?: string | any | TPromise<any> }) => void);
     /**
      * @docid
      * @default true
@@ -87,19 +88,9 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
  * @public
  */
 export default class dxSelectBox extends dxDropDownList {
-    constructor(element: Element, options?: dxSelectBoxOptions)
-    constructor(element: JQuery, options?: dxSelectBoxOptions)
+    constructor(element: TElement, options?: dxSelectBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxSelectBox(): JQuery;
-    dxSelectBox(options: "instance"): dxSelectBox;
-    dxSelectBox(options: string): any;
-    dxSelectBox(options: string, ...params: any[]): any;
-    dxSelectBox(options: dxSelectBoxOptions): JQuery;
-}
-}
 export type Options = dxSelectBoxOptions;
 
 /** @deprecated use Options instead */

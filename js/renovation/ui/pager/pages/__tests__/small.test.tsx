@@ -1,9 +1,10 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { mount } from 'enzyme';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
 import getElementComputedStyle from '../../../../utils/get_computed_style';
 import messageLocalization from '../../../../../localization/message';
+import { createTestRef } from '../../../../test_utils/create_ref';
 
 jest.mock('../../../../utils/get_computed_style');
 jest.mock('../../../number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
@@ -27,7 +28,7 @@ describe('Small pager pages', () => {
   };
 
   it('View', () => {
-    const pageIndexRef = createRef();
+    const pageIndexRef = createTestRef();
     const props = { pageCount: 100 } as Partial<PagesSmall['props']>;
     const viewProps = {
       valueChange: jest.fn(),
@@ -43,9 +44,8 @@ describe('Small pager pages', () => {
     } = render(viewProps);
     expect(tree.props().className).toBe('dx-light-pages');
 
-    expect(pageIndexNumberBox.instance()).toBe(pageIndexRef.current);
     expect(pageIndexNumberBox.props()).toMatchObject({
-      className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40,
+      className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40, rootElementRef: pageIndexRef,
     });
     expect(span.html()).toBe('<span class="dx-info  dx-info-text">of</span>');
     expect(maxPage.props()).toMatchObject({

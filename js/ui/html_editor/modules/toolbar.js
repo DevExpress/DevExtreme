@@ -6,6 +6,7 @@ import Toolbar from '../../toolbar';
 import '../../select_box';
 import '../../color_box/color_view';
 import '../../number_box';
+import errors from '../../widget/ui.errors';
 
 import WidgetCollector from './widget_collector';
 import { each } from '../../../core/utils/iterator';
@@ -68,8 +69,8 @@ if(Quill) {
         return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
     };
 
-    const localizeValue = (value, formatName) => {
-        if(formatName === 'header') {
+    const localizeValue = (value, name) => {
+        if(name === 'header') {
             const isHeaderValue = isDefined(value) && value !== false;
             return isHeaderValue ? `${localize('heading')} ${value}` : localize('normalText');
         }
@@ -113,31 +114,31 @@ if(Quill) {
             this.updateTableWidgets();
         }
 
-        _getDefaultClickHandler(formatName) {
+        _getDefaultClickHandler(name) {
             return ({ event }) => {
                 const formats = this.quill.getFormat();
-                const value = formats[formatName];
+                const value = formats[name];
                 const newValue = !(isBoolean(value) ? value : isDefined(value));
 
-                this._applyFormat([formatName, newValue, USER_ACTION], event);
+                this._applyFormat([name, newValue, USER_ACTION], event);
 
-                this._updateFormatWidget(formatName, newValue, formats);
+                this._updateFormatWidget(name, newValue, formats);
             };
         }
 
-        _updateFormatWidget(formatName, isApplied, formats) {
-            const widget = this._toolbarWidgets.getByName(formatName);
+        _updateFormatWidget(name, isApplied, formats) {
+            const widget = this._toolbarWidgets.getByName(name);
 
             if(!widget) {
                 return;
             }
 
             if(isApplied) {
-                this._markActiveFormatWidget(formatName, widget, formats);
+                this._markActiveFormatWidget(name, widget, formats);
             } else {
-                this._resetFormatWidget(formatName, widget);
-                if(Object.prototype.hasOwnProperty.call(formatName)) {
-                    delete formats[formatName];
+                this._resetFormatWidget(name, widget);
+                if(Object.prototype.hasOwnProperty.call(name)) {
+                    delete formats[name];
                 }
             }
 
@@ -192,12 +193,12 @@ if(Quill) {
             };
         }
 
-        _prepareShortcutHandler(formatName, shortcutValue) {
+        _prepareShortcutHandler(name, shortcutValue) {
             return ({ event }) => {
                 const formats = this.quill.getFormat();
-                const value = formats[formatName] === shortcutValue ? false : shortcutValue;
+                const value = formats[name] === shortcutValue ? false : shortcutValue;
 
-                this._applyFormat([formatName, value, USER_ACTION], event);
+                this._applyFormat([name, value, USER_ACTION], event);
                 this.updateFormatWidgets(true);
             };
         }
@@ -472,11 +473,30 @@ if(Quill) {
             return $container;
         }
 
+        _detectRenamedOptions(item) {
+            const optionsInfo = [{
+                newName: 'name',
+                oldName: 'formatName'
+            }, {
+                newName: 'acceptedValues',
+                oldName: 'formatValues'
+            }];
+
+            if(isObject(item)) {
+                each(optionsInfo, (index, optionName) => {
+                    if(Object.prototype.hasOwnProperty.call(item, optionName.oldName)) {
+                        errors.log('W1016', optionName.oldName, optionName.newName);
+                    }
+                });
+            }
+        }
+
         _prepareToolbarItems() {
             const resultItems = [];
 
             each(this.options.items, (index, item) => {
                 let newItem;
+                this._detectRenamedOptions(item);
                 if(isObject(item)) {
                     newItem = this._handleObjectItem(item);
                 } else if(isString(item)) {
@@ -492,12 +512,12 @@ if(Quill) {
         }
 
         _handleObjectItem(item) {
-            if(item.formatName && item.formatValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
+            if(item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
                 const selectItemConfig = this._prepareSelectItemConfig(item);
 
                 return this._getToolbarItem(selectItemConfig);
-            } else if(item.formatName && this._isAcceptableItem(item.widget, 'dxButton')) {
-                const defaultButtonItemConfig = this._prepareButtonItemConfig(item.formatName);
+            } else if(item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+                const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
                 const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
                 return this._getToolbarItem(buttonItemConfig);
@@ -510,18 +530,18 @@ if(Quill) {
             return !widget || widget === acceptableWidgetName;
         }
 
-        _prepareButtonItemConfig(formatName) {
-            const iconName = formatName === 'clear' ? 'clearformat' : formatName;
-            const buttonText = titleize(formatName);
+        _prepareButtonItemConfig(name) {
+            const iconName = name === 'clear' ? 'clearformat' : name;
+            const buttonText = titleize(name);
 
             return {
                 widget: 'dxButton',
-                formatName: formatName,
+                name,
                 options: {
                     hint: localize(buttonText),
                     text: buttonText,
                     icon: iconName.toLowerCase(),
-                    onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName),
+                    onClick: this._formatHandlers[name] || this._getDefaultClickHandler(name),
                     stylingMode: 'text'
                 },
                 showText: 'inMenu'
@@ -529,19 +549,21 @@ if(Quill) {
         }
 
         _prepareSelectItemConfig(item) {
+            const { name, acceptedValues } = item;
+
             return extend(true, {
                 widget: 'dxSelectBox',
-                formatName: item.formatName,
+                name,
                 options: {
                     stylingMode: 'filled',
-                    dataSource: item.formatValues,
+                    dataSource: acceptedValues,
                     displayExpr: (value) => {
-                        return localizeValue(value, item.formatName);
+                        return localizeValue(value, name);
                     },
-                    placeholder: localize(item.formatName),
+                    placeholder: localize(name),
                     onValueChanged: (e) => {
                         if(!this._isReset) {
-                            this._applyFormat([item.formatName, e.value, USER_ACTION], e.event);
+                            this._applyFormat([name, e.value, USER_ACTION], e.event);
                             this._setValueSilent(e.component, e.value);
                         }
                     }
@@ -549,15 +571,15 @@ if(Quill) {
             }, item);
         }
 
-        _prepareColorClickHandler(formatName) {
+        _prepareColorClickHandler(name) {
             return () => {
                 const formData = this.quill.getFormat();
-                const caption = formatName === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
+                const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
                 this._editorInstance.formDialogOption('title', localizationMessage.format(caption));
                 const promise = this._editorInstance.showFormDialog({
                     formData: formData,
                     items: [{
-                        dataField: formatName,
+                        dataField: name,
                         editorType: 'dxColorView',
                         editorOptions: {
                             onContentReady: (e) => {
@@ -572,7 +594,7 @@ if(Quill) {
                 });
 
                 promise.done((formData, event) => {
-                    this._applyFormat([formatName, formData[formatName], USER_ACTION], event);
+                    this._applyFormat([name, formData[name], USER_ACTION], event);
                 });
                 promise.fail(() => {
                     this.quill.focus();
@@ -584,10 +606,10 @@ if(Quill) {
             const baseItem = {
                 options: {
                     onInitialized: (e) => {
-                        if(item.formatName) {
+                        if(item.name) {
                             e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
-                            e.component.$element().toggleClass(`dx-${item.formatName.toLowerCase()}-format`, !!item.formatName);
-                            this._toolbarWidgets.add(item.formatName, e.component);
+                            e.component.$element().toggleClass(`dx-${item.name.toLowerCase()}-format`, !!item.name);
+                            this._toolbarWidgets.add(item.name, e.component);
                         }
                     }
                 }
@@ -595,7 +617,7 @@ if(Quill) {
 
             const multilineItem = this.isMultilineMode() ? { location: 'before', locateInMenu: 'never' } : {};
 
-            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.formatName), item, baseItem, multilineItem);
+            return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.name), item, baseItem, multilineItem);
         }
 
         _getDefaultItemsConfig() {
@@ -662,8 +684,8 @@ if(Quill) {
             };
         }
 
-        _getDefaultConfig(formatName) {
-            return this._getDefaultItemsConfig()[formatName];
+        _getDefaultConfig(name) {
+            return this._getDefaultItemsConfig()[name];
         }
 
         updateHistoryWidgets() {
@@ -752,12 +774,12 @@ if(Quill) {
             }
         }
 
-        _isColorFormat(formatName) {
-            return formatName === 'color' || formatName === 'background';
+        _isColorFormat(name) {
+            return name === 'color' || name === 'background';
         }
 
-        _updateColorWidget(formatName, color) {
-            const formatWidget = this._toolbarWidgets.getByName(formatName);
+        _updateColorWidget(name, color) {
+            const formatWidget = this._toolbarWidgets.getByName(name);
             if(!formatWidget) {
                 return;
             }
@@ -768,26 +790,26 @@ if(Quill) {
                 .css('borderBottomColor', color || 'transparent');
         }
 
-        _getFormatWidgetName(formatName, formats) {
+        _getFormatWidgetName(name, formats) {
             let widgetName;
-            switch(formatName) {
+            switch(name) {
                 case 'align':
-                    widgetName = formatName + titleize(formats[formatName]);
+                    widgetName = name + titleize(formats[name]);
                     break;
                 case 'list':
-                    widgetName = formats[formatName] + titleize(formatName);
+                    widgetName = formats[name] + titleize(name);
                     break;
                 case 'code-block':
                     widgetName = 'codeBlock';
                     break;
                 case 'script':
-                    widgetName = formats[formatName] + formatName;
+                    widgetName = formats[name] + name;
                     break;
                 case 'imageSrc':
                     widgetName = 'image';
                     break;
                 default:
-                    widgetName = formatName;
+                    widgetName = name;
             }
 
             return widgetName;
@@ -819,9 +841,9 @@ if(Quill) {
             }
         }
 
-        addClickHandler(formatName, handler) {
-            this._formatHandlers[formatName] = handler;
-            const formatWidget = this._toolbarWidgets.getByName(formatName);
+        addClickHandler(name, handler) {
+            this._formatHandlers[name] = handler;
+            const formatWidget = this._toolbarWidgets.getByName(name);
             if(formatWidget && formatWidget.NAME === 'dxButton') {
                 formatWidget.option('onClick', handler);
             }

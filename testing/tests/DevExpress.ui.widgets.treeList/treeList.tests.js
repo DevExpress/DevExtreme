@@ -1220,10 +1220,11 @@ QUnit.module('Expand/Collapse rows', () => {
             ]
         });
         const scrollable = treeList.getScrollable();
+        const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         try {
             scrollable.scrollTo({ y: 300 }); // scroll to the last page
-            devices.real().deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
+            isNativeScrolling && $(scrollable._container()).trigger('scroll');
             clock.tick();
 
             const topVisibleRowData = treeList.getTopVisibleRowData();

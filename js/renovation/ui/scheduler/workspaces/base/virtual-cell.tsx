@@ -1,12 +1,10 @@
 import {
   Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { addWidthToStyle } from '../utils';
 
 export const viewFunction = (viewModel: VirtualCell): JSX.Element => (
   <td
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
     className="dx-scheduler-virtual-cell"
     style={viewModel.style}
   />

@@ -1,4 +1,4 @@
-import { CSSAttributes } from 'devextreme-generator/component_declaration/common';
+import { CSSAttributes } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../utils/combine_classes';
 import { Group, GroupedViewData, TimePanelData } from './types.d';
 import { GroupOrientation } from '../types.d';
@@ -16,7 +16,15 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
   return (key + groupIndex).toString();
 };
 
-export const getKeyByGroup = (groupIndex: number): string => groupIndex.toString();
+export const getKeyByGroup = (
+  groupIndex: number, groupOrientation: GroupOrientation | undefined,
+): string => {
+  if (groupOrientation === VERTICAL_GROUP_ORIENTATION) {
+    return groupIndex.toString();
+  }
+
+  return '0';
+};
 
 const addToStyle = (
   attr: string,

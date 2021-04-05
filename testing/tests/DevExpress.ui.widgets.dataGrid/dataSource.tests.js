@@ -6419,6 +6419,47 @@ QUnit.module('Cache', {
         assert.equal(this.loadingCount, 3, 'data is loaded from cache');
         assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items from cache');
     });
+
+    QUnit.test('New mode. Cache should be reset when pageSize is changed', function(assert) {
+        const dataSource = this.createDataSource({
+            remoteOperations: {
+                paging: true,
+                sorting: true
+            },
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            }
+        });
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 1, 'first load');
+        assert.deepEqual(dataSource.items(), [1, 2, 3], 'items on the first load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 2, 'second load');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items on the second load');
+
+        // act
+        dataSource.pageIndex(0);
+        dataSource.pageSize(2);
+        dataSource.loadPageCount(1);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 3, 'third load');
+        assert.deepEqual(dataSource.items(), [1, 2], 'new loaded items for the first page');
+    });
 });
 
 QUnit.module('Custom Load', {

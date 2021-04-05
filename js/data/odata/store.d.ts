@@ -1,4 +1,6 @@
-import '../../jquery_augmentation';
+import {
+    TPromise
+} from '../../core/utils/deferred';
 
 import Store, {
     StoreOptions
@@ -7,6 +9,13 @@ import Store, {
 import {
     LoadOptions
 } from '../load_options';
+
+interface PromiseExtension<T> {
+    then<TResult1 = T, TResult2 = never>(
+        onfulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): Promise<TResult1 | TResult2>;
+}
 
 export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
@@ -22,7 +31,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
+    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.data
@@ -38,7 +47,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
     /**
      * @docid
      * @default {}
@@ -74,7 +83,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions) => any);
+    onLoading?: ((loadOptions: LoadOptions) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.data
@@ -107,7 +116,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
  */
 export default class ODataStore extends Store {
     constructor(options?: ODataStoreOptions)
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number): TPromise<any>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
@@ -119,7 +128,7 @@ export default class ODataStore extends Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): TPromise<any>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
@@ -129,4 +138,14 @@ export default class ODataStore extends Store {
      * @public
      */
     createQuery(loadOptions: any): any;
+
+    /**
+     * @docid
+     * @publicName insert(values)
+     * @param1 values:object
+     * @return Promise<any>
+     * @prevFileNamespace DevExpress.data
+     * @public
+     */
+    insert(values: any): TPromise<any> & PromiseExtension<any>;
 }

@@ -161,11 +161,11 @@ export default Class.inherit({
     },
 
     isItemDataSelected: function(data) {
-        return this._selectionStrategy.isItemDataSelected(data);
+        return this._selectionStrategy.isItemDataSelected(data, { checkPending: true });
     },
 
-    isItemSelected: function(arg) {
-        return this._selectionStrategy.isItemKeySelected(arg);
+    isItemSelected: function(arg, options) {
+        return this._selectionStrategy.isItemKeySelected(arg, options);
     },
 
     _resetItemSelectionWhenShiftKeyPressed: function() {

@@ -12,7 +12,6 @@ import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 
 import timeZoneUtils from '../utils.timeZone';
 
-import dxrTimelineDateTableLayout from '../../../renovation/ui/scheduler/workspaces/timeline/date_table/layout.j';
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
@@ -87,8 +86,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateForHeaderText(index) {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
-        return this._getDateByIndexCore(newFirstViewDate, index);
+        const firstViewDate = this._getValidFirstViewDateWithoutDST();
+
+        return this._getDateByIndexCore(firstViewDate, index);
     }
 
     _getDateByIndexCore(date, index) {
@@ -100,14 +100,22 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateByIndex(index) {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
-        const result = this._getDateByIndexCore(newFirstViewDate, index);
+        const firstViewDate = this._getValidFirstViewDateWithoutDST();
+
+        const result = this._getDateByIndexCore(firstViewDate, index);
 
         if(timeZoneUtils.isTimezoneChangeInDate(this._firstViewDate)) {
             result.setDate(result.getDate() - 1);
         }
 
         return result;
+    }
+
+    _getValidFirstViewDateWithoutDST() {
+        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
+        newFirstViewDate.setHours(this.option('startDayHour'));
+
+        return newFirstViewDate;
     }
 
     _getFormat() {
@@ -331,23 +339,23 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     }
 
-    getIndicatorLeft(date, $cell) {
-        const cellWidth = this.getCellWidth();
-        const cellDate = this.getCellData($cell).startDate;
+    _renderIndicator(height, rtlOffset, $container, groupCount) {
+        let $indicator;
+        const width = this.getIndicationWidth();
 
-        const duration = date.getTime() - cellDate.getTime();
-        const cellCount = duration / this.getCellDuration();
+        if(this.option('groupOrientation') === 'vertical') {
+            $indicator = this._createIndicator($container);
+            $indicator.height(getBoundingRect($container.get(0)).height);
+            $indicator.css('left', rtlOffset ? rtlOffset - width : width);
+        } else {
+            for(let i = 0; i < groupCount; i++) {
+                const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
+                $indicator = this._createIndicator($container);
+                $indicator.height(getBoundingRect($container.get(0)).height);
 
-        return cellCount * cellWidth;
-    }
-
-    _shiftIndicator(date, $cell, $indicator) {
-        const left = this.getIndicatorLeft(date, $cell);
-        $indicator.css('left', left);
-    }
-
-    _isIndicatorSimple(index) {
-        return this._isVerticalGroupedWorkSpace() && index > 0;
+                $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
+            }
+        }
     }
 
     _isVerticalShader() {
@@ -621,15 +629,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
-
-    renderRDateTable() {
-        this.renderRComponent(
-            this._$dateTable,
-            dxrTimelineDateTableLayout,
-            'renovatedDateTable',
-            this._getRDateTableProps(),
-        );
-    }
 
     generateRenderOptions() {
         const options = super.generateRenderOptions();

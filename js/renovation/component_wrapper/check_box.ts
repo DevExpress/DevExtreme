@@ -1,7 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import Editor from './editor';
+import { addAttributes, getAriaName } from './utils';
 
 export default class CheckBox extends Editor {
+  // eslint-disable-next-line class-methods-use-this
+  _useTemplates(): boolean {
+    return false;
+  }
+
   _optionChanged(option): void {
     const { name, value, previousValue } = option || {};
 
@@ -26,5 +32,10 @@ export default class CheckBox extends Editor {
     }
 
     this._invalidate();
+  }
+
+  setAria(name: string, value: string): void {
+    const attrName = getAriaName(name);
+    addAttributes(this.$element(), [{ name: attrName, value }]);
   }
 }

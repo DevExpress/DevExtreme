@@ -120,9 +120,9 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         this.clock.tick(400);
         assert.ok(this.wrapper.isSplitterActive(), 'Splitter is active');
 
-        const oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        const oldTreeViewWidth = this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth;
         this.wrapper.moveSplitter(100);
-        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, 'Left panel has correct size');
+        assert.equal(this.wrapper.getNavPaneDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, 'Left panel has correct size');
     });
 
     test('progressPanel should change its mode on small screens', function(assert) {
@@ -145,7 +145,25 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         this.wrapper.getToolbarNavigationPaneToggleButton().trigger('dxclick');
         this.clock.tick(400);
 
-        assert.strictEqual(this.wrapper.getDrawerPanelContent().css('margin-left'), '0px', 'Dirs panel has correct left margin');
+        assert.strictEqual(this.wrapper.getNavPaneDrawerPanelContent().css('margin-left'), '0px', 'Dirs panel has correct left margin');
+    });
+
+    test('splitter should follow left pane edge on other elements width change', function(assert) {
+        this.wrapper.getInstance().option('width', '100%');
+        this.clock.tick(400);
+
+        this.wrapper.moveSplitter(50);
+        this.clock.tick(400);
+
+        this.currentWidth = 900;
+        resizeCallbacks.fire();
+        this.clock.tick(400);
+
+        this.wrapper.getInstance().option('width', '50%');
+        this.clock.tick(400);
+
+        const contentPane = this.wrapper.getNavPaneDrawerPanelContent();
+        assert.roughEqual(this.wrapper.getSplitterPosition(), contentPane.outerWidth(), 0.2, 'Splitter is on the correct position');
     });
 
 });

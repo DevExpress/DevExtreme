@@ -1,7 +1,7 @@
 import {
   Component,
   JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import {
   DateTableCellBase,
@@ -23,11 +23,8 @@ export const viewFunction = ({
   },
   contentTemplateProps,
   classes,
-  restAttributes,
 }: MonthDateTableCell): JSX.Element => (
   <DateTableCellBase
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={classes}
     dataCellTemplate={dataCellTemplate}
     startDate={startDate}

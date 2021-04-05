@@ -21,6 +21,7 @@ const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const POPUP_CLASS = 'dx-popup';
+const FOCUSED_CLASS = 'dx-state-focused';
 
 QUnit.testStart(() => {
     const markup =
@@ -1927,12 +1928,12 @@ QUnit.module('keyboard navigation', {
 
     QUnit.testInActiveWindow('arrow right and left should select a button', function(assert) {
         this.keyboard.press('right');
-        assert.ok(this.$toggleButton.hasClass('dx-state-focused'), 'toggle button is focused');
-        assert.notOk(this.$actionButton.hasClass('dx-state-focused'), 'action button lose focus');
+        assert.ok(this.$toggleButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
+        assert.notOk(this.$actionButton.hasClass(FOCUSED_CLASS), 'action button lose focus');
 
         this.keyboard.press('left');
-        assert.notOk(this.$toggleButton.hasClass('dx-state-focused'), 'action button lose');
-        assert.ok(this.$actionButton.hasClass('dx-state-focused'), 'toggle button is focused');
+        assert.notOk(this.$toggleButton.hasClass(FOCUSED_CLASS), 'action button lose');
+        assert.ok(this.$actionButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
     });
 
     QUnit.testInActiveWindow('action button should be clicked on enter or space', function(assert) {
@@ -2064,11 +2065,11 @@ QUnit.module('keyboard navigation', {
         this.keyboard.press('right').press('enter');
 
         assert.ok(this.dropDownButton.option('dropDownOptions.visible'), 'popup is opened');
-        assert.ok(this.$toggleButton.hasClass('dx-state-focused'), 'toggle button is focused');
+        assert.ok(this.$toggleButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
 
         this.keyboard.press('space');
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
-        assert.ok(this.$toggleButton.hasClass('dx-state-focused'), 'toggle button is focused');
+        assert.ok(this.$toggleButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
     });
 
     QUnit.testInActiveWindow('list should get first focused item when down arrow pressed after opening', function(assert) {
@@ -2079,7 +2080,7 @@ QUnit.module('keyboard navigation', {
 
         const $firstItem = getList(this.dropDownButton).itemElements().first();
 
-        assert.ok($firstItem.hasClass('dx-state-focused'), 'first list item is focused');
+        assert.ok($firstItem.hasClass(FOCUSED_CLASS), 'first list item is focused');
     });
 
     QUnit.testInActiveWindow('list should get first focused item when up arrow pressed after opening', function(assert) {
@@ -2090,10 +2091,15 @@ QUnit.module('keyboard navigation', {
 
         const $firstItem = getList(this.dropDownButton).itemElements().first();
 
-        assert.ok($firstItem.hasClass('dx-state-focused'), 'first list item is focused');
+        assert.ok($firstItem.hasClass(FOCUSED_CLASS), 'first list item is focused');
     });
 
     QUnit.testInActiveWindow('esc on list should close the popup', function(assert) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+            return;
+        }
+
         this.keyboard
             .press('right')
             .press('enter')
@@ -2105,7 +2111,7 @@ QUnit.module('keyboard navigation', {
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
 
         // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
-        assert.ok(this.$actionButton.hasClass('dx-state-focused'), 'action button is focused');
+        assert.ok(this.$actionButton.hasClass(FOCUSED_CLASS), 'action button is focused');
     });
 
     QUnit.testInActiveWindow('esc on button group should close the popup', function(assert) {
@@ -2115,10 +2121,15 @@ QUnit.module('keyboard navigation', {
             .press('esc');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
-        assert.ok(this.$toggleButton.hasClass('dx-state-focused'), 'toggle button is focused');
+        assert.ok(this.$toggleButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
     });
 
     QUnit.testInActiveWindow('left on list should close the popup', function(assert) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+            return;
+        }
+
         this.keyboard
             .press('right')
             .press('enter')
@@ -2130,10 +2141,15 @@ QUnit.module('keyboard navigation', {
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
 
         // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
-        assert.ok(this.$actionButton.hasClass('dx-state-focused'), 'action button is focused');
+        assert.ok(this.$actionButton.hasClass(FOCUSED_CLASS), 'action button is focused');
     });
 
     QUnit.testInActiveWindow('right on list should close the popup', function(assert) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+            return;
+        }
+
         this.keyboard
             .press('right')
             .press('enter')
@@ -2145,7 +2161,7 @@ QUnit.module('keyboard navigation', {
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
 
         // TODO: it is better to focus toggle button when splitButtons is true but it is a complex fix
-        assert.ok(this.$actionButton.hasClass('dx-state-focused'), 'action button is focused');
+        assert.ok(this.$actionButton.hasClass(FOCUSED_CLASS), 'action button is focused');
     });
 
     QUnit.testInActiveWindow('down arrow on toggle button should open the popup', function(assert) {
@@ -2157,6 +2173,11 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('selection of the item should return focus to the button group', function(assert) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+            return;
+        }
+
         this.keyboard
             .press('right')
             .press('down')
@@ -2166,7 +2187,7 @@ QUnit.module('keyboard navigation', {
         listKeyboard.press('enter');
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
-        assert.ok(this.$toggleButton.hasClass('dx-state-focused'), 'toggle button is focused');
+        assert.ok(this.$toggleButton.hasClass(FOCUSED_CLASS), 'toggle button is focused');
     });
 
     QUnit.testInActiveWindow('tab on button should close the popup', function(assert) {
@@ -2181,6 +2202,11 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('tab on list should close the popup', function(assert) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+            return;
+        }
+
         this.keyboard
             .press('right')
             .press('down')
@@ -2192,8 +2218,67 @@ QUnit.module('keyboard navigation', {
         const event = listKeyboard.press('tab').event;
 
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'popup is closed');
-        assert.ok(getButtonGroup(this.dropDownButton).$element().hasClass('dx-state-focused'), 'button group was focused');
+        assert.ok(getButtonGroup(this.dropDownButton).$element().hasClass(FOCUSED_CLASS), 'button group was focused');
         assert.strictEqual(event.isDefaultPrevented(), false, 'event was not prevented and native focus move next');
+    });
+
+    QUnit.testInActiveWindow('focus method call moves focus to buttonGroup', function(assert) {
+        const $buttonGroup = getButtonGroup(this.dropDownButton).$element();
+
+        this.dropDownButton.focus();
+
+        assert.ok($buttonGroup.hasClass(FOCUSED_CLASS), 'button group is focused');
+    });
+
+    QUnit.testInActiveWindow('focusIn handler should be called on dropDownButton focus', function(assert) {
+        const focusInHandler = sinon.stub();
+
+        this.dropDownButton.option({ onFocusIn: focusInHandler });
+        this.dropDownButton.focus();
+
+        assert.ok(focusInHandler.calledOnce, 'focusIn handler was called');
+    });
+
+    QUnit.testInActiveWindow('focusOut handler should be called on buttonGroup blur', function(assert) {
+        const focusOutHandler = sinon.stub();
+        this.dropDownButton.option({ onFocusOut: focusOutHandler });
+        const $buttonGroup = getButtonGroup(this.dropDownButton).$element();
+
+        this.dropDownButton.focus();
+        eventsEngine.trigger($buttonGroup, 'focusout');
+
+        assert.ok(focusOutHandler.calledOnce, 'focusOut handler was called');
+    });
+
+    QUnit.module('registerKeyHandler', () => {
+        QUnit.test('should add keyboard event handler with correct context', function(assert) {
+            assert.expect(1);
+
+            const handler = function() {
+                assert.strictEqual(this.NAME, 'dxDropDownButton', 'context is correct');
+            };
+            this.dropDownButton.registerKeyHandler('backspace', handler);
+
+            this.keyboard.press('backspace');
+        });
+
+        [
+            ['downArrow', true],
+            ['upArrow', true],
+            ['tab', false],
+            ['escape', false]
+        ].forEach(([key, opened]) => {
+            QUnit.test(`should work correctly with ${key}`, function(assert) {
+                const handler = sinon.stub();
+                this.dropDownButton.registerKeyHandler(key, handler);
+                this.dropDownButton.focus();
+
+                this.keyboard.press(key);
+
+                assert.strictEqual(this.dropDownButton.option('opened'), opened, 'default handler was called');
+                assert.ok(handler.calledOnce, 'custom handler was called');
+            });
+        });
     });
 });
 

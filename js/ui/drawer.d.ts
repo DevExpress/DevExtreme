@@ -1,15 +1,17 @@
-import '../jquery_augmentation';
+import {
+    TElement
+} from '../core/element';
 
 import {
-    dxElement
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     template
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import Widget, {
@@ -39,7 +41,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -99,7 +101,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @deprecated
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | TElement;
     /**
      * @docid
      * @type_function_param1 Element:dxElement
@@ -107,7 +109,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((Element: dxElement) => any);
+    template?: template | ((Element: TElement) => any);
 }
 /**
  * @docid
@@ -119,8 +121,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
  * @public
  */
 export default class dxDrawer extends Widget {
-    constructor(element: Element, options?: dxDrawerOptions)
-    constructor(element: JQuery, options?: dxDrawerOptions)
+    constructor(element: TElement, options?: dxDrawerOptions)
     /**
      * @docid
      * @publicName content()
@@ -128,7 +129,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): dxElement;
+    content(): TElement;
     /**
      * @docid
      * @publicName hide()
@@ -136,7 +137,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): Promise<void> & JQueryPromise<void>;
+    hide(): TPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -144,7 +145,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): Promise<void> & JQueryPromise<void>;
+    show(): TPromise<void>;
     /**
      * @docid
      * @publicName toggle()
@@ -152,18 +153,9 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): Promise<void> & JQueryPromise<void>;
+    toggle(): TPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxDrawer(): JQuery;
-    dxDrawer(options: "instance"): dxDrawer;
-    dxDrawer(options: string): any;
-    dxDrawer(options: string, ...params: any[]): any;
-    dxDrawer(options: dxDrawerOptions): JQuery;
-}
-}
 export type Options = dxDrawerOptions;
 
 /** @deprecated use Options instead */

@@ -85,7 +85,7 @@ QUnit.module('Editing', {
             { command: 'edit' }
         ];
         this.isResizing = false;
-        setupDataGridModules(this, ['data', 'columns', 'headerPanel', 'rows', 'pager', 'editing', 'editorFactory', 'keyboardNavigation', 'virtualScrolling'], {
+        setupDataGridModules(this, ['data', 'columns', 'headerPanel', 'rows', 'pager', 'editing', 'editingRowBased', 'editingCellBased', 'editorFactory', 'keyboardNavigation', 'virtualScrolling'], {
             initViews: true,
             options: {
                 keyboardNavigation: {
@@ -2976,7 +2976,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editingFormBased', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search', 'errorHandling'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search', 'errorHandling'], {
             initViews: true
         });
 
@@ -2999,7 +2999,7 @@ QUnit.module('Editing with real dataController', {
 }, () => {
 
     // B254105
-    QUnit.test('Reset editing after refresh dataSource', function(assert) {
+    QUnit.test('Not reset editing after refresh dataSource', function(assert) {
         // arrange
         const that = this;
         this.rowsView.render($('#container'));
@@ -3013,7 +3013,7 @@ QUnit.module('Editing with real dataController', {
         that.dataController.refresh();
 
         // assert
-        assert.equal(that.editingController._getVisibleEditRowIndex(), -1);
+        assert.equal(that.editingController._getVisibleEditRowIndex(), 2);
     });
 
     // B254503
@@ -8411,7 +8411,7 @@ QUnit.module('Editing with real dataController', {
         this.addRow();
 
         // assert
-        assert.ok($(rowsView.getRowElement(0)).hasClass('dx-edit-row dx-row-inserted'), 'new row');
+        assert.ok($(rowsView.getRowElement(0)).is('.dx-edit-row.dx-row-inserted'), 'new row');
         assert.notOk($(rowsView.getRowElement(3)).hasClass('dx-edit-row'), 'row isn\'t edited');
     });
 
@@ -10145,7 +10145,7 @@ QUnit.module('Refresh modes', {
         this.setupModules = function() {
             const that = this;
 
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'gridView', 'editing', 'selection', 'grouping', 'editorFactory', 'columnFixing'], {
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'gridView', 'editing', 'editingRowBased', 'editingCellBased', 'selection', 'grouping', 'editorFactory', 'columnFixing'], {
                 initViews: true
             });
 
@@ -10568,7 +10568,7 @@ QUnit.module('Editing with validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'editingFormBased', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
             initViews: true,
             options: {
                 keyboardNavigation: {
@@ -12148,6 +12148,10 @@ QUnit.module('Editing with validation', {
 
     // T284398
     QUnit.testInActiveWindow('Show invalid message on focus for an invalid cell of the inserted row', function(assert) {
+        if(browser.msie && parseInt(browser.version) <= 11) {
+            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+            return;
+        }
         // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -15424,7 +15428,7 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'editing', 'editorFactory', 'selection', 'headerPanel', 'grouping', 'masterDetail'], {
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'editing', 'editingRowBased', 'editingCellBased', 'editorFactory', 'selection', 'headerPanel', 'grouping', 'masterDetail'], {
             initViews: true
         });
 
@@ -15677,7 +15681,13 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
         that.collapseRow(['Alex']);
 
         // assert
-        assert.strictEqual(that.editingController.getEditRowIndex(), -1, 'edit form was closed');
+        assert.strictEqual(that.editingController.getEditRowIndex(), 2, 'edit form was not closed');
+
+        const inputs = $('.dx-edit-row td input.dx-texteditor-input');
+        assert.equal(inputs[0].value, '16', 'first input value');
+        assert.equal(inputs[1].value, 'Skip', 'first input value');
+        assert.equal(inputs[2].value, '553355', 'first input value');
+        assert.equal(inputs[3].value, '2', 'first input value');
     });
 });
 
@@ -15717,7 +15727,7 @@ QUnit.module('Editing with scrolling', {
         };
 
         this.setupDataGrid = function() {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editingFormBased', 'editorFactory', 'virtualScrolling', 'errorHandling', 'validating', 'grouping', 'masterDetail', 'adaptivity'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'virtualScrolling', 'errorHandling', 'validating', 'grouping', 'masterDetail', 'adaptivity'], {
                 initViews: true
             });
         };
@@ -16578,7 +16588,7 @@ QUnit.module('Edit Form', {
         };
 
         this.setupModules = function(that) {
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editingFormBased', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'keyboardNavigation'], {
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'keyboardNavigation'], {
                 initViews: true
             });
         };
@@ -17627,7 +17637,7 @@ QUnit.module('Edit Form', {
         // assert
         $rowElements = $testElement.find('tbody.dx-row');
         assert.strictEqual($rowElements.length, 9, 'row count');
-        assert.ok($rowElements.eq(0).hasClass('dx-edit-row dx-row-inserted dx-datagrid-edit-form'), 'detail form row');
+        assert.ok($rowElements.eq(0).is('.dx-edit-row.dx-row-inserted.dx-datagrid-edit-form'), 'detail form row');
     });
 
     QUnit.test('Edit row when row as tbody', function(assert) {
@@ -17965,7 +17975,7 @@ QUnit.module('Editing - "popup" mode', {
 
         this.setupModules = function(that) {
 
-            setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editingFormBased', 'editorFactory', 'errorHandling', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
+            setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'errorHandling', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
                 initViews: true
             });
 
@@ -18905,7 +18915,7 @@ QUnit.module('Promises in callbacks and events', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'keyboardNavigation', 'editing', 'editorFactory', 'headerPanel', 'validating', 'errorHandling'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'keyboardNavigation', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'headerPanel', 'validating', 'errorHandling'], {
             initViews: true
         });
 
@@ -19585,7 +19595,7 @@ QUnit.module('Promises in callbacks and events', {
         this.clock.tick(500);
 
         // assert
-        assert.ok($(this.rowsView.getRowElement(0)).hasClass('dx-edit-row dx-row-inserted'), 'new row');
+        assert.ok($(this.rowsView.getRowElement(0)).is('.dx-edit-row.dx-row-inserted'), 'new row');
         assert.notOk($(this.rowsView.getRowElement(3)).hasClass('dx-edit-row'), 'row isn\'t edited');
     });
 });
@@ -19622,7 +19632,7 @@ QUnit.module('Async validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'editingFormBased', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
             initViews: true,
             options: {
                 keyboardNavigation: {

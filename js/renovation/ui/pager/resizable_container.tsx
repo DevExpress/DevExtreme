@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent,
   Effect, Template, InternalState, OneWay, ForwardRef, Mutable, JSXTemplate, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import { PagerProps } from './common/pager_props';

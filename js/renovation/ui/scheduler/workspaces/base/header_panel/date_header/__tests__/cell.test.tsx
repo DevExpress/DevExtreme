@@ -33,13 +33,6 @@ describe('DateHeaderCell', () => {
         .toBe(true);
     });
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(cell.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should pass correct attributes', () => {
       const cell = render({ props: { colSpan: 3, text: 'Test' } });
 

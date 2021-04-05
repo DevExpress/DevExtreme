@@ -22,7 +22,7 @@ const test = (description, callback) => {
 
 module('Virtual Scrolling', {
     beforeEach: function() {
-        this.prepareInstance = function(settings) {
+        this.prepareInstance = function(settings, workspaceSettings) {
             settings = settings || {};
             settings = $.extend(true, {
                 height: 300,
@@ -30,20 +30,22 @@ module('Virtual Scrolling', {
                 totalRowCount: 100,
                 totalCellCount: 200,
                 scrolling: {
-                    type: 'both'
+                    orientation: 'both'
                 }
             }, settings);
 
-            this.workspaceMock = {
+            workspaceSettings = workspaceSettings || {};
+            this.workspaceMock = $.extend(true, {
                 _getGroupCount: () => 0,
                 _getTotalRowCount: () => settings.totalRowCount,
                 _getTotalCellCount: () => settings.totalCellCount,
                 _getDateTableCellClass: () => 'fake-cell-class',
                 _getDateTableRowClass: () => 'fake-row-class',
+                _isRTL: () => false,
                 _options: {
                     dataCellTemplate: noop,
                     groupByDate: false,
-                    'scrolling.type': settings.scrolling.type
+                    'scrolling.orientation': settings.scrolling.orientation
                 },
                 getCellWidth: () => { return 150; },
                 getCellHeight: () => { return 50; },
@@ -52,7 +54,6 @@ module('Virtual Scrolling', {
                 _insertAllDayRowsIntoDateTable: noop,
                 _allDayPanels: undefined,
                 isGroupedAllDayPanel: noop,
-                renderRAllDayPanel: noop,
                 renderRWorkspace: noop,
                 renderRAppointments: noop,
                 _createAction: () => { return () => 'action'; },
@@ -76,7 +77,7 @@ module('Virtual Scrolling', {
                     return false;
                 },
                 updateAppointments: () => {},
-            };
+            }, workspaceSettings);
 
             this.scrollableMock = {
                 _options: {
@@ -199,6 +200,21 @@ module('Virtual Scrolling', {
                 assert.equal(state.virtualItemCountAfter, 194, 'Virtual item count after viewport');
             });
 
+            test('Init with RTL', function(assert) {
+                this.prepareInstance(
+                    { },
+                    { _isRTL: () => true }
+                );
+
+                const { horizontalVirtualScrolling } = this;
+                const { state } = horizontalVirtualScrolling;
+
+                assert.equal(horizontalVirtualScrolling.pageSize, 4, 'PageSize');
+                assert.equal(state.virtualItemSizeBefore, 29100, 'Virtual item size before viewport');
+                assert.equal(state.itemCount, 6, 'Item count');
+                assert.equal(state.virtualItemSizeAfter, 0, 'Virtual item size after viewport');
+            });
+
             test('Viewport width should be correct if the "width" option is undefined', function(assert) {
                 this.prepareInstance({ width: null });
 
@@ -208,31 +224,12 @@ module('Virtual Scrolling', {
                 assert.equal(viewportWidth, expectedWidth, 'Viewport width is correct');
             });
 
-            test('document scroll event should be subscribed correctly if the "width" option is not defined', function(assert) {
-                const SCROLL_EVENT_NAME = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
-
+            test('document scroll event should not been subscribed if the "width" option is not defined', function(assert) {
                 const spyEventsOn = this.spy(eventsEngine, 'on');
 
                 this.prepareInstance({ width: null });
 
-                // TODO - determine subscribe windows scroll
-
-                assert.ok(spyEventsOn.calledOnce, 'scroll event subscribed once');
-                assert.equal(spyEventsOn.args[0][0], domAdapter.getDocument(), 'scroll event subscribed for document');
-                assert.equal(spyEventsOn.args[0][1], SCROLL_EVENT_NAME, 'scroll event name is correct');
-            });
-
-            test('document scroll event should be unsubscribed correctly if the "width" option is not defined', function(assert) {
-                const SCROLL_EVENT_NAME = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
-                const spyEventsOff = this.spy(eventsEngine, 'off');
-
-                this.prepareInstance({ width: null });
-
-                this.virtualScrollingDispatcher.dispose();
-
-                assert.ok(spyEventsOff.calledOnce, 'scroll event unsubscribed once');
-                assert.equal(spyEventsOff.args[0][0], domAdapter.getDocument(), 'scroll event unsubscribed from document');
-                assert.equal(spyEventsOff.args[0][1], SCROLL_EVENT_NAME, 'scroll event name is correct');
+                assert.notOk(spyEventsOn.calledOnce, 'scroll event subscribed once');
             });
 
             test('It should call _getTotalCellCount with correct parameters', function(assert) {
@@ -255,29 +252,29 @@ module('Virtual Scrolling', {
         module('Options', () => {
             [
                 {
-                    scrollingType: 'vertical',
+                    scrollingOrientation: 'vertical',
                     expectScrolling: {
                         vertical: true,
                         horizontal: false
                     }
                 }, {
-                    scrollingType: 'horizontal',
+                    scrollingOrientation: 'horizontal',
                     expectScrolling: {
                         vertical: false,
                         horizontal: true
                     }
                 }, {
-                    scrollingType: 'both',
+                    scrollingOrientation: 'both',
                     expectScrolling: {
                         vertical: true,
                         horizontal: true
                     }
                 }
             ].forEach(option => {
-                test(`Virtual scrolling objects should be created correctly if scrolling.type is ${option.scrollingType} `, function(assert) {
+                test(`Virtual scrolling objects should be created correctly if scrolling.orientation is ${option.scrollingOrientation} `, function(assert) {
                     this.prepareInstance({
                         scrolling: {
-                            type: option.scrollingType
+                            orientation: option.scrollingOrientation
                         }
                     });
 
@@ -327,7 +324,7 @@ module('Virtual Scrolling', {
             test(`it should return correct render state if scrolling orientation: ${orientation}`, function(assert) {
                 this.prepareInstance({
                     scrolling: {
-                        type: orientation
+                        orientation
                     }
                 });
 
@@ -353,7 +350,7 @@ module('Virtual Scrolling', {
             test(`it should correctly create virtual scrolling instances if scrolling orientation is ${orientation}`, function(assert) {
                 this.prepareInstance({
                     scrolling: {
-                        type: orientation
+                        orientation
                     }
                 });
 
@@ -387,7 +384,7 @@ module('Virtual Scrolling', {
                 test(`it should get correct cell sizes if virtual scrolling orientation: ${orientation} and testValue: ${testValue}`, function(assert) {
                     this.prepareInstance({
                         scrolling: {
-                            type: orientation
+                            orientation
                         }
                     });
 
@@ -442,7 +439,7 @@ module('Virtual Scrolling', {
 
         test('it should reinitialize vertical virtual scrolling state if virtualization is allowed', function(assert) {
             this.prepareInstance({
-                scrolling: { type: 'vertical' }
+                scrolling: { orientation: 'vertical' }
             });
 
             this.virtualScrollingDispatcher.getCellHeight = () => 200;
@@ -455,7 +452,7 @@ module('Virtual Scrolling', {
 
         test('it should reinitialize horizontal virtual scrolling state if virtualization is allowed', function(assert) {
             this.prepareInstance({
-                scrolling: { type: 'horizontal' }
+                scrolling: { orientation: 'horizontal' }
             });
 
             this.virtualScrollingDispatcher.getCellWidth = () => 200;
@@ -468,7 +465,7 @@ module('Virtual Scrolling', {
 
         test('it should reinitialize virtual scrolling state on "updateDimensions" if virtualization is allowed', function(assert) {
             this.prepareInstance({
-                scrolling: { type: 'both' }
+                scrolling: { orientation: 'both' }
             });
 
             this.virtualScrollingDispatcher.getCellWidth = () => 200;
@@ -507,12 +504,18 @@ module('Virtual Scrolling', {
             assert.equal(this.virtualScrollingDispatcher.getCellHeight(), 101, 'Cell height is correct');
             assert.equal(this.virtualScrollingDispatcher.getCellWidth(), 201, 'Cell width is correct');
         });
+
+        test('it should return correct leftVirtualCellsCount if RTL', function(assert) {
+            this.prepareInstance({}, { _isRTL: () => true });
+
+            assert.equal(this.virtualScrollingDispatcher.leftVirtualCellsCount, 1, 'leftVirtualCellsCount is correct');
+        });
     });
 
     module('API', () => {
         test('reinitState', function(assert) {
             this.prepareInstance({
-                scrolling: { type: 'both' }
+                scrolling: { orientation: 'both' }
             });
 
             this.verticalVirtualScrolling.position = 200;
@@ -561,6 +564,60 @@ module('Virtual Scrolling', {
                 'Horizontal scrolling state is correct'
             );
         });
+
+        test('reinitState if RTL', function(assert) {
+            this.prepareInstance({
+                scrolling: { orientation: 'both' }
+            }, {
+                _isRTL: () => true
+            });
+
+            this.verticalVirtualScrolling.position = 200;
+            this.verticalVirtualScrolling.reinitState(300);
+
+            assert.equal(this.verticalVirtualScrolling.itemSize, 300, 'Vertical scrolling item size is correct');
+            assert.equal(this.verticalVirtualScrolling.position, 200, 'Vertical scrolling position is correct');
+            assert.deepEqual(
+                this.verticalVirtualScrolling.state,
+                {
+                    prevPosition: 0,
+                    startIndex: 0,
+                    itemCount: 1,
+                    virtualItemCountBefore: 0,
+                    virtualItemCountAfter: 99,
+                    outlineCountBefore: 0,
+                    outlineCountAfter: 0,
+                    virtualItemSizeBefore: 0,
+                    virtualItemSizeAfter: 29700,
+                    outlineSizeBefore: 0,
+                    outlineSizeAfter: 0
+                },
+                'Vertical scrolling state is correct'
+            );
+
+            this.horizontalVirtualScrolling.position = 500;
+            this.horizontalVirtualScrolling.reinitState(400);
+
+            assert.equal(this.horizontalVirtualScrolling.itemSize, 400, 'Horizontal scrolling item size is correct');
+            assert.equal(this.horizontalVirtualScrolling.position, 500, 'Horizontal scrolling position is correct');
+            assert.deepEqual(
+                this.horizontalVirtualScrolling.state,
+                {
+                    itemCount: 4,
+                    outlineCountAfter: 1,
+                    outlineCountBefore: 1,
+                    outlineSizeAfter: 0,
+                    outlineSizeBefore: 0,
+                    prevPosition: 400,
+                    startIndex: 0,
+                    virtualItemCountAfter: 196,
+                    virtualItemCountBefore: 0,
+                    virtualItemSizeAfter: 0,
+                    virtualItemSizeBefore: 78400
+                },
+                'Horizontal scrolling state is correct'
+            );
+        });
     });
 
     module('Scrolling', () => {
@@ -593,7 +650,7 @@ module('Virtual Scrolling', {
             });
 
             test('State should be correct on scrolling Up', function(assert) {
-                this.prepareInstance({ scrolling: { type: 'vertical' } });
+                this.prepareInstance({ scrolling: { orientation: 'vertical' } });
 
                 [
                     { top: 4950, stateTop: 4700, topVirtualRowCount: 91, bottomVirtualRowCount: 0, rowCount: 9 },

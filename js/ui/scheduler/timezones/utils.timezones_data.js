@@ -3,12 +3,44 @@ import errors from '../../../core/errors';
 import tzData from './timezones_data';
 import { sign } from '../../../core/utils/math';
 
+const getConvertedUntils = value => {
+    return value.split('|').map(until => {
+        if(until === 'Infinity') {
+            return null;
+        }
+        return parseInt(until, 36) * 1000;
+    });
+};
+
+class TimeZoneCache {
+    constructor() {
+        this.map = new Map();
+    }
+
+    get(id) {
+        if(!this.map.get(id)) {
+            const config = timeZoneDataUtils.getTimezoneById(id);
+            if(!config) {
+                return [false];
+            }
+            const { offsets, offsetIndices, untils } = config;
+
+            this.map.set(id, [offsets, offsetIndices, getConvertedUntils(untils)]);
+        }
+
+        return [true, ...this.map.get(id)];
+    }
+}
+
+const tzCache = new TimeZoneCache();
+
 const timeZoneDataUtils = {
+    _tzCache: tzCache,
     _timeZones: tzData.zones,
 
     getDisplayedTimeZones: function(timestamp) {
         const timeZones = this._timeZones.map((timezone) => {
-            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, timestamp);
+            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, getConvertedUntils(timezone.untils), timestamp);
 
             const title = `(GMT ${this.formatOffset(offset)}) ${this.formatId(timezone.id)}`;
 
@@ -60,34 +92,45 @@ const timeZoneDataUtils = {
     },
 
     getTimeZoneOffsetById: function(id, timestamp) {
-        const tz = this.getTimezoneById(id);
-        let offsets;
-        let offsetIndices;
-        let untils;
-        let result;
+        const [isSuccess, offsets, offsetIndices, untils] = tzCache.get(id);
 
-        if(tz) {
-            offsets = tz.offsets;
-            untils = tz.untils;
-            offsetIndices = tz.offsetIndices;
-
-            result = this.getUtcOffset(offsets, offsetIndices, untils, timestamp);
-        }
-
-        return result;
+        return isSuccess ? this.getUtcOffset(offsets, offsetIndices, untils, timestamp) : undefined;
     },
 
-    getUtcOffset: function(offsets, offsetIndices, untils, dateTimeStamp) {
+    getTimeZoneDeclarationTuple: function(id, year) {
+        const [isSuccess, offsets, offsetIndices, untils] = tzCache.get(id);
+
+        return isSuccess ? this.getTimeZoneDeclarationTupleCore(offsets, offsetIndices, untils, year) : [];
+    },
+
+    getTimeZoneDeclarationTupleCore: function(offsets, offsetIndices, untilsList, year) {
+        const tupleResult = [];
+
+        const offsetIndicesList = offsetIndices.split('');
+        const offsetsList = offsets.split('|').map(value => parseInt(value));
+
+        let currentDate = 0;
+
+        for(let i = 0, listLength = untilsList.length; i < listLength; i++) {
+            currentDate += untilsList[i];
+
+            if(new Date(currentDate).getFullYear() === year) {
+                const offset = offsetsList[Number(offsetIndicesList[i + 1])];
+                tupleResult.push({ date: currentDate, offset: -offset / 60 });
+            }
+
+            if(new Date(currentDate).getFullYear() > year) {
+                break;
+            }
+        }
+
+        return tupleResult;
+    },
+
+    getUtcOffset: function(offsets, offsetIndices, untilsList, dateTimeStamp) {
         let index = 0;
         const offsetIndicesList = offsetIndices.split('');
         const offsetsList = offsets.split('|');
-
-        const untilsList = untils.split('|').map(function(until) {
-            if(until === 'Infinity') {
-                return null;
-            }
-            return parseInt(until, 36) * 1000;
-        });
 
         let currentUntil = 0;
 

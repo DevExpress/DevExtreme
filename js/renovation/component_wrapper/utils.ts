@@ -1,6 +1,6 @@
 import { each } from '../../core/utils/iterator';
 
-const addAttributes = ($element, attributes): void => {
+export const addAttributes = ($element, attributes): void => {
   each(attributes, (_, { name, value }) => {
     if (name === 'class') {
       $element.addClass(value);
@@ -10,20 +10,11 @@ const addAttributes = ($element, attributes): void => {
   });
 };
 
-// NOTE: function for jQuery templates
-export const wrapElement = ($element, $wrapper): any => {
-  const { attributes } = $wrapper.get(0);
-  const children = $wrapper.contents();
-
-  addAttributes($element, attributes);
-
-  $wrapper.remove();
-  each(children, (_, child) => {
-    $element.append(child);
-  });
-
-  return children;
-};
+export function getAriaName(name: string): string {
+  return (name === 'role' || name === 'id')
+    ? name
+    : `aria-${name}`;
+}
 
 export const removeDifferentElements = ($children, $newChildren): void => {
   each($newChildren, (__, element) => {

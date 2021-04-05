@@ -730,7 +730,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                         e.component._attachTablesEvents();
                     },
                     renovateRender: scrollingMode === 'virtual',
-                    scrolling: { mode: scrollingMode, type: 'vertical' },
+                    scrolling: { mode: scrollingMode, orientation: 'vertical' },
                 }).dxSchedulerTimelineMonth('instance');
                 stubInvokeMethod(this.instance);
             }
@@ -863,7 +863,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                             groupByDate,
                             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
                             allowMultipleCellSelection: true,
-                            scrolling: { mode: scrollingMode, type: 'both' },
+                            scrolling: { mode: scrollingMode, orientation: 'vertical' },
                         });
 
                         const $element = this.instance.$element();

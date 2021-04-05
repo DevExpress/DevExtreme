@@ -26,7 +26,9 @@ const setupModule = function() {
         'filterRow',
         'search',
         'editing',
+        'editingRowBased',
         'editingFormBased',
+        'editingCellBased',
         'grouping',
         'headerFilter',
         'masterDetail',
@@ -3655,7 +3657,7 @@ const setupVirtualRenderingModule = function() {
         dataSource: array
     };
 
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail'], {
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'editingRowBased', 'editingCellBased', 'grouping', 'headerFilter', 'masterDetail'], {
         initDefaultOptions: true,
         options: options
     });
@@ -3827,6 +3829,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
                 groupExpanding: undefined,
                 grouping: false,
                 pageIndex: true,
+                pageSize: false,
                 paging: true,
                 reload: false,
                 skip: true,
@@ -4856,13 +4859,19 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // act
         this.dataController.setViewportPosition(500);
         this.clock.tick();
+        const visibleItems = this.dataController.items();
+        const loadedItems = this.dataController.items(true);
 
         // assert
         assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 5 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
         assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
-        assert.deepEqual(this.dataController.items()[0].data, { id: 21, name: 'Name 21' }, 'first loaded item');
-        assert.deepEqual(this.dataController.items()[29].data, { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.equal(loadedItems.length, 30, 'loaded items count');
+        assert.deepEqual(loadedItems[0].data, { id: 21, name: 'Name 21' }, 'first loaded item');
+        assert.deepEqual(loadedItems[29].data, { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.equal(visibleItems.length, 16, 'visible items count');
+        assert.deepEqual(visibleItems[0].data, { id: 26, name: 'Name 26' }, 'first visible item');
+        assert.deepEqual(visibleItems[15].data, { id: 41, name: 'Name 41' }, 'last visible item');
     });
 });
 
@@ -7981,7 +7990,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.deepEqual(this.dataController.items()[0].data, { name: 'Alex', phone: '55-55-55' });
     });
 
-    QUnit.test('Cancel Inserting Row after change page', function(assert) {
+    QUnit.test('Don\'t cancel Inserting Row after change page', function(assert) {
         const array = [
             { name: 'Alex', phone: '55-55-55' },
             { name: 'Dan', phone: '98-75-21' },
@@ -7998,7 +8007,9 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         this.dataController.pageIndex(1);
 
         // assert
-        assert.ok(!this.editingController.isEditing());
+        assert.ok(this.editingController.isEditing());
+        assert.equal(this.option('editing.changes').length, 1, 'editing changes are not reset');
+        assert.ok(this.option('editing.editRowKey'), 'editRowKey is not reset');
         assert.equal(this.dataController.items().length, 1);
 
         assert.deepEqual(this.dataController.items()[0].data, array[2]);
@@ -11234,7 +11245,7 @@ QUnit.module('Summary with Editing', {
         };
 
         this.setupDataGridModules = function(options) {
-            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing'], options);
+            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing', 'editingRowBased', 'editingCellBased'], options);
         };
 
         this.getTotalValues = function() {

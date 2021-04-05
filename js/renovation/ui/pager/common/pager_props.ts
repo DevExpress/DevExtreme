@@ -1,6 +1,6 @@
 import {
   ComponentBindings, OneWay, TwoWay, Event,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback.d';
 
 export type DisplayMode = 'adaptive' | 'compact' | 'full';
@@ -48,4 +48,6 @@ export class PagerProps {
   @OneWay() showNavigationButtons = false;
 
   @OneWay() totalCount = 0;
+
+  @Event() onKeyDown?: (e: any) => void;
 }

@@ -82,9 +82,6 @@ const moduleOptions = {
             setField: function(field, obj, value) {
                 return dataAccessors.setter[field](obj, value);
             },
-            prerenderFilter: function() {
-                return that.items.length ? that.items : that.instance.option('items');
-            },
             getTimeZoneCalculator: function() {
                 return {
                     createDate: date => date
@@ -150,9 +147,13 @@ const moduleOptions = {
             }
         };
 
-        this.instance = $('#scheduler-appointments').dxSchedulerAppointments({ observer: observer }).dxSchedulerAppointments('instance');
+        this.instance = $('#scheduler-appointments').dxSchedulerAppointments({
+            observer: observer
+        }).dxSchedulerAppointments('instance');
 
-        this.workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({}).dxSchedulerWorkSpaceWeek('instance');
+        this.workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+            draggingMode: 'default'
+        }).dxSchedulerWorkSpaceWeek('instance');
         this.workspaceInstance.getWorkArea().append(this.instance.$element());
 
         const schedulerMock = {
@@ -1146,4 +1147,3 @@ QUnit.test('Focus shouldn\'t be prevent when first appointment is reached in bac
 
     $($appointments).off('keydown');
 });
-

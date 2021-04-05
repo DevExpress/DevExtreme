@@ -46,8 +46,6 @@ const moduleOptions = {
                         return dataAccessors.getter[field](obj);
                     case 'setField':
                         return dataAccessors.setter[field](obj, value);
-                    case 'prerenderFilter':
-                        return this.instance.option('items');
                     case 'getAppointmentColor':
                         return $.Deferred().resolve('red').promise();
                     case 'getEndDayHour':

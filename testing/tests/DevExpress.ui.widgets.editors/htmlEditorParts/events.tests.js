@@ -283,21 +283,21 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
 
     [
         {
-            formatName: 'header',
-            formatValues: [false, 1, 2, 3, 4, 5]
+            name: 'header',
+            acceptedValues: [false, 1, 2, 3, 4, 5]
         },
         {
-            formatName: 'size',
-            formatValues: ['8pt', '10pt']
+            name: 'size',
+            acceptedValues: ['8pt', '10pt']
         },
         {
-            formatName: 'font',
-            formatValues: ['Arial', 'Courier New']
+            name: 'font',
+            acceptedValues: ['Arial', 'Courier New']
         }
     ].forEach((listFormat) => {
-        const { formatName } = listFormat;
+        const { name } = listFormat;
 
-        test(`${formatName} toolbar item - click on toolbar button should raise valueChanged event with the relevant event`, function(assert) {
+        test(`${name} toolbar item - click on toolbar button should raise valueChanged event with the relevant event`, function(assert) {
             assert.expect(2);
             const done = assert.async();
             this.createEditor({
@@ -309,7 +309,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
                         assert.strictEqual(
                             event.type,
                             'dxclick',
-                            `${formatName} toolbar item - value changed after "dxclick" event dispatched`
+                            `${name} toolbar item - value changed after "dxclick" event dispatched`
                         );
                         done();
                     }

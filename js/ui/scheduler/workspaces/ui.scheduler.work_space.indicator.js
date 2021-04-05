@@ -3,13 +3,13 @@ import SchedulerWorkSpace from './ui.scheduler.work_space';
 import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
+import { getBoundingRect } from '../../../core/utils/position';
 import { hasWindow } from '../../../core/utils/window';
-import { HEADER_CURRENT_TIME_CELL_CLASS, VIRTUAL_CELL_CLASS } from '../constants';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
-const SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS = 'dx-scheduler-date-time-indicator-simple';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
@@ -63,49 +63,36 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
             if(this.isIndicationOnView() && this.isIndicatorVisible()) {
                 const groupCount = this._getGroupCount() || 1;
-                const date = this._getToday();
+                const $container = this._dateTableScrollable.$content();
+                const height = this.getIndicationHeight();
+                const rtlOffset = this._getRtlOffset(this.getCellWidth());
 
-                this._renderIndicator(date, groupCount);
+                this._renderIndicator(height, rtlOffset, $container, groupCount);
                 this._setCurrentTimeCells();
             }
         }
     }
 
-    _isIndicatorSimple(index) {
-        return this.isGroupedByDate() && index > 0;
-    }
+    _renderIndicator(height, rtlOffset, $container, groupCount) {
+        const groupedByDate = this.isGroupedByDate();
+        const repeatCount = groupedByDate ? 1 : groupCount;
+        for(let i = 0; i < repeatCount; i++) {
+            const $indicator = this._createIndicator($container);
 
-    _renderIndicator(date, groupCount) {
-        for(let groupIndex = 0; groupIndex < groupCount; groupIndex += 1) {
-            const $cell = this.getCellByDate(this._getToday(), groupIndex);
-            if($cell.length && !$cell.hasClass(VIRTUAL_CELL_CLASS)) {
-                const $indicator = this._createIndicator($cell, this._isIndicatorSimple(groupIndex));
-                this._shiftIndicator(date, $cell, $indicator);
-            }
+            $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
+            this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
         }
     }
 
-    _shiftIndicator(date, $cell, $indicator) {
-        const top = this.getIndicatorTopOffset(date, $cell);
-        $indicator.css('top', top);
-        $indicator.css('left', 0);
-    }
-
-    _createIndicator($container, isSimple) {
+    _createIndicator($container) {
         const $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
-        isSimple && $indicator.addClass(SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS);
         $container.append($indicator);
 
         return $indicator;
     }
 
-    getIndicatorTopOffset(date, $cell) {
-        const cellHeight = this.getCellHeight();
-        const cellDate = this.getCellData($cell).startDate;
-        const duration = date.getTime() - cellDate.getTime();
-        const cellCount = duration / this.getCellDuration();
-
-        return cellCount * cellHeight;
+    _getRtlOffset(width) {
+        return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
     }
 
     _setIndicationUpdateInterval() {

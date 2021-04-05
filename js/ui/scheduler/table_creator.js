@@ -77,12 +77,6 @@ class SchedulerTableCreator {
                 }
 
                 if(options.cellTemplate && options.cellTemplate.render) {
-                    let $templateContainer = $(td);
-                    if(options.addTemplateWrapper) {
-                        $templateContainer = $('<div>').appendTo($(td));
-                        $templateContainer.addClass(options.templateWrapperClass);
-                    }
-
                     const additionalTemplateData = options.getTemplateData
                         ? options.getTemplateData(rowIndex)
                         : {};
@@ -93,7 +87,7 @@ class SchedulerTableCreator {
                             date: options.getCellDate ? options.getCellDate(rowIndex) : undefined,
                             ...additionalTemplateData,
                         },
-                        container: getPublicElement($templateContainer),
+                        container: getPublicElement($(td)),
                         index: rowIndex * options.cellCount + columnIndex,
                     };
 

@@ -132,7 +132,7 @@ QUnit.module('Markup', moduleConfig, () => {
         this.clock.tick();
         const treeListRowElement = this.$element.find(TREELIST_DATA_ROW_SELECTOR).last().get(0);
         const ganttViewRowElement = this.$element.find(GANTT_VIEW_ROW_SELECTOR).get(0);
-        assert.roughEqual(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, 0.001, 'row heights are equal');
+        assert.roughEqual(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, 0.01, 'row heights are equal');
     });
     test('auto height', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1024,6 +1024,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             e.values['title'] = 'My text';
             e.values['start'] = newStart;
             e.values['end'] = newEnd;
+            e.values['color'] = 'red';
         });
 
         getGanttViewCore(this.instance).commandManager.createTaskCommand.execute('2019-02-21', '2019-02-22', 'New', 0, '1');
@@ -1033,6 +1034,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(createdTask.title, 'My text', 'new task title is right');
         assert.equal(createdTask.start, newStart, 'new task start is right');
         assert.equal(createdTask.end, newEnd, 'new task end is right');
+        assert.equal(createdTask.color, 'red', 'new task color is right');
     });
     test('task inserted', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1055,6 +1057,54 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(values['title'], text, 'new task title is right');
         assert.equal(values['start'], newStart, 'new task start is right');
         assert.equal(values['end'], newEnd, 'new task end is right');
+    });
+    test('inserting with custom field', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+
+        const tasks = [ {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        } ];
+        const tasksMap = {
+            dataSource: tasks,
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+
+        this.instance.option('onTaskInserting', (e) => {
+            e.values['ItemName'] = 'new item text';
+            e.values['CustomText'] = 'new custom text';
+        });
+        this.clock.tick();
+
+        const data = {
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+
+        this.instance.insertTask(data);
+        this.clock.tick();
+        assert.equal(tasks[1].CustomText, 'new custom text', 'task cust field  is updated');
+        assert.equal(tasks[1].ItemName, 'new item text', 'task cust field  is updated');
     });
     test('task deleting - canceling', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1613,6 +1663,57 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(task.ItemName, data.ItemName, 'task title is updated');
         assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
     });
+    test('update task color and title in auto parent mode (T976669, T978287)', function(assert) {
+        const tasks = [ {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text 1',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        },
+        {
+            Id: 2,
+            ParentId: 1,
+            ItemName: 'custom text 2',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        },
+        ];
+        const tasksMap = {
+            dataSource: tasks,
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        const options = {
+            tasks: tasksMap,
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true },
+            columns: [{ dataField: 'ItemName', caption: 'Task' }]
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const data = {
+            ItemName: 'New',
+            TaskColor: 'yellow'
+        };
+        this.instance.updateTask(1, data);
+        this.clock.tick();
+
+        const firstTreeListTitleText = $(this.instance._treeList.getCellElement(0, 0)).text();
+        assert.equal(firstTreeListTitleText, data.ItemName, 'title text was modified');
+        assert.equal(tasks[0].ItemName, data.ItemName, 'task title is updated');
+        assert.equal(tasks[0].TaskColor, data.TaskColor, 'task color  is updated');
+    });
     test('taskUpdate with only custom field', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
@@ -2014,6 +2115,36 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(this.instance.getVisibleDependencyKeys().length, 0, 'dependencies keys');
         assert.equal(this.instance.getVisibleResourceKeys().length, 0, 'resources keys');
         assert.equal(this.instance.getVisibleResourceAssignmentKeys().length, 0, 'resource assignments keys');
+    });
+    test('double task insert - check infinite loop on selection (T980191)', function(assert) {
+        const myTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 4, 'parentId': 2, 'title': 'Secure project sponsorship', 'start': new Date('2019-02-21T10:00:00.000Z'), 'end': new Date('2019-02-22T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 5, 'parentId': 2, 'title': 'Define preliminary resources', 'start': new Date('2019-02-22T10:00:00.000Z'), 'end': new Date('2019-02-25T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 6, 'parentId': 2, 'title': 'Secure core resources', 'start': new Date('2019-02-25T10:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 },
+            { 'id': 7, 'parentId': 2, 'title': 'Scope complete', 'start': new Date('2019-02-26T09:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 }
+        ];
+        const options = {
+            tasks: { dataSource: myTasks },
+            editing: { enabled: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const data = {
+            title: 'My text',
+            start: new Date('2019-02-23'),
+            end: new Date('2019-02-23'),
+            parentId: 2
+        };
+
+        const tasksCount = myTasks.length;
+        this.instance.insertTask(data);
+        this.instance.insertTask(data);
+        this.clock.tick();
+        assert.equal(myTasks.length, tasksCount + 2, 'new task was created in ds');
     });
 });
 
@@ -3071,7 +3202,6 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.instance.option('height', 200);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         fullScreenCommand.execute();
@@ -3106,8 +3236,6 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
     });
     test('panel sizes are the same', function(assert) {
         this.createInstance(allSourcesOptions);
-        this.clock.tick();
-        this.instance.option('width', 1400);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         let leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
@@ -3176,6 +3304,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
         leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();
+        assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in Normal mode');
     });
 });
 

@@ -1403,6 +1403,63 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             assert.strictEqual($(cell).css('overflow'), 'hidden', 'overflow hidden');
         });
     });
+
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        [null, 'left', 'right'].forEach(fixedPosition => {
+            const fixedPositionText = fixedPosition === null ? 'not specified' : fixedPosition;
+            QUnit.testInActiveWindow(`${editMode} - Cells should be modified properly when fixedPosition is ${fixedPositionText} of a grouped column with showWhenGrouped enabled (T980535)`, function(assert) {
+                // act
+                const columns = [
+                    'field1',
+                    {
+                        dataField: 'field2',
+                        showWhenGrouped: true,
+                        groupIndex: 0
+                    },
+                    'field3'
+                ];
+
+                if(fixedPosition !== null) {
+                    columns[1].fixed = true;
+                    columns[1].fixedPosition = fixedPosition;
+                }
+
+                const dataGrid = createDataGrid({
+                    dataSource: [{ id: 1, field1: 'test1', field2: 'test2', field3: 'test3' }],
+                    keyExpr: 'id',
+                    columns,
+                    editing: {
+                        mode: editMode.toLowerCase(),
+                        allowUpdating: true
+                    },
+                    columnFixing: { enabled: true }
+                });
+
+                this.clock.tick();
+
+                for(let i = 1; i <= 3; i++) {
+                    // act
+                    let $cellElement = $(dataGrid.getCellElement(1, i));
+                    $cellElement.trigger('dxclick');
+                    this.clock.tick();
+                    $cellElement = $(dataGrid.getCellElement(1, i));
+
+                    // assert
+                    assert.ok($cellElement.hasClass('dx-focused'), `cell ${i} is focused after click`);
+                    assert.ok($cellElement.hasClass('dx-editor-cell'), `cell ${i} has an editor after click`);
+
+                    // act
+                    $cellElement.find('.dx-texteditor-input').val(i).trigger('change');
+                    dataGrid.closeEditCell();
+                    this.clock.tick();
+
+                    // assert
+                    assert.strictEqual(dataGrid.cellValue(1, i), `${i}`, `cell ${i} has modified value`);
+                }
+            });
+        });
+    });
 });
 
 QUnit.module('Editing', baseModuleConfig, () => {
@@ -2319,6 +2376,148 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.deepEqual(validatedRowKeys, [1, 3], 'validated row keys');
         assert.deepEqual(validatedMessages, ['Field 1 is required', 'Field 2 is required'], 'broken rules messages');
+    });
+
+    QUnit.testInActiveWindow('Batch - saveEditData after change cell value from invalid to valid if key is complex (T984377)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, id2: 1, field1: 'test12' },
+                { id: 1, id2: 2, field1: 'test22' }
+            ],
+            keyExpr: ['id1', 'id2'],
+            columns: [{
+                dataField: 'field1',
+                validationRules: [{ type: 'required' }]
+            }],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            loadingTimeout: undefined
+        });
+
+        // act
+        dataGrid.editCell(0, 'field1');
+        dataGrid.cellValue(0, 'field1', '');
+        dataGrid.cellValue(0, 'field1', '123');
+        dataGrid.saveEditData();
+
+        // assert
+        assert.notOk(dataGrid.hasEditData(), 'changes are saved');
+        assert.equal(dataGrid.cellValue(0, 'field1'), '123', 'cell value is changed');
+    });
+
+    ['Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Data row should be removed(marked as removed) when a new row is rendered (T978455)`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test12' },
+                    { id: 2, field1: 'test21', field2: 'test22' }
+                ],
+                keyExpr: 'id',
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true,
+                    allowDeleting: true,
+                    confirmDelete: false
+                },
+                loadingTimeout: undefined
+            });
+
+            // act
+            $(dataGrid.element()).find('.dx-icon-edit-button-addrow').trigger('dxclick');
+            this.clock.tick();
+
+            let $firstRow = $(dataGrid.getRowElement(0));
+            const $inputElement = $firstRow.find('.dx-texteditor-input').first();
+
+            // assert
+            assert.ok($firstRow.hasClass('dx-row-inserted'), 'inserted row is rendered');
+
+            // act
+            $inputElement.val('tst').trigger('change');
+            this.clock.tick();
+            $(dataGrid.getRowElement(1)).find('.dx-link-delete').trigger('click');
+            this.clock.tick();
+            const visibleRows = dataGrid.getVisibleRows();
+
+            // assert
+            if(editMode === 'Cell') {
+                assert.equal(visibleRows.length, 2, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'test21', 'field1 cell value of the first row');
+                assert.strictEqual(visibleRows[1].data.field1, 'tst', 'field1 cell value of the second row');
+                assert.notOk(visibleRows[1].isNewRow, 'the second row is not a new row');
+            } else {
+                const $secondRow = $(dataGrid.getRowElement(1));
+                $firstRow = $(dataGrid.getRowElement(0));
+
+                assert.ok($firstRow.hasClass('dx-row-inserted'), 'inserted row is rendered after delete click');
+                assert.ok($secondRow.hasClass('dx-row-removed'), 'removed row is rendered after delete click');
+                assert.equal(visibleRows.length, 3, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'tst', 'field1 cell value of the first row');
+                assert.ok(visibleRows[0].isNewRow, 'the first row is an inserted row');
+                assert.strictEqual(visibleRows[1].data.field1, 'test11', 'field1 cell value of the second row');
+                assert.ok(visibleRows[1].removed, 'the second row is a removed row');
+                assert.strictEqual(visibleRows[2].data.field1, 'test21', 'field1 cell value of the second row');
+            }
+        });
+
+        QUnit.testInActiveWindow(`${editMode} - Data row should be removed(marked as removed) when a cell in another row is modified (T978455)`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test12' },
+                    { id: 2, field1: 'test21', field2: 'test22' }
+                ],
+                keyExpr: 'id',
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true,
+                    allowDeleting: true,
+                    confirmDelete: false
+                },
+                loadingTimeout: undefined
+            });
+
+            // act
+            let $firstCell = $(dataGrid.getCellElement(0, 0));
+            $firstCell.trigger('dxclick');
+            this.clock.tick();
+            $firstCell = $(dataGrid.getCellElement(0, 0));
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-editor-cell'), 'cell is rendered with an editor');
+
+            // act
+            const $inputElement = $firstCell.find('.dx-texteditor-input').first();
+            $inputElement.val('tst').trigger('change');
+            this.clock.tick();
+            $(dataGrid.getRowElement(1)).find('.dx-link-delete').trigger('click');
+            this.clock.tick();
+            const visibleRows = dataGrid.getVisibleRows();
+
+            // assert
+            if(editMode === 'Cell') {
+                assert.equal(visibleRows.length, 1, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'tst', 'field1 cell value of the first row');
+                assert.notOk(visibleRows[0].isNewRow, 'the first row is not a new row');
+            } else {
+                const $secondRow = $(dataGrid.getRowElement(1));
+                $firstCell = $(dataGrid.getCellElement(0, 0));
+
+                assert.ok($firstCell.hasClass('dx-cell-modified'), 'first cell is rendered as modified');
+                assert.ok($secondRow.hasClass('dx-row-removed'), 'removed row is rendered after delete click');
+                assert.equal(visibleRows.length, 2, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'tst', 'field1 cell value of the first row');
+                assert.ok(visibleRows[0].modified, 'the first row is a modified row');
+                assert.strictEqual(visibleRows[1].data.field1, 'test21', 'field1 cell value of the second row');
+                assert.ok(visibleRows[1].removed, 'the second row is a removed row');
+            }
+        });
     });
 });
 
@@ -4750,8 +4949,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                             data: { field: 'test' },
                             key,
                             type: 'insert',
-                            index: -1,
-                            pageIndex: 0
+                            index: -1
                         }];
                         const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
                         const dataGrid = $('#dataGrid').dxDataGrid({
@@ -4872,7 +5070,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                             data: { field: 'test' },
                             key,
                             type: 'insert',
-                            index: -1
+                            index: -1,
+                            pageIndex: -1
                         }];
                         const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
                         const dataGrid = $('#dataGrid').dxDataGrid({

@@ -1,4 +1,6 @@
-import '../jquery_augmentation';
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     dxButtonOptions
@@ -17,7 +19,7 @@ import {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
+export function alert(messageHtml: string, title: string): TPromise<void>;
 
 /**
  * @docid ui.dialog.confirm
@@ -32,7 +34,7 @@ export function alert(messageHtml: string, title: string): Promise<void> & JQuer
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
+export function confirm(messageHtml: string, title: string): TPromise<boolean>;
 
 /**
  * @docid ui.dialog.custom

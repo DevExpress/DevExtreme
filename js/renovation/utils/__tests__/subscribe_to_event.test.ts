@@ -1,6 +1,7 @@
 import {
   EVENT, emit, getEventHandlers, clear,
 } from '../../test_utils/events_mock';
+import { DisposeEffectReturn } from '../effect_return';
 
 import { subscribeToClickEvent } from '../subscribe_to_event';
 
@@ -31,7 +32,7 @@ describe('subscribeToClickEvent', () => {
     emit(EVENT.dxClick);
     expect(clickHandler).toHaveBeenCalledTimes(1);
 
-    unsubscribeFn?.();
+    (unsubscribeFn as DisposeEffectReturn)();
 
     emit(EVENT.dxClick);
     expect(clickHandler).toHaveBeenCalledTimes(1);

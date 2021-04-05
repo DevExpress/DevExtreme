@@ -149,17 +149,19 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 selectAll: function() {
-                    const that = this;
-
-                    const visibleKeys = that._getSelectAllNodeKeys().filter(function(key) {
-                        return !that.isRowSelected(key);
+                    const visibleKeys = this._getSelectAllNodeKeys().filter((key) => {
+                        return !this.isRowSelected(key);
                     });
 
-                    return that.selectRows(visibleKeys, true);
+                    this.focusedItemIndex(-1);
+
+                    return this.selectRows(visibleKeys, true);
                 },
 
                 deselectAll: function() {
                     const visibleKeys = this._getSelectAllNodeKeys();
+
+                    this.focusedItemIndex(-1);
 
                     return this.deselectRows(visibleKeys);
                 },

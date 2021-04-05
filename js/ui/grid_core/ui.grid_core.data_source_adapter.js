@@ -8,7 +8,6 @@ import ArrayStore from '../../data/array_store';
 import { applyBatch } from '../../data/array_utils';
 import { when, Deferred } from '../../core/utils/deferred';
 
-const NEW_SCROLLING_MODE = 'scrolling.newMode';
 
 export default gridCore.Controller.inherit((function() {
     function cloneItems(items, groupCount) {
@@ -36,11 +35,12 @@ export default gridCore.Controller.inherit((function() {
                 pageIndex: loadOptions.pageIndex !== lastLoadOptions.pageIndex,
                 skip: loadOptions.skip !== lastLoadOptions.skip,
                 take: loadOptions.take !== lastLoadOptions.take,
+                pageSize: loadOptions.pageSize !== lastLoadOptions.pageSize,
                 fullReload: isFullReload
             };
 
             operationTypes.reload = isFullReload || operationTypes.sorting || operationTypes.grouping || operationTypes.filtering;
-            operationTypes.paging = operationTypes.pageIndex || operationTypes.take;
+            operationTypes.paging = operationTypes.pageIndex || operationTypes.pageSize || operationTypes.take;
         }
 
         return operationTypes;
@@ -287,7 +287,7 @@ export default gridCore.Controller.inherit((function() {
                 if(operationTypes.reload) {
                     cachedPagingData = undefined;
                     cachedPagesData = createEmptyPagesData();
-                } else if(operationTypes.take && !this.option(NEW_SCROLLING_MODE) || operationTypes.groupExpanding) {
+                } else if(operationTypes.pageSize || operationTypes.groupExpanding) {
                     cachedPagesData = createEmptyPagesData();
                 }
 
@@ -314,55 +314,54 @@ export default gridCore.Controller.inherit((function() {
             }
         },
         _handleDataLoading: function(options) {
-            const that = this;
-            const dataSource = that._dataSource;
-            const lastLoadOptions = that._lastLoadOptions;
+            const dataSource = this._dataSource;
+            const lastLoadOptions = this._lastLoadOptions;
 
-            that.customizeStoreLoadOptions.fire(options);
+            this.customizeStoreLoadOptions.fire(options);
 
             options.delay = this.option('loadingTimeout');
             options.originalStoreLoadOptions = options.storeLoadOptions;
             options.remoteOperations = extend({}, this.remoteOperations());
 
-            const isFullReload = !that.isLoaded() && !that._isRefreshing;
+            const isFullReload = !this.isLoaded() && !this._isRefreshing;
 
-            if(that.option('integrationOptions.renderedOnServer') && !that.isLoaded()) {
+            if(this.option('integrationOptions.renderedOnServer') && !this.isLoaded()) {
                 options.delay = undefined;
             }
 
-            const loadOptions = extend({ pageIndex: that.pageIndex() }, options.storeLoadOptions);
+            const loadOptions = extend({ pageIndex: this.pageIndex(), pageSize: this.pageSize() }, options.storeLoadOptions);
 
             const operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload);
 
-            that._customizeRemoteOperations(options, operationTypes);
+            this._customizeRemoteOperations(options, operationTypes);
 
             if(!options.isCustomLoading) {
-                const isRefreshing = that._isRefreshing;
+                const isRefreshing = this._isRefreshing;
 
                 options.pageIndex = dataSource.pageIndex();
                 options.lastLoadOptions = loadOptions;
                 options.operationTypes = operationTypes;
-                that._loadingOperationTypes = operationTypes;
-                that._isRefreshing = true;
+                this._loadingOperationTypes = operationTypes;
+                this._isRefreshing = true;
 
-                when(isRefreshing || that._isRefreshed || that.refresh(options, operationTypes)).done(function() {
-                    if(that._lastOperationId === options.operationId) {
-                        that._isRefreshed = true;
-                        that.load().always(function() {
-                            that._isRefreshed = false;
+                when(isRefreshing || this._isRefreshed || this.refresh(options, operationTypes)).done(() => {
+                    if(this._lastOperationId === options.operationId) {
+                        this._isRefreshed = true;
+                        this.load().always(() => {
+                            this._isRefreshed = false;
                         });
                     }
-                }).fail(function() {
+                }).fail(() => {
                     dataSource.cancel(options.operationId);
-                }).always(function() {
-                    that._isRefreshing = false;
+                }).always(() => {
+                    this._isRefreshing = false;
                 });
 
-                dataSource.cancel(that._lastOperationId);
-                that._lastOperationId = options.operationId;
+                dataSource.cancel(this._lastOperationId);
+                this._lastOperationId = options.operationId;
 
-                if(that._isRefreshing) {
-                    dataSource.cancel(that._lastOperationId);
+                if(this._isRefreshing) {
+                    dataSource.cancel(this._lastOperationId);
                 }
             }
 

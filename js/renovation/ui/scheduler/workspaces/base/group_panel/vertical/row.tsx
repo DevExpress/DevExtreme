@@ -1,14 +1,12 @@
 import {
   Component, JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { GroupPanelVerticalCell } from './cell';
 import { GroupPanelRowProps } from '../row_props';
 
 export const viewFunction = (viewModel: Row): JSX.Element => (
   <div
     className={`dx-scheduler-group-row ${viewModel.props.className}`}
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
   >
     {viewModel.props.groupItems.map(({
       text, id, data, key, color,

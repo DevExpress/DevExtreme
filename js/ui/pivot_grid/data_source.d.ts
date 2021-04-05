@@ -1,4 +1,6 @@
-import '../../jquery_augmentation';
+import {
+    TPromise
+} from '../../core/utils/deferred';
 
 import Store, {
     StoreOptions
@@ -48,7 +50,7 @@ export interface PivotGridDataSourceOptions {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => any);
+    onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -56,7 +58,7 @@ export interface PivotGridDataSourceOptions {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onLoadError?: ((error: any) => any);
+    onLoadError?: ((error: any) => void);
     /**
      * @docid
      * @type_function_param1 isLoading:boolean
@@ -64,7 +66,7 @@ export interface PivotGridDataSourceOptions {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onLoadingChanged?: ((isLoading: boolean) => any);
+    onLoadingChanged?: ((isLoading: boolean) => void);
     /**
      * @docid
      * @default false
@@ -168,7 +170,7 @@ export interface PivotGridDataSourceField {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
+    calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => void);
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateSummaryValue
      * @type_function_param1 e:dxPivotGridSummaryCell
@@ -555,7 +557,7 @@ export default class PivotGridDataSource {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    load(): Promise<any> & JQueryPromise<any>;
+    load(): TPromise<any>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -601,7 +603,7 @@ export default class PivotGridDataSource {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reload(): Promise<any> & JQueryPromise<any>;
+    reload(): TPromise<any>;
     /**
      * @docid
      * @publicName state()

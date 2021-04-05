@@ -48,7 +48,7 @@ QUnit.module('Pager', {
 function() {
     const isRenovation = !!Pager.IS_RENOVATED_WIDGET;
     const getPagesElement = function(rootElement) {
-        return rootElement.find('.dx-pages')[0].childNodes;
+        return rootElement.find(isRenovation ? '.dx-page-indexes' : '.dx-pages')[0].childNodes;
     };
     QUnit.test('Default options init', function(assert) {
         const $pager = $('#container').dxPager();
@@ -684,7 +684,7 @@ function() {
 
     QUnit.test('Focus selected page', function(assert) {
         const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
-        const $pages = $pager.find('.dx-pages > .dx-page');
+        const $pages = $pager.find('.dx-pages .dx-page');
 
         for(let i = 0; i < $pages.length; ++i) {
             assert.equal($($pages[i]).attr('tabindex'), 0, 'page tabindex');
@@ -1275,7 +1275,6 @@ function() {
         $pager.width(optimalPagerWidth - pager._$info.outerWidth(true) - 1);
 
         pager._dimensionChanged();
-
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
     });
 
@@ -1322,27 +1321,26 @@ function() {
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
     });
 
-    if(!isRenovation) {
-        QUnit.test('Pager is rendered in a normal view after light mode when pageCount is changed', function(assert) {
-            const $pager = $('#container').width(460).dxPager({
-                maxPagesCount: 10,
-                pageCount: 5,
-                pageSize: 8,
-                pageSizes: [5, 8, 15, 30],
-                showInfo: true,
-                totalCount: 40,
-                infoText: 'Page {0} of {1} ({2} items)',
-                pagesCountText: 'of',
-                showNavigationButtons: true
-            });
-            const pager = $pager.dxPager('instance');
-
-            pager.option({ pageCount: 10, pageIndexChanged: commonUtils.noop });
-            pager.option({ pageCount: 5, pageIndexChanged: commonUtils.noop });
-
-            assert.ok(!isLightMode(pager), 'pager is not displayed in the light mode');
+    QUnit.test('Pager is rendered in a normal view after light mode when pageCount is changed', function(assert) {
+        const $pager = $('#container').width(460).dxPager({
+            maxPagesCount: 10,
+            pageCount: 5,
+            pageSize: 8,
+            pageSizes: [5, 8, 15, 30],
+            showInfo: true,
+            totalCount: 40,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
         });
-    }
+        const pager = $pager.dxPager('instance');
+
+        pager.option({ pageCount: 10, pageIndexChanged: commonUtils.noop });
+        pager.option({ pageCount: 5, pageIndexChanged: commonUtils.noop });
+
+        assert.strictEqual(isLightMode(pager), isRenovation, `pager is ${isRenovation ? '' : 'not'} displayed in the light mode for pager`);
+    });
+
     QUnit.test('Light mode is applied only one', function(assert) {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
@@ -1600,14 +1598,14 @@ function() {
 
         rtlTestSample = {
             pageSizes: pagerElement.find('.dx-page-size').text(),
-            pages: $(pagerElement.find('.dx-pages div').get().reverse()).text()
+            pages: $(Array.prototype.slice.call(getPagesElement(pagerElement)).reverse()).text()
         };
 
         pagerInstance.option('rtlEnabled', false);
 
         ltrTestSample = {
             pageSizes: pagerElement.find('.dx-page-size').text(),
-            pages: pagerElement.find('.dx-pages div').text()
+            pages: $(getPagesElement(pagerElement)).text()
         };
 
         assert.equal(rtlTestSample.pageSizes, ltrTestSample.pageSizes, 'check that page sizes in LTR are equal to page sizes in RTL');

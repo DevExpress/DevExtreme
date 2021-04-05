@@ -1,6 +1,6 @@
 import {
-  Component, ComponentBindings, JSXComponent, Slot, OneWay, Fragment,
-} from 'devextreme-generator/component_declaration/common';
+  Component, ComponentBindings, JSXComponent, Slot, OneWay, CSSAttributes,
+} from '@devextreme-generator/declarations';
 import { VirtualCell } from './virtual-cell';
 
 export const viewFunction = ({
@@ -9,46 +9,16 @@ export const viewFunction = ({
     leftVirtualCellWidth,
     rightVirtualCellWidth,
     children,
+    styles,
   },
   hasLeftVirtualCell,
   hasRightVirtualCell,
-  restAttributes,
 }: Row): JSX.Element => (
   <tr
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={className}
+    style={styles}
   >
-    {/*
-        This is a workaround for https://github.com/preactjs/preact/issues/2987
-        TODO: remove once we start using inferno
-      */}
-    {hasLeftVirtualCell && hasRightVirtualCell && (
-      <Fragment>
-        <VirtualCell width={leftVirtualCellWidth} />
-        {children}
-        <VirtualCell width={rightVirtualCellWidth} />
-      </Fragment>
-    )}
-    {hasLeftVirtualCell && !hasRightVirtualCell && (
-      <Fragment>
-        <VirtualCell width={leftVirtualCellWidth} />
-        {children}
-      </Fragment>
-    )}
-    {!hasLeftVirtualCell && hasRightVirtualCell && (
-      <Fragment>
-        {children}
-        <VirtualCell width={rightVirtualCellWidth} />
-      </Fragment>
-    )}
-    {!hasLeftVirtualCell && !hasRightVirtualCell && (
-      <Fragment>
-        {children}
-      </Fragment>
-    )}
-
-    {/* {hasLeftVirtualCell && (
+    {hasLeftVirtualCell && (
       <VirtualCell width={leftVirtualCellWidth} />
     )}
 
@@ -56,7 +26,7 @@ export const viewFunction = ({
 
     {hasRightVirtualCell && (
       <VirtualCell width={rightVirtualCellWidth} />
-    )} */}
+    )}
   </tr>
 );
 
@@ -67,6 +37,8 @@ export class RowProps {
   @OneWay() leftVirtualCellWidth = 0;
 
   @OneWay() rightVirtualCellWidth = 0;
+
+  @OneWay() styles?: CSSAttributes;
 
   @Slot() children?: JSX.Element | JSX.Element[];
 }

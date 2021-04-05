@@ -43,7 +43,8 @@ module('Virtual scrolling integration', () => {
                         currentView: viewName,
                         dataSource: [],
                         scrolling: { mode },
-                        height: 400
+                        height: 400,
+                        renovateRender: false,
                     }).instance;
 
                     const workspace = instance.getWorkSpace();
@@ -68,7 +69,8 @@ module('Virtual scrolling integration', () => {
                             scrolling: { mode }
                         }],
                         currentView: viewName,
-                        height: 400
+                        height: 400,
+                        renovateRender: false,
                     }).instance;
 
                     assert.equal(
@@ -114,7 +116,8 @@ module('Virtual scrolling integration', () => {
                         type: viewName,
                     }],
                     currentView: viewName,
-                    height: 400
+                    height: 400,
+                    renovateRender: false,
                 }).instance;
 
                 instance.option('views[0].scrolling.mode', 'virtual');
@@ -160,7 +163,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
                         currentView: viewName
                     });
@@ -182,7 +185,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
 
                         currentView: viewName
@@ -213,7 +216,7 @@ module('Virtual scrolling integration', () => {
 
                 [{
                     orientation: undefined,
-                    crossScrollingEnabled: false
+                    crossScrollingEnabled: true
                 }, {
                     orientation: 'vertical',
                     crossScrollingEnabled: false
@@ -231,7 +234,7 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: {
                                 mode: 'virtual',
-                                type: orientation
+                                orientation
                             },
                             currentView: viewName
                         });
@@ -240,6 +243,46 @@ module('Virtual scrolling integration', () => {
 
                         assert.equal(workspace.option('crossScrollingEnabled'), crossScrollingEnabled, 'crossScrollingEnabled is correct');
                     });
+                });
+
+                test(`scheduler should correctly change scrolling orientation in "${viewName}"`, function(assert) {
+                    const scheduler = createWrapper({
+                        views: [viewName],
+                        scrolling: {
+                            mode: 'virtual',
+                            orientation: 'vertical',
+                        },
+                        currentView: viewName,
+                    });
+
+                    scheduler.instance.option('scrolling', { mode: 'virtual', orientation: 'both' });
+
+                    const headerScrollable = scheduler.workSpace.getHeaderScrollable();
+                    const sideBarScrollable = scheduler.workSpace.getSideBarScrollable();
+
+                    assert.equal(headerScrollable.length, 1, 'Header scrollable exists');
+                    assert.equal(sideBarScrollable.length, 1, 'Header scrollable exists');
+                });
+
+                test(`scheduler should correctly change scrolling orientation in "${viewName}" when changing a view's option`, function(assert) {
+                    const scheduler = createWrapper({
+                        views: [{
+                            type: viewName,
+                        }],
+                        scrolling: {
+                            mode: 'virtual',
+                            orientation: 'vertical',
+                        },
+                        currentView: viewName,
+                    });
+
+                    scheduler.instance.option('views[0].scrolling', { mode: 'virtual', orientation: 'both' });
+
+                    const headerScrollable = scheduler.workSpace.getHeaderScrollable();
+                    const sideBarScrollable = scheduler.workSpace.getSideBarScrollable();
+
+                    assert.equal(headerScrollable.length, 1, 'Header scrollable exists');
+                    assert.equal(sideBarScrollable.length, 1, 'Header scrollable exists');
                 });
             });
         });
@@ -265,28 +308,28 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 0,
                                 appointmentRects: [
-                                    { left: -9835, top: -9689, height: 500 },
-                                    { left: -9771, top: -9839, height: 50 },
-                                    { left: -9387, top: -9689, height: 500 },
-                                    { left: -9323, top: -9839, height: 50 }
+                                    { left: -9824, top: -9689, height: 500 },
+                                    { left: -9749, top: -9839, height: 50 },
+                                    { left: -9299, top: -9689, height: 500 },
+                                    { left: -9224, top: -9839, height: 50 }
                                 ]
                             },
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9835, top: -10039, height: 850 },
-                                    { left: -9771, top: -10839, height: 50 },
-                                    { left: -9387, top: -10039, height: 850 },
-                                    { left: -9323, top: -10839, height: 50 }
+                                    { left: -9824, top: -10039, height: 850 },
+                                    { left: -9749, top: -10839, height: 50 },
+                                    { left: -9299, top: -10039, height: 850 },
+                                    { left: -9224, top: -10839, height: 50 }
                                 ]
                             },
                             {
                                 y: 2200,
                                 appointmentRects: [
-                                    { left: -9835, top: -10151, height: 650 },
-                                    { left: -9771, top: -11901, height: 50 },
-                                    { left: -9387, top: -10151, height: 650 },
-                                    { left: -9323, top: -11901, height: 50 }
+                                    { left: -9824, top: -10151, height: 650 },
+                                    { left: -9749, top: -11901, height: 50 },
+                                    { left: -9299, top: -10151, height: 650 },
+                                    { left: -9224, top: -11901, height: 50 }
                                 ]
                             }]
                     },
@@ -295,26 +338,26 @@ module('Virtual scrolling integration', () => {
                         steps: [{
                             y: 0,
                             appointmentRects: [
-                                { left: -9835, top: -9712, height: 500 },
-                                { left: -9771, top: -9862, height: 50 },
-                                { left: -9387, top: -9712, height: 500 },
-                                { left: -9323, top: -9862, height: 50 }
+                                { left: -9824, top: -9712, height: 500 },
+                                { left: -9749, top: -9862, height: 50 },
+                                { left: -9299, top: -9712, height: 500 },
+                                { left: -9224, top: -9862, height: 50 }
                             ]
                         }, {
                             y: 1000,
                             appointmentRects: [
-                                { left: -9835, top: -10062, height: 850 },
-                                { left: -9771, top: -10862, height: 50 },
-                                { left: -9387, top: -10062, height: 850 },
-                                { left: -9323, top: -10862, height: 50 }
+                                { left: -9824, top: -10062, height: 850 },
+                                { left: -9749, top: -10862, height: 50 },
+                                { left: -9299, top: -10062, height: 850 },
+                                { left: -9224, top: -10862, height: 50 }
                             ]
                         }, {
                             y: 2200,
                             appointmentRects: [
-                                { left: -9835, top: -10149, height: 650 },
-                                { left: -9771, top: -11899, height: 50 },
-                                { left: -9387, top: -10149, height: 650 },
-                                { left: -9323, top: -11899, height: 50 }
+                                { left: -9824, top: -10149, height: 650 },
+                                { left: -9749, top: -11899, height: 50 },
+                                { left: -9299, top: -10149, height: 650 },
+                                { left: -9224, top: -11899, height: 50 }
                             ]
                         }]
                     }
@@ -342,7 +385,8 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: { mode: 'virtual' },
                             showAllDayPanel: option.showAllDayPanel,
-                            height: 500
+                            height: 500,
+                            width: 800
                         });
 
                         const { instance } = this.scheduler;
@@ -390,26 +434,26 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 0,
                                 appointmentRects: [
-                                    { left: -9771, top: -9839, height: 1050 },
-                                    { left: -9323, top: -9839, height: 1050 }
+                                    { left: -9749, top: -9839, height: 1050 },
+                                    { left: -9224, top: -9839, height: 1050 }
                                 ]
                             },
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9835, top: -9689, height: 500 },
-                                    { left: -9771, top: -10839, height: 1050 },
-                                    { left: -9387, top: -9689, height: 500 },
-                                    { left: -9323, top: -10839, height: 1050 }
+                                    { left: -9824, top: -9689, height: 500 },
+                                    { left: -9749, top: -10839, height: 1050 },
+                                    { left: -9299, top: -9689, height: 500 },
+                                    { left: -9224, top: -10839, height: 1050 }
                                 ]
                             },
                             {
                                 y: 2200,
                                 appointmentRects: [
-                                    { left: -9835, top: -10151, height: 650 },
-                                    { left: -9771, top: -11901, height: 1050 },
-                                    { left: -9387, top: -10151, height: 650 },
-                                    { left: -9323, top: -11901, height: 1050 }
+                                    { left: -9824, top: -10151, height: 650 },
+                                    { left: -9749, top: -11901, height: 1050 },
+                                    { left: -9299, top: -10151, height: 650 },
+                                    { left: -9224, top: -11901, height: 1050 }
                                 ]
                             }
                         ],
@@ -418,26 +462,26 @@ module('Virtual scrolling integration', () => {
                         steps: [{
                             y: 0,
                             appointmentRects: [
-                                { left: -9771, top: -9862, height: 1050 },
-                                { left: -9323, top: -9862, height: 1050 }
+                                { left: -9749, top: -9862, height: 1050 },
+                                { left: -9224, top: -9862, height: 1050 }
                             ]
                         },
                         {
                             y: 1000,
                             appointmentRects: [
-                                { left: -9835, top: -9712, height: 500 },
-                                { left: -9771, top: -10862, height: 1050 },
-                                { left: -9387, top: -9712, height: 500 },
-                                { left: -9323, top: -10862, height: 1050 }
+                                { left: -9824, top: -9712, height: 500 },
+                                { left: -9749, top: -10862, height: 1050 },
+                                { left: -9299, top: -9712, height: 500 },
+                                { left: -9224, top: -10862, height: 1050 }
                             ]
                         },
                         {
                             y: 2200,
                             appointmentRects: [
-                                { left: -9835, top: -10149, height: 650 },
-                                { left: -9771, top: -11899, height: 1050 },
-                                { left: -9387, top: -10149, height: 650 },
-                                { left: -9323, top: -11899, height: 1050 }
+                                { left: -9824, top: -10149, height: 650 },
+                                { left: -9749, top: -11899, height: 1050 },
+                                { left: -9299, top: -10149, height: 650 },
+                                { left: -9224, top: -11899, height: 1050 }
                             ]
                         }
                         ]
@@ -467,6 +511,7 @@ module('Virtual scrolling integration', () => {
                             scrolling: { mode: 'virtual' },
                             showAllDayPanel: option.showAllDayPanel,
                             height: 500,
+                            width: 800
                         });
 
                         const { instance } = this.scheduler;
@@ -493,9 +538,9 @@ module('Virtual scrolling integration', () => {
                                                 .get(0)
                                                 .getBoundingClientRect();
 
-                                            assert.roughEqual(expectedRect.left, appointmentRect.left, 2.01, `appointment part #${index} left is correct`);
-                                            assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
-                                            assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
+                                            assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment part #${index} left is correct`);
+                                            assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment part #${index} top is correct`);
+                                            assert.roughEqual(appointmentRect.height, expectedRect.height, 2.01, `appointment part #${index} height is correct`);
                                         });
                                     },
                                     scrollable,
@@ -530,6 +575,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: { mode: 'virtual' },
                         height: 500,
+                        width: 800
                     });
 
                     const { instance } = this.scheduler;
@@ -543,25 +589,25 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 0,
                                 appointmentRects: [
-                                    { left: -9685, top: -9693, height: 450 }
+                                    { left: -9713, top: -9692, height: 450 }
                                 ]
                             },
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9685, top: -10093, height: 850 }
+                                    { left: -9713, top: -10092, height: 850 }
                                 ]
                             },
                             {
                                 y: 2500,
                                 appointmentRects: [
-                                    { left: -9685, top: -9743, height: 500 }
+                                    { left: -9713, top: -9742, height: 500 }
                                 ]
                             },
                             {
                                 y: 4500,
                                 appointmentRects: [
-                                    { left: -9685, top: -10143, height: 500 }
+                                    { left: -9713, top: -10142, height: 500 }
                                 ]
                             }
                         ].forEach(option => {
@@ -581,13 +627,9 @@ module('Virtual scrolling integration', () => {
                                             .get(0)
                                             .getBoundingClientRect();
 
-                                        assert.deepEqual(expectedRect, {
-                                            left: appointmentRect.left,
-                                            top: appointmentRect.top,
-                                            height: appointmentRect.height
-                                        },
-                                        `appointment part #${index} rect is correct`
-                                        );
+                                        assert.roughEqual(appointmentRect.left, expectedRect.left, 1.01, `Appointemnt#${index} left is correct`);
+                                        assert.roughEqual(appointmentRect.top, expectedRect.top, 1.01, 'Appointemnt#${index} top is correct');
+                                        assert.roughEqual(appointmentRect.height, expectedRect.height, 1.01, 'Appointemnt#${index} height is correct');
                                     });
                                 },
                                 scrollable,
@@ -617,6 +659,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: { mode: 'virtual' },
                         height: 500,
+                        width: 800
                     });
 
                     const { instance } = this.scheduler;
@@ -630,22 +673,22 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 0,
                                 appointmentRects: [
-                                    { left: -9835, top: -9689, height: 500 },
-                                    { left: -9387, top: -9689, height: 500 }
+                                    { left: -9824, top: -9689, height: 500 },
+                                    { left: -9299, top: -9689, height: 500 }
                                 ]
                             },
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9835, top: -10039, height: 850 },
-                                    { left: -9387, top: -10039, height: 850 }
+                                    { left: -9824, top: -10039, height: 850 },
+                                    { left: -9299, top: -10039, height: 850 }
                                 ]
                             },
                             {
                                 y: 2100,
                                 appointmentRects: [
-                                    { left: -9835, top: -10151, height: 500 },
-                                    { left: -9387, top: -10151, height: 500 }
+                                    { left: -9824, top: -10151, height: 500 },
+                                    { left: -9299, top: -10151, height: 500 }
                                 ]
                             }
                         ].forEach(option => {
@@ -665,9 +708,9 @@ module('Virtual scrolling integration', () => {
                                             .get(0)
                                             .getBoundingClientRect();
 
-                                        assert.roughEqual(expectedRect.left, appointmentRect.left, 2.01, `appointment part #${index} left is correct`);
-                                        assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
-                                        assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
+                                        assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment part #${index} left is correct`);
+                                        assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment part #${index} top is correct`);
+                                        assert.roughEqual(appointmentRect.height, expectedRect.height, 2.01, `appointment part #${index} height is correct`);
                                     });
                                 },
                                 scrollable,
@@ -686,7 +729,7 @@ module('Virtual scrolling integration', () => {
                             currentView: 'week',
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'both'
+                                orientation: 'both'
                             },
                             height: 400
                         });
@@ -709,17 +752,17 @@ module('Virtual scrolling integration', () => {
                         steps: [ {
                             offset: { x: 0, y: 0 },
                             appointmentRects: [
-                                { left: -9685, top: -9693, height: 450 },
-                                { left: -9571, top: -9843, height: 50 }
+                                { left: -9714, top: -9693, height: 450 },
+                                { left: -9629, top: -9843, height: 50 }
                             ]
                         },
                         {
                             offset: { x: 0, y: 2300 },
                             appointmentRects: [
-                                { left: -9685, top: -10093, height: 350 },
-                                { left: -9571, top: -12143, height: 50 },
-                                { left: -9685, top: -9543, height: 300 },
-                                { left: -9571, top: -9693, height: 50 }
+                                { left: -9714, top: -10093, height: 350 },
+                                { left: -9629, top: -12143, height: 50 },
+                                { left: -9714, top: -9543, height: 300 },
+                                { left: -9629, top: -9693, height: 50 }
                             ]
                         }]
                     },
@@ -729,17 +772,17 @@ module('Virtual scrolling integration', () => {
                             {
                                 offset: { x: 0, y: 0 },
                                 appointmentRects: [
-                                    { left: -9685, top: -9741, height: 500 },
-                                    { left: -9571, top: -9891, height: 50 }
+                                    { left: -9714, top: -9741, height: 500 },
+                                    { left: -9629, top: -9891, height: 50 }
                                 ]
                             },
                             {
                                 offset: { x: 0, y: 2300 },
                                 appointmentRects: [
-                                    { left: -9685, top: -10091, height: 300 },
-                                    { left: -9571, top: -12191, height: 50 },
-                                    { left: -9685, top: -9641, height: 400 },
-                                    { left: -9571, top: -9791, height: 50 }
+                                    { left: -9714, top: -10091, height: 300 },
+                                    { left: -9629, top: -12191, height: 50 },
+                                    { left: -9714, top: -9641, height: 400 },
+                                    { left: -9629, top: -9791, height: 50 }
                                 ]
                             }
                         ]
@@ -772,10 +815,11 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'vertical'
+                                orientation: 'vertical'
                             },
                             showAllDayPanel,
                             height: 500,
+                            width: 800
                         });
 
                         const { instance } = this.scheduler;
@@ -804,15 +848,9 @@ module('Virtual scrolling integration', () => {
                                                 .get(0)
                                                 .getBoundingClientRect();
 
-                                            assert.deepEqual(
-                                                {
-                                                    left: appointmentRect.left,
-                                                    top: appointmentRect.top,
-                                                    height: appointmentRect.height
-                                                },
-                                                expectedRect,
-                                                `appointment part #${index} rect is correct`
-                                            );
+                                            assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment part #${index} left is correct`);
+                                            assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment part #${index} top is correct`);
+                                            assert.roughEqual(appointmentRect.height, expectedRect.height, 2.01, `appointment part #${index} height is correct`);
                                         });
                                     },
                                     scrollable,
@@ -832,22 +870,22 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 0,
                                 appointmentRects: [
-                                    { left: -9571, top: -9843, height: 1050 },
+                                    { left: -9628, top: -9843, height: 1050 },
                                 ]
                             },
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9685, top: -9693, height: 450 },
-                                    { left: -9571, top: -10843, height: 1050 }
+                                    { left: -9713, top: -9693, height: 450 },
+                                    { left: -9628, top: -10843, height: 1050 }
                                 ]
                             },
                             {
                                 y: 2200,
                                 appointmentRects: [
-                                    { left: -9685, top: -10093, height: 450 },
-                                    { left: -9571, top: -12043, height: 1050 },
-                                    { left: -9571, top: -9593, height: 1050 },
+                                    { left: -9713, top: -10093, height: 450 },
+                                    { left: -9628, top: -12043, height: 1050 },
+                                    { left: -9628, top: -9593, height: 1050 },
                                 ]
                             }
                         ]
@@ -857,22 +895,22 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 0,
                                 appointmentRects: [
-                                    { left: -9571, top: -9891, height: 1050 }
+                                    { left: -9628, top: -9891, height: 1050 }
                                 ]
                             },
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9685, top: -9741, height: 500 },
-                                    { left: -9571, top: -10891, height: 1050 }
+                                    { left: -9713, top: -9741, height: 500 },
+                                    { left: -9628, top: -10891, height: 1050 }
                                 ]
                             },
                             {
                                 y: 2200,
                                 appointmentRects: [
-                                    { left: -9685, top: -10091, height: 400 },
-                                    { left: -9571, top: -12091, height: 1050 },
-                                    { left: -9571, top: -9691, height: 1050 }
+                                    { left: -9713, top: -10091, height: 400 },
+                                    { left: -9628, top: -12091, height: 1050 },
+                                    { left: -9628, top: -9691, height: 1050 }
                                 ]
                             }
                         ]
@@ -906,6 +944,7 @@ module('Virtual scrolling integration', () => {
                             scrolling: { mode: 'virtual' },
                             showAllDayPanel: option.showAllDayPanel,
                             height: 500,
+                            width: 800
                         });
 
                         const { instance } = this.scheduler;
@@ -932,9 +971,9 @@ module('Virtual scrolling integration', () => {
                                                 .get(0)
                                                 .getBoundingClientRect();
 
-                                            assert.roughEqual(expectedRect.left, appointmentRect.left, 2.01, `appointment part #${index} left is correct`);
-                                            assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
-                                            assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
+                                            assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment part #${index} left is correct`);
+                                            assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment part #${index} top is correct`);
+                                            assert.roughEqual(appointmentRect.height, expectedRect.height, 2.01, `appointment part #${index} height is correct`);
                                         });
                                     },
                                     scrollable,
@@ -1054,7 +1093,7 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'both'
+                                orientation: 'both'
                             },
                             showAllDayPanel: showAllDayPanel,
                             height: 500,
@@ -1118,7 +1157,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
                         height: 500,
                         width: 300
@@ -1285,7 +1324,8 @@ module('Virtual scrolling integration', () => {
                             fieldExpr: 'resourceId0',
                             dataSource: [{ id: 0 }]
                         }],
-                        height: 400
+                        height: 400,
+                        width: 800
                     });
 
                     const { instance } = this.scheduler;
@@ -1318,7 +1358,8 @@ module('Virtual scrolling integration', () => {
                                 { id: 1 }
                             ]
                         }],
-                        height: 400
+                        height: 400,
+                        width: 800
                     });
 
                     const { instance } = this.scheduler;
@@ -1501,6 +1542,7 @@ module('Virtual scrolling integration', () => {
                         dataSource: [{ id: 1 }, { id: 2 }]
                     }],
                     height: 600,
+                    width: 800,
                     scrolling: {
                         mode: 'virtual'
                     },
@@ -1519,22 +1561,22 @@ module('Virtual scrolling integration', () => {
                             expected: [
                                 [{
                                     groupIndex: 0,
-                                    left: 100,
+                                    left: 0,
                                     top: 100,
                                     height: 450
                                 }, {
                                     groupIndex: 0,
-                                    left: 324,
+                                    left: 175,
                                     top: 100,
                                     height: 450
                                 }, {
                                     groupIndex: 1,
-                                    left: 548,
+                                    left: 350,
                                     top: 100,
                                     height: 450
                                 }, {
                                     groupIndex: 1,
-                                    left: 773,
+                                    left: 525,
                                     top: 100,
                                     height: 450
                                 }],
@@ -1546,43 +1588,43 @@ module('Virtual scrolling integration', () => {
                             expected: [
                                 [{
                                     groupIndex: 0,
-                                    left: 100,
+                                    left: 0,
                                     top: 250,
                                     height: 300
                                 }, {
                                     groupIndex: 0,
-                                    left: 324,
+                                    left: 175,
                                     top: 250,
                                     height: 300
                                 }, {
                                     groupIndex: 1,
-                                    left: 548,
+                                    left: 350,
                                     top: 250,
                                     height: 300
                                 }, {
                                     groupIndex: 1,
-                                    left: 773,
+                                    left: 525,
                                     top: 250,
                                     height: 300
                                 }],
                                 [{
                                     groupIndex: 0,
-                                    left: 100,
+                                    left: 0,
                                     top: 900,
                                     height: 400
                                 }, {
                                     groupIndex: 0,
-                                    left: 324,
+                                    left: 175,
                                     top: 900,
                                     height: 400
                                 }, {
                                     groupIndex: 1,
-                                    left: 548,
+                                    left: 350,
                                     top: 900,
                                     height: 400
                                 }, {
                                     groupIndex: 1,
-                                    left: 773,
+                                    left: 525,
                                     top: 900,
                                     height: 400
                                 }]
@@ -1594,22 +1636,22 @@ module('Virtual scrolling integration', () => {
                                 [],
                                 [{
                                     groupIndex: 0,
-                                    left: 100,
+                                    left: 0,
                                     top: 900,
                                     height: 650
                                 }, {
                                     groupIndex: 0,
-                                    left: 324,
+                                    left: 175,
                                     top: 900,
                                     height: 650
                                 }, {
                                     groupIndex: 1,
-                                    left: 548,
+                                    left: 350,
                                     top: 900,
                                     height: 650
                                 }, {
                                     groupIndex: 1,
-                                    left: 773,
+                                    left: 525,
                                     top: 900,
                                     height: 650
                                 }]]
@@ -1619,54 +1661,49 @@ module('Virtual scrolling integration', () => {
                             expected: [
                                 [{
                                     groupIndex: 0,
-                                    left: 100,
+                                    left: 0,
                                     top: 250,
                                     height: 300
                                 }, {
                                     groupIndex: 0,
-                                    left: 324,
+                                    left: 175,
                                     top: 250,
                                     height: 300
                                 }, {
                                     groupIndex: 1,
-                                    left: 548,
+                                    left: 350,
                                     top: 250,
                                     height: 300
                                 }, {
                                     groupIndex: 1,
-                                    left: 773,
+                                    left: 525,
                                     top: 250,
                                     height: 300
                                 }],
                                 [{
                                     groupIndex: 0,
-                                    left: 100,
+                                    left: 0,
                                     top: 900,
                                     height: 400
                                 }, {
                                     groupIndex: 0,
-                                    left: 324,
+                                    left: 175,
                                     top: 900,
                                     height: 400
                                 }, {
                                     groupIndex: 1,
-                                    left: 548,
+                                    left: 350,
                                     top: 900,
                                     height: 400
                                 }, {
                                     groupIndex: 1,
-                                    left: 773,
+                                    left: 525,
                                     top: 900,
                                     height: 400
                                 }]
                             ]
                         }
-                    ].forEach(option => {
-                        const {
-                            offsetY,
-                            expected
-                        } = option;
-
+                    ].forEach(({ offsetY, expected }) => {
                         promise = asyncScrollTest(
                             assert,
                             promise,
@@ -1731,7 +1768,7 @@ module('Virtual scrolling integration', () => {
                     }],
                     scrolling: {
                         mode: 'virtual',
-                        type: 'both'
+                        orientation: 'both'
                     },
                     height: 600,
                     width: 800
@@ -2058,7 +2095,7 @@ module('Virtual scrolling integration', () => {
                         currentView: 'day',
                         scrolling: {
                             mode: 'virtual',
-                            type: 'vertical'
+                            orientation: 'vertical'
                         },
                         height: 400
                     }).instance;
@@ -2190,7 +2227,8 @@ module('Virtual scrolling integration', () => {
                         ],
                         label: 'Resource0'
                     }],
-                    height: 400
+                    height: 400,
+                    width: 800
                 }).instance;
 
                 const filteredItems = instance.getFilteredItems();
@@ -2254,7 +2292,8 @@ module('Virtual scrolling integration', () => {
                         ],
                         label: 'Resource0'
                     }],
-                    height: 400
+                    height: 400,
+                    width: 800
                 }).instance;
 
                 const filteredItems = instance.getFilteredItems();
@@ -2394,7 +2433,7 @@ module('Virtual scrolling integration', () => {
                         currentView: 'day',
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
                         height: 400
                     }, options);
@@ -2717,7 +2756,7 @@ module('Virtual scrolling integration', () => {
                             currentView: 'day',
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'both'
+                                orientation: 'both'
                             },
                             groups: ['resourceId0'],
                             resources: [{
@@ -2877,7 +2916,7 @@ module('Virtual scrolling integration', () => {
                                 currentView: 'Work Week',
                                 scrolling: {
                                     mode: 'virtual',
-                                    type: 'both',
+                                    orientation: 'both',
                                 },
                                 currentDate: new Date(2021, 8, 6),
                                 groups: ['resourceId'],
@@ -2991,17 +3030,50 @@ module('Virtual scrolling integration', () => {
             };
         }
     }, function() {
-        test('Repaint all flag should be set', function(assert) {
+        test('Appointment should not repaint if grid cells is exists for it', function(assert) {
+            const data = [{
+                startDate: new Date(2020, 8, 7, 2),
+                endDate: new Date(2020, 8, 7, 3),
+                text: 'test'
+            }];
+
             this.createInstance({
-                currentDate: new Date(2015, 2, 2),
+                height: 600,
+                width: 800,
+                currentDate: new Date(2020, 8, 7),
                 scrolling: {
-                    mode: 'virtual'
+                    mode: 'virtual',
+                    orientation: 'both'
                 },
-                height: 400
+                currentView: 'week',
+                views: [{
+                    type: 'week',
+                    intervalCount: 10,
+                }],
+                dataSource: data
             });
 
-            assert.ok(this.instance._appointments._isRepaintAll(), 'Full repaint flag is set');
+            const scrollable = this.instance.getWorkSpaceScrollable();
+
+            return asyncWrapper(
+                assert,
+                promise => asyncScrollTest(
+                    assert,
+                    promise,
+                    () => {
+                        const appointmentsItems = this.instance.getAppointmentsInstance().option('items');
+
+                        assert.deepEqual(appointmentsItems[0].itemData, data[0], 'Item1 is correct');
+                        assert.notOk(appointmentsItems[0].needRepaint, 'Item should not be repainted');
+                        assert.notOk(appointmentsItems[0].needRemove, 'Item0 should not be removed');
+                        assert.equal(this.instance.getWorkSpace().virtualScrollingDispatcher.leftVirtualCellsCount, 1, 'Virtual cells count is correct');
+                    },
+                    scrollable,
+                    { x: 500 }
+                )
+            );
         });
+
 
         [
             {
@@ -3044,7 +3116,8 @@ module('Virtual scrolling integration', () => {
                     ],
                     scrolling: {
                         mode: 'virtual'
-                    }
+                    },
+                    width: 800
                 });
 
                 const { expectedReducers } = option;
@@ -3072,7 +3145,7 @@ module('Virtual scrolling integration', () => {
                         currentView: 'week',
                         scrolling: {
                             mode: 'virtual',
-                            type: scrollOrientation
+                            orientation: scrollOrientation
                         },
                         groups: ['priorityId'],
                         resources: [{
@@ -3127,7 +3200,7 @@ module('Virtual scrolling integration', () => {
                 currentDate: new Date(2015, 1, 9),
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 height: 500,
                 width: 600
@@ -3220,7 +3293,7 @@ module('Virtual scrolling integration', () => {
                         currentView: viewName,
                         scrolling: {
                             mode: 'virtual',
-                            type: 'horizontal'
+                            orientation: 'horizontal'
                         },
                         crossScrollingEnabled: true,
                         height: 400,
@@ -3266,6 +3339,34 @@ module('Virtual scrolling integration', () => {
                 assert.equal(dateTableHeight, calculatedHeight, 'Correct dateTable height');
                 assert.equal(groupPanelHeight, calculatedHeight, 'Correct groupPanel height');
             });
+        });
+
+        test('AllDayPanel should have correct height if all day appointments out of viewport', function(assert) {
+            const { workSpace } = createWrapper({
+                height: 600,
+                width: 800,
+                currentDate: new Date(2021, 8, 6),
+                dataSource: [{
+                    text: 'Test',
+                    startDate: new Date(2021, 8, 11, 9, 30),
+                    resourceId: [5],
+                    allDay: true
+                }],
+                startDayHour: 9,
+                endDayHour: 18,
+                currentView: 'week',
+                scrolling: {
+                    mode: 'virtual',
+                    type: 'both',
+                },
+                groups: ['resourceId'],
+                resources: [{
+                    fieldExpr: 'resourceId',
+                    dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+                }]
+            });
+
+            assert.equal(workSpace.getAllDayCellHeight(), 75, 'AllDayPanel height is correct');
         });
     });
 });

@@ -1,7 +1,5 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -9,7 +7,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import Widget, {
@@ -47,7 +45,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     icon?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 validationGroup:object
@@ -55,7 +53,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxButton, element?: dxElement, model?: any, event?: event, validationGroup?: any }) => any);
+    onClick?: ((e: { component?: dxButton, element?: TElement, model?: any, event?: TEvent, validationGroup?: any }) => void);
     /**
      * @docid
      * @type Enums.ButtonStylingMode
@@ -75,7 +73,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
+    template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default ""
@@ -116,19 +114,9 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
  * @public
  */
 export default class dxButton extends Widget {
-    constructor(element: Element, options?: dxButtonOptions)
-    constructor(element: JQuery, options?: dxButtonOptions)
+    constructor(element: TElement, options?: dxButtonOptions)
 }
 
-declare global {
-interface JQuery {
-    dxButton(): JQuery;
-    dxButton(options: "instance"): dxButton;
-    dxButton(options: string): any;
-    dxButton(options: string, ...params: any[]): any;
-    dxButton(options: dxButtonOptions): JQuery;
-}
-}
 export type Options = dxButtonOptions;
 
 /** @deprecated use Options instead */

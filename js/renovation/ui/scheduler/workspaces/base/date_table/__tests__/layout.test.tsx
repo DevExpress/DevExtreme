@@ -5,6 +5,7 @@ import {
 } from '../layout';
 import { Table } from '../../table';
 import { DateTableBody } from '../table_body';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 
 jest.mock('../table_body', () => ({
   DateTableBody: () => null,
@@ -46,6 +47,7 @@ describe('DateTableLayoutBase', () => {
         cellTemplate,
         viewData: viewDataBase,
         viewType: 'month',
+        groupOrientation: VERTICAL_GROUP_ORIENTATION,
         ...viewModel.props,
       },
     } as any) as any);
@@ -96,6 +98,7 @@ describe('DateTableLayoutBase', () => {
       expect(tableBody.props())
         .toMatchObject({
           viewData: viewDataBase,
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
           cellTemplate,
           dataCellTemplate,
           leftVirtualCellWidth: 300,

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { createRef } from 'react';
 import { mount } from 'enzyme';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
 import { PageSizeSelector, viewFunction as PageSizeSelectorComponent } from '../selector';
 import { PageSizeSmall } from '../small';
 import { PageSizeLarge } from '../large';
@@ -96,14 +96,14 @@ describe('Pager size selector', () => {
 
     describe('setRootElementRef', () => {
       it('set rootElementRef to div ref', () => {
-        const widgetRef = {} as RefObject<HTMLDivElement>;
+        const widgetRef = { } as RefObject<HTMLDivElement>;
         const component = new PageSizeSelector({
-          rootElementRef: {} as RefObject<HTMLDivElement>,
+          rootElementRef: { current: {} } as RefObject<HTMLDivElement>,
         });
         component.htmlRef = widgetRef;
         component.setRootElementRef();
 
-        expect(component.props.rootElementRef).toBe(component.htmlRef);
+        expect(component.htmlRef.current).toBe(component.props.rootElementRef?.current);
       });
 
       it('hasnt rootElementRef', () => {

@@ -783,12 +783,12 @@ const TagBox = SelectBox.inherit({
             return d.resolve(filteredItems).promise();
         } else {
             const dataSource = this._dataSource;
-            const { customQueryParams, expand } = dataSource.loadOptions();
+            const { customQueryParams, expand, select } = dataSource.loadOptions();
             const filter = this._getFilter(creator);
 
             dataSource
                 .store()
-                .load({ filter, customQueryParams, expand })
+                .load({ filter, customQueryParams, expand, select })
                 .done((data, extra) => {
                     this._isDataSourceChanged = false;
                     if(this._disposed) {

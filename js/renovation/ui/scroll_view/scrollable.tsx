@@ -4,9 +4,8 @@ import {
   Ref,
   Method,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
-import { combineClasses } from '../../utils/combine_classes';
 import {
   ScrollableLocation, ScrollOffset,
 } from './types.d';
@@ -24,7 +23,6 @@ import { nativeScrolling, touch } from '../../../core/utils/support';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
-    cssClasses,
     scrollableNativeRef,
     scrollableSimulatedRef,
     props: {
@@ -42,7 +40,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     ? (
       <ScrollableNative
         ref={scrollableNativeRef}
-        classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -56,7 +53,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     : (
       <ScrollableSimulated
         ref={scrollableSimulatedRef}
-        classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -114,6 +110,16 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
+  release(): void {
+    return this.scrollableRef.release();
+  }
+
+  @Method()
+  refresh(): void {
+    this.scrollableRef.refresh();
+  }
+
+  @Method()
   scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
     this.scrollableRef.scrollTo(targetLocation);
   }
@@ -163,16 +169,10 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.validate(e);
   }
 
-  get cssClasses(): string {
-    const { classes } = this.props;
-
-    return combineClasses({
-      [`${classes}`]: !!classes,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
-    return this.scrollableNativeRef.current! || this.scrollableSimulatedRef.current!;
+    if (this.props.useNative) {
+      return this.scrollableNativeRef.current!;
+    }
+    return this.scrollableSimulatedRef.current!;
   }
 }

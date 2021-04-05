@@ -5,6 +5,7 @@ import eventsEngine from 'events/core/events_engine';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import browser from 'core/utils/browser';
 import support from 'core/utils/support';
 import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import Overlay from 'ui/overlay';
@@ -348,8 +349,12 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
 
 QUnit.module('focus policy', () => {
     QUnit.testInActiveWindow('editor should save focus on button clicking', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'blur preventing unnecessary on mobile devices');
+        const isDesktop = devices.real().deviceType === 'desktop';
+        const isIE11OrLower = browser.msie && parseInt(browser.version) <= 11;
+
+        if(!isDesktop || isIE11OrLower) {
+            const message = isIE11OrLower ? 'test is ignored in IE11 because it failes on farm' : 'blur preventing unnecessary on mobile devices';
+            assert.ok(true, message);
             return;
         }
 
@@ -530,6 +535,30 @@ QUnit.module('focus policy', () => {
         $input1.trigger($.Event('focusout', { relatedTarget: $(`.${POPUP_CONTENT}`) }));
 
         assert.ok(dropDownEditor1.option('opened'), 'should be still opened after the widget\'s popup focus');
+    });
+
+    [false, true].forEach((acceptCustomValue) => {
+        const position = acceptCustomValue ? 'end' : 'beginning';
+        const testTitle = `caret should be set to the ${position} of the text after click on the dropDown button when "acceptCustomValue" option is ${acceptCustomValue} (T976700)`;
+
+        QUnit.testInActiveWindow(testTitle, function(assert) {
+            const value = '1234567890abcdefgh';
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                items: [value],
+                focusStateEnabled: true,
+                showDropDownButton: true,
+                acceptCustomValue,
+                value
+            });
+            const $dropDownButton = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+            const input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).get(0);
+            const expectedPosition = acceptCustomValue ? value.length : 0;
+
+            $dropDownButton.trigger('dxclick');
+
+            assert.strictEqual(input.selectionStart, expectedPosition, 'correct start position');
+            assert.strictEqual(input.selectionEnd, expectedPosition, 'correct end position');
+        });
     });
 });
 
@@ -1795,4 +1824,3 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 });
-

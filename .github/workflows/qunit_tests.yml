@@ -1,15 +1,15 @@
-name: QUnit tests linux
+name: QUnit tests
 
 on: [push, pull_request]
 
 jobs:
-  test:
+  qunit-tests:
     strategy:
+      fail-fast: true
       matrix:
-        RENOVATION: [ true ]
+        NORENOVATION: [ true ]
         BROWSER: [ google-chrome ]
-        CONSTEL: [ export, viz, renovation ]
-        # CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
+        CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
         JQUERY: [ jquery=3 ]
 
     runs-on: ubuntu-latest
@@ -31,7 +31,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: .\node_modules
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
         restore-keys: |
           ${{ runner.os }}-node-modules
@@ -44,14 +44,14 @@ jobs:
         DEVEXTREME_TEST_CI: "true"
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-      run: npm run build:r
+      run: npm run build
 
     - name: Run QUnit tests
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
         JQUERY: ${{ matrix.JQUERY }}
         BROWSER: ${{ matrix.BROWSER }}
-        RENOVATION: ${{ matrix.RENOVATION }}
+        NORENOVATION: ${{ matrix.NORENOVATION }}
         GITHUBACTION: "true"
         TARGET: "test"
       run: |

@@ -33,7 +33,8 @@ const timeZones = {
     Moscow: 'Europe/Moscow',
     UTC: 'Etc/UTC',
     Greenwich: 'Greenwich',
-    Dawson_Creek: 'America/Dawson_Creek'
+    Dawson_Creek: 'America/Dawson_Creek',
+    Berlin: 'Europe/Berlin'
 };
 
 testStart(() => initTestMarkup());
@@ -911,6 +912,54 @@ module('Scheduler grid', moduleConfig, () => {
         return schedulerTz * 3600000 + defaultTz;
     };
 
+    if(isDesktopEnvironment()) {
+        test('Local DST shouldn\'t effect on for the set timezone', function(assert) {
+            // TODO Los Angeles and Sydney timezones have local DST
+            const etalonDateText = '12:30 PM - 2:00 PM';
+
+            const scheduler = createWrapper({
+                timeZone: timeZones.Berlin,
+                dataSource: [{
+                    text: 'Website Re-Design Plan',
+                    startDate: new Date('2021-02-24T11:30:00.000Z'),
+                    endDate: new Date('2021-02-24T13:00:00.000Z'),
+                    recurrenceRule: 'FREQ=DAILY'
+                }],
+                views: ['week'],
+                currentView: 'week',
+                currentDate: new Date(2021, 2, 14),
+                firstDayOfWeek: 5,
+                startDayHour: 11,
+                height: 600
+            });
+
+            scheduler.appointmentList.forEach(appointment => {
+                assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+                appointment.click();
+
+                assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+            });
+
+            scheduler.header.navigator.nextButton.click();
+            assert.equal(scheduler.header.navigator.caption.getText(), '19-25 March 2021');
+
+            scheduler.header.navigator.nextButton.click();
+            assert.equal(scheduler.header.navigator.caption.getText(), '26 Mar-1 Apr 2021');
+
+            scheduler.header.navigator.nextButton.click();
+            assert.equal(scheduler.header.navigator.caption.getText(), '2-8 April 2021');
+
+            scheduler.appointmentList.forEach(appointment => {
+                assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+                appointment.click();
+
+                assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+            });
+
+            assert.expect(31);
+        });
+    }
+
     [
         {
             timeZone: timeZones.NewYork,
@@ -947,6 +996,7 @@ module('Scheduler grid', moduleConfig, () => {
         }].forEach(({ timeZone, startDate, endDate }) => {
             test(`Drag n drop should work right in week view if timezone='${timeZone}'`, function(assert) {
                 const scheduler = createWrapper({
+                    _draggingMode: 'default',
                     currentDate: new Date(2015, 11, 23),
                     views: ['week'],
                     currentView: 'week',
@@ -1002,6 +1052,7 @@ module('Scheduler grid', moduleConfig, () => {
             }].forEach(({ startDayHour, endDayHour }) => {
                 test(`Drag n drop should work right in month view if timezone='${timeZone}' and startDayHour=${startDayHour}, endDayHour=${endDayHour}`, function(assert) {
                     const scheduler = createWrapper({
+                        _draggingMode: 'default',
                         currentDate: new Date(2015, 11, 23),
                         views: ['month'],
                         currentView: 'month',
@@ -1055,6 +1106,7 @@ module('Scheduler grid', moduleConfig, () => {
             const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
             try {
                 const scheduler = createWrapper({
+                    _draggingMode: 'default',
                     currentDate: new Date(2015, 11, 25),
                     startDayHour: 16,
                     views: ['week'],
@@ -1116,6 +1168,7 @@ module('Scheduler grid', moduleConfig, () => {
         });
 
         const scheduler = createWrapper({
+            _draggingMode: 'default',
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
             editing: true,
@@ -1147,6 +1200,7 @@ module('Scheduler grid', moduleConfig, () => {
             const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
             try {
                 const scheduler = createWrapper({
+                    _draggingMode: 'default',
                     currentDate: new Date(2016, 5, 25),
                     startDayHour: 16,
                     views: ['day'],
@@ -1275,6 +1329,7 @@ module('Scheduler grid', moduleConfig, () => {
     [true, false].forEach((renovateRender) => {
         test(`Appointment with custom tz that isn't equal to scheduler tz should be dragged correctly when renovateRender is ${renovateRender} (T392414)`, function(assert) {
             const scheduler = createWrapper({
+                _draggingMode: 'default',
                 currentDate: new Date(2015, 4, 25),
                 startDayHour: 6,
                 views: ['day'],
