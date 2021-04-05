@@ -18,6 +18,11 @@ import { isDxMouseWheelEvent } from '../../../events/utils/index';
 import { ScrollbarProps } from './scrollbar_props';
 import {
   DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS, TopPocketState,
+  SCROLLABLE_SCROLL_CLASS,
+  SCROLLABLE_SCROLL_CONTENT_CLASS,
+  HIDE_SCROLLBAR_TIMEOUT,
+  SCROLLABLE_SCROLLBAR_ACTIVE_CLASS,
+  HOVER_ENABLED_STATE,
 } from './common/consts';
 
 import {
@@ -29,15 +34,7 @@ import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 import { ScrollableProps } from './scrollable_props';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
-
-const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
-const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
-const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
-const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
-
-const MAX_OFFSET = 0;
 const THUMB_MIN_SIZE = 15;
-const HIDE_SCROLLBAR_TIMEOUT = 500;
 
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
@@ -95,7 +92,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @InternalState() boundaryOffset = 0;
 
-  @InternalState() maxOffset = MAX_OFFSET;
+  @InternalState() maxOffset = 0;
 
   @InternalState() minOffset = 0;
 

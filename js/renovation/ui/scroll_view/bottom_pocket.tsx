@@ -11,6 +11,9 @@ import { isDefined } from '../../../core/utils/type';
 
 import {
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
+  SCROLLVIEW_REACHBOTTOM_CLASS,
+  SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS,
+  SCROLLVIEW_REACHBOTTOM_TEXT_CLASS,
 } from './common/consts';
 
 import messageLocalization from '../../../localization/message';
@@ -18,10 +21,6 @@ import messageLocalization from '../../../localization/message';
 import { BaseWidgetProps } from '../../utils/base_props';
 
 import { combineClasses } from '../../utils/combine_classes';
-
-const SCROLLVIEW_REACHBOTTOM_CLASS = 'dx-scrollview-scrollbottom';
-const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = 'dx-scrollview-scrollbottom-indicator';
-const SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = 'dx-scrollview-scrollbottom-text';
 
 export const viewFunction = (viewModel: BottomPocket): JSX.Element => {
   const {
