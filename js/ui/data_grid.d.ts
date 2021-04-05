@@ -715,22 +715,22 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
      * @public
      */
-    onEditCanceled?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => void);
+    onEditCanceled?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<DataChange> }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @type_function_param1_field5 cancel:boolean
      * @default null
      * @action
      * @public
      */
-    onEditCanceling?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange>, cancel?: boolean }) => void);
+    onEditCanceling?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<DataChange>, cancel?: boolean }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -886,23 +886,23 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
      * @public
      */
-    onSaved?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => void);
+    onSaved?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<DataChange> }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @type_function_param1_field5 promise:Promise<void>
      * @type_function_param1_field6 cancel:boolean
      * @default null
      * @action
      * @public
      */
-    onSaving?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange>, promise?: TPromise<void>, cancel?: boolean }) => void);
+    onSaving?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<DataChange>, promise?: TPromise<void>, cancel?: boolean }) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1459,7 +1459,7 @@ export interface GridBaseEditing {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    changes?: Array<GridBaseEditingChange>;
+    changes?: Array<DataChange>;
     /**
      * @docid GridBaseOptions.editing.editColumnName
      * @default null
@@ -1538,7 +1538,7 @@ export interface GridBaseEditing {
   * @docid
   * @prevFileNamespace DevExpress.ui
   */
- export interface GridBaseEditingChange {
+ export interface DataChange {
   /**
    * @docid
    */
