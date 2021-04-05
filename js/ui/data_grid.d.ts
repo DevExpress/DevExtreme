@@ -96,7 +96,7 @@ export interface EditCanceledEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
-  readonly changes: Array<GridBaseEditingChange>;
+  readonly changes: Array<DataChange>;
 }
 
 /**
@@ -106,7 +106,7 @@ export interface EditCancelingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
-  readonly changes: Array<GridBaseEditingChange>;
+  readonly changes: Array<DataChange>;
   cancel: boolean;
 }
 
@@ -270,7 +270,7 @@ export interface SavedEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
-  readonly changes: Array<GridBaseEditingChange>;
+  readonly changes: Array<DataChange>;
 }
 
 
@@ -281,7 +281,7 @@ export interface SavingEvent<T extends GridBase> {
   readonly component: T;
   readonly element: TElement;
   readonly model?: any;
-  changes: Array<GridBaseEditingChange>;
+  changes: Array<DataChange>;
   promise?: TPromise<void>;
   cancel: boolean;
 }
@@ -976,7 +976,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:TElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
      * @public
@@ -988,7 +988,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:TElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @type_function_param1_field5 cancel:boolean
      * @default null
      * @action
@@ -1192,7 +1192,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:TElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
      * @public
@@ -1204,7 +1204,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:TElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @type_function_param1_field5 promise:Promise<void>
      * @type_function_param1_field6 cancel:boolean
      * @default null
@@ -1950,7 +1950,7 @@ export interface EditingBase {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    changes?: Array<GridBaseEditingChange>;
+    changes?: Array<DataChange>;
     /**
      * @docid GridBaseOptions.editing.editColumnName
      * @default null
@@ -2029,7 +2029,7 @@ export interface EditingBase {
   * @docid
   * @prevFileNamespace DevExpress.ui
   */
-export interface GridBaseEditingChange {
+export interface DataChange {
     /**
      * @docid 
      */
