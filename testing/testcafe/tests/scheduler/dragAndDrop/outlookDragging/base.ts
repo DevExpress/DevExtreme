@@ -6,6 +6,53 @@ import { createScreenshotsComparer } from '../../../../helpers/screenshot-compar
 fixture`Outlook dragging base tests`
   .page(url(__dirname, '../../../container.html'));
 
+test('Basic drag-n-drop movements in groups', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
+
+  await t
+    .drag(draggableAppointment.element, 330, 70, { speed: 0.1 })
+    .expect(await takeScreenshot('drag-n-drop-to-orange-group.png', scheduler.workSpace))
+    .ok()
+
+    .drag(draggableAppointment.element, -330, 70, { speed: 0.1 })
+    .expect(await takeScreenshot('drag-n-drop-blue-group.png', scheduler.workSpace))
+    .ok()
+
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(() => createWidget('dxScheduler', {
+  dataSource: [{
+    text: 'Website Re-Design Plan',
+    startDate: new Date(2021, 4, 26, 8, 30),
+    endDate: new Date(2021, 4, 26, 11, 0),
+    priorityId: 1,
+  }],
+  groups: ['priorityId'],
+  resources: [{
+    fieldExpr: 'priorityId',
+    allowMultiple: false,
+    dataSource: [{
+      text: 'Low Priority',
+      id: 1,
+      color: '#1e90ff',
+    }, {
+      text: 'High Priority',
+      id: 2,
+      color: '#ff9747',
+    }],
+    label: 'Priority',
+  }],
+  views: ['day'],
+  currentView: 'day',
+  currentDate: new Date(2021, 4, 26),
+  startDayHour: 8,
+  height: 600,
+  width: 1000,
+}));
+
 test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
   const scheduler = new Scheduler('#container');
 

@@ -45,7 +45,7 @@ function getRelativeLocation(element: HTMLElement): ScrollableLocation {
   return result;
 }
 
-function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): number {
+export function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): number {
   return containerRef[`scroll${titleize(dimension)}`] - containerRef[`client${titleize(dimension)}`];
 }
 
@@ -53,6 +53,7 @@ export function getBoundaryProps(
   direction: ScrollableDirection,
   scrollOffset: ScrollableLocation,
   element: HTMLDivElement,
+  topPocketHeight: number,
 ): Partial<ScrollableBoundary> {
   const { left, top } = scrollOffset;
   const boundaryProps: Partial<ScrollableBoundary> = {};
@@ -64,16 +65,9 @@ export function getBoundaryProps(
   }
   if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element);
+    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element) - topPocketHeight;
   }
   return boundaryProps;
-}
-
-export function getContainerOffsetInternal(element: HTMLDivElement): ScrollableLocation {
-  return {
-    left: element.scrollLeft,
-    top: element.scrollTop,
-  };
 }
 
 function getScrollBarSize(dimension: string, containerRef: HTMLDivElement): number {
@@ -93,10 +87,10 @@ export function normalizeCoordinate(
 }
 
 export function getPublicCoordinate(
-  prop: keyof ScrollOffset, coordinate: number, containerRef: HTMLDivElement, rtlEnabled?: boolean,
+  prop: keyof ScrollOffset, coordinate: number, maxLeftOffset: number, rtlEnabled?: boolean,
 ): number {
   return needNormalizeCoordinate(prop, rtlEnabled)
-    ? getMaxScrollOffset('width', containerRef) + normalizeCoordinate(prop, coordinate, rtlEnabled)
+    ? maxLeftOffset + normalizeCoordinate(prop, coordinate, rtlEnabled)
     : coordinate;
 }
 
@@ -136,7 +130,7 @@ function getElementLocationInternal(
 
   const containerLocation = normalizeCoordinate(
     prop,
-    getContainerOffsetInternal(containerRef)[prop],
+    containerRef[`scroll${titleize(prop)}`],
     rtlEnabled,
   );
 
@@ -164,13 +158,14 @@ export function getElementLocation(
   rtlEnabled?: boolean,
 ): number {
   const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
+  const maxScrollLeftOffset = getMaxScrollOffset('width', containerRef);
   const location = normalizeCoordinate(
     prop,
     getElementLocationInternal(element, prop, offset, direction, containerRef, rtlEnabled),
     rtlEnabled,
   );
 
-  return getPublicCoordinate(prop, location, containerRef, rtlEnabled);
+  return getPublicCoordinate(prop, location, maxScrollLeftOffset, rtlEnabled);
 }
 
 export function updateAllowedDirection(
