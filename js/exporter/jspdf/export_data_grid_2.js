@@ -1,6 +1,5 @@
 import { isDefined } from '../../core/utils/type';
 import PdfGrid from './pdf_grid';
-import { drawPdfTable } from './draw_pdf_table';
 
 
 function exportDataGrid(doc, dataGrid, options) {
@@ -50,7 +49,7 @@ function exportDataGrid(doc, dataGrid, options) {
                 pdfGrid.addRow(currentRow);
             }
 
-            pdfGrid.drawTo(doc, drawPdfTable);
+            pdfGrid.drawTo(doc);
             resolve();
         });
     });

@@ -54,12 +54,12 @@ class PdfGrid {
         this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells);
     }
 
-    drawTo(doc, drawTableCallback) {
+    drawTo(doc) {
         this._tables.forEach((table) => {
             if(this._newPageTables.indexOf(table) !== -1) {
                 doc.addPage();
             }
-            table.drawTo(doc, drawTableCallback);
+            table.drawTo(doc);
         });
     }
 }

@@ -1,4 +1,5 @@
 import { isDefined } from '../../core/utils/type';
+import { drawPdfTable } from './draw_pdf_table';
 
 class PdfTable {
     constructor(drawTableBorder, rect) {
@@ -36,8 +37,8 @@ class PdfTable {
         }
     }
 
-    drawTo(doc, drawTableCallback) {
-        drawTableCallback(doc, this);
+    drawTo(doc) {
+        drawPdfTable(doc, this);
     }
 }
 
