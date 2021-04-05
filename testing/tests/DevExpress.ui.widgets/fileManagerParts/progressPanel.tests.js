@@ -7,8 +7,6 @@ import FileManagerProgressPanelMock from '../../../helpers/fileManager/notificat
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
-import CustomFileSystemProvider from 'file_management/custom_provider.js';
-import FileSystemError from 'file_management/error.js';
 
 const { test } = QUnit;
 
@@ -674,27 +672,6 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount - 1, 'files count decreased');
         assert.ok(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is visible');
         assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is still no operations');
-    });
-
-    test('errorText can be customized on the getItems', function(assert) {
-        const customMessage = 'Custom error message';
-        this.fileManager.option({
-            fileSystemProvider: new CustomFileSystemProvider({
-                getItems: () => { throw new FileSystemError(0, null, customMessage); }
-            })
-        });
-        this.clock.tick(400);
-
-        const info = this.progressPanelWrapper.getInfos()[0];
-        const common = info.common;
-        const details = info.details[0];
-        assert.notOk(common.hasError, 'error rendered');
-        assert.equal(common.commonText, 'The directory cannot be opened', 'common text rendered');
-        assert.notOk(common.$progressBar.length, 'progress bar not rendered');
-        assert.ok(common.closeButtonVisible, 'close button visible');
-
-        assert.ok(details.hasError, 'error rendered');
-        assert.equal(details.errorText, customMessage, 'details error text rendered');
     });
 
 });
