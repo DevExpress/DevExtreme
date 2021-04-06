@@ -1255,24 +1255,6 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.equal(timePanelDate, '6 Sun', 'Time panel date is OK');
     });
 
-    test('dateCellTemplate should take cellElement with correct geometry (T453520)', function(assert) {
-        this.createInstance({
-            currentView: 'agenda',
-            views: ['agenda'],
-            height: 700,
-            width: 700,
-            currentDate: new Date(2016, 10, 28),
-            dataSource: [{
-                startDate: new Date(2016, 10, 28, 1),
-                endDate: new Date(2016, 10, 28, 2)
-            }],
-            dateCellTemplate: function(cellData, cellIndex, cellElement) {
-                assert.equal($(cellElement).outerWidth(), 70, 'Date cell width is OK');
-                assert.equal($(cellElement).outerHeight(), 80, 'Date cell height is OK');
-            }
-        });
-    });
-
     test('resourceCellTemplate should take cellElement with correct geometry (T453520)', function(assert) {
         this.createInstance({
             currentView: 'agenda',
@@ -1920,103 +1902,6 @@ module('Integration: Agenda', moduleConfig, () => {
             this.instance.option('currentView', 'agenda');
 
             assert.ok(true, 'Agenda works');
-        });
-    });
-});
-
-QUnit.module('Cell Templates', () => {
-    const data = [{
-        startDate: new Date(2020, 10, 24, 10),
-        endDate: new Date(2020, 10, 24, 11),
-        priorityId: 1,
-    }, {
-        startDate: new Date(2020, 10, 25, 10),
-        endDate: new Date(2020, 10, 25, 11),
-        priorityId: 1,
-    }, {
-        startDate: new Date(2020, 10, 24, 10),
-        endDate: new Date(2020, 10, 24, 11),
-        priorityId: 2,
-    }, {
-        startDate: new Date(2020, 10, 25, 10),
-        endDate: new Date(2020, 10, 25, 11),
-        priorityId: 2,
-    }];
-    const basicOptions = {
-        dataSource: data,
-        views: ['agenda'],
-        currentView: 'agenda',
-        currentDate: new Date(2020, 10, 24),
-        resources: [{
-            fieldExpr: 'priorityId',
-            allowMultiple: false,
-            dataSource: [{
-                text: 'Low Priority',
-                id: 1
-            }, {
-                text: 'High Priority',
-                id: 2
-            }],
-            label: 'Priority',
-        }],
-    };
-
-    QUnit.test('Date cell template should have correct data without grouping', function(assert) {
-        let currentTemplateIndex = 0;
-        const rowsCount = 2;
-        const expectedData = [{
-            date: new Date(2020, 10, 24),
-            groups: {},
-            groupIndex: undefined,
-            text: '24 Tue',
-        }, {
-            date: new Date(2020, 10, 25),
-            groups: {},
-            groupIndex: undefined,
-            text: '25 Wed',
-        }];
-
-        createWrapper({
-            ...basicOptions,
-            dateCellTemplate: (data) => {
-                assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
-                currentTemplateIndex += 1;
-            },
-        });
-    });
-
-    QUnit.test('Date cell template should have correct data with grouping', function(assert) {
-        let currentTemplateIndex = 0;
-        const rowsCount = 4;
-        const expectedData = [{
-            date: new Date(2020, 10, 24),
-            groups: { priorityId: 1 },
-            groupIndex: 0,
-            text: '24 Tue',
-        }, {
-            date: new Date(2020, 10, 25),
-            groups: { priorityId: 1 },
-            groupIndex: 0,
-            text: '25 Wed',
-        }, {
-            date: new Date(2020, 10, 24),
-            groups: { priorityId: 2 },
-            groupIndex: 1,
-            text: '24 Tue',
-        }, {
-            date: new Date(2020, 10, 25),
-            groups: { priorityId: 2 },
-            groupIndex: 1,
-            text: '25 Wed',
-        }];
-
-        createWrapper({
-            ...basicOptions,
-            dateCellTemplate: (data) => {
-                assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
-                currentTemplateIndex += 1;
-            },
-            groups: ['priorityId'],
         });
     });
 });
