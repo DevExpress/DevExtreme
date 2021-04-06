@@ -78,7 +78,7 @@ const subscribes = {
 
     updateAppointmentAfterResize: function(options) {
         const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
-        const exceptionDate = info.sourceAppointment.startDate;
+        const exceptionDate = info.sourceAppointment.exceptionDate;
 
         this._checkRecurringAppointment(options.target, options.data, exceptionDate, (function() {
             this._updateAppointment(options.target, options.data, function() {
