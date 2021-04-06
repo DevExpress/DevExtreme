@@ -294,13 +294,14 @@ module('Virtual Scrolling', {
                     rowCount: 9,
                     startIndex: 0,
                     startRowIndex: 0,
-                    topVirtualRowHeight: 0
+                    topVirtualRowHeight: 0,
+                    cellWidth: 150,
                 }
             }, {
                 orientation: 'horizontal',
                 expectedRenderState: {
                     cellCount: 6,
-                    cellWidth: undefined,
+                    cellWidth: 150,
                     leftVirtualCellWidth: 0,
                     rightVirtualCellWidth: 29100,
                     startCellIndex: 0
@@ -314,10 +315,10 @@ module('Virtual Scrolling', {
                     startRowIndex: 0,
                     topVirtualRowHeight: 0,
                     cellCount: 6,
-                    cellWidth: undefined,
+                    cellWidth: 150,
                     leftVirtualCellWidth: 0,
                     rightVirtualCellWidth: 29100,
-                    startCellIndex: 0
+                    startCellIndex: 0,
                 }
             }
         ].forEach(({ orientation, expectedRenderState }) => {
