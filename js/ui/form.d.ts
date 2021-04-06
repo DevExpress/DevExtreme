@@ -12,9 +12,8 @@ import {
 
 import {
     ComponentEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxButton, {
@@ -51,7 +50,7 @@ import Widget, {
 export type ContentReadyEvent = ComponentEvent<dxForm>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxForm>;
+export type DisposingEvent = ComponentEvent<dxForm>;
 
 /** @public */
 export type EditorEnterKeyEvent = ComponentEvent<dxForm> & {
@@ -68,21 +67,21 @@ export type FieldDataChangedEvent = ComponentEvent<dxForm> & {
 export type InitializedEvent = ComponentInitializedEvent<dxForm>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxForm>;
+export type OptionChangedEvent = ComponentEvent<dxForm> & ChangedOptionInfo;
 
 /** @public */
 export type GroupItemTemplateData = {
-    component?: dxForm;
-    formData?: any;
+    readonly component: dxForm;
+    readonly formData?: any;
 }
 
 /** @public */
 export type SimpleItemTemplateData = {
-    component?: dxForm;
-    dataField?: string;
-    editorOptions?: any;
-    editorType?: string;
-    name?: string;
+    readonly component: dxForm;
+    readonly dataField?: string;
+    readonly editorOptions?: any;
+    readonly editorType?: string;
+    readonly name?: string;
 }
 
 export interface dxFormOptions extends WidgetOptions<dxForm> {

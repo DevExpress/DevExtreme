@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import Editor, {
@@ -19,13 +18,13 @@ import Editor, {
 export type ContentReadyEvent = ComponentEvent<dxSwitch>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxSwitch>;
+export type DisposingEvent = ComponentEvent<dxSwitch>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxSwitch>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxSwitch>;
+export type OptionChangedEvent = ComponentEvent<dxSwitch> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxSwitch> & ValueChangedInfo;

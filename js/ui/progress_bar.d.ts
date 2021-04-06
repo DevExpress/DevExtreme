@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -25,13 +24,13 @@ export type CompleteEvent = ComponentNativeEvent<dxProgressBar>;
 export type ContentReadyEvent = ComponentEvent<dxProgressBar>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxProgressBar>;
+export type DisposingEvent = ComponentEvent<dxProgressBar>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxProgressBar>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxProgressBar>;
+export type OptionChangedEvent = ComponentEvent<dxProgressBar> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxProgressBar> & ValueChangedInfo;

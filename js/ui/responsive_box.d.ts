@@ -9,9 +9,8 @@ import DataSource, {
 import {
   ComponentEvent,
   ComponentNativeEvent,
-  ComponentDisposingEvent,
   ComponentInitializedEvent,
-  ComponentOptionChangedEvent,
+  ChangedOptionInfo,
   ItemInfo
 } from '../events/index';
 
@@ -24,7 +23,7 @@ import CollectionWidget, {
 export type ContentReadyEvent = ComponentEvent<dxResponsiveBox>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxResponsiveBox>;
+export type DisposingEvent = ComponentEvent<dxResponsiveBox>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxResponsiveBox>;
@@ -42,7 +41,7 @@ export type ItemHoldEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
 export type ItemRenderedEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxResponsiveBox>;
+export type OptionChangedEvent = ComponentEvent<dxResponsiveBox> & ChangedOptionInfo;
 
 export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
     /**

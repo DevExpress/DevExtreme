@@ -13,9 +13,8 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import Editor, {
@@ -31,7 +30,7 @@ import {
 export type ContentReadyEvent = ComponentEvent<dxHtmlEditor>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxHtmlEditor>;
+export type DisposingEvent = ComponentEvent<dxHtmlEditor>;
 
 /** @public */
 export type FocusInEvent = ComponentNativeEvent<dxHtmlEditor>;
@@ -43,7 +42,7 @@ export type FocusOutEvent = ComponentNativeEvent<dxHtmlEditor>;
 export type InitializedEvent = ComponentInitializedEvent<dxHtmlEditor>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxHtmlEditor>;
+export type OptionChangedEvent = ComponentEvent<dxHtmlEditor> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxHtmlEditor> & ValueChangedInfo;

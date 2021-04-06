@@ -18,9 +18,8 @@ import {
     TEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -55,7 +54,7 @@ export type ClosedEvent = ComponentEvent<dxLookup>;
 export type ContentReadyEvent = ComponentEvent<dxLookup>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxLookup>;
+export type DisposingEvent = ComponentEvent<dxLookup>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxLookup>;
@@ -67,7 +66,7 @@ export type ItemClickEvent = ComponentNativeEvent<dxLookup> & ItemInfo;
 export type OpenedEvent = ComponentEvent<dxLookup>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxLookup>;
+export type OptionChangedEvent = ComponentEvent<dxLookup> & ChangedOptionInfo;
 
 /** @public */
 export type PageLoadingEvent = ComponentEvent<dxLookup>;

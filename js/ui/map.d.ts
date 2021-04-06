@@ -9,9 +9,8 @@ import {
 import {
   ComponentEvent,
   ComponentNativeEvent,
-  ComponentDisposingEvent,
   ComponentInitializedEvent,
-  ComponentOptionChangedEvent
+  ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
@@ -22,7 +21,7 @@ import Widget, {
 export type ClickEvent = ComponentNativeEvent<dxMap>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxMap>;
+export type DisposingEvent = ComponentEvent<dxMap>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxMap>;
@@ -39,7 +38,7 @@ export type MarkerRemovedEvent = ComponentEvent<dxMap> & {
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxMap>;
+export type OptionChangedEvent = ComponentEvent<dxMap> & ChangedOptionInfo;
 
 /** @public */
 export type ReadyEvent = ComponentEvent<dxMap> & {

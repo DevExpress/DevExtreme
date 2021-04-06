@@ -13,9 +13,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -60,7 +59,7 @@ export type CustomItemCreatingEvent = ComponentEvent<dxSelectBox> & CustomItemCr
 export type CutEvent = ComponentNativeEvent<dxSelectBox>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxSelectBox>;
+export type DisposingEvent = ComponentEvent<dxSelectBox>;
 
 /** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxSelectBox>;
@@ -93,7 +92,7 @@ export type KeyUpEvent = ComponentNativeEvent<dxSelectBox>;
 export type OpenedEvent = ComponentEvent<dxSelectBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxSelectBox>;
+export type OptionChangedEvent = ComponentEvent<dxSelectBox> & ChangedOptionInfo;
 
 /** @public */
 export type PasteEvent = ComponentNativeEvent<dxSelectBox>;

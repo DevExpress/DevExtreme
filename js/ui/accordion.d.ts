@@ -15,12 +15,10 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -34,7 +32,7 @@ import CollectionWidget, {
 export type ContentReadyEvent = ComponentEvent<dxAccordion>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxAccordion>;
+export type DisposingEvent = ComponentEvent<dxAccordion>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxAccordion>;
@@ -52,18 +50,10 @@ export type ItemHoldEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 export type ItemRenderedEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 
 /** @public */
-export type ItemTitleClickEvent = {
-    readonly component: dxAccordion;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly itemData?: any;
-    readonly itemElement: TElement;
-    readonly itemIndex: number;
-    readonly event: TEvent;
-}
+export type ItemTitleClickEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxAccordion>;
+export type OptionChangedEvent = ComponentEvent<dxAccordion> & ChangedOptionInfo;
 
 /** @public */
 export type SelectionChangedEvent = ComponentEvent<dxAccordion> & SelectionChangedInfo;

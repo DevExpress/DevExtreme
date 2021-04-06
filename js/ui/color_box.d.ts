@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -36,7 +35,7 @@ export type CopyEvent = ComponentNativeEvent<dxColorBox>;
 export type CutEvent = ComponentNativeEvent<dxColorBox>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxColorBox>;
+export type DisposingEvent = ComponentEvent<dxColorBox>;
 
 /** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxColorBox>;
@@ -66,7 +65,7 @@ export type KeyUpEvent = ComponentNativeEvent<dxColorBox>;
 export type OpenedEvent = ComponentEvent<dxColorBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxColorBox>;
+export type OptionChangedEvent = ComponentEvent<dxColorBox> & ChangedOptionInfo;
 
 /** @public */
 export type PasteEvent = ComponentNativeEvent<dxColorBox>;

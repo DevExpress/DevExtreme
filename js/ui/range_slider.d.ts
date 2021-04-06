@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -24,13 +23,13 @@ import dxTrackBar from './track_bar';
 export type ContentReadyEvent = ComponentEvent<dxRangeSlider>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxRangeSlider>;
+export type DisposingEvent = ComponentEvent<dxRangeSlider>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxRangeSlider>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxRangeSlider>;
+export type OptionChangedEvent = ComponentEvent<dxRangeSlider> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxRangeSlider> & ValueChangedInfo & {

@@ -3,11 +3,10 @@ import {
 } from '../core/element';
 
 import {
-    TEvent,
     ComponentEvent,
-    ComponentDisposingEvent,
+    ComponentNativeEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
@@ -15,10 +14,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ClickEvent = {
-    event?: TEvent;
-    component?: dxSpeedDialAction;
-    element?: TElement;
+export type ClickEvent = ComponentNativeEvent<dxSpeedDialAction> & {
     actionElement?: TElement
 }
 
@@ -28,13 +24,13 @@ export type ContentReadyEvent = ComponentEvent<dxSpeedDialAction> & {
 };
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxSpeedDialAction>;
+export type DisposingEvent = ComponentEvent<dxSpeedDialAction>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxSpeedDialAction>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxSpeedDialAction>;
+export type OptionChangedEvent = ComponentEvent<dxSpeedDialAction> & ChangedOptionInfo;
 
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**

@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -43,7 +42,7 @@ export type CopyEvent = ComponentNativeEvent<dxAutocomplete>;
 export type CutEvent = ComponentNativeEvent<dxAutocomplete>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxAutocomplete>;
+export type DisposingEvent = ComponentEvent<dxAutocomplete>;
 
 /** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxAutocomplete>;
@@ -76,7 +75,7 @@ export type KeyUpEvent = ComponentNativeEvent<dxAutocomplete>;
 export type OpenedEvent = ComponentEvent<dxAutocomplete>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxAutocomplete>;
+export type OptionChangedEvent = ComponentEvent<dxAutocomplete> & ChangedOptionInfo;
 
 /** @public */
 export type PasteEvent = ComponentNativeEvent<dxAutocomplete>;

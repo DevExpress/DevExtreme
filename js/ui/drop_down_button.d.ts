@@ -18,9 +18,8 @@ import {
     TEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
@@ -44,7 +43,7 @@ export type ButtonClickEvent = ComponentNativeEvent<dxDropDownButton> & {
 export type ContentReadyEvent = ComponentEvent<dxDropDownButton>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxDropDownButton>;
+export type DisposingEvent = ComponentEvent<dxDropDownButton>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxDropDownButton>;
@@ -52,11 +51,11 @@ export type InitializedEvent = ComponentInitializedEvent<dxDropDownButton>;
 /** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxDropDownButton> & {
     readonly itemData?: any;
-    itemElement: TElement;
+    readonly itemElement: TElement;
 };
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxDropDownButton>;
+export type OptionChangedEvent = ComponentEvent<dxDropDownButton> & ChangedOptionInfo;
 
 /** @public */
 export type SelectionChangedEvent = ComponentNativeEvent<dxDropDownButton> & {

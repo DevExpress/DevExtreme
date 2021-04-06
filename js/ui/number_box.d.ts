@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxTextEditor, {
@@ -36,7 +35,7 @@ export type CopyEvent = ComponentNativeEvent<dxNumberBox>;
 export type CutEvent = ComponentNativeEvent<dxNumberBox>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxNumberBox>;
+export type DisposingEvent = ComponentEvent<dxNumberBox>;
 
 /** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxNumberBox>;
@@ -63,7 +62,7 @@ export type KeyPressEvent = ComponentNativeEvent<dxNumberBox>;
 export type KeyUpEvent = ComponentNativeEvent<dxNumberBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxNumberBox>;
+export type OptionChangedEvent = ComponentEvent<dxNumberBox> & ChangedOptionInfo;
 
 /** @public */
 export type PasteEvent = ComponentNativeEvent<dxNumberBox>;

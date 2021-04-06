@@ -65,7 +65,7 @@ export function getBoundaryProps(
   }
   if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element) - topPocketHeight;
+    boundaryProps.reachedBottom = (getMaxScrollOffset('height', element) - topPocketHeight) - top < 0.5;
   }
   return boundaryProps;
 }

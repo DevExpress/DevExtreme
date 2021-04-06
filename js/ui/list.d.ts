@@ -17,9 +17,8 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -39,7 +38,7 @@ import {
 
 interface ListItemInfo {
     readonly itemData?: any;
-    itemElement: TElement;
+    readonly itemElement: TElement;
     readonly itemIndex: number | { group: number; item: number; };
 }
 
@@ -55,12 +54,12 @@ export interface ScrollInfo {
 export type ContentReadyEvent = ComponentEvent<dxList>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxList>;
+export type DisposingEvent = ComponentEvent<dxList>;
 
 /** @public */
 export type GroupRenderedEvent = ComponentEvent<dxList> & {
     readonly groupData?: any;
-    groupElement?: TElement;
+    readonly groupElement?: TElement;
     readonly groupIndex?: number;
 }
 
@@ -99,7 +98,7 @@ export type ItemSwipeEvent = ComponentNativeEvent<dxList> & ListItemInfo & {
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxList>;
+export type OptionChangedEvent = ComponentEvent<dxList> & ChangedOptionInfo;
 
 /** @public */
 export type PageLoadingEvent = ComponentEvent<dxList>;
