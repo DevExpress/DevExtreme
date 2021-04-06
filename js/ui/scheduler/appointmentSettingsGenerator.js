@@ -40,6 +40,29 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         let appointmentList = this._createAppointments(appointment, itemResources);
 
+        appointmentList = this._getProcessedByAppointmentTimeZone(appointmentList, appointment); // T983264
+
+        if(this._canProcessNotNativeTimezoneDates(appointment)) {
+            appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
+        }
+
+        let gridAppointmentList = this._createGridAppointmentList(appointmentList, appointment);
+
+        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment, isAllDay);
+
+        gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
+
+        const appointmentInfos = this.createAppointmentInfos(
+            gridAppointmentList,
+            itemResources,
+            isAllDay,
+            appointment.isRecurrent
+        );
+
+        return appointmentInfos;
+    }
+
+    _getProcessedByAppointmentTimeZone(appointmentList, appointment) {
         const hasAppointmentTimeZone = !isEmptyObject(appointment.startDateTimeZone) || !isEmptyObject(appointment.endDateTimeZone);
 
         if(appointmentList.length > 1 && hasAppointmentTimeZone) {
@@ -66,24 +89,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             });
         }
 
-        if(this._canProcessNotNativeTimezoneDates(appointment)) {
-            appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
-        }
-
-        let gridAppointmentList = this._createGridAppointmentList(appointmentList, appointment);
-
-        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment, isAllDay);
-
-        gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
-
-        const appointmentInfos = this.createAppointmentInfos(
-            gridAppointmentList,
-            itemResources,
-            isAllDay,
-            appointment.isRecurrent
-        );
-
-        return appointmentInfos;
+        return appointmentList;
     }
 
     _isAllDayAppointment(rawAppointment) {
