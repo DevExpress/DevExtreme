@@ -785,25 +785,25 @@ export class DataGridRowDragging {
   handle?: string;
 
   @Event()
-  onAdd?: (e: AddEvent<DxDataGrid>) => any;
+  onAdd?: (e: AddEvent) => any;
 
   @Event()
-  onDragChange?: (e: DragChangeEvent<DxDataGrid>) => any;
+  onDragChange?: (e: DragChangeEvent) => any;
 
   @Event()
-  onDragEnd?: (e: DragEndEvent<DxDataGrid>) => any;
+  onDragEnd?: (e: DragEndEvent) => any;
 
   @Event()
-  onDragMove?: (e: DragMoveEvent<DxDataGrid>) => any;
+  onDragMove?: (e: DragMoveEvent) => any;
 
   @Event()
-  onDragStart?: (e: DragStartEvent<DxDataGrid>) => any;
+  onDragStart?: (e: DragStartEvent) => any;
 
   @Event()
-  onRemove?: (e: RemoveEvent<DxDataGrid>) => any;
+  onRemove?: (e: RemoveEvent) => any;
 
   @Event()
-  onReorder?: (e: ReorderEvent<DxDataGrid>) => any;
+  onReorder?: (e: ReorderEvent) => any;
 
   @OneWay()
   scrollSensitivity?: number;
@@ -1240,37 +1240,37 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @Event() onRowPrepared?: (e: RowPreparedEvent) => any;
 
-  @Event() onAdaptiveDetailRowPreparing?: (e: AdaptiveDetailRowPreparingEvent<DxDataGrid>) => any;
+  @Event() onAdaptiveDetailRowPreparing?: (e: AdaptiveDetailRowPreparingEvent) => any;
 
-  @Event() onDataErrorOccurred?: (e: DataErrorOccurredEvent<DxDataGrid>) => any;
+  @Event() onDataErrorOccurred?: (e: DataErrorOccurredEvent) => any;
 
-  @Event() onInitNewRow?: (e: InitNewRowEvent<DxDataGrid>) => any;
+  @Event() onInitNewRow?: (e: InitNewRowEvent) => any;
 
-  @Event() onKeyDown?: (e: KeyDownEvent<DxDataGrid>) => any;
+  @Event() onKeyDown?: (e: KeyDownEvent) => any;
 
-  @Event() onRowCollapsed?: (e: RowCollapsedEvent<DxDataGrid>) => any;
+  @Event() onRowCollapsed?: (e: RowCollapsedEvent) => any;
 
-  @Event() onRowCollapsing?: (e: RowCollapsingEvent<DxDataGrid>) => any;
+  @Event() onRowCollapsing?: (e: RowCollapsingEvent) => any;
 
-  @Event() onRowExpanded?: (e: RowExpandedEvent<DxDataGrid>) => any;
+  @Event() onRowExpanded?: (e: RowExpandedEvent) => any;
 
-  @Event() onRowExpanding?: (e: RowExpandingEvent<DxDataGrid>) => any;
+  @Event() onRowExpanding?: (e: RowExpandingEvent) => any;
 
-  @Event() onRowInserted?: (e: RowInsertedEvent<DxDataGrid>) => any;
+  @Event() onRowInserted?: (e: RowInsertedEvent) => any;
 
-  @Event() onRowInserting?: (e: RowInsertingEvent<DxDataGrid>) => any;
+  @Event() onRowInserting?: (e: RowInsertingEvent) => any;
 
-  @Event() onRowRemoved?: (e: RowRemovedEvent<DxDataGrid>) => any;
+  @Event() onRowRemoved?: (e: RowRemovedEvent) => any;
 
-  @Event() onRowRemoving?: (e: RowRemovingEvent<DxDataGrid>) => any;
+  @Event() onRowRemoving?: (e: RowRemovingEvent) => any;
 
-  @Event() onRowUpdated?: (e: RowUpdatedEvent<DxDataGrid>) => any;
+  @Event() onRowUpdated?: (e: RowUpdatedEvent) => any;
 
-  @Event() onRowUpdating?: (e: RowUpdatingEvent<DxDataGrid>) => any;
+  @Event() onRowUpdating?: (e: RowUpdatingEvent) => any;
 
-  @Event() onRowValidating?: (e: RowValidatingEvent<DxDataGrid>) => any;
+  @Event() onRowValidating?: (e: RowValidatingEvent) => any;
 
-  @Event() onSelectionChanged?: (e: SelectionChangedEvent<DxDataGrid>) => any;
+  @Event() onSelectionChanged?: (e: SelectionChangedEvent) => any;
 
-  @Event() onToolbarPreparing?: (e: ToolbarPreparingEvent<DxDataGrid>) => any;
+  @Event() onToolbarPreparing?: (e: ToolbarPreparingEvent) => any;
 }

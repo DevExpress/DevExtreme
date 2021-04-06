@@ -14,7 +14,13 @@ import {
 import DataSource from '../data/data_source';
 
 import {
-    TEvent
+    TEvent,
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentDisposingEvent,
+    ComponentInitializedEvent,
+    ComponentOptionChangedEvent
 } from '../events/index';
 
 import {
@@ -33,35 +39,7 @@ import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
 
-/**
- * @public
- */
-export interface CellClickEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly event: TEvent;
-    readonly data: any;
-    readonly key: any;
-    readonly value?: any;
-    readonly displayValue?: any;
-    readonly text: string;
-    readonly columnIndex: number;
-    readonly column: any;
-    readonly rowIndex: number;
-    readonly rowType: string;
-    readonly cellElement: TElement;
-    readonly row: RowObject;
-}
-
-/**
- * @public
- */
-export interface CellDblClick {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly event: TEvent;
+interface CellInfo {
     readonly data: any;
     readonly key: any;
     readonly value?: any;
@@ -75,59 +53,28 @@ export interface CellDblClick {
     readonly row: RowObject;
 }
 
-/**
- * @public
- */
-export interface CellHoverChangedEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type CellClickEvent = ComponentNativeEvent<dxTreeList> & CellInfo;
+
+/** @public */
+export type CellDblClickEvent = ComponentNativeEvent<dxTreeList> & CellInfo;
+
+/** @public */
+export type CellHoverChangedEvent = ComponentEvent<dxTreeList> & CellInfo & {
     readonly eventType: string;
-    readonly data: any;
-    readonly key: any;
-    readonly value?: any;
-    readonly text: string;
-    readonly displayValue?: any;
-    readonly columnIndex: number;
-    readonly rowIndex: number;
-    readonly column: Column;
-    readonly rowType: string;
-    readonly cellElement: TElement;
-    readonly row: RowObject;
 }
 
-/**
- * @public
- */
-export interface CellPreparedEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly data: any;
-    readonly key: any;
-    readonly value?: any;
-    readonly displayValue?: any;
-    readonly text: string;
-    readonly columnIndex: number;
-    readonly column: Column;
-    readonly rowIndex: number;
-    readonly rowType: string;
-    readonly row: RowObject;
+/** @public */
+export type CellPreparedEvent = ComponentEvent<dxTreeList> & CellInfo & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
-    readonly cellElement: TElement;
     readonly watch?: Function;
     readonly oldValue?: any;
 }
 
-/**
- * @public
- */
-export interface ContextMenuPreparingEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type ContextMenuPreparingEvent = ComponentEvent<dxTreeList> & {
     items?: Array<any>;
     readonly target: string;
     readonly targetElement: TElement;
@@ -137,26 +84,18 @@ export interface ContextMenuPreparingEvent {
     readonly row?: RowObject;
 }
 
-/**
- * @public
- */
-export interface EditingStartEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type DisposingEvent = ComponentDisposingEvent<dxTreeList>;
+
+/** @public */
+export type EditingStartEvent = Cancelable & ComponentEvent<dxTreeList> & {
     readonly data: any;
     readonly key: any;
-    cancel: boolean;
     readonly column: any;
 }
 
-/**
- * @public
- */
-export interface EditorPreparedEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type EditorPreparedEvent = ComponentEvent<dxTreeList> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -170,13 +109,8 @@ export interface EditorPreparedEvent {
     readonly row?: RowObject;
 }
 
-/**
- * @public
- */
-export interface EditorPreparingEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type EditorPreparingEvent = Cancelable & ComponentEvent<dxTreeList> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -184,7 +118,6 @@ export interface EditorPreparingEvent {
     readonly width?: number;
     readonly disabled: boolean;
     readonly rtlEnabled: boolean;
-    cancel: boolean;
     readonly editorElement: TElement;
     readonly readOnly: boolean;
     editorName: string;
@@ -193,13 +126,8 @@ export interface EditorPreparingEvent {
     readonly row?: RowObject;
 }
 
-/**
- * @public
- */
-export interface FocusedCellChangedEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type FocusedCellChangedEvent = ComponentEvent<dxTreeList> & {
     readonly cellElement: TElement;
     readonly columnIndex: number;
     readonly rowIndex: number;
@@ -207,67 +135,46 @@ export interface FocusedCellChangedEvent {
     readonly column: Column;
 }
 
-/**
- * @public
- */
-export interface FocusedCellChangingEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type FocusedCellChangingEvent = Cancelable & ComponentNativeEvent<dxTreeList> & {
     readonly cellElement: TElement;
     readonly prevColumnIndex: number;
     readonly prevRowIndex: number;
     newColumnIndex: number;
     newRowIndex: number;
-    readonly event?: TEvent;
     readonly rows: Array<RowObject>;
     readonly columns: Array<Column>;
-    cancel: boolean;
     isHighlighted: boolean;
 }
 
-/**
- * @public
- */
-export interface FocusedRowChangedEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type FocusedRowChangedEvent = ComponentEvent<dxTreeList> & {
     readonly rowElement: TElement;
     readonly rowIndex: number;
     readonly row: RowObject;
 }
 
-interface FocusedRowChangingEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type FocusedRowChangingEvent = ComponentNativeEvent<dxTreeList> & {
     readonly rowElement: TElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
-    readonly event?: TEvent;
     readonly rows: Array<RowObject>;
-    cancel: boolean;
 }
 
-/**
- * @public
- */
-export interface NodesInitializedEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxTreeList>;
+
+/** @public */
+export type NodesInitializedEvent = ComponentEvent<dxTreeList> & {
     readonly root: Node;
 }
 
-/**
- * @public
- */
-export interface RowClickEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly event: TEvent;
+/** @public */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxTreeList>;
+
+/** @public */
+export type RowClickEvent = ComponentNativeEvent<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -283,14 +190,8 @@ export interface RowClickEvent {
     readonly level: number;
 }
 
-/**
- * @public
- */
-export interface RowDblClickEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly event: TEvent;
+/** @public */
+export type RowDblClickEvent = ComponentNativeEvent<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -303,13 +204,8 @@ export interface RowDblClickEvent {
     readonly rowElement: TElement;
 }
 
-/**
- * @public
- */
-export interface RowPreparedEvent {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
+/** @public */
+export type RowPreparedEvent = ComponentEvent<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -452,7 +348,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellDblClick?: ((e: CellDblClick) => void);
+    onCellDblClick?: ((e: CellDblClickEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -814,9 +710,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
 /** @deprecated Use Editing instead */
 export type dxTreeListEditing = Editing;
 
-/**
- * @public
- */
+/** @public */
 export interface Editing extends EditingBase {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
@@ -863,9 +757,7 @@ export interface Editing extends EditingBase {
 /** @deprecated Use EditingTexts instead */
 export type dxTreeListEditingTexts = EditingTexts;
 
-/**
- * @public
- */
+/** @public */
 export interface EditingTexts extends EditingTextsBase {
     /**
      * @docid dxTreeListOptions.editing.texts.addRowToNode
@@ -879,9 +771,7 @@ export interface EditingTexts extends EditingTextsBase {
 /** @deprecated Use Paging instead */
 export type dxTreeListPaging = Paging;
 
-/**
- * @public
- */
+/** @public */
 export interface Paging extends PagingBase {
     /**
      * @docid dxTreeListOptions.paging.enabled
@@ -895,9 +785,7 @@ export interface Paging extends PagingBase {
 /** @deprecated Use Scrolling instead */
 export type dxTreeListScrolling = Scrolling;
 
-/**
- * @public
- */
+/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxTreeListOptions.scrolling.mode
@@ -912,9 +800,7 @@ export interface Scrolling extends ScrollingBase {
 /** @deprecated Use Selection instead */
 export type dxTreeListSelection = Selection;
 
-/**
- * @public
- */
+/** @public */
 export interface Selection extends SelectionBase {
     /**
      * @docid dxTreeListOptions.selection.recursive
@@ -1178,9 +1064,7 @@ export default class dxTreeList extends Widget implements GridBase {
 /** @deprecated Use Column instead */
 export type dxTreeListColumn = Column;
 
-/**
- * @public
- */
+/** @public */
 export interface CellTemplateInfo {
     readonly data: any;
     readonly component: dxTreeList;
@@ -1196,9 +1080,7 @@ export interface CellTemplateInfo {
     readonly watch?: Function;
 }
 
-/**
- * @public
- */
+/** @public */
 export interface EditCellTemplateInfo {
     readonly setValue?: any;
     readonly data: any;
@@ -1302,9 +1184,7 @@ export interface Column extends ColumnBase {
     type?: 'adaptive' | 'buttons';
 }
 
-/**
- * @public
- */
+/** @public */
 export interface ColumnButtonTemplate {
     readonly component: dxTreeList;
     readonly data: any;
@@ -1316,9 +1196,7 @@ export interface ColumnButtonTemplate {
     readonly row: RowObject;
 }
 
-/**
- * @public
- */
+/** @public */
 export interface ColumnButtonClickArg {
     readonly component: dxTreeList;
     readonly element: TElement;
