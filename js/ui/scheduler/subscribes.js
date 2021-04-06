@@ -108,7 +108,7 @@ const subscribes = {
             (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
-            this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, (function() {
+            this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, (function() {
 
                 this._updateAppointment(rawAppointment, targetedRawAppointment, function() {
                     this._appointments.moveAppointmentBack(event);

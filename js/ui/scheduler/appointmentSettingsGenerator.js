@@ -40,6 +40,32 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         let appointmentList = this._createAppointments(appointment, itemResources);
 
+        const hasAppointmentTimeZone = !isEmptyObject(appointment.startDateTimeZone) || !isEmptyObject(appointment.endDateTimeZone);
+
+        if(appointmentList.length > 1 && hasAppointmentTimeZone) {
+            const appointmentOffsets = {
+                startDate: this.timeZoneCalculator.getOffsets(appointment.startDate, appointment.startDateTimeZone),
+                endDate: this.timeZoneCalculator.getOffsets(appointment.endDate, appointment.endDateTimeZone),
+            };
+
+            appointmentList.forEach(a => {
+                const sourceOffsets = {
+                    startDate: this.timeZoneCalculator.getOffsets(a.startDate, appointment.startDateTimeZone),
+                    endDate: this.timeZoneCalculator.getOffsets(a.endDate, appointment.endDateTimeZone),
+                };
+
+                const startDateOffsetDiff = appointmentOffsets.startDate.appointment - sourceOffsets.startDate.appointment;
+                const endDateOffsetDiff = appointmentOffsets.endDate.appointment - sourceOffsets.endDate.appointment;
+
+                if(startDateOffsetDiff !== 0) {
+                    a.startDate = new Date(a.startDate.getTime() + startDateOffsetDiff * toMs('hour'));
+                }
+                if(endDateOffsetDiff !== 0) {
+                    a.endDate = new Date(a.endDate.getTime() + endDateOffsetDiff * toMs('hour'));
+                }
+            });
+        }
+
         if(this._canProcessNotNativeTimezoneDates(appointment)) {
             appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
         }
@@ -69,24 +95,23 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         if(!appointment.isRecurrent && appointments.length === 0) {
             appointments.push({
-                startDate: appointment.startDate,
-                endDate: appointment.endDate
+                startDate: new Date(appointment.startDate),
+                endDate: new Date(appointment.endDate)
             });
         }
 
         // T817857
         appointments = appointments.map(item => {
-            const {
-                startDate,
-                endDate
-            } = item;
-            const endTime = endDate?.getTime();
+            const resultEndTime = item.endDate?.getTime();
 
-            if(startDate.getTime() === endTime) {
-                endDate.setTime(endTime + toMs('minute'));
+            if(item.startDate.getTime() === resultEndTime) {
+                item.endDate.setTime(resultEndTime + toMs('minute'));
             }
 
-            return item;
+            return {
+                ...item,
+                exceptionDate: new Date(item.startDate)
+            };
         });
 
         return appointments;
@@ -155,7 +180,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 return {
                     ...item,
                     startDate: newStartDate,
-                    endDate: newEndDate
+                    endDate: newEndDate,
+                    exceptionDate: new Date(newStartDate)
                 };
             });
         }
@@ -200,8 +226,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return gridAppointmentList;
     }
 
-    _getProcessedDatesByAppointmentTimeZone(appointmentList, appointment, startDate, endDate) {
+    _getProcessedDatesByAppointmentTimeZone(appointmentList, appointment, startDate, endDate) { // T983264
         const hasAppointmentTimeZone = !isEmptyObject(appointment.startDateTimeZone) || !isEmptyObject(appointment.endDateTimeZone);
+
         if(appointmentList.length > 1 && hasAppointmentTimeZone) {
             const appointmentOffsets = {
                 startDate: this.timeZoneCalculator.getOffsets(appointment.startDate, appointment.startDateTimeZone),
@@ -234,14 +261,10 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             if(offsetDifference !== 0 && this._canProcessNotNativeTimezoneDates(appointment)) {
                 source.startDate = new Date(source.startDate.getTime() + offsetDifference * toMs('minute'));
                 source.endDate = new Date(source.endDate.getTime() + offsetDifference * toMs('minute'));
+                source.exceptionDate = new Date(source.startDate);
             }
 
-            const [sourceStartDate, sourceEndDate] = this._getProcessedDatesByAppointmentTimeZone(
-                appointmentList,
-                appointment,
-                source.startDate,
-                source.endDate
-            );
+            const [sourceStartDate, sourceEndDate] = [source.startDate, source.endDate];
 
             const startDate = this.timeZoneCalculator.createDate(sourceStartDate, { path: 'toGrid' });
             const endDate = this.timeZoneCalculator.createDate(sourceEndDate, { path: 'toGrid' });
