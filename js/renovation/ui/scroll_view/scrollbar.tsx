@@ -262,7 +262,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
     if (this.thumbScrolling) {
       distance[this.axis] = -Math.round(
-        distance[this.axis] / this.containerToContentRatio(),
+        distance[this.axis] / this.containerToContentRatio,
       );
     }
 
@@ -403,7 +403,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   moveToMouseLocation(e): void {
     const mouseLocation = e[`page${this.axis.toUpperCase()}`] - this.props.scrollableOffset;
     const location = this.scrollLocation + mouseLocation
-    / this.containerToContentRatio() - this.props.containerSize / 2;
+    / this.containerToContentRatio - this.props.containerSize / 2;
 
     this.scrollStep(-Math.round(location));
   }
@@ -500,7 +500,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     const { containerSize, scaleRatio } = this.props;
 
     const size = Math.round(
-      Math.max(Math.round(containerSize * this.containerToContentRatio()), THUMB_MIN_SIZE),
+      Math.max(Math.round(containerSize * this.containerToContentRatio), THUMB_MIN_SIZE),
     );
 
     return size / scaleRatio;
@@ -523,16 +523,18 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return 0;
   }
 
-  containerToContentRatio(): number {
+  get containerToContentRatio(): number {
     return this.contentSize
       ? this.props.containerSize / this.contentSize
       : this.props.containerSize;
   }
 
-  baseContainerToContentRatio(): number {
-    const { baseContainerSize, baseContentSize } = this.props;
-
-    return (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
+  get baseContainerToContentRatio(): number {
+    return this.props.baseContainerSize
+      / (this.props.baseContentSize
+        ? this.props.baseContentSize - this.topPocketSize - this.bottomPocketSize
+        : 1
+      );
   }
 
   get dimension(): string {
@@ -604,7 +606,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get isVisible(): boolean {
-    return this.props.showScrollbar !== 'never' && this.baseContainerToContentRatio() < 1;
+    return this.props.showScrollbar !== 'never' && this.baseContainerToContentRatio < 1;
   }
 
   get visible(): boolean {
