@@ -83,6 +83,9 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxButtonGroup
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
