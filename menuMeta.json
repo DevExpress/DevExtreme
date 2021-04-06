@@ -810,7 +810,7 @@
           {
             "Title": "Overview",
             "Name": "ExportToPDF",
-            "Badge": "New",
+            "Badge": "Updated",
             "Widget": "DataGrid",
             "Modules": "jspdf&jspdf-autotable",
             "MvcAdditionalFiles": [
@@ -1128,7 +1128,6 @@
       {
         "Name": "Export to Excel",
         "Equivalents": "",
-        "Badge": "New",
         "Demos": [
           {
             "Title": "Overview",
