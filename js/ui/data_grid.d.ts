@@ -3360,11 +3360,7 @@ export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxDataGrid>;
 export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxDataGrid> & DragReorderInfo;
 
 /** @public */ 
-export type ColumnButtonClickEvent = {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  event?: TEvent;
+export type ColumnButtonClickEvent = ComponentNativeEvent<dxDataGrid> & {
   row?: RowObject;
   column?: Column;
 }

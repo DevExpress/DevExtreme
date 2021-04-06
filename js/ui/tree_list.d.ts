@@ -329,6 +329,14 @@ export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxTreeList>;
 /** @public */
 export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxTreeList> & DragReorderInfo;
 
+
+/** @public */ 
+export type ColumnButtonClickEvent = ComponentNativeEvent<dxTreeList> & {
+    row?: RowObject;
+    column?: Column;
+}
+
+
 /** @public */
 export type ColumnButtonTemplateData = {
     readonly component: dxTreeList;
@@ -1297,16 +1305,6 @@ export interface Column extends ColumnBase {
     type?: 'adaptive' | 'buttons';
 }
 
-/** @public */
-export interface ColumnButtonClickArg {
-    readonly component: dxTreeList;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly event: TEvent;
-    readonly row: RowObject;
-    readonly column: Column;
-}
-
 export type dxTreeListColumnButton = ColumnButton;
 
 
@@ -1335,7 +1333,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: ColumnButtonClickArg) => void) | string;
+    onClick?: ((e: ColumnButtonClickEvent) => void) | string;
     /**
      * @docid dxTreeListColumnButton.template
      * @type_function_param1 cellElement:TElement
