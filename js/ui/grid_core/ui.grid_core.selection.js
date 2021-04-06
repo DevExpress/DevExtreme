@@ -108,27 +108,26 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         _getSelectionConfig: function() {
-            const that = this;
-            const dataController = that._dataController;
-            const selectionOptions = that.option('selection') || {};
+            const dataController = this._dataController;
+            const selectionOptions = this.option('selection') || {};
 
             return {
-                selectedKeys: that.option('selectedRowKeys'),
-                mode: that._selectionMode,
+                selectedKeys: this.option('selectedRowKeys'),
+                mode: this._selectionMode,
                 deferred: selectionOptions.deferred,
                 maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
-                selectionFilter: that.option('selectionFilter'),
+                selectionFilter: this.option('selectionFilter'),
                 key: function() {
-                    return dataController && dataController.key();
+                    return dataController?.key();
                 },
                 keyOf: function(item) {
-                    return dataController && dataController.keyOf(item);
+                    return dataController?.keyOf(item);
                 },
                 dataFields: function() {
-                    return dataController.dataSource() && dataController.dataSource().select();
+                    return dataController.dataSource()?.select();
                 },
                 load: function(options) {
-                    return dataController.dataSource() && dataController.dataSource().load(options) || new Deferred().resolve([]);
+                    return dataController.dataSource()?.load(options) || new Deferred().resolve([]);
                 },
                 plainItems: function() {
                     return dataController.items(true);
@@ -137,18 +136,22 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     return item.selected;
                 },
                 isSelectableItem: function(item) {
-                    return item && item.rowType === 'data' && !item.isNewRow;
+                    return item?.rowType === 'data' && !item.isNewRow;
                 },
                 getItemData: function(item) {
-                    return item && (item.oldData || item.data || item);
+                    return item?.oldData || item?.data || item;
                 },
                 filter: function() {
                     return dataController.getCombinedFilter();
                 },
-                totalCount: function() {
+                totalCount: () => {
+                    if(this.option('scrolling.mode') === 'infinite') {
+                        // return dataController.items().filter(item => item.rowType === 'data').length;
+                    }
+
                     return dataController.totalCount();
                 },
-                onSelectionChanged: that._updateSelectedItems.bind(this)
+                onSelectionChanged: this._updateSelectedItems.bind(this)
             };
         },
 

@@ -844,3 +844,49 @@ QUnit.module('columnWidth auto option', {
         assert.ok($($selectAllElement).find('.dx-select-checkbox').hasClass('dx-checkbox-checked'));
     });
 });
+
+QUnit.module('Selection with scrolling', baseModuleConfig, () => {
+    // T987316
+    QUnit.test('SelectAll should work properly if infinite scrolling and grouping and all data is loaded', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ id: 1 }],
+            selection: {
+                mode: 'multiple'
+            },
+            scrolling: {
+                mode: 'infinite'
+            },
+            grouping: {
+                autoExpandAll: true,
+            },
+            columns: [{
+                dataField: 'id',
+                groupIndex: 0
+            }]
+        });
+
+        const $checkBoxes = $(dataGrid.$element().find('.dx-command-select .dx-checkbox'));
+
+        // assert
+        assert.equal($checkBoxes.length, 2, 'checkboxes count');
+
+        // act
+        const $selectAllCheckBox = $checkBoxes.first();
+        const $rowCheckBox = $checkBoxes.eq(1);
+        $selectAllCheckBox.trigger('dxclick');
+
+        // assert
+        assert.ok($selectAllCheckBox.hasClass('dx-checkbox-checked'), 'selectAll checkbox is checked');
+        assert.ok($rowCheckBox.hasClass('dx-checkbox-checked'), 'row checkbox is checked');
+
+        // act
+        $selectAllCheckBox.trigger('dxclick');
+
+        // assert
+        assert.notOk($selectAllCheckBox.hasClass('dx-checkbox-checked'), 'selectAll checkbox is not checked');
+        assert.notOk($selectAllCheckBox.hasClass('dx-checkbox-indeterminate'), 'selectAll checkbox is not indeterminate');
+        assert.notOk($rowCheckBox.hasClass('dx-checkbox-checked'), 'row checkbox is not checked');
+        assert.notOk($rowCheckBox.hasClass('dx-checkbox-indeterminate'), 'selectAll checkbox is not indeterminate');
+    });
+});
