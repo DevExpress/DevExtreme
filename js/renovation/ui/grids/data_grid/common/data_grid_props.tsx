@@ -15,8 +15,8 @@ import type {
   ColumnButtonClickEvent,
   ColumnButtonTemplateInfo,
   ColumnCustomizeTextArg,
-  AddEvent,
-  DragChangeEvent,
+  RowDraggingAddEvent,
+  RowDraggingChangeEvent,
   CalculateCustomSummaryArg,
   CellTemplateInfo,
   DragTemplateInfo,
@@ -33,9 +33,9 @@ import type {
   ContextMenuPreparingEvent,
   CustomizeExcelCellArg,
   DataErrorOccurredEvent,
-  DragEndEvent,
-  DragMoveEvent,
-  DragStartEvent,
+  RowDraggingEndEvent,
+  RowDraggingMoveEvent,
+  RowDraggingStartEvent,
   EditingStartEvent,
   EditorPreparedEvent,
   EditorPreparingEvent,
@@ -49,8 +49,8 @@ import type {
   FocusedRowChangingEvent,
   InitNewRowEvent,
   KeyDownEvent,
-  RemoveEvent,
-  ReorderEvent,
+  RowDraggingRemoveEvent,
+  RowDraggingReorderEvent,
   RowClickEvent,
   RowCollapsedEvent,
   RowCollapsingEvent,
@@ -785,25 +785,25 @@ export class DataGridRowDragging {
   handle?: string;
 
   @Event()
-  onAdd?: (e: AddEvent) => any;
+  onAdd?: (e: RowDraggingAddEvent) => any;
 
   @Event()
-  onDragChange?: (e: DragChangeEvent) => any;
+  onDragChange?: (e: RowDraggingChangeEvent) => any;
 
   @Event()
-  onDragEnd?: (e: DragEndEvent) => any;
+  onDragEnd?: (e: RowDraggingEndEvent) => any;
 
   @Event()
-  onDragMove?: (e: DragMoveEvent) => any;
+  onDragMove?: (e: RowDraggingMoveEvent) => any;
 
   @Event()
-  onDragStart?: (e: DragStartEvent) => any;
+  onDragStart?: (e: RowDraggingStartEvent) => any;
 
   @Event()
-  onRemove?: (e: RemoveEvent) => any;
+  onRemove?: (e: RowDraggingRemoveEvent) => any;
 
   @Event()
-  onReorder?: (e: ReorderEvent) => any;
+  onReorder?: (e: RowDraggingReorderEvent) => any;
 
   @OneWay()
   scrollSensitivity?: number;

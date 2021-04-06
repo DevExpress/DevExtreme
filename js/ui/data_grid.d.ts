@@ -163,7 +163,7 @@ export interface ToolbarPreparingInfo {
   toolbarOptions: dxToolbarOptions;
 }
 
-export interface GridDragAddEvent<T extends GridBase> {
+export interface ComponentRowDraggingEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   readonly itemData?: any;
@@ -174,52 +174,9 @@ export interface GridDragAddEvent<T extends GridBase> {
   readonly toComponent: dxSortable | dxDraggable;
   readonly fromData?: any;
   readonly toData?: any;
-  readonly dropInsideItem: boolean;
 }
 
-export interface GridDragChangeEvent<T extends GridBase> {
-  readonly component: T;
-  readonly event: TEvent;
-  readonly itemData?: any;
-  readonly itemElement: TElement;
-  readonly fromIndex: number;
-  readonly toIndex: number;
-  readonly fromComponent: dxSortable | dxDraggable;
-  readonly toComponent: dxSortable | dxDraggable;
-  readonly fromData?: any;
-  readonly toData?: any;
-  readonly dropInsideItem: boolean;
-}
-
-export interface GridDragEndEvent<T extends GridBase> {
-  readonly component: T;
-  readonly event: TEvent;
-  readonly itemData?: any;
-  readonly itemElement: TElement;
-  readonly fromIndex: number;
-  readonly toIndex: number;
-  readonly fromComponent: dxSortable | dxDraggable;
-  readonly toComponent: dxSortable | dxDraggable;
-  readonly fromData?: any;
-  readonly toData?: any;
-  readonly dropInsideItem: boolean;
-}
-
-export interface GridMoveEvent<T extends GridBase> {
-  readonly component: T;
-  readonly event: TEvent;
-  readonly itemData?: any;
-  readonly itemElement: TElement;
-  readonly fromIndex: number;
-  readonly toIndex: number;
-  readonly fromComponent: dxSortable | dxDraggable;
-  readonly toComponent: dxSortable | dxDraggable;
-  readonly fromData?: any;
-  readonly toData?: any;
-  readonly dropInsideItem: boolean;
-}
-
-export interface GridDragStartEvent<T extends GridBase> {
+export interface ComponentDragStartEvent<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   itemData?: any;
@@ -228,30 +185,11 @@ export interface GridDragStartEvent<T extends GridBase> {
   readonly fromData?: any;
 }
 
-export interface GridDragRemoveEvent<T extends GridBase> {
-  readonly component: T;
-  readonly event: TEvent;
-  readonly itemData?: any;
-  readonly itemElement: TElement;
-  readonly fromIndex: number;
-  readonly toIndex: number;
-  readonly fromComponent: dxSortable | dxDraggable;
-  readonly toComponent: dxSortable | dxDraggable;
-  readonly fromData?: any;
-  readonly toData?: any;
+export interface DragDropInfo {
+  readonly dropInsideItem: boolean;
 }
 
-export interface GridDragReorderEvent<T extends GridBase> {
-  readonly component: T;
-  readonly event: TEvent;
-  readonly itemData?: any;
-  readonly itemElement: TElement;
-  readonly fromIndex: number;
-  readonly toIndex: number;
-  readonly fromComponent: dxSortable | dxDraggable;
-  readonly toComponent: dxSortable | dxDraggable;
-  readonly fromData?: any;
-  readonly toData?: any;
+export interface DragReorderInfo {
   readonly dropInsideItem: boolean;
   promise?: TPromise<void>;
 }
@@ -415,7 +353,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field10 toData:any
      * @type_function_param1_field11 dropInsideItem:boolean
      */
-    onAdd?: ((e: GridDragAddEvent<T>) => void),
+    onAdd?: ((e: ComponentRowDraggingEvent<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragChange
      * @prevFileNamespace DevExpress.ui
@@ -433,7 +371,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 toData:any
      * @type_function_param1_field12 dropInsideItem:boolean
      */
-    onDragChange?: ((e: Cancelable & GridDragChangeEvent<T>) => void),
+    onDragChange?: ((e: Cancelable & ComponentRowDraggingEvent<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragEnd
      * @prevFileNamespace DevExpress.ui
@@ -451,7 +389,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 toData:any
      * @type_function_param1_field12 dropInsideItem:boolean
      */
-    onDragEnd?: ((e: Cancelable & GridDragEndEvent<T>) => void),
+    onDragEnd?: ((e: Cancelable & ComponentRowDraggingEvent<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragMove
      * @prevFileNamespace DevExpress.ui
@@ -469,7 +407,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 toData:any
      * @type_function_param1_field12 dropInsideItem:boolean
      */
-    onDragMove?: ((e: Cancelable & GridMoveEvent<T>) => void),
+    onDragMove?: ((e: Cancelable & ComponentRowDraggingEvent<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragStart
      * @prevFileNamespace DevExpress.ui
@@ -482,7 +420,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field6 fromIndex:number
      * @type_function_param1_field7 fromData:any
      */
-    onDragStart?: ((e: Cancelable & GridDragStartEvent<T>) => void),
+    onDragStart?: ((e: Cancelable & ComponentDragStartEvent<T>) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onRemove
      * @prevFileNamespace DevExpress.ui
@@ -498,7 +436,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field9 fromData:any
      * @type_function_param1_field10 toData:any
      */
-    onRemove?: ((e: GridDragRemoveEvent<T>) => void),
+    onRemove?: ((e: ComponentRowDraggingEvent<T>) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onReorder
      * @prevFileNamespace DevExpress.ui
@@ -516,7 +454,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 dropInsideItem:boolean
      * @type_function_param1_field12 promise:Promise<void>
      */
-    onReorder?: ((e: GridDragReorderEvent<T>) => void),
+    onReorder?: ((e: ComponentRowDraggingEvent<dxDataGrid> & DragReorderInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.scrollSensitivity
      * @prevFileNamespace DevExpress.ui
@@ -3402,25 +3340,25 @@ export type ToolbarPreparingEvent = ComponentEvent<dxDataGrid> & ToolbarPreparin
 
 
 /** @public */
-export type AddEvent = GridDragAddEvent<dxDataGrid>;
+export type RowDraggingAddEvent = ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type DragChangeEvent = Cancelable & GridDragChangeEvent<dxDataGrid>;
+export type RowDraggingChangeEvent = Cancelable & ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type DragEndEvent = Cancelable & GridDragEndEvent<dxDataGrid>;
+export type RowDraggingEndEvent = Cancelable & ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type DragMoveEvent = Cancelable & GridMoveEvent<dxDataGrid>;
+export type RowDraggingMoveEvent = Cancelable & ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type DragStartEvent = Cancelable & GridDragStartEvent<dxDataGrid>;
+export type RowDraggingStartEvent = Cancelable & ComponentDragStartEvent<dxDataGrid>;
 
 /** @public */
-export type RemoveEvent = GridDragRemoveEvent<dxDataGrid>;
+export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxDataGrid>;
 
 /** @public */
-export type ReorderEvent = GridDragReorderEvent<dxDataGrid>;
+export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxDataGrid> & DragReorderInfo;
 
 /** @public */ 
 export type ColumnButtonClickEvent = {

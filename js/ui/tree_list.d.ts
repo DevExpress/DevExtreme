@@ -36,13 +36,10 @@ import {
     AdaptiveDetailRowPreparingInfo,
     DataErrorOccurredInfo,
     DataChangeInfo,
-    GridDragAddEvent,
-    GridDragChangeEvent,
-    GridDragEndEvent,
-    GridDragRemoveEvent,
-    GridDragReorderEvent,
-    GridDragStartEvent,
-    GridMoveEvent,
+    ComponentDragStartEvent,
+    ComponentRowDraggingEvent,
+    DragDropInfo,
+    DragReorderInfo,
     KeyDownInfo,
     NewRowInfo,
     RowInsertedInfo,
@@ -61,8 +58,6 @@ import {
 import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
-
-
 
 interface CellInfo {
     readonly data: any;
@@ -313,25 +308,25 @@ export type ToolbarPreparingEvent = ComponentEvent<dxTreeList> & ToolbarPreparin
 
 
 /** @public */
-export type AddEvent = GridDragAddEvent<dxTreeList>;
+export type RowDraggingAddEvent = ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type DragChangeEvent = Cancelable & GridDragChangeEvent<dxTreeList>;
+export type RowDraggingChangeEvent = Cancelable & ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type DragEndEvent = Cancelable & GridDragEndEvent<dxTreeList>;
+export type RowDraggingEndEvent = Cancelable & ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type DragMoveEvent = Cancelable & GridMoveEvent<dxTreeList>;
+export type RowDraggingMoveEvent = Cancelable & ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type DragStartEvent = Cancelable & GridDragStartEvent<dxTreeList>;
+export type RowDraggingStartEvent = Cancelable & ComponentDragStartEvent<dxTreeList>;
 
 /** @public */
-export type RemoveEvent = GridDragRemoveEvent<dxTreeList>;
+export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxTreeList>;
 
 /** @public */
-export type ReorderEvent = GridDragReorderEvent<dxTreeList>;
+export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxTreeList> & DragReorderInfo;
 
 export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
