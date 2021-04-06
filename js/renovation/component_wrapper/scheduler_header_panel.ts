@@ -2,7 +2,7 @@
 import Component from './component';
 
 export default class HeaderPanel extends Component {
-  _setOptionsByReference() {
+  _setOptionsByReference(): void {
     super._setOptionsByReference();
 
     this._optionsByReference = {

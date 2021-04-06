@@ -148,4 +148,6 @@ export default class Component {
   _getDefaultOptions(): object;
   _init(): void;
   _optionChanged(args: { name: string; value: unknown }): void;
+  _setOptionsByReference(): void;
+  _optionsByReference: Record<string, boolean>;
 }
