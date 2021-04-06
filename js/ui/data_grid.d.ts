@@ -4494,12 +4494,8 @@ export interface SummaryTexts {
     sumOtherColumn?: string
 }
 
-/**
- * @deprecated Use Editing instead
- */
 export type dxDataGridEditing = Editing;
 
-/** @public */
 export interface Editing extends EditingBase {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
@@ -4538,12 +4534,8 @@ export interface Editing extends EditingBase {
     texts?: any;
 }
 
-/**
- * @deprecated Use Scrolling instead
- */
 export type dxDataGridScrolling = Scrolling;
 
-/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxDataGridOptions.scrolling.mode
@@ -4555,12 +4547,8 @@ export interface Scrolling extends ScrollingBase {
     mode?: 'infinite' | 'standard' | 'virtual';
 }
 
-/**
- * @deprecated Use Selection instead
- */
 export type dxDataGridSelection = Selection;
 
-/** @public */
 export interface Selection extends SelectionBase {
     /**
      * @docid dxDataGridOptions.selection.deferred
@@ -4864,9 +4852,6 @@ export interface HeaderCellTemplateInfo {
 }
 
 
-/**
- * @deprecated Use Column instead
- */ 
 export type dxDataGridColumn = Column;
 
 /**
@@ -5027,9 +5012,6 @@ export interface ColumnButtonTemplateInfo {
   readonly row: RowObject;
 }
 
-/**
- * @deprecated
- */
 export type dxDataGridColumnButton = ColumnButton;
 /**
  * @docid dxDataGridColumnButton
@@ -5088,7 +5070,6 @@ export interface ColumnButton extends ColumnButtonBase {
     visible?: boolean | ((options: { component?: dxDataGrid, row?: RowObject, column?: Column }) => boolean);
 }
 
-/** @deprecated Use RowObject instead */
 export type dxDataGridRowObject = RowObject;
 
 /**

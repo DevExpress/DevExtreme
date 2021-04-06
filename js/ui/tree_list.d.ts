@@ -820,10 +820,8 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     selection?: Selection;
 }
 
-/** @deprecated Use Editing instead */
 export type dxTreeListEditing = Editing;
 
-/** @public */
 export interface Editing extends EditingBase {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
@@ -867,10 +865,8 @@ export interface Editing extends EditingBase {
     texts?: EditingTexts;
 }
 
-/** @deprecated Use EditingTexts instead */
 export type dxTreeListEditingTexts = EditingTexts;
 
-/** @public */
 export interface EditingTexts extends EditingTextsBase {
     /**
      * @docid dxTreeListOptions.editing.texts.addRowToNode
@@ -881,10 +877,8 @@ export interface EditingTexts extends EditingTextsBase {
     addRowToNode?: string;
 }
 
-/** @deprecated Use Paging instead */
 export type dxTreeListPaging = Paging;
 
-/** @public */
 export interface Paging extends PagingBase {
     /**
      * @docid dxTreeListOptions.paging.enabled
@@ -895,10 +889,8 @@ export interface Paging extends PagingBase {
     enabled?: boolean;
 }
 
-/** @deprecated Use Scrolling instead */
 export type dxTreeListScrolling = Scrolling;
 
-/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxTreeListOptions.scrolling.mode
@@ -910,10 +902,8 @@ export interface Scrolling extends ScrollingBase {
     mode?: 'standard' | 'virtual';
 }
 
-/** @deprecated Use Selection instead */
 export type dxTreeListSelection = Selection;
 
-/** @public */
 export interface Selection extends SelectionBase {
     /**
      * @docid dxTreeListOptions.selection.recursive
@@ -1174,7 +1164,6 @@ export default class dxTreeList extends Widget implements GridBase {
     updateDimensions(): void;
 }
 
-/** @deprecated Use Column instead */
 export type dxTreeListColumn = Column;
 
 /** @public */
@@ -1319,7 +1308,6 @@ export interface ColumnButtonClickArg {
     readonly column: Column;
 }
 
-/** @deprecated Use ColumnButton instead */
 export type dxTreeListColumnButton = ColumnButton;
 
 
@@ -1380,7 +1368,6 @@ export interface ColumnButton extends ColumnButtonBase {
     visible?: boolean | ((options: { readonly component: dxTreeList, row?: RowObject, readonly column: Column }) => boolean);
 }
 
-/** @deprecated Use Node instead */
 export type dxTreeListNode = Node;
 
 /**
@@ -1434,7 +1421,6 @@ export interface Node {
     visible?: boolean;
 }
 
-/** @deprecated Use RowObject instead */
 export type dxTreeListRowObject = RowObject;
 
 /**
@@ -1507,5 +1493,4 @@ export interface RowObject {
 
 export type Options = dxTreeListOptions;
 
-/** @deprecated use Options instead */
 export type IOptions = dxTreeListOptions;
