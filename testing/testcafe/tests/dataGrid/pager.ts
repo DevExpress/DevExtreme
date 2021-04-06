@@ -108,3 +108,27 @@ test('Resize', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 });
+test('Resize without navigation buttons', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await dataGrid.option('pager.showNavigationButtons', false);
+  const pagerElement = dataGrid.getPager().element;
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .resizeWindow(700, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-large.png', pagerElement))
+    .ok()
+    .resizeWindow(540, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-large-noinfo.png', pagerElement))
+    .ok()
+    .resizeWindow(350, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-small.png', pagerElement))
+    .ok()
+    .resizeWindow(540, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-large-noinfo-enlarge.png', pagerElement))
+    .ok()
+    .resizeWindow(700, 600)
+    .expect(await takeScreenshot('pager-resize-nobutton-large-enlarge.png', pagerElement))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+});
