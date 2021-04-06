@@ -146,7 +146,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
                 },
                 totalCount: () => {
                     if(this.option('scrolling.mode') === 'infinite') {
-                        // return dataController.items().filter(item => item.rowType === 'data').length;
+                        return dataController.items().filter(item => item.rowType === 'data').length;
                     }
 
                     return dataController.totalCount();
