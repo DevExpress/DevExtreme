@@ -84,21 +84,20 @@ class FileManager extends Widget {
 
         this._notificationControl = this._createComponent($notificationControl, FileManagerNotificationControl, {
             progressPanelContainer: this.$element(),
-            contentTemplate: container => this._createWrapper(container),
+            contentTemplate: (container, notificationControl) => this._createWrapper(container, notificationControl),
             onActionProgress: e => this._onActionProgress(e),
             positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`,
             showProgressPanel: this.option('notifications.showPanel'),
             showNotificationPopup: this.option('notifications.showPopup')
         });
-        this._editing.option('notificationControl', this._notificationControl);
     }
 
-    _createWrapper(container) {
+    _createWrapper(container, notificationControl) {
         this._$wrapper = $('<div>')
             .addClass(FILE_MANAGER_WRAPPER_CLASS)
             .appendTo(container);
 
-        this._createEditing();
+        this._createEditing(notificationControl);
 
         const $toolbar = $('<div>').appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
@@ -124,7 +123,7 @@ class FileManager extends Widget {
         });
     }
 
-    _createEditing() {
+    _createEditing(notificationControl) {
         const $editingContainer = $('<div>')
             .addClass(FILE_MANAGER_EDITING_CONTAINER_CLASS)
             .appendTo(this.$element());
@@ -135,6 +134,7 @@ class FileManager extends Widget {
                 getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
             },
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
+            notificationControl,
             uploadDropZonePlaceholderContainer: this.$element(),
             onSuccess: ({ updatedOnlyFiles }) => this._redrawComponent(updatedOnlyFiles),
             onCreating: () => this._setItemsViewAreaActive(false),
@@ -685,7 +685,7 @@ class FileManager extends Widget {
     }
 
     _getSelectedItemInfos() {
-        return this._itemView.getSelectedItems();
+        return this._itemView ? this._itemView.getSelectedItems() : [];
     }
 
     refresh() {
