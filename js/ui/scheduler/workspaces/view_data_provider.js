@@ -321,14 +321,48 @@ class ViewDataGenerator {
             rightVirtualCellWidth,
             cellCount,
             totalCellCount,
+            isGenerateWeekDaysHeaderData,
+            groupByDate,
+            horizontalGroupCount,
+            cellCountInDay,
+            cellWidth,
         } = options;
 
+        const dataMap = [];
+        let weekDayLeftVirtualCellWidth;
+        let weekDayRightVirtualCellWidth;
+        let weekDayLeftVirtualCellCount;
+        let weekDayRightVirtualCellCount;
+
+        if(isGenerateWeekDaysHeaderData) {
+            const colSpan = groupByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
+            const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
+            const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
+            const validCellWidth = cellWidth || 0;
+
+            const weekDayRow = completeDateHeaderMap[0].slice(leftVirtualCellCount, actualCellCount);
+
+            dataMap.push(weekDayRow);
+
+            weekDayLeftVirtualCellCount = leftVirtualCellCount * colSpan;
+            weekDayLeftVirtualCellWidth = weekDayLeftVirtualCellCount * validCellWidth;
+            weekDayRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
+            weekDayRightVirtualCellWidth = weekDayRightVirtualCellCount * validCellWidth;
+        }
+
+        const dateRow = completeDateHeaderMap[completeDateHeaderMap.length - 1].slice(startCellIndex, startCellIndex + cellCount);
+        dataMap.push(dateRow);
+
         return {
-            dataMap: completeDateHeaderMap.map(headerRow => headerRow.slice(startCellIndex, startCellIndex + cellCount)),
+            dataMap,
             leftVirtualCellWidth,
             rightVirtualCellWidth,
             leftVirtualCellCount: startCellIndex,
             rightVirtualCellCount: totalCellCount - startCellIndex - cellCount,
+            weekDayLeftVirtualCellCount,
+            weekDayLeftVirtualCellWidth,
+            weekDayRightVirtualCellCount,
+            weekDayRightVirtualCellWidth,
         };
     }
 

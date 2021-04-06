@@ -1,7 +1,6 @@
 import {
   Component,
   ComponentBindings,
-  Effect,
   JSXComponent,
   JSXTemplate,
   OneWay,
@@ -92,10 +91,5 @@ export class HeaderPanelLayout extends JSXComponent<HeaderPanelLayoutProps, 'dat
     const { groupOrientation, groups } = this.props;
 
     return isHorizontalGroupOrientation(groups, groupOrientation);
-  }
-
-  @Effect({ run: 'always' })
-  someEffect() {
-    console.log('effect');
   }
 }

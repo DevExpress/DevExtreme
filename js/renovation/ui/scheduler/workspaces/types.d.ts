@@ -127,4 +127,8 @@ export interface DateHeaderData {
   rightVirtualCellWidth: number;
   leftVirtualCellCount: number;
   rightVirtualCellCount: number;
+  weekDayLeftVirtualCellWidth?: number;
+  weekDayRightVirtualCellWidth?: number;
+  weekDayLeftVirtualCellCount?: number;
+  weekDayRightVirtualCellCount?: number;
 }

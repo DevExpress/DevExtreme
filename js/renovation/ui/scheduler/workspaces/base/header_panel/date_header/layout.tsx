@@ -32,7 +32,6 @@ export const viewFunction = ({
     rightVirtualCellWidth,
   } = dateHeaderData;
 
-  // console.log(leftVirtualCellCount);
   return (
     <Fragment>
       {dataMap.map((dateHeaderRow, rowIndex) => (
