@@ -61,7 +61,6 @@ import {
 } from './types.d';
 
 import { getElementOffset } from './utils/get_element_offset';
-import { getTranslateValues } from './utils/get_translate_values';
 import { getElementStyle } from './utils/get_element_style';
 
 import { TopPocket } from './top_pocket';
@@ -415,12 +414,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   scrollOffset(): ScrollableLocation {
-    const location = { ...{ left: 0, top: 0 }, ...getTranslateValues(this.contentRef.current) };
-
-    location.top -= this.containerRef.current!.scrollTop;
-    location.left -= this.containerRef.current!.scrollLeft;
-
-    return { top: -location.top, left: -location.left };
+    return {
+      top: this.containerRef.current!.scrollTop,
+      left: this.containerRef.current!.scrollLeft,
+    };
   }
 
   @Method()
@@ -454,10 +451,17 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   getEventArgs(): ScrollEventArgs {
+    const scrollOffset = this.scrollOffset();
+
     return {
       event: this.eventForUserAction,
-      scrollOffset: this.scrollOffset(),
-      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef.current!),
+      scrollOffset,
+      ...getBoundaryProps(
+        this.props.direction,
+        scrollOffset,
+        this.containerRef.current!,
+        this.topPocketClientHeight,
+      ),
     };
   }
 

@@ -18,21 +18,20 @@ import { BaseWidgetProps } from '../../utils/base_props';
 import { combineClasses } from '../../utils/combine_classes';
 
 import {
+  PULLDOWN_ICON_CLASS,
+  SCROLLVIEW_PULLDOWN,
+  SCROLLVIEW_PULLDOWN_IMAGE_CLASS,
+  SCROLLVIEW_PULLDOWN_INDICATOR_CLASS,
+  SCROLLVIEW_PULLDOWN_READY_CLASS,
+  SCROLLVIEW_PULLDOWN_REFRESHING_CLASS,
+  SCROLLVIEW_PULLDOWN_TEXT_CLASS,
+  SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS,
+  SCROLLVIEW_TOP_POCKET_CLASS,
   TopPocketState,
 } from './common/consts';
 import {
   RefreshStrategy,
 } from './types.d';
-
-const SCROLLVIEW_TOP_POCKET_CLASS = 'dx-scrollview-top-pocket';
-const SCROLLVIEW_PULLDOWN = 'dx-scrollview-pull-down';
-const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
-const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
-const SCROLLVIEW_PULLDOWN_IMAGE_CLASS = 'dx-scrollview-pull-down-image';
-const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
-const SCROLLVIEW_PULLDOWN_TEXT_CLASS = 'dx-scrollview-pull-down-text';
-const SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = 'dx-scrollview-pull-down-text-visible';
-const PULLDOWN_ICON_CLASS = 'dx-icon-pulldown';
 
 export const viewFunction = (viewModel: TopPocket): JSX.Element => {
   const {

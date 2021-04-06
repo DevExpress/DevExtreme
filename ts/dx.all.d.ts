@@ -3317,6 +3317,31 @@ declare module DevExpress.ui {
         validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => boolean);
     }
     /**
+     * [descr:DataChange]
+     */
+    export interface DataChange {
+        /**
+         * [descr:DataChange.data]
+         */
+        data: any;
+        /**
+         * [descr:DataChange.index]
+         */
+        index?: number;
+        /**
+         * [descr:DataChange.key]
+         */
+        key: any;
+        /**
+         * [descr:DataChange.pageIndex]
+         */
+        pageIndex?: number;
+        /**
+         * [descr:DataChange.type]
+         */
+        type: 'insert' | 'update' | 'remove';
+    }
+    /**
      * [descr:DataExpressionMixinOptions]
      */
     export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
@@ -3615,11 +3640,11 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.onEditCanceled]
          */
-        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => any);
+        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<DataChange> }) => any);
         /**
          * [descr:GridBaseOptions.onEditCanceling]
          */
-        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<GridBaseEditingChange>, cancel?: boolean }) => any);
+        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<DataChange>, cancel?: boolean }) => any);
         /**
          * [descr:GridBaseOptions.onInitNewRow]
          */
@@ -3675,11 +3700,11 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.onSaved]
          */
-        onSaved?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => any);
+        onSaved?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<DataChange> }) => any);
         /**
          * [descr:GridBaseOptions.onSaving]
          */
-        onSaving?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<GridBaseEditingChange>, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
+        onSaving?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<DataChange>, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
         /**
          * [descr:GridBaseOptions.onSelectionChanged]
          */
@@ -3768,7 +3793,7 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.editing.changes]
          */
-        changes?: Array<GridBaseEditingChange>;
+        changes?: Array<DataChange>;
         /**
          * [descr:GridBaseOptions.editing.confirmDelete]
          */
@@ -4422,31 +4447,6 @@ declare module DevExpress.ui {
          * [descr:GridBaseColumnButton.text]
          */
         text?: string;
-    }
-    /**
-     * [descr:GridBaseEditingChange]
-     */
-    export interface GridBaseEditingChange {
-        /**
-         * [descr:GridBaseEditingChange.data]
-         */
-        data: any;
-        /**
-         * [descr:GridBaseEditingChange.index]
-         */
-        index?: number;
-        /**
-         * [descr:GridBaseEditingChange.key]
-         */
-        key: any;
-        /**
-         * [descr:GridBaseEditingChange.pageIndex]
-         */
-        pageIndex?: number;
-        /**
-         * [descr:GridBaseEditingChange.type]
-         */
-        type: 'insert' | 'update' | 'remove';
     }
     /**
      * [descr:HierarchicalCollectionWidgetOptions]
@@ -6036,11 +6036,11 @@ declare module DevExpress.ui {
          */
         import(data: string, updateExistingItemsOnly?: boolean): void;
         /**
-         * [descr:dxDiagram.scrollToItems(items: Array<dxDiagramItem>)]
+         * [descr:dxDiagram.scrollToItems(items)]
          */
         scrollToItems(items: Array<dxDiagramItem>): void;
         /**
-         * [descr:dxDiagram.setSelectedItems(items: Array<dxDiagramItem>)]
+         * [descr:dxDiagram.setSelectedItems(items)]
          */
         setSelectedItems(items: Array<dxDiagramItem>): void;
         /**

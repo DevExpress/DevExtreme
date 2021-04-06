@@ -36,8 +36,7 @@ import {
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
 
 import {
-  ensureLocation, normalizeCoordinate,
-  getContainerOffsetInternal,
+  ensureLocation, normalizeCoordinate, getMaxScrollOffset,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
 } from './scrollable_utils';
 
@@ -307,11 +306,11 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   scrollOffset(): ScrollableLocation {
-    const { rtlEnabled } = this.props;
-    const { left, top } = getContainerOffsetInternal(this.containerRef.current!);
+    const maxScrollLeftOffset = getMaxScrollOffset('width', this.containerRef.current!);
+
     return {
-      left: getPublicCoordinate('left', left, this.containerRef.current!, rtlEnabled),
-      top: getPublicCoordinate('top', top, this.containerRef.current!, rtlEnabled),
+      left: getPublicCoordinate('left', this.containerRef.current!.scrollLeft, maxScrollLeftOffset, this.props.rtlEnabled),
+      top: this.containerRef.current!.scrollTop,
     };
   }
 
@@ -358,7 +357,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return {
       event: this.eventForUserAction,
       scrollOffset: this.scrollOffset(),
-      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef.current!),
+      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef.current!, 0),
     };
   }
 
