@@ -1063,9 +1063,6 @@ exports.DataController = Class.inherit((function() {
                 that._rowsInfo = rowsInfo;
 
                 if(that._rowsScrollController && that._columnsScrollController && that.changed && !that._dataSource.paginate()) {
-                    that._rowsScrollController.reset();
-                    that._columnsScrollController.reset();
-
                     that._lockChanged = true;
                     that._rowsScrollController.load();
                     that._columnsScrollController.load();
