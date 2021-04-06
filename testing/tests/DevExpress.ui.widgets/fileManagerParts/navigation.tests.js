@@ -852,4 +852,25 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
         assert.strictEqual(this.wrapper.getFocusedItemText(), folderName, 'current folder is still focused');
     });
+
+    test('errorText can be customized on the getItems', function(assert) {
+        const customMessage = 'Custom error message';
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                getItems: () => { throw { errorId: 0, errorText: customMessage }; }
+            })
+        });
+        this.clock.tick(400);
+
+        const info = this.progressPanelWrapper.getInfos()[0];
+        const common = info.common;
+        const details = info.details[0];
+        assert.notOk(common.hasError, 'error rendered');
+        assert.equal(common.commonText, 'The directory cannot be opened', 'common text rendered');
+        assert.notOk(common.$progressBar.length, 'progress bar not rendered');
+        assert.ok(common.closeButtonVisible, 'close button visible');
+
+        assert.ok(details.hasError, 'error rendered');
+        assert.equal(details.errorText, customMessage, 'details error text rendered');
+    });
 });
