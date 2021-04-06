@@ -915,16 +915,12 @@ module('Scheduler grid and appointment time zone', moduleConfig, () => {
                 timeZone: timeZones.Phoenix,
                 dataSource: [{
                     text: 'DST Test',
-                    roomId: [1],
                     startDate: new Date('2021-03-13T19:00:00.000Z'),
                     endDate: new Date('2021-03-13T19:30:00.000Z'),
                     recurrenceRule: 'FREQ=DAILY',
                     startDateTimeZone: timeZones.NewYork,
                     endDateTimeZone: timeZones.NewYork
                 }],
-                editing: {
-                    allowTimeZoneEditing: true
-                },
                 views: ['week'],
                 currentView: 'week',
                 currentDate: new Date(2021, 2, 13),
