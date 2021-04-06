@@ -101,8 +101,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         if(!appointment.isRecurrent && appointments.length === 0) {
             appointments.push({
-                startDate: new Date(appointment.startDate),
-                endDate: new Date(appointment.endDate)
+                startDate: appointment.startDate,
+                endDate: appointment.endDate
             });
         }
 
