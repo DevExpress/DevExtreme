@@ -2,7 +2,7 @@ import $ from 'jquery';
 import fx from 'animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 const {
     module,
@@ -21,10 +21,6 @@ testStart(function() {
 const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
     },
     afterEach: function() {
         fx.off = false;
@@ -318,7 +314,7 @@ module('CellTemplate tests', moduleConfig, () => {
             let countCallTemplate1 = 0;
             let countCallTemplate2 = 0;
 
-            this.createInstance({
+            createWrapper({
                 views: [{
                     type: 'day',
                     dataCellTemplate: function() {
@@ -335,8 +331,8 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.notEqual(countCallTemplate2, 0, 'count call second template');
         });
 
-        QUnit.test('allDayPanel cell with custom dataCellTemplate must open appointment popup when double-clicked (T737506)', function(assert) {
-            this.createInstance({
+        test('allDayPanel cell with custom dataCellTemplate must open appointment popup when double-clicked (T737506)', function(assert) {
+            const scheduler = createWrapper({
                 currentDate: new Date(2015, 4, 25),
                 views: ['week'],
                 currentView: 'week',
@@ -350,21 +346,21 @@ module('CellTemplate tests', moduleConfig, () => {
                 }
             });
 
-            this.instance.option('dataSource', [
+            scheduler.instance.option('dataSource', [
                 { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
                 { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
             ]);
 
-            const spy = sinon.spy(this.instance, 'showAppointmentPopup');
+            const spy = sinon.spy(scheduler.instance, 'showAppointmentPopup');
 
-            const $allDayAppointment = $(this.instance.$element()).find('.dx-scheduler-all-day-appointment').eq(0);
+            const $allDayAppointment = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-appointment').eq(0);
             $allDayAppointment.trigger('dxdblclick');
 
             assert.ok(spy.calledOnce, 'Method was called');
         });
 
-        QUnit.test('Data cell should has right content when used dataCellTemplate option', function(assert) {
-            this.createInstance({
+        test('Data cell should has right content when used dataCellTemplate option', function(assert) {
+            const scheduler = createWrapper({
                 currentView: 'week',
                 currentDate: new Date(2016, 8, 5),
                 firstDayOfWeek: 0,
@@ -373,13 +369,13 @@ module('CellTemplate tests', moduleConfig, () => {
                 }
             });
 
-            const $element = this.instance.$element();
+            const $element = scheduler.instance.$element();
 
             assert.ok($element.find('.custom-cell-class').length > 0, 'class is ok');
         });
 
-        QUnit.test('Data cell should has right content when dataCellTemplate option was change', function(assert) {
-            this.createInstance({
+        test('Data cell should has right content when dataCellTemplate option was change', function(assert) {
+            const scheduler = createWrapper({
                 currentView: 'week',
                 currentDate: new Date(2016, 8, 5),
                 firstDayOfWeek: 0,
@@ -388,11 +384,11 @@ module('CellTemplate tests', moduleConfig, () => {
                 }
             });
 
-            const $element = this.instance.$element();
+            const $element = scheduler.instance.$element();
 
             assert.ok($element.find('.custom-cell-class').length > 0, 'class before option changing is ok');
 
-            this.instance.option('dataCellTemplate', function(itemData, index, container) {
+            scheduler.instance.option('dataCellTemplate', function(itemData, index, container) {
                 $(container).addClass('new-custom-class');
             });
 
@@ -400,10 +396,10 @@ module('CellTemplate tests', moduleConfig, () => {
         });
 
         [true, false].forEach((renovateRender) => {
-            QUnit.test(`dataCellTemplate should have correct options when renovateRender is ${renovateRender}`, function(assert) {
+            test(`dataCellTemplate should have correct options when renovateRender is ${renovateRender}`, function(assert) {
                 let templateOptions;
 
-                this.createInstance({
+                createWrapper({
                     currentView: 'week',
                     startDayHour: 5,
                     currentDate: new Date(2016, 8, 5),
@@ -434,9 +430,9 @@ module('CellTemplate tests', moduleConfig, () => {
                 }, 'Resources option is ok');
             });
 
-            QUnit.test(`dataCellTemplate for all-day panel should take cellElement with correct geometry(T453520) when renovateRender is ${renovateRender}`, function(assert) {
+            test(`dataCellTemplate for all-day panel should take cellElement with correct geometry(T453520) when renovateRender is ${renovateRender}`, function(assert) {
                 assert.expect(2);
-                this.createInstance({
+                createWrapper({
                     currentView: 'week',
                     views: ['week'],
                     height: 700,
@@ -453,9 +449,9 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
-        QUnit.test('dataCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+        test('dataCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
             assert.expect(2);
-            this.createInstance({
+            createWrapper({
                 currentView: 'week',
                 views: ['week'],
                 height: 700,
@@ -495,7 +491,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: 4,
             }],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`dataCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -557,7 +553,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: 4,
             }],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`dataCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -598,7 +594,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: index - 1,
             })),
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -643,7 +639,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: index - 1,
             })),
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -693,7 +689,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: index - 1,
             })),
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`dataCellTemplate should have correct options in ${viewType} view when appointments are grouped by date`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} view when appointments are grouped by date`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -820,7 +816,7 @@ module('CellTemplate tests', moduleConfig, () => {
             secondCellIndex,
             templatesNumber,
         }) => {
-            QUnit.test(`dataCellTemplate should have correct options in ${view} view`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${view} view`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -862,7 +858,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: index - 1,
             })),
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`dataCellTemplate should have correct options in ${viewType} with grouping and virtual scrolling`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} with grouping and virtual scrolling`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -893,7 +889,7 @@ module('CellTemplate tests', moduleConfig, () => {
 
     module('Date Cell template', {}, function() {
         test('dateCellTemplate should take cellElement with correct geometry (T453520)', function(assert) {
-            this.createInstance({
+            createWrapper({
                 currentView: 'agenda',
                 views: ['agenda'],
                 height: 700,
@@ -947,7 +943,7 @@ module('CellTemplate tests', moduleConfig, () => {
             }],
         };
 
-        QUnit.test('Date cell template should have correct data without grouping', function(assert) {
+        test('Date cell template should have correct data without grouping', function(assert) {
             let currentTemplateIndex = 0;
             const rowsCount = 2;
             const expectedData = [{
@@ -971,7 +967,7 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
-        QUnit.test('Date cell template should have correct data with grouping', function(assert) {
+        test('Date cell template should have correct data with grouping', function(assert) {
             let currentTemplateIndex = 0;
             const rowsCount = 4;
             const expectedData = [{
@@ -1022,7 +1018,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     };
                 },
             }, () => {
-                QUnit.test('Scheduler should have specific dateCellTemplate setting of the view', function(assert) {
+                test('Scheduler should have specific dateCellTemplate setting of the view', function(assert) {
                     let countCallTemplate1 = 0;
                     let countCallTemplate2 = 0;
 
@@ -1045,7 +1041,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.notEqual(countCallTemplate2, 0, 'count call second template');
                 });
 
-                QUnit.test('dateCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+                test('dateCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
                     assert.expect(3);
                     this.createInstance({
                         currentView: 'week',
@@ -1063,7 +1059,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     });
                 });
 
-                QUnit.test('dateCellTemplate should work correctly', function(assert) {
+                test('dateCellTemplate should work correctly', function(assert) {
                     this.createInstance({
                         views: ['month'],
                         currentView: 'month',
@@ -1094,7 +1090,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
                 });
 
-                QUnit.test('dateCellTemplate should have unique date in data (T732376)', function(assert) {
+                test('dateCellTemplate should have unique date in data (T732376)', function(assert) {
                     this.createInstance({
                         views: ['timelineWorkWeek'],
                         currentView: 'timelineWorkWeek',
@@ -1134,7 +1130,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     $($button).trigger('dxclick');
                 });
 
-                QUnit.test('dateCellTemplate should work correctly in workWeek view', function(assert) {
+                test('dateCellTemplate should work correctly in workWeek view', function(assert) {
                     const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
                     this.createInstance({
@@ -1161,7 +1157,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.ok($headerPanel.text(), 'Mon5Tue6Wed7Thu8Fri9');
                 });
 
-                QUnit.test('dateCellTemplate should work correctly in agenda view', function(assert) {
+                test('dateCellTemplate should work correctly in agenda view', function(assert) {
                     this.createInstance({
                         views: ['agenda'],
                         currentView: 'agenda',
@@ -1203,7 +1199,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
                 });
 
-                QUnit.test('dateCellTemplate should have correct options', function(assert) {
+                test('dateCellTemplate should have correct options', function(assert) {
                     let templateOptions;
 
                     this.createInstance({
@@ -1220,7 +1216,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.deepEqual(templateOptions.date.getTime(), new Date(2016, 7, 28).getTime(), 'date option is ok');
                 });
 
-                QUnit.test('dateCellTemplate should have correct options in agenda view', function(assert) {
+                test('dateCellTemplate should have correct options in agenda view', function(assert) {
                     let templateOptions;
 
                     this.createInstance({
@@ -1263,7 +1259,7 @@ module('CellTemplate tests', moduleConfig, () => {
 
                 });
 
-                QUnit.test('WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment', function(assert) {
+                test('WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment', function(assert) {
                     this.createInstance({
                         currentView: 'week',
                         currentDate: new Date(2016, 8, 5),
@@ -1296,7 +1292,7 @@ module('CellTemplate tests', moduleConfig, () => {
         [true, false].forEach((isRenovatedView) => {
             const baseConfig = getBaseConfig(isRenovatedView);
 
-            QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
+            test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
                 assert.expect(totalDateCells * 2);
 
                 const scheduler = createWrapper({
@@ -1310,7 +1306,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
             });
 
-            QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and vertical grouping is used`, function(assert) {
+            test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and vertical grouping is used`, function(assert) {
                 assert.expect(totalDateCells * 2);
                 const views = viewsBase.map(({ type, intervalCount }) => ({
                     type,
@@ -1330,7 +1326,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
             });
 
-            QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and grouping by date is used`, function(assert) {
+            test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and grouping by date is used`, function(assert) {
                 assert.expect(totalDateCells * 2);
                 const views = viewsBase.map(({ type, intervalCount }) => ({
                     type,
@@ -1351,7 +1347,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
             });
 
-            QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and horizontal grouping is used`, function(assert) {
+            test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and horizontal grouping is used`, function(assert) {
                 assert.expect(totalDateCells * 4);
                 const views = viewsBase.map(({ type, intervalCount }) => ({
                     type,
@@ -1401,7 +1397,7 @@ module('CellTemplate tests', moduleConfig, () => {
             let countCallTemplate1 = 0;
             let countCallTemplate2 = 0;
 
-            this.createInstance({
+            createWrapper({
                 dataSource: [],
                 views: [{
                     type: 'week',
@@ -1419,10 +1415,10 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.notEqual(countCallTemplate2, 0, 'count call second template');
         });
 
-        QUnit.test('timeCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+        test('timeCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
             assert.expect(3);
 
-            this.createInstance({
+            createWrapper({
                 currentView: 'week',
                 views: ['week'],
                 height: 700,
@@ -1438,10 +1434,10 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
-        QUnit.test('timeCellTemplate should have correct options', function(assert) {
+        test('timeCellTemplate should have correct options', function(assert) {
             let templateOptions;
 
-            this.createInstance({
+            createWrapper({
                 currentView: 'week',
                 currentDate: new Date(2016, 8, 5),
                 firstDayOfWeek: 0,
@@ -1455,9 +1451,9 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.equal(templateOptions.text, '3:00 AM', 'text options is ok');
         });
 
-        QUnit.test('timeCellTemplate should contains the date field of data parameter in the Day view', function(assert) {
+        test('timeCellTemplate should contains the date field of data parameter in the Day view', function(assert) {
             const resultDates = [];
-            this.createInstance({
+            createWrapper({
                 currentView: 'day',
                 views: ['day'],
                 currentDate: new Date(2016, 8, 5),
@@ -1476,9 +1472,9 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3), 'date parameter for the fourth time cell');
         });
 
-        QUnit.test('timeCellTemplate should contains the date field of data parameter in Week view', function(assert) {
+        test('timeCellTemplate should contains the date field of data parameter in Week view', function(assert) {
             const resultDates = [];
-            this.createInstance({
+            createWrapper({
                 currentView: 'week',
                 views: ['week'],
                 currentDate: new Date(2016, 8, 5),
@@ -1498,9 +1494,9 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.deepEqual(resultDates[3], new Date(2016, 8, 4, 3), 'date parameter for the fourth time cell');
         });
 
-        QUnit.test('timeCellTemplate should contains the date field of data parameter in workWeek view', function(assert) {
+        test('timeCellTemplate should contains the date field of data parameter in workWeek view', function(assert) {
             const resultDates = [];
-            this.createInstance({
+            createWrapper({
                 currentView: 'workWeek',
                 views: ['workWeek'],
                 currentDate: new Date(2016, 8, 5),
@@ -1524,7 +1520,7 @@ module('CellTemplate tests', moduleConfig, () => {
             viewType: 'day',
             expectedTemplateOptions: timeCells,
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`timeCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
+            test(`timeCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -1550,7 +1546,7 @@ module('CellTemplate tests', moduleConfig, () => {
             viewType: 'day',
             expectedTemplateOptions: timeCells,
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`timeCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, function(assert) {
+            test(`timeCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -1576,7 +1572,7 @@ module('CellTemplate tests', moduleConfig, () => {
             viewType: 'day',
             expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, function(assert) {
+            test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -1610,7 +1606,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 groups: undefined,
             }],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, function(assert) {
+            test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -1640,7 +1636,7 @@ module('CellTemplate tests', moduleConfig, () => {
             viewType: 'day',
             expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            QUnit.test(`timeCellTemplate should have correct options in ${viewType} view with grouping and virtual scrolling`, function(assert) {
+            test(`timeCellTemplate should have correct options in ${viewType} view with grouping and virtual scrolling`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
@@ -1671,7 +1667,7 @@ module('CellTemplate tests', moduleConfig, () => {
         [true, false].forEach((isRenovatedView) => {
             const baseConfig = getBaseConfig(isRenovatedView);
 
-            QUnit.test(`'"groups" and "groupIndex" shoud be correct in timeCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
+            test(`'"groups" and "groupIndex" shoud be correct in timeCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
                 assert.expect(totalTimeCells * 2);
 
                 const scheduler = createWrapper({
@@ -1685,7 +1681,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
             });
 
-            QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate '
+            test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate '
                 + `when renovateRender is ${isRenovatedView} and vertical grouping is used in simple views`, function(assert) {
                 assert.expect(32);
                 const views = viewsBase.map(({ type, intervalCount }) => ({
@@ -1718,7 +1714,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
             });
 
-            QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate '
+            test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate '
                 + `when renovateRender is ${isRenovatedView} and vertical grouping is used in timleine views`, function(assert) {
                 assert.expect(72);
                 const views = viewsBase.map(({ type, intervalCount }) => ({
@@ -1740,7 +1736,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
             });
 
-            QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+            test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
                 + ` when renovateRender is ${isRenovatedView} and grouping by date is used`, function(assert) {
                 assert.expect(totalTimeCells * 2);
                 const views = viewsBase.map(({ type, intervalCount }) => ({
@@ -1762,7 +1758,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
             });
 
-            QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+            test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
                 + ` when renovateRender is ${isRenovatedView} and horizontal grouping is used in simple views`, function(assert) {
                 assert.expect(16);
                 const views = viewsBase.map(({ type, intervalCount }) => ({
@@ -1783,7 +1779,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
             });
 
-            QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+            test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
                 + ` when renovateRender is ${isRenovatedView} and horizontal grouping is used in timeline views`, function(assert) {
                 assert.expect((totalTimeCells - 8) * 4);
                 const views = viewsBase.map(({ type, intervalCount }) => ({
