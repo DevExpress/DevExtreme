@@ -996,98 +996,100 @@ describe('Simulated', () => {
           });
         });
 
-        each([true]).describe('PullDownEnabled: %o', (pullDownEnabled) => {
-          each([true]).describe('ReachBottomEnabled: %o', (reachBottomEnabled) => {
-            each([
-              [{ top: -81, left: -81 }, {
-                scrollOffset: { top: -81, left: -81 },
-                reachedTop: true,
-                reachedBottom: false,
-                reachedLeft: true,
-                reachedRight: false,
-              }],
-              [{ top: -1, left: -1 }, {
-                scrollOffset: { top: -1, left: -1 },
-                reachedTop: true,
-                reachedBottom: false,
-                reachedLeft: true,
-                reachedRight: false,
-              }],
-              [{ top: 0, left: 0 }, {
-                scrollOffset: { top: 0, left: 0 },
-                reachedTop: true,
-                reachedBottom: false,
-                reachedLeft: true,
-                reachedRight: false,
-              }],
-              [{ top: 1, left: 1 }, {
-                scrollOffset: { top: 1, left: 1 },
-                reachedTop: false,
-                reachedBottom: false,
-                reachedLeft: false,
-                reachedRight: false,
-              }],
-              [{ top: 99, left: 99 }, {
-                scrollOffset: { top: 99, left: 99 },
-                reachedTop: false,
-                reachedBottom: false,
-                reachedLeft: false,
-                reachedRight: false,
-              }],
-              [{ top: 100, left: 100 }, {
-                scrollOffset: { top: 100, left: 100 },
-                reachedTop: false,
-                reachedBottom: !(reachBottomEnabled && pullDownEnabled),
-                reachedLeft: false,
-                reachedRight: true,
-              }],
-              [{ top: 101, left: 101 }, {
-                scrollOffset: { top: 101, left: 101 },
-                reachedTop: false,
-                reachedBottom: !(reachBottomEnabled && pullDownEnabled),
-                reachedLeft: false,
-                reachedRight: true,
-              }],
-              [{ top: 154, left: 154 }, {
-                scrollOffset: { top: 154, left: 154 },
-                reachedTop: false,
-                reachedBottom: !(reachBottomEnabled && pullDownEnabled),
-                reachedLeft: false,
-                reachedRight: true,
-              }],
-              [{ top: 155, left: 155 }, {
-                scrollOffset: { top: 155, left: 155 },
-                reachedTop: false,
-                reachedBottom: true,
-                reachedLeft: false,
-                reachedRight: true,
-              }],
-              [{ top: 156, left: 156 }, {
-                scrollOffset: { top: 156, left: 156 },
-                reachedTop: false,
-                reachedBottom: true,
-                reachedLeft: false,
-                reachedRight: true,
-              }],
-            ]).describe('ScrollOffset: %o', (scrollOffset, expected) => {
-              it('onScroll event fires with correct arguments', () => {
-                const onScrollHandler = jest.fn();
-                const helper = new ScrollableTestHelper({
-                  direction,
-                  pullDownEnabled,
-                  reachBottomEnabled,
-                  forceGeneratePockets: true,
-                  onScroll: onScrollHandler,
+        each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+          each([true, false]).describe('PullDownEnabled: %o', (pullDownEnabled) => {
+            each([true, false]).describe('ReachBottomEnabled: %o', (reachBottomEnabled) => {
+              each([
+                [{ top: -81, left: -81 }, {
+                  scrollOffset: { top: -81, left: -81 },
+                  reachedTop: true,
+                  reachedBottom: false,
+                  reachedLeft: true,
+                  reachedRight: false,
+                }],
+                [{ top: -1, left: -1 }, {
+                  scrollOffset: { top: -1, left: -1 },
+                  reachedTop: true,
+                  reachedBottom: false,
+                  reachedLeft: true,
+                  reachedRight: false,
+                }],
+                [{ top: 0, left: 0 }, {
+                  scrollOffset: { top: 0, left: 0 },
+                  reachedTop: true,
+                  reachedBottom: false,
+                  reachedLeft: true,
+                  reachedRight: false,
+                }],
+                [{ top: 1, left: 1 }, {
+                  scrollOffset: { top: 1, left: 1 },
+                  reachedTop: false,
+                  reachedBottom: false,
+                  reachedLeft: false,
+                  reachedRight: false,
+                }],
+                [{ top: 99, left: 99 }, {
+                  scrollOffset: { top: 99, left: 99 },
+                  reachedTop: false,
+                  reachedBottom: false,
+                  reachedLeft: false,
+                  reachedRight: false,
+                }],
+                [{ top: 100, left: 100 }, {
+                  scrollOffset: { top: 100, left: 100 },
+                  reachedTop: false,
+                  reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
+                  reachedLeft: false,
+                  reachedRight: true,
+                }],
+                [{ top: 101, left: 101 }, {
+                  scrollOffset: { top: 101, left: 101 },
+                  reachedTop: false,
+                  reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
+                  reachedLeft: false,
+                  reachedRight: true,
+                }],
+                [{ top: 154, left: 154 }, {
+                  scrollOffset: { top: 154, left: 154 },
+                  reachedTop: false,
+                  reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
+                  reachedLeft: false,
+                  reachedRight: true,
+                }],
+                [{ top: 155, left: 155 }, {
+                  scrollOffset: { top: 155, left: 155 },
+                  reachedTop: false,
+                  reachedBottom: true,
+                  reachedLeft: false,
+                  reachedRight: true,
+                }],
+                [{ top: 156, left: 156 }, {
+                  scrollOffset: { top: 156, left: 156 },
+                  reachedTop: false,
+                  reachedBottom: true,
+                  reachedLeft: false,
+                  reachedRight: true,
+                }],
+              ]).describe('ScrollOffset: %o', (scrollOffset, expected) => {
+                it('onScroll event fires with correct arguments', () => {
+                  const onScrollHandler = jest.fn();
+                  const helper = new ScrollableTestHelper({
+                    direction,
+                    pullDownEnabled,
+                    reachBottomEnabled,
+                    forceGeneratePockets,
+                    onScroll: onScrollHandler,
+                  });
+
+                  helper.initScrollbarSettings();
+                  helper.initContainerPosition(scrollOffset);
+
+                  helper.viewModel.scrollEffect();
+                  emit('scroll');
+
+                  expect(onScrollHandler).toHaveBeenCalledTimes(1);
+                  helper.checkScrollParams(expect, onScrollHandler.mock.calls[0][0], expected);
                 });
-
-                helper.initScrollbarSettings();
-                helper.initContainerPosition(scrollOffset);
-
-                helper.viewModel.scrollEffect();
-                emit('scroll');
-
-                expect(onScrollHandler).toHaveBeenCalledTimes(1);
-                helper.checkScrollParams(expect, onScrollHandler.mock.calls[0][0], expected);
               });
             });
           });

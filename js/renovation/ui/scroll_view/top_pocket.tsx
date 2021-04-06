@@ -42,7 +42,7 @@ export const viewFunction = (viewModel: TopPocket): JSX.Element => {
 
   return (
     <div ref={topPocketRef} className={SCROLLVIEW_TOP_POCKET_CLASS}>
-      <div className={pullDownClasses}>
+      <div className={pullDownClasses} style={{ opacity: useNative && refreshStrategy === 'swipeDown' ? 0 : undefined }}>
         { refreshStrategy !== 'swipeDown' && <div className={SCROLLVIEW_PULLDOWN_IMAGE_CLASS} /> }
         { useNative && refreshStrategy === 'swipeDown' && <div className={PULLDOWN_ICON_CLASS} />}
         <div className={SCROLLVIEW_PULLDOWN_INDICATOR_CLASS}>
