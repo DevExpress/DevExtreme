@@ -436,11 +436,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       return;
     }
 
-    this.needPullDownRefreshClass = false;
     this.releaseState();
-    // this.topPocketState = TopPocketState.STATE_RELEASED;
-    // this._$pullDown.removeClass(SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS);
-    // this._releaseState();
   }
 
   getEventArgs(): ScrollEventArgs {
@@ -686,6 +682,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   pullDownRefreshing(): void {
     this.topPocketState = TopPocketState.STATE_LOADING;
+    this.needPullDownRefreshClass = false;
     this.pullDownRefreshHandler();
   }
 
@@ -697,7 +694,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   refreshPullDown(): void {
     // this._$pullDown.addClass(SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS);
     this.pullDownTopOffset = this.getPullDownHeight();
-    // move(this._$pullDown, { top: this._getPullDownHeight() });
   }
 
   movePullDown(): void {
@@ -730,6 +726,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   releaseState(): void {
+    this.needPullDownRefreshClass = false;
     this.topPocketState = TopPocketState.STATE_RELEASED;
     this.pullDownOpacity = 0;
   }

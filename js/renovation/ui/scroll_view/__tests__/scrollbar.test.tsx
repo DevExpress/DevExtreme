@@ -1021,12 +1021,15 @@ describe('Handlers', () => {
 
                 const scrollByHandler = jest.fn();
                 (viewModel as any).scrollBy = scrollByHandler;
-                (viewModel as any).containerToContentRatio = () => containerToContentRatio;
+                Object.defineProperties(viewModel, {
+                  containerToContentRatio: { get() { return containerToContentRatio; } },
+                });
 
                 viewModel.thumbScrolling = thumbScrolling;
                 viewModel.crossThumbScrolling = crossThumbScrolling;
 
                 viewModel.moveHandler(delta);
+
                 if (crossThumbScrolling) {
                   expect(scrollByHandler).toBeCalledTimes(0);
                   return;
