@@ -7,6 +7,17 @@ import {
 } from './button';
 
 /**
+ * @public
+*/
+export interface CustomDialogOptions {
+    title?: string,
+    messageHtml?: string,
+    buttons?: Array<dxButtonOptions>,
+    showTitle?: boolean,
+    message?: string,
+    dragEnabled?: boolean
+}
+/**
  * @docid ui.dialog.alert
  * @publicName alert(messageHtml,title)
  * @param1 messageHtml:string
@@ -54,6 +65,6 @@ export function confirm(messageHtml: string, title: string): TPromise<boolean>;
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
+export function custom(options: CustomDialogOptions): any;
 
 

@@ -3,12 +3,40 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent,
+    ComponentNativeEvent
+} from '../events/index';
+
+import {
     template
 } from '../core/templates/template';
 
 import Editor, {
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
+
+export interface ComponentDisabledDate<T> {
+    component: T;
+    readonly date: Date;
+    readonly view: string;
+}
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxCalendar>;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxCalendar> & ValueChangedInfo;
+
+/** @public */
+export type CellTemplateData = {
+    readonly date: Date,
+    readonly view: string,
+    readonly text?: string
+}
+
+/** @public */
+export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
@@ -31,7 +59,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((itemData: { date?: Date, view?: string, text?: string }, itemIndex: number, itemElement: TElement) => string | TElement);
+    cellTemplate?: template | ((itemData: CellTemplateData, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default undefined
@@ -50,7 +78,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    disabledDates?: Array<Date> | ((data: { component?: any, date?: Date, view?: string }) => boolean);
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
     /**
      * @docid
      * @type Enums.FirstDayOfWeek

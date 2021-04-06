@@ -6,9 +6,100 @@ import {
     template
 } from '../core/templates/template';
 
+import {
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
+import {
+    SelectionChangedInfo
+} from './collection/ui.collection_widget.base';
+
+import {
+    DropDownButtonTemplateDataModel
+} from './drop_down_editor/ui.drop_down_editor';
+
+import {
+    ValueChangedInfo
+} from './editor/editor';
+
 import dxSelectBox, {
-    dxSelectBoxOptions
+    dxSelectBoxOptions,
+    CustomItemCreatingInfo
 } from './select_box';
+
+/** @public */
+export type ChangeEvent = ComponentNativeEvent<dxTagBox>;
+
+/** @public */
+export type ClosedEvent = ComponentEvent<dxTagBox>;
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxTagBox>;
+
+/** @public */
+export type CustomItemCreatingEvent = ComponentEvent<dxTagBox> & CustomItemCreatingInfo;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxTagBox>;
+
+/** @public */
+export type EnterKeyEvent = ComponentNativeEvent<dxTagBox>;
+
+/** @public */
+export type FocusInEvent = ComponentNativeEvent<dxTagBox>;
+
+/** @public */
+export type FocusOutEvent = ComponentNativeEvent<dxTagBox>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxTagBox>;
+
+/** @public */
+export type InputEvent = ComponentNativeEvent<dxTagBox>;
+
+/** @public */
+export type ItemClickEvent = ComponentNativeEvent<dxTagBox> & ItemInfo;
+
+/** @public */
+export type KeyDownEvent = ComponentNativeEvent<dxTagBox>;
+
+/** @public */
+export type KeyPressEvent = ComponentNativeEvent<dxTagBox>;
+
+/** @public */
+export type KeyUpEvent = ComponentNativeEvent<dxTagBox>;
+
+/** @public */
+export type MultiTagPreparingEvent = ComponentEvent<dxTagBox> & Cancelable & {
+    multiTagElement: TElement;
+    readonly selectedItems?: Array<string | number | any>;
+    readonly text?: string;
+}
+
+/** @public */
+export type OpenedEvent = ComponentEvent<dxTagBox>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxTagBox> & ChangedOptionInfo;
+
+/** @public */
+export type SelectAllValueChangedEvent = ComponentEvent<dxTagBox> & {
+    readonly value: boolean;
+}
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxTagBox> & SelectionChangedInfo<string | number | any>;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxTagBox> & ValueChangedInfo;
+
+/** @public */
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     /**
@@ -48,32 +139,41 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1_field5 selectedItems:Array<string,number,Object>
      * @type_function_param1_field6 text:string
      * @type_function_param1_field7 cancel:boolean
+     * @type_function_param1_field1 component:dxTagBox
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: TElement, model?: any, multiTagElement?: TElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => void);
+    onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
+     * @type_function_param1_field1 component:dxTagBox
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: TElement, model?: any, value?: boolean }) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:Array<string,number,Object>
      * @type_function_param1_field5 removedItems:Array<string,number,Object>
+     * @type_function_param1_field1 component:dxTagBox
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxTagBox, element?: TElement, model?: any, addedItems?: Array<string | number | any>, removedItems?: Array<string | number | any> }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @type Enums.SelectAllMode

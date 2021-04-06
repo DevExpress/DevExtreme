@@ -7,7 +7,8 @@ import {
 } from '../../core/templates/template';
 
 import dxTextBox, {
-    dxTextBoxOptions
+    dxTextBoxOptions,
+
 } from '../text_box';
 
 import {
@@ -17,6 +18,15 @@ import {
 import {
     dxPopupOptions
 } from '../popup';
+
+import {
+    ComponentEvent
+} from '../../events/index';
+
+export interface DropDownButtonTemplateDataModel {
+    readonly text?: string;
+    readonly icon?: string;
+}
 
 export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
     /**
@@ -74,23 +84,31 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | TElement);
+    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onClosed?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onOpened?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default false
