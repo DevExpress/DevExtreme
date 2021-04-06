@@ -52,7 +52,7 @@ export type InitializedEvent = ComponentInitializedEvent<dxDropDownButton>;
 /** @public */
 export type ItemClickEvent = ComponentNativeEvent<dxDropDownButton> & {
     readonly itemData?: any;
-    itemElement: TElement;
+    readonly itemElement: TElement;
 };
 
 /** @public */

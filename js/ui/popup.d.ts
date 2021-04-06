@@ -33,7 +33,7 @@ import {
 } from './resizable';
 
 export interface TitleRenderedInfo {
-    titleElement: TElement
+    readonly titleElement: TElement
 }
 
 /** @public */

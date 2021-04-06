@@ -39,7 +39,7 @@ import {
 
 interface ListItemInfo {
     readonly itemData?: any;
-    itemElement: TElement;
+    readonly itemElement: TElement;
     readonly itemIndex: number | { group: number; item: number; };
 }
 
@@ -60,7 +60,7 @@ export type DisposingEvent = ComponentDisposingEvent<dxList>;
 /** @public */
 export type GroupRenderedEvent = ComponentEvent<dxList> & {
     readonly groupData?: any;
-    groupElement?: TElement;
+    readonly groupElement?: TElement;
     readonly groupIndex?: number;
 }
 

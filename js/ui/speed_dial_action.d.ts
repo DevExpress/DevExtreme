@@ -5,6 +5,7 @@ import {
 import {
     TEvent,
     ComponentEvent,
+    ComponentNativeEvent,
     ComponentDisposingEvent,
     ComponentInitializedEvent,
     ComponentOptionChangedEvent
@@ -15,10 +16,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ClickEvent = {
-    event?: TEvent;
-    component?: dxSpeedDialAction;
-    element?: TElement;
+export type ClickEvent = ComponentNativeEvent<dxSpeedDialAction> & {
     actionElement?: TElement
 }
 

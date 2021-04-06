@@ -52,15 +52,7 @@ export type ItemHoldEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 export type ItemRenderedEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 
 /** @public */
-export type ItemTitleClickEvent = {
-    readonly component: dxAccordion;
-    readonly element: TElement;
-    readonly model?: any;
-    readonly itemData?: any;
-    readonly itemElement: TElement;
-    readonly itemIndex: number;
-    readonly event: TEvent;
-}
+export type ItemTitleClickEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = ComponentOptionChangedEvent<dxAccordion>;

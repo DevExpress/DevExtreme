@@ -93,7 +93,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
+    onItemClick?: ((e: ItemClickEvent) => void);
     /**
      * @docid
      * @default null

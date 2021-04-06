@@ -72,17 +72,17 @@ export type OptionChangedEvent = ComponentOptionChangedEvent<dxForm>;
 
 /** @public */
 export type GroupItemTemplateData = {
-    component?: dxForm;
-    formData?: any;
+    readonly component: dxForm;
+    readonly formData?: any;
 }
 
 /** @public */
 export type SimpleItemTemplateData = {
-    component?: dxForm;
-    dataField?: string;
-    editorOptions?: any;
-    editorType?: string;
-    name?: string;
+    readonly component: dxForm;
+    readonly dataField?: string;
+    readonly editorOptions?: any;
+    readonly editorType?: string;
+    readonly name?: string;
 }
 
 export interface dxFormOptions extends WidgetOptions<dxForm> {
