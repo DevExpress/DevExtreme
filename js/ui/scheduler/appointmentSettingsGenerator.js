@@ -242,10 +242,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 source.exceptionDate = new Date(source.startDate);
             }
 
-            const [sourceStartDate, sourceEndDate] = [source.startDate, source.endDate];
-
-            const startDate = this.timeZoneCalculator.createDate(sourceStartDate, { path: 'toGrid' });
-            const endDate = this.timeZoneCalculator.createDate(sourceEndDate, { path: 'toGrid' });
+            const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
+            const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
 
             return {
                 startDate,
