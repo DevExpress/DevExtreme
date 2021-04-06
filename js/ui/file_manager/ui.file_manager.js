@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import { Deferred, when } from '../../core/utils/deferred';
+import { when } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
@@ -71,34 +71,31 @@ class FileManager extends Widget {
 
         this.$element().addClass(FILE_MANAGER_CLASS);
 
-        when(this._createNotificationControl())
-            .done(() => {
-                this._createEditing();
-                this._createAdaptivityControl();
-                this._initCommandManager();
-                this._setItemsViewAreaActive(false);
-            });
+        this._createNotificationControl();
+
+        this._initCommandManager();
+        this._setItemsViewAreaActive(false);
     }
 
     _createNotificationControl() {
-        const wrapperCreatedDeferred = new Deferred();
         const $notificationControl = $('<div>')
             .addClass('dx-filemanager-notification-container')
             .appendTo(this.$element());
 
         this._notificationControl = this._createComponent($notificationControl, FileManagerNotificationControl, {
             progressPanelContainer: this.$element(),
-            contentTemplate: container => this._createWrapper(container, wrapperCreatedDeferred),
+            contentTemplate: (container, notificationControl) => this._createWrapper(container, notificationControl),
             onActionProgress: e => this._onActionProgress(e),
             positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`
         });
-        return wrapperCreatedDeferred.promise();
     }
 
-    _createWrapper(container, createdDeferred) {
+    _createWrapper(container, notificationControl) {
         this._$wrapper = $('<div>')
             .addClass(FILE_MANAGER_WRAPPER_CLASS)
             .appendTo(container);
+
+        this._createEditing(notificationControl);
 
         const $toolbar = $('<div>').appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
@@ -109,7 +106,7 @@ class FileManager extends Widget {
             onItemClick: (args) => this._actions.onToolbarItemClick(args)
         });
 
-        createdDeferred.resolve();
+        this._createAdaptivityControl();
     }
 
     _createAdaptivityControl() {
@@ -124,7 +121,7 @@ class FileManager extends Widget {
         });
     }
 
-    _createEditing() {
+    _createEditing(notificationControl) {
         const $editingContainer = $('<div>')
             .addClass(FILE_MANAGER_EDITING_CONTAINER_CLASS)
             .appendTo(this.$element());
@@ -135,7 +132,7 @@ class FileManager extends Widget {
                 getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
             },
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
-            notificationControl: this._notificationControl,
+            notificationControl,
             uploadDropZonePlaceholderContainer: this.$element(),
             onSuccess: ({ updatedOnlyFiles }) => this._redrawComponent(updatedOnlyFiles),
             onCreating: () => this._setItemsViewAreaActive(false),
@@ -760,7 +757,7 @@ class FileManager extends Widget {
     }
 
     _getSelectedItemInfos() {
-        return this._itemView ? this._itemView.getSelectedItems() : [];
+        return this._itemView.getSelectedItems();
     }
 
     refresh() {
