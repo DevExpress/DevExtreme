@@ -471,7 +471,8 @@ export const ListBase = CollectionWidget.inherit({
         if(isLoading && this.option('indicateLoading')) {
             this._showLoadingIndicatorTimer = setTimeout((function() {
                 const isEmpty = !this._itemElements().length;
-                if(this._scrollView && !isEmpty) {
+                const shouldIndicateLoading = !isEmpty || this._dataSource.searchValue()?.length;
+                if(this._scrollView && shouldIndicateLoading) {
                     this._scrollView.startLoading();
                 }
             }).bind(this));
@@ -479,14 +480,20 @@ export const ListBase = CollectionWidget.inherit({
             clearTimeout(this._showLoadingIndicatorTimer);
             this._scrollView && this._scrollView.finishLoading();
         }
+        // if(!isLoading) {
+        //     this._isDSLoaded = false;
+        // }
+
     },
 
-    _dataSourceChangedHandler: function(newItems) {
+    _dataSourceChangedHandler: function() {
         if(!this._shouldAppendItems() && hasWindow()) {
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
         this.callBase.apply(this, arguments);
+
+        this._isDSLoaded = true;
     },
 
     _refreshContent: function() {
@@ -524,6 +531,7 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _infiniteDataLoading: function() {
+        // console.log('_infiniteDataLoading');
         const isElementVisible = this.$element().is(':visible');
 
         if(isElementVisible && !this._scrollViewIsFull() && !this._isDataSourceLoading() && !this._isLastPage()) {
@@ -783,6 +791,7 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _clean: function() {
+        // delete this._isDSLoaded;
         clearTimeout(this._inkRippleTimer);
         if(this._$nextButton) {
             this._$nextButton.remove();
@@ -866,6 +875,11 @@ export const ListBase = CollectionWidget.inherit({
             case 'dataSource':
                 this.callBase(args);
                 this._initScrollView();
+                // this._isDSLoaded = false;
+                break;
+            case 'items':
+                this.callBase(args);
+                // this._isDSLoaded = false;
                 break;
             case 'pullingDownText':
             case 'pulledDownText':
