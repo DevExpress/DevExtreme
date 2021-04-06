@@ -908,7 +908,7 @@ module('Not native date DST', moduleConfig, () => {
 
 module('Scheduler grid and appointment time zone', moduleConfig, () => {
     if(isDesktopEnvironment()) {
-        test('Appointment time zone has DST', function(assert) {
+        test('Appointment time zone has DST(T983264)', function(assert) {
             const scheduler = createWrapper({
                 _draggingMode: 'default',
                 recurrenceEditMode: 'occurrence',
@@ -934,20 +934,22 @@ module('Scheduler grid and appointment time zone', moduleConfig, () => {
                 width: 1000
             });
 
-            const result = ['12:00 PM - 12:30 PM', '11:00 AM - 11:30 AM', '11:00 AM - 11:30 AM'];
-
             scheduler.appointmentList.forEach((appointment, index) => {
-                assert.equal(appointment.date, result[index]);
+                const result = ['12:00 PM - 12:30 PM', '11:00 AM - 11:30 AM', '11:00 AM - 11:30 AM'];
+                assert.equal(appointment.date, result[index],);
             });
 
             scheduler.appointmentList[1].drag.toCell(19);
 
             const dataSource = scheduler.option('dataSource');
+            assert.equal(dataSource.length, 2, 'appointment should be exclude from series');
 
-            assert.equal(dataSource.length, 2);
-            assert.equal(dataSource[0].recurrenceException, '20210314T190000Z');
+            scheduler.appointmentList.forEach((appointment, index) => {
+                const result = ['10:00 AM - 10:30 AM', '12:00 PM - 12:30 PM', '11:00 AM - 11:30 AM'];
+                assert.equal(appointment.date, result[index]);
+            });
 
-            assert.expect(5);
+            assert.expect(7);
         });
     }
 });
