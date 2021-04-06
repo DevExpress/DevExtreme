@@ -293,13 +293,17 @@ class VirtualScrollingBase {
         this._viewportSize = options.viewportSize;
         this._itemSize = options.itemSize;
         this._position = -1;
+        this._forceUpdateState = false;
 
         this.updateState(0);
     }
 
     get viewportSize() { return this._viewportSize; }
     get itemSize() { return this._itemSize; }
-    set itemSize(value) { this._itemSize = value; }
+    set itemSize(value) {
+        this._forceUpdateState = this._itemSize !== value;
+        this._itemSize = value;
+    }
     get state() { return this._state; }
     set state(value) { this._state = value; }
 
@@ -515,7 +519,8 @@ class VirtualScrollingBase {
 
         const isAppend = prevVirtualSizeBefore < virtualSizeBefore;
         const isPrepend = prevVirtualSizeAfter < virtualSizeAfter;
-        const needAddItems = isAppend || isPrepend;
+
+        const needAddItems = this._forceUpdateState || isAppend || isPrepend;
 
         if(needAddItems) {
             this._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
