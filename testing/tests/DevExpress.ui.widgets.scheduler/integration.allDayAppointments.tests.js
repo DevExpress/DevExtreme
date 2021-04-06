@@ -1493,34 +1493,6 @@ QUnit.module('Integration: allDay appointments', {
                 assert.roughEqual(secondPosition.top, secondAllDayRowPosition.top, 1.5, 'Appointment has correct top');
             });
 
-            QUnit.test('allDayPanel cell with custom dataCellTemplate must open appointment popup when double-clicked (T737506)', function(assert) {
-                this.createInstance({
-                    currentDate: new Date(2015, 4, 25),
-                    views: ['week'],
-                    currentView: 'week',
-                    firstDayOfWeek: 1,
-                    startDayHour: 8,
-                    endDayHour: 18,
-                    height: 600,
-                    dataCellTemplate: function(cellData, index, container) {
-                        const wrapper = $('<div>').appendTo(container).addClass('dx-template-wrapper');
-                        wrapper.append($('<div>').text(cellData.text).addClass('day-cell'));
-                    }
-                });
-
-                this.instance.option('dataSource', [
-                    { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
-                    { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
-                ]);
-
-                const spy = sinon.spy(this.instance, 'showAppointmentPopup');
-
-                const $allDayAppointment = $(this.instance.$element()).find('.dx-scheduler-all-day-appointment').eq(0);
-                $allDayAppointment.trigger('dxdblclick');
-
-                assert.ok(spy.calledOnce, 'Method was called');
-            });
-
             QUnit.test('Appointment in allDayPanel must not change position if `editing` option is changed (T807933)', function(assert) {
                 const scheduler = createInstance({
                     dataSource: [{
