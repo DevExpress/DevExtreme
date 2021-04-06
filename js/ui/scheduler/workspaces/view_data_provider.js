@@ -940,10 +940,7 @@ export default class ViewDataProvider {
             this._workspace,
         );
 
-        const data = viewDataGenerator._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
-        // console.log(data === this.dateHeaderData);
-        this.dateHeaderData = data;
-        // console.log(this.dateHeaderData);
+        this.dateHeaderData = viewDataGenerator._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
         this.timePanelData = viewDataGenerator._generateTimePanelData(
             this.completeTimePanelMap,
             renderOptions,

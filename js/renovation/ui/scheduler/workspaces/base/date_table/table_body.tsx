@@ -39,8 +39,6 @@ export const viewFunction = ({
               key={cellsRow[0].key - viewData.leftVirtualCellCount}
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
-              leftVirtualCellCount={viewData.leftVirtualCellCount}
-              rightVirtualCellCount={viewData.rightVirtualCellCount}
             >
               {cellsRow.map(({
                 startDate,
