@@ -131,7 +131,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               pulledDownText={pulledDownText}
               refreshingText={refreshingText}
               refreshStrategy="simulated"
-              useNative={false}
               pocketState={topPocketState}
               visible={!!pullDownEnabled}
             />

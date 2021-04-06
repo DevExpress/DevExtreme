@@ -1418,21 +1418,33 @@ describe('Native', () => {
 
           it('Should have correct css classes if useSimulatedScrollbar is set to true and nativeStrategy is used', () => {
             devices.real = () => ({ platform });
-            const instance = new Scrollable({
+            const viewModel = new Scrollable({
               useSimulatedScrollbar,
               showScrollbar: 'onScroll',
               direction,
             });
 
             if (useSimulatedScrollbar || (useSimulatedScrollbar === undefined && platform === 'android')) {
-              expect(instance.cssClasses).toEqual(
+              expect(viewModel.cssClasses).toEqual(
                 expect.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED),
               );
             } else {
-              expect(instance.cssClasses).toEqual(
+              expect(viewModel.cssClasses).toEqual(
                 expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED),
               );
             }
+          });
+
+          it('Should assign swipeDown, pullDown strategy', () => {
+            devices.real = () => ({ platform });
+
+            const viewModel = new Scrollable({
+              useSimulatedScrollbar,
+              showScrollbar: 'onScroll',
+              direction,
+            });
+
+            expect(viewModel.refreshStrategy).toEqual(platform === 'android' ? 'swipeDown' : 'pullDown');
           });
         });
       });
