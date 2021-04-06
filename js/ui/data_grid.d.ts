@@ -22,9 +22,8 @@ import {
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -3133,7 +3132,7 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxDataGrid> & {
 export type DataErrorOccurredEvent = ComponentEvent<dxDataGrid> & DataErrorOccurredInfo;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxDataGrid>;
+export type DisposingEvent = ComponentEvent<dxDataGrid>;
 
 /** @public */
 export type EditCanceledEvent = ComponentEvent<dxDataGrid> & DataChangeInfo;
@@ -3244,7 +3243,7 @@ export type InitNewRowEvent = ComponentEvent<dxDataGrid> & NewRowInfo;
 export type KeyDownEvent = ComponentNativeEvent<dxDataGrid> & KeyDownInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxDataGrid>;
+export type OptionChangedEvent = ComponentEvent<dxDataGrid> & ChangedOptionInfo;
 
 /** @public */
 export type RowClickEvent = ComponentNativeEvent<dxDataGrid> & {

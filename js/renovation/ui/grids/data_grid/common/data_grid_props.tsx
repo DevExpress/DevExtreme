@@ -17,21 +17,21 @@ import type {
   ColumnCustomizeTextArg,
   RowDraggingAddEvent,
   RowDraggingChangeEvent,
-  CalculateCustomSummaryArg,
+  CustomSummaryInfo,
   ColumnCellTemplateData,
   RowDraggingTemplateData,
   ColumnEditCellTemplateData,
   ColumnGroupCellTemplateData,
   ColumnHeaderCellTemplateData,
   MasterDetailTemplateData,
-  SummaryItemCustomizeTextArg,
+  SummaryItemTextInfo,
   AdaptiveDetailRowPreparingEvent,
   CellClickEvent,
   CellDblClickEvent,
   CellHoverChangedEvent,
   CellPreparedEvent,
   ContextMenuPreparingEvent,
-  CustomizeExcelCellArg,
+  ExcelCellInfo,
   DataErrorOccurredEvent,
   RowDraggingEndEvent,
   RowDraggingMoveEvent,
@@ -609,7 +609,7 @@ export class DataGridSummaryGroupItem {
   column?: string;
 
   @Event()
-  customizeText?: (itemInfo: SummaryItemCustomizeTextArg) => string;
+  customizeText?: (itemInfo: SummaryItemTextInfo) => string;
 
   @OneWay()
   displayFormat?: string;
@@ -645,7 +645,7 @@ export class DataGridSummaryTotalItem {
   cssClass?: string;
 
   @Event()
-  customizeText?: (itemInfo: SummaryItemCustomizeTextArg) => string;
+  customizeText?: (itemInfo: SummaryItemTextInfo) => string;
 
   @OneWay()
   displayFormat?: string;
@@ -669,7 +669,7 @@ export class DataGridSummaryTotalItem {
 @ComponentBindings()
 export class DataGridSummary {
   @Event()
-  calculateCustomSummary?: (options: CalculateCustomSummaryArg) => any;
+  calculateCustomSummary?: (options: CustomSummaryInfo) => any;
 
   @Nested()
   groupItems?: DataGridSummaryGroupItem[];
@@ -1046,7 +1046,7 @@ export class DataGridLoadPanel {
 export class DataGridExport {
   @OneWay() allowExportSelectedData?: boolean;
 
-  @Event() customizeExcelCell?: ((options: CustomizeExcelCellArg) => any);
+  @Event() customizeExcelCell?: ((options: ExcelCellInfo) => any);
 
   @OneWay() enabled?: boolean;
 

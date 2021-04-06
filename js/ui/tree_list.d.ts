@@ -14,13 +14,11 @@ import {
 import DataSource from '../data/data_source';
 
 import {
-    TEvent,
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -115,7 +113,7 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxTreeList> & {
 export type DataErrorOccurredEvent = ComponentEvent<dxTreeList> & DataErrorOccurredInfo;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxTreeList>;
+export type DisposingEvent = ComponentEvent<dxTreeList>;
 
 /** @public */
 export type EditCanceledEvent = ComponentEvent<dxTreeList> & DataChangeInfo;
@@ -213,7 +211,7 @@ export type NodesInitializedEvent = ComponentEvent<dxTreeList> & {
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxTreeList>;
+export type OptionChangedEvent = ComponentEvent<dxTreeList> & ChangedOptionInfo;
 
 /** @public */
 export type RowClickEvent = ComponentNativeEvent<dxTreeList> & {
