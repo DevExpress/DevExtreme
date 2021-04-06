@@ -13,32 +13,10 @@ const STATE_TOUCHED = 4;
 const STATE_PULLED = 5;
 
 const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
-
-    _init: function(scrollView) {
-        this.callBase(scrollView);
-        this._$topPocket = scrollView._$topPocket;
-        this._$bottomPocket = scrollView._$bottomPocket;
-        this._$pullDown = scrollView._$pullDown;
-        this._$scrollViewContent = scrollView.content();
-
-        this._location = 0;
-    },
-
-    render: function() {
-        this.callBase();
-        this._releaseState();
-    },
-
     _releaseState: function() {
         this._state = STATE_RELEASED;
         this._releasePullDown();
         this._updateDimensions();
-    },
-
-    _releasePullDown: function() {
-        this._$pullDown.css({
-            opacity: 0
-        });
     },
 
     _updateDimensions: function() {
@@ -46,12 +24,6 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this._topPocketSize = this._$topPocket.height();
         this._bottomPocketSize = this._$bottomPocket.height();
         this._scrollOffset = this._$container.height() - this._$content.height();
-    },
-
-    _allowedDirections: function() {
-        const allowedDirections = this.callBase();
-        allowedDirections.vertical = allowedDirections.vertical || this._pullDownEnabled;
-        return allowedDirections;
     },
 
     handleInit: function(e) {
