@@ -123,7 +123,7 @@ export default class VirtualScrollingDispatcher {
         return {
             ...verticalRenderState,
             ...horizontalRenderState,
-            cellWidth: this.getCellWidth(),
+            cellWidth: this.cellWidth,
         };
     }
 
