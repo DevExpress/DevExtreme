@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import { when } from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
@@ -71,28 +71,31 @@ class FileManager extends Widget {
 
         this.$element().addClass(FILE_MANAGER_CLASS);
 
-        this._createNotificationControl();
-        this._createEditing();
-        this._createAdaptivityControl();
-
-        this._initCommandManager();
-        this._setItemsViewAreaActive(false);
+        when(this._createNotificationControl())
+            .done(() => {
+                this._createEditing();
+                this._createAdaptivityControl();
+                this._initCommandManager();
+                this._setItemsViewAreaActive(false);
+            });
     }
 
     _createNotificationControl() {
+        const wrapperCreatedDeferred = new Deferred();
         const $notificationControl = $('<div>')
             .addClass('dx-filemanager-notification-container')
             .appendTo(this.$element());
 
         this._notificationControl = this._createComponent($notificationControl, FileManagerNotificationControl, {
             progressPanelContainer: this.$element(),
-            contentTemplate: container => this._createWrapper(container),
+            contentTemplate: container => this._createWrapper(container, wrapperCreatedDeferred),
             onActionProgress: e => this._onActionProgress(e),
             positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`
         });
+        return wrapperCreatedDeferred.promise();
     }
 
-    _createWrapper(container) {
+    _createWrapper(container, createdDeferred) {
         this._$wrapper = $('<div>')
             .addClass(FILE_MANAGER_WRAPPER_CLASS)
             .appendTo(container);
@@ -105,6 +108,8 @@ class FileManager extends Widget {
             itemViewMode: this.option('itemView').mode,
             onItemClick: (args) => this._actions.onToolbarItemClick(args)
         });
+
+        createdDeferred.resolve();
     }
 
     _createAdaptivityControl() {
