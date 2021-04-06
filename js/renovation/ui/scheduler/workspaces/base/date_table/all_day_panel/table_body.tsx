@@ -18,7 +18,6 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
   <Row
     leftVirtualCellWidth={viewModel.props.leftVirtualCellWidth}
     rightVirtualCellWidth={viewModel.props.rightVirtualCellWidth}
-    leftVirtualCellCount={viewMo}
     className={viewModel.classes}
   >
     {viewModel.props.viewData.map(({

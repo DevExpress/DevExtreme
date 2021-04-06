@@ -17,8 +17,6 @@ import { GroupPanelProps } from '../group_panel/group_panel_props';
 import { DateHeaderLayout, DateHeaderLayoutProps } from './date_header/layout';
 import HeaderPanel from '../../../../../component_wrapper/scheduler_header_panel';
 
-let dateHeader = null;
-
 export const viewFunction = ({
   isHorizontalGrouping,
   props: {
@@ -34,15 +32,9 @@ export const viewFunction = ({
     timeCellTemplate,
     dateHeaderTemplate: DateHeader,
   },
-}: HeaderPanelLayout): JSX.Element => {
-  // const isTrue = dateHeaderData === dateHeader;
-  console.log(dateHeaderData);
-  // console.log('////////////');
-  dateHeader = dateHeaderData;
-
-  return (
-    <thead>
-      {isHorizontalGrouping && !groupByDate && (
+}: HeaderPanelLayout): JSX.Element => (
+  <thead>
+    {isHorizontalGrouping && !groupByDate && (
       <GroupPanel
         groups={groups}
         groupByDate={groupByDate}
@@ -51,8 +43,8 @@ export const viewFunction = ({
         columnCountPerGroup={columnCountPerGroup}
         resourceCellTemplate={resourceCellTemplate}
       />
-      )}
-      {isRenderDateHeader && (
+    )}
+    {isRenderDateHeader && (
       <DateHeader
         groupByDate={groupByDate}
         dateHeaderData={dateHeaderData}
@@ -61,8 +53,8 @@ export const viewFunction = ({
         dateCellTemplate={dateCellTemplate}
         timeCellTemplate={timeCellTemplate}
       />
-      )}
-      {groupByDate && (
+    )}
+    {groupByDate && (
       <GroupPanel
         groups={groups}
         groupByDate={groupByDate}
@@ -71,10 +63,9 @@ export const viewFunction = ({
         columnCountPerGroup={columnCountPerGroup}
         resourceCellTemplate={resourceCellTemplate}
       />
-      )}
-    </thead>
-  );
-};
+    )}
+  </thead>
+);
 
 @ComponentBindings()
 export class HeaderPanelLayoutProps extends GroupPanelProps {

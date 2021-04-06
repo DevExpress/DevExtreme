@@ -324,7 +324,7 @@ class ViewDataGenerator {
         } = options;
 
         return {
-            dataMap: completeDateHeaderMap.map(headerRow => headerRow.slice(startCellIndex, cellCount)),
+            dataMap: completeDateHeaderMap.map(headerRow => headerRow.slice(startCellIndex, startCellIndex + cellCount)),
             leftVirtualCellWidth,
             rightVirtualCellWidth,
             leftVirtualCellCount: startCellIndex,

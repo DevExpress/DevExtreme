@@ -1444,19 +1444,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             });
             this[componentName] = component;
         } else {
-            let optionValue;
-            if(componentName === 'renovatedHeaderPanel') {
-                optionValue = component.option('dateHeaderData');
-                // console.log(optionValue);
-                debugger;
-            }
             component.option(viewModel);
-
-            if(componentName === 'renovatedHeaderPanel') {
-                console.log(optionValue === component.option('dateHeaderData'));
-                component.option('dateHeaderData.dataMap[0][0]', { text: 'aaaaaaaaaaa' });
-                // console.log(component.option('dateHeaderData'));
-            }
         }
     }
 
