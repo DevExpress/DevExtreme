@@ -232,34 +232,6 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return gridAppointmentList;
     }
 
-    _getProcessedDatesByAppointmentTimeZone(appointmentList, appointment, startDate, endDate) { // T983264
-        const hasAppointmentTimeZone = !isEmptyObject(appointment.startDateTimeZone) || !isEmptyObject(appointment.endDateTimeZone);
-
-        if(appointmentList.length > 1 && hasAppointmentTimeZone) {
-            const appointmentOffsets = {
-                startDate: this.timeZoneCalculator.getOffsets(appointment.startDate, appointment.startDateTimeZone),
-                endDate: this.timeZoneCalculator.getOffsets(appointment.endDate, appointment.endDateTimeZone),
-            };
-
-            const sourceOffsets = {
-                startDate: this.timeZoneCalculator.getOffsets(startDate, appointment.startDateTimeZone),
-                endDate: this.timeZoneCalculator.getOffsets(endDate, appointment.endDateTimeZone),
-            };
-
-            const startDateOffsetDiff = appointmentOffsets.startDate.appointment - sourceOffsets.startDate.appointment;
-            const endDateOffsetDiff = appointmentOffsets.endDate.appointment - sourceOffsets.endDate.appointment;
-
-            if(startDateOffsetDiff !== 0) {
-                startDate = new Date(startDate.getTime() + startDateOffsetDiff * toMs('hour'));
-            }
-            if(endDateOffsetDiff !== 0) {
-                endDate = new Date(endDate.getTime() + endDateOffsetDiff * toMs('hour'));
-            }
-        }
-
-        return [startDate, endDate];
-    }
-
     _createGridAppointmentList(appointmentList, appointment) {
         return appointmentList.map(source => {
             const offsetDifference = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
