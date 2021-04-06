@@ -52,7 +52,8 @@ import {
     RowValidatingInfo,
     SavingInfo,
     SelectionChangedInfo,
-    ToolbarPreparingInfo
+    ToolbarPreparingInfo,
+    RowDraggingTemplateDataModel
 } from './data_grid';
 
 import dxScrollable from './scroll_view/ui.scrollable';
@@ -327,6 +328,59 @@ export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxTreeList>;
 
 /** @public */
 export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxTreeList> & DragReorderInfo;
+
+/** @public */
+export type ColumnButtonTemplateData = {
+    readonly component: dxTreeList;
+    readonly data: any;
+    readonly key: any;
+    readonly columnIndex: number;
+    readonly column: Column;
+    readonly rowIndex: number;
+    readonly rowType: string;
+    readonly row: RowObject;
+}
+
+/** @public */
+export type ColumnCellTemplateData = {
+    readonly data: any;
+    readonly component: dxTreeList;
+    readonly value?: any;
+    readonly oldValue?: any;
+    readonly displayValue?: any;
+    readonly text: string;
+    readonly columnIndex: number;
+    readonly rowIndex: number;
+    readonly column: Column;
+    readonly row: RowObject;
+    readonly rowType: string;
+    readonly watch?: Function;
+}
+
+/** @public */
+export type ColumnEditCellTemplateData = {
+    readonly setValue?: any;
+    readonly data: any;
+    readonly component: dxTreeList;
+    readonly value?: any;
+    readonly displayValue?: any;
+    readonly text: string;
+    readonly columnIndex: number;
+    readonly rowIndex: number;
+    readonly column: Column;
+    readonly row: RowObject;
+    readonly rowType: string;
+    readonly watch?: Function;
+}
+
+export type ColumnHeaderCellTemplateData = {
+    readonly component: dxTreeList;
+    readonly columnIndex: number;
+    readonly column: Column;
+}
+
+/** @public */
+export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
 
 export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
@@ -1161,44 +1215,6 @@ export default class dxTreeList extends Widget implements GridBase {
 
 export type dxTreeListColumn = Column;
 
-/** @public */
-export interface CellTemplateInfo {
-    readonly data: any;
-    readonly component: dxTreeList;
-    readonly value?: any;
-    readonly oldValue?: any;
-    readonly displayValue?: any;
-    readonly text: string;
-    readonly columnIndex: number;
-    readonly rowIndex: number;
-    readonly column: Column;
-    readonly row: RowObject;
-    readonly rowType: string;
-    readonly watch?: Function;
-}
-
-/** @public */
-export interface EditCellTemplateInfo {
-    readonly setValue?: any;
-    readonly data: any;
-    readonly component: dxTreeList;
-    readonly value?: any;
-    readonly displayValue?: any;
-    readonly text: string;
-    readonly columnIndex: number;
-    readonly rowIndex: number;
-    readonly column: Column;
-    readonly row: RowObject;
-    readonly rowType: string;
-    readonly watch?: Function;
-}
-
-export interface HeaderCellTemplateInfo {
-    readonly component: dxTreeList;
-    readonly columnIndex: number;
-    readonly column: Column;
-}
-
 /**
  * @docid dxTreeListColumn
  * @inherits GridBaseColumn
@@ -1231,7 +1247,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((cellElement: TElement, cellInfo: CellTemplateInfo) => any);
+    cellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.columns
      * @type Array<dxTreeListColumn|string>
@@ -1259,7 +1275,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editCellTemplate?: template | ((cellElement: TElement, cellInfo: EditCellTemplateInfo) => any);
+    editCellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.headerCellTemplate
      * @type_function_param1 columnHeader:dxElement
@@ -1270,7 +1286,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: HeaderCellTemplateInfo) => any);
+    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: ColumnHeaderCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.type
      * @publicName type
@@ -1279,18 +1295,6 @@ export interface Column extends ColumnBase {
      * @public
      */
     type?: 'adaptive' | 'buttons';
-}
-
-/** @public */
-export interface ColumnButtonTemplate {
-    readonly component: dxTreeList;
-    readonly data: any;
-    readonly key: any;
-    readonly columnIndex: number;
-    readonly column: Column;
-    readonly rowIndex: number;
-    readonly rowType: string;
-    readonly row: RowObject;
 }
 
 /** @public */
@@ -1348,7 +1352,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplate) => string | TElement);
+    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplateData) => string | TElement);
     /**
      * @docid dxTreeListColumnButton.visible
      * @default true

@@ -13,16 +13,16 @@ import type {
   Column,
   RowObject,
   ColumnButtonClickEvent,
-  ColumnButtonTemplateInfo,
+  ColumnButtonTemplateData,
   ColumnCustomizeTextArg,
   RowDraggingAddEvent,
   RowDraggingChangeEvent,
   CalculateCustomSummaryArg,
-  CellTemplateInfo,
-  DragTemplateInfo,
-  EditCellTemplateInfo,
-  GroupCellTemplateInfo,
-  HeaderCellTemplateInfo,
+  ColumnCellTemplateData,
+  RowDraggingTemplateData,
+  ColumnEditCellTemplateData,
+  ColumnGroupCellTemplateData,
+  ColumnHeaderCellTemplateData,
   MasterDetailTemplateData,
   SummaryItemCustomizeTextArg,
   AdaptiveDetailRowPreparingEvent,
@@ -107,7 +107,7 @@ export class DataGridColumnButton {
   | template
   | ((
     cellElement: TElement,
-    cellInfo: ColumnButtonTemplateInfo,
+    cellInfo: ColumnButtonTemplateData,
   ) => string | TElement);
 
   @OneWay()
@@ -376,7 +376,7 @@ export class DataGridColumn {
   | template
   | ((
     cellElement: TElement,
-    cellInfo: CellTemplateInfo,
+    cellInfo: ColumnCellTemplateData,
   ) => any);
 
   @OneWay()
@@ -387,7 +387,7 @@ export class DataGridColumn {
   | template
   | ((
     cellElement: TElement,
-    cellInfo: EditCellTemplateInfo,
+    cellInfo: ColumnEditCellTemplateData,
   ) => any);
 
   @OneWay()
@@ -395,7 +395,7 @@ export class DataGridColumn {
   | template
   | ((
     cellElement: TElement,
-    cellInfo: GroupCellTemplateInfo,
+    cellInfo: ColumnGroupCellTemplateData,
   ) => any);
 
   @OneWay()
@@ -406,7 +406,7 @@ export class DataGridColumn {
   | template
   | ((
     columnHeader: TElement,
-    headerInfo: HeaderCellTemplateInfo,
+    headerInfo: ColumnHeaderCellTemplateData,
   ) => any);
 
   @OneWay()
@@ -768,7 +768,7 @@ export class DataGridRowDragging {
   dragTemplate?:
   | template
   | ((
-    dragInfo: DragTemplateInfo,
+    dragInfo: RowDraggingTemplateData,
     containerElement: TElement,
   ) => string | TElement);
 

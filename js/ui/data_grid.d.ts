@@ -194,8 +194,7 @@ export interface DragReorderInfo {
   promise?: TPromise<void>;
 }
 
-/** @public */
-export interface DragTemplateInfo {
+export interface RowDraggingTemplateDataModel {
   readonly itemData: any;
   readonly itemElement: TElement;
 }
@@ -311,7 +310,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_return string|Element|jQuery
      * @default undefined
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateInfo, containerElement: TElement) => string | TElement),
+    dragTemplate?: template | ((dragInfo: RowDraggingTemplateData, containerElement: TElement) => string | TElement),
     /**
      * @docid GridBaseOptions.rowDragging.dropFeedbackMode
      * @prevFileNamespace DevExpress.ui
@@ -3371,7 +3370,84 @@ export type ColumnButtonClickEvent = {
 }
 
 /** @public */
-export interface RowTemplateInfo {
+export type ColumnButtonTemplateData = {
+  readonly component: dxDataGrid;
+  readonly data?: any;
+  readonly key?: any;
+  readonly columnIndex: number;
+  readonly column: Column;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly row: RowObject;
+}
+
+/** @public */
+export type ColumnCellTemplateData = {
+  readonly data?: any;
+  readonly component: dxDataGrid;
+  readonly value?: any;
+  readonly oldValue?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly row: RowObject;
+  readonly rowType: string;
+  readonly watch?: Function;
+}
+
+/** @public */
+export type ColumnEditCellTemplateData = {
+  readonly setValue?: any;
+  readonly data?: any;
+  readonly component: dxDataGrid;
+  readonly value?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly row: RowObject;
+  readonly rowType: string;
+  readonly watch?: Function;
+}
+
+/** @public */
+export type ColumnGroupCellTemplateData = {
+  readonly data?: any;
+  readonly component: dxDataGrid;
+  readonly value?: any;
+  readonly text: string;
+  readonly displayValue?: any;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly row: RowObject;
+  readonly summaryItems: Array<any>;
+  readonly groupContinuesMessage?: string;
+  readonly groupContinuedMessage?: string;
+}
+
+/** @public */
+export type ColumnHeaderCellTemplateData = {
+  readonly component: dxDataGrid;
+  readonly columnIndex: number;
+  readonly column: Column;
+}
+
+/** @public */
+export type MasterDetailTemplateData = {
+  readonly key: any;
+  readonly data: any;
+  readonly watch?: Function;
+}
+
+/** @public */
+export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
+
+/** @public */
+export type RowTemplateData = {
   readonly key: any;
   readonly data: any;
   readonly component: dxDataGrid;
@@ -3884,7 +3960,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowTemplate?: template | ((rowElement: TElement, rowInfo: RowTemplateInfo) => any);
+    rowTemplate?: template | ((rowElement: TElement, rowInfo: RowTemplateData) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -4123,12 +4199,6 @@ export interface GroupingTexts {
    * @default "Ungroup All"
    */
    ungroupAll?: string
-}
-
-export interface MasterDetailTemplateData {
-  readonly key: any;
-  readonly data: any;
-  readonly watch?: Function;
 }
 
 export interface MasterDetail {
@@ -4734,62 +4804,6 @@ declare class dxDataGrid extends Widget implements GridBase {
     updateDimensions(): void;
 }
 
-/** @public */
-export interface CellTemplateInfo {
-  readonly data?: any;
-  readonly component: dxDataGrid;
-  readonly value?: any;
-  readonly oldValue?: any;
-  readonly displayValue?: any;
-  readonly text: string;
-  readonly columnIndex: number;
-  readonly rowIndex: number;
-  readonly column: Column;
-  readonly row: RowObject;
-  readonly rowType: string;
-  readonly watch?: Function;
-}
-
-/** @public */
-export interface EditCellTemplateInfo {
-  readonly setValue?: any;
-  readonly data?: any;
-  readonly component: dxDataGrid;
-  readonly value?: any;
-  readonly displayValue?: any;
-  readonly text: string;
-  readonly columnIndex: number;
-  readonly rowIndex: number;
-  readonly column: Column;
-  readonly row: RowObject;
-  readonly rowType: string;
-  readonly watch?: Function;
-}
-
-/** @public */
-export interface GroupCellTemplateInfo {
-  readonly data?: any;
-  readonly component: dxDataGrid;
-  readonly value?: any;
-  readonly text: string;
-  readonly displayValue?: any;
-  readonly columnIndex: number;
-  readonly rowIndex: number;
-  readonly column: Column;
-  readonly row: RowObject;
-  readonly summaryItems: Array<any>;
-  readonly groupContinuesMessage?: string;
-  readonly groupContinuedMessage?: string;
-}
-
-/** @public */
-export interface HeaderCellTemplateInfo {
-  readonly component: dxDataGrid;
-  readonly columnIndex: number;
-  readonly column: Column;
-}
-
-
 export type dxDataGridColumn = Column;
 
 /**
@@ -4853,7 +4867,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((cellElement: TElement, cellInfo: CellTemplateInfo) => any);
+    cellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.columns
      * @type Array<dxDataGridColumn|string>
@@ -4881,7 +4895,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editCellTemplate?: template | ((cellElement: TElement, cellInfo: EditCellTemplateInfo) => any);
+    editCellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.groupCellTemplate
      * @type_function_param1 cellElement:dxElement
@@ -4901,7 +4915,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupCellTemplate?: template | ((cellElement: TElement, cellInfo: GroupCellTemplateInfo) => any);
+    groupCellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnGroupCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.groupIndex
      * @default undefined
@@ -4920,7 +4934,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: HeaderCellTemplateInfo) => any);
+    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: ColumnHeaderCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.showWhenGrouped
      * @default false
@@ -4936,18 +4950,6 @@ export interface Column extends ColumnBase {
      * @public
      */
     type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
-}
-
-/** @public */
-export interface ColumnButtonTemplateInfo {
-  readonly component: dxDataGrid;
-  readonly data?: any;
-  readonly key?: any;
-  readonly columnIndex: number;
-  readonly column: Column;
-  readonly rowIndex: number;
-  readonly rowType: string;
-  readonly row: RowObject;
 }
 
 export type dxDataGridColumnButton = ColumnButton;
@@ -4993,7 +4995,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplateInfo) => string | TElement);
+    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplateData) => string | TElement);
     /**
      * @docid dxDataGridColumnButton.visible
      * @default true
