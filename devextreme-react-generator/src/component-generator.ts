@@ -76,6 +76,15 @@ interface IRenderedPropTyping {
 const TYPE_KEY_FN = '(data: any) => string';
 const TYPE_RENDER = '(...params: any) => React.ReactNode';
 const TYPE_COMPONENT = 'React.ComponentType<any>';
+const PORTAL_COMPONENTS: Set<string> = new Set([
+  'dxLoadPanel',
+  'dxOverlay',
+  'dxPopover',
+  'dxPopup',
+  'dxToast',
+  'dxTooltip',
+  'dxValidationMessage',
+]);
 
 function getIndent(indent: number) {
   return Array(indent * 2 + 1).join(' ');
@@ -310,6 +319,7 @@ const renderComponent: (model: {
   renderedDefaultProps?: string[];
   renderedTemplateProps?: string[];
   renderedPropTypings?: string[];
+  isPortalComponent?: boolean;
 }) => string = createTempate(
   `class <#= it.className #> extends BaseComponent<<#= it.optionsName #>> {
 
@@ -318,6 +328,10 @@ const renderComponent: (model: {
   }
 
   protected _WidgetClass = <#= it.widgetName #>;\n`
+
++ `<#? it.isPortalComponent #>${
+  L1}protected isPortalComponent = true;\n`
++ '<#?#>'
 
 + `<#? it.subscribableOptions #>${
   L1}protected subscribableOptions = [<#= it.subscribableOptions.join(',') #>];\n`
@@ -536,6 +550,7 @@ function generate(component: IComponent): string {
       })),
       renderedPropTypings,
       expectedChildren: component.expectedChildren,
+      isPortalComponent: PORTAL_COMPONENTS.has(widgetName),
     }),
 
     renderedNestedComponents: nestedComponents && nestedComponents.map(renderNestedComponent),

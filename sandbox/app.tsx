@@ -2,8 +2,9 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.compact.css';
-import AccordionExample from './accordion-example';
 import Button from 'devextreme-react/button';
+import NumberBox from 'devextreme-react/number-box';
+import AccordionExample from './accordion-example';
 import BoxExample from './box-example';
 import ChartExample from './chart-example';
 import DataGridExample from './data-grid-example';
@@ -13,7 +14,6 @@ import Example from './example-block';
 import FormExample from './form-example';
 import ListExample from './list-example';
 import MapExample from './map-example';
-import NumberBox from 'devextreme-react/number-box';
 import PopupExample from './popup-example';
 import SchedulerExample from './scheduler-example';
 import ScrollViewExample from './scroll-view-example';
@@ -27,7 +27,7 @@ import ValidationExample from './validation-example';
 ReactDOM.render(
   <div>
     <AccordionExample />
-    
+
     <BoxExample />
 
     <Example title="DxButton">
@@ -49,7 +49,7 @@ ReactDOM.render(
     <FormExample />
 
     <ListExample />
-    
+
     <MapExample />
 
     <Example title="DxNumberBox">
@@ -75,7 +75,6 @@ ReactDOM.render(
     <ValidationExample />
 
     <SchedulerExample />
-
 
     <Example title="SelectBox example">
       <SelectBoxExample />

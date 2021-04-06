@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { Component } from '../component';
 
 const eventHandlers: { [index: string]: (e?: any) => void } = {};
@@ -25,6 +26,9 @@ class TestComponent<P = any> extends Component<P> {
     Widget.option.mockReset();
   }
 }
+class TestPortalComponent<P = any> extends TestComponent<P> {
+  protected isPortalComponent = true;
+}
 
 function fireOptionChange(fullName: string, value: unknown): void {
   eventHandlers.optionChanged({
@@ -36,6 +40,7 @@ function fireOptionChange(fullName: string, value: unknown): void {
 
 export {
   TestComponent,
+  TestPortalComponent,
   Widget,
   WidgetClass,
   eventHandlers,

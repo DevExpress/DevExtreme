@@ -9,9 +9,9 @@ import NavigationList from './NavigationList';
 
 class App extends React.Component<any, {
   opened: boolean,
-  openedStateMode: "shrink" | "overlap" | "push" | undefined,
-  revealMode: "slide" | "expand" | undefined,
-  position: "left" | "before" | "right" | "top" | "bottom" | "after" | undefined
+  openedStateMode: 'shrink' | 'overlap' | 'push' | undefined,
+  revealMode: 'slide' | 'expand' | undefined,
+  position: 'left' | 'before' | 'right' | 'top' | 'bottom' | 'after' | undefined
 }> {
   constructor(props: any) {
     super(props);
@@ -46,7 +46,7 @@ class App extends React.Component<any, {
     }];
 
     return (
-      <Example title="DxDrawer" state={this.state} >
+      <Example title="DxDrawer" state={this.state}>
         <Toolbar items={toolbarItems} />
         <Drawer
           opened={opened}
@@ -58,10 +58,12 @@ class App extends React.Component<any, {
           height={400}
         >
           <div id="content" className="dx-theme-background-color">
-            <div>Lorem ipsum dolor sit amet consectetur,
-            adipisicing elit. Corrupti fugit culpa similique non illum doloremque,
-            odio aperiam enim nostrum laboriosam accusantium delectus tempora nesciunt,
-                 repellendus explicabo laudantium nam. Non, officiis!</div>
+            <div>
+              Lorem ipsum dolor sit amet consectetur,
+              adipisicing elit. Corrupti fugit culpa similique non illum doloremque,
+              odio aperiam enim nostrum laboriosam accusantium delectus tempora nesciunt,
+              repellendus explicabo laudantium nam. Non, officiis!
+            </div>
           </div>
         </Drawer>
         <div className="options">

@@ -1,16 +1,79 @@
 import * as events from 'devextreme/events';
+import { TemplatesRenderer } from '../templates-renderer';
 
 import { mount, React, shallow } from './setup';
 import {
-  fireOptionChange, TestComponent, Widget, WidgetClass,
+  fireOptionChange, TestComponent, TestPortalComponent, Widget, WidgetClass,
 } from './test-component';
 
 describe('rendering', () => {
-  it('renders correctly', () => {
-    const component = shallow(
+  it('renders component without children correctly', () => {
+    const component = mount(
       <TestComponent />,
     );
-    expect(component.type()).toBe('div');
+
+    expect(component.children().length).toBe(1);
+    expect(component.childAt(0).type()).toBe('div');
+
+    const content = component.childAt(0);
+
+    expect(content.children().length).toBe(1);
+    expect(content.find(TemplatesRenderer).exists()).toBe(true);
+  });
+
+  it('renders component with children correctly', () => {
+    const component = mount(
+      <TestComponent>
+        <TestComponent />
+      </TestComponent>,
+    );
+
+    expect(component.children().length).toBe(1);
+    expect(component.childAt(0).type()).toBe('div');
+
+    const content = component.childAt(0);
+
+    expect(content.children().length).toBe(2);
+    expect(content.find(TestComponent).exists()).toBe(true);
+    expect(content.find(TemplatesRenderer).exists()).toBe(true);
+  });
+
+  it('renders portal component without children correctly', () => {
+    const component = mount(
+      <TestPortalComponent />,
+    );
+
+    expect(component.children().length).toBe(1);
+    expect(component.childAt(0).type()).toBe('div');
+
+    const content = component.childAt(0);
+
+    expect(content.children().length).toBe(1);
+    expect(content.find(TemplatesRenderer).exists()).toBe(true);
+  });
+
+  it('renders portal component with children correctly', () => {
+    const component = mount(
+      <TestPortalComponent>
+        <TestComponent />
+      </TestPortalComponent>,
+    );
+
+    expect(component.children().length).toBe(2);
+    expect(component.childAt(0).type()).toBe('div');
+    expect(component.childAt(1).name()).toBe('Portal');
+
+    const content = component.childAt(0);
+    const portal = component.childAt(1);
+
+    expect(content.children().length).toBe(2);
+    expect(content
+      .findWhere((node) => node.type() === 'div' && node.prop('style')?.display === 'none')
+      .exists()).toBe(true);
+    expect(content.find(TemplatesRenderer).exists()).toBe(true);
+
+    expect(portal.children().length).toBe(1);
+    expect(portal.find(TestComponent).exists()).toBe(true);
   });
 
   it('create widget on componentDidMount', () => {
