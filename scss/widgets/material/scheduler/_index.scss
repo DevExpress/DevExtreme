@@ -87,6 +87,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     padding-right: 0;
   }
 
+  .dx-rtl.dx-scheduler-small & {
+    padding-left: 2px;
+  }
+
   &.dx-scheduler-time-panel-current-time-cell::before {
     content: none;
   }
