@@ -200,6 +200,33 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return gridAppointmentList;
     }
 
+    _getProcessedDatesByAppointmentTimeZone(appointmentList, appointment, startDate, endDate) {
+        const hasAppointmentTimeZone = !isEmptyObject(appointment.startDateTimeZone) || !isEmptyObject(appointment.endDateTimeZone);
+        if(appointmentList.length > 1 && hasAppointmentTimeZone) {
+            const appointmentOffsets = {
+                startDate: this.timeZoneCalculator.getOffsets(appointment.startDate, appointment.startDateTimeZone),
+                endDate: this.timeZoneCalculator.getOffsets(appointment.endDate, appointment.endDateTimeZone),
+            };
+
+            const sourceOffsets = {
+                startDate: this.timeZoneCalculator.getOffsets(startDate, appointment.startDateTimeZone),
+                endDate: this.timeZoneCalculator.getOffsets(endDate, appointment.endDateTimeZone),
+            };
+
+            const startDateOffsetDiff = appointmentOffsets.startDate.appointment - sourceOffsets.startDate.appointment;
+            const endDateOffsetDiff = appointmentOffsets.endDate.appointment - sourceOffsets.endDate.appointment;
+
+            if(startDateOffsetDiff !== 0) {
+                startDate = new Date(startDate.getTime() + startDateOffsetDiff * toMs('hour'));
+            }
+            if(endDateOffsetDiff !== 0) {
+                endDate = new Date(endDate.getTime() + endDateOffsetDiff * toMs('hour'));
+            }
+        }
+
+        return [startDate, endDate];
+    }
+
     _createGridAppointmentList(appointmentList, appointment) {
         return appointmentList.map(source => {
             const offsetDifference = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
@@ -209,8 +236,15 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 source.endDate = new Date(source.endDate.getTime() + offsetDifference * toMs('minute'));
             }
 
-            const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
-            const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
+            const [sourceStartDate, sourceEndDate] = this._getProcessedDatesByAppointmentTimeZone(
+                appointmentList,
+                appointment,
+                source.startDate,
+                source.endDate
+            );
+
+            const startDate = this.timeZoneCalculator.createDate(sourceStartDate, { path: 'toGrid' });
+            const endDate = this.timeZoneCalculator.createDate(sourceEndDate, { path: 'toGrid' });
 
             return {
                 startDate,
