@@ -80,7 +80,7 @@ const subscribes = {
 
     updateAppointmentAfterResize: function(options) {
         const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
-        const exceptionDate = info.sourceAppointment.startDate;
+        const exceptionDate = info.sourceAppointment.exceptionDate;
 
         this._checkRecurringAppointment(options.target, options.data, exceptionDate, (function() {
             this._updateAppointment(options.target, options.data, function() {
@@ -110,7 +110,7 @@ const subscribes = {
             (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
-            this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, (function() {
+            this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.exceptionDate, (function() {
 
                 this._updateAppointment(rawAppointment, targetedRawAppointment, function() {
                     this._appointments.moveAppointmentBack(event);
