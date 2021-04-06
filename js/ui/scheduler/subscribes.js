@@ -480,7 +480,7 @@ const subscribes = {
     },
 
     groupAppointmentsByResources: function(appointments) {
-        let result = { '0': appointments };
+        let result = { '0': appointments.map(app => ({ ...app })) };
         const groups = this._getCurrentViewOption('groups');
 
         if(groups && groups.length && this._resourcesManager.getResourcesData().length) {
