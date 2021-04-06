@@ -257,99 +257,6 @@ export interface GridDragReorderEvent<T extends GridBase> {
 }
 
 /** @public */
-export type AdaptiveDetailRowPreparingEvent = ComponentEvent<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
-
-/** @public */
-export type DataErrorOccurredEvent = ComponentEvent<dxDataGrid> & DataErrorOccurredInfo;
-
-/** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxDataGrid>;
-
-/** @public */
-export type EditCanceledEvent = ComponentEvent<dxDataGrid> & DataChangeInfo;
-
-/** @public */
-export type EditCancelingEvent = Cancelable & ComponentEvent<dxDataGrid> & DataChangeInfo;
-
-/** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDataGrid>;
-
-/** @public */
-export type InitNewRowEvent = ComponentEvent<dxDataGrid> & NewRowInfo;
-
-/** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxDataGrid> & KeyDownInfo;
-
-/** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxDataGrid>;
-
-/** @public */
-export type RowCollapsedEvent = ComponentEvent<dxDataGrid> & RowKeyInfo;
-
-/** @public */
-export type RowCollapsingEvent = Cancelable & ComponentEvent<dxDataGrid> & RowKeyInfo;
-
-/** @public */
-export type RowExpandedEvent = ComponentEvent<dxDataGrid> & RowKeyInfo;
-
-/** @public */
-export type RowExpandingEvent = Cancelable & ComponentEvent<dxDataGrid> & RowKeyInfo;
-
-/** @public */
-export type RowInsertedEvent = ComponentEvent<dxDataGrid> & RowInsertedInfo;
-
-/** @public */
-export type RowInsertingEvent = ComponentEvent<dxDataGrid> & RowInsertingInfo;
-
-/** @public */
-export type RowRemovedEvent = ComponentEvent<dxDataGrid> & RowRemovedInfo;
-
-/** @public */
-export type RowRemovingEvent = ComponentEvent<dxDataGrid> & RowRemovingInfo;
-
-/** @public */
-export type RowUpdatedEvent = ComponentEvent<dxDataGrid> & RowUpdatedInfo;
-
-/** @public */
-export type RowUpdatingEvent = ComponentEvent<dxDataGrid> & RowUpdatingInfo;
-
-/** @public */
-export type RowValidatingEvent = ComponentEvent<dxDataGrid> & RowValidatingInfo;
-
-/** @public */
-export type SavedEvent = ComponentEvent<dxDataGrid> & DataChangeInfo;
-
-/** @public */
-export type SavingEvent = ComponentEvent<dxDataGrid> & SavingInfo;
-
-/** @public */
-export type SelectionChangedEvent = ComponentEvent<dxDataGrid> & SelectionChangedInfo;
-
-/** @public */
-export type ToolbarPreparingEvent = ComponentEvent<dxDataGrid> & ToolbarPreparingInfo;
-
-/** @public */
-export type AddEvent = GridDragAddEvent<dxDataGrid>;
-
-/** @public */
-export type DragChangeEvent = Cancelable & GridDragChangeEvent<dxDataGrid>;
-
-/** @public */
-export type DragEndEvent = Cancelable & GridDragEndEvent<dxDataGrid>;
-
-/** @public */
-export type DragMoveEvent = Cancelable & GridMoveEvent<dxDataGrid>;
-
-/** @public */
-export type DragStartEvent = Cancelable & GridDragStartEvent<dxDataGrid>;
-
-/** @public */
-export type RemoveEvent = GridDragRemoveEvent<dxDataGrid>;
-
-/** @public */
-export type ReorderEvent = GridDragReorderEvent<dxDataGrid>;
-
-/** @public */
 export interface DragTemplateInfo {
   readonly itemData: any;
   readonly itemElement: TElement;
@@ -3203,6 +3110,9 @@ export interface ColumnButtonBase {
 }
 
 /** @public */
+export type AdaptiveDetailRowPreparingEvent = ComponentEvent<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
+
+/** @public */
 export type CellClickEvent = ComponentNativeEvent<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
@@ -3268,15 +3178,8 @@ export type CellPreparedEvent = ComponentEvent<dxDataGrid> & {
   readonly oldValue?: any;
 }
 
-/** @public */ 
- export type ColumnButtonClickEvent = {
-  component?: dxDataGrid;
-  element?: TElement;
-  model?: any;
-  event?: TEvent;
-  row?: RowObject;
-  column?: Column;
-}
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxDataGrid>;
 
 /** @public */
 export type ContextMenuPreparingEvent = ComponentEvent<dxDataGrid> & {
@@ -3288,6 +3191,18 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxDataGrid> & {
   readonly rowIndex: number;
   readonly row?: RowObject;
 }
+
+/** @public */
+export type DataErrorOccurredEvent = ComponentEvent<dxDataGrid> & DataErrorOccurredInfo;
+
+/** @public */
+export type DisposingEvent = ComponentDisposingEvent<dxDataGrid>;
+
+/** @public */
+export type EditCanceledEvent = ComponentEvent<dxDataGrid> & DataChangeInfo;
+
+/** @public */
+export type EditCancelingEvent = Cancelable & ComponentEvent<dxDataGrid> & DataChangeInfo;
 
 /** @public */
 export type EditingStartEvent = Cancelable & ComponentEvent<dxDataGrid> & {
@@ -3383,6 +3298,18 @@ export type FocusedRowChangingEvent = Cancelable & ComponentNativeEvent<dxDataGr
 }
 
 /** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxDataGrid>;
+
+/** @public */
+export type InitNewRowEvent = ComponentEvent<dxDataGrid> & NewRowInfo;
+
+/** @public */
+export type KeyDownEvent = ComponentNativeEvent<dxDataGrid> & KeyDownInfo;
+
+/** @public */
+export type OptionChangedEvent = ComponentOptionChangedEvent<dxDataGrid>;
+
+/** @public */
 export type RowClickEvent = ComponentNativeEvent<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
@@ -3397,6 +3324,12 @@ export type RowClickEvent = ComponentNativeEvent<dxDataGrid> & {
   readonly rowElement: TElement;
   readonly handled: boolean;
 }
+
+/** @public */
+export type RowCollapsedEvent = ComponentEvent<dxDataGrid> & RowKeyInfo;
+
+/** @public */
+export type RowCollapsingEvent = Cancelable & ComponentEvent<dxDataGrid> & RowKeyInfo;
 
 /** @public */
 export type RowDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
@@ -3414,6 +3347,18 @@ export type RowDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
 }
 
 /** @public */
+export type RowExpandedEvent = ComponentEvent<dxDataGrid> & RowKeyInfo;
+
+/** @public */
+export type RowExpandingEvent = Cancelable & ComponentEvent<dxDataGrid> & RowKeyInfo;
+
+/** @public */
+export type RowInsertedEvent = ComponentEvent<dxDataGrid> & RowInsertedInfo;
+
+/** @public */
+export type RowInsertingEvent = ComponentEvent<dxDataGrid> & RowInsertingInfo;
+
+/** @public */
 export type RowPreparedEvent = ComponentEvent<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
@@ -3426,6 +3371,65 @@ export type RowPreparedEvent = ComponentEvent<dxDataGrid> & {
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
   readonly rowElement: TElement;
+}
+
+/** @public */
+export type RowRemovedEvent = ComponentEvent<dxDataGrid> & RowRemovedInfo;
+
+/** @public */
+export type RowRemovingEvent = ComponentEvent<dxDataGrid> & RowRemovingInfo;
+
+/** @public */
+export type RowUpdatedEvent = ComponentEvent<dxDataGrid> & RowUpdatedInfo;
+
+/** @public */
+export type RowUpdatingEvent = ComponentEvent<dxDataGrid> & RowUpdatingInfo;
+
+/** @public */
+export type RowValidatingEvent = ComponentEvent<dxDataGrid> & RowValidatingInfo;
+
+/** @public */
+export type SavedEvent = ComponentEvent<dxDataGrid> & DataChangeInfo;
+
+/** @public */
+export type SavingEvent = ComponentEvent<dxDataGrid> & SavingInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxDataGrid> & SelectionChangedInfo;
+
+/** @public */
+export type ToolbarPreparingEvent = ComponentEvent<dxDataGrid> & ToolbarPreparingInfo;
+
+
+/** @public */
+export type AddEvent = GridDragAddEvent<dxDataGrid>;
+
+/** @public */
+export type DragChangeEvent = Cancelable & GridDragChangeEvent<dxDataGrid>;
+
+/** @public */
+export type DragEndEvent = Cancelable & GridDragEndEvent<dxDataGrid>;
+
+/** @public */
+export type DragMoveEvent = Cancelable & GridMoveEvent<dxDataGrid>;
+
+/** @public */
+export type DragStartEvent = Cancelable & GridDragStartEvent<dxDataGrid>;
+
+/** @public */
+export type RemoveEvent = GridDragRemoveEvent<dxDataGrid>;
+
+/** @public */
+export type ReorderEvent = GridDragReorderEvent<dxDataGrid>;
+
+/** @public */ 
+export type ColumnButtonClickEvent = {
+  component?: dxDataGrid;
+  element?: TElement;
+  model?: any;
+  event?: TEvent;
+  row?: RowObject;
+  column?: Column;
 }
 
 /** @public */
