@@ -980,7 +980,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @prevFileNamespace DevExpress.ui
        * @extends AppointmentTooltipTemplate
        */
-      appointmentTooltipTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: TElement) => string | TElement),
+      appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
