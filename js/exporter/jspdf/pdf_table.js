@@ -1,7 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { drawPdfTable } from './draw_pdf_table';
 
-class PdfTable {
+export class PdfTable {
     constructor(drawTableBorder, rect) {
         this.drawTableBorder = drawTableBorder;
         this.rect = rect;
@@ -41,5 +41,3 @@ class PdfTable {
         drawPdfTable(doc, this);
     }
 }
-
-export default PdfTable;

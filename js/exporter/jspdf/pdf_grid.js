@@ -1,7 +1,7 @@
 import { isDefined } from '../../core/utils/type';
-import PdfTable from './pdf_table';
+import { PdfTable } from './pdf_table';
 
-class PdfGrid {
+export class PdfGrid {
     constructor(splitByColumns) {
         this._splitByColumns = splitByColumns ?? [];
         this._newPageTables = [];
@@ -63,5 +63,3 @@ class PdfGrid {
         });
     }
 }
-
-export default PdfGrid;

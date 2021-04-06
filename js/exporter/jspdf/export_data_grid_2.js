@@ -1,5 +1,5 @@
 import { isDefined } from '../../core/utils/type';
-import PdfGrid from './pdf_grid';
+import { PdfGrid } from './pdf_grid';
 
 
 function exportDataGrid(doc, dataGrid, options) {
