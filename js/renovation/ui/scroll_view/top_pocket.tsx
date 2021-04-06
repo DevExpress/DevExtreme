@@ -13,7 +13,7 @@ import { isDefined } from '../../../core/utils/type';
 import messageLocalization from '../../../localization/message';
 
 import { ScrollableProps } from './scrollable_props';
-import { BaseWidgetProps } from '../../utils/base_props';
+import { BaseWidgetProps } from '../common/base_props';
 
 import { combineClasses } from '../../utils/combine_classes';
 
