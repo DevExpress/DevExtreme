@@ -13,9 +13,8 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -34,7 +33,7 @@ import {
 export type ContentReadyEvent = ComponentEvent<dxTreeView>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxTreeView>;
+export type DisposingEvent = ComponentEvent<dxTreeView>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxTreeView>;
@@ -94,7 +93,7 @@ export type ItemSelectionChangedEvent = ComponentEvent<dxTreeView> & {
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxTreeView>;
+export type OptionChangedEvent = ComponentEvent<dxTreeView> & ChangedOptionInfo;
 
 /** @public */
 export type SelectAllValueChangedEvent = ComponentEvent<dxTreeView> & {

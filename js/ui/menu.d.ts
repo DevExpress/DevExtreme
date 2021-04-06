@@ -10,9 +10,8 @@ import {
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -29,7 +28,7 @@ import dxMenuBase, {
 export type ContentReadyEvent = ComponentEvent<dxMenu>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxMenu>;
+export type DisposingEvent = ComponentEvent<dxMenu>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxMenu>;
@@ -44,7 +43,7 @@ export type ItemContextMenuEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
 export type ItemRenderedEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxMenu>;
+export type OptionChangedEvent = ComponentEvent<dxMenu> & ChangedOptionInfo;
 
 /** @public */
 export type SelectionChangedEvent = ComponentEvent<dxMenu> & SelectionChangedInfo;

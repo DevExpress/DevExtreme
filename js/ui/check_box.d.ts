@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import Editor, {
@@ -19,13 +18,13 @@ import Editor, {
 export type ContentReadyEvent = ComponentEvent<dxCheckBox>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxCheckBox>;
+export type DisposingEvent = ComponentEvent<dxCheckBox>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxCheckBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxCheckBox>;
+export type OptionChangedEvent = ComponentEvent<dxCheckBox> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxCheckBox> & ValueChangedInfo;

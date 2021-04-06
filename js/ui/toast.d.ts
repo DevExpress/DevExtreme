@@ -14,9 +14,8 @@ import {
     TEvent,
     Cancelable,
     ComponentEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxOverlay, {
@@ -28,7 +27,7 @@ import dxOverlay, {
 export type ContentReadyEvent = ComponentEvent<dxToast>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxToast>;
+export type DisposingEvent = ComponentEvent<dxToast>;
 
 /** @public */
 export type HidingEvent = ComponentEvent<dxToast> & Cancelable;
@@ -40,7 +39,7 @@ export type HiddenEvent = ComponentEvent<dxToast>;
 export type InitializedEvent = ComponentInitializedEvent<dxToast>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxToast>;
+export type OptionChangedEvent = ComponentEvent<dxToast> & ChangedOptionInfo;
 
 /** @public */
 export type ShowingEvent = ComponentEvent<dxToast>;

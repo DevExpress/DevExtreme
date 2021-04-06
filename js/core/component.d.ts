@@ -1,8 +1,6 @@
 import {
-  ComponentDisposingEvent,
-  ComponentInitializedEvent,
-  ComponentOptionChangedEvent
-} from '../events/index';
+  TElement
+} from './element';
 
 export interface ComponentOptions<T = Component> {
   /**
@@ -14,7 +12,7 @@ export interface ComponentOptions<T = Component> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onDisposing?: ((e: ComponentDisposingEvent<T>) => void);
+  onDisposing?: ((e: { component: T }) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -24,7 +22,7 @@ export interface ComponentOptions<T = Component> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onInitialized?: ((e: ComponentInitializedEvent<T>) => void);
+  onInitialized?: ((e: { component?: T, element?: TElement }) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -37,7 +35,7 @@ export interface ComponentOptions<T = Component> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onOptionChanged?: ((e: ComponentOptionChangedEvent<T>) => void);
+  onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => void);
 }
 /**
 * @docid

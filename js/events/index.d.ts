@@ -10,14 +10,17 @@ export interface EventType { }
  */
 export type TEvent = {} extends EventType ? dxEvent : EventType;
 
-/** @public */
+export interface ComponentInitializedEvent<T> {
+    readonly component?: T;
+    readonly element?: TElement;
+}
+
 export interface ComponentEvent<T> {
     readonly component: T;
     readonly element: TElement;
     readonly model?: any;
 }
 
-/** @public */
 export interface ComponentNativeEvent<T> {
     readonly component: T;
     readonly element: TElement;
@@ -25,33 +28,21 @@ export interface ComponentNativeEvent<T> {
     readonly event?: TEvent;
 }
 
-/** @public */
-export interface ComponentDisposingEvent<T> {
-    readonly component?: T;
-}
-
-/** @public */
-export interface ComponentInitializedEvent<T> {
-    readonly component?: T;
-    readonly element?: TElement;
-}
-
-/** @public */
-export interface ComponentOptionChangedEvent<T> {
-    readonly component: T;
+export interface ChangedOptionInfo {
     readonly name: string;
     readonly fullName: string;
     readonly value?: any;
-}
-
-export interface Cancelable {
-    cancel?: boolean;
+    readonly previousValue?: any;
 }
 
 export interface ItemInfo {
     readonly itemData?: any;
     readonly itemElement: TElement;
     readonly itemIndex: number;
+}
+
+export interface Cancelable {
+    cancel?: boolean;
 }
 
 /**

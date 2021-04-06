@@ -9,9 +9,8 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -25,7 +24,7 @@ import CollectionWidget, {
 export type ContentReadyEvent = ComponentEvent<dxMultiView>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxMultiView>;
+export type DisposingEvent = ComponentEvent<dxMultiView>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxMultiView>;
@@ -43,7 +42,7 @@ export type ItemHoldEvent = ComponentNativeEvent<dxMultiView> & ItemInfo;
 export type ItemRenderedEvent = ComponentNativeEvent<dxMultiView> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxMultiView>;
+export type OptionChangedEvent = ComponentEvent<dxMultiView> & ChangedOptionInfo;
 
 /** @public */
 export type SelectionChangedEvent = ComponentEvent<dxMultiView> & SelectionChangedInfo;

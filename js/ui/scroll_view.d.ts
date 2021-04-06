@@ -8,9 +8,8 @@ import {
 
 import {
     ComponentEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxScrollable, {
@@ -19,13 +18,13 @@ import dxScrollable, {
 } from './scroll_view/ui.scrollable';
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxScrollView>;
+export type DisposingEvent = ComponentEvent<dxScrollView>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxScrollView>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxScrollView>;
+export type OptionChangedEvent = ComponentEvent<dxScrollView> & ChangedOptionInfo;
 
 /** @public */
 export type PullDownEvent = ComponentEvent<dxScrollView>;

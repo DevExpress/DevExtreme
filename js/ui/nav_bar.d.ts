@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -24,7 +23,7 @@ import dxTabs, {
 export type ContentReadyEvent = ComponentEvent<dxNavBar>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxNavBar>;
+export type DisposingEvent = ComponentEvent<dxNavBar>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxNavBar>;
@@ -42,7 +41,7 @@ export type ItemHoldEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
 export type ItemRenderedEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxNavBar>;
+export type OptionChangedEvent = ComponentEvent<dxNavBar> & ChangedOptionInfo;
 
 /** @public */
 export type SelectionChangedEvent = ComponentEvent<dxNavBar> & SelectionChangedInfo;

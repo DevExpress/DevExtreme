@@ -11,9 +11,9 @@ import {
 } from '../core/templates/template';
 
 import {
-    ComponentDisposingEvent,
+    ComponentEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
@@ -21,13 +21,13 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxSlideOutView>;
+export type DisposingEvent = ComponentEvent<dxSlideOutView>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxSlideOutView>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxSlideOutView>;
+export type OptionChangedEvent = ComponentEvent<dxSlideOutView> & ChangedOptionInfo;
 
 export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**

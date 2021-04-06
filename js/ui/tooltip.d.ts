@@ -5,9 +5,8 @@ import {
 import {
     Cancelable,
     ComponentEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxPopover, {
@@ -18,7 +17,7 @@ import dxPopover, {
 export type ContentReadyEvent = ComponentEvent<dxTooltip>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxTooltip>;
+export type DisposingEvent = ComponentEvent<dxTooltip>;
 
 /** @public */
 export type HidingEvent = ComponentEvent<dxTooltip> & Cancelable;
@@ -30,7 +29,7 @@ export type HiddenEvent = ComponentEvent<dxTooltip>;
 export type InitializedEvent = ComponentInitializedEvent<dxTooltip>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxTooltip>;
+export type OptionChangedEvent = ComponentEvent<dxTooltip> & ChangedOptionInfo;
 
 /** @public */
 export type ShowingEvent = ComponentEvent<dxTooltip>;

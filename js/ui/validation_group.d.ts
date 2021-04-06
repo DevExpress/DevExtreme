@@ -11,9 +11,9 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    ComponentDisposingEvent,
+    ComponentEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -29,13 +29,13 @@ import {
 } from './validation_rules';
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxValidationGroup>;
+export type DisposingEvent = ComponentEvent<dxValidationGroup>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxValidationGroup>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxValidationGroup>;
+export type OptionChangedEvent = ComponentEvent<dxValidationGroup> & ChangedOptionInfo;
 
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }

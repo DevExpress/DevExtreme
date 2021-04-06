@@ -4,9 +4,8 @@ import {
 
 import {
     ComponentEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
@@ -17,13 +16,13 @@ import Widget, {
 export type ContentReadyEvent = ComponentEvent<dxLoadIndicator>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxLoadIndicator>;
+export type DisposingEvent = ComponentEvent<dxLoadIndicator>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxLoadIndicator>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxLoadIndicator>;
+export type OptionChangedEvent = ComponentEvent<dxLoadIndicator> & ChangedOptionInfo;
 
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**

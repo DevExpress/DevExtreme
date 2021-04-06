@@ -10,9 +10,8 @@ import {
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -46,7 +45,7 @@ export type ContentReadyEvent = ComponentEvent<dxTagBox>;
 export type CustomItemCreatingEvent = ComponentEvent<dxTagBox> & CustomItemCreatingInfo;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxTagBox>;
+export type DisposingEvent = ComponentEvent<dxTagBox>;
 
 /** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxTagBox>;
@@ -86,7 +85,7 @@ export type MultiTagPreparingEvent = ComponentEvent<dxTagBox> & Cancelable & {
 export type OpenedEvent = ComponentEvent<dxTagBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxTagBox>;
+export type OptionChangedEvent = ComponentEvent<dxTagBox> & ChangedOptionInfo;
 
 /** @public */
 export type SelectAllValueChangedEvent = ComponentEvent<dxTagBox> & {

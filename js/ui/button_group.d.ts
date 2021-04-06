@@ -7,12 +7,10 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -29,7 +27,7 @@ import Widget, {
 export type ContentReadyEvent = ComponentEvent<dxButtonGroup>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxButtonGroup>;
+export type DisposingEvent = ComponentEvent<dxButtonGroup>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxButtonGroup>;
@@ -38,7 +36,7 @@ export type InitializedEvent = ComponentInitializedEvent<dxButtonGroup>;
 export type ItemClickEvent = ComponentNativeEvent<dxButtonGroup> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxButtonGroup>;
+export type OptionChangedEvent = ComponentEvent<dxButtonGroup> & ChangedOptionInfo;
 
 /** @public */
 export type SelectionChangedEvent = ComponentEvent<dxButtonGroup> & SelectionChangedInfo;

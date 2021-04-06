@@ -18,9 +18,8 @@ import {
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxOverlay, {
@@ -40,7 +39,7 @@ export interface TitleRenderedInfo {
 export type ContentReadyEvent = ComponentEvent<dxPopup>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxPopup>;
+export type DisposingEvent = ComponentEvent<dxPopup>;
 
 /** @public */
 export type HidingEvent = ComponentEvent<dxPopup> & Cancelable;
@@ -64,7 +63,7 @@ export type ResizeStartEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
 export type ResizeEndEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxPopup>;
+export type OptionChangedEvent = ComponentEvent<dxPopup> & ChangedOptionInfo;
 
 /** @public */
 export type ShowingEvent = ComponentEvent<dxPopup>;

@@ -5,9 +5,8 @@ import {
 import {
     TEvent,
     ComponentEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import PivotGridDataSource, {
@@ -30,13 +29,13 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGridFieldChooser> 
 }
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxPivotGridFieldChooser>;
+export type DisposingEvent = ComponentEvent<dxPivotGridFieldChooser>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxPivotGridFieldChooser>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxPivotGridFieldChooser>;
+export type OptionChangedEvent = ComponentEvent<dxPivotGridFieldChooser> & ChangedOptionInfo;
 
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**

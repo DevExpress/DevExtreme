@@ -12,9 +12,8 @@ import {
 
 import {
     ComponentEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
@@ -25,13 +24,13 @@ import Widget, {
 export type ContentReadyEvent = ComponentEvent<dxDeferRendering>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxDeferRendering>;
+export type DisposingEvent = ComponentEvent<dxDeferRendering>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxDeferRendering>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxDeferRendering>;
+export type OptionChangedEvent = ComponentEvent<dxDeferRendering> & ChangedOptionInfo;
 
 /** @public */
 export type RenderedEvent = ComponentEvent<dxDeferRendering>;

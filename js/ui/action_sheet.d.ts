@@ -15,9 +15,8 @@ import {
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -33,7 +32,7 @@ export type CancelClickEvent = ComponentEvent<dxActionSheet> & Cancelable;
 export type ContentReadyEvent = ComponentEvent<dxActionSheet>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxActionSheet>;
+export type DisposingEvent = ComponentEvent<dxActionSheet>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxActionSheet>;
@@ -51,7 +50,7 @@ export type ItemHoldEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
 export type ItemRenderedEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxActionSheet>;
+export type OptionChangedEvent = ComponentEvent<dxActionSheet> & ChangedOptionInfo;
 
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**

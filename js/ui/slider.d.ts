@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -26,13 +25,13 @@ import {
 export type ContentReadyEvent = ComponentEvent<dxSlider>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxSlider>;
+export type DisposingEvent = ComponentEvent<dxSlider>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxSlider>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxSlider>;
+export type OptionChangedEvent = ComponentEvent<dxSlider> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxSlider> & ValueChangedInfo;

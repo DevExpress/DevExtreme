@@ -13,9 +13,8 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -28,7 +27,7 @@ import CollectionWidget, {
 export type ContentReadyEvent = ComponentEvent<dxToolbar>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxToolbar>;
+export type DisposingEvent = ComponentEvent<dxToolbar>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxToolbar>;
@@ -46,7 +45,7 @@ export type ItemHoldEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
 export type ItemRenderedEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxToolbar>;
+export type OptionChangedEvent = ComponentEvent<dxToolbar> & ChangedOptionInfo;
 
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**

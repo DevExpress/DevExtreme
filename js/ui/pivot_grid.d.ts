@@ -10,9 +10,8 @@ import {
     Cancelable,
     ComponentNativeEvent,
     ComponentEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import PivotGridDataSource, {
@@ -65,7 +64,7 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGrid> & {
 }
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxPivotGrid>;
+export type DisposingEvent = ComponentEvent<dxPivotGrid>;
 
 /** @public */
 export type ExportedEvent = ComponentEvent<dxPivotGrid>;
@@ -88,7 +87,7 @@ export type FileSavingEvent = Cancelable & {
 export type InitializedEvent = ComponentInitializedEvent<dxPivotGrid>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxPivotGrid>;
+export type OptionChangedEvent = ComponentEvent<dxPivotGrid> & ChangedOptionInfo;
 
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**

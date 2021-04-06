@@ -7,9 +7,8 @@ import DataSource from '../data/data_source';
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import Editor, {
@@ -25,13 +24,13 @@ import {
 export type ContentReadyEvent = ComponentEvent<dxRadioGroup>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxRadioGroup>;
+export type DisposingEvent = ComponentEvent<dxRadioGroup>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxRadioGroup>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxRadioGroup>;
+export type OptionChangedEvent = ComponentEvent<dxRadioGroup> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxRadioGroup> & ValueChangedInfo;

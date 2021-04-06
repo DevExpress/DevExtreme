@@ -5,9 +5,8 @@ import {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent,
+    ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
 
@@ -19,7 +18,7 @@ import CollectionWidget, {
 export type ContentReadyEvent = ComponentEvent<dxValidationSummary>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxValidationSummary>;
+export type DisposingEvent = ComponentEvent<dxValidationSummary>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxValidationSummary>;
@@ -28,7 +27,7 @@ export type InitializedEvent = ComponentInitializedEvent<dxValidationSummary>;
 export type ItemClickEvent = ComponentNativeEvent<dxValidationSummary> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxValidationSummary>;
+export type OptionChangedEvent = ComponentEvent<dxValidationSummary> & ChangedOptionInfo;
 
 export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
     /**

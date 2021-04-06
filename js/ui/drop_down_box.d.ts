@@ -13,9 +13,8 @@ import DataSource, {
 import {
     ComponentEvent,
     ComponentNativeEvent,
-    ComponentDisposingEvent,
     ComponentInitializedEvent,
-    ComponentOptionChangedEvent
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxDropDownEditor, {
@@ -44,7 +43,7 @@ export type CopyEvent = ComponentNativeEvent<dxDropDownBox>;
 export type CutEvent = ComponentNativeEvent<dxDropDownBox>;
 
 /** @public */
-export type DisposingEvent = ComponentDisposingEvent<dxDropDownBox>;
+export type DisposingEvent = ComponentEvent<dxDropDownBox>;
 
 /** @public */
 export type EnterKeyEvent = ComponentNativeEvent<dxDropDownBox>;
@@ -74,7 +73,7 @@ export type KeyUpEvent = ComponentNativeEvent<dxDropDownBox>;
 export type OpenedEvent = ComponentEvent<dxDropDownBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentOptionChangedEvent<dxDropDownBox>;
+export type OptionChangedEvent = ComponentEvent<dxDropDownBox> & ChangedOptionInfo;
 
 /** @public */
 export type PasteEvent = ComponentNativeEvent<dxDropDownBox>;
