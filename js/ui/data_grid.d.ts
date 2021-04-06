@@ -3997,8 +3997,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     summary?: Summary;
 }
 
-/** @public */
-export interface CustomizeExcelCellArg {
+export interface ExcelCellInfo {
   readonly component: dxDataGrid;
   horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
   verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
@@ -4036,7 +4035,7 @@ export interface Export {
     * @type_function_param1_field10 numberFormat:string
     * @type_function_param1_field11 gridCell:ExcelDataGridCell
     */
-   customizeExcelCell?: ((options: CustomizeExcelCellArg) => void),
+   customizeExcelCell?: ((options: ExcelCellInfo) => void),
    /**
     * @docid dxDataGridOptions.export.enabled
     * @prevFileNamespace DevExpress.ui
@@ -4245,8 +4244,7 @@ export interface dxDataGridSortByGroupSummaryInfoItem {
     summaryItem?: string | number
 }
 
-/** @public */
-export interface CalculateCustomSummaryArg {
+export interface CustomSummaryInfo {
   readonly component: dxDataGrid;
   readonly name?: string;
   readonly summaryProcess: string;
@@ -4267,7 +4265,7 @@ export interface Summary {
    * @type_function_param1_field5 totalValue:any
    * @type_function_param1_field6 groupIndex:number
    */
-  calculateCustomSummary?: ((options: CalculateCustomSummaryArg) => void),
+  calculateCustomSummary?: ((options: CustomSummaryInfo) => void),
   /**
    * @docid dxDataGridOptions.summary.groupItems
    * @type Array<object>
@@ -4302,8 +4300,7 @@ export interface Summary {
   totalItems?: Array<SummaryTotalItem>
 }
 
-/** @public */
-export interface SummaryItemCustomizeTextArg {
+export interface SummaryItemTextInfo {
   readonly value?: string | number | Date;
   readonly valueText: string;
 }
@@ -4329,7 +4326,7 @@ export interface SummaryGroupItem {
      * @type_function_param1_field2 valueText:string
      * @type_function_return string
      */
-    customizeText?: ((itemInfo: SummaryItemCustomizeTextArg) => string),
+    customizeText?: ((itemInfo: SummaryItemTextInfo) => string),
     /**
      * @docid dxDataGridOptions.summary.groupItems.displayFormat
      * @prevFileNamespace DevExpress.ui
@@ -4402,7 +4399,7 @@ export interface SummaryTotalItem {
    * @type_function_param1_field2 valueText:string
    * @type_function_return string
    */
-  customizeText?: ((itemInfo: SummaryItemCustomizeTextArg) => string),
+  customizeText?: ((itemInfo: SummaryItemTextInfo) => string),
   /**
    * @docid dxDataGridOptions.summary.totalItems.displayFormat
    * @prevFileNamespace DevExpress.ui
