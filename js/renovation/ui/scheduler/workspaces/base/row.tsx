@@ -46,9 +46,9 @@ export class RowProps {
 
   @OneWay() rightVirtualCellWidth = 0;
 
-  @OneWay() leftVirtualCellCount = 0;
+  @OneWay() leftVirtualCellCount?: number;
 
-  @OneWay() rightVirtualCellCount = 0;
+  @OneWay() rightVirtualCellCount?: number;
 
   @OneWay() styles?: CSSAttributes;
 

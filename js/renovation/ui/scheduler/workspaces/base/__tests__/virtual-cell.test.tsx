@@ -24,6 +24,13 @@ describe('VirtualCell', () => {
       expect(cell.prop('style'))
         .toEqual({ with: '31px' });
     });
+
+    it('should pass colSpan to the root component', () => {
+      const cell = render({ props: { colSpan: 34 } });
+
+      expect(cell.prop('colSpan'))
+        .toBe(34);
+    });
   });
 
   describe('Logic', () => {

@@ -36,6 +36,7 @@ describe('RowBase', () => {
       expected: {
         selectors: ['.child'],
         widths: [50],
+        colSpans: [undefined],
       },
     }, {
       hasLeftVirtualCell: true,
@@ -43,12 +44,14 @@ describe('RowBase', () => {
         selectors: [VirtualCell, '.child'],
         leftVirtualCellWidth: 100,
         widths: [100, 50],
+        colSpans: [3, undefined],
       },
     }, {
       hasRightVirtualCell: true,
       expected: {
         selectors: ['.child', VirtualCell],
         widths: [50, 200],
+        colSpans: [undefined, 4],
       },
     }, {
       hasLeftVirtualCell: true,
@@ -56,6 +59,7 @@ describe('RowBase', () => {
       expected: {
         selectors: [VirtualCell, '.child', VirtualCell],
         widths: [100, 50, 200],
+        colSpans: [3, undefined, 4],
       },
     }].forEach((option) => {
       it(`should render virtual cells correctly if 'hasLeftVirtualCell' is ${option.hasLeftVirtualCell},
@@ -64,6 +68,8 @@ describe('RowBase', () => {
           props: {
             leftVirtualCellWidth: 100,
             rightVirtualCellWidth: 200,
+            leftVirtualCellCount: 3,
+            rightVirtualCellCount: 4,
             children: <td className="child" style={{ width: 50 }} />,
           },
           hasLeftVirtualCell: option.hasLeftVirtualCell,
@@ -76,16 +82,19 @@ describe('RowBase', () => {
           .toHaveLength(expected.selectors.length);
 
         expected.selectors.forEach((selector, index) => {
-          const child = row.childAt(index);
+          const cell = row.childAt(index);
 
-          expect(child.is(selector))
+          expect(cell.is(selector))
             .toBe(true);
 
           const width = selector === VirtualCell
-            ? child.getElement().props.width
-            : child.getElement().props.style.width;
+            ? cell.getElement().props.width
+            : cell.getElement().props.style.width;
+
           expect(width)
             .toEqual(expected.widths[index]);
+          expect(cell.prop('colSpan'))
+            .toBe(expected.colSpans[index]);
         });
       });
     });
