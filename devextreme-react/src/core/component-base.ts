@@ -1,6 +1,5 @@
 import * as events from 'devextreme/events';
 import * as React from 'react';
-import { createPortal } from 'react-dom';
 
 import { OptionsManager } from './options-manager';
 import { ITemplateMeta } from './template';
@@ -27,10 +26,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   protected _instance: any;
 
   protected _element: HTMLDivElement;
-
-  protected portalContainer: HTMLElement | null;
-
-  protected isPortalComponent = false;
 
   protected readonly _defaults: Record<string, string>;
 
@@ -166,45 +161,18 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     return children;
   }
 
-  protected renderContent(): React.ReactNode {
-    const { children } = this.props;
-
-    return this.isPortalComponent && children
-      ? React.createElement('div', {
-        ref: (node: HTMLDivElement | null) => {
-          if (node && this.portalContainer !== node) {
-            this.portalContainer = node;
-            this.forceUpdate();
-          }
-        },
-        style: {
-          display: 'contents',
-        },
-      })
-      : this.renderChildren();
-  }
-
-  protected renderPortal(): React.ReactNode {
-    return this.portalContainer && createPortal(
-      this.renderChildren(),
-      this.portalContainer,
-    );
-  }
-
   public render(): React.ReactNode {
     return React.createElement(
-      React.Fragment,
-      {},
+      'div',
+      this._getElementProps(),
+      this.renderChildren(),
       React.createElement(
-        'div',
-        this._getElementProps(),
-        this.renderContent(),
-        React.createElement(TemplatesRenderer, {
+        TemplatesRenderer,
+        {
           templatesStore: this._templatesStore,
           ref: this._setTemplatesRendererRef,
-        }),
+        },
       ),
-      this.isPortalComponent && this.renderPortal(),
     );
   }
 }
