@@ -68,7 +68,7 @@ describe('rendering', () => {
 
     expect(content.children().length).toBe(2);
     expect(content
-      .findWhere((node) => node.type() === 'div' && node.prop('style')?.display === 'none')
+      .findWhere((node) => node.type() === 'div' && node.prop('style')?.display === 'contents')
       .exists()).toBe(true);
     expect(content.find(TemplatesRenderer).exists()).toBe(true);
 

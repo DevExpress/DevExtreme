@@ -172,14 +172,13 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     return this.isPortalComponent && children
       ? React.createElement('div', {
         ref: (node: HTMLDivElement | null) => {
-          const container = node ? node.parentElement : null;
-          if (container && this.portalContainer !== container) {
-            this.portalContainer = container;
+          if (node && this.portalContainer !== node) {
+            this.portalContainer = node;
             this.forceUpdate();
           }
         },
         style: {
-          display: 'none',
+          display: 'contents',
         },
       })
       : this.renderChildren();
