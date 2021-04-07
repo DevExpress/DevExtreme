@@ -359,21 +359,6 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.ok(spy.calledOnce, 'Method was called');
         });
 
-        test('Data cell should has right content when used dataCellTemplate option', function(assert) {
-            const scheduler = createWrapper({
-                currentView: 'week',
-                currentDate: new Date(2016, 8, 5),
-                firstDayOfWeek: 0,
-                dataCellTemplate: function(itemData, index, container) {
-                    $(container).addClass('custom-cell-class');
-                }
-            });
-
-            const $element = scheduler.instance.$element();
-
-            assert.ok($element.find('.custom-cell-class').length > 0, 'class is ok');
-        });
-
         test('Data cell should has right content when dataCellTemplate option was change', function(assert) {
             const scheduler = createWrapper({
                 currentView: 'week',
@@ -392,7 +377,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 $(container).addClass('new-custom-class');
             });
 
-            assert.ok($element.find('.new-custom-class').length > 0, 'class is ok');
+            assert.ok($element.find('.new-custom-class').length > 0, 'class after option changing is ok');
         });
 
         [true, false].forEach((renovateRender) => {
