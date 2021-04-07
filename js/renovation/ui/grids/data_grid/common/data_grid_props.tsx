@@ -68,7 +68,7 @@ import type {
   SelectionChangedEvent,
   ToolbarPreparingEvent,
 } from '../../../../../ui/data_grid';
-import { BaseWidgetProps } from '../../../../utils/base_props';
+import { BaseWidgetProps } from '../../../common/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../../ui/filter_builder';
 import { TPromise } from '../../../../../core/utils/deferred'; // eslint-disable-line import/named

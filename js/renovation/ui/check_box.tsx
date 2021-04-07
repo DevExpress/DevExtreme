@@ -18,7 +18,7 @@ import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { isMaterial, current } from '../../ui/themes';
 import BaseComponent from '../component_wrapper/check_box';
-import { BaseWidgetProps } from '../utils/base_props';
+import { BaseWidgetProps } from './common/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
 import { ValidationMessage } from './validation_message';
