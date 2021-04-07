@@ -315,23 +315,6 @@ QUnit.test('AllDay appointment should have specific content on agenda view', fun
     assert.ok($appointmentAllDayTitle.is(':visible'), 'AllDay title is visible');
 });
 
-QUnit.test('Appointment parts should have appointmentSettings field', function(assert) {
-    this.createInstance({
-        views: ['agenda'],
-        currentView: 'agenda',
-        currentDate: new Date(2016, 1, 24),
-        dataSource: [
-            { startDate: new Date(2016, 1, 22, 1), endDate: new Date(2016, 2, 4, 1, 30) }
-        ]
-    });
-
-    const $appointments = this.instance.$element().find('.dx-scheduler-appointment');
-
-    assert.ok(dataUtils.data($appointments.get(1), 'dxItemData').settings, 'Appointment part has special field for settings');
-    assert.equal(dataUtils.data($appointments.get(1), 'dxItemData').settings.startDate.getTime(), new Date(2016, 1, 25, 0).getTime(), 'Current date of appointment part is OK');
-    assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData').startDate, dataUtils.data($appointments.get(1), 'dxItemData').startDate, 'Appointments data is OK');
-});
-
 QUnit.test('Agenda should contain a right quantity of recurrence appointments', function(assert) {
     this.createInstance({
         views: ['agenda'],
@@ -1226,11 +1209,6 @@ QUnit.test('Recurring appointment and timepanel should be rendered correctly if 
         currentDate: new Date(2016, 10, 5),
         firstDayOfWeek: 1,
         height: 300,
-        onAppointmentRendered: function(e) {
-            const targetedAppointmentData = e.targetedAppointmentData;
-            assert.equal(targetedAppointmentData.settings.startDate.getDate(), 10, 'Appointment start date is OK');
-            assert.equal(targetedAppointmentData.settings.endDate.getDate(), 10, 'Appointment end date is OK');
-        },
         dataSource: [{
             text: 'test-rec',
             startDate: new Date(2016, 10, 3, 9, 0),
@@ -1336,14 +1314,24 @@ QUnit.test('Long appointment parts data should be correct', function(assert) {
     assert.equal(dataUtils.data($appointments.get(3), 'dxItemData').text, 'a');
 
     assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData').Start, new Date(2016, 1, 24, 1)); // first part of long appointment has original startDate
-    assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData').settings.Start, new Date(2016, 1, 25, 8));
-    assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData').settings.Start, new Date(2016, 1, 26, 8));
-    assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData').settings.Start, new Date(2016, 1, 27, 8));
+
 
     assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData').endDate, new Date(2016, 1, 27, 11, 30)); // first part of long appointment has original endDate
-    assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData').settings.endDate, new Date(2016, 1, 25, 20));
-    assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData').settings.endDate, new Date(2016, 1, 26, 20));
-    assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData').settings.endDate, new Date(2016, 1, 27, 11, 30));
+
+    const expectedTimes = [
+        '8:00 AM - 8:00 PM',
+        '8:00 AM - 8:00 PM',
+        '8:00 AM - 8:00 PM',
+        '8:00 AM - 11:30 AM',
+    ];
+
+    const $appts = this.instance.$element().find('.dx-scheduler-appointment');
+
+    expectedTimes.forEach((expectedTime, index) => {
+        const time = $appts.eq(index)
+            .find('.dx-scheduler-appointment-content-date').first().text();
+        assert.equal(time, expectedTime, `${index} date is correct`);
+    });
 });
 
 QUnit.test('Long appointment parts targetedAppointmentData should be correct', function(assert) {
@@ -1536,6 +1524,7 @@ QUnit.test('Long appointment should not affect render the next appointment', fun
 
     this.createInstance({
         currentView: 'agenda',
+        views: ['agenda'],
         currentDate: new Date(2020, 9, 1),
         startDayHour: 9,
         dataSource: data
@@ -1543,16 +1532,19 @@ QUnit.test('Long appointment should not affect render the next appointment', fun
 
     const items = this.instance._appointments.option('items');
 
-    let settings = items[0].itemData.settings;
-    assert.deepEqual(settings.startDate, data[0].startDate, 'Long item part 0 settings startDate is correct');
-    assert.deepEqual(settings.endDate, new Date(2020, 9, 2, 0, 0), 'Long item part 0 settings endDate is correct');
+    const expectedTimes = [
+        '9:15 PM - 12:00 AM',
+        '9:00 AM - 9:15 AM',
+        '9:16 PM - 10:00 PM',
+    ];
 
-    settings = items[1].itemData.settings;
-    assert.deepEqual(settings.startDate, new Date(2020, 9, 2, 9, 0), 'Long item part 1 settings startDate is correct');
-    assert.deepEqual(settings.endDate, new Date(2020, 9, 2, 9, 15), 'Long item part 1 settings endDate is correct');
+    const $appts = this.instance.$element().find('.dx-scheduler-appointment');
 
-    settings = items[2].itemData.settings;
-    assert.notOk(items[2].itemData.settings, 'Simple item settings are empty');
+    expectedTimes.forEach((expectedTime, index) => {
+        const time = $appts.eq(index)
+            .find('.dx-scheduler-appointment-content-date').first().text();
+        assert.equal(time, expectedTime, `${index} date is correct`);
+    });
 
     const { itemData } = items[2];
     assert.deepEqual(itemData.startDate, data[1].startDate, 'Simple item startDate is correct');
