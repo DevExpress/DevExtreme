@@ -20,7 +20,7 @@ import { getImageSourceType } from '../../core/utils/icon';
 import { Icon } from './common/icon';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
-import { BaseWidgetProps } from '../utils/base_props';
+import { BaseWidgetProps } from './common/base_props';
 import BaseComponent from '../component_wrapper/button';
 import { EffectReturn } from '../utils/effect_return.d';
 
