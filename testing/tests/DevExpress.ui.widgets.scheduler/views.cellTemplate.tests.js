@@ -415,8 +415,8 @@ module('CellTemplate tests', moduleConfig, () => {
                 }, 'Resources option is ok');
             });
 
-            test(`dataCellTemplate for all-day panel should take cellElement with correct geometry(T453520) when renovateRender is ${renovateRender}`, function(assert) {
-                assert.expect(2);
+            test(`dataCellTemplate should take cellElement with correct geometry(T453520) when renovateRender is ${renovateRender}`, function(assert) {
+                assert.expect(4);
                 createWrapper({
                     currentView: 'week',
                     views: ['week'],
@@ -424,30 +424,20 @@ module('CellTemplate tests', moduleConfig, () => {
                     width: 700,
                     dataSource: [],
                     dataCellTemplate: function(cellData, cellIndex, cellElement) {
+                        // all-day table cell size
                         if(cellData.allDay && !cellIndex) {
                             assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Data cell width is OK');
                             assert.roughEqual($(cellElement).outerHeight(), 24, 1.001, 'Data cell height is OK');
                         }
+
+                        // scheduler table cell size
+                        if(!cellData.allDay && !cellIndex) {
+                            assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 85, 1.001, 'Data cell width is OK');
+                            assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Data cell height is OK');
+                        }
                     },
                     renovateRender,
                 });
-            });
-        });
-
-        test('dataCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
-            assert.expect(2);
-            createWrapper({
-                currentView: 'week',
-                views: ['week'],
-                height: 700,
-                width: 700,
-                dataSource: [],
-                dataCellTemplate: function(cellData, cellIndex, cellElement) {
-                    if(!cellData.allDay && !cellIndex) {
-                        assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 85, 1.001, 'Data cell width is OK');
-                        assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Data cell height is OK');
-                    }
-                }
             });
         });
 
