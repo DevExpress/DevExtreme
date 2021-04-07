@@ -88,10 +88,8 @@ export default class ClearButton extends TextEditorButton {
 
     updateCurrentTemplate(options) {
         if(!this.isSameTemplate()) {
-            const { editor } = this;
-
-            options.template = editor._getTemplateByOption('dropDownButtonTemplate');
-            this.currentTemplate = editor.option('dropDownButtonTemplate');
+            options.template = this.editor._getTemplateByOption('dropDownButtonTemplate');
+            this.currentTemplate = this.editor.option('dropDownButtonTemplate');
         }
     }
 
