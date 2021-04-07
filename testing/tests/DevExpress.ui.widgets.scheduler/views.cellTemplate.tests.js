@@ -1491,44 +1491,26 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3), 'date parameter for the fourth time cell');
         });
 
-        [{
-            viewType: 'day',
-            expectedTemplateOptions: timeCells,
-        }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`timeCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
+        [
+            {
+                viewType: 'day',
+                expectedTemplateOptions: timeCells,
+                showAllDayPanel: false,
+            },
+            {
+                viewType: 'day',
+                expectedTemplateOptions: timeCells,
+                showAllDayPanel: true,
+            }
+        ].forEach(({ viewType, expectedTemplateOptions, showAllDayPanel }) => {
+            test(`timeCellTemplate should have correct options in ${viewType} view when all day panel is ${showAllDayPanel}`, function(assert) {
                 const templateOptions = [];
 
                 createWrapper({
                     dataSource: [],
                     views: [viewType],
                     currentView: viewType,
-                    showAllDayPanel: false,
-                    startDayHour: 0,
-                    endDayHour: 1,
-                    cellDuration: 60,
-                    currentDate: new Date(2020, 7, 23),
-                    renovateRender: true,
-                    timeCellTemplate: (data, index) => {
-                        templateOptions.push({ data, index });
-                    },
-                });
-
-                assert.deepEqual(templateOptions, expectedTemplateOptions, 'Template options are correct');
-            });
-        });
-
-        [{
-            viewType: 'day',
-            expectedTemplateOptions: timeCells,
-        }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`timeCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, function(assert) {
-                const templateOptions = [];
-
-                createWrapper({
-                    dataSource: [],
-                    views: [viewType],
-                    currentView: viewType,
-                    showAllDayPanel: true,
+                    showAllDayPanel,
                     startDayHour: 0,
                     endDayHour: 1,
                     cellDuration: 60,
