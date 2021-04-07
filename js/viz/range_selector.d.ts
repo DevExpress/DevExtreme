@@ -35,7 +35,17 @@ import BaseWidget, {
     BaseWidgetTooltip,
     Font
 } from './core/base_widget';
-
+/**
+ * @public
+ */
+export interface ValueEvent {
+  readonly component: dxRangeSelector,
+  readonly element: TElement,
+  readonly model?: any,
+  readonly value: Array<number | string | Date>,
+  readonly previousValue: Array<number | string | Date>,
+  readonly event: TEvent
+}
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * @docid
@@ -341,6 +351,9 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxRangeSelector
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:Array<number,string,Date>
      * @type_function_param1_field5 previousValue:Array<number,string,Date>
      * @type_function_param1_field6 event:event
@@ -349,7 +362,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSelector, element?: TElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: TEvent }) => void);
+    onValueChanged?: ((e: ValueEvent) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz

@@ -42,6 +42,64 @@ import {
 } from './core/base_widget';
 
 export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
+/**
+ * @public
+ */
+ export interface SeriesInteractionEvent {
+    component: dxPolarChart,
+    element: TElement,
+    model?: any,
+    target: polarChartSeriesObject
+ }
+/**
+ * @public
+ */
+export interface LegendClickEvent {
+    readonly component: dxPolarChart,
+    readonly element: TElement,
+    readonly model?: any,
+    readonly event: TEvent,
+    readonly target: polarChartSeriesObject
+}
+/**
+ * @public
+ */
+export interface SeriesClickEvent {
+    readonly component: dxPolarChart,
+    readonly element: TElement,
+    readonly model?: any,
+    readonly event: TEvent,
+    readonly target: polarChartSeriesObject
+}
+/**
+ * @public
+ */
+export interface ZoomEndEvent {
+    readonly component: dxPolarChart,
+    readonly element: TElement,
+    readonly model?: any,
+    readonly event: TEvent,
+    readonly axis: chartAxisObject,
+    readonly range: VizRange,
+    readonly previousRange: VizRange,
+    cancel?: boolean,
+    readonly actionType: 'zoom' | 'pan',
+    readonly zoomFactor: number,
+    readonly shift: number
+}
+/**
+ * @public
+ */
+export interface ZoomStartEvent {
+    readonly component: dxPolarChart,
+    readonly element: TElement,
+    readonly model: any,
+    readonly event: TEvent,
+    readonly axis: chartAxisObject,
+    readonly range: VizRange,
+    cancel?: boolean,
+    readonly actionType: 'zoom' | 'pan'
+}
 
 /**
  * @docid
@@ -215,6 +273,9 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxPolarChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -222,11 +283,14 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, target?: polarChartSeriesObject }) => void) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxPolarChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -234,33 +298,42 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesClick?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, target?: polarChartSeriesObject }) => void) | string;
+    onSeriesClick?: ((e: SeriesClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxPolarChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesHoverChanged?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, target?: polarChartSeriesObject }) => void);
+    onSeriesHoverChanged?: ((e: SeriesInteractionEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxPolarChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesSelectionChanged?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, target?: polarChartSeriesObject }) => void);
+    onSeriesSelectionChanged?: ((e: SeriesInteractionEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxPolarChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
      * @type_function_param1_field6 range:VizRange
@@ -274,11 +347,14 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomEnd?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => void);
+    onZoomEnd?: ((e: ZoomEndEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxPolarChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
      * @type_function_param1_field6 range:VizRange
@@ -289,7 +365,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomStart?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => void);
+    onZoomStart?: ((e: ZoomStartEvent) => void);
     /**
      * @docid
      * @type Enums.PolarChartResolveLabelOverlapping

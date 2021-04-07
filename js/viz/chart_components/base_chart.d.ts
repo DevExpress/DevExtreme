@@ -42,7 +42,38 @@ import BaseWidget, {
     BaseWidgetTooltip,
     BaseWidgetAnnotationConfig
 } from '../core/base_widget';
-
+/**
+ * @public
+ */
+export interface PointClickEvent {
+    readonly component: BaseChart,
+    readonly element: TElement,
+    readonly model?: any,
+    readonly event: TEvent,
+    readonly target: basePointObject 
+}
+/**
+ * @public
+ */
+export interface TooltipEvent {
+    component?: T,
+    element?: TElement,
+    model?: any,
+    target?: basePointObject | dxChartAnnotationConfig | any
+}
+/**
+ * @public
+ */
+export interface PointInteractionEvent {
+    readonly component: any,
+    readonly element: any,
+    readonly target: basePointObject
+}
+export interface DoneEvent { 
+    readonly component: T,
+    readonly element: TElement,
+    readonly model?: any 
+}
 export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     /**
      * @docid
@@ -117,16 +148,23 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDone?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onDone?: ((e: DoneEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:basePointObject
      * @notUsedInTheme
@@ -134,7 +172,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, target?: basePointObject }) => void) | string;
+    onPointClick?: ((e: PointClickEvent) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -146,7 +184,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointHoverChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => void);
+    onPointHoverChanged?: ((e: PointInteractionEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -158,29 +196,35 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointSelectionChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => void);
+    onPointSelectionChanged?: ((e: PointInteractionEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => void);
+    onTooltipHidden?: ((e: TooltipEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => void);
+    onTooltipShown?: ((e: TooltipEvent) => void);
     /**
      * @docid
      * @extends CommonVizPalette

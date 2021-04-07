@@ -28,6 +28,52 @@ import BaseWidget, {
     VizTextOverflowType,
 } from './core/base_widget';
 
+/**
+ * @public
+ */
+export interface ClickEvent {
+  readonly component: dxTreeMap,
+  readonly element: TElement,
+  readonly model?: any,
+  readonly event: TEvent,
+  readonly node: dxTreeMapNode
+}
+/**
+ * @public
+ */
+export interface NodesInitializedEvent {
+  readonly component: dxTreeMap,
+  readonly element: TElement,
+  readonly model?: any,
+  readonly root: dxTreeMapNode
+}
+/**
+ * @public
+ */
+export interface InteractiveEvent {
+  readonly component: dxTreeMap,
+  readonly element: TElement,
+  readonly model?: any,
+  readonly node: dxTreeMapNode
+}
+/**
+ * @public
+ */
+export interface NodesRenderingEvent {
+  readonly component: dxTreeMap,
+  readonly element: TElement,
+  readonly model?: any,
+  readonly node: dxTreeMapNode
+}
+/**
+ * @public
+ */
+export interface DrillEvent {
+  readonly component: dxTreeMap,
+  readonly element: TElement,
+  readonly model?: any,
+  readonly node: dxTreeMapNode
+}
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
@@ -297,6 +343,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 node:dxTreeMapNode
      * @notUsedInTheme
@@ -304,62 +353,77 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, event?: TEvent, node?: dxTreeMapNode }) => void) | string;
+    onClick?: ((e: ClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrill?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onDrill?: ((e: DrillEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onHoverChanged?: ((e: InteractiveEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 root:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodesInitialized?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, root?: dxTreeMapNode }) => void);
+    onNodesInitialized?: ((e: NodesInitializedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodesRendering?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onNodesRendering?: ((e: NodesRenderingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onSelectionChanged?: ((e: InteractiveEvent) => void);
     /**
      * @docid
      * @default undefined

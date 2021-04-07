@@ -65,7 +65,15 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
      */
     item?: BarGaugeBarInfo;
 }
-
+/**
+ * @public
+ */
+export interface TooltipEvent {
+    component?: dxBarGauge,
+    element?: TElement,
+    model?: any,
+    target?: any
+}
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid
@@ -195,24 +203,30 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxBarGauge
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
+    onTooltipHidden?: ((e: TooltipEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxBarGauge
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
+    onTooltipShown?: ((e: TooltipEvent) => void);
     /**
      * @docid
      * @extends CommonVizPalette

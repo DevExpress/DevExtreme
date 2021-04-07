@@ -15,7 +15,10 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    TEvent,
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -39,6 +42,43 @@ import {
     VectorMapProjectionConfig
 } from './vector_map/projection';
 
+/**
+ * @public
+ */
+export interface CenterChangedEvent {
+    readonly component: dxVectorMap,
+    readonly element: TElement,
+    readonly model?: any,
+    readonly center: Array<number>
+}
+/**
+ * @public
+ */
+export interface ClickEvent {
+    readonly component: dxVectorMap,
+    readonly element: TElement,
+    readonly model?: any,
+    readonly event: TEvent,
+    readonly target: MapLayerElement
+}
+/**
+ * @public
+ */
+export interface ZoomChangedEvent {
+    readonly component: dxVectorMap,
+    readonly element: TElement,
+    readonly model?: any,
+    readonly target: MapLayerElement
+}
+/**
+ * @public
+ */
+export interface ZoomFactorChangedEvent {
+    readonly component: dxVectorMap,
+    readonly element: TElement,
+    readonly model?: any,
+    readonly zoomFactor: number
+}
 /**
  * @docid
  * @publicName Layer
@@ -93,6 +133,15 @@ export interface MapLayer {
     type?: string;
 }
 
+/**
+ * @public
+ */
+export interface TooltipEvent {
+    component?: dxVectorMap,
+    element?: TElement,
+    model?: any,
+    target?: MapLayerElement | dxVectorMapAnnotationConfig
+}
 /**
  * @docid
  * @publicName Layer Element
@@ -508,17 +557,23 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 center:Array<number>
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onCenterChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, center?: Array<number> }) => void);
+    onCenterChanged?: ((e: CenterChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:MapLayerElement
      * @notUsedInTheme
@@ -526,51 +581,63 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, event?: TEvent, target?: MapLayerElement }) => void) | string;
+    onClick?: ((e: ClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement }) => void);
+    onSelectionChanged?: ((e: ZoomChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
+    onTooltipHidden?: ((e: TooltipEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
+    onTooltipShown?: ((e: TooltipEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 zoomFactor:number
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, zoomFactor?: number }) => void);
+    onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void);
     /**
      * @docid
      * @default true
