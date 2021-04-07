@@ -16,7 +16,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -35,7 +39,10 @@ import BaseWidget, {
     BaseWidgetTooltip,
     Font,
     WordWrapType,
-    VizTextOverflowType
+    VizTextOverflowType,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 /**
@@ -51,35 +58,47 @@ export interface FunnelLegendItem extends BaseLegendItem {
      */
     item?: dxFunnelItem;
 }
-/**
- * @public
- */
-export interface LegendClickEvent { 
-  readonly component: dxFunnel,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly event: TEvent,
+
+interface FunnelItemInfo {
   readonly item: dxFunnelItem
 }
-/**
- * @public
- */
-export interface ItemClickEvent {
-  readonly component: dxFunnel,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly event: TEvent,
-  readonly item: dxFunnelItem
-}
-/**
- * @public
- */
-export interface InteractiveEvent {
-  readonly component: dxFunnel,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly item: dxFunnelItem
-}
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxFunnel>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxFunnel>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxFunnel>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxFunnel> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxFunnel>;
+
+/** @public */
+export type HoverChangedEvent = ComponentEvent<dxFunnel> & FunnelItemInfo;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxFunnel> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxFunnel>;
+
+/** @public */
+export type ItemClickEvent = ComponentNativeEvent<dxFunnel> & FunnelItemInfo;
+
+/** @public */
+export type LegendClickEvent = ComponentNativeEvent<dxFunnel> & FunnelItemInfo;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxFunnel> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxFunnel> & FunnelItemInfo;
+
 
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
@@ -482,7 +501,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: InteractiveEvent) => void);
+    onHoverChanged?: ((e: HoverChangedEvent) => void);
     /**
      * @docid
      * @default null
@@ -526,7 +545,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: InteractiveEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @extends CommonVizPalette

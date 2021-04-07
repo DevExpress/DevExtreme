@@ -3,7 +3,11 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -19,7 +23,9 @@ import {
     BaseChartLegend,
     BaseChartOptions,
     BaseChartTooltip,
-    BaseChartAnnotationConfig
+    BaseChartAnnotationConfig,
+    PointInteractionInfo,
+    TooltipInfo
 } from './chart_components/base_chart';
 
 import {
@@ -35,49 +41,100 @@ import {
 import {
     Font,
     WordWrapType,
-    VizTextOverflowType
+    VizTextOverflowType,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo,
 } from './core/base_widget';
 
 export type ChartSingleValueSeriesAggregationMethodType = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
-/**
- * @public
- */
-export interface ArgumentAxisClickEvent { 
-    readonly component: dxChart, 
-    readonly element: TElement,
-    readonly model?: any,
-    readonly event: TEvent,
-    readonly argument: Date | number | string
+
+interface SeriesInteractionInfo {
+    target: chartSeriesObject;
 }
-/**
- * @public
- */
-export interface SeriesInteractionEvent {
-    component: dxChart,
-    element: TElement,
-    model?: any,
-    target: chartSeriesObject
- }
-/**
- * @public
- */
-export interface LegendClickEvent { 
-    readonly component: dxChart,
-    readonly element: TElement,
-    readonly model?: any,
-    readonly event: TEvent,
-    readonly target: chartSeriesObject
- }
- /**
-  * @public
-  */
- export interface SeriesClickEvent {
-    readonly component: dxChart,
-    readonly element: TElement,
-    readonly model?: any,
-    readonly event: TEvent,
-    readonly target: chartSeriesObject
+
+/** @public */
+export type ArgumentAxisClickEvent = ComponentNativeEvent<dxChart> & {
+    readonly argument: Date | number | string;
 }
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxChart>;
+
+/** @public */
+export type DoneEvent = ComponentEvent<dxChart>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxChart>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxChart>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxChart> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxChart>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxChart> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxChart>;
+
+/** @public */
+export type LegendClickEvent  = ComponentNativeEvent<dxChart> & {
+    readonly target: chartSeriesObject;
+}
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxChart> & ChangedOptionInfo;
+
+/** @public */
+export type PointClickEvent = ComponentNativeEvent<dxChart> & PointInteractionInfo;
+
+/** @public */
+export type PointHoverChangedEvent = ComponentEvent<dxChart> & PointInteractionInfo;
+
+/** @public */
+export type PointSelectionChangedEvent = ComponentEvent<dxChart> & PointInteractionInfo;
+
+/** @public */
+export type SeriesClickEvent = ComponentNativeEvent<dxChart> & {
+    readonly target: chartSeriesObject;
+}
+
+/** @public */
+export type SeriesHoverChangedEvent = ComponentEvent<dxChart> & SeriesInteractionInfo;
+
+/** @public */
+export type SeriesSelectionChangedEvent = ComponentEvent<dxChart> & SeriesInteractionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxChart> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxChart> & TooltipInfo;
+
+/** @public */
+export type ZoomEndEvent = Cancelable & ComponentNativeEvent<dxChart> & {
+    readonly rangeStart: Date | number;
+    readonly rangeEnd: Date | number;
+    readonly axis: chartAxisObject;
+    readonly range: VizRange;
+    readonly previousRange: VizRange;
+    readonly actionType: 'zoom' | 'pan';
+    readonly zoomFactor: number;
+    readonly shift: number;
+}
+
+/** @public */
+export type ZoomStartEvent = Cancelable & ComponentNativeEvent<dxChart> & {
+    readonly axis: chartAxisObject;
+    readonly range: VizRange;
+    readonly actionType?: 'zoom' | 'pan';
+}
+
 
 /**
 * @docid
@@ -250,37 +307,7 @@ export interface basePointObject {
      */
     tag?: any;
 }
-/**
- * @public
- */
-export interface ZoomEndEvent{
-    readonly component: dxChart,
-    readonly element: TElement,
-    readonly model: any,
-    readonly event: TEvent,
-    readonly rangeStart: Date | number,
-    readonly rangeEnd: Date | number,
-    readonly axis: chartAxisObject, 
-    readonly range: VizRange,
-    readonly previousRange: VizRange,
-    cancel?: boolean,
-    readonly actionType: 'zoom' | 'pan',
-    readonly zoomFactor: number,
-    readonly shift: number
-}
-/**
- * @public
- */
-export interface ZoomStartEvent {
-    readonly component: dxChart,
-    readonly element: TElement,
-    readonly model: any,
-    readonly event: TEvent,
-    readonly axis: chartAxisObject,
-    readonly range: VizRange,
-    cancel?: boolean,
-    readonly actionType?: 'zoom' | 'pan'
-}
+
 /**
 * @docid
 * @publicName Series
@@ -1052,7 +1079,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesHoverChanged?: ((e: SeriesInteractionEvent) => void);
+    onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
     /**
      * @docid
      * @default null
@@ -1066,7 +1093,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesSelectionChanged?: ((e: SeriesInteractionEvent) => void);
+    onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
     /**
      * @docid
      * @default null

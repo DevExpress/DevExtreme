@@ -16,54 +16,66 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 import { HatchingDirectionType } from './common';
-/**
- * @public
- */
-export interface LinkClickEvent {
-  readonly component: dxSankey,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly event: TEvent,
-  readonly target: dxSankeyLink
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxSankey>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxSankey>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxSankey>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxSankey> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxSankey>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxSankey> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxSankey>;
+
+/** @public */
+export type LinkClickEvent = ComponentNativeEvent<dxSankey> & {
+    readonly target: dxSankeyLink;
 }
-/**
- * @public
- */
-export interface LinkHoverEvent {
-  readonly component: dxSankey,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly target: dxSankeyLink
+/** @public */
+export type LinkHoverEvent = ComponentEvent<dxSankey> & {
+    readonly target: dxSankeyLink;
 }
-/**
- * @public
- */
-export interface NodeClickEvent {
-  readonly component: dxSankey,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly event: TEvent,
-  readonly target: dxSankeyNode
+/** @public */
+export type NodeClickEvent = ComponentNativeEvent<dxSankey> & {
+    readonly target: dxSankeyNode;
 }
-/**
- * @public
- */
-export interface NodeHoverEvent {
-  readonly component: dxSankey,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly target: dxSankeyNode
+/** @public */
+export type NodeHoverEvent = ComponentEvent<dxSankey> & {
+    readonly target: dxSankeyNode;
 }
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxSankey> & ChangedOptionInfo;
+
+
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid

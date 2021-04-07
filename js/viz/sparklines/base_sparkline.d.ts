@@ -6,6 +6,10 @@ import {
     template
 } from '../../core/templates/template';
 
+import {
+    ComponentEvent
+} from '../../events/index';
+
 import BaseWidget, {
     BaseWidgetExport,
     BaseWidgetLoadingIndicator,
@@ -13,11 +17,7 @@ import BaseWidget, {
     BaseWidgetTitle,
     BaseWidgetTooltip
 } from '../core/base_widget';
-export interface TooltipEvent {
-    component: T,
-    element: TElement,
-    model?: any
-}
+
 export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptions<T> {
     /**
      * @docid
@@ -45,7 +45,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: TooltipEvent) => void);
+    onTooltipHidden?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -58,7 +58,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: TooltipEvent) => void);
+    onTooltipShown?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz

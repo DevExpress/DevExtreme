@@ -12,6 +12,10 @@ import {
 } from '../../core/templates/template';
 
 import {
+    ComponentEvent
+} from '../../events/index';
+
+import {
     format
 } from '../../ui/widget/ui.widget';
 
@@ -21,14 +25,9 @@ import BaseWidget, {
     BaseWidgetTooltip,
     Font
 } from '../core/base_widget';
-/**
- * @public
- */
-export interface TooltipEvent {
-    component: T,
-    element: TElement,
-    model?: any,
-    target: any
+
+export interface TooltipInfo {
+    target: any;
 }
 
 export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
@@ -66,7 +65,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: TooltipEvent) => void);
+    onTooltipHidden?: ((e: ComponentEvent<T> & TooltipInfo) => void);
     /**
      * @docid
      * @default null
@@ -80,7 +79,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: TooltipEvent) => void);
+    onTooltipShown?: ((e: ComponentEvent<T> & TooltipInfo) => void);
     /**
      * @docid
      * @type object

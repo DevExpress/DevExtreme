@@ -15,8 +15,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    Cancelable,
     ComponentEvent,
+    ComponentNativeEvent,
     ComponentInitializedEvent,
     ChangedOptionInfo
 } from '../events/index';
@@ -35,50 +36,70 @@ import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    BaseWidgetAnnotationConfig
+    BaseWidgetAnnotationConfig,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 import {
     VectorMapProjectionConfig
 } from './vector_map/projection';
 
-/**
- * @public
- */
-export interface CenterChangedEvent {
-    readonly component: dxVectorMap,
-    readonly element: TElement,
-    readonly model?: any,
-    readonly center: Array<number>
+export interface TooltipInfo {
+    target?: MapLayerElement | dxVectorMapAnnotationConfig;
 }
-/**
- * @public
- */
-export interface ClickEvent {
-    readonly component: dxVectorMap,
-    readonly element: TElement,
-    readonly model?: any,
-    readonly event: TEvent,
-    readonly target: MapLayerElement
+
+/** @public */
+export type CenterChangedEvent = ComponentEvent<dxVectorMap> & {
+    readonly center: Array<number>;
 }
-/**
- * @public
- */
-export interface ZoomChangedEvent {
-    readonly component: dxVectorMap,
-    readonly element: TElement,
-    readonly model?: any,
-    readonly target: MapLayerElement
+
+/** @public */
+export type ClickEvent = ComponentNativeEvent<dxVectorMap> & {
+    readonly target: MapLayerElement;
 }
-/**
- * @public
- */
-export interface ZoomFactorChangedEvent {
-    readonly component: dxVectorMap,
-    readonly element: TElement,
-    readonly model?: any,
-    readonly zoomFactor: number
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxVectorMap>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxVectorMap>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxVectorMap>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxVectorMap> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxVectorMap>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxVectorMap> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxVectorMap>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxVectorMap> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxVectorMap> & {
+    readonly target: MapLayerElement;
 }
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxVectorMap> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxVectorMap> & TooltipInfo;
+
+/** @public */
+export type ZoomFactorChangedEvent = ComponentEvent<dxVectorMap> & {
+    readonly zoomFactor: number;
+}
+
 /**
  * @docid
  * @publicName Layer
@@ -133,15 +154,6 @@ export interface MapLayer {
     type?: string;
 }
 
-/**
- * @public
- */
-export interface TooltipEvent {
-    component?: dxVectorMap,
-    element?: TElement,
-    model?: any,
-    target?: MapLayerElement | dxVectorMapAnnotationConfig
-}
 /**
  * @docid
  * @publicName Layer Element
@@ -595,7 +607,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: ZoomChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @default null
@@ -609,7 +621,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: TooltipEvent) => void);
+    onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
     /**
      * @docid
      * @default null
@@ -623,7 +635,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: TooltipEvent) => void);
+    onTooltipShown?: ((e: TooltipShownEvent) => void);
     /**
      * @docid
      * @default null

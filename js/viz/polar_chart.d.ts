@@ -3,7 +3,12 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
+    TEvent,
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -24,7 +29,9 @@ import {
     BaseChartLegend,
     BaseChartOptions,
     BaseChartTooltip,
-    BaseChartAnnotationConfig
+    BaseChartAnnotationConfig,
+    PointInteractionInfo,
+    TooltipInfo
 } from './chart_components/base_chart';
 
 import {
@@ -38,67 +45,95 @@ import {
 } from './common';
 
 import {
-    Font
+    Font,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
-/**
- * @public
- */
- export interface SeriesInteractionEvent {
-    component: dxPolarChart,
-    element: TElement,
-    model?: any,
+
+interface SeriesInteractionInfo {
     target: polarChartSeriesObject
- }
-/**
- * @public
- */
-export interface LegendClickEvent {
-    readonly component: dxPolarChart,
-    readonly element: TElement,
-    readonly model?: any,
-    readonly event: TEvent,
-    readonly target: polarChartSeriesObject
 }
-/**
- * @public
- */
-export interface SeriesClickEvent {
-    readonly component: dxPolarChart,
-    readonly element: TElement,
-    readonly model?: any,
-    readonly event: TEvent,
-    readonly target: polarChartSeriesObject
+
+/** @public */
+export type ArgumentAxisClickEvent = ComponentNativeEvent<dxPolarChart> & {
+    readonly argument: Date | number | string;
 }
-/**
- * @public
- */
-export interface ZoomEndEvent {
-    readonly component: dxPolarChart,
-    readonly element: TElement,
-    readonly model?: any,
-    readonly event: TEvent,
-    readonly axis: chartAxisObject,
-    readonly range: VizRange,
-    readonly previousRange: VizRange,
-    cancel?: boolean,
-    readonly actionType: 'zoom' | 'pan',
-    readonly zoomFactor: number,
-    readonly shift: number
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxPolarChart>;
+
+/** @public */
+export type DoneEvent = ComponentEvent<dxPolarChart>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxPolarChart>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxPolarChart>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxPolarChart> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxPolarChart>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxPolarChart> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxPolarChart>;
+
+/** @public */
+export type LegendClickEvent = ComponentNativeEvent<dxPolarChart> & {
+    readonly target: polarChartSeriesObject;
 }
-/**
- * @public
- */
-export interface ZoomStartEvent {
-    readonly component: dxPolarChart,
-    readonly element: TElement,
-    readonly model: any,
-    readonly event: TEvent,
-    readonly axis: chartAxisObject,
-    readonly range: VizRange,
-    cancel?: boolean,
-    readonly actionType: 'zoom' | 'pan'
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxPolarChart> & ChangedOptionInfo;
+
+/** @public */
+export type PointClickEvent = ComponentNativeEvent<dxPolarChart> & PointInteractionInfo;
+
+/** @public */
+export type PointHoverChangedEvent = ComponentEvent<dxPolarChart> & PointInteractionInfo;
+
+/** @public */
+export type PointSelectionChangedEvent = ComponentEvent<dxPolarChart> & PointInteractionInfo;
+
+/** @public */
+export type SeriesClickEvent = ComponentNativeEvent<dxPolarChart> & {
+    readonly target: polarChartSeriesObject;
+}
+
+/** @public */
+export type SeriesHoverChangedEvent = ComponentEvent<dxPolarChart> & SeriesInteractionInfo;
+
+/** @public */
+export type SeriesSelectionChangedEvent = ComponentEvent<dxPolarChart> & SeriesInteractionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxPolarChart> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxPolarChart> & TooltipInfo;
+
+/** @public */
+export type ZoomEndEvent = Cancelable & ComponentNativeEvent<dxPolarChart> & {
+    readonly axis: chartAxisObject;
+    readonly range: VizRange;
+    readonly previousRange: VizRange;
+    readonly actionType: 'zoom' | 'pan';
+    readonly zoomFactor: number;
+    readonly shift: number;
+}
+/** @public */
+export type ZoomStartEvent = Cancelable & ComponentNativeEvent<dxPolarChart> & {
+    readonly axis: chartAxisObject;
+    readonly range: VizRange;
+    readonly actionType: 'zoom' | 'pan';
 }
 
 /**
@@ -312,7 +347,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesHoverChanged?: ((e: SeriesInteractionEvent) => void);
+    onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
     /**
      * @docid
      * @default null
@@ -326,7 +361,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesSelectionChanged?: ((e: SeriesInteractionEvent) => void);
+    onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
     /**
      * @docid
      * @default null

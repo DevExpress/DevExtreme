@@ -12,7 +12,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -33,19 +37,42 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
-/**
- * @public
- */
-export interface ValueEvent {
-  readonly component: dxRangeSelector,
-  readonly element: TElement,
-  readonly model?: any,
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxRangeSelector>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxRangeSelector>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxRangeSelector>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxRangeSelector> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxRangeSelector>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxRangeSelector> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxRangeSelector>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxRangeSelector> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxRangeSelector> & {
   readonly value: Array<number | string | Date>,
   readonly previousValue: Array<number | string | Date>,
-  readonly event: TEvent
 }
+
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * @docid
@@ -362,7 +389,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onValueChanged?: ((e: ValueEvent) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz

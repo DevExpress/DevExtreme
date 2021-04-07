@@ -15,6 +15,10 @@ import {
 } from '../../core/utils/deferred';
 
 import {
+    ComponentEvent
+} from '../../events/index';
+
+import {
     format
 } from '../../ui/widget/ui.widget';
 
@@ -24,47 +28,24 @@ import {
 
 export type WordWrapType = 'normal' | 'breakWord' | 'none';
 export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
-export interface DrawnEvent {
-  readonly component: T,
-  readonly element: TElement,
-  readonly model?: any
+
+export interface ExportInfo {
+  readonly fileName: string;
+  readonly format: string;
 }
-/**
- * @public
- */
-export interface IncidentOccurredEvent<T> {
-  readonly component: T,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly target: any
+
+export interface IncidentInfo {
+  readonly target: any;
 }
-export interface ExportedEvent<T> {
-  readonly component: T,
-  readonly element: TElement,
-  readonly model?: any
+
+export interface ComponentFileSavingEvent<T> {
+  readonly component: T;
+  readonly element: TElement;
+  readonly fileName: string;
+  readonly format: string;
+  readonly data: Blob;
 }
-/**
- * @public
- */
-export interface ExportingEvent<T> {
-  readonly component: T,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly fileName: string,
-  readonly cancel?: boolean,
-  readonly format: string
-}
-/**
- * @public
- */
-export interface FileSavingEvent<T> { 
-  readonly component: T, 
-  readonly element: TElement,
-  readonly fileName: string,
-  readonly format: string,
-  readonly data: Blob,
-  readonly cancel?: boolean 
-}
+
 export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
     /**
      * @docid
@@ -114,7 +95,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrawn?: ((e: DrawnEvent) => void);
+    onDrawn?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -126,7 +107,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExported?: ((e: ExportedEvent<T>) => void);
+    onExported?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -141,7 +122,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExporting?: ((e: ExportingEvent<T>) => void);
+    onExporting?: ((e: ComponentEvent<T> & ExportInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -156,7 +137,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onFileSaving?: ((e: FileSavingEvent<T>) => void);
+    onFileSaving?: ((e: ComponentFileSavingEvent<T>) => void);
     /**
      * @docid
      * @default null
@@ -169,7 +150,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onIncidentOccurred?: ((e: IncidentOccurredEvent<T>) => void);
+    onIncidentOccurred?: ((e: ComponentEvent<T> & IncidentInfo) => void);
     /**
      * @docid
      * @default false

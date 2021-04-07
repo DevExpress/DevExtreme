@@ -16,7 +16,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import BaseWidget, {
@@ -26,54 +30,66 @@ import BaseWidget, {
     Font,
     WordWrapType,
     VizTextOverflowType,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
-/**
- * @public
- */
-export interface ClickEvent {
-  readonly component: dxTreeMap,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly event: TEvent,
+export interface InteractionInfo {
+  readonly node: dxTreeMapNode;
+}
+
+/** @public */
+export type ClickEvent = ComponentNativeEvent<dxTreeMap> & {
   readonly node: dxTreeMapNode
 }
-/**
- * @public
- */
-export interface NodesInitializedEvent {
-  readonly component: dxTreeMap,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly root: dxTreeMapNode
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxTreeMap>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxTreeMap>;
+
+/** @public */
+export type DrillEvent = ComponentEvent<dxTreeMap> & {
+  readonly node: dxTreeMapNode;
 }
-/**
- * @public
- */
-export interface InteractiveEvent {
-  readonly component: dxTreeMap,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly node: dxTreeMapNode
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxTreeMap>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxTreeMap> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxTreeMap>;
+
+/** @public */
+export type HoverChangedEvent = ComponentEvent<dxTreeMap> & InteractionInfo;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxTreeMap> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxTreeMap>;
+
+/** @public */
+export type NodesInitializedEvent = ComponentEvent<dxTreeMap> & {
+    readonly root: dxTreeMapNode;
 }
-/**
- * @public
- */
-export interface NodesRenderingEvent {
-  readonly component: dxTreeMap,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly node: dxTreeMapNode
+
+/** @public */
+export type NodesRenderingEvent = ComponentEvent<dxTreeMap> & {
+    readonly node: dxTreeMapNode;
 }
-/**
- * @public
- */
-export interface DrillEvent {
-  readonly component: dxTreeMap,
-  readonly element: TElement,
-  readonly model?: any,
-  readonly node: dxTreeMapNode
-}
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxTreeMap> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxTreeMap> & InteractionInfo;
+
+
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
@@ -381,7 +397,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: InteractiveEvent) => void);
+    onHoverChanged?: ((e: HoverChangedEvent) => void);
     /**
      * @docid
      * @default null
@@ -423,7 +439,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: InteractiveEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @default undefined
