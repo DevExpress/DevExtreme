@@ -32,6 +32,7 @@ export default class ClearButton extends TextEditorButton {
 
         this._addToContainer($element);
 
+        this.updateCurrentTemplate();
         const instance = editor._createComponent($element, Button, extend({}, options, { elementAttr: { 'aria-label': messageLocalization.format(BUTTON_MESSAGE) } }));
 
         this._legacyRender(editor.$element(), $element, options.visible);
@@ -70,22 +71,31 @@ export default class ClearButton extends TextEditorButton {
         $editor.toggleClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE, isVisible);
 
         if($element) {
-            $element.removeClass('dx-button');
-            $element.addClass(DROP_DOWN_EDITOR_BUTTON_CLASS);
+            $element
+                .removeClass('dx-button')
+                .addClass(DROP_DOWN_EDITOR_BUTTON_CLASS);
         }
     }
 
+    isSameTemplate() {
+        return this.editor.option('dropDownButtonTemplate') === this.currentTemplate;
+    }
+
+    updateCurrentTemplate() {
+        this.currentTemplate = this.editor.option('dropDownButtonTemplate');
+    }
+
     update() {
-        const shouldRender = this._shouldRender();
         const shouldUpdate = super.update();
 
-        if(!shouldRender && shouldUpdate) {
+        if(shouldUpdate) {
             const { editor, instance } = this;
             const $editor = editor.$element();
             const options = this._getOptions();
 
-            instance && instance.option(options);
-            this._legacyRender($editor, instance && instance.$element(), options.visible);
+            this.isSameTemplate() ? delete options.template : this.updateCurrentTemplate();
+            instance?.option(options);
+            this._legacyRender($editor, instance?.$element(), options.visible);
         }
     }
 }
