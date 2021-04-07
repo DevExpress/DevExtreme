@@ -3252,7 +3252,7 @@ declare module DevExpress.ui {
         /**
          * [descr:CollectionWidgetItem.template]
          */
-        template?: DevExpress.core.template | (() => string | Element | JQuery);
+        template?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.TElement) => string | Element | JQuery);
         /**
          * [descr:CollectionWidgetItem.text]
          */
@@ -4495,11 +4495,11 @@ declare module DevExpress.ui {
         /**
          * [descr:MapLocation.lat]
          */
-        lat?: number;
+        lat: number;
         /**
          * [descr:MapLocation.lng]
          */
-        lng?: number;
+        lng: number;
     }
     /**
      * [descr:NumericRule]
@@ -6036,9 +6036,9 @@ declare module DevExpress.ui {
          */
         import(data: string, updateExistingItemsOnly?: boolean): void;
         /**
-         * [descr:dxDiagram.scrollToItems(items)]
+         * [descr:dxDiagram.scrollToItem(item)]
          */
-        scrollToItems(items: Array<dxDiagramItem>): void;
+        scrollToItem(item: dxDiagramItem): void;
         /**
          * [descr:dxDiagram.setSelectedItems(items)]
          */
