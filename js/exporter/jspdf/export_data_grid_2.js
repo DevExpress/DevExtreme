@@ -30,7 +30,11 @@ function exportDataGrid(doc, dataGrid, options) {
                         const width = options.columnWidths[cellIndex];
                         if(isDefined(width) && !pdfCell.skip && !isDefined(pdfCell.rect.w)) {
                             pdfCell.rect.w = width;
+                        } else {
+                            // TODO
                         }
+                    } else {
+                        // TODO
                     }
                     currentRow.push(pdfCell);
                 }
