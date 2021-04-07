@@ -480,8 +480,8 @@ export const ListBase = CollectionWidget.inherit({
             this._showLoadingIndicatorTimer = setTimeout((function() {
                 const isEmpty = !this._itemElements().length;
                 const shouldIndicateLoading = !isEmpty || this._isDataSourceFirstLoadCompleted();
-                if(this._scrollView && shouldIndicateLoading) {
-                    this._scrollView.startLoading();
+                if(shouldIndicateLoading) {
+                    this._scrollView?.startLoading();
                 }
             }).bind(this));
         } else {
@@ -538,7 +538,6 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _infiniteDataLoading: function() {
-        // console.log('_infiniteDataLoading');
         const isElementVisible = this.$element().is(':visible');
 
         if(isElementVisible && !this._scrollViewIsFull() && !this._isDataSourceLoading() && !this._isLastPage()) {
