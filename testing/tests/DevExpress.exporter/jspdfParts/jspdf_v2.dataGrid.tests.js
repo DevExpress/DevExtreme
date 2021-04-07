@@ -371,6 +371,52 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
+    QUnit.test('2 cols - 2 rows - column[0] width is zero', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1_1', f2: 'v2_1' }, { f1: 'v1_2', f2: 'v2_2' }]
+        });
+
+        let cellIndex = 0;
+        const pdfCellRects = [
+            { x: 10, y: 15 },
+            { x: 10, y: 15 },
+            { x: 10, y: 31 },
+            { x: 10, y: 31 },
+            { x: 10, y: 51 },
+            { x: 10, y: 51 }
+        ];
+        const onCellExporting = ({ pdfCell }) => {
+            pdfCell.rect = pdfCellRects[cellIndex];
+            cellIndex++;
+        };
+        const onRowExporting = (e) => {
+            if(e.rowCells[0].text === 'F1') {
+                e.rowHeight = 16;
+            } else if(e.rowCells[0].text === 'v1_1') {
+                e.rowHeight = 20;
+            } else if(e.rowCells[0].text === 'v1_2') {
+                e.rowHeight = 24;
+            }
+        };
+
+        const expectedLog = [
+            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,0,16',
+            'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,16',
+            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,0,20',
+            'text,v2_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,100,20',
+            'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,0,24',
+            'text,v2_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
+        ];
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 60 }, columnWidths: [ 0, 100 ], onCellExporting, onRowExporting }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('3 cols - 2 rows - hide left border of [1,1] cell', function(assert) {
         // TODO:
         const done = assert.async();
