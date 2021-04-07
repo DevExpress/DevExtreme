@@ -2056,7 +2056,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.equal(loadCalled, 1, 'load called once');
     });
 
-    QUnit.test('loading indication panel should not be shown when list has no items', function(assert) { //
+    QUnit.test('loading indication panel should not be shown when list has no items', function(assert) {
         const element = this.element;
         element.dxList({
             height: 300,
@@ -2137,7 +2137,6 @@ QUnit.module('dataSource integration', moduleSetup, () => {
     QUnit.test('list should indicate loading during second dataSource loading (T985917)', function(assert) {
         const dataSourceLoadTime = 100;
         const dataSource = new DataSource({
-            paginate: true,
             load() {
                 const deferred = $.Deferred();
 
@@ -2161,46 +2160,8 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         dataSource.load();
         this.clock.tick(dataSourceLoadTime / 2);
         const scrollView = element.dxScrollView('instance');
+
         assert.equal(scrollView._loading, true, 'scrollView is in loading state');
-    });
-
-    QUnit.test('list should indicate loading during second dataSource loading after widget reinitialization (T985917)', function(assert) {
-        const dataSourceLoadTime = 100;
-        const dataSourceConfig = {
-            paginate: true,
-            load() {
-                const deferred = $.Deferred();
-
-                setTimeout(() => {
-                    deferred.resolve([]);
-                }, dataSourceLoadTime);
-
-                return deferred.promise();
-            }
-        };
-
-        const element = this.element;
-        const listInstance = element.dxList({
-            height: 300,
-            pageLoadMode: 'scrollBottom',
-            showSelectionControls: true,
-            dataSource: new DataSource(dataSourceConfig)
-        }).dxList('instance');
-
-        this.clock.tick(dataSourceLoadTime / 2);
-
-        listInstance.dispose();
-        this.clock.tick(dataSourceLoadTime);
-
-        element.dxList({
-            height: 300,
-            pageLoadMode: 'scrollBottom',
-            showSelectionControls: true,
-            dataSource: new DataSource(dataSourceConfig)
-        });
-        this.clock.tick(dataSourceLoadTime / 2);
-        const scrollView = element.dxScrollView('instance');
-        assert.equal(scrollView._loading, false, 'scrollView doesn\'t in loading state');
     });
 
     QUnit.test('list should indicate loading during second dataSource loading after dataSource changing (T985917)', function(assert) {
@@ -2229,15 +2190,14 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         this.clock.tick(2 * dataSourceLoadTime);
 
-
         listInstance.option('dataSource', new DataSource(dataSourceConfig));
-        // element.dxList(listConfig);
         this.clock.tick(dataSourceLoadTime / 2);
         const scrollView = element.dxScrollView('instance');
+
         assert.equal(scrollView._loading, false, 'scrollView doesn\'t in loading state');
     });
 
-    QUnit.test('list should indicate loading during dataSource loading on reload (T985917)', function(assert) {
+    QUnit.test('list should indicate loading during dataSource reload (T985917)', function(assert) {
         const dataSourceLoadTime = 100;
         const dataSource = new DataSource({
             paginate: true,
@@ -2259,13 +2219,12 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             dataSource
         };
         element.dxList(listConfig).dxList('instance');
-
         this.clock.tick(2 * dataSourceLoadTime);
-        dataSource.load();
 
         dataSource.reload();
         this.clock.tick(dataSourceLoadTime / 2);
         const scrollView = element.dxScrollView('instance');
+
         assert.equal(scrollView._loading, true, 'scrollView doesn\'t in loading state');
     });
 
