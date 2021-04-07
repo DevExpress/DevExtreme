@@ -77,7 +77,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
     windowResizeHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
     scrollableRef, isLoadPanelVisible, topPocketState, refreshStrategy,
-    pullDownTopOffset, pullDownIconAngle, needPullDownRefreshClass, pullDownOpacity,
+    pullDownTopOffset, pullDownIconAngle, isFakeRefreshState, pullDownOpacity,
     props: {
       disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -115,7 +115,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
               pullDownTopOffset={pullDownTopOffset}
               pullDownIconAngle={pullDownIconAngle}
               pullDownOpacity={pullDownOpacity}
-              needPullDownRefreshClass={needPullDownRefreshClass}
+              isFakeRefreshState={isFakeRefreshState}
               visible={!!pullDownEnabled}
             />
             )}
@@ -203,7 +203,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Mutable() eventForUserAction?: Event;
 
-  @Mutable() startClientY = 0;
+  @Mutable() initPageY = 0;
 
   @Mutable() deltaY = 0;
 
@@ -231,7 +231,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @InternalState() pullDownOpacity = 0;
 
-  @InternalState() needPullDownRefreshClass = false;
+  @InternalState() isFakeRefreshState = false;
 
   @Method()
   content(): HTMLDivElement {
@@ -630,7 +630,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     if (this.props.forceGeneratePockets && this.isSwipeDownStrategy) {
       if (this.topPocketState === TopPocketState.STATE_RELEASED
         && this.containerRef.current!.scrollTop === 0) {
-        this.startClientY = e.originalEvent.pageY;
+        this.initPageY = e.originalEvent.pageY;
         this.topPocketState = TopPocketState.STATE_TOUCHED;
       }
     }
@@ -647,7 +647,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
 
     if (this.props.forceGeneratePockets && this.isSwipeDownStrategy) {
-      this.deltaY = e.originalEvent.pageY - this.startClientY;
+      this.deltaY = e.originalEvent.pageY - this.initPageY;
 
       if (this.topPocketState === TopPocketState.STATE_TOUCHED) {
         if (this.props.pullDownEnabled && this.deltaY > 0) {
@@ -666,7 +666,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   handleEnd(): void {
     if (this.props.forceGeneratePockets && this.isSwipeDownStrategy) {
-      if (this.isPullDown) {
+      if (this.isPullDown()) {
         this.pullDownRefreshing();
       }
 
@@ -682,7 +682,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   pullDownRefreshing(): void {
     this.topPocketState = TopPocketState.STATE_LOADING;
-    this.needPullDownRefreshClass = false;
+    this.isFakeRefreshState = false;
     this.pullDownRefreshHandler();
   }
 
@@ -692,7 +692,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   refreshPullDown(): void {
-    // this._$pullDown.addClass(SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS);
     this.pullDownTopOffset = this.getPullDownHeight();
   }
 
@@ -702,7 +701,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const angle = (180 * top) / pullDownHeight / 3;
 
     if (top < pullDownHeight) {
-      this.needPullDownRefreshClass = true;
+      this.isFakeRefreshState = true;
     }
 
     this.pullDownOpacity = 1;
@@ -726,7 +725,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   releaseState(): void {
-    this.needPullDownRefreshClass = false;
+    this.isFakeRefreshState = false;
     this.topPocketState = TopPocketState.STATE_RELEASED;
     this.pullDownOpacity = 0;
   }
@@ -740,7 +739,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return this.refreshStrategy === 'swipeDown';
   }
 
-  get isPullDown(): boolean {
+  isPullDown(): boolean {
     return this.props.pullDownEnabled
       && this.topPocketState === TopPocketState.STATE_PULLED
       && this.deltaY >= this.getPullDownHeight() - this.getPullDownStartPosition();

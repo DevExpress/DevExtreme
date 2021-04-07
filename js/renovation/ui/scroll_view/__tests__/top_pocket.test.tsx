@@ -25,7 +25,7 @@ describe('TopPocket', () => {
       const topPocket = mount<TopPocket>(<TopPocket {...props} />);
 
       expect(topPocket.props()).toEqual({
-        needPullDownRefreshClass: false,
+        isFakeRefreshState: false,
         pocketState: 0,
         pullDownIconAngle: 0,
         pullDownOpacity: 0,

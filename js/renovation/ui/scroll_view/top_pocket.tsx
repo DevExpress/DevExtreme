@@ -87,7 +87,7 @@ export class TopPocketProps {
 
   @OneWay() pullDownOpacity = 0;
 
-  @OneWay() needPullDownRefreshClass = false;
+  @OneWay() isFakeRefreshState = false;
 }
 
 export type TopPocketPropsType = TopPocketProps & Pick<BaseWidgetProps, 'visible'>;
@@ -154,7 +154,7 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
       [SCROLLVIEW_PULLDOWN]: true,
       [SCROLLVIEW_PULLDOWN_READY_CLASS]: pocketState === TopPocketState.STATE_READY,
       [SCROLLVIEW_PULLDOWN_REFRESHING_CLASS]: pocketState === TopPocketState.STATE_REFRESHING
-        || this.props.needPullDownRefreshClass,
+        || this.props.isFakeRefreshState,
       [SCROLLVIEW_PULLDOWN_LOADING_CLASS]: pocketState === TopPocketState.STATE_LOADING,
       'dx-state-invisible': !visible,
     };
