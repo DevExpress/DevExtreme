@@ -7,7 +7,7 @@ import AgendaAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.sch
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
-import { createWrapper, SchedulerTestWrapper, isIE11 } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 import 'generic_light.css!';
@@ -1703,55 +1703,6 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.notOk(data[1].settings, 'Agenda doesn\'t modify user data of invisible appointment');
         assert.notOk(data[2].settings, 'Agenda doesn\'t modify user data of long appointment');
     });
-
-    if(!isIE11) {
-        [
-            {
-                appointmentType: 'Long and recurrence',
-                data:
-                {
-                    startDate: new Date(2021, 1, 22, 9),
-                    endDate: new Date(2021, 1, 24, 10, 30),
-                    recurrenceRule: 'FREQ=DAILY;COUNT=3',
-                    text: 'Long and recurrence',
-                },
-                schedulerSettings: {
-                    views: ['agenda'],
-                    currentView: 'agenda',
-                    currentDate: new Date(2021, 1, 22),
-                }
-            },
-            {
-                appointmentType: 'Long',
-                data:
-                {
-                    startDate: new Date(2021, 1, 23, 1),
-                    endDate: new Date(2021, 1, 25, 10, 30),
-                    text: 'Long',
-                },
-                schedulerSettings: {
-                    views: ['agenda'],
-                    currentView: 'agenda',
-                    currentDate: new Date(2021, 1, 22),
-                }
-            }
-        ].forEach(({ appointmentType, data, schedulerSettings }) => {
-            test(`User property settings of dataSource doesn't delete with ${appointmentType} appointment`, function(assert) {
-                const proxiedData = new Proxy(data, {
-                    set: function() {
-                        assert.ok(false, 'userSettings mustn\'t be modified');
-                    }
-                });
-
-                const dataSource = [proxiedData];
-
-                createWrapper({ ...schedulerSettings, dataSource });
-
-                assert.equal(dataSource.length, 1, 'User dataSource has correct length');
-                assert.equal(dataSource[0], proxiedData, 'User dataSource has correct first element');
-            });
-        });
-    }
 
     module('Rows calculation', function() {
         test('Agenda row count calculation', function(assert) {
