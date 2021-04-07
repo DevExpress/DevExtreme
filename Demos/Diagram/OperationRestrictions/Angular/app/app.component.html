@@ -19,7 +19,7 @@
         baseType="rectangle"
         [defaultText]="'Employee Name'">
     </dxi-custom-shape>
-    <dxo-nodes [dataSource]="orgItemsDataSource" keyExpr="ID" typeExpr="Type" textExpr="Name" parentKeyExpr="ParentID">
+    <dxo-nodes [dataSource]="orgItemsDataSource" keyExpr="ID" typeExpr="Type" textExpr="Name" parentKeyExpr="ParentID" [styleExpr]="itemStyleExpr">
         <dxo-auto-layout type="tree"></dxo-auto-layout>
     </dxo-nodes>
     <dxo-context-toolbox [width]="100" [shapeIconsPerRow]="2" [shapes]="['team', 'employee']">

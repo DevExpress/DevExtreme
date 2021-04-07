@@ -30,7 +30,18 @@ export class AppComponent {
             data: service.getEmployees()
         });
     }
-
+    contentReadyHandler(e) {
+        var diagram = e.component;
+        // preselect some shape
+        var items = diagram.getItems().filter(function(item) {
+            return item.itemType === "shape" && (item.text === "Greta Sims");
+        });
+        if(items.length > 0) {
+            diagram.setSelectedItems(items);
+            diagram.scrollToItem(items[0]);
+            diagram.focus();
+        }
+    }
     selectionChangedHandler(e) {
         this.selectedItems = e.items.filter(item => item.itemType === "shape");
     }    

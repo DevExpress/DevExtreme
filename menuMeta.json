@@ -2184,7 +2184,7 @@
             "DemoType": "Web",
             "WideDemo": true,
             "Modules": "whatwg-fetch",
-            "Badge": "New"
+            "Badge": "Updated"
           },
           {
             "Title": "Editing Restrictions",
@@ -2193,7 +2193,7 @@
             "Widget": "Diagram",
             "DemoType": "Web",
             "WideDemo": true,
-            "Badge": "New"
+            "Badge": "Updated"
           }
         ]
       },

@@ -12,6 +12,18 @@ $(function() {
                 type: "tree"
             }
         },
+        onContentReady: function(e) {
+            var diagram = e.component;
+            // preselect some shape
+            var items = diagram.getItems().filter(function(item) {
+                return item.itemType === "shape" && (item.text === "Greta Sims");
+            });
+            if(items.length > 0) {
+                diagram.setSelectedItems(items);
+                diagram.scrollToItem(items[0]);
+                diagram.focus();
+            }
+        },
         onSelectionChanged: function(e) {
             var items = e.items
                 .filter(function(item) { return item.itemType === "shape"; })

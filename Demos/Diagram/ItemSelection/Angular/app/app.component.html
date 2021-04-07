@@ -1,4 +1,4 @@
-<dx-diagram #diagram id="diagram" (onSelectionChanged)="selectionChangedHandler($event)">
+<dx-diagram #diagram id="diagram" (onContentReady)="contentReadyHandler($event)" (onSelectionChanged)="selectionChangedHandler($event)">
     <dxo-nodes [dataSource]="dataSource" keyExpr="ID" textExpr="Full_Name" parentKeyExpr="Head_ID">
         <dxo-auto-layout type="tree"></dxo-auto-layout>
     </dxo-nodes>

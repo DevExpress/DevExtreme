@@ -37,6 +37,7 @@ $(function() {
             textExpr: "Name",
             typeExpr: "Type",
             parentKeyExpr: "ParentID",
+            styleExpr: itemStyleExpr,
             autoLayout: {
                 type: "tree"
             }
@@ -130,4 +131,13 @@ $(function() {
             visibility: "disabled"
         }
     });
+    function itemStyleExpr(obj) {
+        if(obj.Type === "root")
+            return { "fill": "#ffcfc3"};
+        else
+            if(obj.Type === "team")
+                return { "fill": "#b7e3fe"};
+            else
+                return { "fill": "#bbefcb" };
+    }
 });

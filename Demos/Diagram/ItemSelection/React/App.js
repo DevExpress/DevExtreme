@@ -17,6 +17,18 @@ class App extends React.Component {
     };
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
   }
+  onContentReady(e) {
+    var diagram = e.component;
+    // preselect some shape
+    var items = diagram.getItems().filter(function(item) {
+      return item.itemType === 'shape' && (item.text === 'Greta Sims');
+    });
+    if(items.length > 0) {
+      diagram.setSelectedItems(items);
+      diagram.scrollToItem(items[0]);
+      diagram.focus();
+    }
+  }
   onSelectionChanged({ items }) {
     var selectedItemNames = 'Nobody has been selected';
     items = items
@@ -33,7 +45,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Diagram id="diagram" onSelectionChanged={this.onSelectionChanged}>
+        <Diagram id="diagram" onContentReady={this.onContentReady} onSelectionChanged={this.onSelectionChanged}>
           <Nodes dataSource={this.dataSource} keyExpr="ID" textExpr="Full_Name" parentKeyExpr="Head_ID">
             <AutoLayout type="tree" />
           </Nodes>
