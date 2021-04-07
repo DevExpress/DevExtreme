@@ -529,7 +529,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    columnFixing?: GridBaseColumnFixing;
+    columnFixing?: ColumnFixing;
     /**
      * @docid
      * @default false
@@ -692,7 +692,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    keyboardNavigation?: GridBaseKeyboardNavigation;
+    keyboardNavigation?: KeyboardNavigation;
     /**
      * @docid
      * @type object
@@ -1187,7 +1187,7 @@ export interface ColumnChooser {
     width?: number
 }
 
-export interface GridBaseColumnFixing {
+export interface ColumnFixing {
   /**
     * @docid GridBaseOptions.columnFixing.enabled
     * @prevFileNamespace DevExpress.ui
@@ -1438,7 +1438,7 @@ export interface HeaderFilterTexts {
     ok?: string
 }
 
-export interface GridBaseKeyboardNavigation {
+export interface KeyboardNavigation {
   /**
      * @docid GridBaseOptions.keyboardNavigation.editOnKeyPress
      * @prevFileNamespace DevExpress.ui
