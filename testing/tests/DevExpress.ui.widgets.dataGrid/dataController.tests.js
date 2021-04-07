@@ -4874,6 +4874,63 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.deepEqual(visibleItems[0].data, { id: 26, name: 'Name 26' }, 'first visible item');
         assert.deepEqual(visibleItems[15].data, { id: 41, name: 'Name 41' }, 'last visible item');
     });
+
+    QUnit.test('New mode. View port items should be rendered partially on scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const changedSpy = sinon.spy();
+
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(100),
+            pageSize: 10
+        });
+
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        this.dataController.setViewportPosition(0);
+        this.clock.tick();
+        this.dataController.changed.add(changedSpy);
+
+        let renderedItemIds = this.dataController.items().map(i => i.data.id);
+
+        // assert
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], 'initially rendered item IDs');
+
+        // act
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+
+        renderedItemIds = this.dataController.items().map(i => i.data.id);
+        const change = changedSpy.args[0][0];
+        const changedItemIds = change.items.map(i => i.data.id);
+
+        // assert
+        assert.equal(changedSpy.callCount, 1, 'changed called');
+        assert.ok(change.repaintChangesOnly, 'repaint changes only');
+        assert.strictEqual(change.items.length, 4, 'items count');
+        assert.deepEqual(changedItemIds, [1, 2, 17, 18], 'change item IDs');
+        assert.deepEqual(change.changeTypes, ['remove', 'remove', 'insert', 'insert'], 'change types');
+        assert.deepEqual(renderedItemIds, [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 'finally rendered item IDs');
+    });
 });
 
 QUnit.module('Infinite scrolling', {
