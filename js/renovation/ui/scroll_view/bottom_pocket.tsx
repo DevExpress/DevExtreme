@@ -1,30 +1,39 @@
 import {
   JSXComponent,
   Component,
+  ComponentBindings,
+  OneWay,
+  ForwardRef,
+  RefObject,
 } from '@devextreme-generator/declarations';
+import { LoadIndicator } from '../load_indicator';
 import { isDefined } from '../../../core/utils/type';
 
 import {
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
-} from './scrollable_utils';
+  SCROLLVIEW_REACHBOTTOM_CLASS,
+  SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS,
+  SCROLLVIEW_REACHBOTTOM_TEXT_CLASS,
+} from './common/consts';
 
 import messageLocalization from '../../../localization/message';
 
-import { BottomPocketProps } from './bottom_pocket_props';
+import { BaseWidgetProps } from '../common/base_props';
 
-const SCROLLVIEW_REACHBOTTOM_CLASS = 'dx-scrollview-scrollbottom';
-const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = 'dx-scrollview-scrollbottom-indicator';
-const SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = 'dx-scrollview-scrollbottom-text';
+import { combineClasses } from '../../utils/combine_classes';
 
 export const viewFunction = (viewModel: BottomPocket): JSX.Element => {
   const {
-    reachBottomText,
+    reachBottomText, reachBottomClasses,
+    props: { bottomPocketRef },
   } = viewModel;
 
   return (
-    <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS}>
-      <div className={SCROLLVIEW_REACHBOTTOM_CLASS}>
-        <div className={SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS} />
+    <div ref={bottomPocketRef} className={SCROLLVIEW_BOTTOM_POCKET_CLASS}>
+      <div className={reachBottomClasses}>
+        <div className={SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS}>
+          <LoadIndicator />
+        </div>
         <div className={SCROLLVIEW_REACHBOTTOM_TEXT_CLASS}>
           <div>{reachBottomText}</div>
         </div>
@@ -33,12 +42,21 @@ export const viewFunction = (viewModel: BottomPocket): JSX.Element => {
   );
 };
 
+@ComponentBindings()
+export class BottomPocketProps {
+  @ForwardRef() bottomPocketRef?: RefObject<HTMLDivElement>;
+
+  @OneWay() reachBottomText?: string;
+}
+
+export type BottomPocketPropsType = BottomPocketProps & Pick<BaseWidgetProps, 'visible'>;
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
 
-export class BottomPocket extends JSXComponent(BottomPocketProps) {
+export class BottomPocket extends JSXComponent<BottomPocketPropsType>() {
   get reachBottomText(): string | undefined {
     const { reachBottomText } = this.props;
 
@@ -47,5 +65,16 @@ export class BottomPocket extends JSXComponent(BottomPocketProps) {
     }
 
     return messageLocalization.format('dxScrollView-reachBottomText');
+  }
+
+  get reachBottomClasses(): string {
+    const { visible } = this.props;
+
+    const classesMap = {
+      [SCROLLVIEW_REACHBOTTOM_CLASS]: true,
+      'dx-state-invisible': !visible,
+    };
+
+    return combineClasses(classesMap);
   }
 }

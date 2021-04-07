@@ -15,6 +15,7 @@ import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
 import { ScrollbarProps } from './scrollbar_props';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
+import { EventCallback } from '../common/event_callback.d';
 
 export const OUT_BOUNDS_ACCELERATION = 0.5;
 
@@ -53,7 +54,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
 
 @ComponentBindings()
 export class AnimatedScrollbarProps extends ScrollbarProps {
-  @Event() onBounce?: () => void;
+  @Event() onBounce?: EventCallback;
 }
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
@@ -76,8 +77,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   @Mutable() velocity = 0;
 
   @Mutable() animator = 'inertia';
-
-  @Mutable() bounceLocation = 0;
 
   start(animatorName: 'inertia'| 'bounce', receivedVelocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean): void {
     this.animator = animatorName;
@@ -137,14 +136,14 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   setupBounce(): void {
-    const bounceDistance = this.boundLocation() - this.getLocation();
+    const bounceDistance = this.boundLocation() - this.getScrollLocation();
 
     this.velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
   }
 
   complete(): void {
     if (this.isBounceAnimator) {
-      this.move(this.boundLocation());
+      this.moveScrollbar(this.boundLocation());
     }
 
     this.scrollComplete();
@@ -189,14 +188,14 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   /* istanbul ignore next */
   crossBoundOnNextStep(): boolean {
-    const location = this.getLocation();
+    const location = this.getScrollLocation();
     const nextLocation = location + this.velocity;
 
     const minOffset = this.getMinOffset();
+    const maxOffset = this.getMaxOffset();
 
     return (location < minOffset && nextLocation >= minOffset)
-      || (location > this.getMaxOffset()
-      && nextLocation <= this.getMaxOffset());
+      || (location > maxOffset && nextLocation <= maxOffset);
   }
 
   inBounds(): boolean {
@@ -210,91 +209,96 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   getMaxOffset(): number {
-    return this.scrollbarRef.current!.getMaxOffset();
+    return this.scrollbar.getMaxOffset();
   }
 
   scrollStep(delta: number): void {
-    return this.scrollbarRef.current!.scrollStep(delta);
+    this.scrollbar.scrollStep(delta);
   }
 
-  move(location?: number): void {
-    return this.scrollbarRef.current!.move(location);
+  moveScrollbar(location?: number): void {
+    this.scrollbar.moveScrollbar(location);
   }
 
   stopComplete(): void {
-    return this.scrollbarRef.current!.stopComplete();
+    this.scrollbar.stopComplete();
   }
 
   scrollComplete(): void {
-    return this.scrollbarRef.current!.scrollComplete();
-  }
-
-  getLocation(): number {
-    return this.scrollbarRef.current!.getLocation();
+    this.scrollbar.scrollComplete();
   }
 
   @Method()
   boundLocation(value?: number): number {
-    return this.scrollbarRef.current!.boundLocation(value);
+    return this.scrollbar.boundLocation(value);
   }
 
   @Method()
   getScrollLocation(): number {
-    return this.scrollbarRef.current!.getScrollLocation();
+    return this.scrollbar.getScrollLocation();
   }
 
   @Method()
   getMinOffset(): number {
-    return this.scrollbarRef.current!.getMinOffset();
+    return this.scrollbar.getMinOffset();
   }
 
   @Method()
   validateEvent(e): boolean {
-    return this.scrollbarRef.current!.validateEvent(e);
+    return this.scrollbar.validateEvent(e);
   }
 
   @Method()
   isThumb(element: HTMLDivElement): boolean {
-    return this.scrollbarRef.current!.isThumb(element);
+    return this.scrollbar.isThumb(element);
   }
 
   @Method()
   reachedMin(): boolean {
-    return this.scrollbarRef.current!.reachedMin();
+    return this.scrollbar.reachedMin();
   }
 
   @Method()
   reachedMax(): boolean {
-    return this.scrollbarRef.current!.reachedMax();
+    return this.scrollbar.reachedMax();
   }
 
   @Method()
   initHandler(e, crossThumbScrolling: boolean): void {
-    this.scrollbarRef.current!.initHandler(e, crossThumbScrolling);
+    this.scrollbar.initHandler(e, crossThumbScrolling);
   }
 
   @Method()
   startHandler(): void {
-    this.scrollbarRef.current!.startHandler();
+    this.scrollbar.startHandler();
   }
 
   @Method()
   moveHandler(delta: { x: number; y: number }): void {
-    this.scrollbarRef.current!.moveHandler(delta);
+    this.scrollbar.moveHandler(delta);
   }
 
   @Method()
   endHandler(velocity: { x: number; y: number }): void {
-    this.scrollbarRef.current!.endHandler(velocity);
+    this.scrollbar.endHandler(velocity);
   }
 
   @Method()
   stopHandler(): void {
-    this.scrollbarRef.current!.stopHandler();
+    this.scrollbar.stopHandler();
   }
 
   @Method()
   scrollByHandler(delta: { x: number; y: number }): void {
-    this.scrollbarRef.current!.scrollByHandler(delta);
+    this.scrollbar.scrollByHandler(delta);
+  }
+
+  @Method()
+  releaseHandler(): void {
+    this.scrollbar.releaseHandler();
+  }
+
+  get scrollbar(): any { // technical limitation in the generator
+    return this.scrollbarRef.current!;
   }
 }

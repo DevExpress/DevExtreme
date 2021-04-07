@@ -539,40 +539,6 @@ QUnit.module('Initialization', {
         assert.equal(appointment.eq(1).text(), 'Update-2', 'Appointment is rerendered');
     });
 
-    QUnit.test('Push new item to the store (remoteFiltering: true) (T900529)', function(assert) {
-        const data = [{
-            id: 0,
-            text: 'Test Appointment',
-            startDate: new Date(2017, 4, 22, 9, 30),
-            endDate: new Date(2017, 4, 22, 11, 30)
-        }];
-
-        const pushItem = {
-            id: 1,
-            text: 'Pushed Appointment',
-            startDate: new Date(2017, 4, 23, 9, 30),
-            endDate: new Date(2017, 4, 23, 11, 30)
-        };
-
-        const scheduler = createWrapper({
-            dataSource: {
-                pushAggregationTimeout: 0,
-                reshapeOnPush: true,
-                load: () => data,
-                key: 'id'
-            },
-            views: ['week'],
-            currentView: 'week',
-            currentDate: new Date(2017, 4, 25)
-        });
-
-        const dataSource = scheduler.instance.getDataSource();
-        dataSource.store().push([{ type: 'update', key: pushItem.id, data: pushItem }]);
-
-        assert.equal(scheduler.appointments.getTitleText(0), 'Test Appointment', 'Appointment is rerendered');
-        assert.equal(scheduler.appointments.getTitleText(1), 'Pushed Appointment', 'Pushed appointment is rerendered');
-    });
-
     QUnit.test('the \'update\' method of store should have key as arg is store has the \'key\' field', function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10)

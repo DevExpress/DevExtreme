@@ -22,9 +22,8 @@ import {
 import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
-import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
-import { BaseWidgetProps } from '../../utils/base_props';
+import { BaseWidgetProps } from './base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';
@@ -162,27 +161,6 @@ export class Widget extends JSXComponent(WidgetProps) {
     if (rootElementRef) {
       rootElementRef.current = this.widgetRef.current;
     }
-  }
-
-  @Effect()
-  accessKeyEffect(): EffectReturn {
-    const namespace = 'UIFeedback';
-    const { accessKey, focusStateEnabled, disabled } = this.props;
-    const isFocusable = focusStateEnabled && !disabled;
-    const canBeFocusedByKey = isFocusable && accessKey;
-
-    if (canBeFocusedByKey) {
-      dxClick.on(this.widgetRef.current, (e) => {
-        if (isFakeClickEvent(e)) {
-          e.stopImmediatePropagation();
-          this.focused = true;
-        }
-      }, { namespace });
-
-      return (): void => dxClick.off(this.widgetRef.current, { namespace });
-    }
-
-    return undefined;
   }
 
   @Effect()

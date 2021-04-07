@@ -11,7 +11,7 @@ export interface XmlaStoreOptions {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
+    beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

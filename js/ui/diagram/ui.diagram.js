@@ -1978,6 +1978,12 @@ class Diagram extends Widget {
     getSelectedItems() {
         return this._diagramInstance.getNativeSelectedItems().map(nativeItem => nativeItem && this._nativeItemToDiagramItem(nativeItem));
     }
+    setSelectedItems(items) {
+        return this._diagramInstance.setSelectedItems(items.map(item => item.id));
+    }
+    scrollToItem(item) {
+        return this._diagramInstance.scrollToItems([item.id]);
+    }
 
     _invalidateContextMenuCommands() {
         if(this._contextMenu) {

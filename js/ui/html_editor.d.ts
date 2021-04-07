@@ -11,10 +11,14 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import Editor, {
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
 
@@ -22,6 +26,33 @@ import {
     dxToolbarItem
 } from './toolbar';
 
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxHtmlEditor>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxHtmlEditor>;
+
+/** @public */
+export type FocusInEvent = ComponentNativeEvent<dxHtmlEditor>;
+
+/** @public */
+export type FocusOutEvent = ComponentNativeEvent<dxHtmlEditor>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxHtmlEditor>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxHtmlEditor> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxHtmlEditor> & ValueChangedInfo;
+
+/** @public */
+export interface MentionTemplateData {
+    readonly marker: string;
+    readonly id?: string | number;
+    readonly value?: any;
+}
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
@@ -29,7 +60,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeModules?: ((config: any) => any);
+    customizeModules?: ((config: any) => void);
     /**
      * @docid
      * @default true
@@ -63,21 +94,27 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field1 component:dxHtmlEditor
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => void);
+    onFocusIn?: ((e: FocusInEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field1 component:dxHtmlEditor
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => void);
+    onFocusOut?: ((e: FocusOutEvent) => void);
     /**
      * @docid
      * @default ""
@@ -353,13 +390,6 @@ export default class dxHtmlEditor extends Editor {
      * @public
      */
     undo(): void;
-    /**
-     * @docid
-     * @publicName update()
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    update(): void;
 }
 
 /**
@@ -456,7 +486,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: TElement) => string | TElement);
+    template?: template | ((mentionData: MentionTemplateData, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default "this"

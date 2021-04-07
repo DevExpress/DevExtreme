@@ -6,27 +6,63 @@ import {
     TPromise
 } from '../core/utils/deferred';
 
+import {
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
 import dxScrollable, {
-    dxScrollableOptions
+    dxScrollableOptions,
+    ComponentScrollEvent
 } from './scroll_view/ui.scrollable';
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxScrollView>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxScrollView>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxScrollView> & ChangedOptionInfo;
+
+/** @public */
+export type PullDownEvent = ComponentEvent<dxScrollView>;
+
+/** @public */
+export type ReachBottomEvent = ComponentEvent<dxScrollView>;
+
+/** @public */
+export type ScrollEvent = ComponentScrollEvent<dxScrollView>;
+
+/** @public */
+export type UpdatedEvent = ComponentScrollEvent<dxScrollView>;
 
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScrollView
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullDown?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => void);
+    onPullDown?: ((e: PullDownEvent) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScrollView
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReachBottom?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => void);
+    onReachBottom?: ((e: ReachBottomEvent) => void);
     /**
      * @docid
      * @default "Release to refresh..."

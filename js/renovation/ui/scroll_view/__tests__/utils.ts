@@ -5,12 +5,11 @@ import {
 import {
   ScrollableLocation,
   ScrollableDirection,
-  ScrollableBoundary,
 } from '../types.d';
 
 import {
   SCROLLABLE_CONTENT_CLASS,
-} from '../scrollable_utils';
+} from '../common/consts';
 
 export function createElement({
   location,
@@ -79,22 +78,4 @@ export function createTargetElement(args: { [key: string]: any }): HTMLElement {
     ...args,
     ...{ offsetParent: scrollableContent, isInScrollableContent: true },
   });
-}
-
-export function checkScrollParams({ direction, actual, expected }:
-{ direction: ScrollableDirection;
-  actual: ScrollableBoundary;
-  expected: Partial<ScrollableBoundary>;
-}): void {
-  const expectedParams = expected;
-
-  if (direction === 'vertical') {
-    delete expectedParams.reachedLeft;
-    delete expectedParams.reachedRight;
-  } else if (direction === 'horizontal') {
-    delete expectedParams.reachedTop;
-    delete expectedParams.reachedBottom;
-  }
-
-  expect(actual).toMatchObject(expectedParams);
 }

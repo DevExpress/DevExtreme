@@ -1,15 +1,10 @@
-import $ from '../../core/renderer';
-import Callbacks from '../../core/utils/callbacks';
 import { move } from '../../animation/translator';
 import { eventData } from '../../events/utils/index';
 import NativeStrategy from './ui.scrollable.native';
-import LoadIndicator from '../load_indicator';
 import { Deferred } from '../../core/utils/deferred';
 
 const SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = 'dx-scrollview-pull-down-loading';
-const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-refreshing';
-const PULLDOWN_ICON_CLASS = 'dx-icon-pulldown';
 
 const STATE_RELEASED = 0;
 const STATE_READY = 1;
@@ -18,53 +13,10 @@ const STATE_TOUCHED = 4;
 const STATE_PULLED = 5;
 
 const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
-
-    _init: function(scrollView) {
-        this.callBase(scrollView);
-        this._$topPocket = scrollView._$topPocket;
-        this._$bottomPocket = scrollView._$bottomPocket;
-        this._$pullDown = scrollView._$pullDown;
-        this._$scrollViewContent = scrollView.content();
-        this._initCallbacks();
-
-        this._location = 0;
-    },
-
-    _initCallbacks: function() {
-        this.pullDownCallbacks = Callbacks();
-        this.releaseCallbacks = Callbacks();
-        this.reachBottomCallbacks = Callbacks();
-    },
-
-    render: function() {
-        this.callBase();
-        this._renderPullDown();
-        this._releaseState();
-    },
-
-    _renderPullDown: function() {
-        const $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS);
-        const $loadIndicator = new LoadIndicator($('<div>')).$element();
-
-        this._$icon = $('<div>')
-            .addClass(PULLDOWN_ICON_CLASS);
-
-        this._$pullDown
-            .empty()
-            .append(this._$icon)
-            .append($loadContainer.append($loadIndicator));
-    },
-
     _releaseState: function() {
         this._state = STATE_RELEASED;
         this._releasePullDown();
         this._updateDimensions();
-    },
-
-    _releasePullDown: function() {
-        this._$pullDown.css({
-            opacity: 0
-        });
     },
 
     _updateDimensions: function() {
@@ -72,12 +24,6 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this._topPocketSize = this._$topPocket.height();
         this._bottomPocketSize = this._$bottomPocket.height();
         this._scrollOffset = this._$container.height() - this._$content.height();
-    },
-
-    _allowedDirections: function() {
-        const allowedDirections = this.callBase();
-        allowedDirections.vertical = allowedDirections.vertical || this._pullDownEnabled;
-        return allowedDirections;
     },
 
     handleInit: function(e) {

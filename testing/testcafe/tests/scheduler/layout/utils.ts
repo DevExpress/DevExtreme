@@ -14,6 +14,27 @@ export const resourceDataSource = [{
   label: 'Priority',
 }];
 
+export const views = [
+  'day',
+  'week',
+  'workWeek',
+  'month',
+  'timelineDay',
+  'timelineWeek',
+  'timelineWorkWeek',
+  'timelineMonth',
+];
+export const verticalViews = views
+  .map((viewType) => ({
+    type: viewType,
+    groupOrientation: 'vertical',
+  }));
+export const horizontalViews = views
+  .map((viewType) => ({
+    type: viewType,
+    groupOrientation: 'horizontal',
+  }));
+
 export const createDataSetForScreenShotTests = (): Record<string, unknown>[] => {
   const result: {
     text: string;

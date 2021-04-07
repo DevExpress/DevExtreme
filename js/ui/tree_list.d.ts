@@ -53,7 +53,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeColumns?: ((columns: Array<dxTreeListColumn>) => any);
+    customizeColumns?: ((columns: Array<dxTreeListColumn>) => void);
     /**
      * @docid
      * @type Enums.TreeListDataStructure

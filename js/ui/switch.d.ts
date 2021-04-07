@@ -2,9 +2,32 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
 import Editor, {
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxSwitch>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxSwitch>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxSwitch>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxSwitch> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxSwitch> & ValueChangedInfo;
 
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**

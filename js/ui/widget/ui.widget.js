@@ -1,13 +1,12 @@
 import $ from '../../core/renderer';
 import Action from '../../core/action';
 import DOMComponent from '../../core/dom_component';
-import { active, dxClick, focus, hover, keyboard } from '../../events/short';
+import { active, focus, hover, keyboard } from '../../events/short';
 import { deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { focusable as focusableSelector } from './selectors';
 import { inArray } from '../../core/utils/array';
-import { isFakeClickEvent } from '../../events/utils/index';
 import { isPlainObject, isDefined } from '../../core/utils/type';
 
 import '../../events/click';
@@ -176,16 +175,8 @@ const Widget = DOMComponent.inherit({
     _renderAccessKey() {
         const $el = this._focusTarget();
         const { accessKey } = this.option();
-        const namespace = 'UIFeedback';
 
         $el.attr('accesskey', accessKey);
-        dxClick.off($el, { namespace });
-        accessKey && dxClick.on($el, e => {
-            if(isFakeClickEvent(e)) {
-                e.stopImmediatePropagation();
-                this.focus();
-            }
-        }, { namespace });
     },
 
     _isFocusable() {
