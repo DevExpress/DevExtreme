@@ -1,6 +1,7 @@
 import messageLocalization from 'localization/message';
 import { runCommonOptionTests } from '../commonParts/options.tests.js';
 import DataGrid from 'ui/data_grid/ui.data_grid';
+import PivotGrid from 'ui/pivot_grid/ui.pivot_grid';
 
 const ExcelJSOptionTests = {
     runTests(moduleConfig, _getFullOptions, getComponent) {
@@ -72,6 +73,38 @@ const ExcelJSOptionTests = {
 
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: false }).autoFilterEnabled, false, 'false');
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: true }).autoFilterEnabled, true, 'true');
+            });
+
+            QUnit.test('mergeRowFieldValues', function(assert) {
+                if(!(getComponent() instanceof PivotGrid)) {
+                    assert.ok(true, 'The test relevant for PivotGrid widget only');
+                    return;
+                }
+
+                const component = getComponent();
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).mergeRowFieldValues, true, 'no member');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeRowFieldValues: undefined }).mergeRowFieldValues, true, 'undefined');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeRowFieldValues: null }).mergeRowFieldValues, true, 'null');
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeRowFieldValues: false }).mergeRowFieldValues, false, 'false');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeRowFieldValues: true }).mergeRowFieldValues, true, 'true');
+            });
+
+            QUnit.test('mergeColumnFieldValues', function(assert) {
+                if(!(getComponent() instanceof PivotGrid)) {
+                    assert.ok(true, 'The test relevant for PivotGrid widget only');
+                    return;
+                }
+
+                const component = getComponent();
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).mergeColumnFieldValues, true, 'no member');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: undefined }).mergeColumnFieldValues, true, 'undefined');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: null }).mergeColumnFieldValues, true, 'null');
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: false }).mergeColumnFieldValues, false, 'false');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: true }).mergeColumnFieldValues, true, 'true');
             });
         });
     }

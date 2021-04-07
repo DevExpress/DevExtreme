@@ -12,7 +12,7 @@ import {
   Effect,
   ForwardRef,
   Event,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { combineClasses } from '../../utils/combine_classes';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 import getElementOffset from '../../utils/get_element_offset';
@@ -332,7 +332,7 @@ export class Bullet extends JSXComponent(BulletProps) {
     return {
       ...tooltip,
       ...customProps,
-      enabled: tooltip.enabled !== false && this.tooltipEnabled,
+      enabled: tooltip.enabled && this.tooltipEnabled,
     };
   }
 

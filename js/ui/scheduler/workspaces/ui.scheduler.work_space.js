@@ -7,7 +7,7 @@ import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getPublicElement } from '../../../core/element';
 import { extend } from '../../../core/utils/extend';
 import { each } from '../../../core/utils/iterator';
-import { getBoundingRect } from '../../../core/utils/position';
+import { getBoundingRect, getElementsFromPoint } from '../../../core/utils/position';
 import messageLocalization from '../../../localization/message';
 import dateLocalization from '../../../localization/date';
 import { noop } from '../../../core/utils/common';
@@ -1052,8 +1052,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     _visibilityChanged(visible) {
         this.cache.clear();
 
-        if(visible && this._isVerticalGroupedWorkSpace()) {
-            this._setHorizontalGroupHeaderCellsHeight();
+        if(visible) {
+            this._updateGroupTableHeight();
         }
 
         if(visible && this._needCreateCrossScrolling()) {
@@ -1110,9 +1110,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._attachHeaderTableClasses();
 
-        if(this._isVerticalGroupedWorkSpace()) {
-            this._setHorizontalGroupHeaderCellsHeight();
-        }
+        this._updateGroupTableHeight();
     }
 
     getWorkSpaceMinWidth() {
@@ -1479,7 +1477,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         data.forEach((cellData) => {
-            const { groups, startDate, allDay } = cellData;
+            const { groups, startDate, allDay, index } = cellData;
             let { groupIndex } = cellData;
 
             if(!groupIndex) {
@@ -1490,7 +1488,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const coordinates = this.isVirtualScrolling()
                 ? this.viewDataProvider.findCellPositionInMap(
-                    groupIndex, startDate, allDay,
+                    { groupIndex, startDate, isAllDay: allDay, index }
                 )
                 : this.getCoordinatesByDate(startDate, groupIndex, allDay);
 
@@ -2795,7 +2793,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         let position;
 
         if(this.isVirtualScrolling()) {
-            const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
+            const cellInfo = { groupIndex, startDate: date, isAllDay: inAllDayRow };
+            const positionByMap = this.viewDataProvider.findCellPositionInMap(cellInfo);
             if(!positionByMap) {
                 return undefined;
             }
@@ -2884,12 +2883,13 @@ class SchedulerWorkSpace extends WidgetObserver {
             currentDayStart.setHours(this.option('startDayHour'), 0, 0, 0);
         }
 
+        const timeZoneDifference = dateUtils.getTimezonesDifference(date, currentDayStart);
         const currentDateTime = date.getTime();
         const currentDayStartTime = currentDayStart.getTime();
         const minTime = this._firstViewDate.getTime();
 
         return (currentDateTime > minTime)
-            ? ((currentDateTime - currentDayStartTime) % cellDuration) / cellDuration
+            ? ((currentDateTime - currentDayStartTime + timeZoneDifference) % cellDuration) / cellDuration
             : 0;
     }
 
@@ -3648,14 +3648,13 @@ const createDragBehaviorConfig = (
         const isWideAppointment = appointmentWidth > getCellWidth();
 
         const draggableElement = locate($(state.dragElement).parent());
-        const document = domAdapter.getDocument();
 
         const newX = draggableElement.left + mouseIndent;
         const newY = draggableElement.top + mouseIndent;
 
         const elements = isWideAppointment ?
-            document.elementsFromPoint(newX, newY) :
-            document.elementsFromPoint(newX + appointmentWidth / 2, newY);
+            getElementsFromPoint(newX, newY) :
+            getElementsFromPoint(newX + appointmentWidth / 2, newY);
 
         const droppableCell = elements.find(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1);
 

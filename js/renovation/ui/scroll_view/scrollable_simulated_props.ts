@@ -1,6 +1,6 @@
 import {
   ComponentBindings, OneWay, Event, TwoWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { EventCallback } from '../common/event_callback.d';
 import {
   ScrollableProps,
@@ -8,8 +8,8 @@ import {
 import { ScrollEventArgs } from './types.d';
 
 import { BaseWidgetProps } from '../../utils/base_props';
-import { TopPocketProps } from './top_pocket_props';
-import { BottomPocketProps } from './bottom_pocket_props';
+import { TopPocketProps } from './top_pocket';
+import { BottomPocketProps } from './bottom_pocket';
 
 @ComponentBindings()
 export class ScrollableSimulatedProps extends ScrollableProps {

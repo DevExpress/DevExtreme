@@ -1,6 +1,7 @@
 import { isDefined, isString, isDate, isObject, isFunction } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
+import { MergedRangesManager } from './export_merged_ranges_manager';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
 
@@ -12,7 +13,7 @@ const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 const MAX_EXCEL_COLUMN_WIDTH = 255;
 
 export const Export = {
-    getFullOptions: function(options) {
+    getFullOptions(options) {
         const fullOptions = extend({}, options);
         if(!(isDefined(fullOptions.worksheet) && isObject(fullOptions.worksheet))) {
             throw Error('The "worksheet" field must contain an object.');
@@ -39,7 +40,7 @@ export const Export = {
         return fullOptions;
     },
 
-    convertDateForExcelJS: function(date) {
+    convertDateForExcelJS(date) {
         return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
     },
 
@@ -47,7 +48,7 @@ export const Export = {
         excelCell.numFmt = numberFormat;
     },
 
-    getCellStyles: function(dataProvider) {
+    getCellStyles(dataProvider) {
         const styles = dataProvider.getStyles();
 
         styles.forEach((style) => {
@@ -63,7 +64,7 @@ export const Export = {
         return styles;
     },
 
-    tryConvertToExcelNumberFormat: function(format, dataType) {
+    tryConvertToExcelNumberFormat(format, dataType) {
         const newFormat = ExportFormat.formatObjectConverter(format, dataType);
         const currency = newFormat.currency;
 
@@ -73,7 +74,7 @@ export const Export = {
         return ExportFormat.convertFormat(format, newFormat.precision, dataType, currency);
     },
 
-    setAlignment: function(excelCell, wrapText, horizontalAlignment) {
+    setAlignment(excelCell, wrapText, horizontalAlignment) {
         excelCell.alignment = excelCell.alignment || {};
 
         if(isDefined(wrapText)) {
@@ -86,7 +87,7 @@ export const Export = {
         excelCell.alignment.vertical = 'top';
     },
 
-    setColumnsWidth: function(worksheet, widths, startColumnIndex) {
+    setColumnsWidth(worksheet, widths, startColumnIndex) {
         if(!isDefined(widths)) {
             return;
         }
@@ -99,42 +100,16 @@ export const Export = {
         }
     },
 
-    tryGetMergeRange: function(rowIndex, cellIndex, mergedCells, dataProvider) {
-        if(!mergedCells[rowIndex] || !mergedCells[rowIndex][cellIndex]) {
-            const cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
-            if(cellMerge.colspan || cellMerge.rowspan) {
-                for(let i = rowIndex; i <= rowIndex + cellMerge.rowspan || 0; i++) {
-                    for(let j = cellIndex; j <= cellIndex + cellMerge.colspan || 0; j++) {
-                        if(!mergedCells[i]) {
-                            mergedCells[i] = [];
-                        }
-                        mergedCells[i][j] = true;
-                    }
-                }
-                return {
-                    start: { row: rowIndex, column: cellIndex },
-                    end: { row: rowIndex + (cellMerge.rowspan || 0), column: cellIndex + (cellMerge.colspan || 0) }
-                };
-            }
-        }
-    },
-
-    mergeCells: function(worksheet, topLeftCell, mergeRanges) {
-        mergeRanges.forEach((mergeRange) => {
-            worksheet.mergeCells(mergeRange.start.row + topLeftCell.row, mergeRange.start.column + topLeftCell.column, mergeRange.end.row + topLeftCell.row, mergeRange.end.column + topLeftCell.column);
-        });
-    },
-
-    setLoadPanelOptions: function(component, options, privateOptions) {
+    setLoadPanelOptions(component, options, renderLoadPanel) {
         if(!hasWindow()) {
             return;
         }
 
         component._setOptionWithoutOptionChange('loadPanel', options);
-        privateOptions._renderLoadPanel(component);
+        renderLoadPanel(component);
     },
 
-    export: function(options, privateOptions) {
+    export(options, helpers) {
         const {
             customizeCell,
             component,
@@ -143,7 +118,9 @@ export const Export = {
             autoFilterEnabled,
             keepColumnWidths,
             selectedRowsOnly,
-            loadPanel
+            loadPanel,
+            mergeRowFieldValues,
+            mergeColumnFieldValues,
         } = options;
 
         const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
@@ -151,7 +128,7 @@ export const Export = {
             loadPanel.animation = null;
         }
 
-        this.setLoadPanelOptions(component, loadPanel, privateOptions);
+        this.setLoadPanelOptions(component, loadPanel, helpers._renderLoadPanel);
 
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -170,28 +147,27 @@ export const Export = {
         return new Promise((resolve) => {
             dataProvider.ready().done(() => {
                 const columns = dataProvider.getColumns();
-                const headerRowCount = isFunction(dataProvider.getHeaderRowCount) ? dataProvider.getHeaderRowCount() : 1;
                 const dataRowsCount = dataProvider.getRowsCount();
 
                 if(keepColumnWidths) {
                     this.setColumnsWidth(worksheet, dataProvider.getColumnsWidths(), cellRange.from.column);
                 }
 
-                const mergedCells = [];
-                const mergeRanges = [];
+                const mergedRangesManager = new MergedRangesManager(dataProvider, helpers, mergeRowFieldValues, mergeColumnFieldValues);
                 const styles = this.getCellStyles(dataProvider);
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
+                    helpers._trySetOutlineLevel(dataProvider, row, rowIndex);
 
-                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, styles, privateOptions);
+                    this.exportRow(dataProvider, helpers, mergedRangesManager, rowIndex, columns.length, row, cellRange.from.column, customizeCell, wrapText, styles);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
                     }
                 }
 
-                this.mergeCells(worksheet, topLeftCell, mergeRanges);
+                mergedRangesManager.applyMergedRages(worksheet);
 
                 cellRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
@@ -201,11 +177,11 @@ export const Export = {
                     worksheetViewSettings.rightToLeft = true;
                 }
 
-                if(headerRowCount > 0) {
+                if(helpers._isFrozenZone(dataProvider)) {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
-                        extend(worksheetViewSettings, privateOptions._getWorksheetFrozenState(dataProvider, cellRange));
+                        extend(worksheetViewSettings, helpers._getWorksheetFrozenState(dataProvider, cellRange));
                     }
-                    privateOptions._trySetAutoFilter(dataProvider, worksheet, cellRange, headerRowCount, autoFilterEnabled);
+                    helpers._trySetAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
                 }
 
                 if(Object.keys(worksheetViewSettings).length > 0) {
@@ -214,48 +190,45 @@ export const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                this.setLoadPanelOptions(component, initialLoadPanelOptions, privateOptions);
+                this.setLoadPanelOptions(component, initialLoadPanelOptions, helpers._renderLoadPanel);
             });
         });
     },
 
-    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, styles, privateOptions) {
-        privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
-
+    exportRow(dataProvider, helpers, mergedRangesManager, rowIndex, cellCount, row, startColumnIndex, customizeCell, wrapText, styles) {
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-            const cell = cellData.cellSourceData;
-
             const excelCell = row.getCell(startColumnIndex + cellIndex);
 
-            if(isDate(cellData.value)) {
-                excelCell.value = this.convertDateForExcelJS(cellData.value);
+            mergedRangesManager.updateMergedRanges(excelCell, rowIndex, cellIndex);
+
+            const cellInfo = mergedRangesManager.findMergedCellInfo(rowIndex, cellIndex);
+            if(isDefined(cellInfo) && (excelCell !== cellInfo.masterCell)) {
+                excelCell.style = cellInfo.masterCell.style;
+                excelCell.value = cellInfo.masterCell.value;
             } else {
-                excelCell.value = cellData.value;
-            }
-
-            if(isDefined(excelCell.value)) {
-                const { bold, alignment: horizontalAlignment, numberFormat } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
-
-                if(isDefined(numberFormat)) {
-                    this.setNumberFormat(excelCell, numberFormat);
-                } else if(isString(excelCell.value) && /^[@=+-]/.test(excelCell.value)) {
-                    this.setNumberFormat(excelCell, '@');
+                if(isDate(cellData.value)) {
+                    excelCell.value = this.convertDateForExcelJS(cellData.value);
+                } else {
+                    excelCell.value = cellData.value;
                 }
 
-                privateOptions._trySetFont(excelCell, bold);
-                this.setAlignment(excelCell, wrapText, horizontalAlignment);
+                if(isDefined(excelCell.value)) {
+                    const { bold, alignment: horizontalAlignment, numberFormat } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+
+                    if(isDefined(numberFormat)) {
+                        this.setNumberFormat(excelCell, numberFormat);
+                    } else if(isString(excelCell.value) && /^[@=+-]/.test(excelCell.value)) {
+                        this.setNumberFormat(excelCell, '@');
+                    }
+
+                    helpers._trySetFont(excelCell, bold);
+                    this.setAlignment(excelCell, wrapText, horizontalAlignment);
+                }
             }
 
             if(isFunction(customizeCell)) {
-                customizeCell(privateOptions._getCustomizeCellOptions(excelCell, cell));
-            }
-
-            if(privateOptions._needMergeRange(rowIndex, headerRowCount)) {
-                const mergeRange = this.tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
-                if(isDefined(mergeRange)) {
-                    mergeRanges.push(mergeRange);
-                }
+                customizeCell(helpers._getCustomizeCellOptions(excelCell, cellData.cellSourceData));
             }
         }
     }

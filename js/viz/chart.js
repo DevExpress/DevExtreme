@@ -176,6 +176,11 @@ function getHorizontalAxesMargins(axes, getMarginsFunc) {
         margins.left = pickMax('left', paneMargins, margins);
         margins.right = pickMax('right', paneMargins, margins);
 
+        const orthogonalAxis = axis.getOrthogonalAxis?.();
+        if(orthogonalAxis && orthogonalAxis.customPositionIsAvailable() &&
+            (!axis.customPositionIsBoundaryOrthogonalAxis() || !orthogonalAxis.customPositionEqualsToPredefined())) {
+            margins[orthogonalAxis.getResolvedBoundaryPosition()] = 0;
+        }
         return margins;
     }, { panes: {} });
 }
@@ -550,8 +555,9 @@ const dxChart = AdvancedChart.inherit({
         return this._argumentAxes.concat(this._valueAxes);
     },
 
-    _resetAxesAnimation(isFirstDrawing) {
-        this._getAllAxes().forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
+    _resetAxesAnimation(isFirstDrawing, isHorizontal) {
+        const axes = _isDefined(isHorizontal) ? (isHorizontal ^ this._isRotated() ? this._argumentAxes : this._valueAxes) : this._getAllAxes();
+        axes.forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
     },
 
     // for async templates. Should be fixed
@@ -914,6 +920,7 @@ const dxChart = AdvancedChart.inherit({
         const horizontalElements = rotated ? that._valueAxes : extendedArgAxes;
         const allAxes = verticalAxes.concat(horizontalAxes);
         const allElements = allAxes.concat(scrollBar);
+        const verticalAxesFirstDrawing = verticalAxes.some(v => v.isFirstDrawing());
 
         that._normalizePanesHeight();
         that._updatePanesCanvases(drawOptions);
@@ -977,8 +984,9 @@ const dxChart = AdvancedChart.inherit({
 
         const visibleSeries = that._getVisibleSeries();
         const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
+        const axesIsAnimated = axisAnimationEnabled(drawOptions, pointsToAnimation);
 
-        performActionOnAxes(allElements, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+        performActionOnAxes(allElements, 'updateSize', panesCanvases, axesIsAnimated);
 
         horizontalElements.forEach(shiftAxis('top', 'bottom'));
         verticalElements.forEach(shiftAxis('left', 'right'));
@@ -994,7 +1002,7 @@ const dxChart = AdvancedChart.inherit({
         });
 
         verticalAxes.forEach((axis, i) => {
-            if(axis.hasWrap && axis.hasWrap()) {
+            if(axis.hasWrap?.()) {
                 const title = axis.getTitle();
                 const newTitleWidth = title ? title.bBox.width : 0;
                 const offset = newTitleWidth - oldTitlesWidth[i];
@@ -1013,7 +1021,8 @@ const dxChart = AdvancedChart.inherit({
         });
 
         if(verticalAxes.some(v => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition)) {
-            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, false);
+            axesIsAnimated && that._resetAxesAnimation(verticalAxesFirstDrawing, false);
+            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, axesIsAnimated);
         }
 
         horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));
@@ -1142,7 +1151,7 @@ const dxChart = AdvancedChart.inherit({
             const argAxisLabelPosition = argumentAxis.getOptions().label?.position;
             const scrollBarPosition = that._scrollBar.getOptions().position;
 
-            return argumentAxis.hasCustomPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
+            return argumentAxis.hasNonBoundaryPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
         }
 
         return false;
@@ -1330,13 +1339,11 @@ const dxChart = AdvancedChart.inherit({
     _applyClipRectsForAxes() {
         const that = this;
         const axes = that._getAllAxes();
-        const customPositionAxes = axes.filter(a => a.hasCustomPosition());
         const chartCanvasClipRectID = that._getCanvasClipRectID();
 
         for(let i = 0; i < axes.length; i++) {
             const elementsClipRectID = that._getElementsClipRectID(axes[i].pane);
-            const canvasClipRectID = customPositionAxes.indexOf(axes[i]) >= 0 ? elementsClipRectID : chartCanvasClipRectID;
-            axes[i].applyClipRects(elementsClipRectID, canvasClipRectID);
+            axes[i].applyClipRects(elementsClipRectID, chartCanvasClipRectID);
         }
     },
 

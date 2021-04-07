@@ -2684,6 +2684,14 @@ declare module DevExpress.excelExporter {
          * [descr:ExcelExportPivotGridProps.customizeCell]
          */
         customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeColumnFieldValues]
+         */
+        mergeColumnFieldValues?: boolean;
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeRowFieldValues]
+         */
+        mergeRowFieldValues?: boolean;
     }
     /**
      * [descr:ExcelPivotGridCell]
@@ -3244,7 +3252,7 @@ declare module DevExpress.ui {
         /**
          * [descr:CollectionWidgetItem.template]
          */
-        template?: DevExpress.core.template | (() => string | Element | JQuery);
+        template?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.TElement) => string | Element | JQuery);
         /**
          * [descr:CollectionWidgetItem.text]
          */
@@ -3307,6 +3315,31 @@ declare module DevExpress.ui {
          * [descr:CustomRule.validationCallback]
          */
         validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => boolean);
+    }
+    /**
+     * [descr:DataChange]
+     */
+    export interface DataChange {
+        /**
+         * [descr:DataChange.data]
+         */
+        data: any;
+        /**
+         * [descr:DataChange.index]
+         */
+        index?: number;
+        /**
+         * [descr:DataChange.key]
+         */
+        key: any;
+        /**
+         * [descr:DataChange.pageIndex]
+         */
+        pageIndex?: number;
+        /**
+         * [descr:DataChange.type]
+         */
+        type: 'insert' | 'update' | 'remove';
     }
     /**
      * [descr:DataExpressionMixinOptions]
@@ -3607,11 +3640,11 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.onEditCanceled]
          */
-        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<any> }) => any);
+        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<DataChange> }) => any);
         /**
          * [descr:GridBaseOptions.onEditCanceling]
          */
-        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<any>, cancel?: boolean }) => any);
+        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<DataChange>, cancel?: boolean }) => any);
         /**
          * [descr:GridBaseOptions.onInitNewRow]
          */
@@ -3667,11 +3700,11 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.onSaved]
          */
-        onSaved?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<any> }) => any);
+        onSaved?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<DataChange> }) => any);
         /**
          * [descr:GridBaseOptions.onSaving]
          */
-        onSaving?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<any>, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
+        onSaving?: ((e: { component?: T, element?: DevExpress.core.TElement, model?: any, changes?: Array<DataChange>, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
         /**
          * [descr:GridBaseOptions.onSelectionChanged]
          */
@@ -3760,7 +3793,7 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBaseOptions.editing.changes]
          */
-        changes?: Array<any>;
+        changes?: Array<DataChange>;
         /**
          * [descr:GridBaseOptions.editing.confirmDelete]
          */
@@ -4462,11 +4495,11 @@ declare module DevExpress.ui {
         /**
          * [descr:MapLocation.lat]
          */
-        lat?: number;
+        lat: number;
         /**
          * [descr:MapLocation.lng]
          */
-        lng?: number;
+        lng: number;
     }
     /**
      * [descr:NumericRule]
@@ -5987,13 +6020,29 @@ declare module DevExpress.ui {
          */
         getItemByKey(key: any): dxDiagramItem;
         /**
+         * [descr:dxDiagram.getItems()]
+         */
+        getItems(): Array<dxDiagramItem>;
+        /**
          * [descr:dxDiagram.getNodeDataSource()]
          */
         getNodeDataSource(): DevExpress.data.DataSource;
         /**
+         * [descr:dxDiagram.getSelectedItems()]
+         */
+        getSelectedItems(): Array<dxDiagramItem>;
+        /**
          * [descr:dxDiagram.import(data, updateExistingItemsOnly)]
          */
         import(data: string, updateExistingItemsOnly?: boolean): void;
+        /**
+         * [descr:dxDiagram.scrollToItem(item)]
+         */
+        scrollToItem(item: dxDiagramItem): void;
+        /**
+         * [descr:dxDiagram.setSelectedItems(items)]
+         */
+        setSelectedItems(items: Array<dxDiagramItem>): void;
         /**
          * [descr:dxDiagram.updateToolbox()]
          */
@@ -6789,6 +6838,10 @@ declare module DevExpress.ui {
          * [descr:dxFileManagerOptions.itemView]
          */
         itemView?: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
+        /**
+         * [descr:dxFileManagerOptions.notifications]
+         */
+        notifications?: { showPanel?: boolean, showPopup?: boolean };
         /**
          * [descr:dxFileManagerOptions.onContextMenuItemClick]
          */
@@ -7969,7 +8022,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttOptions.taskContentTemplate]
          */
-        taskContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, item: { cellSize?: any, isMilestone?: boolean, taskData?: any, taskHTML?: any, taskPosition?: any, taskResources?: Array<any>, taskSize?: any }) => string | DevExpress.core.TElement);
+        taskContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, item: { cellSize?: any, isMilestone?: boolean, taskData?: any, taskHTML?: any, taskPosition?: any, taskResources?: Array<any>, taskSize?: any }) => string | Element | JQuery);
         /**
          * [descr:dxGanttOptions.taskListWidth]
          */
@@ -7981,7 +8034,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttOptions.taskTooltipContentTemplate]
          */
-        taskTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => string | DevExpress.core.TElement);
+        taskTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => string | Element | JQuery);
         /**
          * [descr:dxGanttOptions.tasks]
          */
@@ -8017,6 +8070,10 @@ declare module DevExpress.ui {
          * [descr:dxGantt.deleteTask(key)]
          */
         deleteTask(key: any): void;
+        /**
+         * [descr:dxGantt.exportToPdf(options)]
+         */
+        exportToPdf(options: any): Promise<any> & JQueryPromise<any>;
         /**
          * [descr:dxGantt.getDependencyData(key)]
          */
@@ -8306,10 +8363,6 @@ declare module DevExpress.ui {
          * [descr:dxHtmlEditor.undo()]
          */
         undo(): void;
-        /**
-         * [descr:dxHtmlEditor.update()]
-         */
-        update(): void;
     }
     /**
      * [descr:dxHtmlEditorMediaResizing]

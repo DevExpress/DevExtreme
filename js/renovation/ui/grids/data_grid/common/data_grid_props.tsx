@@ -6,7 +6,7 @@ import {
   TwoWay,
   Nested,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import DxDataGrid from '../../../../../ui/data_grid';
 import type { Options, dxDataGridColumn, dxDataGridRowObject } from '../../../../../ui/data_grid';
 import { BaseWidgetProps } from '../../../../utils/base_props';

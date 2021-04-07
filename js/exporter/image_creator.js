@@ -720,9 +720,10 @@ function convertSvgToCanvas(svg, canvas, rootAppended) {
     });
 }
 
-function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToCanvas = convertSvgToCanvas) {
+function getCanvasFromSvg(markup, width, height, backgroundColor, margin, pixelRatio, svgToCanvas = convertSvgToCanvas) {
     const canvas = createCanvas(width, height, margin);
     const context = canvas.getContext('2d');
+    context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     const svgElem = getSvgElement(markup);
     let invisibleDiv;
     const markupIsDomElement = domAdapter.isElementNode(markup);
@@ -750,16 +751,17 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToC
 
 export const imageCreator = {
     getImageData: function(markup, options) {
+        const pixelRatio = window.devicePixelRatio || 1;
         const mimeType = 'image/' + options.format;
-        const width = options.width;
-        const height = options.height;
+        const width = options.width * pixelRatio;
+        const height = options.height * pixelRatio;
         const backgroundColor = options.backgroundColor;
         // Injection for testing T403049
         if(isFunction(options.__parseAttributesFn)) {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, options.svgToCanvas).then(canvas => getStringFromCanvas(canvas, mimeType));
+        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, pixelRatio, options.svgToCanvas).then(canvas => getStringFromCanvas(canvas, mimeType));
     },
 
     getData: function(markup, options) {

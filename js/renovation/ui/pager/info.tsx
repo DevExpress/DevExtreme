@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, ForwardRef, JSXComponent, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { format } from '../../../core/utils/string';
 import messageLocalization from '../../../localization/message';

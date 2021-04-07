@@ -3,12 +3,78 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
     template
 } from '../core/templates/template';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    DropDownButtonTemplateDataModel
 } from './drop_down_editor/ui.drop_down_editor';
+
+import {
+    ValueChangedInfo
+} from './editor/editor';
+
+/** @public */
+export type ChangeEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type ClosedEvent = ComponentEvent<dxColorBox>;
+
+/** @public */
+export type CopyEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type CutEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxColorBox>;
+
+/** @public */
+export type EnterKeyEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type FocusInEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type FocusOutEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxColorBox>;
+
+/** @public */
+export type InputEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type KeyDownEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type KeyPressEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type KeyUpEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type OpenedEvent = ComponentEvent<dxColorBox>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxColorBox> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = ComponentNativeEvent<dxColorBox>;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxColorBox> & ValueChangedInfo;
+
+/** @public */
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**

@@ -181,7 +181,7 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any}) => any);
+    customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any}) => void);
 }
 
 /**
@@ -196,6 +196,18 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @public
      */
     component?: dxPivotGrid;
+      /**
+     * @docid
+     * @default true
+     * @public
+     */
+    mergeRowFieldValues?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    mergeColumnFieldValues?: boolean;
     /**
      * @docid
      * @type_function_param1 options:Object
@@ -203,7 +215,7 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any}) => any);
+    customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any}) => void);
 }
 
 /**

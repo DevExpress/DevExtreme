@@ -52,23 +52,48 @@ describe('ScrollView', () => {
       { name: 'scrollTo', argsCount: 1 },
       { name: 'scrollBy', argsCount: 1 },
       { name: 'content', argsCount: 0 },
+      { name: 'update', argsCount: 0 },
+      { name: 'release', argsCount: 0 },
     ]).describe('Method: %o', (methodInfo) => {
       it(`${methodInfo.name}() method should call according method from scrollbar`, () => {
         const viewModel = new ScrollView({ });
+        const funcHandler = jest.fn();
+        Object.defineProperties(viewModel, {
+          scrollableRef: {
+            get() { return ({ [`${methodInfo.name}`]: funcHandler }); },
+          },
+        });
 
-        (viewModel as any).scrollableRef = { current: { [`${methodInfo.name}`]: jest.fn() } };
-
-        if (isDefined(viewModel.scrollableRef.current)) {
+        if (isDefined(viewModel.scrollableRef)) {
           if (methodInfo.argsCount === 2) {
             viewModel[methodInfo.name]('arg1', 'arg2');
-            expect(viewModel.scrollableRef.current[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1', 'arg2');
+            expect(funcHandler).toHaveBeenCalledWith('arg1', 'arg2');
           } else if (methodInfo.argsCount === 1) {
             viewModel[methodInfo.name]('arg1');
-            expect(viewModel.scrollableRef.current[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1');
+            expect(funcHandler).toHaveBeenCalledWith('arg1');
           } else {
             viewModel[methodInfo.name]();
+            expect(funcHandler).toHaveBeenCalledTimes(1);
           }
-          expect(viewModel.scrollableRef.current[`${methodInfo.name}`]).toHaveBeenCalledTimes(1);
+        }
+      });
+    });
+
+    each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+      it('refresh() method should call according method from scrollbar', () => {
+        const viewModel = new ScrollView({ pullDownEnabled });
+        const funcHandler = jest.fn();
+        Object.defineProperties(viewModel, {
+          scrollableRef: {
+            get() { return ({ refresh: funcHandler }); },
+          },
+        });
+
+        viewModel.refresh();
+        if (pullDownEnabled) {
+          expect(funcHandler).toHaveBeenCalledTimes(1);
+        } else {
+          expect(funcHandler).not.toBeCalled();
         }
       });
     });
@@ -80,6 +105,20 @@ describe('ScrollView', () => {
         it('Check default property values', () => {
           const { cssClasses } = new ScrollView({});
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollview'));
+        });
+
+        each([false, true]).describe('useNative: %o', (useNative) => {
+          it('Check strategy branch', () => {
+            const scrollView = mount(viewFunction({ props: { useNative } } as any) as JSX.Element);
+
+            if (useNative) {
+              expect(scrollView.find('.dx-scrollable-native').exists()).toBe(true);
+              expect(scrollView.find('.dx-scrollable-simulated').exists()).toBe(false);
+            } else {
+              expect(scrollView.find('.dx-scrollable-native').exists()).toBe(false);
+              expect(scrollView.find('.dx-scrollable-simulated').exists()).toBe(true);
+            }
+          });
         });
 
         it('should render scrollView content', () => {
@@ -95,6 +134,20 @@ describe('ScrollView', () => {
           expect(topPocket.exists()).toBe(true);
           const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
           expect(bottomPocket.exists()).toBe(true);
+        });
+      });
+
+      each([false, true]).describe('useNative: %o', (useNative) => {
+        it('scrollableRef', () => {
+          const viewModel = new ScrollView({ useNative });
+
+          Object.defineProperties(viewModel, {
+            scrollableNativeRef: { get() { return { current: 'native' }; } },
+            scrollViewSimulatedRef: { get() { return { current: 'simulated' }; } },
+          });
+
+          expect(viewModel.scrollableRef)
+            .toEqual(useNative ? 'native' : 'simulated');
         });
       });
     });
@@ -216,9 +269,9 @@ describe('ScrollView', () => {
       const getDefaultOptions = (): ScrollViewProps => Object.assign(new ScrollViewProps(),
         convertRulesToOptions(defaultOptionRules));
 
-      each([false]).describe('isSimulator: %o', (isSimulator) => {
-        each(['desktop']).describe('deviceType: %o', (deviceType) => {
-          each(['generic']).describe('platform: %o', (platform) => {
+      each([false, true]).describe('isSimulator: %o', (isSimulator) => {
+        each(['desktop', 'phone', 'tablet']).describe('deviceType: %o', (deviceType) => {
+          each(['generic', 'android', 'ios']).describe('platform: %o', (platform) => {
             it('scrollByThumb, showScrollbar', () => {
               (devices as any).isSimulator.mockImplementation(() => isSimulator);
               (devices.real as Mock).mockImplementation(() => ({ deviceType }));

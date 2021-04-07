@@ -306,15 +306,6 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(testModule.getEditor(), this.instance);
     });
 
-    test('\'update\' method should call the quill\'s update', function(assert) {
-        this.createEditor();
-        const updateSpy = sinon.spy(this.instance.getQuillInstance(), 'update');
-
-        this.instance.update();
-
-        assert.ok(updateSpy.calledOnce, 'Quill update() should triggered on the editor\'s update()');
-    });
-
     test('\'focus\' method should call the quill\'s focus', function(assert) {
         this.createEditor();
         const focusSpy = sinon.spy(this.instance.getQuillInstance(), 'focus');
@@ -333,17 +324,17 @@ testModule('API', moduleConfig, () => {
         assert.ok(blurSpy.calledOnce, 'Quill blur() should triggered on the editor\'s blur()');
     });
 
-    test('\'blur\' method should remove focus from any htmlEditor element', function(assert) {
+    test('\'blur\' method should not remove focus from additional htmlEditor element', function(assert) {
         this.createEditor();
         const internalElement = $('<input type="button">');
         const blurSpy = sinon.spy();
         internalElement.appendTo(this.instance.element());
-        internalElement.on('focusout', blurSpy);
+        internalElement.on('blur', blurSpy);
 
         internalElement.focus();
         this.instance.blur();
 
-        assert.ok(blurSpy.calledOnce, 'Internal element blur() should triggered on the editor\'s blur()');
+        assert.strictEqual(blurSpy.callCount, 0, 'custom internal element blur() should not triggered on the editor\'s blur()');
     });
 
     test('change value via \'option\' method should correctly update content', function(assert) {

@@ -205,11 +205,13 @@ export default class VirtualScrollingDispatcher {
     }
 
     _attachScrollableEvents() {
-        if(this.height || this.width) {
-            this._attachScrollableScroll();
-        }
-        if(!this.height || !this.width) {
-            this._attachWindowScroll();
+        if(this.horizontalScrollingAllowed || this.verticalScrollingAllowed) {
+            if(this.height || this.horizontalScrollingAllowed) {
+                this._attachScrollableScroll();
+            }
+            if(!this.height) {
+                this._attachWindowScroll();
+            }
         }
     }
 
@@ -291,13 +293,17 @@ class VirtualScrollingBase {
         this._viewportSize = options.viewportSize;
         this._itemSize = options.itemSize;
         this._position = -1;
+        this._itemSizeChanged = false;
 
         this.updateState(0);
     }
 
     get viewportSize() { return this._viewportSize; }
     get itemSize() { return this._itemSize; }
-    set itemSize(value) { this._itemSize = value; }
+    set itemSize(value) {
+        this._itemSizeChanged = this._itemSize !== value;
+        this._itemSize = value;
+    }
     get state() { return this._state; }
     set state(value) { this._state = value; }
 
@@ -513,8 +519,8 @@ class VirtualScrollingBase {
 
         const isAppend = prevVirtualSizeBefore < virtualSizeBefore;
         const isPrepend = prevVirtualSizeAfter < virtualSizeAfter;
-        const needAddItems = isAppend || isPrepend;
 
+        const needAddItems = this._itemSizeChanged || isAppend || isPrepend;
         if(needAddItems) {
             this._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
         }

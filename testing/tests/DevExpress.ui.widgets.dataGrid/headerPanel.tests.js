@@ -518,7 +518,7 @@ QUnit.module('Header panel', {
 
 QUnit.module('Draw buttons in header panel', {
     beforeEach: function() {
-        setupDataGridModules(this, ['columns', 'data', 'headerPanel', 'editing', 'editorFactory', 'columnChooser'], {
+        setupDataGridModules(this, ['columns', 'data', 'headerPanel', 'editing', 'editingCellBased', 'editorFactory', 'columnChooser'], {
             initViews: true,
             controllers: {
                 columns: new MockColumnsController([]),

@@ -12,7 +12,7 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: any }) => any);
+    beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: any }) => void);
     /**
      * @docid
      * @type_function_param1 options: object
@@ -20,7 +20,7 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    beforeSubmit?: ((options: { formData?: any }) => any);
+    beforeSubmit?: ((options: { formData?: any }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.fileManagement
