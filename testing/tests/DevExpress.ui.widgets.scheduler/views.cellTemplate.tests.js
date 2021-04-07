@@ -2,7 +2,7 @@ import $ from 'jquery';
 import fx from 'animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
 const {
     module,
@@ -11,12 +11,7 @@ const {
 } = QUnit;
 
 
-testStart(function() {
-    $('#qunit-fixture').html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+testStart(() => initTestMarkup());
 
 const moduleConfig = {
     beforeEach: function() {
