@@ -11,6 +11,12 @@ const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
 const BUTTON_MESSAGE = 'dxDropDownEditor-selectLabel';
 
 export default class ClearButton extends TextEditorButton {
+    constructor(name, editor, options) {
+        super(name, editor, options);
+
+        this.currentTemplate = null;
+    }
+
     _attachEvents(instance) {
         const { editor } = this;
 
