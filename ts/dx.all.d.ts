@@ -5370,7 +5370,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGridOptions.onCellClick]
          */
-        onCellClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any) | string;
+        onCellClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /**
          * [descr:dxDataGridOptions.onCellDblClick]
          */
@@ -5432,7 +5432,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGridOptions.onRowClick]
          */
-        onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
+        onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any);
         /**
          * [descr:dxDataGridOptions.onRowDblClick]
          */
@@ -5665,7 +5665,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGridColumnButton.onClick]
          */
-        onClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any) | string;
+        onClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any);
         /**
          * [descr:dxDataGridColumnButton.template]
          */
@@ -11969,7 +11969,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListOptions.onCellClick]
          */
-        onCellClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.TElement, row?: dxTreeListRowObject }) => any) | string;
+        onCellClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.TElement, row?: dxTreeListRowObject }) => any);
         /**
          * [descr:dxTreeListOptions.onCellDblClick]
          */
@@ -12021,7 +12021,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListOptions.onRowClick]
          */
-        onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.TElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
+        onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.TElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any);
         /**
          * [descr:dxTreeListOptions.onRowDblClick]
          */
@@ -12239,7 +12239,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListColumnButton.onClick]
          */
-        onClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
+        onClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any);
         /**
          * [descr:dxTreeListColumnButton.template]
          */

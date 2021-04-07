@@ -492,7 +492,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: CellClickEvent) => void) | string;
+    onCellClick?: ((e: CellClickEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -763,7 +763,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowClick?: ((e: RowClickEvent) => void) | string;
+    onRowClick?: ((e: RowClickEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1331,7 +1331,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: ColumnButtonClickEvent) => void) | string;
+    onClick?: ((e: ColumnButtonClickEvent) => void);
     /**
      * @docid dxTreeListColumnButton.template
      * @type_function_param1 cellElement:TElement
