@@ -13,11 +13,12 @@ const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const watch = require('gulp-watch');
 const cache = require('gulp-cache');
+const through2 = require('through2');
 
 const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
 const globTs = require('./ts').GLOB_TS;
-const replaceWidgets = require('./renovation-pipes').replaceWidgets;
+const { replaceWidgets, reloadConfig, renovatedComponentsPath } = require('./renovation-pipes');
 const { ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
@@ -28,7 +29,8 @@ const src = [
     'js/**/*.*',
     `!${globTs}`,
     '!js/**/*.{tsx,ts}',
-    '!js/renovation/code_coverage/**/*.*'
+    '!js/renovation/code_coverage/**/*.*',
+    '!js/renovation/components.js'
 ];
 
 const esmTranspileSrc = src.concat([
@@ -37,6 +39,7 @@ const esmTranspileSrc = src.concat([
     '!js/renovation/**/*',
     '!**/*.json'
 ]);
+
 
 const srcDir = path.join(process.cwd(), './js');
 const generatedTs = [
@@ -106,16 +109,27 @@ const transpileDefault = () => transpile(src, ctx.TRANSPILED_PATH, [
     babelCjs()
 ]);
 
-const transpileRenovation = () => transpile(src, ctx.TRANSPILED_RENOVATION_PATH, [
-    replaceWidgets(true),
-    babelCjs()
-]);
+const touch = () => through2.obj(function(file, enc, cb) {
+    if(file.stat) {
+        // eslint-disable-next-line spellcheck/spell-checker
+        file.stat.atime = file.stat.mtime = file.stat.ctime = new Date();
+    }
+    cb(null, file);
+});
 
-const transpileProd = (dist, isEsm) => transpile(src, dist, [
+const transpileRenovation = (watch) => transpile(src, ctx.TRANSPILED_RENOVATION_PATH, [
+    replaceWidgets(true),
+    babelCjs(),
+    touch()
+], watch);
+
+const transpileProd = (dist, isEsm, watch) => transpile(src, dist, [
     removeDebug(),
     replaceWidgets(false),
     isEsm ? babelEsm() : babelCjs(),
-]);
+], watch);
+
+const transpileRenovationProd = (watch) => transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false, watch);
 
 const transpileEsm = (dist) => gulp.series.apply(gulp, [
     transpileProd(path.join(dist, './cjs'), false),
@@ -159,7 +173,7 @@ gulp.task('transpile', gulp.series(
     'bundler-config',
     transpileDefault(),
     transpileRenovation(),
-    transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false),
+    transpileRenovationProd(),
     ifEsmPackage('transpile-esm'),
 ));
 
@@ -182,12 +196,26 @@ const replaceVersion = () => gulp.parallel([
 
 gulp.task('version-replace', replaceVersion());
 
+gulp.task('renovated-components-watch', () => {
+    return gulp
+        .watch(
+            [renovatedComponentsPath + '.js'],
+            function transpileRenovatedComponents(done) {
+                gulp.series(
+                    reloadConfig,
+                    transpileRenovation(),
+                    transpileRenovationProd()
+                )(done);
+            }
+        )
+        .on('ready', () => console.log('renovated-components task is watching for changes...'));
+
+});
+
 gulp.task('transpile-watch', gulp.series(
-    transpileDefault(),
-    transpileRenovation(),
-    replaceVersion(),
     () => {
-        const watchTask = watch(src).on('ready', () => console.log('transpile task is watching for changes...'))
+        const watchTask = watch(src)
+            .on('ready', () => console.log('transpile task is watching for changes...'))
             .pipe(plumber({
                 errorHandler: notify
                     .onError('Error: <%= error.message %>')
@@ -200,6 +228,11 @@ gulp.task('transpile-watch', gulp.series(
             .pipe(replaceWidgets(true))
             .pipe(babel(transpileConfig.cjs))
             .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH));
+        watchTask
+            .pipe(removeDebug())
+            .pipe(replaceWidgets(true))
+            .pipe(babel(transpileConfig.cjs))
+            .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
         return watchTask;
     }
 ));

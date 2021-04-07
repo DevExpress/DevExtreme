@@ -115,8 +115,7 @@ task('style-compiler-themes-ci', series(
     )
 ));
 
-task('style-compiler-themes-dev', () => {
-    createBundles();
+task('style-compiler-themes-watch', () => {
     const args = parseArguments(process.argv);
     const bundlesArg = args['bundles'];
 
