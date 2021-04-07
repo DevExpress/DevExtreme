@@ -1,7 +1,15 @@
-import { extend } from 'core/utils/extend';
-import { NotificationManagerReal } from 'ui/file_manager/ui.file_manager.notification_manager';
+import { NotificationManager } from 'ui/file_manager/ui.file_manager.notification_manager';
 
-export default class FileManagerNotificationManagerMock extends NotificationManagerReal {
+export default class FileManagerNotificationManagerMock extends NotificationManager {
+    constructor(options) {
+        super(options);
+        if(options.progressPanelComponent) {
+            this._progressPanelComponent = options.progressPanelComponent;
+        }
+        if(options.logger) {
+            this._logger = options.logger;
+        }
+    }
 
     createErrorDetailsProgressBox($container, item, errorText) {
         const itemInfo = {
@@ -30,28 +38,8 @@ export default class FileManagerNotificationManagerMock extends NotificationMana
         }
     }
 
-    _getProgressPanelComponent() { // TODO
-        const component = this.option('progressPanelComponent');
-        return component ? component : super._getProgressPanelComponent();
-    }
-
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            progressPanelComponent: null,
-            logger: null
-        });
-    }
-
-    _optionChanged(args) {
-        const name = args.name;
-
-        switch(name) {
-            case 'progressPanelComponent':
-            case 'logger':
-                break;
-            default:
-                super._optionChanged(args);
-        }
+    _getProgressPanelComponent() {
+        return this._progressPanelComponent || super._getProgressPanelComponent();
     }
 
 }

@@ -31,7 +31,7 @@ export class OverlayProps extends WidgetProps {
 
   @OneWay() templatesRenderAsynchronously? = false;
 
-  @OneWay() shading?= true;
+  @OneWay() shading? = true;
 
   @OneWay() width?: number | string | (() => number| string);
 
@@ -45,6 +45,8 @@ export class OverlayProps extends WidgetProps {
     type: 'pop', duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 },
   };
 
+  @OneWay() position?: any;
+
   @OneWay() visible?: boolean = false;
 
   @OneWay() container?: string | Element;
@@ -53,7 +55,7 @@ export class OverlayProps extends WidgetProps {
 
   @OneWay() _checkParentVisibility? = false;
 
-  @OneWay() rtlEnabled?= false;
+  @OneWay() rtlEnabled? = false;
 
   @OneWay() contentTemplate?: template | ((contentElement: TElement) => string | TElement) = 'content';
 

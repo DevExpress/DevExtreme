@@ -2,6 +2,17 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
+    ValueChangedInfo
+} from './editor/editor';
+
 import dxTrackBar, {
     dxTrackBarOptions
 } from './track_bar';
@@ -9,6 +20,21 @@ import dxTrackBar, {
 import {
     format
 } from './widget/ui.widget';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxSlider>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxSlider>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxSlider>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxSlider> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxSlider> & ValueChangedInfo;
 
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**

@@ -1,6 +1,9 @@
+import Guid from '../../core/guid';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { getImageContainer } from '../../core/utils/icon';
+
+import FileManagerProgressPanel from './ui.file_manager.notification.progress_panel';
 
 const FILE_MANAGER_PROGRESS_BOX_CLASS = 'dx-filemanager-progress-box';
 const FILE_MANAGER_PROGRESS_BOX_ERROR_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-error`;
@@ -8,6 +11,7 @@ const FILE_MANAGER_PROGRESS_BOX_IMAGE_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS
 const FILE_MANAGER_PROGRESS_BOX_WRAPPER_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-wrapper`;
 const FILE_MANAGER_PROGRESS_BOX_COMMON_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-common`;
 
+const MANAGER_ID_NAME = '__operationInfoManager';
 const ACTION_PROGRESS_STATUS = {
     default: 'default',
     progress: 'progress',
@@ -16,11 +20,19 @@ const ACTION_PROGRESS_STATUS = {
 };
 
 class NotificationManagerBase {
-    constructor(options) {
-        this._isRealHandler = '__operationInfoHandler';
+    constructor({ onActionProgressStatusChanged, isActual }) {
+        this._id = new Guid().toString();
+        this._isActual = isActual || false;
         this._actionProgressStatus = ACTION_PROGRESS_STATUS.default;
-        this._raiseActionProgress = options.onActionProgressStatusChanged;
-        this._getProgressPanelComponent = options.getProgressPanelComponent;
+        this._raiseActionProgress = onActionProgressStatusChanged;
+    }
+
+    getId() {
+        return this._id;
+    }
+
+    isActual() {
+        return this._isActual;
     }
 
     createErrorDetailsProgressBox($container, item, errorText) {
@@ -74,7 +86,7 @@ class NotificationManagerBase {
 class NotificationManagerStub extends NotificationManagerBase {
     addOperation() {
         return {
-            [this._isRealHandler]: false
+            [MANAGER_ID_NAME]: this._id
         };
     }
 
@@ -90,9 +102,13 @@ class NotificationManagerStub extends NotificationManagerBase {
 
     addOperationDetailsError() {}
 
-    isDimensionChanged() { return false; }
+    handleDimensionChanged() { return false; }
 
     ensureProgressPanelCreated() {}
+
+    tryHideActionProgress() {
+        this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
+    }
 
     updateActionProgressStatus() {
         this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
@@ -117,7 +133,7 @@ class NotificationManagerStub extends NotificationManagerBase {
     set _failedOperationCount(value) {}
 }
 
-class NotificationManagerReal extends NotificationManagerStub {
+class NotificationManager extends NotificationManagerBase {
     constructor(options) {
         super(options);
 
@@ -128,29 +144,21 @@ class NotificationManagerReal extends NotificationManagerStub {
     addOperation(processingMessage, allowCancel, allowProgressAutoUpdate) {
         this._operationInProgressCount++;
         const operationInfo = this._progressPanel.addOperation(processingMessage, allowCancel, allowProgressAutoUpdate);
-        operationInfo[this._isRealHandler] = true;
+        operationInfo[MANAGER_ID_NAME] = this._id;
         this._updateActionProgress(processingMessage, ACTION_PROGRESS_STATUS.progress);
         return operationInfo;
     }
 
-    _executeIfNeeded(needExecute, actionName, ...args) {
-        if(needExecute) {
-            this._progressPanel[actionName](...args);
-        } else {
-            super[actionName](...args);
-        }
-    }
-
     addOperationDetails(operationInfo, details, showCloseButton) {
-        this._executeIfNeeded(operationInfo[this._isRealHandler], 'addOperationDetails', operationInfo, details, showCloseButton);
+        this._progressPanel.addOperationDetails(operationInfo, details, showCloseButton);
     }
 
     updateOperationItemProgress(operationInfo, itemIndex, itemProgress, commonProgress) {
-        this._executeIfNeeded(operationInfo[this._isRealHandler], 'updateOperationItemProgress', operationInfo, itemIndex, itemProgress, commonProgress);
+        this._progressPanel.updateOperationItemProgress(operationInfo, itemIndex, itemProgress, commonProgress);
     }
 
     completeOperationItem(operationInfo, itemIndex, commonProgress) {
-        this._executeIfNeeded(operationInfo[this._isRealHandler], 'completeOperationItem', operationInfo, itemIndex, commonProgress);
+        this._progressPanel.completeOperationItem(operationInfo, itemIndex, commonProgress);
     }
 
     completeOperation(operationInfo, commonText, isError, statusText) {
@@ -158,20 +166,20 @@ class NotificationManagerReal extends NotificationManagerStub {
         if(isError) {
             this._failedOperationCount++;
         }
-        this._executeIfNeeded(operationInfo[this._isRealHandler], 'completeOperation', operationInfo, commonText, isError, statusText);
+        this._progressPanel.completeOperation(operationInfo, commonText, isError, statusText);
     }
 
     completeSingleOperationWithError(operationInfo, errorInfo) {
-        this._executeIfNeeded(operationInfo[this._isRealHandler], 'completeSingleOperationWithError', operationInfo, errorInfo.detailErrorText);
-        this._notifyError(operationInfo, errorInfo);
+        this._progressPanel.completeSingleOperationWithError(operationInfo, errorInfo.detailErrorText);
+        this._notifyError(errorInfo);
     }
 
     addOperationDetailsError(operationInfo, errorInfo) {
-        this._executeIfNeeded(operationInfo[this._isRealHandler], 'addOperationDetailsError', operationInfo, errorInfo.itemIndex, errorInfo.detailErrorText);
-        this._notifyError(operationInfo, errorInfo);
+        this._progressPanel.addOperationDetailsError(operationInfo, errorInfo.itemIndex, errorInfo.detailErrorText);
+        this._notifyError(errorInfo);
     }
 
-    isDimensionChanged() {
+    handleDimensionChanged() {
         if(this._progressPanel) {
             this._progressPanel.$element().detach();
         }
@@ -190,37 +198,34 @@ class NotificationManagerReal extends NotificationManagerStub {
         }
     }
 
+    // needed for editingProgress.tests.js
+    _getProgressPanelComponent() {
+        return FileManagerProgressPanel;
+    }
+
     _onProgressPanelOperationClosed(operationInfo) {
         if(operationInfo.hasError) {
             this._failedOperationCount--;
-            this._tryHideActionProgress(operationInfo);
+            this.tryHideActionProgress(operationInfo);
         }
     }
 
-    _tryHideActionProgress(operationInfo) {
-        if(this.hasNoOperations(operationInfo)) {
-            this._updateActionProgressWrapper(operationInfo, '', ACTION_PROGRESS_STATUS.default);
+    tryHideActionProgress() {
+        if(this.hasNoOperations()) {
+            this._updateActionProgress('', ACTION_PROGRESS_STATUS.default);
         }
     }
 
     updateActionProgressStatus(operationInfo) {
-        if(operationInfo?.[this._isRealHandler]) {
+        if(operationInfo) {
             const status = this._failedOperationCount === 0 ? ACTION_PROGRESS_STATUS.success : ACTION_PROGRESS_STATUS.error;
-            this._updateActionProgressWrapper(operationInfo, '', status);
+            this._updateActionProgress('', status);
         }
     }
 
-    _notifyError(operationInfo, errorInfo) {
-        const status = this.hasNoOperations(operationInfo) ? ACTION_PROGRESS_STATUS.default : ACTION_PROGRESS_STATUS.error;
-        this._updateActionProgressWrapper(operationInfo, errorInfo.commonErrorText, status);
-    }
-
-    _updateActionProgressWrapper(operationInfo, message, status) {
-        if(operationInfo?.[this._isRealHandler]) {
-            this._updateActionProgress(message, status);
-        } else {
-            super._updateActionProgress(message, status);
-        }
+    _notifyError(errorInfo) {
+        const status = this.hasNoOperations() ? ACTION_PROGRESS_STATUS.default : ACTION_PROGRESS_STATUS.error;
+        this._updateActionProgress(errorInfo.commonErrorText, status);
     }
 
     _updateActionProgress(message, status) {
@@ -228,12 +233,8 @@ class NotificationManagerReal extends NotificationManagerStub {
         this._raiseActionProgress(message, status);
     }
 
-    hasNoOperations(operationInfo) {
-        if(operationInfo && operationInfo[this._isRealHandler]) {
-            return this._operationInProgressCount === 0 && this._failedOperationCount === 0;
-        } else {
-            return super.hasNoOperations();
-        }
+    hasNoOperations() {
+        return this._operationInProgressCount === 0 && this._failedOperationCount === 0;
     }
 
     get _operationInProgressCount() { return this._operationInProgressCountInternal; }
@@ -245,4 +246,4 @@ class NotificationManagerReal extends NotificationManagerStub {
     set _failedOperationCount(value) { this._failedOperationCountInternal = value; }
 }
 
-export { NotificationManagerReal, NotificationManagerStub };
+export { NotificationManager, NotificationManagerStub, MANAGER_ID_NAME };

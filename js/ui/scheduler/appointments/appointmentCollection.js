@@ -371,8 +371,7 @@ class SchedulerAppointments extends CollectionWidget {
         const formatText = this.invoke(
             'getTextAndFormatDate',
             model.appointmentData,
-            model.appointmentData.settings || model.targetedAppointmentData,
-            // TODO: very strange variable model.appointmentData.settings at this place
+            this._currentAppointmentSettings.agendaSettings || model.targetedAppointmentData,
             'TIME'
         );
 

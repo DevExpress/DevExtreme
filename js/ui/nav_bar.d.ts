@@ -2,10 +2,49 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
+import {
+    SelectionChangedInfo
+} from './collection/ui.collection_widget.base';
+
 import dxTabs, {
     dxTabsItem,
     dxTabsOptions
 } from './tabs';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxNavBar>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxNavBar>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxNavBar>;
+
+/** @public */
+export type ItemClickEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxNavBar> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxNavBar> & SelectionChangedInfo;
 
 export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
     /**

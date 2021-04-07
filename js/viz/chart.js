@@ -555,8 +555,9 @@ const dxChart = AdvancedChart.inherit({
         return this._argumentAxes.concat(this._valueAxes);
     },
 
-    _resetAxesAnimation(isFirstDrawing) {
-        this._getAllAxes().forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
+    _resetAxesAnimation(isFirstDrawing, isHorizontal) {
+        const axes = _isDefined(isHorizontal) ? (isHorizontal ^ this._isRotated() ? this._argumentAxes : this._valueAxes) : this._getAllAxes();
+        axes.forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
     },
 
     // for async templates. Should be fixed
@@ -919,6 +920,7 @@ const dxChart = AdvancedChart.inherit({
         const horizontalElements = rotated ? that._valueAxes : extendedArgAxes;
         const allAxes = verticalAxes.concat(horizontalAxes);
         const allElements = allAxes.concat(scrollBar);
+        const verticalAxesFirstDrawing = verticalAxes.some(v => v.isFirstDrawing());
 
         that._normalizePanesHeight();
         that._updatePanesCanvases(drawOptions);
@@ -982,8 +984,9 @@ const dxChart = AdvancedChart.inherit({
 
         const visibleSeries = that._getVisibleSeries();
         const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
+        const axesIsAnimated = axisAnimationEnabled(drawOptions, pointsToAnimation);
 
-        performActionOnAxes(allElements, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+        performActionOnAxes(allElements, 'updateSize', panesCanvases, axesIsAnimated);
 
         horizontalElements.forEach(shiftAxis('top', 'bottom'));
         verticalElements.forEach(shiftAxis('left', 'right'));
@@ -999,7 +1002,7 @@ const dxChart = AdvancedChart.inherit({
         });
 
         verticalAxes.forEach((axis, i) => {
-            if(axis.hasWrap && axis.hasWrap()) {
+            if(axis.hasWrap?.()) {
                 const title = axis.getTitle();
                 const newTitleWidth = title ? title.bBox.width : 0;
                 const offset = newTitleWidth - oldTitlesWidth[i];
@@ -1018,7 +1021,8 @@ const dxChart = AdvancedChart.inherit({
         });
 
         if(verticalAxes.some(v => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition)) {
-            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, false);
+            axesIsAnimated && that._resetAxesAnimation(verticalAxesFirstDrawing, false);
+            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, axesIsAnimated);
         }
 
         horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));

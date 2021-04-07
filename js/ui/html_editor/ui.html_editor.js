@@ -619,10 +619,6 @@ const HtmlEditor = Editor.inherit({
         return this._formDialog.popupOption.apply(this._formDialog, arguments);
     },
 
-    update: function() {
-        this._applyQuillMethod('update');
-    },
-
     focus: function() {
         this.callBase();
         this._applyQuillMethod('focus');

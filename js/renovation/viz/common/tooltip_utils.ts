@@ -322,9 +322,9 @@ export function getCloudAngle(
 }
 
 export function prepareData(
-  data?: TooltipData, color?: string,
-  border?: InitialBorder,
-  font?: Font,
+  data: TooltipData, color: string,
+  border: InitialBorder,
+  font: Font,
   customizeTooltip?: CustomizeTooltipFn,
 ): CustomizedOptions {
   let customize = {} as CustomizedOptions;
@@ -340,11 +340,11 @@ export function prepareData(
     }
   }
   if (!('text' in customize) && !('html' in customize)) {
-    customize.text = data?.valueText || data?.description || '';
+    customize.text = data.valueText || data.description || '';
   }
   customize.color = customize.color || color;
-  customize.borderColor = customize.borderColor || border?.color;
-  customize.fontColor = customize.fontColor || font?.color;
+  customize.borderColor = customize.borderColor || border.color;
+  customize.fontColor = customize.fontColor || font.color;
   return customize as CustomizedOptions;
 }
 

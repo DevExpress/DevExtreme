@@ -2,9 +2,32 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
 import Editor, {
-    EditorOptions
+    EditorOptions,
+    ValueChangedInfo
 } from './editor/editor';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxCheckBox>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxCheckBox>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxCheckBox>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxCheckBox> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxCheckBox> & ValueChangedInfo;
 
 export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     /**

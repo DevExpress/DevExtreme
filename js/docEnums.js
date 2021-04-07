@@ -1207,3 +1207,8 @@
  * @typedef {string} Enums.GridPagerPageSize
  * @enum {'all'}
  */
+
+/**
+ * @typedef {string} Enums.GridDataChangeType
+ * @enum {'insert' | 'update' | 'remove'}
+ */

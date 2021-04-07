@@ -11,12 +11,24 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
+    TEvent,
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxDrawer>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxDrawer>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxDrawer> & ChangedOptionInfo;
 
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**

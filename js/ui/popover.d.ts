@@ -15,13 +15,45 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    TEvent
+    TEvent,
+    Cancelable,
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxPopup, {
     dxPopupAnimation,
-    dxPopupOptions
+    dxPopupOptions,
+    TitleRenderedInfo
 } from './popup';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxPopover>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxPopover>;
+
+/** @public */
+export type HidingEvent = ComponentEvent<dxPopover> & Cancelable;
+
+/** @public */
+export type HiddenEvent = ComponentEvent<dxPopover>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxPopover>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxPopover> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = ComponentEvent<dxPopover>;
+
+/** @public */
+export type ShownEvent = ComponentEvent<dxPopover>;
+
+/** @public */
+export type TitleRenderedEvent = ComponentEvent<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
