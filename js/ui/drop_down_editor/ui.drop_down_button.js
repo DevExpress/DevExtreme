@@ -38,7 +38,6 @@ export default class ClearButton extends TextEditorButton {
 
         this._addToContainer($element);
 
-        this.updateCurrentTemplate();
         const instance = editor._createComponent($element, Button, extend({}, options, { elementAttr: { 'aria-label': messageLocalization.format(BUTTON_MESSAGE) } }));
 
         this._legacyRender(editor.$element(), $element, options.visible);
@@ -53,17 +52,17 @@ export default class ClearButton extends TextEditorButton {
         const { editor } = this;
         const visible = this._isVisible();
         const isReadOnly = editor.option('readOnly');
-        const template = editor._getTemplateByOption('dropDownButtonTemplate');
-
-        return {
+        const options = {
             focusStateEnabled: false,
             hoverStateEnabled: false,
             activeStateEnabled: false,
             useInkRipple: false,
             disabled: isReadOnly,
-            visible,
-            template
+            visible
         };
+
+        this.updateCurrentTemplate(options);
+        return options;
     }
 
     _isVisible() {
@@ -87,8 +86,13 @@ export default class ClearButton extends TextEditorButton {
         return this.editor.option('dropDownButtonTemplate') === this.currentTemplate;
     }
 
-    updateCurrentTemplate() {
-        this.currentTemplate = this.editor.option('dropDownButtonTemplate');
+    updateCurrentTemplate(options) {
+        if(!this.isSameTemplate()) {
+            const { editor } = this;
+
+            options.template = editor._getTemplateByOption('dropDownButtonTemplate');
+            this.currentTemplate = editor.option('dropDownButtonTemplate');
+        }
     }
 
     update() {
@@ -99,7 +103,6 @@ export default class ClearButton extends TextEditorButton {
             const $editor = editor.$element();
             const options = this._getOptions();
 
-            this.isSameTemplate() ? delete options.template : this.updateCurrentTemplate();
             instance?.option(options);
             this._legacyRender($editor, instance?.$element(), options.visible);
         }
