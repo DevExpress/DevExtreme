@@ -12,6 +12,7 @@ import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
 import holdEvent from '../../events/hold';
 import Selection from '../selection/selection';
 import { Deferred } from '../../core/utils/deferred';
+import errors from '../widget/ui.errors';
 
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
 const ROW_CLASS = 'dx-row';
@@ -102,6 +103,11 @@ const SelectionController = gridCore.Controller.inherit((function() {
             this._selectionMode = this.option(SELECTION_MODE);
             this._isSelectionWithCheckboxes = false;
 
+            const deferred = this.option('selection.deferred');
+            if(this.option('scrolling.mode') === 'infinite' && !deferred && this._selectionMode === 'multiple') {
+                errors.log('W1018');
+            }
+
             this._selection = this._createSelection();
             this._updateSelectColumn();
             this.createAction('onSelectionChanged', { excludeValidators: ['disabled', 'readOnly'] });
@@ -145,10 +151,6 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     return dataController.getCombinedFilter();
                 },
                 totalCount: () => {
-                    if(this.option('scrolling.mode') === 'infinite') {
-                        return dataController.items().filter(item => item.rowType === 'data').length;
-                    }
-
                     return dataController.totalCount();
                 },
                 onSelectionChanged: this._updateSelectedItems.bind(this)
