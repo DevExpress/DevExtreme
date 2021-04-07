@@ -20,7 +20,8 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
 
     _getDurationInDays(startDate, endDate) {
         const adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
-        return (adjustedDuration / dateUtils.dateToMilliseconds('day')) || ZERO_APPOINTMENT_DURATION_IN_DAYS;
+//         return (adjustedDuration / dateUtils.dateToMilliseconds('day')) || ZERO_APPOINTMENT_DURATION_IN_DAYS;
+        return ZERO_APPOINTMENT_DURATION_IN_DAYS;
     }
 
     getDeltaTime(args, initialSize) {
