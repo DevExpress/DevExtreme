@@ -64,8 +64,11 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
                 height: height,
                 width: '100%',
                 sortedIndex: sortedIndex++,
-                groupIndex: this._calculateGroupIndex(index, appointmentsByResources)
+                groupIndex: this._calculateGroupIndex(index, appointmentsByResources),
+                agendaSettings: appt.settings
             }]);
+
+            delete appt.settings;
         }.bind(this));
 
         return result;
