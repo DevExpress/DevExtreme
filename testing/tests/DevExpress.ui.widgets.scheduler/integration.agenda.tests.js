@@ -320,22 +320,6 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.ok($appointmentAllDayTitle.is(':visible'), 'AllDay title is visible');
     });
 
-    test('Appointment parts should have appointmentSettings field', function(assert) {
-        this.createInstance({
-            views: ['agenda'],
-            currentView: 'agenda',
-            currentDate: new Date(2016, 1, 24),
-            dataSource: [
-                { startDate: new Date(2016, 1, 22, 1), endDate: new Date(2016, 2, 4, 1, 30) }
-            ]
-        });
-
-        const $appointments = this.instance.$element().find('.dx-scheduler-appointment');
-
-        assert.ok(dataUtils.data($appointments.get(1), 'dxItemData').settings, 'Appointment part has special field for settings');
-        assert.equal(dataUtils.data($appointments.get(1), 'dxItemData').settings.startDate.getTime(), new Date(2016, 1, 25, 0).getTime(), 'Current date of appointment part is OK');
-        assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData').startDate, dataUtils.data($appointments.get(1), 'dxItemData').startDate, 'Appointments data is OK');
-    });
 
     test('Agenda should contain a right quantity of recurrence appointments', function(assert) {
         this.createInstance({
