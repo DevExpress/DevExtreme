@@ -48,8 +48,8 @@ interface AppointmentDraggingEvent {
   readonly fromData?: any;
 }
 
-interface AppointmentTemplateDataModel {
-  readonly appointmentData?: any;
+interface TargetedAppointmentInfo {
+  readonly appointmentData: any;
   readonly targetedAppointmentData?: any;
 }
 
@@ -66,23 +66,17 @@ export type AppointmentAddingEvent = ComponentEvent<dxScheduler> & {
 }
 
 /** @public */
-export type AppointmentClickEvent = Cancelable & ComponentNativeEvent<dxScheduler> & {
-  readonly appointmentData: any;
-  readonly targetedAppointmentData?: any;
+export type AppointmentClickEvent = Cancelable & ComponentNativeEvent<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: TElement;
 }
 
 /** @public */
-export type AppointmentContextMenuEvent = ComponentNativeEvent<dxScheduler> & {
-  readonly appointmentData: any;
-  readonly targetedAppointmentData?: any;
+export type AppointmentContextMenuEvent = ComponentNativeEvent<dxScheduler> & TargetedAppointmentInfo &{
   readonly appointmentElement: TElement;
 }
 
 /** @public */
-export type AppointmentDblClickEvent = Cancelable & ComponentNativeEvent<dxScheduler> & {
-  readonly appointmentData: any;
-  readonly targetedAppointmentData?: any;
+export type AppointmentDblClickEvent = Cancelable & ComponentNativeEvent<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: TElement;
 }
 
@@ -106,9 +100,7 @@ export type AppointmentFormOpeningEvent = Cancelable & ComponentEvent<dxSchedule
 }
 
 /** @public */
-export type AppointmentRenderedEvent = ComponentEvent<dxScheduler> & {
-  readonly appointmentData: any;
-  readonly targetedAppointmentData?: any;
+export type AppointmentRenderedEvent = ComponentEvent<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: TElement;
 }
 
@@ -180,10 +172,10 @@ export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
 }
 
 /** @public */
-export type AppointmentTemplateData = AppointmentTemplateDataModel;
+export type AppointmentTemplateData = TargetedAppointmentInfo;
 
 /** @public */
-export type AppointmentTooltipTemplateData = AppointmentTemplateDataModel;
+export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
 
 /** @public */
 export type AppointmentCollectorTemplateData = {
