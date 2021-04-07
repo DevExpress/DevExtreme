@@ -312,6 +312,7 @@ export default class FileItemsController {
         this._raiseEditActionResultAcquired(actionInfo);
         this._raiseEditActionError(actionInfo, {
             errorId: errorInfo.errorId,
+            errorText: errorInfo.errorText,
             fileItem: parentDirectoryInfo.fileItem,
             index: 0
         });
