@@ -660,6 +660,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @docid
      * @type_function_param1 container:dxElement
      * @type_function_param2 task:any
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -675,6 +676,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param2_field5 taskPosition:object
      * @type_function_param2_field6 taskResources:Array<object>
      * @type_function_param2_field7 taskSize:object
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

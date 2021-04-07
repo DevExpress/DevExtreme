@@ -12,9 +12,12 @@ export interface ComponentOptions<T = Component> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onDisposing?: ((e: { component?: T }) => void);
+  onDisposing?: ((e: { component: T }) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
+   * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 element:TElement
    * @default null
    * @prevFileNamespace DevExpress.core
    * @public
@@ -22,6 +25,11 @@ export interface ComponentOptions<T = Component> {
   onInitialized?: ((e: { component?: T, element?: TElement }) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
+   * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 name:string
+   * @type_function_param1_field3 fullName:string
+   * @type_function_param1_field4 value:any
    * @default null
    * @action
    * @prevFileNamespace DevExpress.core

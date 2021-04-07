@@ -36,8 +36,7 @@ import {
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
 
 import {
-  ensureLocation, normalizeCoordinate,
-  getContainerOffsetInternal,
+  ensureLocation, normalizeCoordinate, getMaxScrollOffset,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
 } from './scrollable_utils';
 
@@ -56,6 +55,7 @@ import {
   SCROLLABLE_DISABLED_CLASS,
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_SCROLLBARS_HIDDEN,
+  TopPocketState,
 } from './common/consts';
 
 import { Scrollbar } from './scrollbar';
@@ -73,7 +73,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     horizontalScrollbarRef, verticalScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
     windowResizeHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
-    scrollableRef, isLoadPanelVisible,
+    scrollableRef, isLoadPanelVisible, topPocketState,
     props: {
       disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -105,6 +105,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
               pullingDownText={pullingDownText}
               pulledDownText={pulledDownText}
               refreshingText={refreshingText}
+              pocketState={topPocketState}
               useNative
               visible={!!pullDownEnabled}
             />
@@ -197,6 +198,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @InternalState() contentClientHeight = 0;
 
   @InternalState() needForceScrollbarsVisibility = false;
+
+  @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
 
   @InternalState() isLoadPanelVisible = false;
 
@@ -307,11 +310,11 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   scrollOffset(): ScrollableLocation {
-    const { rtlEnabled } = this.props;
-    const { left, top } = getContainerOffsetInternal(this.containerRef.current!);
+    const maxScrollLeftOffset = getMaxScrollOffset('width', this.containerRef.current!);
+
     return {
-      left: getPublicCoordinate('left', left, this.containerRef.current!, rtlEnabled),
-      top: getPublicCoordinate('top', top, this.containerRef.current!, rtlEnabled),
+      left: getPublicCoordinate('left', this.containerRef.current!.scrollLeft, maxScrollLeftOffset, this.props.rtlEnabled),
+      top: this.containerRef.current!.scrollTop,
     };
   }
 
@@ -358,7 +361,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return {
       event: this.eventForUserAction,
       scrollOffset: this.scrollOffset(),
-      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef.current!),
+      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef.current!, 0),
     };
   }
 
@@ -531,8 +534,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const contentEl = this.contentRef.current;
     const containerEl = this.containerRef.current;
 
-    const isOverflowVertical = contentEl!.clientHeight > containerEl!.clientHeight;
-    const isOverflowHorizontal = contentEl!.clientWidth > containerEl!.clientWidth;
+    const isOverflowVertical = (isVertical && contentEl!.clientHeight > containerEl!.clientHeight)
+      || this.props.pullDownEnabled;
+    const isOverflowHorizontal = (isHorizontal && contentEl!.clientWidth > containerEl!.clientWidth)
+      || this.props.pullDownEnabled;
 
     if (isBoth && isOverflowVertical && isOverflowHorizontal) {
       return DIRECTION_BOTH;

@@ -10,6 +10,12 @@ import {
     template
 } from '../core/templates/template';
 
+import {
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
 import dxButton, {
     dxButtonOptions
 } from './button';
@@ -39,6 +45,44 @@ import {
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxForm>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxForm>;
+
+/** @public */
+export type EditorEnterKeyEvent = ComponentEvent<dxForm> & {
+    readonly dataField?: string;
+}
+
+/** @public */
+export type FieldDataChangedEvent = ComponentEvent<dxForm> & {
+    readonly dataField?: string;
+    readonly value?: any;
+}
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxForm>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxForm> & ChangedOptionInfo;
+
+/** @public */
+export type GroupItemTemplateData = {
+    readonly component: dxForm;
+    readonly formData?: any;
+}
+
+/** @public */
+export type SimpleItemTemplateData = {
+    readonly component: dxForm;
+    readonly dataField?: string;
+    readonly editorOptions?: any;
+    readonly editorType?: string;
+    readonly name?: string;
+}
 
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
@@ -78,7 +122,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => any);
+    customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void);
     /**
      * @docid
      * @default {}
@@ -115,22 +159,28 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
+     * @type_function_param1_field1 component:dxForm
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorEnterKey?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string }) => void);
+    onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @type_function_param1_field5 value:object
+     * @type_function_param1_field1 component:dxForm
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFieldDataChanged?: ((e: { component?: dxForm, element?: TElement, model?: any, dataField?: string, value?: any }) => void);
+    onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
     /**
      * @docid
      * @default "optional"
@@ -518,7 +568,7 @@ export interface dxFormGroupItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: { component?: dxForm, formData?: any }, itemElement: TElement) => string | TElement);
+    template?: template | ((data: GroupItemTemplateData, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default true
@@ -659,7 +709,7 @@ export interface dxFormSimpleItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: TElement) => string | TElement);
+    template?: template | ((data: SimpleItemTemplateData, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default undefined

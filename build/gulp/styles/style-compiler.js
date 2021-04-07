@@ -8,7 +8,8 @@ const plumber = require('gulp-plumber');
 const sass = require('gulp-dart-sass');
 
 const fiber = require('fibers');
-const cleanCss = require('gulp-clean-css');
+const CleanCss = require('clean-css');
+const through = require('through2');
 const autoPrefix = require('gulp-autoprefixer');
 const parseArguments = require('minimist');
 
@@ -37,7 +38,13 @@ const compileBundles = (bundles) => {
             functions
         }))
         .pipe(autoPrefix())
-        .pipe(cleanCss(cleanCssOptions))
+        .pipe(through.obj((file, enc, callback) => {
+            const content = file.contents.toString();
+            new CleanCss(cleanCssOptions).minify(content, (_, css) => {
+                file.contents = new Buffer.from(css.styles);
+                callback(null, file);
+            });
+        }))
         .pipe(starLicense())
         .pipe(replace(/([\s\S]*)(@charset.*?;\s)/, '$2$1'))
         .pipe(dest(cssArtifactsPath));
