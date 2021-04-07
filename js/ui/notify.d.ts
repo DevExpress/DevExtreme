@@ -28,7 +28,5 @@ declare function notify(message: string, type?: string, displayTime?: number): v
  */
 declare function notify(options: any, type?: string, displayTime?: number): void;
 
-/**
- * @public
- */
+/** @public */
 export default notify;

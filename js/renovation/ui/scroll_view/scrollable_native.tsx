@@ -55,6 +55,7 @@ import {
   SCROLLABLE_DISABLED_CLASS,
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_SCROLLBARS_HIDDEN,
+  TopPocketState,
 } from './common/consts';
 
 import { Scrollbar } from './scrollbar';
@@ -72,7 +73,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     horizontalScrollbarRef, verticalScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
     windowResizeHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
-    scrollableRef, isLoadPanelVisible,
+    scrollableRef, isLoadPanelVisible, topPocketState,
     props: {
       disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -104,6 +105,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
               pullingDownText={pullingDownText}
               pulledDownText={pulledDownText}
               refreshingText={refreshingText}
+              pocketState={topPocketState}
               useNative
               visible={!!pullDownEnabled}
             />
@@ -196,6 +198,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @InternalState() contentClientHeight = 0;
 
   @InternalState() needForceScrollbarsVisibility = false;
+
+  @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
 
   @InternalState() isLoadPanelVisible = false;
 
@@ -530,8 +534,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const contentEl = this.contentRef.current;
     const containerEl = this.containerRef.current;
 
-    const isOverflowVertical = contentEl!.clientHeight > containerEl!.clientHeight;
-    const isOverflowHorizontal = contentEl!.clientWidth > containerEl!.clientWidth;
+    const isOverflowVertical = (isVertical && contentEl!.clientHeight > containerEl!.clientHeight)
+      || this.props.pullDownEnabled;
+    const isOverflowHorizontal = (isHorizontal && contentEl!.clientWidth > containerEl!.clientWidth)
+      || this.props.pullDownEnabled;
 
     if (isBoth && isOverflowVertical && isOverflowHorizontal) {
       return DIRECTION_BOTH;

@@ -7,8 +7,40 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
+
+export interface ResizeInfo {
+    readonly width: number;
+    readonly height: number;
+    handles: {
+        readonly left: boolean;
+        readonly top: boolean;
+        readonly right: boolean;
+        readonly bottom: boolean;
+    }
+}
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxResizable>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxResizable>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxResizable> & ChangedOptionInfo;
+
+/** @public */
+export type ResizeEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
+
+/** @public */
+export type ResizeStartEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
+
+/** @public */
+export type ResizeEndEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
 
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
@@ -62,11 +94,14 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
      * @type_function_param1_field6 height:number
+     * @type_function_param1_field1 component:dxResizable
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => void);
+    onResize?: ((e: ResizeEvent) => void);
     /**
      * @docid
      * @default null
@@ -74,11 +109,14 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
      * @type_function_param1_field6 height:number
+     * @type_function_param1_field1 component:dxResizable
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => void);
+    onResizeEnd?: ((e: ResizeEndEvent) => void);
     /**
      * @docid
      * @default null
@@ -86,11 +124,14 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
      * @type_function_param1_field6 height:number
+     * @type_function_param1_field1 component:dxResizable
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: dxResizable, element?: TElement, model?: any, event?: TEvent, width?: number, height?: number }) => void);
+    onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
      * @docid
      * @type_function_return number|string
