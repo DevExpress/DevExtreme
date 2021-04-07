@@ -793,15 +793,12 @@ export const virtualScrollingModule = {
 
                         const pageIndex = !isVirtualMode(this) && that.pageIndex() >= that.pageCount() ? that.pageCount() - 1 : that.pageIndex();
                         that._rowPageIndex = Math.ceil(pageIndex * that.pageSize() / that.getRowPageSize());
+                        that._uncountableItemCount = 0;
 
                         that._visibleItems = that.option(NEW_SCROLLING_MODE) ? null : [];
 
                         const isItemCountable = function(item) {
                             return isItemCountableByDataSource(item, that._dataSource);
-                        };
-
-                        const isItemNonCountable = function(item) {
-                            return !isItemCountable(item);
                         };
 
                         that._rowsScrollController = new VirtualScrollController(that.component, {
@@ -810,7 +807,7 @@ export const virtualScrollingModule = {
                             },
                             totalItemsCount: function() {
                                 if(that.option(NEW_SCROLLING_MODE)) {
-                                    return that.totalItemsCount() + that._items.filter(isItemNonCountable).length;
+                                    return that.totalItemsCount() + that._uncountableItemCount;
                                 }
 
                                 return isVirtualMode(that) ? that.totalItemsCount() : that._items.filter(isItemCountable).length;
@@ -969,8 +966,14 @@ export const virtualScrollingModule = {
                             }
                         }
                     },
+                    _updateLoadViewportParams: function() {
+                        this._loadViewportParams = this._rowsScrollController.getViewportParams();
+                    },
                     _afterProcessItems: function(items, change) {
+                        this._uncountableItemCount = 0;
                         if(isDefined(this._loadViewportParams)) {
+                            this._uncountableItemCount = items.filter(item => !isItemCountableByDataSource(item, this._dataSource)).length;
+                            this._updateLoadViewportParams();
                             const { skipForCurrentPage } = this.getLoadPageParams();
                             change.repaintChangesOnly = change.changeType === 'refresh';
 
@@ -1092,7 +1095,7 @@ export const virtualScrollingModule = {
                     },
                     loadViewport: function() {
                         if(isVirtualMode(this)) {
-                            this._loadViewportParams = this._rowsScrollController.getViewportParams();
+                            this._updateLoadViewportParams();
                             const { pageIndex, loadPageCount } = this.getLoadPageParams();
 
                             this._dataSource.pageIndex(pageIndex);
