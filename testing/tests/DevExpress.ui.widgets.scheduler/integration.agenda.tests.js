@@ -1213,11 +1213,6 @@ module('Integration: Agenda', moduleConfig, () => {
             currentDate: new Date(2016, 10, 5),
             firstDayOfWeek: 1,
             height: 300,
-            onAppointmentRendered: function(e) {
-                const targetedAppointmentData = e.targetedAppointmentData;
-                assert.equal(targetedAppointmentData.settings.startDate.getDate(), 10, 'Appointment start date is OK');
-                assert.equal(targetedAppointmentData.settings.endDate.getDate(), 10, 'Appointment end date is OK');
-            },
             dataSource: [{
                 text: 'test-rec',
                 startDate: new Date(2016, 10, 3, 9, 0),
