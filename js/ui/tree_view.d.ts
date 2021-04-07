@@ -90,6 +90,8 @@ export type ItemRenderedEvent = ComponentNativeEvent<dxTreeView> & {
 export type ItemSelectionChangedEvent = ComponentEvent<dxTreeView> & {
     readonly node?: dxTreeViewNode;
     readonly itemElement?: TElement;
+    readonly itemData?: any;
+    readonly itemIndex?: number;
 }
 
 /** @public */
