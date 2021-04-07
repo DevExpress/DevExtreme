@@ -4843,6 +4843,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
                 rowPageSize: 5
             }
         });
+
         this.dataController.init();
         this.setupDataSource({
             data: getData(200),
@@ -4854,21 +4855,21 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // assert
         assert.strictEqual(this.dataController.dataSource().loadPageCount(), 1, 'initial load page count');
-        assert.strictEqual(this.dataController.items().length, 10, 'initial loaded items count');
+        assert.strictEqual(this.dataController.items().length, 10, 'initial visible items count');
 
         // act
         this.dataController.setViewportPosition(500);
         this.clock.tick();
         const visibleItems = this.dataController.items();
-        const loadedItems = this.dataController.items(true);
+        const loadedItems = this.dataController.dataSource().items();
 
         // assert
         assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 5 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
         assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
         assert.equal(loadedItems.length, 30, 'loaded items count');
-        assert.deepEqual(loadedItems[0].data, { id: 21, name: 'Name 21' }, 'first loaded item');
-        assert.deepEqual(loadedItems[29].data, { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
+        assert.deepEqual(loadedItems[29], { id: 50, name: 'Name 50' }, 'last loaded item');
         assert.equal(visibleItems.length, 16, 'visible items count');
         assert.deepEqual(visibleItems[0].data, { id: 26, name: 'Name 26' }, 'first visible item');
         assert.deepEqual(visibleItems[15].data, { id: 41, name: 'Name 41' }, 'last visible item');
