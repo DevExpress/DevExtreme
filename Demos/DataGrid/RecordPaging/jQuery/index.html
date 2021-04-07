@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>DevExtreme Demo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -8,13 +9,36 @@
     <script src="../../../../../node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.common.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
     <script src="data.js"></script>
     <script src="index.js"></script>
 </head>
+
 <body class="dx-viewport">
     <div class="demo-container">
-        <div id="gridContainer"></div>
+        <div id="data-grid-demo">
+            <div id="gridContainer"></div>
+            <div class="options">
+                <div class="caption">Options</div>
+                <div class="option-container">
+                    <div class="option">
+                        <span class="option-caption">Display Mode</span>
+                        <div id="displayMode"></div>
+                    </div>
+                    <div class="option">
+                        <div id="showPageSizes"></div>
+                    </div>
+                    <div class="option">
+                        <div id="showInfo"></div>
+                    </div>
+                    <div class="option">
+                        <div id="showNavButtons"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
+
 </html>

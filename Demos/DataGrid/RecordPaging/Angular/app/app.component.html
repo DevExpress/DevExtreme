@@ -1,17 +1,55 @@
 <dx-data-grid 
-    id="gridContainer"
-    [dataSource]="dataSource"
-    [showBorders]="true">    
-    <dxo-paging [pageSize]="10"></dxo-paging>
+    id="gridContainer" 
+    [dataSource]="dataSource" 
+    [showBorders]="true">
+    <dxo-scrolling 
+        rowRenderingMode="virtual">
+    </dxo-scrolling>
+    <dxo-paging 
+        [pageSize]="10">
+    </dxo-paging>
     <dxo-pager 
-        [showPageSizeSelector]="true"
-        [allowedPageSizes]="[5, 10, 20]"
-        [showInfo]="true">
+        [visible]="true" 
+        [allowedPageSizes]="allowedPageSizes" 
+        [displayMode]="displayMode"
+        [showPageSizeSelector]="showPageSizeSelector" 
+        [showInfo]="showInfo" 
+        [showNavigationButtons]="showNavButtons">
     </dxo-pager>
-    
-    <dxi-column dataField="CompanyName"></dxi-column>
-    <dxi-column dataField="City"></dxi-column>
-    <dxi-column dataField="State"></dxi-column>
-    <dxi-column dataField="Phone"></dxi-column>
-    <dxi-column dataField="Fax"></dxi-column>
 </dx-data-grid>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option-container">
+        <div class="option">
+            <span class="option-caption">Display Mode</span>
+            <dx-select-box 
+                id="displayModes"
+                [items]="displayModes" 
+                [(value)]="displayMode">
+            </dx-select-box>
+        </div>
+        <div class="option">
+            <dx-check-box 
+                id="showPageSizes"
+                text="Show Page Size Selector" 
+                [(value)]="showPageSizeSelector">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box 
+                id="showInfo"
+                text="Show Info Text" 
+                [disabled]="isCompactMode" 
+                [(value)]="showInfo">
+            </dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box 
+                id="showNavButtons"
+                text="Show Navigation Buttons" 
+                [disabled]="isCompactMode" 
+                [(value)]="showNavButtons">
+            </dx-check-box>
+        </div>
+    </div>
+</div>

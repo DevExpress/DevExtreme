@@ -8,6 +8,7 @@
     <script src="../../../../../node_modules/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.common.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="../../../../../node_modules/angular/angular.min.js"></script>
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
     <script src="data.js"></script>
@@ -16,6 +17,24 @@
 <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
         <div id="gridContainer" dx-data-grid="dataGridOptions"></div>
+        <div class="options">
+            <div class="caption">Options</div>
+            <div class="option-container">
+                <div class="option">
+                    <span class="option-caption">Display Mode</span>
+                    <div id="displayMode" dx-select-box="displayModeOptions"></div>
+                </div>
+                <div class="option">
+                    <div id="showPageSizes" dx-check-box="showPageSizesOptions"></div>
+                </div>
+                <div class="option">
+                    <div id="showInfo" dx-check-box="showInfoOptions"></div>
+                </div>
+                <div class="option">
+                    <div id="showNavButtons" dx-check-box="showNavButtonsOptions"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule } from 'devextreme-angular';
-import { Service, Company } from './app.service';
+import { DxDataGridModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { Service, Employee } from './app.service';
 
 if(!/localhost/.test(document.location.host)) {
     enableProdMode();
@@ -11,20 +11,29 @@ if(!/localhost/.test(document.location.host)) {
 @Component({
     selector: 'demo-app',
     templateUrl: 'app/app.component.html',
-    providers: [Service]
+    providers: [Service],
+    styleUrls: ['app/app.component.css']
 })
 export class AppComponent {
-    dataSource: Company[];
-
+    dataSource: Employee[];
+    readonly allowedPageSizes = [5, 10, 'all'];
+    readonly displayModes = ["full", "compact"];
+    displayMode = "full";
+    showPageSizeSelector = true;
+    showInfo = true;
+    showNavButtons = true;
+    get isCompactMode() {
+        return this.displayMode === "compact";
+    }
     constructor(service: Service) {
-        this.dataSource = service.getCompanies();
+        this.dataSource = service.generateData(100000);
     }
 }
 
 @NgModule({
     imports: [
         BrowserModule,
-        DxDataGridModule
+        DxDataGridModule,DxCheckBoxModule, DxSelectBoxModule
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]
