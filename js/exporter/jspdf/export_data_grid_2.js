@@ -26,6 +26,12 @@ function exportDataGrid(doc, dataGrid, options) {
                     if(options.onCellExporting) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
+                    if(isDefined(options.columnWidths)) {
+                        const width = options.columnWidths[cellIndex];
+                        if(width && !pdfCell.skip && !pdfCell.rect.w) {
+                            pdfCell.rect.w = width;
+                        }
+                    }
                     currentRow.push(pdfCell);
                 }
 
