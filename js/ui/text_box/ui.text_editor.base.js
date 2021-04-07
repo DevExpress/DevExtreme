@@ -214,7 +214,6 @@ const TextEditorBase = Editor.inherit({
     },
 
     _render: function() {
-        this._renderLabel();
         this._renderPlaceholder();
         this._refreshValueChangeEvent();
         this._renderEvents();
@@ -449,8 +448,9 @@ const TextEditorBase = Editor.inherit({
             this._$label = null;
         }
 
-        this.$element().removeClass(TEXTEDITOR_WITH_LABEL_CLASS);
-        this.$element().removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS);
+        this.$element()
+            .removeClass(TEXTEDITOR_WITH_LABEL_CLASS)
+            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS);
 
         if(!this.option('label') || this.option('labelMode') === 'hidden') return;
 

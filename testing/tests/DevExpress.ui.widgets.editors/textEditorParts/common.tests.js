@@ -483,6 +483,15 @@ QUnit.module('label option', {}, () => {
         assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 1, 'a label renders if the option is specified');
         assert.ok($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
         assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+    });
+
+    QUnit.test('change label mode in Generic theme', function(assert) {
+        const $container = $('#texteditor');
+        const textEditor = $container
+            .dxTextEditor({
+                label: 'Label'
+            })
+            .dxTextEditor('instance');
 
         textEditor.option('labelMode', 'floating');
         assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
@@ -515,9 +524,20 @@ QUnit.module('label option', {}, () => {
         assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
         assert.ok($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container has floating class');
 
-        textEditor.option('labelMode', 'floating');
-        assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
-        assert.ok($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container has floating class');
+        themes.isMaterial = realIsMaterial;
+    });
+
+    QUnit.test('change label mode in Material theme', function(assert) {
+        const realIsMaterial = themes.isMaterial;
+        themes.isMaterial = () => {
+            return true;
+        };
+        const $container = $('#texteditor');
+        const textEditor = $container
+            .dxTextEditor({
+                label: 'Label'
+            })
+            .dxTextEditor('instance');
 
         textEditor.option('labelMode', 'static');
         assert.ok($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');

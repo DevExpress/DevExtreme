@@ -8,6 +8,9 @@ const TEXTEDITOR_CLASS = 'dx-texteditor';
 const INPUT_CLASS = 'dx-texteditor-input';
 const CONTAINER_CLASS = 'dx-texteditor-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
+const LABEL_CLASS = 'dx-texteditor-label';
+const WITH_LABEL_CLASS = 'dx-texteditor-with-label';
+const WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
@@ -17,8 +20,11 @@ module('Basic markup', () => {
     test('basic init', function(assert) {
         const element = $('#texteditor').dxTextEditor();
         assert.ok(element.hasClass(TEXTEDITOR_CLASS));
+        assert.notOk(element.hasClass(WITH_LABEL_CLASS));
+        assert.notOk(element.hasClass(WITH_FLOATING_LABEL_CLASS));
         assert.equal(element.children().length, 1);
         assert.equal(element.find(`.${PLACEHOLDER_CLASS}`).length, 1);
+        assert.equal(element.find(`.${LABEL_CLASS}`).length, 0);
         assert.equal(element.find(`.${INPUT_CLASS}`).length, 1);
         assert.equal(element.find(`.${CONTAINER_CLASS}`).length, 1);
     });
@@ -34,6 +40,35 @@ module('Basic markup', () => {
         const placeholder = $inputContainer.find(`.${PLACEHOLDER_CLASS}`);
         assert.strictEqual(placeholder.length, 1, 'placeholder is in the input container');
         assert.notOk(placeholder.hasClass(STATE_INVISIBLE_CLASS), 'placeholder is visible when editor hasn\'t a value');
+    });
+
+    test('init with static label', function(assert) {
+        const element = $('#texteditor').dxTextEditor({
+            label: 'Label'
+        });
+
+        const $inputContainer = element.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
+        assert.strictEqual($inputContainer.length, 1, 'input container is rendered');
+
+        const label = $inputContainer.find(`.${LABEL_CLASS}`);
+        assert.strictEqual(label.length, 1, 'label is in the element');
+        assert.ok(element.hasClass(WITH_LABEL_CLASS), 'text editor has ' + WITH_LABEL_CLASS);
+        assert.notOk(element.hasClass(WITH_FLOATING_LABEL_CLASS), 'text editor hasn\'t ' + WITH_FLOATING_LABEL_CLASS);
+    });
+
+    test('init with floating label', function(assert) {
+        const element = $('#texteditor').dxTextEditor({
+            label: 'Label',
+            labelMode: 'floating'
+        });
+
+        const $inputContainer = element.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
+        assert.strictEqual($inputContainer.length, 1, 'input container is rendered');
+
+        const label = $inputContainer.find(`.${LABEL_CLASS}`);
+        assert.strictEqual(label.length, 1, 'label is in the element');
+        assert.notOk(element.hasClass(WITH_LABEL_CLASS), 'text editor hasn\'t ' + WITH_LABEL_CLASS);
+        assert.ok(element.hasClass(WITH_FLOATING_LABEL_CLASS), 'text editor hasn ' + WITH_FLOATING_LABEL_CLASS);
     });
 
     test('init with options', function(assert) {
