@@ -67,6 +67,8 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
                 groupIndex: this._calculateGroupIndex(index, appointmentsByResources),
                 agendaSettings: appt.settings
             }]);
+
+            delete appt.settings;
         }.bind(this));
 
         return result;
