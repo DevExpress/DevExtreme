@@ -10,10 +10,42 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxToolbar>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxToolbar>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxToolbar>;
+
+/** @public */
+export type ItemClickEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxToolbar> & ChangedOptionInfo;
 
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**

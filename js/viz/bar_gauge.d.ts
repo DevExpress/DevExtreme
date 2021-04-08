@@ -12,6 +12,13 @@ import {
 } from '../core/templates/template';
 
 import {
+    Cancelable,
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
     format
 } from '../ui/widget/ui.widget';
 
@@ -24,7 +31,10 @@ import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 /**
@@ -65,6 +75,40 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
      */
     item?: BarGaugeBarInfo;
 }
+
+export interface TooltipInfo {
+    target?: any;
+}
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxBarGauge>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxBarGauge>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxBarGauge>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxBarGauge> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxBarGauge>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxBarGauge> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxBarGauge>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxBarGauge> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxBarGauge> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxBarGauge> & TooltipInfo;
 
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
@@ -195,24 +239,30 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxBarGauge
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
+    onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxBarGauge
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
+    onTooltipShown?: ((e: TooltipShownEvent) => void);
     /**
      * @docid
      * @extends CommonVizPalette

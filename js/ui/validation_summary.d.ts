@@ -2,9 +2,32 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxValidationSummary>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxValidationSummary>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxValidationSummary>;
+
+/** @public */
+export type ItemClickEvent = ComponentNativeEvent<dxValidationSummary> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxValidationSummary> & ChangedOptionInfo;
 
 export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
     /**
