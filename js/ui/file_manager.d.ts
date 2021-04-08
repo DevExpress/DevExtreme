@@ -7,7 +7,6 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    TEvent,
     Cancelable,
     ComponentEvent,
     ComponentNativeEvent,
