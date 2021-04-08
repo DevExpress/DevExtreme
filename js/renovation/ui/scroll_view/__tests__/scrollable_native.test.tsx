@@ -116,36 +116,106 @@ describe('Behavior', () => {
     //   expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(1);
     // });
 
-    each([true, false]).describe('useSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
-      it('handleScroll, location was changed', () => {
-        const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() } as any;
-        const viewModel = new Scrollable({ useSimulatedScrollbar });
-        viewModel.containerRef = { current: {} } as RefObject;
-        viewModel.lastLocation = { top: 1, left: 1 };
-        viewModel.location = () => ({ top: 2, left: 2 });
-        viewModel.moveScrollbars = jest.fn();
-
-        viewModel.scrollEffect();
-        emit('scroll', e);
-
-        expect(e.stopImmediatePropagation).not.toBeCalled();
-        expect(viewModel.eventForUserAction).toEqual(e);
-        expect(viewModel.lastLocation).toEqual({ top: 2, left: 2 });
-
-        if (useSimulatedScrollbar) {
-          expect(viewModel.moveScrollbars).toHaveBeenCalledTimes(1);
-        } else {
-          expect(viewModel.moveScrollbars).not.toBeCalled();
-        }
-      });
-    });
-
     each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
       each([true, false]).describe('isSwipeDownStrategy: %o', (isSwipeDownStrategy) => {
         each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
           each([TopPocketState.STATE_RELEASED, TopPocketState.STATE_READY,
             TopPocketState.STATE_PULLED, TopPocketState.STATE_LOADING,
             TopPocketState.STATE_TOUCHED, TopPocketState.STATE_REFRESHING]).describe('pocketState: %o', (pocketState) => {
+            each([true, false]).describe('useSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
+              each([true, false]).describe('isReachBottom: %o', (isReachBottom) => {
+                each([-1, -2, -3]).describe('prevLocationTop: %o', (prevLocationTop) => {
+                  each([jest.fn(), undefined]).describe('onReachBottom: %o', (onReachBottom) => {
+                    afterEach(() => {
+                      jest.clearAllMocks();
+                    });
+
+                    it('handleScroll, location was changed', () => {
+                      const e = {
+                        ...defaultEvent,
+                        stopImmediatePropagation: jest.fn(),
+                        preventDefault: jest.fn(),
+                      } as any;
+                      const viewModel = new Scrollable({
+                        useSimulatedScrollbar,
+                        forceGeneratePockets,
+                        pullDownEnabled,
+                        onReachBottom,
+                      });
+                      Object.defineProperties(viewModel, {
+                        isSwipeDownStrategy: { get() { return isSwipeDownStrategy; } },
+                      });
+                      viewModel.wrapperRef = { current: {} } as RefObject;
+                      viewModel.containerRef = { current: {} } as RefObject;
+                      viewModel.lastLocation = { top: -1, left: -1 };
+                      viewModel.location = () => ({ top: -2, left: -2 });
+                      viewModel.moveScrollbars = jest.fn();
+                      viewModel.isReachBottom = jest.fn(() => isReachBottom);
+                      viewModel.topPocketState = pocketState;
+                      viewModel.pullDownOpacity = 0.5;
+                      viewModel.pullDownTopOffset = 0;
+                      viewModel.pullDownIconAngle = 0;
+                      (viewModel as any).isFakeRefreshState = 'default';
+                      viewModel.locationTop = prevLocationTop;
+
+                      viewModel.scrollEffect();
+                      emit('scroll', e);
+
+                      expect(e.stopImmediatePropagation).not.toBeCalled();
+                      expect(viewModel.eventForUserAction).toEqual(e);
+                      expect(viewModel.lastLocation).toEqual({ top: -2, left: -2 });
+
+                      if (useSimulatedScrollbar) {
+                        expect(viewModel.moveScrollbars).toHaveBeenCalledTimes(1);
+                      } else {
+                        expect(viewModel.moveScrollbars).not.toBeCalled();
+                      }
+
+                      let expectedTopPocketState = pocketState;
+                      let expectedPullDownOpacity = 0.5;
+                      let expectedIsFakeRefreshState = 'default' as string | boolean;
+                      const expectedPullDownTopOffset = 0;
+                      const expectedPullDownIconAngle = 0;
+                      let onReachBottomCalled = false;
+                      // const expectedLocationTop = prevLocationTop;
+
+                      if (forceGeneratePockets && isSwipeDownStrategy
+                      && pocketState !== TopPocketState.STATE_REFRESHING) {
+                        if ((prevLocationTop - viewModel.location().top) > 0 && isReachBottom) {
+                          onReachBottomCalled = true;
+                        } else if (pocketState !== TopPocketState.STATE_RELEASED) {
+                          expectedTopPocketState = TopPocketState.STATE_RELEASED;
+                          expectedPullDownOpacity = 0;
+                          expectedIsFakeRefreshState = false;
+                        }
+                      }
+
+                      if (onReachBottom) {
+                        if (onReachBottomCalled) {
+                          expect(onReachBottom).toHaveBeenCalledTimes(1);
+                          expect(onReachBottom).toHaveBeenCalledWith({});
+                        } else {
+                          expect(onReachBottom).toHaveBeenCalledTimes(0);
+                        }
+                      }
+
+                      // expect(viewModel.locationTop).toEqual(expectedLocationTop);
+                      expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
+                      expect(viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
+                      expect(viewModel.isFakeRefreshState)
+                        .toEqual(expectedIsFakeRefreshState);
+                      expect(viewModel.pullDownTopOffset)
+                        .toEqual(expectedPullDownTopOffset);
+                      expect(viewModel.pullDownIconAngle)
+                        .toEqual(expectedPullDownIconAngle);
+                      expect(e.preventDefault).toHaveBeenCalledTimes(0);
+                      expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(0);
+                    });
+                  });
+                });
+              });
+            });
+
             each([1, 0, -1]).describe('containerScrollTop: %o', (containerScrollTop) => {
               it('handleInit()', () => {
                 const e = { ...defaultEvent, originalEvent: { pageY: 50 } } as any;

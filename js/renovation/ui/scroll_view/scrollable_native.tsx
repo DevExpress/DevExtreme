@@ -249,6 +249,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Method()
+  /* istanbul ignore next */
   refresh(): void {
     this.topPocketState = TopPocketState.STATE_READY;
 
@@ -257,6 +258,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Method()
+  /* istanbul ignore next */
   release(): void {
     this.clearReleaseTimeout();
     this.releaseTimeout = setTimeout((() => {
@@ -265,22 +267,26 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }), 800);
   }
 
+  /* istanbul ignore next */
   clearReleaseTimeout(): void {
     clearTimeout(this.hideScrollbarTimeout);
     this.hideScrollbarTimeout = undefined;
   }
 
   @Effect({ run: 'once' })
+  /* istanbul ignore next */
   disposeReleaseTimeout(): DisposeEffectReturn {
     return (): void => this.clearReleaseTimeout();
   }
 
+  /* istanbul ignore next */
   onRelease(): void {
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
     this.props.onUpdated?.(this.getEventArgs());
   }
 
+  /* istanbul ignore next */
   startLoading(): void {
     if (this.loadingIndicatorEnabled) {
       // TODO: check visibility - && this.$element().is(':visible')
@@ -289,6 +295,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.lock();
   }
 
+  /* istanbul ignore next */
   finishLoading(): void {
     this.isLoadPanelVisible = false;
     this.unlock();
@@ -447,6 +454,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     };
   }
 
+  /* istanbul ignore next */
   isReachBottom(): boolean {
     const maxScrollTopOffset = getMaxScrollOffset('height', this.containerRef.current!);
 
