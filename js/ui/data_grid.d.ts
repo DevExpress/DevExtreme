@@ -1693,6 +1693,7 @@ export interface StateStoring {
     type?: 'custom' | 'localStorage' | 'sessionStorage'
 }
 
+export type GridBaseEditing = EditingBase;
 export interface EditingBase {
     /**
      * @docid GridBaseOptions.editing.confirmDelete
@@ -1809,6 +1810,8 @@ export interface DataChange {
      */
     pageIndex?: number;
 }
+
+export type GridBaseEditingTexts = EditingTextsBase;
 export interface EditingTextsBase {
     /**
      * @docid GridBaseOptions.editing.texts.addRow
@@ -1889,6 +1892,7 @@ export interface EditingTextsBase {
     validationCancelChanges?: string;
 }
 
+export type GridBasePaging = PagingBase;
 export interface PagingBase {
     /**
      * @docid GridBaseOptions.paging.enabled
@@ -1915,6 +1919,7 @@ export interface PagingBase {
     pageSize?: number;
 }
 
+export type GridBaseScrolling = ScrollingBase;
 export interface ScrollingBase {
     /**
      * @docid GridBaseOptions.scrolling.columnRenderingMode
@@ -1972,6 +1977,7 @@ export interface ScrollingBase {
     useNative?: boolean | 'auto';
 }
 
+export type GridBaseSelection = SelectionBase;
 export interface SelectionBase {
     /**
      * @docid GridBaseOptions.selection.allowSelectAll
@@ -2548,6 +2554,7 @@ export interface ColumnCustomizeTextArg {
   groupInterval?: string | number;
 }
 
+export type GridBaseColumn = ColumnBase;
 /**
  * @docid GridBaseColumn
  * @type object
@@ -3014,6 +3021,7 @@ export interface ColumnLookup {
   valueExpr?: string
 }
 
+export type GridBaseColumnButton = ColumnButtonBase;
 /**
  * @docid GridBaseColumnButton
  * @type object
