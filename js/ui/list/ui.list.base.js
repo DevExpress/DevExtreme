@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { ensureDefined, noop } from '../../core/utils/common';
-import { isPlainObject } from '../../core/utils/type';
+import { isDefined, isPlainObject } from '../../core/utils/type';
 import { getImageContainer } from '../../core/utils/icon';
 import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
@@ -468,6 +468,14 @@ export const ListBase = CollectionWidget.inherit({
         return this._nextButtonMode() && this._dataSource && this._dataSource.isLoaded();
     },
 
+    _isDataSourceFirstLoadCompleted: function(newValue) {
+        if(isDefined(newValue)) {
+            this._isFirstLoadCompleted = newValue;
+        }
+
+        return this._isFirstLoadCompleted;
+    },
+
     _dataSourceLoadingChangedHandler: function(isLoading) {
         if(this._loadIndicationSuppressed()) {
             return;
@@ -476,22 +484,28 @@ export const ListBase = CollectionWidget.inherit({
         if(isLoading && this.option('indicateLoading')) {
             this._showLoadingIndicatorTimer = setTimeout((function() {
                 const isEmpty = !this._itemElements().length;
-                if(this._scrollView && !isEmpty) {
-                    this._scrollView.startLoading();
+                const shouldIndicateLoading = !isEmpty || this._isDataSourceFirstLoadCompleted();
+                if(shouldIndicateLoading) {
+                    this._scrollView?.startLoading();
                 }
             }).bind(this));
         } else {
             clearTimeout(this._showLoadingIndicatorTimer);
             this._scrollView && this._scrollView.finishLoading();
         }
+        if(!isLoading) {
+            this._isDataSourceFirstLoadCompleted(false);
+        }
     },
 
-    _dataSourceChangedHandler: function(newItems) {
+    _dataSourceChangedHandler: function() {
         if(!this._shouldAppendItems() && hasWindow()) {
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
         this.callBase.apply(this, arguments);
+
+        this._isDataSourceFirstLoadCompleted(true);
     },
 
     _refreshContent: function() {
@@ -798,6 +812,7 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _dispose: function() {
+        this._isDataSourceFirstLoadCompleted(false);
         clearTimeout(this._holdTimer);
         clearTimeout(this._loadNextPageTimer);
         clearTimeout(this._showLoadingIndicatorTimer);
@@ -871,6 +886,11 @@ export const ListBase = CollectionWidget.inherit({
             case 'dataSource':
                 this.callBase(args);
                 this._initScrollView();
+                this._isDataSourceFirstLoadCompleted(false);
+                break;
+            case 'items':
+                this.callBase(args);
+                this._isDataSourceFirstLoadCompleted(false);
                 break;
             case 'pullingDownText':
             case 'pulledDownText':
