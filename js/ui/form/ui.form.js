@@ -61,6 +61,8 @@ import {
     FORM_VALIDATION_SUMMARY,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
+import { TOOLBAR_CLASS } from '../toolbar/constants';
+
 const WIDGET_CLASS = 'dx-widget';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
@@ -457,7 +459,7 @@ const Form = Widget.inherit({
             inOneColumn
         });
 
-        triggerResizeEvent(this.$element().find(`.${WIDGET_CLASS}`));
+        triggerResizeEvent(this.$element().find(`.${TOOLBAR_CLASS}`));
     },
 
     _clean: function() {

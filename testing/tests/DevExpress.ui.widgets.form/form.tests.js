@@ -29,11 +29,15 @@ import {
     FIELD_ITEM_LABEL_CLASS,
     FORM_GROUP_CAPTION_CLASS
 } from 'ui/form/constants';
+
+import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
+
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
+import 'ui/toolbar';
 import 'ui/text_area';
 import themes from 'ui/themes';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
@@ -1405,6 +1409,26 @@ QUnit.test('optional mark aligned', function(assert) {
 
     assert.roughEqual($labelsContent.offset().left + $optionalLabel.width(), $optionalMark.offset().left, 0.5, 'position of optional mark is right');
     assert.ok($optionalLabel.position().left < $optionalMark.position().left, 'optional mark should be after of the text');
+});
+
+QUnit.test('HtmlEditor with Toolbar is rendered inside form (T986577)', function(assert) {
+    const $form = $('#form').dxForm({
+        width: 250,
+        items: [ {
+            label: { text: 'text' },
+            editorType: 'dxHtmlEditor',
+            editorOptions: {
+                toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike', 'underline' ] }
+            }
+        }, {
+            label: { text: 'Very very long text' }
+        } ]
+    });
+
+    const toolbar = $form.find(`.${TOOLBAR_CLASS}`).eq(0).dxToolbar('instance');
+    const menuItems = toolbar._getMenuItems();
+
+    assert.equal(menuItems.length, 3, 'italic, strike and underline items are located in menu');
 });
 
 
