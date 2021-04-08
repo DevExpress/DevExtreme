@@ -32,33 +32,33 @@ export type DisposingEvent = ComponentEvent<dxFilterBuilder>;
 
 /** @public */
 export type EditorPreparedEvent = ComponentEvent<dxFilterBuilder> & {
-    value?: any;
-    setValue?: any;
-    editorElement?: TElement;
-    editorName?: string;
-    dataField?: string;
-    filterOperation?: string;
-    updateValueTimeout?: number;
-    width?: number;
-    readOnly?: boolean;
-    disabled?: boolean;
-    rtlEnabled?: boolean;
+    readonly value?: any;
+    readonly setValue: any;
+    readonly editorElement: TElement;
+    readonly editorName: string;
+    readonly dataField?: string;
+    readonly filterOperation?: string;
+    readonly updateValueTimeout?: number;
+    readonly width?: number;
+    readonly readOnly: boolean;
+    readonly disabled: boolean;
+    readonly rtlEnabled: boolean;
 }
 
 /** @public */
 export type EditorPreparingEvent = Cancelable & ComponentEvent<dxFilterBuilder> & {
-    value?: any;
-    setValue?: any;
-    editorElement?: TElement;
-    editorName?: string;
+    readonly value?: any;
+    readonly setValue: any;
+    readonly editorElement?: TElement;
+    editorName: string;
     editorOptions?: any;
-    dataField?: string;
-    filterOperation?: string;
+    readonly dataField?: string;
+    readonly filterOperation?: string;
     updateValueTimeout?: number;
-    width?: number;
-    readOnly?: boolean;
-    disabled?: boolean;
-    rtlEnabled?: boolean;
+    readonly width?: number;
+    readonly readOnly: boolean;
+    readonly disabled: boolean;
+    readonly rtlEnabled: boolean;
 }
 
 /** @public */
@@ -69,23 +69,23 @@ export type OptionChangedEvent = ComponentEvent<dxFilterBuilder> & ChangedOption
 
 /** @public */
 export type ValueChangedEvent = ComponentEvent<dxFilterBuilder> & {
-    value?: any;
-    previousValue?: any;
+    readonly value?: any;
+    readonly previousValue?: any;
 }
 
 /** @public */
 export type CustomOperationEditorTemplate = {
-    value?: string | number | Date;
-    field?: dxFilterBuilderField;
-    setValue?: Function;
+    readonly value?: string | number | Date;
+    readonly field: dxFilterBuilderField;
+    readonly setValue: Function;
 }
 
 /** @public */
 export type FieldEditorTemplate = {
-    value?: string | number | Date;
-    filterOperation?: string;
-    field?: dxFilterBuilderField;
-    setValue?: Function;
+    readonly value?: string | number | Date;
+    readonly filterOperation?: string;
+    readonly field: dxFilterBuilderField;
+    readonly setValue: Function;
 }
 
 export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
