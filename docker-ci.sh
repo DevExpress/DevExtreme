@@ -178,12 +178,6 @@ function run_test_jest {
     npm run test-jest
 }
 
-function run_native_components {
-    npm i
-    npx gulp localization
-    npx gulp native-components-compilation-check
-}
-
 function run_test_styles {
     npm i
     npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false

@@ -12,7 +12,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -33,8 +37,41 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxRangeSelector>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxRangeSelector>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxRangeSelector>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxRangeSelector> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxRangeSelector>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxRangeSelector> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxRangeSelector>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxRangeSelector> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxRangeSelector> & {
+  readonly value: Array<number | string | Date>,
+  readonly previousValue: Array<number | string | Date>,
+}
 
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
@@ -341,6 +378,9 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxRangeSelector
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:Array<number,string,Date>
      * @type_function_param1_field5 previousValue:Array<number,string,Date>
      * @type_function_param1_field6 event:event
@@ -349,7 +389,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSelector, element?: TElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: TEvent }) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz

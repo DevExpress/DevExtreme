@@ -3,13 +3,57 @@ import {
 } from '../core/element';
 
 import {
+    Cancelable,
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
+} from './core/base_widget';
+
+import {
     BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
     BaseGaugeScale,
     BaseGaugeScaleLabel,
-    GaugeIndicator
+    GaugeIndicator,
+    TooltipInfo
 } from './gauges/base_gauge';
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxCircularGauge>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxCircularGauge>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxCircularGauge>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxCircularGauge> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxCircularGauge>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxCircularGauge> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxCircularGauge>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxCircularGauge> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxCircularGauge> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxCircularGauge> & TooltipInfo;
 
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
