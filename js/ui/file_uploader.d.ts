@@ -21,9 +21,9 @@ import UploadInfo from '../file_management/upload_info';
 
 /** @public */
 export type BeforeSendEvent = ComponentEvent<dxFileUploader> & {
-    request?: XMLHttpRequest;
-    file?: File;
-    uploadInfo?: UploadInfo;
+    readonly request: XMLHttpRequest;
+    readonly file: File;
+    readonly uploadInfo?: UploadInfo;
 }
 
 /** @public */
@@ -34,12 +34,12 @@ export type DisposingEvent = ComponentEvent<dxFileUploader>;
 
 /** @public */
 export type DropZoneEnterEvent = ComponentNativeEvent<dxFileUploader> & {
-    dropZoneElement?: TElement;
+    readonly dropZoneElement: TElement;
 }
 
 /** @public */
 export type DropZoneLeaveEvent = ComponentNativeEvent<dxFileUploader> & {
-    dropZoneElement?: TElement;
+    readonly dropZoneElement: TElement;
 }
 
 /** @public */
@@ -53,11 +53,11 @@ export type OptionChangedEvent = ComponentEvent<dxFileUploader> & ChangedOptionI
 
 /** @public */
 export type ProgressEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    segmentSize?: number;
-    bytesLoaded?: number;
-    bytesTotal?: number;
-    request?: XMLHttpRequest;
+    readonly file: File;
+    readonly segmentSize: number;
+    readonly bytesLoaded: number;
+    readonly bytesTotal: number;
+    readonly request: XMLHttpRequest;
 }
 
 /** @public */
