@@ -32,7 +32,7 @@ export type ContentReadyEvent = ComponentEvent<dxDiagram>;
 export type CustomCommandEvent = {
     readonly component: dxDiagram;
     readonly element: TElement;
-    name?: string;
+    readonly name: string;
 }
 
 /** @public */
