@@ -1500,24 +1500,26 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         [true, false].forEach(deferred => {
             ['infinite', 'virtual', 'standard'].forEach(scrollingMode => {
                 ['multiple', 'single', 'none'].forEach(selectionMode => {
-                    QUnit.test(`scrolling mode = ${scrollingMode}, deferred = ${deferred}, selection mode = ${selectionMode}`, function(assert) {
-                        // arrange
-                        sinon.spy(errors, 'log');
+                    ['page', 'allPages'].forEach(selectAllMode => {
+                        QUnit.test(`scrolling mode = ${scrollingMode}, deferred = ${deferred}, selection mode = ${selectionMode}, selectAllMode = ${selectAllMode}`, function(assert) {
+                            // arrange
+                            sinon.spy(errors, 'log');
 
-                        this.applyOptions({
-                            selection: { mode: selectionMode, deferred },
-                            scrolling: { mode: scrollingMode }
+                            this.applyOptions({
+                                selection: { mode: selectionMode, deferred, selectAllMode },
+                                scrolling: { mode: scrollingMode }
+                            });
+
+                            // assert
+                            if(scrollingMode === 'infinite' && selectionMode === 'multiple' && !deferred && selectAllMode === 'allPages') {
+                                assert.equal(errors.log.callCount, 1, 'warning was thrown');
+                                assert.equal(errors.log.lastCall.args[0], 'W1018', 'warning code');
+                            } else {
+                                assert.equal(errors.log.callCount, 0, 'warning was not thrown');
+                            }
+
+                            errors.log.restore();
                         });
-
-                        // assert
-                        if(scrollingMode === 'infinite' && selectionMode === 'multiple' && !deferred) {
-                            assert.equal(errors.log.callCount, 1, 'warning was thrown');
-                            assert.equal(errors.log.lastCall.args[0], 'W1018', 'warning code');
-                        } else {
-                            assert.equal(errors.log.callCount, 0, 'warning was not thrown');
-                        }
-
-                        errors.log.restore();
                     });
                 });
             });

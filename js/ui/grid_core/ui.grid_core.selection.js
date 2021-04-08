@@ -99,14 +99,14 @@ const SelectionController = gridCore.Controller.inherit((function() {
 
     return {
         init: function() {
-            this._dataController = this.getController('data');
-            this._selectionMode = this.option(SELECTION_MODE);
-            this._isSelectionWithCheckboxes = false;
-
-            const deferred = this.option('selection.deferred');
-            if(this.option('scrolling.mode') === 'infinite' && !deferred && this._selectionMode === 'multiple') {
+            const { deferred, selectAllMode, mode } = this.option('selection') || {};
+            if(this.option('scrolling.mode') === 'infinite' && !deferred && mode === 'multiple' && selectAllMode === 'allPages') {
                 errors.log('W1018');
             }
+
+            this._dataController = this.getController('data');
+            this._selectionMode = mode;
+            this._isSelectionWithCheckboxes = false;
 
             this._selection = this._createSelection();
             this._updateSelectColumn();
