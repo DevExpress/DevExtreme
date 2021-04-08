@@ -18,7 +18,7 @@ import {
 
 import messageLocalization from '../../../localization/message';
 
-import { BaseWidgetProps } from '../../utils/base_props';
+import { BaseWidgetProps } from '../common/base_props';
 
 import { combineClasses } from '../../utils/combine_classes';
 

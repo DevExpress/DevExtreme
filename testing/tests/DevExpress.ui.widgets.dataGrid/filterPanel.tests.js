@@ -5,6 +5,7 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'data/array_store';
+import errors from 'ui/widget/ui.errors';
 
 const FILTER_PANEL_CLASS = 'dx-datagrid-filter-panel';
 const FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + '-text';
@@ -263,6 +264,98 @@ QUnit.module('Filter Panel', {
             assert.equal(loadingSpy.callCount, 2, 'loadingSpy.callCount');
             const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
             assert.deepEqual(loadingFilters, [['key', '=', 1], ['key', '=', 2]]);
+        });
+    });
+
+    ['key', undefined].forEach(key => {
+        QUnit.test(`W1017 warning: key = '${key}' and no calculateDisplayValue`, function(assert) {
+            // arrange
+            sinon.spy(errors, 'log');
+            const filter = ['field', 'anyof', [1, 2]];
+            const lookupDataStore = new ArrayStore({
+                key,
+                data: [
+                    { key: 1, text: 'Text 1', value: 1 },
+                    { key: 2, text: 'Text 2', value: 2 },
+                    { key: 3, text: 'Text 3', value: 3 }
+                ]
+            });
+            this.initFilterPanelView({
+                filterValue: filter,
+                headerFilter: {
+                    texts: {}
+                },
+                columns: [{
+                    dataField: 'field',
+                    dataType: 'string',
+                    headerFilter: { dataSource: lookupDataStore },
+                    lookup: {
+                        dataSource: lookupDataStore,
+                        valueExpr: 'key',
+                        displayExpr: 'text'
+                    }
+                }]
+            });
+            const loadingSpy = sinon.spy();
+            lookupDataStore.on('loading', loadingSpy);
+
+            // act
+            assert.expect(2);
+            this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+                assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+                assert.equal(errors.log.callCount, 0, 'no warnings');
+            }).always(() => {
+                errors.log.restore();
+            });
+        });
+
+        QUnit.test(`W1017 warning: key = '${key}' and calculateDisplayValue = 'text'`, function(assert) {
+            // arrange
+            sinon.spy(errors, 'log');
+            const filter = ['field', 'anyof', [1, 2]];
+            const lookupDataStore = new ArrayStore({
+                key,
+                data: [
+                    { key: 1, text: 'Text 1', value: 1 },
+                    { key: 2, text: 'Text 2', value: 2 },
+                    { key: 3, text: 'Text 3', value: 3 }
+                ]
+            });
+            this.initFilterPanelView({
+                filterValue: filter,
+                headerFilter: {
+                    texts: {}
+                },
+                columns: [{
+                    dataField: 'field',
+                    dataType: 'string',
+                    headerFilter: { dataSource: lookupDataStore },
+                    lookup: {
+                        dataSource: lookupDataStore,
+                        valueExpr: 'key',
+                        displayExpr: 'text'
+                    },
+                    calculateDisplayValue: 'text'
+                }]
+            });
+            const loadingSpy = sinon.spy();
+            lookupDataStore.on('loading', loadingSpy);
+
+            // act
+            assert.expect(key ? 2 : 6);
+            this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+                assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+                if(!key) {
+                    assert.equal(errors.log.callCount, 4, 'four warnings');
+                    errors.log.getCalls().forEach(call => {
+                        assert.equal(call.args[0], 'W1017', 'warning code');
+                    });
+                } else {
+                    assert.equal(errors.log.callCount, 0, 'no warnings');
+                }
+            }).always(() => {
+                errors.log.restore();
+            });
         });
     });
 

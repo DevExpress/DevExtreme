@@ -1124,6 +1124,24 @@ QUnit.module('Templates', () => {
         assert.strictEqual($buttons.length, 1, 'there is only one button');
         assert.strictEqual($buttons.text(), 'test button', 'correct text');
     });
+
+    ['readOnly', 'disabled'].forEach((prop) => {
+        [false, true].forEach((propValue) => {
+            QUnit.test(`Drop button template should be rendered once after change the "${prop}" option value to ${!propValue}`, function(assert) {
+                const dropDownButtonTemplate = sinon.spy(() => {
+                    return '<div>Template</div>';
+                });
+
+                const editor = $('#dropDownEditorLazy').dxDropDownEditor({
+                    dropDownButtonTemplate,
+                    [prop]: propValue
+                }).dxDropDownEditor('instance');
+
+                editor.option(prop, !propValue);
+                assert.ok(dropDownButtonTemplate.calledOnce, 'dropDownButton template rendered once');
+            });
+        });
+    });
 });
 
 QUnit.module('options', () => {

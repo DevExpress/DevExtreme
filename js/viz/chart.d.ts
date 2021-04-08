@@ -3,7 +3,11 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -19,7 +23,9 @@ import {
     BaseChartLegend,
     BaseChartOptions,
     BaseChartTooltip,
-    BaseChartAnnotationConfig
+    BaseChartAnnotationConfig,
+    PointInteractionInfo,
+    TooltipInfo
 } from './chart_components/base_chart';
 
 import {
@@ -35,10 +41,100 @@ import {
 import {
     Font,
     WordWrapType,
-    VizTextOverflowType
+    VizTextOverflowType,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo,
 } from './core/base_widget';
 
 export type ChartSingleValueSeriesAggregationMethodType = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+
+interface SeriesInteractionInfo {
+    target: chartSeriesObject;
+}
+
+/** @public */
+export type ArgumentAxisClickEvent = ComponentNativeEvent<dxChart> & {
+    readonly argument: Date | number | string;
+}
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxChart>;
+
+/** @public */
+export type DoneEvent = ComponentEvent<dxChart>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxChart>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxChart>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxChart> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxChart>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxChart> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxChart>;
+
+/** @public */
+export type LegendClickEvent  = ComponentNativeEvent<dxChart> & {
+    readonly target: chartSeriesObject;
+}
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxChart> & ChangedOptionInfo;
+
+/** @public */
+export type PointClickEvent = ComponentNativeEvent<dxChart> & PointInteractionInfo;
+
+/** @public */
+export type PointHoverChangedEvent = ComponentEvent<dxChart> & PointInteractionInfo;
+
+/** @public */
+export type PointSelectionChangedEvent = ComponentEvent<dxChart> & PointInteractionInfo;
+
+/** @public */
+export type SeriesClickEvent = ComponentNativeEvent<dxChart> & {
+    readonly target: chartSeriesObject;
+}
+
+/** @public */
+export type SeriesHoverChangedEvent = ComponentEvent<dxChart> & SeriesInteractionInfo;
+
+/** @public */
+export type SeriesSelectionChangedEvent = ComponentEvent<dxChart> & SeriesInteractionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxChart> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxChart> & TooltipInfo;
+
+/** @public */
+export type ZoomEndEvent = Cancelable & ComponentNativeEvent<dxChart> & {
+    readonly rangeStart: Date | number;
+    readonly rangeEnd: Date | number;
+    readonly axis: chartAxisObject;
+    readonly range: VizRange;
+    readonly previousRange: VizRange;
+    readonly actionType: 'zoom' | 'pan';
+    readonly zoomFactor: number;
+    readonly shift: number;
+}
+
+/** @public */
+export type ZoomStartEvent = Cancelable & ComponentNativeEvent<dxChart> & {
+    readonly axis: chartAxisObject;
+    readonly range: VizRange;
+    readonly actionType?: 'zoom' | 'pan';
+}
+
 
 /**
 * @docid
@@ -929,6 +1025,9 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 argument:Date|Number|string
      * @notUsedInTheme
@@ -936,11 +1035,14 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, argument?: Date | number | string }) => void) | string;
+    onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
      * @notUsedInTheme
@@ -948,11 +1050,14 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, target?: chartSeriesObject }) => void) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
      * @notUsedInTheme
@@ -960,33 +1065,42 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesClick?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, target?: chartSeriesObject }) => void) | string;
+    onSeriesClick?: ((e: SeriesClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesHoverChanged?: ((e: { component?: dxChart, element?: TElement, model?: any, target?: chartSeriesObject }) => void);
+    onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesSelectionChanged?: ((e: { component?: dxChart, element?: TElement, model?: any, target?: chartSeriesObject }) => void);
+    onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
      * @type_function_param1_field6 rangeEnd:Date|Number:deprecated(range)
@@ -1002,11 +1116,14 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomEnd?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => void);
+    onZoomEnd?: ((e: ZoomEndEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
      * @type_function_param1_field6 range:VizRange
@@ -1017,7 +1134,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomStart?: ((e: { component?: dxChart, element?: TElement, model?: any, event?: TEvent, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => void);
+    onZoomStart?: ((e: ZoomStartEvent) => void);
     /**
      * @docid
      * @type Object|Array<Object>
