@@ -16,7 +16,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -35,7 +39,10 @@ import BaseWidget, {
     BaseWidgetTooltip,
     Font,
     WordWrapType,
-    VizTextOverflowType
+    VizTextOverflowType,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 /**
@@ -51,6 +58,47 @@ export interface FunnelLegendItem extends BaseLegendItem {
      */
     item?: dxFunnelItem;
 }
+
+interface FunnelItemInfo {
+  readonly item: dxFunnelItem
+}
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxFunnel>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxFunnel>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxFunnel>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxFunnel> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxFunnel>;
+
+/** @public */
+export type HoverChangedEvent = ComponentEvent<dxFunnel> & FunnelItemInfo;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxFunnel> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxFunnel>;
+
+/** @public */
+export type ItemClickEvent = ComponentNativeEvent<dxFunnel> & FunnelItemInfo;
+
+/** @public */
+export type LegendClickEvent = ComponentNativeEvent<dxFunnel> & FunnelItemInfo;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxFunnel> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxFunnel> & FunnelItemInfo;
+
 
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
@@ -444,17 +492,23 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: { component?: dxFunnel, element?: TElement, model?: any, item?: dxFunnelItem }) => void);
+    onHoverChanged?: ((e: HoverChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
@@ -462,11 +516,14 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onItemClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => void) | string;
+    onItemClick?: ((e: ItemClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
@@ -474,18 +531,21 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxFunnel, element?: TElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => void) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxFunnel, element?: TElement, model?: any, item?: dxFunnelItem }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @extends CommonVizPalette

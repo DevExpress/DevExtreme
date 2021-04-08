@@ -9,11 +9,8 @@ import {
 } from '@devextreme-generator/declarations';
 import { LoadIndicator } from '../load_indicator';
 import { isDefined } from '../../../core/utils/type';
-
 import messageLocalization from '../../../localization/message';
-
-import { BaseWidgetProps } from '../../utils/base_props';
-
+import { BaseWidgetProps } from '../common/base_props';
 import { combineClasses } from '../../utils/combine_classes';
 
 import {
