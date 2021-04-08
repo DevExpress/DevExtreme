@@ -315,11 +315,11 @@ const textCloud = BaseTextCloudMarker.inherit({
     _correctCloudType(type, { x, y }, { width, height }) {
         if((type === 'right-top' || type === 'right-bottom')) {
             if((x - width) < this._translator.getCodomainStart()) {
-                type = 'left-' + type.split('-')[1];
+                type = `left-${type.split('-')[1]}`;
             }
         } else if(type === 'top-left' || type === 'top-right') {
             if((y + height) > this._translator.getCodomainStart()) {
-                type = 'bottom-' + type.split('-')[1];
+                type = `bottom-${type.split('-')[1]}`;
             }
         }
         return type;
