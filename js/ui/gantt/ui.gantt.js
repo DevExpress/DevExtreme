@@ -174,6 +174,8 @@ class Gantt extends Widget {
             modelChangesListener: this._createModelChangesListener(),
             exportHelper: this._createGanttViewExportHelper(),
             taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
+            taskProgressTooltipContentTemplate: this._getTaskProgressTooltipContentTemplateFunc(this.option('taskProgressTooltipContentTemplate')),
+            taskTimeTooltipContentTemplate: this._getTaskTimeTooltipContentTemplateFunc(this.option('taskTimeTooltipContentTemplate')),
             taskContentTemplate: this._getTaskContentTemplateFunc(this.option('taskContentTemplate')),
             onTaskClick: (e) => { this._onTreeListRowClick(e); },
             onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); },
@@ -1211,6 +1213,34 @@ class Gantt extends Widget {
         return createTemplateFunction;
     }
 
+    _getTaskProgressTooltipContentTemplateFunc(taskTooltipContentTemplateOption) {
+        const isTooltipShowing = true;
+        const template = taskTooltipContentTemplateOption && this._getTemplate(taskTooltipContentTemplateOption);
+        const createTemplateFunction = template && ((container, item, callback, posX) => {
+            template.render({
+                model: item,
+                container: getPublicElement($(container)),
+                onRendered: () => { callback(posX); }
+            });
+            return isTooltipShowing;
+        });
+        return createTemplateFunction;
+    }
+
+    _getTaskTimeTooltipContentTemplateFunc(taskTooltipContentTemplateOption) {
+        const isTooltipShowing = true;
+        const template = taskTooltipContentTemplateOption && this._getTemplate(taskTooltipContentTemplateOption);
+        const createTemplateFunction = template && ((container, item, callback, posX) => {
+            template.render({
+                model: item,
+                container: getPublicElement($(container)),
+                onRendered: () => { callback(posX); }
+            });
+            return isTooltipShowing;
+        });
+        return createTemplateFunction;
+    }
+
     _getTaskContentTemplateFunc(taskContentTemplateOption) {
         const isTaskShowing = true;
         const template = taskContentTemplateOption && this._getTemplate(taskContentTemplateOption);
@@ -1321,6 +1351,8 @@ class Gantt extends Widget {
                 items: undefined
             },
             taskTooltipContentTemplate: null,
+            taskProgressTooltipContentTemplate: null,
+            taskTimeTooltipContentTemplate: null,
             taskContentTemplate: null,
             rootValue: 0
         });
@@ -1649,6 +1681,12 @@ class Gantt extends Widget {
                 break;
             case 'taskTooltipContentTemplate':
                 this._setGanttViewOption('taskTooltipContentTemplate', this._getTaskTooltipContentTemplateFunc(args.value));
+                break;
+            case 'taskProgressTooltipContentTemplate':
+                this._setGanttViewOption('taskProgressTooltipContentTemplate', this._getTaskProgressTooltipContentTemplateFunc(args.value));
+                break;
+            case 'taskTimeTooltipContentTemplate':
+                this._setGanttViewOption('taskTimeTooltipContentTemplate', this._getTaskTimeTooltipContentTemplateFunc(args.value));
                 break;
             case 'taskContentTemplate':
                 this._setGanttViewOption('taskContentTemplate', this._getTaskContentTemplateFunc(args.value));
