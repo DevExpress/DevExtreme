@@ -5,10 +5,6 @@
 ::ng-deep #c1, #c2, #c3, #c4, #c5 {
     height: 110px;
 }
-::ng-deep #c4 {
-    width: 107%;
-    margin-left: -40px;
-}
 
 ::ng-deep .long-title h3 {
     font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
