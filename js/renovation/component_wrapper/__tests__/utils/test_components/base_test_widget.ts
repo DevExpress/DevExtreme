@@ -9,7 +9,7 @@ export default class BaseTestWidget extends Component {
     return this.lastPassedProps;
   }
 
-  _renderWrapper(props: any): void {
+  _renderWrapper(props: unknown): void {
     this.lastPassedProps = props;
     super._renderWrapper(props);
   }

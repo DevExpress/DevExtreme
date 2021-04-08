@@ -59,12 +59,12 @@ export default class TestWidget extends JSXComponent(TestWidgetProps) {
   rootRef!: RefObject<HTMLDivElement>;
 
   @Method()
-  apiMethodCheck(arg1, arg2): string {
+  apiMethodCheck(arg1: string, arg2: string): string {
     return `${this.props.text} - ${arg1} - ${arg2}`;
   }
 
   @Method()
-  eventPropCheck(arg): void {
+  eventPropCheck(arg: unknown): void {
     this.props.onEventProp?.(arg);
   }
 
