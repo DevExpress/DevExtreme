@@ -1127,13 +1127,14 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @Nested() searchPanel?: DataGridSearchPanel;
 
-  @Nested() sorting?: DataGridSorting = {
+  @Nested() sorting?: DataGridSorting;
+  /* {
     mode: 'single',
     ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
     descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
     clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
     showSortIndexes: true,
-  };
+  }; */
 
   @Nested() stateStoring?: DataGridStateStoring;
 

@@ -198,7 +198,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
                 useNative: false,
                 showScrollbar: false
             },
-            loadingTimeout: null
+            loadingTimeout: undefined
         }, 'options');
     });
 
