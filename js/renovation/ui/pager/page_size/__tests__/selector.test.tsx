@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { createRef } from 'react';
 import { mount } from 'enzyme';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
+import { RefObject } from '@devextreme-generator/declarations';
 import { PageSizeSelector, viewFunction as PageSizeSelectorComponent } from '../selector';
 import { PageSizeSmall } from '../small';
 import { PageSizeLarge } from '../large';

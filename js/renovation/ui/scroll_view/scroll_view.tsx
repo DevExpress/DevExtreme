@@ -4,10 +4,9 @@ import {
   Ref,
   Method,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
-// eslint-disable-next-line import/default
-import Themes from '../../../ui/themes';
+import { current, isMaterial } from '../../../ui/themes';
 import { isDefined } from '../../../core/utils/type';
 
 import {
@@ -21,6 +20,7 @@ import {
 
 import { combineClasses } from '../../utils/combine_classes';
 import { ScrollViewPropsType } from './scroll_view_props';
+import { ScrollableSimulated } from './scrollable_simulated';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
@@ -29,26 +29,47 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     refreshingText,
     pullingDownText,
     reachBottomText,
-    scrollableRef,
+    scrollableNativeRef,
+    scrollViewSimulatedRef,
     props,
     restAttributes,
   } = viewModel;
 
-  return (
-    <Scrollable
-      classes={cssClasses}
-      ref={scrollableRef}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...props}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
-      pulledDownText={pulledDownText}
-      pullingDownText={pullingDownText}
-      refreshingText={refreshingText}
-      reachBottomText={reachBottomText}
-      forceGeneratePockets
-      needScrollViewContentWrapper
-    />
+  return (viewModel.props.useNative
+    ? (
+      <Scrollable
+        classes={cssClasses}
+        ref={scrollableNativeRef}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...restAttributes}
+        pulledDownText={pulledDownText}
+        pullingDownText={pullingDownText}
+        refreshingText={refreshingText}
+        reachBottomText={reachBottomText}
+        forceGeneratePockets
+        needScrollViewContentWrapper
+        needScrollViewLoadPanel
+      />
+    )
+    : (
+      <ScrollableSimulated
+        classes={cssClasses}
+        ref={scrollViewSimulatedRef}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...restAttributes}
+        pulledDownText={pulledDownText}
+        pullingDownText={pullingDownText}
+        refreshingText={refreshingText}
+        reachBottomText={reachBottomText}
+        forceGeneratePockets
+        needScrollViewContentWrapper
+        needScrollViewLoadPanel
+      />
+    )
   );
 };
 @Component({
@@ -58,61 +79,80 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
 })
 
 export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
-  @Ref() scrollableRef!: RefObject<Scrollable>;
+  @Ref() scrollableNativeRef!: RefObject<Scrollable>;
+
+  @Ref() scrollViewSimulatedRef!: RefObject<ScrollableSimulated>;
+
+  @Method()
+  update(): void {
+    this.scrollableRef.update();
+  }
+
+  @Method()
+  release(): void {
+    this.scrollableRef.release();
+  }
+
+  @Method()
+  refresh(): void {
+    if (this.props.pullDownEnabled) {
+      this.scrollableRef.refresh();
+    }
+  }
 
   @Method()
   content(): HTMLDivElement {
-    return this.scrollableRef.current!.content();
+    return this.scrollableRef.content();
   }
 
   @Method()
   scrollBy(distance: number | Partial<ScrollableLocation>): void {
-    this.scrollableRef.current!.scrollBy(distance);
+    this.scrollableRef.scrollBy(distance);
   }
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
-    this.scrollableRef.current!.scrollTo(targetLocation);
+    this.scrollableRef.scrollTo(targetLocation);
   }
 
   @Method()
   scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-    this.scrollableRef.current!.scrollToElement(element, offset);
+    this.scrollableRef.scrollToElement(element, offset);
   }
 
   @Method()
   scrollHeight(): number {
-    return this.scrollableRef.current!.scrollHeight();
+    return this.scrollableRef.scrollHeight();
   }
 
   @Method()
   scrollWidth(): number {
-    return this.scrollableRef.current!.scrollWidth();
+    return this.scrollableRef.scrollWidth();
   }
 
   @Method()
   scrollOffset(): ScrollableLocation {
-    return this.scrollableRef.current!.scrollOffset();
+    return this.scrollableRef.scrollOffset();
   }
 
   @Method()
   scrollTop(): number {
-    return this.scrollableRef.current!.scrollTop();
+    return this.scrollableRef.scrollTop();
   }
 
   @Method()
   scrollLeft(): number {
-    return this.scrollableRef.current!.scrollLeft();
+    return this.scrollableRef.scrollLeft();
   }
 
   @Method()
   clientHeight(): number {
-    return this.scrollableRef.current!.clientHeight();
+    return this.scrollableRef.clientHeight();
   }
 
   @Method()
   clientWidth(): number {
-    return this.scrollableRef.current!.clientWidth();
+    return this.scrollableRef.clientWidth();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -129,8 +169,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       return pullingDownText;
     }
 
-    // eslint-disable-next-line import/no-named-as-default-member
-    return Themes.isMaterial(Themes.current()) ? '' : undefined;
+    return isMaterial(current()) ? '' : undefined;
   }
 
   get pulledDownText(): string | undefined {
@@ -140,8 +179,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       return pulledDownText;
     }
 
-    // eslint-disable-next-line import/no-named-as-default-member
-    return Themes.isMaterial(Themes.current()) ? '' : undefined;
+    return isMaterial(current()) ? '' : undefined;
   }
 
   get refreshingText(): string | undefined {
@@ -151,8 +189,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       return refreshingText;
     }
 
-    // eslint-disable-next-line import/no-named-as-default-member
-    return Themes.isMaterial(Themes.current()) ? '' : undefined;
+    return isMaterial(current()) ? '' : undefined;
   }
 
   get reachBottomText(): string | undefined {
@@ -162,7 +199,13 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       return reachBottomText;
     }
 
-    // eslint-disable-next-line import/no-named-as-default-member
-    return Themes.isMaterial(Themes.current()) ? '' : undefined;
+    return isMaterial(current()) ? '' : undefined;
+  }
+
+  get scrollableRef(): any {
+    if (this.props.useNative) {
+      return this.scrollableNativeRef.current!;
+    }
+    return this.scrollViewSimulatedRef.current!;
   }
 }

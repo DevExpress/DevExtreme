@@ -2,13 +2,58 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    Cancelable,
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+
+import {
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
+} from './core/base_widget';
+
 import BaseSparkline, {
     BaseSparklineOptions
 } from './sparklines/base_sparkline';
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxSparkline>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxSparkline>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxSparkline>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxSparkline> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxSparkline>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxSparkline> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxSparkline>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxSparkline> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxSparkline>;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxSparkline>;
+
 
 export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     /**

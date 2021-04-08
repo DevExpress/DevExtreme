@@ -32,9 +32,12 @@ export default class FileManagerNotificationControlMock extends FileManagerNotif
         }
     }
 
-    _getProgressPanelComponent() {
-        const component = this.option('progressPanelComponent');
-        return component ? component : super._getProgressPanelComponent();
+    _setNotificationManager() {
+        const options = {
+            progressPanelComponent: this.option('progressPanelComponent'),
+            logger: this.option('logger')
+        };
+        super._setNotificationManager(options);
     }
 
     _getProgressManagerComponent() {

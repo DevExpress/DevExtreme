@@ -7,8 +7,10 @@ import {
   RefObject,
   InternalState,
   Mutable,
-} from 'devextreme-generator/component_declaration/common';
+  ForwardRef,
+} from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
+import { ScrollViewLoadPanel } from './load_panel';
 
 import { AnimatedScrollbar } from './animated_scrollbar';
 import { Widget } from '../common/widget';
@@ -23,17 +25,16 @@ import '../../../events/gesture/emitter.gesture.scroll';
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
-  ScrollableLocation, ScrollOffset,
-  AllowedDirection,
-  ScrollEventArgs,
-  ScrollableDirection,
-} from './types.d';
+  normalizeLocation,
+  getElementLocation, getBoundaryProps,
+  updateAllowedDirection,
+} from './scrollable_utils';
 
 import {
-  normalizeLocation, ScrollDirection,
-  getElementLocation, getBoundaryProps,
-  getElementStyle,
-  updateAllowedDirection,
+  ScrollDirection,
+} from './utils/scroll_direction';
+
+import {
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   SCROLLABLE_SIMULATED_CLASS,
@@ -47,10 +48,20 @@ import {
   SCROLL_LINE_HEIGHT,
   SCROLLABLE_SCROLLBAR_CLASS,
   DIRECTION_BOTH,
-} from './scrollable_utils';
+  KEY_CODES,
+  VALIDATE_WHEEL_TIMEOUT,
+  TopPocketState,
+} from './common/consts';
+
+import {
+  ScrollableLocation, ScrollOffset,
+  AllowedDirection,
+  ScrollEventArgs,
+  ScrollableDirection,
+} from './types.d';
 
 import { getElementOffset } from './utils/get_element_offset';
-import { getTranslateValues } from './utils/get_translate_values';
+import { getElementStyle } from './utils/get_element_style';
 
 import { TopPocket } from './top_pocket';
 import { BottomPocket } from './bottom_pocket';
@@ -64,24 +75,11 @@ import {
   dxScrollCancel,
 } from '../../../events/short';
 
-const KEY_CODES = {
-  PAGE_UP: 'pageUp',
-  PAGE_DOWN: 'pageDown',
-  END: 'end',
-  HOME: 'home',
-  LEFT: 'leftArrow',
-  UP: 'upArrow',
-  RIGHT: 'rightArrow',
-  DOWN: 'downArrow',
-  TAB: 'tab',
-};
-
-const VALIDATE_WHEEL_TIMEOUT = 500;
-
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
     horizontalScrollbarRef, verticalScrollbarRef,
+    topPocketRef, bottomPocketRef, bottomPocketClientHeight, topPocketClientHeight,
     cursorEnterHandler, cursorLeaveHandler,
     isHovered, contentTranslateOffsetChange, contentPositionChange,
     scaleRatioWidth, scaleRatioHeight,
@@ -89,12 +87,15 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     contentWidth, containerClientWidth, contentHeight, containerClientHeight,
     baseContentWidth, baseContainerWidth, baseContentHeight, baseContainerHeight,
     scrollableRef, windowResizeHandler, contentStyles, containerStyles, onBounce,
-    direction,
+    onReachBottom, onRelease, onPullDown, direction, topPocketState,
+    isLoadPanelVisible, pocketStateChange,
     props: {
       disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
+      needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
       reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled, contentTranslateOffset,
+      pullDownEnabled, reachBottomEnabled,
     },
     restAttributes,
   } = viewModel;
@@ -125,10 +126,13 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef} style={contentStyles}>
             {forceGeneratePockets && (
             <TopPocket
+              topPocketRef={topPocketRef}
               pullingDownText={pullingDownText}
               pulledDownText={pulledDownText}
               refreshingText={refreshingText}
               refreshStrategy="simulated"
+              pocketState={topPocketState}
+              visible={!!pullDownEnabled}
             />
             )}
             {needScrollViewContentWrapper
@@ -136,7 +140,9 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               : <div>{children}</div>}
             {forceGeneratePockets && (
             <BottomPocket
+              bottomPocketRef={bottomPocketRef}
               reachBottomText={reachBottomText}
+              visible={!!reachBottomEnabled}
             />
             )}
           </div>
@@ -180,10 +186,28 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
+
+              forceGeneratePockets={forceGeneratePockets}
+              topPocketSize={topPocketClientHeight}
+              bottomPocketSize={bottomPocketClientHeight}
+              onPullDown={onPullDown}
+              onRelease={onRelease}
+              onReachBottom={onReachBottom}
+              pullDownEnabled={pullDownEnabled}
+              reachBottomEnabled={reachBottomEnabled}
+              pocketState={topPocketState}
+              pocketStateChange={pocketStateChange}
             />
           )}
         </div>
       </div>
+      { needScrollViewLoadPanel && (
+        <ScrollViewLoadPanel
+          targetElement={scrollableRef}
+          refreshingText={refreshingText}
+          visible={isLoadPanelVisible}
+        />
+      )}
     </Widget>
   );
 };
@@ -192,10 +216,13 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   defaultOptionRules: null,
   view: viewFunction,
 })
+
 export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
   @Mutable() validateWheelTimer?: any;
 
   @Mutable() locked = false;
+
+  @Mutable() loadingIndicatorEnabled = true;
 
   @Mutable() eventForUserAction?: Event;
 
@@ -212,6 +239,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Ref() verticalScrollbarRef!: RefObject; // TODO: any -> Scrollbar (Generators)
 
   @Ref() horizontalScrollbarRef!: RefObject; // TODO: any -> Scrollbar (Generators)
+
+  @ForwardRef() topPocketRef!: RefObject<HTMLDivElement>;
+
+  @ForwardRef() bottomPocketRef!: RefObject<HTMLDivElement>;
 
   @InternalState() isHovered = false;
 
@@ -239,6 +270,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() contentOffsetHeight = 0;
 
+  @InternalState() topPocketClientHeight = 0;
+
+  @InternalState() bottomPocketClientHeight = 0;
+
+  @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
+
+  @InternalState() isLoadPanelVisible = false;
+
   @Method()
   content(): HTMLDivElement {
     return this.contentRef.current!;
@@ -254,17 +293,35 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
   }
 
-  // updateIfNeed(): void {
-  //   if (!this.props.updateManually) {
-  //     this.update();
-  //   }
-  // }
+  @Method()
+  refresh(): void {
+    this.topPocketState = TopPocketState.STATE_READY;
+
+    this.startLoading();
+    this.props.onPullDown?.({});
+  }
+
+  startLoading(): void {
+    if (this.loadingIndicatorEnabled) {
+      // TODO: check visibility - && this.$element().is(':visible')
+      this.isLoadPanelVisible = true;
+    }
+    this.lock();
+  }
+
+  finishLoading(): void {
+    this.isLoadPanelVisible = false;
+    this.unlock();
+  }
+
+  @Method()
+  release(): void {
+    this.eventHandler((scrollbar) => scrollbar.releaseHandler());
+  }
 
   @Method()
   scrollBy(distance: number | Partial<ScrollableLocation>): void {
     const location = normalizeLocation(distance, this.props.direction);
-
-    // this.updateIfNeed();
 
     if (this.direction.isVertical) {
       const scrollbar = this.verticalScrollbarRef.current;
@@ -292,9 +349,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
     let location = normalizeLocation(targetLocation, this.props.direction);
-
-    // this.updateIfNeed();
-
     let containerPosition = this.scrollOffset();
 
     location = this.applyScaleRatio(location);
@@ -359,12 +413,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   scrollOffset(): ScrollableLocation {
-    const location = { ...{ left: 0, top: 0 }, ...getTranslateValues(this.contentRef.current) };
-
-    location.top -= this.containerRef.current!.scrollTop;
-    location.left -= this.containerRef.current!.scrollLeft;
-
-    return { top: -location.top, left: -location.left };
+    return {
+      top: this.containerRef.current!.scrollTop,
+      left: this.containerRef.current!.scrollLeft,
+    };
   }
 
   @Method()
@@ -395,26 +447,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Effect() scrollEffect(): EffectReturn {
     return subscribeToScrollEvent(this.containerRef.current!,
       () => this.props.onScroll?.(this.getEventArgs()));
-    // this.eventHandler( // Think about reworking it | only for tab press support
-    //   (scrollbar) => {
-    //     /* istanbul ignore next */
-    //     if (scrollbar.insideBounds()) {
-    //       scrollbar.setLocation(
-    // -this.containerRef[`scroll${scrollbar.getDirection()
-    // === DIRECTION_HORIZONTAL ? 'Left' : 'Top'}`]);
-    //       return scrollbar.moveToLocation();
-    //     }
-    //     /* istanbul ignore next */
-    //     return undefined;
-    //   },
-    // );
   }
 
   getEventArgs(): ScrollEventArgs {
+    const scrollOffset = this.scrollOffset();
+
     return {
       event: this.eventForUserAction,
-      scrollOffset: this.scrollOffset(),
-      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef.current!),
+      scrollOffset,
+      ...getBoundaryProps(
+        this.props.direction,
+        scrollOffset,
+        this.containerRef.current!,
+        this.topPocketClientHeight,
+      ),
     };
   }
 
@@ -422,7 +468,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   initEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
-    /* istanbul ignore next */
     dxScrollInit.on(this.wrapperRef.current,
       (e: Event) => {
         this.handleInit(e);
@@ -509,6 +554,28 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.props.onBounce?.(this.getEventArgs());
   }
 
+  onPullDown(): void {
+    this.loadingIndicatorEnabled = false;
+    this.startLoading();
+    this.props.onPullDown?.({});
+  }
+
+  onRelease(): void {
+    this.loadingIndicatorEnabled = true;
+    this.finishLoading();
+    this.props.onUpdated?.(this.getEventArgs());
+  }
+
+  onReachBottom(): void {
+    this.loadingIndicatorEnabled = false;
+    this.startLoading();
+    this.props.onReachBottom?.({});
+  }
+
+  pocketStateChange(state: number): void {
+    this.topPocketState = state;
+  }
+
   contentPositionChange(scrollProp: 'scrollLeft' | 'scrollTop', location: number, ratio: number): void {
     const containerEl = this.containerRef.current;
 
@@ -520,7 +587,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   triggerScrollEvent(): void {
-    /* istanbul ignore next */
     (eventsEngine as any).triggerHandler(this.containerRef.current, { type: 'scroll' });
   }
 
@@ -561,9 +627,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   handleStart(e: Event): void {
     this.eventForUserAction = e;
 
-    this.eventHandler(
-      (scrollbar) => scrollbar.startHandler(),
-    );
+    this.eventHandler((scrollbar) => scrollbar.startHandler());
 
     this.props.onStart?.(this.getEventArgs());
   }
@@ -579,26 +643,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.adjustDistance(e, 'delta');
     this.eventForUserAction = e;
 
-    this.eventHandler(
-      (scrollbar) => scrollbar.moveHandler(e.delta),
-    );
+    this.eventHandler((scrollbar) => scrollbar.moveHandler(e.delta));
   }
 
   handleEnd(e): void {
     this.adjustDistance(e, 'velocity');
     this.eventForUserAction = e;
 
-    this.eventHandler(
-      (scrollbar) => scrollbar.endHandler(e.velocity),
-    );
+    this.eventHandler((scrollbar) => scrollbar.endHandler(e.velocity));
 
     this.props.onEnd?.(this.getEventArgs());
   }
 
   handleStop(): void {
-    this.eventHandler(
-      (scrollbar) => scrollbar.stopHandler(),
-    );
+    this.eventHandler((scrollbar) => scrollbar.stopHandler());
   }
 
   handleCancel(e: Event): void {
@@ -733,8 +791,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return false;
     }
 
-    // this.updateIfNeed();
-
     if (this.props.bounceEnabled) {
       return true;
     }
@@ -857,7 +913,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     });
   }
 
-  /* istanbul ignore next */
   // eslint-disable-next-line class-methods-use-this
   tryGetDevicePixelRatio(): number | undefined {
     if (hasWindow()) {
@@ -943,7 +998,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollTop' : 'scrollLeft';
   }
 
-  @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
+  @Effect({ run: 'always' }) updateScrollbarSize(): void {
     this.scrollableOffsetLeft = this.scrollableOffset.left;
     this.scrollableOffsetTop = this.scrollableOffset.top;
 
@@ -976,6 +1031,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       this.contentOffsetWidth = contentEl.offsetWidth;
       this.contentOffsetHeight = contentEl.offsetHeight;
     }
+
+    if (this.props.forceGeneratePockets) {
+      if (this.props.pullDownEnabled) {
+        const topPocketEl = this.topPocketRef.current;
+
+        if (isDefined(topPocketEl)) {
+          this.topPocketClientHeight = topPocketEl.clientHeight;
+        }
+      }
+
+      if (this.props.reachBottomEnabled) {
+        const bottomPocketEl = this.bottomPocketRef.current;
+
+        if (isDefined(bottomPocketEl)) {
+          this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
+        }
+      }
+    }
   }
 
   get baseContentWidth(): number {
@@ -995,16 +1068,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get scaleRatioWidth(): number {
-    if (!isDefined(this.scrollableRef?.current)) {
+    if (!isDefined(this.containerRef?.current)) {
       return 1;
     }
 
     let scaleRatio = 1;
 
-    /* istanbul ignore next */
     if (hasWindow()) {
-      const realDimension = this.scrollableRef.current!.clientWidth;
-      const baseDimension = this.scrollableRef.current!.offsetWidth;
+      const realDimension = this.containerRef.current.clientWidth;
+      const baseDimension = this.containerRef.current.offsetWidth;
 
       scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
     }
@@ -1013,16 +1085,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get scaleRatioHeight(): number {
-    if (!isDefined(this.scrollableRef?.current)) {
+    if (!isDefined(this.containerRef?.current)) {
       return 1;
     }
 
     let scaleRatio = 1;
 
-    /* istanbul ignore next */
     if (hasWindow()) {
-      const realDimension = this.scrollableRef.current!.clientHeight;
-      const baseDimension = this.scrollableRef.current!.offsetHeight;
+      const realDimension = this.containerRef.current.clientHeight;
+      const baseDimension = this.containerRef.current.offsetHeight;
 
       scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
     }
@@ -1062,8 +1133,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return this.contentClientHeight;
   }
 
+  /* istanbul ignore next */
   get scrollableOffset(): { left: number; top: number } {
-    /* istanbul ignore next */
     return getElementOffset(this.scrollableRef.current);
   }
 

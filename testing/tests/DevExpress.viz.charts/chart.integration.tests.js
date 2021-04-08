@@ -4273,3 +4273,66 @@ QUnit.test('Resolve orthogonal labels overlapping: axis moves to the opposite po
 
     assert.equal(chart.getArgumentAxis()._majorTicks[5].mark.attr('translateY'), 6);
 });
+
+QUnit.test('Reset axes animation before adjusting position of vertical axes (fix incorrect moving of axis elements)', function(assert) {
+    function generateDataSource() {
+        let x1; let x2; let y1; let y2; let i;
+        const ds = [];
+        for(i = 0; i < 20; i++) {
+            x1 = random(-15, 15);
+            y1 = random(-15, 15);
+
+            ds.push({ x1: x1, y1: y1, x2: x2, y2: y2 });
+        }
+        for(i = 0; i < 20; i++) {
+            x2 = random(-15, 15);
+            y2 = random(-15, 15);
+
+            ds.push({ x1: x1, y1: y1, x2: x2, y2: y2 });
+        }
+        return ds;
+    }
+
+    function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    this.options = {
+        size: {
+            width: 820,
+            height: 440
+        },
+        dataSource: generateDataSource(),
+        commonSeriesSettings: {
+            type: 'scatter'
+        },
+        series: [{
+            argumentField: 'x1',
+            valueField: 'y1'
+        }, {
+            argumentField: 'x2',
+            valueField: 'y2',
+        }],
+        argumentAxis: {
+            customPosition: 0,
+            visualRange: [-20, 20]
+        },
+        valueAxis: {
+            customPosition: 0,
+            endOnTick: false,
+            visualRange: [-20, 20]
+        },
+        legend: {
+            visible: false
+        }
+    };
+    const chart = this.createChart({});
+    const axis = chart.getValueAxis();
+
+    chart.option('dataSource', generateDataSource());
+    const tickAnimationSegments = axis._majorTicks[0].mark.animation.params.segments;
+
+    assert.strictEqual(tickAnimationSegments.from[0][1], tickAnimationSegments.to[0][1]);
+    assert.strictEqual(axis._majorTicks[0].mark.getBBox().x, tickAnimationSegments.to[0][1]);
+    assert.strictEqual(tickAnimationSegments.to[1][1] - axis._axisPosition, 1);
+});

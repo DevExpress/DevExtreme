@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component, ComponentBindings, JSXComponent, OneWay, ForwardRef, Provider, Effect, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { InfoText } from './info';
 import { PageIndexSelector } from './pages/page_index_selector';
@@ -25,6 +25,7 @@ export const viewFunction = ({
   pagesContainerVisibility,
   isLargeDisplayMode,
   infoVisible,
+  pageIndexSelectorVisible,
   props: {
     pageSizesRef, pagesRef, infoTextRef,
     pageSizeChange, pageIndexChange,
@@ -41,17 +42,17 @@ export const viewFunction = ({
     rtlEnabled={rtlEnabled}
     classes={classes}
     visible={visible}
-  // eslint-disable-next-line react/jsx-props-no-spreading
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
     {showPageSizes && (
-    <PageSizeSelector
-      rootElementRef={pageSizesRef}
-      isLargeDisplayMode={isLargeDisplayMode}
-      pageSize={pageSize}
-      pageSizeChange={pageSizeChange}
-      pageSizes={pageSizes}
-    />
+      <PageSizeSelector
+        rootElementRef={pageSizesRef}
+        isLargeDisplayMode={isLargeDisplayMode}
+        pageSize={pageSize}
+        pageSizeChange={pageSizeChange}
+        pageSizes={pageSizes}
+      />
     )}
     {pagesContainerVisible && (
       <div
@@ -59,30 +60,32 @@ export const viewFunction = ({
         style={{ visibility: pagesContainerVisibility }}
       >
         {infoVisible && (
-        <InfoText
-          rootElementRef={infoTextRef}
-          infoText={infoText}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          totalCount={totalCount}
-        />
-        )}
-        <div
-          className={PAGER_PAGE_INDEXES_CLASS}
-          ref={pagesRef as any}
-        >
-          <PageIndexSelector
-            hasKnownLastPage={hasKnownLastPage}
-            isLargeDisplayMode={isLargeDisplayMode}
-            maxPagesCount={maxPagesCount}
+          <InfoText
+            rootElementRef={infoTextRef}
+            infoText={infoText}
             pageCount={pageCount}
             pageIndex={pageIndex}
-            pageIndexChange={pageIndexChange}
-            pagesCountText={pagesCountText}
-            showNavigationButtons={showNavigationButtons}
             totalCount={totalCount}
           />
-        </div>
+        )}
+        {pageIndexSelectorVisible && (
+          <div
+            className={PAGER_PAGE_INDEXES_CLASS}
+            ref={pagesRef as any}
+          >
+            <PageIndexSelector
+              hasKnownLastPage={hasKnownLastPage}
+              isLargeDisplayMode={isLargeDisplayMode}
+              maxPagesCount={maxPagesCount}
+              pageCount={pageCount}
+              pageIndex={pageIndex}
+              pageIndexChange={pageIndexChange}
+              pagesCountText={pagesCountText}
+              showNavigationButtons={showNavigationButtons}
+              totalCount={totalCount}
+            />
+          </div>
+        )}
       </div>
     )}
   </Widget>
@@ -144,6 +147,10 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   get infoVisible(): boolean {
     const { showInfo, infoTextVisible } = this.props;
     return showInfo && infoTextVisible && this.isLargeDisplayMode;
+  }
+
+  get pageIndexSelectorVisible(): boolean {
+    return this.props.pageSize !== 0;
   }
 
   private get normalizedDisplayMode(): DisplayMode {

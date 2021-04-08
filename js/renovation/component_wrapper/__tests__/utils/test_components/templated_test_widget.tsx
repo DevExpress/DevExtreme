@@ -6,7 +6,7 @@ import {
   Slot,
   Template,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 export const view = ({
   props: {

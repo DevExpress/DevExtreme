@@ -1,11 +1,8 @@
 import {
-  isNumeric, isDefined, isPlainObject,
+  isNumeric, isPlainObject,
 } from '../../../core/utils/type';
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
-import { camelize } from '../../../core/utils/inflector';
-import getElementComputedStyle from '../../utils/get_computed_style';
-
-import { toNumber } from '../../utils/type_conversion';
+import { titleize } from '../../../core/utils/inflector';
 import { ensureDefined } from '../../../core/utils/common';
 
 import {
@@ -14,38 +11,16 @@ import {
   AllowedDirection,
 } from './types.d';
 
-export const SCROLL_LINE_HEIGHT = 40;
+import {
+  SCROLLABLE_CONTENT_CLASS,
+  DIRECTION_VERTICAL,
+  DIRECTION_HORIZONTAL,
+  DIRECTION_BOTH,
+} from './common/consts';
 
-export const DIRECTION_VERTICAL = 'vertical';
-export const DIRECTION_HORIZONTAL = 'horizontal';
-export const DIRECTION_BOTH = 'both';
-export const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
-export const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
-export const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
-export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-export const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
-export const SCROLLVIEW_BOTTOM_POCKET_CLASS = 'dx-scrollview-bottom-pocket';
-export const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
-export const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated';
-export const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
-export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
-
-export const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
-
-export function getElementWidth(element: Element | undefined): number {
-  return toNumber(getElementComputedStyle(element)?.width);
-}
-
-export function getElementHeight(element: Element | undefined): number {
-  return toNumber(getElementComputedStyle(element)?.height);
-}
-
-export function getElementStyle(
-  name: keyof CSSStyleDeclaration, element: Element | null,
-): number | string {
-  const computedStyle = getElementComputedStyle(element) || {};
-  return computedStyle[name];
-}
+import {
+  ScrollDirection,
+} from './utils/scroll_direction';
 
 export function ensureLocation(
   location: number | Partial<ScrollableLocation>,
@@ -70,40 +45,15 @@ function getRelativeLocation(element: HTMLElement): ScrollableLocation {
   return result;
 }
 
-export class ScrollDirection {
-  direction: ScrollableDirection;
-
-  readonly DIRECTION_HORIZONTAL = 'horizontal';
-
-  readonly DIRECTION_VERTICAL = 'vertical';
-
-  readonly DIRECTION_BOTH = 'both';
-
-  constructor(direction: ScrollableDirection) {
-    this.direction = direction ?? DIRECTION_VERTICAL;
-  }
-
-  get isHorizontal(): boolean {
-    return this.direction === DIRECTION_HORIZONTAL || this.direction === DIRECTION_BOTH;
-  }
-
-  get isVertical(): boolean {
-    return this.direction === DIRECTION_VERTICAL || this.direction === DIRECTION_BOTH;
-  }
-
-  get isBoth(): boolean {
-    return this.direction === DIRECTION_BOTH;
-  }
-}
-
-function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): number {
-  return containerRef[`scroll${camelize(dimension, true)}`] - containerRef[`client${camelize(dimension, true)}`];
+export function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): number {
+  return containerRef[`scroll${titleize(dimension)}`] - containerRef[`client${titleize(dimension)}`];
 }
 
 export function getBoundaryProps(
   direction: ScrollableDirection,
   scrollOffset: ScrollableLocation,
   element: HTMLDivElement,
+  topPocketHeight: number,
 ): Partial<ScrollableBoundary> {
   const { left, top } = scrollOffset;
   const boundaryProps: Partial<ScrollableBoundary> = {};
@@ -115,16 +65,9 @@ export function getBoundaryProps(
   }
   if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element);
+    boundaryProps.reachedBottom = (getMaxScrollOffset('height', element) - topPocketHeight) - top < 0.5;
   }
   return boundaryProps;
-}
-
-export function getContainerOffsetInternal(element: HTMLDivElement): ScrollableLocation {
-  return {
-    left: element.scrollLeft,
-    top: element.scrollTop,
-  };
 }
 
 function getScrollBarSize(dimension: string, containerRef: HTMLDivElement): number {
@@ -144,10 +87,10 @@ export function normalizeCoordinate(
 }
 
 export function getPublicCoordinate(
-  prop: keyof ScrollOffset, coordinate: number, containerRef: HTMLDivElement, rtlEnabled?: boolean,
+  prop: keyof ScrollOffset, coordinate: number, maxLeftOffset: number, rtlEnabled?: boolean,
 ): number {
   return needNormalizeCoordinate(prop, rtlEnabled)
-    ? getMaxScrollOffset('width', containerRef) + normalizeCoordinate(prop, coordinate, rtlEnabled)
+    ? maxLeftOffset + normalizeCoordinate(prop, coordinate, rtlEnabled)
     : coordinate;
 }
 
@@ -156,16 +99,13 @@ export function normalizeLocation(
   direction?: ScrollableDirection,
 ): Partial<ScrollableLocation> {
   if (isPlainObject(location)) {
-    const left = ensureDefined(location.left, location.x);
-    const top = ensureDefined(location.top, location.y);
-
     return {
-      left: isDefined(left) ? -left : undefined,
-      top: isDefined(top) ? -top : undefined,
+      left: -ensureDefined(location.left, location.x),
+      top: -ensureDefined(location.top, location.y),
     };
   }
 
-  const { isVertical, isHorizontal } = new ScrollDirection(direction || 'vertical');
+  const { isVertical, isHorizontal } = new ScrollDirection(direction);
   return {
     left: isHorizontal ? -location : undefined,
     top: isVertical ? -location : undefined,
@@ -190,7 +130,7 @@ function getElementLocationInternal(
 
   const containerLocation = normalizeCoordinate(
     prop,
-    getContainerOffsetInternal(containerRef)[prop],
+    containerRef[`scroll${titleize(prop)}`],
     rtlEnabled,
   );
 
@@ -218,13 +158,14 @@ export function getElementLocation(
   rtlEnabled?: boolean,
 ): number {
   const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
+  const maxScrollLeftOffset = getMaxScrollOffset('width', containerRef);
   const location = normalizeCoordinate(
     prop,
     getElementLocationInternal(element, prop, offset, direction, containerRef, rtlEnabled),
     rtlEnabled,
   );
 
-  return getPublicCoordinate(prop, location, containerRef, rtlEnabled);
+  return getPublicCoordinate(prop, location, maxScrollLeftOffset, rtlEnabled);
 }
 
 export function updateAllowedDirection(

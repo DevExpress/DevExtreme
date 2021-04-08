@@ -4,6 +4,7 @@ import { extend } from '../../core/utils/extend';
 import { DataSource } from '../../data/data_source/data_source';
 import { Deferred } from '../../core/utils/deferred';
 import { isGroup, isCondition, getFilterExpression, renderValueText } from '../filter_builder/utils';
+import errors from '../widget/ui.errors';
 
 function baseOperation(grid) {
     const calculateFilterExpression = function(filterValue, field, fields) {
@@ -55,9 +56,13 @@ function baseOperation(grid) {
             const result = new Deferred();
 
             const key = dataSource.store().key();
+
             if(key) {
                 dataSource.filter([key, '=', fieldInfo.value]);
+            } else if(fieldInfo.field.calculateDisplayValue) {
+                errors.log('W1017');
             }
+
             dataSource.load().done(items => {
                 result.resolve(getSelectedItemsTexts(items)[0]);
             });

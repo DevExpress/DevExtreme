@@ -77,6 +77,8 @@ const APPLY_BUTTON_CLASS = 'dx-popup-done';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
+const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
+
 const FOCUSED_CLASS = 'dx-state-focused';
 
 const toSelector = function(val) {
@@ -2983,7 +2985,7 @@ QUnit.module('dataSource integration', {
             this.clock.tick(loadDelay);
             const $content = $(instance.content());
             const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
-            const $loadPanel = $content.find('.dx-scrollview-loadpanel');
+            const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
             const keyboard = keyboardMock($input);
 
             keyboard.type('2');
@@ -3016,7 +3018,7 @@ QUnit.module('dataSource integration', {
 
         this.clock.tick(loadDelay);
         const $content = $(instance.content());
-        const $loadPanel = $content.find('.dx-scrollview-loadpanel');
+        const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
 
         instance.getDataSource().load();
         this.clock.tick(loadDelay / 2);
@@ -3024,6 +3026,41 @@ QUnit.module('dataSource integration', {
 
         this.clock.tick(loadDelay / 2);
         assert.ok($loadPanel.is(':hidden'), 'load panel is not visible when loading has been finished');
+    });
+
+    QUnit.test('load panel should be displayed if old search result has no items and now search value was modified (T985917)', function(assert) {
+        const loadDelay = 1000;
+        const instance = this.$element.dxLookup({
+            dataSource: {
+                load: () => {
+                    const d = new $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve([]);
+                    }, loadDelay);
+
+                    return d;
+                }
+            },
+            searchEnabled: true,
+            searchTimeout: loadDelay / 10,
+            useNativeScrolling: false,
+            opened: true
+        }).dxLookup('instance');
+
+        this.clock.tick(loadDelay);
+
+        const $content = $(instance.content());
+        const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        this.clock.tick(loadDelay * 2);
+        keyboard.type('2');
+        this.clock.tick(loadDelay / 2);
+        const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
+
+        assert.ok($loadPanel.is(':visible'), 'load panel is visible');
     });
 });
 

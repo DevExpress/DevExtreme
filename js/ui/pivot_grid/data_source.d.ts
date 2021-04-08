@@ -170,7 +170,7 @@ export interface PivotGridDataSourceField {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
+    calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => void);
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateSummaryValue
      * @type_function_param1 e:dxPivotGridSummaryCell

@@ -2,7 +2,7 @@ import {
   Component,
   ComponentBindings,
   JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { HeaderPanelLayout, HeaderPanelLayoutProps } from '../../base/header_panel/layout';
 import { TimelineDateHeaderLayout } from './date_header/layout';
 

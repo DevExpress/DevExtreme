@@ -3,10 +3,41 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
+    ValueChangedInfo
+} from './editor/editor';
+
+import {
     dxSliderBaseOptions
 } from './slider';
 
 import dxTrackBar from './track_bar';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxRangeSlider>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxRangeSlider>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxRangeSlider>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxRangeSlider> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxRangeSlider> & ValueChangedInfo & {
+    readonly start?: number;
+    readonly end?: number;
+    readonly value?: Array<number>;
+}
+
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
      * @docid
@@ -24,6 +55,9 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     endName?: string;
     /**
      * @docid
+     * @type_function_param1_field1 component:dxRangeSlider
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @default null
      * @type_function_param1_field4 start:number
@@ -32,7 +66,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSlider, element?: TElement, model?: any, start?: number, end?: number, value?: Array<number> }) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @default 40

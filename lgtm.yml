@@ -1,0 +1,6 @@
+extraction:
+  javascript:
+    index:
+      include:
+        - js
+        - themebuilder-scss/src

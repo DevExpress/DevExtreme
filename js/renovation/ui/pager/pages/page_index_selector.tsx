@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Fragment, Consumer,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { LightButton } from '../common/light_button';
 import { PagesLarge } from './large';

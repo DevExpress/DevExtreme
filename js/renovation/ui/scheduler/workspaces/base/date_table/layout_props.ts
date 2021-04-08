@@ -1,6 +1,6 @@
 import {
   ComponentBindings, JSXTemplate, Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { DataCellTemplateProps, ViewCellData } from '../../types.d';
 import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
