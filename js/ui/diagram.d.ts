@@ -43,12 +43,12 @@ export type InitializedEvent = ComponentInitializedEvent<dxDiagram>;
 
 /** @public */
 export type ItemClickEvent = ComponentEvent<dxDiagram> & {
-    item?: dxDiagramItem;
+    readonly item: dxDiagramItem;
 }
 
 /** @public */
 export type ItemDblClickEvent = ComponentEvent<dxDiagram> & {
-    item?: dxDiagramItem;
+    readonly item: dxDiagramItem;
 }
 
 /** @public */
@@ -56,34 +56,32 @@ export type OptionChangedEvent = ComponentEvent<dxDiagram> & ChangedOptionInfo;
 
 /** @public */
 export type RequestEditOperationEvent = ComponentEvent<dxDiagram> & {
-    operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
-    args?: dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs;
-    reason?: 'checkUIElementAvailability' | 'modelModification';
+    readonly operation: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
+    readonly args: dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs;
+    readonly reason: 'checkUIElementAvailability' | 'modelModification';
     allowed?: boolean;
 }
 
 /** @public */
 export type RequestLayoutUpdateEvent = ComponentEvent<dxDiagram> & {
-  changes?: any[];
-  allowed?: boolean 
+    readonly changes: any[];
+    allowed?: boolean 
 }
 
 /** @public */
 export type SelectionChangedEvent = ComponentEvent<dxDiagram> & {
-  items?: Array<dxDiagramItem>;
+    readonly items: Array<dxDiagramItem>;
 }
-
 
 /** @public */
 export type CustomShapeTemplateData = {
-    item?: dxDiagramShape;
+    readonly item: dxDiagramShape;
 };
 
 /** @public */
 export type CustomShapeToolboxTemplateData = {
-    item?: dxDiagramShape;
+    readonly item: dxDiagramShape;
 };
-
 
 export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
