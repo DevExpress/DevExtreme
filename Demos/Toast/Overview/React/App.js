@@ -1,28 +1,55 @@
 ﻿import React from 'react';
+import { Toast } from 'devextreme-react/toast';
 
 import { ProductItem } from './ProductItem.js';
 import { products } from './data.js';
 
-class App extends React.Component {
+function App() {
+  const [toastConfig, setToastConfig] = React.useState({
+    isVisible: false,
+    type: 'info',
+    message: ''
+  });
 
-  render() {
+  const items = products.map((product) => (
+    <li key={product.ID}>
+      <ProductItem product={product} checkAvailability={checkAvailability} />
+    </li>
+  ));
 
-    const items = products.map((product) => (
-      <li key={product.ID}>
-        <ProductItem product={product} />
-      </li>
-    ));
+  return (
+    <div id="productList">
+      <h1>Product List</h1>
+      <ul>{items}</ul>
+      <Toast
+        visible={toastConfig.isVisible}
+        message={toastConfig.message}
+        type={toastConfig.type}
+        onHiding={onHiding}
+        displayTime={600}
+      />
+    </div>
+  );
 
-    return (
-      <div id="toast">
+  function checkAvailability(e, product) {
+    const type = e.value ? 'success' : 'error';
+    const message =
+      product.Name + (e.value ? ' is available' : ' is not available');
 
-        <h1>Product List</h1>
-
-        <ul>{items}</ul>
-      </div>
-    );
+    setToastConfig({
+      ...toastConfig,
+      isVisible: true,
+      type,
+      message
+    });
   }
 
+  function onHiding() {
+    setToastConfig({
+      ...toastConfig,
+      isVisible: false
+    });
+  }
 }
 
 export default App;

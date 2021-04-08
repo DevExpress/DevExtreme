@@ -1,8 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCheckBoxModule } from 'devextreme-angular';
-import notify from 'devextreme/ui/notify';
+import { DxCheckBoxModule, DxToastModule } from 'devextreme-angular';
 
 import { Product, Service } from './app.service';
 
@@ -18,24 +17,29 @@ if(!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     products: Product[];
+    isVisible: boolean = false;
+    type: string = "info";
+    message: string = "";
 
     constructor(service: Service) {
         this.products = service.getProducts();
     }
 
     checkAvailable(e, product) {
-        var type = e.value ? "success" : "error",
-            text = product.Name +
-            (e.value ? " is available" : " is not available");
+        const type = e.value ? "success" : "error";
+        const text = product.Name + (e.value ? " is available" : " is not available");
 
-        notify(text, type, 600);
+        this.type = type;
+        this.message = text;
+        this.isVisible = true;
     }
 }
 
 @NgModule({
     imports: [
         BrowserModule,
-        DxCheckBoxModule
+        DxCheckBoxModule,
+        DxToastModule
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]

@@ -1,17 +1,17 @@
-::ng-deep #toast {
+::ng-deep #productList {
     padding: 10px;
 }
-::ng-deep #toast ul {
+::ng-deep #productList ul {
     text-align: center;
     list-style-type: none;
     margin: 20px 0;
 }
-::ng-deep #toast ul li {
+::ng-deep #productList ul li {
     display: inline-block;
     width: 160px;
     margin: 10px;
 }
-::ng-deep #toast ul li img {
+::ng-deep #productList ul li img {
     width: 100px;
 }
 ::ng-deep .dx-toast-content {
