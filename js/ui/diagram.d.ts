@@ -1,4 +1,3 @@
-import { type } from 'jsrender';
 import {
     TElement
 } from '../core/element';
@@ -14,10 +13,8 @@ import DataSource, {
 
 import {
   ComponentEvent,
-  ComponentNativeEvent,
   ComponentInitializedEvent,
-  ChangedOptionInfo,
-  ItemInfo
+  ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
