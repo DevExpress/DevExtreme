@@ -10,7 +10,7 @@ const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
 
 const BUTTON_MESSAGE = 'dxDropDownEditor-selectLabel';
 
-export default class ClearButton extends TextEditorButton {
+export default class DropDownButton extends TextEditorButton {
     constructor(name, editor, options) {
         super(name, editor, options);
 
@@ -61,7 +61,7 @@ export default class ClearButton extends TextEditorButton {
             visible
         };
 
-        this.updateCurrentTemplate(options);
+        this._addTemplate(options);
         return options;
     }
 
@@ -82,12 +82,12 @@ export default class ClearButton extends TextEditorButton {
         }
     }
 
-    isSameTemplate() {
+    _isSameTemplate() {
         return this.editor.option('dropDownButtonTemplate') === this.currentTemplate;
     }
 
-    updateCurrentTemplate(options) {
-        if(!this.isSameTemplate()) {
+    _addTemplate(options) {
+        if(!this._isSameTemplate()) {
             options.template = this.editor._getTemplateByOption('dropDownButtonTemplate');
             this.currentTemplate = this.editor.option('dropDownButtonTemplate');
         }
