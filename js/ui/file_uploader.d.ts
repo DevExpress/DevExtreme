@@ -62,36 +62,36 @@ export type ProgressEvent = ComponentNativeEvent<dxFileUploader> & {
 
 /** @public */
 export type UploadAbortedEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    request?: XMLHttpRequest;
-    message?: string
+    readonly file: File;
+    readonly request: XMLHttpRequest;
+    message: string
 }
 
 /** @public */
 export type UploadedEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    request?: XMLHttpRequest;
-    message?: string;
+    readonly file: File;
+    readonly request: XMLHttpRequest;
+    message: string;
 }
 
 /** @public */
 export type UploadErrorEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    request?: XMLHttpRequest;
-    error?: any;
-    message?: string;
+    readonly file: File;
+    readonly request: XMLHttpRequest;
+    readonly error: any;
+    message: string;
 }
 
 /** @public */
 export type UploadStartedEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    request?: XMLHttpRequest 
+    readonly file: File;
+    readonly request: XMLHttpRequest 
 }
 
 /** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxFileUploader> & {
-    value?: Array<File>;
-    previousValue?: Array<File>;
+    readonly value?: Array<File>;
+    readonly previousValue?: Array<File>;
 }
 
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
