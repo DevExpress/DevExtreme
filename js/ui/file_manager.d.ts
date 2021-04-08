@@ -39,23 +39,23 @@ export type ContentReadyEvent = ComponentEvent<dxFileManager>;
 
 /** @public */
 export type ContextMenuItemClickEvent = ComponentNativeEvent<dxFileManager> & {
-    itemData?: any;
-    itemElement?: TElement;
-    itemIndex?: number;
-    fileSystemItem?: FileSystemItem;
-    viewArea?: 'navPane' | 'itemView';
+    readonly itemData: any;
+    readonly itemElement: TElement;
+    readonly itemIndex: number;
+    readonly fileSystemItem?: FileSystemItem;
+    readonly viewArea: 'navPane' | 'itemView';
 }
 
 /** @public */
 export type ContextMenuShowingEvent = Cancelable & ComponentNativeEvent<dxFileManager> & {
-    fileSystemItem?: FileSystemItem;
-    targetElement?: TElement;
-    viewArea?: 'navPane' | 'itemView';
+    readonly fileSystemItem?: FileSystemItem;
+    readonly targetElement?: TElement;
+    readonly viewArea: 'navPane' | 'itemView';
 }
 
 /** @public */
 export type CurrentDirectoryChangedEvent = ComponentEvent<dxFileManager> & {
-    directory?: FileSystemItem;
+    readonly directory: FileSystemItem;
 }
 
 /** @public */
@@ -63,15 +63,15 @@ export type DisposingEvent = ComponentEvent<dxFileManager>;
 
 /** @public */
 export type ErrorOccurredEvent =  ComponentEvent<dxFileManager> & {
-    errorCode?: number;
+    readonly errorCode?: number;
     errorText?: string;
-    fileSystemItem?: FileSystemItem;
+    readonly fileSystemItem?: FileSystemItem;
 }
 
 /** @public */
 export type FocusedItemChangedEvent =  ComponentEvent<dxFileManager> & {
-    item?: FileSystemItem;
-    itemElement?: TElement;
+    readonly item?: FileSystemItem;
+    readonly itemElement?: TElement;
 }
 
 /** @public */
@@ -83,22 +83,22 @@ export type OptionChangedEvent = ComponentEvent<dxFileManager> & ChangedOptionIn
 
 /** @public */
 export type SelectedFileOpenedEvent = ComponentEvent<dxFileManager> & {
-    file?: FileSystemItem;
+    readonly file: FileSystemItem;
 }
 
 /** @public */
 export type SelectionChangedEvent =  ComponentEvent<dxFileManager> & {
-    currentSelectedItemKeys?: Array<string>;
-    currentDeselectedItemKeys?: Array<string>;
-    selectedItems?: Array<FileSystemItem>;
-    selectedItemKeys?: Array<string>;
+    readonly currentSelectedItemKeys: Array<string>;
+    readonly currentDeselectedItemKeys: Array<string>;
+    readonly selectedItems: Array<FileSystemItem>;
+    readonly selectedItemKeys: Array<string>;
 }
 
 /** @public */
 export type ToolbarItemClickEvent = ComponentNativeEvent<dxFileManager> & {
-    itemData?: any;
-    itemElement?: TElement;
-    itemIndex?: number;
+    readonly itemData: any;
+    readonly itemElement: TElement;
+    readonly itemIndex: number;
 }
 
 

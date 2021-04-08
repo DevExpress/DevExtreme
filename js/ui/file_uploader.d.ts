@@ -21,9 +21,9 @@ import UploadInfo from '../file_management/upload_info';
 
 /** @public */
 export type BeforeSendEvent = ComponentEvent<dxFileUploader> & {
-    request?: XMLHttpRequest;
-    file?: File;
-    uploadInfo?: UploadInfo;
+    readonly request: XMLHttpRequest;
+    readonly file: File;
+    readonly uploadInfo?: UploadInfo;
 }
 
 /** @public */
@@ -34,12 +34,12 @@ export type DisposingEvent = ComponentEvent<dxFileUploader>;
 
 /** @public */
 export type DropZoneEnterEvent = ComponentNativeEvent<dxFileUploader> & {
-    dropZoneElement?: TElement;
+    readonly dropZoneElement: TElement;
 }
 
 /** @public */
 export type DropZoneLeaveEvent = ComponentNativeEvent<dxFileUploader> & {
-    dropZoneElement?: TElement;
+    readonly dropZoneElement: TElement;
 }
 
 /** @public */
@@ -53,45 +53,45 @@ export type OptionChangedEvent = ComponentEvent<dxFileUploader> & ChangedOptionI
 
 /** @public */
 export type ProgressEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    segmentSize?: number;
-    bytesLoaded?: number;
-    bytesTotal?: number;
-    request?: XMLHttpRequest;
+    readonly file: File;
+    readonly segmentSize: number;
+    readonly bytesLoaded: number;
+    readonly bytesTotal: number;
+    readonly request: XMLHttpRequest;
 }
 
 /** @public */
 export type UploadAbortedEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    request?: XMLHttpRequest;
-    message?: string
+    readonly file: File;
+    readonly request: XMLHttpRequest;
+    message: string
 }
 
 /** @public */
 export type UploadedEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    request?: XMLHttpRequest;
-    message?: string;
+    readonly file: File;
+    readonly request: XMLHttpRequest;
+    message: string;
 }
 
 /** @public */
 export type UploadErrorEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    request?: XMLHttpRequest;
-    error?: any;
-    message?: string;
+    readonly file: File;
+    readonly request: XMLHttpRequest;
+    readonly error: any;
+    message: string;
 }
 
 /** @public */
 export type UploadStartedEvent = ComponentNativeEvent<dxFileUploader> & {
-    file?: File;
-    request?: XMLHttpRequest 
+    readonly file: File;
+    readonly request: XMLHttpRequest 
 }
 
 /** @public */
 export type ValueChangedEvent = ComponentNativeEvent<dxFileUploader> & {
-    value?: Array<File>;
-    previousValue?: Array<File>;
+    readonly value?: Array<File>;
+    readonly previousValue?: Array<File>;
 }
 
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
