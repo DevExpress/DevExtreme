@@ -10,7 +10,7 @@ import {
   Template,
   Slot,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
 import { isMaterial, current } from '../../ui/themes';
@@ -20,7 +20,7 @@ import { getImageSourceType } from '../../core/utils/icon';
 import { Icon } from './common/icon';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
-import { BaseWidgetProps } from '../utils/base_props';
+import { BaseWidgetProps } from './common/base_props';
 import BaseComponent from '../component_wrapper/button';
 import { EffectReturn } from '../utils/effect_return.d';
 

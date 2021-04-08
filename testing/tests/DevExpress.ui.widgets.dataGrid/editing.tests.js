@@ -8411,7 +8411,7 @@ QUnit.module('Editing with real dataController', {
         this.addRow();
 
         // assert
-        assert.ok($(rowsView.getRowElement(0)).hasClass('dx-edit-row dx-row-inserted'), 'new row');
+        assert.ok($(rowsView.getRowElement(0)).is('.dx-edit-row.dx-row-inserted'), 'new row');
         assert.notOk($(rowsView.getRowElement(3)).hasClass('dx-edit-row'), 'row isn\'t edited');
     });
 
@@ -17637,7 +17637,7 @@ QUnit.module('Edit Form', {
         // assert
         $rowElements = $testElement.find('tbody.dx-row');
         assert.strictEqual($rowElements.length, 9, 'row count');
-        assert.ok($rowElements.eq(0).hasClass('dx-edit-row dx-row-inserted dx-datagrid-edit-form'), 'detail form row');
+        assert.ok($rowElements.eq(0).is('.dx-edit-row.dx-row-inserted.dx-datagrid-edit-form'), 'detail form row');
     });
 
     QUnit.test('Edit row when row as tbody', function(assert) {
@@ -18915,7 +18915,7 @@ QUnit.module('Promises in callbacks and events', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'keyboardNavigation', 'editing', 'editingRowBased', 'editingCellBased', 'editorFactory', 'headerPanel', 'validating', 'errorHandling'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'keyboardNavigation', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'headerPanel', 'validating', 'errorHandling'], {
             initViews: true
         });
 
@@ -19595,7 +19595,7 @@ QUnit.module('Promises in callbacks and events', {
         this.clock.tick(500);
 
         // assert
-        assert.ok($(this.rowsView.getRowElement(0)).hasClass('dx-edit-row dx-row-inserted'), 'new row');
+        assert.ok($(this.rowsView.getRowElement(0)).is('.dx-edit-row.dx-row-inserted'), 'new row');
         assert.notOk($(this.rowsView.getRowElement(3)).hasClass('dx-edit-row'), 'row isn\'t edited');
     });
 });

@@ -42,9 +42,10 @@ module('Workspace navigation', () => {
                 beforeEach: function() {
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
-                            ...options,
+                            currentDate: new Date(2021, 0, 10),
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             renovateRender: scrollingMode === 'virtual',
+                            ...options,
                         });
                     };
                 },
@@ -875,7 +876,6 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
-                                scrolling: { mode: scrollingMode, orientation: 'both' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');
@@ -923,7 +923,6 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
-                                scrolling: { mode: scrollingMode, orientation: 'both' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');
@@ -953,9 +952,10 @@ module('Workspace navigation', () => {
                 beforeEach: function() {
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
-                            ...options,
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             renovateRender: scrollingMode === 'virtual',
+                            currentDate: new Date(2021, 0, 10),
+                            ...options,
                         });
                     };
                 },
@@ -1431,7 +1431,6 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 height: 500,
-                                scrolling: { mode: scrollingMode, orientation: 'both' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');

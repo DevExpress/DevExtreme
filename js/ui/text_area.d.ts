@@ -2,9 +2,68 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
+    ValueChangedInfo
+} from './editor/editor';
+
 import dxTextBox, {
     dxTextBoxOptions
 } from './text_box';
+
+/** @public */
+export type ChangeEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxTextArea>;
+
+/** @public */
+export type CopyEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type CutEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxTextArea>;
+
+/** @public */
+export type EnterKeyEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type FocusInEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type FocusOutEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxTextArea>;
+
+/** @public */
+export type InputEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type KeyDownEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type KeyPressEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type KeyUpEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxTextArea> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = ComponentNativeEvent<dxTextArea>;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxTextArea> & ValueChangedInfo;
 
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**

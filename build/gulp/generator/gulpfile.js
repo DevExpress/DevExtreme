@@ -5,8 +5,8 @@ const file = require('gulp-file');
 const del = require('del');
 const path = require('path');
 const fs = require('fs');
-const { generateComponents } = require('devextreme-generator/component-compiler');
-const { InfernoGenerator } = require('devextreme-generator/inferno-generator/inferno-generator');
+const { generateComponents } = require('@devextreme-generator/build-helpers');
+const { InfernoGenerator } = require('@devextreme-generator/inferno');
 const ts = require('gulp-typescript');
 const plumber = require('gulp-plumber');
 const gulpIf = require('gulp-if');
@@ -15,6 +15,8 @@ const notify = require('gulp-notify');
 const watch = require('gulp-watch');
 const transpileConfig = require('../transpile-config');
 const env = require('../env-variables');
+const cached = require('gulp-cached');
+
 const {
     BASE_GENERATOR_OPTIONS,
     BASE_GENERATOR_OPTIONS_WITH_JQUERY
@@ -35,7 +37,7 @@ const SRC = [
 ];
 
 const IGNORE_PATHS_BY_FRAMEWORKS = {
-    vue: ['!js/renovation/viz/**/*'],
+    vue: [],
     react: [],
     angular: []
 };
@@ -62,9 +64,11 @@ function generateJQueryComponents(isWatch) {
         generateJQueryOnly: true
     };
 
-    const pipe = isWatch ? watch(SRC).on('ready', () => console.log(
-        'generate-jquery-components task is watching for changes...'
-    )) : gulp.src(SRC);
+
+    const pipe = isWatch ?
+        watch(SRC).on('ready', () => console.log(
+            'generate-jquery-components task is watching for changes...'
+        )) : gulp.src(SRC);
 
     return pipe
         .pipe(generateComponents(generator))
@@ -93,6 +97,7 @@ function generateInfernoComponents(distPath = './', babelConfig = transpileConfi
         const isDefault = distPath === './';
 
         return gulp.src(SRC, { base: 'js' })
+            .pipe(gulpIf(dev, cached('generate-inferno-component')))
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(tsProject({
@@ -152,10 +157,18 @@ gulp.task('generate-components', gulp.series(
 gulp.task('generate-components-dev', gulp.series(
     'generate-jquery-components',
     generateInfernoComponents('./', transpileConfig.cjs, true),
-    ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm, true)),
-    ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs, true)),
     processRenovationMeta
 ));
+
+gulp.task('generate-inferno-components-watch', function() {
+    gulp
+        .watch(SRC, gulp.series(
+            generateInfernoComponents('./', transpileConfig.cjs, true)
+        ))
+        .on('ready', () => console.log(
+            'generate-inferno-components task is watching for changes...'
+        ));
+});
 
 function addGenerationTask(
     frameworkName,
@@ -165,7 +178,7 @@ function addGenerationTask(
     babelGeneratedFiles = true
 ) {
     const frameworkDest = `artifacts/${frameworkName}`;
-    const generator = require(`devextreme-generator/${frameworkName}-generator`).default;
+    const generator = require(`@devextreme-generator/${frameworkName}`).default;
     let tsProject = () => () => { };
     if(compileTs) {
         tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);

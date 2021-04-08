@@ -3,7 +3,7 @@ import {
   Component,
   JSXComponent,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 export const viewFunction = ({ props: { id } }: GrayScaleFilter): JSX.Element => (
   <filter id={id}>

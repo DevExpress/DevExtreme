@@ -37,7 +37,7 @@ gulp.task('bundler-config', function() {
         .pipe(gulp.dest(`${context.RESULT_NPM_PATH}/${packageDir}/bundles`));
 });
 
-gulp.task('bundler-config-dev', function() {
+gulp.task('bundler-config-watch', function() {
     return gulp
         .watch(BUNDLE_CONFIG_SOURCES, gulp.series('bundler-config'))
         .on('ready', () => console.log(

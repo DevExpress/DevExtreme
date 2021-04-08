@@ -6,6 +6,7 @@ import { Consts, createTestFileSystem, FileManagerProgressPanelWrapper, FileMana
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
+import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 
 const { test } = QUnit;
 
@@ -497,9 +498,7 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         this.wrapper.getDialogButton('Delete').trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
-        this.clock.tick(400);
-        this.wrapper.getContextMenuItem('Refresh').trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton(true).trigger('dxclick');
         this.clock.tick(400);
 
         $rows = this.wrapper.getRowsInDetailsView();
@@ -532,9 +531,7 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         this.wrapper.getDialogButton('Delete').trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
-        this.clock.tick(400);
-        this.wrapper.getContextMenuItem('Refresh').trigger('dxclick');
+        this.wrapper.getToolbarRefreshButton(true).trigger('dxclick');
         this.clock.tick(400);
 
         $rows = this.wrapper.getRowsInDetailsView();
@@ -628,6 +625,53 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         const refreshIcon1 = $refresh.eq(1).find(`.${Consts.TOOLBAR_REFRESH_ITEM_ICON_CLASS}`);
         assert.ok(refreshIcon0.hasClass(Consts.TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS), 'refresh button is in default state');
         assert.ok(refreshIcon1.hasClass(Consts.TOOLBAR_REFRESH_ITEM_ICON_DEAFULT_CLASS), 'refresh button is in default state');
+    });
+
+    test('long-running operation cannot be shown in case of showPanel is dynamically set to true-false-true', function(assert) {
+        const operationDelay = 1500;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'd'
+            }),
+            notifications: {
+                showPanel: true
+            }
+        });
+        this.clock.tick(400);
+
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
+
+        const initialCount = this.wrapper.getRowsInDetailsView().length;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick((operationDelay - 300) / 3);
+
+        assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount, 'files count is the same yet');
+        assert.notOk(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is hidden');
+
+        this.fileManager.option('notifications.showPanel', false);
+        this.clock.tick((operationDelay - 300) / 3);
+
+        assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount, 'files count is the same yet');
+        assert.notOk(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is hidden');
+
+        this.fileManager.option('notifications.showPanel', true);
+        this.clock.tick((operationDelay - 300) / 3);
+
+        assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount, 'files count is the same yet');
+        assert.notOk(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is hidden');
+
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount - 1, 'files count decreased');
+        assert.ok(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is visible');
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is still no operations');
     });
 
 });

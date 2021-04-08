@@ -1,12 +1,12 @@
 import {
   ComponentBindings,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import {
   ScrollableProps,
 } from './scrollable_props';
 
-import { BaseWidgetProps } from '../../utils/base_props';
+import { BaseWidgetProps } from '../common/base_props';
 
 @ComponentBindings()
 export class ScrollViewProps extends ScrollableProps {

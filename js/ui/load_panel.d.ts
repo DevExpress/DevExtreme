@@ -3,6 +3,13 @@ import {
 } from '../core/element';
 
 import {
+    Cancelable,
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
     animationConfig
 } from '../animation/fx';
 
@@ -14,6 +21,30 @@ import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions
 } from './overlay';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxLoadPanel>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxLoadPanel>;
+
+/** @public */
+export type HidingEvent = ComponentEvent<dxLoadPanel> & Cancelable;
+
+/** @public */
+export type HiddenEvent = ComponentEvent<dxLoadPanel>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxLoadPanel>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxLoadPanel> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = ComponentEvent<dxLoadPanel>;
+
+/** @public */
+export type ShownEvent = ComponentEvent<dxLoadPanel>;
 
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**

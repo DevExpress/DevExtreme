@@ -6,10 +6,42 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxTileView>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxTileView>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxTileView>;
+
+/** @public */
+export type ItemClickEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxTileView> & ChangedOptionInfo;
 
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**

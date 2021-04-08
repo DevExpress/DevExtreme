@@ -62,7 +62,7 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
             }, this.options);
 
             setupDataGridModules(this, [
-                'data', 'columns', 'columnHeaders', 'rows', 'editorFactory', 'grouping', 'gridView', 'editing', 'editingRowBased', 'editingCellBased', 'focus', 'selection',
+                'data', 'columns', 'columnHeaders', 'rows', 'editorFactory', 'grouping', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'focus', 'selection',
                 'keyboardNavigation', 'validating', 'masterDetail', 'virtualScrolling', 'adaptivity', 'columnFixing', 'pager'
             ], {
                 initViews: true

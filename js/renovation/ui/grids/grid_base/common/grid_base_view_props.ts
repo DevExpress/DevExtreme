@@ -1,4 +1,4 @@
-import { ComponentBindings, OneWay } from 'devextreme-generator/component_declaration/common';
+import { ComponentBindings, OneWay } from '@devextreme-generator/declarations';
 import { GridBaseView } from './types';
 
 @ComponentBindings()

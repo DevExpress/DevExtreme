@@ -1,6 +1,6 @@
 import {
   JSXComponent, Component, Ref, OneWay, ComponentBindings, Effect, RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import $ from '../../../../core/renderer';
 import type { GridBaseView } from './common/types';
 

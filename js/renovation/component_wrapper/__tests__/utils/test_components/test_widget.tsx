@@ -9,7 +9,7 @@ import {
   OneWay,
   Ref,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import {
   keyboard,
 } from '../../../../../events/short';
@@ -59,12 +59,12 @@ export default class TestWidget extends JSXComponent(TestWidgetProps) {
   rootRef!: RefObject<HTMLDivElement>;
 
   @Method()
-  apiMethodCheck(arg1, arg2): string {
+  apiMethodCheck(arg1: string, arg2: string): string {
     return `${this.props.text} - ${arg1} - ${arg2}`;
   }
 
   @Method()
-  eventPropCheck(arg): void {
+  eventPropCheck(arg: unknown): void {
     this.props.onEventProp?.(arg);
   }
 

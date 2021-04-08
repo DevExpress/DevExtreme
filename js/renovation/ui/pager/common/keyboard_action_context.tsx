@@ -1,4 +1,4 @@
-import { createContext } from 'devextreme-generator/component_declaration/common';
+import { createContext } from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { EventCallback } from '../../common/event_callback.d';
 

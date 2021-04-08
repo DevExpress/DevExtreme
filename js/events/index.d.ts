@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 export interface EventExtension { }
 export interface EventType { }
 /**
@@ -5,6 +9,41 @@ export interface EventType { }
  * @prevFileNamespace DevExpress.events
  */
 export type TEvent = {} extends EventType ? dxEvent : EventType;
+
+export interface ComponentInitializedEvent<T> {
+    readonly component?: T;
+    readonly element?: TElement;
+}
+
+export interface ComponentEvent<T> {
+    readonly component: T;
+    readonly element: TElement;
+    readonly model?: any;
+}
+
+export interface ComponentNativeEvent<T> {
+    readonly component: T;
+    readonly element: TElement;
+    readonly model?: any;
+    readonly event?: TEvent;
+}
+
+export interface ChangedOptionInfo {
+    readonly name: string;
+    readonly fullName: string;
+    readonly value?: any;
+    readonly previousValue?: any;
+}
+
+export interface ItemInfo {
+    readonly itemData?: any;
+    readonly itemElement: TElement;
+    readonly itemIndex: number;
+}
+
+export interface Cancelable {
+    cancel?: boolean;
+}
 
 /**
  * @docid

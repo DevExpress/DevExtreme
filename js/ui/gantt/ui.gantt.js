@@ -1214,11 +1214,12 @@ class Gantt extends Widget {
     _getTaskContentTemplateFunc(taskContentTemplateOption) {
         const isTaskShowing = true;
         const template = taskContentTemplateOption && this._getTemplate(taskContentTemplateOption);
-        const createTemplateFunction = template && ((container, item) => {
+        const createTemplateFunction = template && ((container, item, callback, index) => {
             item.taskData = this.getTaskDataByCoreData(item.taskData);
             template.render({
                 model: item,
-                container: getPublicElement($(container))
+                container: getPublicElement($(container)),
+                onRendered: () => { callback(container, index); }
             });
             return isTaskShowing;
         });
@@ -1412,11 +1413,21 @@ class Gantt extends Widget {
     }
 
     // export
+    exportToPdf(options) {
+        const fullOptions = extend({}, options);
+        fullOptions.docCreateMethod ??= window['jspdf']?.['jsPDF'] ?? window['jsPDF'];
+        fullOptions.format ??= 'a4';
+        return new Promise((resolve) => {
+            const doc = this._ganttView?._ganttViewCore.exportToPdf(fullOptions);
+            resolve(doc);
+        });
+    }
     getTreeListTableStyle() {
         const table = this._treeList._$element.find('.dx-treelist-table').get(0);
         const style = window.getComputedStyle(table);
         return {
             color: style.color,
+            backgroundColor: style.backgroundColor,
             fontSize: style.fontSize,
             fontFamily: style.fontFamily,
             fontWeight: style.fontWeight,
@@ -1456,7 +1467,8 @@ class Gantt extends Widget {
         const style = window.getComputedStyle(cell);
         const styleForExport = {
             color: style.color,
-            padding: style.padding
+            padding: style.padding,
+            width: cellElement.clientWidth
         };
 
         const nodeKey = treeList.getKeyByRowIndex(rowIndex);

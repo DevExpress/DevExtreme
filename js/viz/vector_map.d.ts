@@ -15,7 +15,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -32,12 +36,69 @@ import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    BaseWidgetAnnotationConfig
+    BaseWidgetAnnotationConfig,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 import {
     VectorMapProjectionConfig
 } from './vector_map/projection';
+
+export interface TooltipInfo {
+    target?: MapLayerElement | dxVectorMapAnnotationConfig;
+}
+
+/** @public */
+export type CenterChangedEvent = ComponentEvent<dxVectorMap> & {
+    readonly center: Array<number>;
+}
+
+/** @public */
+export type ClickEvent = ComponentNativeEvent<dxVectorMap> & {
+    readonly target: MapLayerElement;
+}
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxVectorMap>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxVectorMap>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxVectorMap>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxVectorMap> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxVectorMap>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxVectorMap> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxVectorMap>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxVectorMap> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxVectorMap> & {
+    readonly target: MapLayerElement;
+}
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxVectorMap> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxVectorMap> & TooltipInfo;
+
+/** @public */
+export type ZoomFactorChangedEvent = ComponentEvent<dxVectorMap> & {
+    readonly zoomFactor: number;
+}
 
 /**
  * @docid
@@ -319,7 +380,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       * @type_function_param1 elements:Array<MapLayerElement>
       * @notUsedInTheme
       */
-      customize?: ((elements: Array<MapLayerElement>) => any),
+      customize?: ((elements: Array<MapLayerElement>) => void),
       /**
       * @docid
       * @prevFileNamespace DevExpress.viz
@@ -508,17 +569,23 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 center:Array<number>
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onCenterChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, center?: Array<number> }) => void);
+    onCenterChanged?: ((e: CenterChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:MapLayerElement
      * @notUsedInTheme
@@ -526,51 +593,63 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, event?: TEvent, target?: MapLayerElement }) => void) | string;
+    onClick?: ((e: ClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
+    onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => void);
+    onTooltipShown?: ((e: TooltipShownEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxVectorMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 zoomFactor:number
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: TElement, model?: any, zoomFactor?: number }) => void);
+    onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void);
     /**
      * @docid
      * @default true

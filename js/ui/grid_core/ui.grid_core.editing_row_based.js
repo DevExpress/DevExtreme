@@ -1,11 +1,21 @@
-const EDIT_MODE_ROW = 'row';
-const EDIT_MODE_FORM = 'form';
-const MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
+import {
+    EDIT_MODE_ROW,
+    MODES_WITH_DELAYED_FOCUS,
+    ROW_SELECTED_CLASS,
+    EDIT_FORM_CLASS
+
+} from './ui.grid_core.editing_constants';
+
+const EDIT_ROW = 'dx-edit-row';
 
 export const editingRowBasedModule = {
     extenders: {
         controllers: {
             editing: {
+                isRowEditMode: function() {
+                    return this.getEditMode() === EDIT_MODE_ROW;
+                },
+
                 _afterCancelEditData: function(rowIndex) {
                     const dataController = this._dataController;
 
@@ -97,6 +107,36 @@ export const editingRowBasedModule = {
 
                     return this.callBase.apply(this, arguments);
                 }
+            }
+        },
+        views: {
+            rowsView: {
+                _createRow: function(row) {
+                    const $row = this.callBase(row);
+
+                    if(row) {
+                        const editingController = this._editingController;
+                        const isEditRow = editingController.isEditRow(row.rowIndex);
+
+                        if(isEditRow) {
+                            $row.addClass(EDIT_ROW);
+                            $row.removeClass(ROW_SELECTED_CLASS);
+
+                            if(row.rowType === 'detail') {
+                                $row.addClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
+                            }
+                        }
+                    }
+
+                    return $row;
+                },
+
+                _update: function(change) {
+                    this.callBase(change);
+                    if(change.changeType === 'updateSelection') {
+                        this.getTableElements().children('tbody').children('.' + EDIT_ROW).removeClass(ROW_SELECTED_CLASS);
+                    }
+                },
             }
         }
     }

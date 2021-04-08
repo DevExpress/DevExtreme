@@ -14,10 +14,62 @@ import {
     template
 } from '../core/templates/template';
 
+import {
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions
 } from './overlay';
+
+import {
+    ResizeInfo
+} from './resizable';
+
+export interface TitleRenderedInfo {
+    readonly titleElement: TElement
+}
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxPopup>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxPopup>;
+
+/** @public */
+export type HidingEvent = ComponentEvent<dxPopup> & Cancelable;
+
+/** @public */
+export type HiddenEvent = ComponentEvent<dxPopup>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxPopup>;
+
+/** @public */
+export type ShownEvent = ComponentEvent<dxPopup>;
+
+/** @public */
+export type ResizeEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
+
+/** @public */
+export type ResizeStartEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
+
+/** @public */
+export type ResizeEndEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxPopup> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = ComponentEvent<dxPopup>;
+
+/** @public */
+export type TitleRenderedEvent = ComponentEvent<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
@@ -68,37 +120,52 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onResize?: ((e: ResizeEvent) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onResizeEnd?: ((e: ResizeEndEvent) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 titleElement:dxElement
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: T, element?: TElement, model?: any, titleElement?: TElement }) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function

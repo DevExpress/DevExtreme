@@ -2,7 +2,7 @@ import {
   Component,
   Fragment,
   JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { Row } from '../../../base/row';
 import { isHorizontalGroupOrientation } from '../../../utils';
 import { DateHeaderCell } from '../../../base/header_panel/date_header/cell';
