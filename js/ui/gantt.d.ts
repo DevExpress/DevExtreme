@@ -47,40 +47,40 @@ export type ContextMenuPreparingEvent = Cancelable & {
     readonly component?: dxGantt;
     readonly element?: TElement;
     readonly event?: TEvent;
-    targetKey?: any;
-    targetType?: string;
-    data?: any;
-    items?: Array<any>
+    readonly targetKey?: any;
+    readonly targetType?: string;
+    readonly data?: any;
+    readonly items?: Array<any>
 }
 
 /** @public */
 export type CustomCommandEvent = {
     readonly component?: dxGantt;
     readonly element?: TElement;
-    name?: string;
+    readonly name: string;
 }
 
 /** @public */
 export type DependencyDeletedEvent = ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type DependencyDeletingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type DependencyInsertedEvent = ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type DependencyInsertingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    values?: any;
+    readonly values: any;
 }
 
 /** @public */
@@ -94,127 +94,127 @@ export type OptionChangedEvent = ComponentEvent<dxGantt> & ChangedOptionInfo;
 
 /** @public */
 export type ResourceAssignedEvent = ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type ResourceAssigningEvent = Cancelable & ComponentEvent<dxGantt> & {
-    values?: any;
+    readonly values: any;
 }
 
 /** @public */
 export type ResourceDeletedEvent = ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type ResourceDeletingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type ResourceInsertedEvent = ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type ResourceInsertingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    values?: any;
+    readonly values: any;
 }
 
 /** @public */
 export type ResourceUnassignedEvent = ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type ResourceUnassigningEvent = Cancelable & ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type SelectionChangedEvent = ComponentEvent<dxGantt> & {
-    selectedRowKey?: any;
+    readonly selectedRowKey?: any;
 }
 
 /** @public */
 export type TaskClickEvent = ComponentNativeEvent<dxGantt> & {
-    key?: any;
-    data?: any;
+    readonly key?: any;
+    readonly data?: any;
 }
 
 /** @public */
 export type TaskDblClickEvent = Cancelable & ComponentNativeEvent<dxGantt> & {
-    key?: any;
-    data?: any;
+    readonly key?: any;
+    readonly data?: any;
 }
 
 /** @public */
 export type TaskDeletedEvent = ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type TaskDeletingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type TaskEditDialogShowingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
-    readOnlyFields?: Array<string>;
-    hiddenFields?: Array<string>;
+    readonly values: any;
+    readonly key: any;
+    readonly readOnlyFields?: Array<string>;
+    readonly hiddenFields?: Array<string>;
 }
 
 /** @public */
 export type TaskInsertedEvent = ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly value?: any;
+    readonly key: any;
 }
 
 /** @public */
 export type TaskInsertingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    values?: any;
+    readonly values: any;
 }
 
 /** @public */
 export type TaskMovingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    newValues?: any;
-    values?: any;
-    key?: any;
+    readonly newValues: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type TaskUpdatedEvent = ComponentEvent<dxGantt> & {
-    values?: any;
-    key?: any;
+    readonly values: any;
+    readonly key: any;
 }
 
 /** @public */
 export type TaskUpdatingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    newValues?: any;
-    values?: any;
-    key?: any
+    readonly newValues: any;
+    readonly values: any;
+    readonly key: any
 }
 
 /** @public */
 export type TaskContentTemplateData = {
-    cellSize: any;
-    isMilestone: boolean;
-    taskData: any;
-    taskHTML: any;
-    taskPosition: any;
-    taskResources:  Array<any>;
-    taskSize: any;
+    readonly cellSize: any;
+    readonly isMilestone: boolean;
+    readonly taskData: any;
+    readonly taskHTML: any;
+    readonly taskPosition: any;
+    readonly taskResources:  Array<any>;
+    readonly taskSize: any;
 }
 
 
