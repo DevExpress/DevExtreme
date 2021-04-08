@@ -29,8 +29,7 @@ const src = [
     'js/**/*.*',
     `!${globTs}`,
     '!js/**/*.{tsx,ts}',
-    '!js/renovation/code_coverage/**/*.*',
-    '!js/renovation/components.js'
+    '!js/renovation/code_coverage/**/*.*'
 ];
 
 const esmTranspileSrc = src.concat([
