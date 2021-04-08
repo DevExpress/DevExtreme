@@ -18,7 +18,7 @@ import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
 import { isDefined } from '../../../core/utils/type';
-import { BaseWidgetProps } from '../../utils/base_props';
+import { BaseWidgetProps } from '../common/base_props';
 import {
   ScrollableProps,
 } from './scrollable_props';

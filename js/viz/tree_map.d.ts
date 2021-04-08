@@ -16,7 +16,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import BaseWidget, {
@@ -26,7 +30,65 @@ import BaseWidget, {
     Font,
     WordWrapType,
     VizTextOverflowType,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
+
+export interface InteractionInfo {
+  readonly node: dxTreeMapNode;
+}
+
+/** @public */
+export type ClickEvent = ComponentNativeEvent<dxTreeMap> & {
+  readonly node: dxTreeMapNode
+}
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxTreeMap>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxTreeMap>;
+
+/** @public */
+export type DrillEvent = ComponentEvent<dxTreeMap> & {
+  readonly node: dxTreeMapNode;
+}
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxTreeMap>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxTreeMap> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxTreeMap>;
+
+/** @public */
+export type HoverChangedEvent = ComponentEvent<dxTreeMap> & InteractionInfo;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxTreeMap> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxTreeMap>;
+
+/** @public */
+export type NodesInitializedEvent = ComponentEvent<dxTreeMap> & {
+    readonly root: dxTreeMapNode;
+}
+
+/** @public */
+export type NodesRenderingEvent = ComponentEvent<dxTreeMap> & {
+    readonly node: dxTreeMapNode;
+}
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxTreeMap> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxTreeMap> & InteractionInfo;
+
 
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
@@ -297,6 +359,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 node:dxTreeMapNode
      * @notUsedInTheme
@@ -304,62 +369,77 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, event?: TEvent, node?: dxTreeMapNode }) => void) | string;
+    onClick?: ((e: ClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrill?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onDrill?: ((e: DrillEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onHoverChanged?: ((e: HoverChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 root:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodesInitialized?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, root?: dxTreeMapNode }) => void);
+    onNodesInitialized?: ((e: NodesInitializedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodesRendering?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onNodesRendering?: ((e: NodesRenderingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @default undefined
