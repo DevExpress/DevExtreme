@@ -6,15 +6,15 @@ import { GridBaseViewWrapper } from './grid_base_view_wrapper';
 
 const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   props: {
     views,
     className,
+    role,
   },
-}: GridBaseViews) => (
+}: GridBaseViews): JSX.Element => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <div className={`${className} ${GRIDBASE_CONTAINER_CLASS}`}>
+  <div className={`${className} ${GRIDBASE_CONTAINER_CLASS}`} role={role}>
     {(views.map(({ name, view }) => (<GridBaseViewWrapper key={name} view={view} />)))}
   </div>
 );

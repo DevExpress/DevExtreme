@@ -2844,7 +2844,7 @@ QUnit.module('Real dataGrid ExportController tests', {
                     }
                 }
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
                 { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },

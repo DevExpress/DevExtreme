@@ -17,7 +17,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('column should be draggable if grid contains this column and column with allowHiding: false', function(assert) {
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1', allowHiding: false }, { dataField: 'field2' }],
             dataSource: []
         });
@@ -36,7 +36,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('Correct runtime changing of a columnChooser mode (string)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2' }],
             dataSource: []
         });
@@ -61,7 +61,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('Correct runtime changing of a columnChooser mode (object)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2' }],
             dataSource: []
         });
@@ -86,7 +86,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('ColumnChooser\'s treeView get correct default config (without checkboxes)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnChooser: { mode: 'select' },
             columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2', visible: false }],
             dataSource: []

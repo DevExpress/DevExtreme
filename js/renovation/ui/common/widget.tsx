@@ -121,9 +121,9 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onFocusOut?: (e: Event) => void;
 
-  @Event() onHoverStart?: () => void;
+  @Event() onHoverStart?: (e: Event) => void;
 
-  @Event() onHoverEnd?: () => void;
+  @Event() onHoverEnd?: (e: Event) => void;
 }
 
 @Component({
@@ -277,13 +277,13 @@ export class Widget extends JSXComponent(WidgetProps) {
     const isHoverable = hoverStateEnabled && !disabled;
     if (isHoverable) {
       hover.on(this.widgetRef.current,
-        () => {
+        ({ event }: { event: Event }) => {
           !this.active && (this.hovered = true);
-          onHoverStart?.();
+          onHoverStart?.(event);
         },
-        () => {
+        ({ event }: { event: Event }) => {
           this.hovered = false;
-          onHoverEnd?.();
+          onHoverEnd?.(event);
         },
         { selector, namespace });
       return (): void => hover.off(this.widgetRef.current, { selector, namespace });

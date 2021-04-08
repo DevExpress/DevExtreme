@@ -173,7 +173,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                         rowRenderingMode,
                         useNative: false
                     },
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 // act
@@ -212,7 +212,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                     columnRenderingMode: 'virtual',
                     useNative: true
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const columnController = dataGrid.getController('columns');
@@ -266,7 +266,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 200,
             height: 200,
             dataSource: array,
@@ -320,7 +320,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 200,
             height: 200,
             dataSource: array,
@@ -682,7 +682,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: array,
             keyExpr: 'id',
             paging: { pageSize: 10 },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual',
                 useNative: false
@@ -711,7 +711,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
             height: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}, {}, {}, {}],
             searchPanel: {
                 visible: true
@@ -736,7 +736,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     QUnit.test('columns width when all columns have width and scrolling mode is virtual and columns fixing and grouping', function(assert) {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             remoteOperations: true,
             dataSource: {
                 load: function() {
@@ -799,7 +799,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             columns: ['field1', 'field2'],
             dataSource: [],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: { mode: 'virtual' },
             stateStoring: {
                 enabled: true,
@@ -859,7 +859,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             onContentReady: function() {
                 contentReadyCallCount++;
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual'
             },
@@ -889,7 +889,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             height: 200,
             columnAutoWidth: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: generateData(10),
             scrolling: {
                 rowPageSize: 2,
@@ -931,7 +931,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         ];
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             scrolling: {
                 mode: 'virtual'
@@ -1085,7 +1085,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const dataGrid = $('#dataGrid').dxDataGrid({
             height: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             dataSource: array,
             scrolling: {
@@ -1151,7 +1151,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
             remoteOperations: { groupPaging: true },
             height: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
@@ -1215,7 +1215,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
             remoteOperations: { groupPaging: true },
             height: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
@@ -1272,7 +1272,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         }
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 load: function(options) {
                     const items = [];
@@ -1352,7 +1352,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         $('#dataGrid').dxDataGrid({
             dataSource: store,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 rowRenderingMode: 'virtual',
             },
@@ -1398,7 +1398,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: { mode: 'virtual' },
             paging: { pageSize: 2 },
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         // act
@@ -1646,7 +1646,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             height: 200,
             keyExpr: 'id',
             dataSource: data,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             paging: {
                 pageSize: 5
             },
@@ -1924,7 +1924,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
         const dataGrid = createDataGrid({
             height: 50,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             scrolling: {
                 mode: 'virtual',
@@ -1972,7 +1972,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
         const dataGrid = createDataGrid({
             height: 50,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             scrolling: {
                 rowRenderingMode: 'virtual',
@@ -2015,7 +2015,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid({
             height: 50,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             scrolling: {
                 mode: 'virtual',
@@ -2059,7 +2059,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         };
         const dataGrid = createDataGrid({
             height: 800,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: generateDataSource(100),
             scrolling: {
                 mode: 'virtual',
@@ -2081,7 +2081,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const rowHeight = 50;
         const dataGrid = createDataGrid({
             height: rowHeight,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: data,
             columns: ['id'],
             scrolling: {
@@ -2188,7 +2188,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             height: 200,
             wordWrapEnabled: true,
             allowColumnResizing: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnResizingMode: 'widget',
             dataSource: {
                 store: {
@@ -2311,7 +2311,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const $dataGrid = testElement.dxDataGrid({
             width: 1000,
             height: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: generateDataSource(10),
             allowColumnResizing: true,
             scrolling: {
@@ -2366,7 +2366,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 rowRenderingMode: 'virtual',
                 useNative: false
             },
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         // act
@@ -2427,7 +2427,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             width: 200,
             columnWidth: 50,
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: columns,
             scrolling: {
                 columnRenderingMode: 'virtual'
@@ -2450,7 +2450,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const dataGrid = $('#dataGrid').dxDataGrid({
             height: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 load: function() {
                     const d = $.Deferred();
@@ -2755,7 +2755,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
             dataSource: data,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 updateTimeout: 0,
                 useNative: false,
@@ -2798,7 +2798,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 }
             },
             remoteOperations: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
@@ -2898,7 +2898,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     QUnit.test('DataGrid should not paginate to the already loaded page if it is not in the viewport and it\'s row was focused (T726994)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             height: 200,
             dataSource: generateDataSource(100),
             keyExpr: 'id',
@@ -2938,7 +2938,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                     return result;
                 };
                 const dataGrid = createDataGrid({
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     dataSource: generateData(),
                     height: 500,
                     keyExpr: 'id',
@@ -3144,7 +3144,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             grouping: {
                 expandMode: 'rowClick'
             },
@@ -3186,7 +3186,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite'
             },
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
 
@@ -3208,7 +3208,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid({
             height: 300,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: data,
                 group: 'id'
@@ -3235,7 +3235,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
     QUnit.test('Scroll to second page should works if scrolling mode is infinite, summary is defined and server returns totalCount', function(assert) {
         const dataGrid = createDataGrid({
             height: 100,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 timeout: 0,
                 mode: 'infinite',
@@ -3281,7 +3281,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid({
             height: 100,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 timeout: 0,
                 mode: 'infinite',
@@ -3311,7 +3311,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         let error = false;
         const dataGrid = createDataGrid({
             height: 300,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 load: function(options) {
                     if(error) {
@@ -3362,7 +3362,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             height: 500,
             dataSource: data,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 updateTimeout: 0,
                 useNative: false,
@@ -3400,7 +3400,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             height: 400,
             dataSource: data,
             keyExpr: 'id',
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 updateTimeout: 0,
                 useNative: false,
@@ -3469,7 +3469,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['C0', 'C1', 'C2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [
                     { C0: 10, C1: 11, C2: 12 }, { C0: 10, C1: 11, C2: 12 },

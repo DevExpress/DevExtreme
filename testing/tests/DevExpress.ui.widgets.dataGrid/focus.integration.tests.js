@@ -88,7 +88,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 enabled: true,
                 template: function(container, e) {
                     masterDetailDataGrids.push($('<div class="detail-grid">').dxDataGrid({
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         keyExpr: 'id',
                         focusedRowEnabled: true,
                         dataSource: [{ id: 3, text: '3' }]
@@ -515,7 +515,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Cell should not be unfocused after click on it while editing with row mode', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'data1', field2: 'data2' }],
             columns: ['field1', 'field2'],
             editing: {
@@ -623,7 +623,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Row should be focused after click on readonly cell if editor is opened', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1, field: 'some1' }, { id: 2, field: 'some2' }],
             keyExpr: 'id',
             editing: {
@@ -816,7 +816,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             { team: 'public', name: 'Zeb', age: 18 }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: data,
             remoteOperations: { filtering: true, sorting: true, paging: true },
             columns: [{ dataField: 'team', groupIndex: 0 }, 'name', 'age'],
@@ -849,7 +849,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             { team: 'public', name: 'Zeb', age: 18 }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: data,
             keyExpr: 'name',
             remoteOperations: { filtering: true, sorting: true, paging: true },
@@ -872,7 +872,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 { 'OrderID': 10248, 'CustomerID': 'VINET', 'EmployeeID': 5, 'ShipCity': 'Reims' },
                 { 'OrderID': 10249, 'CustomerID': 'TOMSP', 'EmployeeID': 6, 'ShipCity': 'Münster' }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: ['OrderID', 'EmployeeID'],
             columns: [{ dataField: 'CustomerID', groupIndex: 0 }, 'ShipCity'],
             focusedRowEnabled: true,
@@ -900,7 +900,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             { name: 'Dan2', phone: '777777', room: 2 }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: data,
             columns: ['name', 'phone', { dataField: 'room', groupIndex: 0, showWhenGrouped: true }],
             grouping: { autoExpandAll: true }
@@ -922,7 +922,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.testInActiveWindow('Focus search textbox after change search text', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             searchPanel: { visible: true },
             dataSource: {
                 store: [{ field1: '1', field2: '2', field3: '3', field4: '4', field5: '5' }]
@@ -948,7 +948,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.testInActiveWindow('Focus component with focusedRowEnabled and focusedRowIndex should focus the focused row', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'field1',
             dataSource: [
                 { field1: '1', field2: '4' },
@@ -974,7 +974,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.testInActiveWindow('DataGrid - Should change focusedRowKey at runtime', function(assert) {
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'field1',
             dataSource: [
                 { field1: '1', field2: '4' },
@@ -1023,7 +1023,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 contentReadyCallCount++;
             },
             focusedRowEnabled: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             dataSource: [{ id: 1 }]
         });
@@ -1047,7 +1047,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             onContentReady: function() {
                 contentReadyCallCount++;
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             dataSource: [{ id: 1 }]
         });
@@ -1116,7 +1116,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Click by the first row on the next page should focus it without grid refresh if scrolling.mode is virtual and focusedRowEnabled is true (T722879)', function(assert) {
         const dataGrid = createDataGrid({
             focusedRowEnabled: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'name',
             dataSource: [
                 { name: 'Alex', phone: '555555', room: 1 },
@@ -1146,7 +1146,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     ['row', 'form'].forEach(editMode => {
         QUnit.test(`Should not throw exception after calling editRow() if KBN is disabled and edit mode is ${editMode}`, function(assert) {
             const dataGrid = $('#dataGrid').dxDataGrid({
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 editing: {
                     mode: editMode,
                     allowUpdating: true
@@ -1166,7 +1166,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         QUnit.test(`Should not throw exception after calling focus() if KBN is disabled and edit mode is ${editMode}`, function(assert) {
             const dataGrid = $('#dataGrid').dxDataGrid({
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 editing: {
                     mode: editMode,
                     allowUpdating: true
@@ -1348,7 +1348,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.testInActiveWindow('First cell of added row should be focused after adding row during editing another cell if onInitNewRow is async', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ room: 1 }, { room: 2 }, { room: 3 }],
             editing: {
                 allowAdding: true,
@@ -1391,7 +1391,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const onOptionChanged = sinon.spy();
 
         createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1 }],
             columns: [{ dataField: 'field1' }],
             filterRow: { visible: true },
@@ -1428,7 +1428,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
     // T809900
     QUnit.testInActiveWindow('Focus should not return to cell from filter row after filtering', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             filterRow: { visible: true },
             dataSource: [{ field1: 1, field2: 2 }]
         }).dxDataGrid('instance');
@@ -1525,7 +1525,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         }
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: store,
             height: 200,
             keyExpr: 'id',
@@ -1881,7 +1881,7 @@ QUnit.module('View\'s focus', {
             // arrange
             const masterDetailClass = 'master-detail-test';
             this.dataGrid.option({
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 dataSource: [{ id: 1 }],
                 editing: {
                     startEditAction: startEditAction
@@ -1922,7 +1922,7 @@ QUnit.module('View\'s focus', {
         };
         let dataSourceChanged = false;
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource0,
             customizeColumns: columns => {
                 if(dataSourceChanged) {
@@ -3634,7 +3634,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.testInActiveWindow('Keyboard navigation works well with multilevel grouping', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ field1: '1', field2: '2', field3: '3', field4: '4', field5: '5' }]
             },
@@ -3793,7 +3793,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('Focused cell position has correct value when focus grouping row cell', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['field1', { dataField: 'field2', groupIndex: 0 }, { dataField: 'field3', groupIndex: 1 }, { dataField: 'fixedField', fixed: true, fixedPosition: 'right' }],
             dataSource: {
                 store: [
@@ -3858,7 +3858,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('Focused cell position has correct value when focus grouping row with alignByColumn summary cells (T317210)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['field1', { dataField: 'field2', groupIndex: 0 }, { dataField: 'field3' }, { dataField: 'field4' }, { dataField: 'fixedField', fixed: true, fixedPosition: 'right' }],
             dataSource: {
                 store: [
@@ -3915,7 +3915,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.testInActiveWindow('focus method for cell with editor must focus this editor (T404427)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [
                     { field1: 1, field2: 2 },
@@ -3945,7 +3945,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // arrange
         const data = [{ firstName: 'Alex', lastName: 'Black' }, { firstName: 'John', lastName: 'Dow' }];
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'form',
                 allowUpdating: true
@@ -4012,7 +4012,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 { dataField: 'field2' },
                 { dataField: 'field3' }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2, field3: 3 }]
         });
 
@@ -4080,7 +4080,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 allowUpdating: true
             },
             dataSource: [{ field: 1 }],
-            loadingTimeout: undefined
+            loadingTimeout: null
         });
 
         // act
@@ -4173,7 +4173,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['CompanyName', 'City'],
             showBorders: true,
             allowColumnResizing: true
@@ -4201,7 +4201,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
             dataSource: [{ field1: '1111', field2: '2222' }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['field1', 'field2'],
             showBorders: true,
             allowColumnResizing: true
@@ -4245,7 +4245,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
             commonColumnSettings: {
                 allowResizing: true
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}],
             columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }, { dataField: 'room', width: 100 }, { dataField: 'birthDay', width: 100 }]
         });

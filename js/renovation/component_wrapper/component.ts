@@ -45,7 +45,7 @@ export default class ComponentWrapper extends DOMComponent {
   _viewComponent!: any;
 
   get viewRef() {
-    return this._viewRef.current;
+    return this._viewRef?.current;
   }
   _getDefaultOptions() {
     return extend(

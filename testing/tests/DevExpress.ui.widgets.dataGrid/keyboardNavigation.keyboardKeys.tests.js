@@ -2482,7 +2482,7 @@ QUnit.module('Keyboard keys', {
             dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }],
             columns: ['field1', 'field2', { allowEditing: false, calculateCellValue: function(data) { return data.field1 + data.field1; } }],
             commonColumnSettings: { allowEditing: true },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'cell',
                 allowUpdating: true
@@ -2531,7 +2531,7 @@ QUnit.module('Keyboard keys', {
             showColumnHeaders: true,
             dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }],
             commonColumnSettings: { allowEditing: true },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'cell',
                 allowUpdating: true
@@ -2580,7 +2580,7 @@ QUnit.module('Keyboard keys', {
                     dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }],
                     columns: ['field1', 'field2'],
                     commonColumnSettings: { allowEditing: true },
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     editing: {
                         mode: editMode,
                         allowUpdating: true,
