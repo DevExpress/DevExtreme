@@ -12,6 +12,15 @@ const getConvertedUntils = value => {
     });
 };
 
+const parseTimezone = ({ offsets, offsetIndices, untils }) => {
+    const offsetsList = offsets.split('|').map(value => parseInt(value));
+    const offsetIndicesList = offsetIndices.split('').map(value => parseInt(value));
+    const datesList = getConvertedUntils(untils)
+        .map((accumulator => value => accumulator += value)(0));
+
+    return { offsetsList, offsetIndicesList, datesList };
+};
+
 class TimeZoneCache {
     constructor() {
         this.map = new Map();
@@ -21,14 +30,13 @@ class TimeZoneCache {
         if(!this.map.get(id)) {
             const config = timeZoneDataUtils.getTimezoneById(id);
             if(!config) {
-                return [false];
+                return false;
             }
-            const { offsets, offsetIndices, untils } = config;
 
-            this.map.set(id, [offsets, offsetIndices, getConvertedUntils(untils)]);
+            this.map.set(id, parseTimezone(config));
         }
 
-        return [true, ...this.map.get(id)];
+        return this.map.get(id);
     }
 }
 
@@ -40,13 +48,13 @@ const timeZoneDataUtils = {
 
     getDisplayedTimeZones: function(timestamp) {
         const timeZones = this._timeZones.map((timezone) => {
-            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, getConvertedUntils(timezone.untils), timestamp);
+            const offset = this.getUtcOffset(parseTimezone(timezone), timestamp);
 
             const title = `(GMT ${this.formatOffset(offset)}) ${this.formatId(timezone.id)}`;
 
             return {
-                offset: offset,
-                title: title,
+                offset,
+                title,
                 id: timezone.id
             };
         });
@@ -71,55 +79,48 @@ const timeZoneDataUtils = {
     },
 
     getTimezoneById: function(id) {
-        let result;
-        let i = 0;
+        if(!id) {
+            return;
+        }
+
         const tzList = this._timeZones;
 
-        if(id) {
-            while(!result) {
-                if(!tzList[i]) {
-                    errors.log('W0009', id);
-                    return;
-                }
-                const currentId = tzList[i]['id'];
-                if(currentId === id) {
-                    result = tzList[i];
-                }
-                i++;
+        for(let i = 0; i < tzList.length; i++) {
+            const currentId = tzList[i]['id'];
+            if(currentId === id) {
+                return tzList[i];
             }
         }
-        return result;
+
+        errors.log('W0009', id);
+        return;
     },
 
     getTimeZoneOffsetById: function(id, timestamp) {
-        const [isSuccess, offsets, offsetIndices, untils] = tzCache.get(id);
+        const timeZoneInfo = tzCache.get(id);
 
-        return isSuccess ? this.getUtcOffset(offsets, offsetIndices, untils, timestamp) : undefined;
+        return timeZoneInfo ? this.getUtcOffset(timeZoneInfo, timestamp) : undefined;
     },
 
     getTimeZoneDeclarationTuple: function(id, year) {
-        const [isSuccess, offsets, offsetIndices, untils] = tzCache.get(id);
+        const timeZoneInfo = tzCache.get(id);
 
-        return isSuccess ? this.getTimeZoneDeclarationTupleCore(offsets, offsetIndices, untils, year) : [];
+        return timeZoneInfo ? this.getTimeZoneDeclarationTupleCore(timeZoneInfo, year) : [];
     },
 
-    getTimeZoneDeclarationTupleCore: function(offsets, offsetIndices, untilsList, year) {
+    getTimeZoneDeclarationTupleCore: function({ offsetsList, offsetIndicesList, datesList }, year) {
         const tupleResult = [];
 
-        const offsetIndicesList = offsetIndices.split('');
-        const offsetsList = offsets.split('|').map(value => parseInt(value));
+        for(let i = 0; i < datesList.length; i++) {
+            const currentDate = datesList[i];
+            const currentYear = new Date(currentDate).getFullYear();
 
-        let currentDate = 0;
-
-        for(let i = 0, listLength = untilsList.length; i < listLength; i++) {
-            currentDate += untilsList[i];
-
-            if(new Date(currentDate).getFullYear() === year) {
-                const offset = offsetsList[Number(offsetIndicesList[i + 1])];
+            if(currentYear === year) {
+                const offset = offsetsList[offsetIndicesList[i + 1]];
                 tupleResult.push({ date: currentDate, offset: -offset / 60 });
             }
 
-            if(new Date(currentDate).getFullYear() > year) {
+            if(currentYear > year) {
                 break;
             }
         }
@@ -127,28 +128,13 @@ const timeZoneDataUtils = {
         return tupleResult;
     },
 
-    getUtcOffset: function(offsets, offsetIndices, untilsList, dateTimeStamp) {
-        let index = 0;
-        const offsetIndicesList = offsetIndices.split('');
-        const offsetsList = offsets.split('|');
-
-        let currentUntil = 0;
-
-        for(let i = 0, listLength = untilsList.length; i < listLength; i++) {
-            currentUntil += untilsList[i];
-            if(dateTimeStamp >= currentUntil) {
-                index = i;
-                continue;
-            } else {
-                break;
-            }
+    getUtcOffset: function({ offsetsList, offsetIndicesList, datesList }, dateTimeStamp) {
+        let index = datesList.length - 2;
+        while(index >= 0 && dateTimeStamp < datesList[index]) {
+            index--;
         }
 
-        if(untilsList[index + 1]) {
-            index++;
-        }
-
-        const offset = Number(offsetsList[Number(offsetIndicesList[index])]);
+        const offset = offsetsList[offsetIndicesList[index + 1]];
         return -offset / 60 || offset;
     }
 };
