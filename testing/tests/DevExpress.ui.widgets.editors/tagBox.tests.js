@@ -3702,6 +3702,48 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.ok(handlerStub.called, 'repaint was fired');
     });
 
+    QUnit.test('popup should update position after change height of input on dataSource "Loaded" event', function(assert) {
+        const $element = $('#tagBox').dxTagBox({
+            focusStateEnabled: true,
+            opened: true,
+            dataSource: {
+                store: new CustomStore({
+                    loadMode: 'raw',
+                    load: function() {
+                        const deferred = $.Deferred();
+
+                        setTimeout(() => {
+                            deferred.resolve(['testvalue1', 'testvalue2', 'testvalue3']);
+                        }, TIME_TO_WAIT);
+
+                        return deferred.promise();
+                    }
+                })
+            },
+            width: 170,
+            value: ['testvalue1', 'testvalue2'],
+            searchEnabled: true,
+            searchTimeout: 0
+        });
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $element.dxTagBox('instance');
+        const popupContent = $(instance.content());
+        const { top: initialTop } = popupContent.offset();
+
+        $element
+            .find(`.${TEXTBOX_CLASS}`)
+            .val('testtesttesttest')
+            .trigger('input');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const { top: updatedTop } = popupContent.offset();
+
+        assert.ok(updatedTop > initialTop, 'Popup update position');
+    });
+
     QUnit.test('the input size should change if autocompletion is Enabled (T378411)', function(assert) {
         const items = ['Antigua and Barbuda', 'Albania'];
         const $element = $('#tagBox').dxTagBox({
