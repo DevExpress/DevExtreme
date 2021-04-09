@@ -260,10 +260,22 @@ const DropDownEditor = TextBox.inherit({
     _renderInput: function() {
         this.callBase();
 
-        this.$element().wrapInner($('<div>').addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER));
-        this._$container = this.$element().children().eq(0);
-
+        this._wrapInput();
         this._setDefaultAria();
+    },
+
+    _wrapInput: function() {
+        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
+        const $element = this.$element();
+
+        useHiddenSubmitElement && this._$submitElement?.detach();
+
+        this._$container = $element
+            .wrapInner($('<div>').addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER))
+            .children()
+            .eq(0);
+
+        useHiddenSubmitElement && this._$submitElement?.appendTo($element);
     },
 
     _setDefaultAria: function() {
