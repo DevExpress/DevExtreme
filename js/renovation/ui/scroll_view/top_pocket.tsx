@@ -5,16 +5,12 @@ import {
   OneWay,
   ForwardRef,
   RefObject,
+  Ref,
 } from '@devextreme-generator/declarations';
 import { LoadIndicator } from '../load_indicator';
-import devices from '../../../core/devices';
 import { isDefined } from '../../../core/utils/type';
-
 import messageLocalization from '../../../localization/message';
-
-import { ScrollableProps } from './scrollable_props';
-import { BaseWidgetProps } from '../../utils/base_props';
-
+import { BaseWidgetProps } from '../common/base_props';
 import { combineClasses } from '../../utils/combine_classes';
 
 import {
@@ -24,6 +20,7 @@ import {
   SCROLLVIEW_PULLDOWN_INDICATOR_CLASS,
   SCROLLVIEW_PULLDOWN_READY_CLASS,
   SCROLLVIEW_PULLDOWN_REFRESHING_CLASS,
+  SCROLLVIEW_PULLDOWN_LOADING_CLASS,
   SCROLLVIEW_PULLDOWN_TEXT_CLASS,
   SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
@@ -36,15 +33,16 @@ import {
 export const viewFunction = (viewModel: TopPocket): JSX.Element => {
   const {
     releaseVisibleClass, readyVisibleClass, refreshVisibleClass,
-    pullDownClasses, pullingDownText, pulledDownText, refreshingText, refreshStrategy,
-    props: { useNative, topPocketRef },
+    pullDownClasses, pullingDownText, pulledDownText, refreshingText,
+    pullDownStyles, pullDownIconStyles, pullDownRef,
+    props: { topPocketRef, refreshStrategy },
   } = viewModel;
 
   return (
     <div ref={topPocketRef} className={SCROLLVIEW_TOP_POCKET_CLASS}>
-      <div className={pullDownClasses}>
+      <div ref={pullDownRef} className={pullDownClasses} style={pullDownStyles}>
         { refreshStrategy !== 'swipeDown' && <div className={SCROLLVIEW_PULLDOWN_IMAGE_CLASS} /> }
-        { useNative && refreshStrategy === 'swipeDown' && <div className={PULLDOWN_ICON_CLASS} />}
+        { refreshStrategy === 'swipeDown' && <div className={PULLDOWN_ICON_CLASS} style={pullDownIconStyles} />}
         <div className={SCROLLVIEW_PULLDOWN_INDICATOR_CLASS}>
           <LoadIndicator />
         </div>
@@ -79,15 +77,25 @@ export class TopPocketProps {
   @OneWay() refreshingText?: string;
 
   @OneWay() pocketState: number = TopPocketState.STATE_RELEASED;
+
+  @OneWay() pullDownTopOffset = 0;
+
+  @OneWay() pullDownIconAngle = 0;
+
+  @OneWay() pullDownOpacity = 0;
+
+  @OneWay() isFakeRefreshState = false;
 }
 
-export type TopPocketPropsType = TopPocketProps & Pick<ScrollableProps, 'useNative'> & Pick<BaseWidgetProps, 'visible'>;
+export type TopPocketPropsType = TopPocketProps & Pick<BaseWidgetProps, 'visible'>;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
 
 export class TopPocket extends JSXComponent<TopPocketPropsType>() {
+  @Ref() pullDownRef!: RefObject<HTMLDivElement>;
+
   get releaseVisibleClass(): string | undefined {
     return this.props.pocketState === TopPocketState.STATE_RELEASED
       ? SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS
@@ -101,13 +109,9 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
   }
 
   get refreshVisibleClass(): string | undefined {
-    return this.props.pocketState === TopPocketState.STATE_REFRESHING
+    return this.props.pocketState === TopPocketState.STATE_LOADING
       ? SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS
       : undefined;
-  }
-
-  get refreshStrategy(): string {
-    return this.props.refreshStrategy || (devices.real().platform === 'android' ? 'swipeDown' : 'pullDown');
   }
 
   get pullingDownText(): string | undefined {
@@ -146,10 +150,29 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
     const classesMap = {
       [SCROLLVIEW_PULLDOWN]: true,
       [SCROLLVIEW_PULLDOWN_READY_CLASS]: pocketState === TopPocketState.STATE_READY,
-      [SCROLLVIEW_PULLDOWN_REFRESHING_CLASS]: pocketState === TopPocketState.STATE_REFRESHING,
+      [SCROLLVIEW_PULLDOWN_REFRESHING_CLASS]: pocketState === TopPocketState.STATE_REFRESHING
+        || this.props.isFakeRefreshState,
+      [SCROLLVIEW_PULLDOWN_LOADING_CLASS]: pocketState === TopPocketState.STATE_LOADING,
       'dx-state-invisible': !visible,
     };
 
     return combineClasses(classesMap);
+  }
+
+  get pullDownStyles(): { [key: string]: string | number } | undefined {
+    if (this.props.refreshStrategy === 'swipeDown') {
+      return {
+        opacity: this.props.pullDownOpacity,
+        transform: `translate(0px, ${this.props.pullDownTopOffset}px)`,
+      };
+    }
+
+    return undefined;
+  }
+
+  get pullDownIconStyles(): { [key: string]: string | number } {
+    return {
+      transform: `rotate(${this.props.pullDownIconAngle}deg)`,
+    };
   }
 }

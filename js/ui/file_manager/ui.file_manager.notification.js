@@ -56,7 +56,7 @@ export default class FileManagerNotificationControl extends Widget {
 
         const contentRenderer = this.option('contentTemplate');
         if(isFunction(contentRenderer)) {
-            contentRenderer($drawerContent);
+            contentRenderer($drawerContent, this);
         }
     }
 

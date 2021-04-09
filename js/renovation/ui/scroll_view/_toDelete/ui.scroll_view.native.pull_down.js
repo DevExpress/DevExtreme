@@ -1,9 +1,5 @@
-/* eslint-disable no-undef */
-import $ from '../../core/renderer';
-import Callbacks from '../../core/utils/callbacks';
 import { move } from '../../animation/translator';
 import NativeStrategy from './ui.scrollable.native';
-import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { Deferred } from '../../core/utils/deferred';
 
@@ -17,53 +13,6 @@ const STATE_LOADING = 3;
 const PULLDOWN_RELEASE_TIME = 400;
 
 const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
-
-    _init: function(scrollView) {
-        this.callBase(scrollView);
-        this._$topPocket = scrollView._$topPocket;
-        this._$pullDown = scrollView._$pullDown;
-        this._$bottomPocket = scrollView._$bottomPocket;
-        this._$refreshingText = scrollView._$refreshingText;
-        this._$scrollViewContent = $(scrollView.content());
-
-        this._initCallbacks();
-    },
-
-    _initCallbacks: function() {
-        this.pullDownCallbacks = Callbacks();
-        this.releaseCallbacks = Callbacks();
-        this.reachBottomCallbacks = Callbacks();
-    },
-
-    render: function() {
-        this.callBase();
-        this._renderPullDown();
-        this._releaseState();
-    },
-
-    _renderPullDown: function() {
-        const $loadIndicator = new LoadIndicator($('<div>')).$element();
-
-        this._$pullDown
-            .empty()
-            .append($image)
-            .append($loadContainer.append($loadIndicator));
-    },
-
-    _releaseState: function() {
-        this._state = STATE_RELEASED;
-        this._refreshPullDownText();
-    },
-
-    _pushBackFromBoundary: function() {
-        if(!this._isLocked() && !this._component.isEmpty()) {
-            this.callBase();
-        }
-    },
-
-    _refreshPullDownText: function() {
-    },
-
     update: function() {
         this.callBase();
         this._setTopPocketOffset();
@@ -79,12 +28,6 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         } else {
             this._scrollOffset = this._$container.height() - this._$content.height();
         }
-    },
-
-    _allowedDirections: function() {
-        const allowedDirections = this.callBase();
-        allowedDirections.vertical = allowedDirections.vertical || this._pullDownEnabled;
-        return allowedDirections;
     },
 
     _setTopPocketOffset: function() {

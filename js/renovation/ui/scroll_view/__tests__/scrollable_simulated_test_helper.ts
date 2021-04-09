@@ -86,23 +86,25 @@ class ScrollableTestHelper {
     const { contentSize = 200, containerSize = 100, overflow = 'hidden' } = props;
     let contentHeight = contentSize;
 
-    if (props.pullDownEnabled) {
-      contentHeight += TOP_POCKET_HEIGHT;
+    if (props.forceGeneratePockets) {
+      if (props.pullDownEnabled) {
+        contentHeight += TOP_POCKET_HEIGHT;
 
-      this.viewModel.topPocketRef.current = this.getTopPocketElement();
-      Object.defineProperties(this.viewModel.topPocketRef.current, {
-        clientWidth: { configurable: true, get() { return 100; } },
-        clientHeight: { configurable: true, get() { return TOP_POCKET_HEIGHT; } },
-      });
-    }
-    if (props.reachBottomEnabled) {
-      contentHeight += BOTTOM_POCKET_HEIGHT;
+        this.viewModel.topPocketRef.current = this.getTopPocketElement();
+        Object.defineProperties(this.viewModel.topPocketRef.current, {
+          clientWidth: { configurable: true, get() { return 100; } },
+          clientHeight: { configurable: true, get() { return TOP_POCKET_HEIGHT; } },
+        });
+      }
+      if (props.reachBottomEnabled) {
+        contentHeight += BOTTOM_POCKET_HEIGHT;
 
-      this.viewModel.bottomPocketRef.current = this.getBottomPocketElement();
-      Object.defineProperties(this.viewModel.bottomPocketRef.current, {
-        clientWidth: { configurable: true, get() { return 100; } },
-        clientHeight: { configurable: true, get() { return BOTTOM_POCKET_HEIGHT; } },
-      });
+        this.viewModel.bottomPocketRef.current = this.getBottomPocketElement();
+        Object.defineProperties(this.viewModel.bottomPocketRef.current, {
+          clientWidth: { configurable: true, get() { return 100; } },
+          clientHeight: { configurable: true, get() { return BOTTOM_POCKET_HEIGHT; } },
+        });
+      }
     }
 
     this.initStyles(this.viewModel.containerRef.current,

@@ -90,7 +90,7 @@ declare module '../core/utils/deferred' {
     interface PromiseType<T> extends JQueryPromise<T> { }
 }
 
-declare module '../events' {
+declare module '../events/index' {
     interface EventType extends JQueryEventObject {
         cancel?: boolean;
     }

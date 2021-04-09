@@ -2,6 +2,7 @@ import $ from 'jquery';
 import renderer from 'core/renderer';
 const { test } = QUnit;
 import 'ui/file_manager';
+import FileSystemError from 'file_management/error.js';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import FileManagerBreadcrumbs from 'ui/file_manager/ui.file_manager.breadcrumbs';
@@ -851,5 +852,26 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         this.clock.tick(800);
 
         assert.strictEqual(this.wrapper.getFocusedItemText(), folderName, 'current folder is still focused');
+    });
+
+    test('errorText can be customized on the getItems', function(assert) {
+        const customMessage = 'Custom error message';
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                getItems: () => { throw new FileSystemError(0, null, customMessage); }
+            })
+        });
+        this.clock.tick(400);
+
+        const info = this.progressPanelWrapper.getInfos()[0];
+        const common = info.common;
+        const details = info.details[0];
+        assert.notOk(common.hasError, 'error rendered');
+        assert.equal(common.commonText, 'The directory cannot be opened', 'common text rendered');
+        assert.notOk(common.$progressBar.length, 'progress bar not rendered');
+        assert.ok(common.closeButtonVisible, 'close button visible');
+
+        assert.ok(details.hasError, 'error rendered');
+        assert.equal(details.errorText, customMessage, 'details error text rendered');
     });
 });
