@@ -757,7 +757,7 @@ describe('Methods', () => {
                   if (pocketState === TopPocketState.STATE_READY) {
                     if (pocketState !== TopPocketState.STATE_REFRESHING) {
                       expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
-                      expect(pocketStateChangeHandler).toHaveBeenCalledWith(2);
+                      expect(pocketStateChangeHandler).toHaveBeenCalledWith(3);
                       expect(reachBottomHandler).not.toHaveBeenCalled();
                       expect(pullDownHandler).toHaveBeenCalledTimes(1);
                     } else {
@@ -1021,12 +1021,15 @@ describe('Handlers', () => {
 
                 const scrollByHandler = jest.fn();
                 (viewModel as any).scrollBy = scrollByHandler;
-                (viewModel as any).containerToContentRatio = () => containerToContentRatio;
+                Object.defineProperties(viewModel, {
+                  containerToContentRatio: { get() { return containerToContentRatio; } },
+                });
 
                 viewModel.thumbScrolling = thumbScrolling;
                 viewModel.crossThumbScrolling = crossThumbScrolling;
 
                 viewModel.moveHandler(delta);
+
                 if (crossThumbScrolling) {
                   expect(scrollByHandler).toBeCalledTimes(0);
                   return;

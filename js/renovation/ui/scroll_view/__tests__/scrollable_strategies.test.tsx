@@ -21,6 +21,8 @@ import {
   SCROLLABLE_DISABLED_CLASS,
 } from '../common/consts';
 
+import { titleize } from '../../../../core/utils/inflector';
+
 import { Widget } from '../../common/widget';
 
 const testBehavior = { positive: false };
@@ -280,56 +282,50 @@ each([{
             expect(actualParams).toMatchObject(checkedParams);
           };
 
-          it('scrollEffect should return unsubscribe callback', () => {
-            const scrollable = new Scrollable({ direction });
-            scrollable.containerRef = React.createRef();
-            scrollable.containerRef.current = {};
+          each([
+            { eventName: 'dxscrollinit', effectName: 'init', passEvent: true },
+            { eventName: 'dxscroll', effectName: 'move', passEvent: true },
+            { eventName: 'dxscrollstop', effectName: 'stop' },
+            { eventName: 'dxscrollend', effectName: 'end' },
+          ]).describe('Event: %o', (eventInfo) => {
+            it(`should subscribe to ${eventInfo.eventName} event`, () => {
+              const e = { ...defaultEvent };
+              const viewModel = new Scrollable({ direction });
 
-            const detach = scrollable.scrollEffect() as DisposeEffectReturn;
+              const { eventName, effectName, passEvent } = eventInfo;
+              const eventHandlerName = `handle${titleize(effectName)}`;
+              viewModel[eventHandlerName] = jest.fn();
+              viewModel.wrapperRef = React.createRef();
+              viewModel.containerRef = React.createRef();
 
-            expect(getEventHandlers('scroll').length).toBe(1);
-            detach();
-            expect(getEventHandlers('scroll').length).toBe(0);
+              viewModel[`${effectName}Effect`]();
+              emit(eventName, e);
+
+              expect(viewModel[eventHandlerName]).toHaveBeenCalledTimes(1);
+
+              if (passEvent) {
+                expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(e);
+              }
+            });
           });
 
-          it('should subscribe to scrollinit event', () => {
-            const e = { ...defaultEvent };
-            const scrollable = new Scrollable({ direction });
-            const handleInit = jest.fn();
-            scrollable.handleInit = handleInit;
-            scrollable.wrapperRef = React.createRef();
-            scrollable.containerRef = React.createRef();
+          each([
+            { eventName: 'scroll', effectName: 'scroll' },
+            { eventName: 'dxscrollinit', effectName: 'init' },
+            { eventName: 'dxscrollstop', effectName: 'stop' },
+            { eventName: 'dxscrollend', effectName: 'end' },
+            { eventName: 'dxscroll', effectName: 'move' },
+          ]).describe('Event: %o', (eventInfo) => {
+            it(`${eventInfo.effectName}Effect should return unsubscribe callback`, () => {
+              const viewModel = new Scrollable({ direction });
+              viewModel.wrapperRef = { current: {} };
+              viewModel.containerRef = { current: {} };
 
-            scrollable.initEffect();
-            emit('dxscrollinit', e);
+              const { eventName, effectName } = eventInfo;
+              viewModel[`handle${titleize(effectName)}`] = jest.fn();
 
-            expect(handleInit).toHaveBeenCalledTimes(1);
-            expect(handleInit).toHaveBeenCalledWith(e);
-          });
+              const detach = viewModel[`${effectName}Effect`]() as DisposeEffectReturn;
 
-          it('should subscribe to dxscroll event', () => {
-            const e = { ...defaultEvent };
-            const scrollable = new Scrollable({ direction });
-            const handleMove = jest.fn();
-            scrollable.handleMove = handleMove;
-            scrollable.wrapperRef = React.createRef();
-
-            scrollable.moveEffect();
-            emit('dxscroll', e);
-
-            expect(handleMove).toHaveBeenCalledTimes(1);
-            expect(handleMove).toHaveBeenCalledWith(e);
-          });
-
-          each(['init']).describe('EventName: %o', (shortEventName) => {
-            it('Effect should return unsubscribe callback', () => {
-              const scrollable = new Scrollable({ direction });
-              scrollable.wrapperRef = React.createRef();
-              scrollable.containerRef = React.createRef();
-
-              const detach = scrollable[`${shortEventName}Effect`]() as DisposeEffectReturn;
-
-              const eventName = `dxscroll${shortEventName}`;
               expect(getEventHandlers(eventName).length).toBe(1);
               detach();
               expect(getEventHandlers(eventName).length).toBe(0);
@@ -337,60 +333,51 @@ each([{
           });
 
           if (Scrollable === ScrollableSimulated) {
-            it('should subscribe to scrollstart event', () => {
-              const e = { ...defaultEvent };
-              const scrollable = new Scrollable({ direction });
-              const handleStart = jest.fn();
-              scrollable.handleStart = handleStart;
-              scrollable.wrapperRef = React.createRef();
+            each([
+              { eventName: 'dxscrollstart', effectName: 'start', passEvent: true },
+              { eventName: 'dxscrollcancel', effectName: 'cancel', passEvent: true },
+            ]).describe('Event: %o', (eventInfo) => {
+              it(`should subscribe to ${eventInfo.eventName} event`, () => {
+                const e = { ...defaultEvent };
+                const viewModel = new Scrollable({ direction });
 
-              scrollable.startEffect();
-              emit('dxscrollstart', e);
+                const { eventName, effectName, passEvent } = eventInfo;
+                const eventHandlerName = `handle${titleize(effectName)}`;
+                viewModel[eventHandlerName] = jest.fn();
+                viewModel.wrapperRef = React.createRef();
+                viewModel.containerRef = React.createRef();
 
-              expect(handleStart).toHaveBeenCalledTimes(1);
-              expect(handleStart).toHaveBeenCalledWith(e);
+                viewModel[`${effectName}Effect`]();
+                emit(eventName, e);
+
+                expect(viewModel[eventHandlerName]).toHaveBeenCalledTimes(1);
+
+                if (passEvent) {
+                  expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(e);
+                }
+              });
             });
 
-            it('should subscribe to scrollend event', () => {
-              const e = { ...defaultEvent };
-              const scrollable = new Scrollable({ direction });
-              const handleEnd = jest.fn();
-              scrollable.handleEnd = handleEnd;
-              scrollable.wrapperRef = React.createRef();
+            each([
+              { eventName: 'dxscrollstart', effectName: 'start' },
+              { eventName: 'dxscrollcancel', effectName: 'cancel' },
+            ]).describe('Event: %o', (eventInfo) => {
+              it(`${eventInfo.effectName}Effect should return unsubscribe callback`, () => {
+                const viewModel = new Scrollable({ direction });
+                viewModel.wrapperRef = { current: {} };
+                viewModel.containerRef = { current: {} };
 
-              scrollable.endEffect();
-              emit('dxscrollend', e);
+                const { eventName, effectName } = eventInfo;
+                viewModel[`handle${titleize(effectName)}`] = jest.fn();
 
-              expect(handleEnd).toHaveBeenCalledTimes(1);
-              expect(handleEnd).toHaveBeenCalledWith(e);
-            });
+                const detach = viewModel[`${effectName}Effect`]() as DisposeEffectReturn;
 
-            each(['start', 'end', 'stop', 'cancel']).describe('EventName: %o', (shortEventName) => {
-              it(`${shortEventName}Effect should return unsubscribe callback`, () => {
-                const scrollable = new Scrollable({ direction });
-                scrollable.wrapperRef = React.createRef();
-                scrollable.containerRef = React.createRef();
-
-                const detach = scrollable[`${shortEventName}Effect`]() as DisposeEffectReturn;
-
-                const eventName = `dxscroll${shortEventName}`;
                 expect(getEventHandlers(eventName).length).toBe(1);
                 detach();
                 expect(getEventHandlers(eventName).length).toBe(0);
               });
             });
           }
-
-          it('moveEffect should return unsubscribe callback', () => {
-            const scrollable = new Scrollable({ direction });
-            scrollable.wrapperRef = React.createRef();
-
-            const detach = scrollable.moveEffect() as DisposeEffectReturn;
-
-            expect(getEventHandlers('dxscroll').length).toBe(1);
-            detach();
-            expect(getEventHandlers('dxscroll').length).toBe(0);
-          });
 
           if (Scrollable === ScrollableNative) {
             it('scrollEffect', () => {

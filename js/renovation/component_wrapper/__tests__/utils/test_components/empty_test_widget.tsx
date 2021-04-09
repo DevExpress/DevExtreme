@@ -4,8 +4,7 @@ import {
   JSXComponent,
 } from '@devextreme-generator/declarations';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const view = () => <div />;
+export const view = (): JSX.Element => <div />;
 
 @ComponentBindings()
 export class EmptyTestWidgetProps {}

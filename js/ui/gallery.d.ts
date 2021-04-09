@@ -10,10 +10,46 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxGallery>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxGallery>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxGallery>;
+
+/** @public */
+export type ItemClickEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxGallery> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = ComponentEvent<dxGallery> & SelectionChangedInfo;
 
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     /**

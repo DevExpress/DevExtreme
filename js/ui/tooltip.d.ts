@@ -2,9 +2,40 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    Cancelable,
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
 import dxPopover, {
     dxPopoverOptions
 } from './popover';
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxTooltip>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxTooltip>;
+
+/** @public */
+export type HidingEvent = ComponentEvent<dxTooltip> & Cancelable;
+
+/** @public */
+export type HiddenEvent = ComponentEvent<dxTooltip>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxTooltip>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxTooltip> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = ComponentEvent<dxTooltip>;
+
+/** @public */
+export type ShownEvent = ComponentEvent<dxTooltip>;
 
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
 }

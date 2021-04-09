@@ -1981,8 +1981,8 @@ class Diagram extends Widget {
     setSelectedItems(items) {
         return this._diagramInstance.setSelectedItems(items.map(item => item.id));
     }
-    scrollToItems(items) {
-        return this._diagramInstance.scrollToItems(items.map(item => item.id));
+    scrollToItem(item) {
+        return this._diagramInstance.scrollToItems([item.id]);
     }
 
     _invalidateContextMenuCommands() {

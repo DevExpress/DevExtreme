@@ -6,6 +6,10 @@ import {
     template
 } from '../../core/templates/template';
 
+import {
+    ComponentEvent
+} from '../../events/index';
+
 import BaseWidget, {
     BaseWidgetExport,
     BaseWidgetLoadingIndicator,
@@ -32,21 +36,29 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onTooltipHidden?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onTooltipShown?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz

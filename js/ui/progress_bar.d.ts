@@ -3,12 +3,37 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
+
+import {
+    ValueChangedInfo
+} from './editor/editor';
 
 import dxTrackBar, {
     dxTrackBarOptions
 } from './track_bar';
+
+/** @public */
+export type CompleteEvent = ComponentNativeEvent<dxProgressBar>;
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxProgressBar>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxProgressBar>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxProgressBar>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxProgressBar> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxProgressBar> & ValueChangedInfo;
 
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
@@ -16,11 +41,14 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field1 component:dxProgressBar
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: { component?: dxProgressBar, element?: TElement, model?: any, event?: TEvent }) => void);
+    onComplete?: ((e: CompleteEvent) => void);
     /**
      * @docid
      * @default true
