@@ -2767,6 +2767,36 @@ QUnit.module('keyboard navigation through tags', {
         assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
     });
 
+    QUnit.test('the focused tag should be removed after pressing the \'backspace\' key after readonly state (T986220)', function(assert) {
+        const items = [1, 2, 3, 4];
+        this.reinit({
+            items,
+            value: items,
+            focusStateEnabled: true,
+            searchEnabled: true,
+            readOnly: true
+        });
+
+        this.instance.option('readOnly', false);
+
+        this.keyboard
+            .focus()
+            .press('left')
+            .press('left')
+            .press('left');
+
+        const expectedValue = this.instance.option('value').slice();
+        const focusedTagIndex = this.getFocusedTag().index();
+
+        expectedValue.splice(focusedTagIndex, 1);
+
+        this.keyboard
+            .press('backspace');
+
+        const value = this.instance.option('value');
+        assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
+    });
+
     QUnit.test('backspace should remove selected search text but not tag if any text is selected', function(assert) {
         this.reinit({
             items: ['item 1', 'item 2'],

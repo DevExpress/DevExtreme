@@ -137,6 +137,7 @@ const TagBox = SelectBox.inherit({
 
                 const direction = rtlEnabled ? 'next' : 'prev';
                 this._moveTagFocus(direction);
+
                 !this.option('multiline') && this._scrollContainer(direction);
             },
             rightArrow: function(e) {
@@ -559,7 +560,7 @@ const TagBox = SelectBox.inherit({
     _renderTypingEvent: function() {
         eventsEngine.on(this._input(), addNamespace('keydown', this.NAME), (e) => {
             const keyName = normalizeKeyName(e);
-            if(!this._isControlKey(keyName) && this._isEditable()) {
+            if(!this._isControlKey(keyName) && keyName !== 'backspace' && keyName !== 'del' && this._isEditable()) {
                 this._clearTagFocus();
             }
         });
