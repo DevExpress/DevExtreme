@@ -2940,7 +2940,9 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         assert.notEqual(tooltipText.indexOf(10), -1, 'Default progress tooltip works correctly');
         ganttCore.taskEditController.tooltip.showTime(tasks[0].start, tasks[0].end);
         tooltipText = tooltip.text();
-        assert.notEqual(tooltipText.indexOf(tasks[0].start.toLocaleDateString()), -1, 'Default time tooltip works correctly');
+        assert.notEqual(tooltipText.indexOf('Start'), -1, 'Default time tooltip works correctly 1');
+        assert.notEqual(tooltipText.indexOf('End'), -1, 'Default time tooltip works correctly 2');
+
 
     });
     test('custom text', function(assert) {
