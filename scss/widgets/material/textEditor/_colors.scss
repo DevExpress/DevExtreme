@@ -56,7 +56,6 @@ $texteditor-button-clear-icon-color-bg: null !default;
 $texteditor-invalid-focused-border-color: $base-invalid-color !default;
 $texteditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 $texteditor-input-border-radius: $base-border-radius !default;
-$texteditor-label-color: null !default;
 
 @if $mode == "light" {
   $texteditor-placeholder-color: lighten($texteditor-color, 58%) !default;
