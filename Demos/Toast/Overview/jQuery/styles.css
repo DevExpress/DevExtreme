@@ -1,20 +1,20 @@
-#toast {
+#product-list {
     padding: 10px;
 }
 
-#toast ul {
+#product-list ul {
     text-align: center;
     list-style-type: none;
     margin: 20px 0;
 }
 
-#toast ul li {
+#product-list ul li {
     display: inline-block;
     width: 160px;
     margin: 10px;
 }
 
-#toast ul li img {
+#product-list ul li img {
     width: 100px;
 }
 

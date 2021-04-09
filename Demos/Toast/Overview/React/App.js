@@ -18,7 +18,7 @@ function App() {
   ));
 
   return (
-    <div id="productList">
+    <div id="product-list">
       <h1>Product List</h1>
       <ul>{items}</ul>
       <Toast
