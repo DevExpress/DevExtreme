@@ -712,7 +712,7 @@ const TagBox = SelectBox.inherit({
 
     _renderInputSubstitution: function() {
         this.callBase();
-        this._renderInputSize();
+        this._updateWidgetHeight();
     },
 
     _getValue: function() {
