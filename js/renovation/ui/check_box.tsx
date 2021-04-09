@@ -176,7 +176,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @Effect()
   contentReadyEffect(): EffectReturn {
-    const { onContentReady } = this.props;
+    const { onContentReady, text } = this.props;
+    ((x): unknown => x)(text);
     onContentReady?.({});
   }
 

@@ -161,8 +161,12 @@ export class Button extends JSXComponent(ButtonProps) {
     // NOTE: we should trigger this effect on change each
     //       property upon which onContentReady depends
     //       (for example, text, icon, etc)
-    const { onContentReady } = this.props;
-
+    const {
+      onContentReady, text, icon, template,
+    } = this.props;
+    ((x): unknown => x)(text);
+    ((y): unknown => y)(icon);
+    ((z): unknown => z)(template);
     onContentReady?.({ element: this.contentRef.current!.parentNode });
   }
 
