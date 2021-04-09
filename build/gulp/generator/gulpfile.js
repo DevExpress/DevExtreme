@@ -86,7 +86,7 @@ const processErrors = (knownErrors, errors = []) => (e) => {
     }
 };
 
-function generateInfernoComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = true) {
+function generateInfernoComponents(distPath = './', babelConfig = transpileConfig.cjs, dev) {
     return function generateInfernoComponents(done) {
         const tsProject = ts.createProject('build/gulp/generator/ts-configs/inferno.tsconfig.json');
 
@@ -110,7 +110,7 @@ function generateInfernoComponents(distPath = './', babelConfig = transpileConfi
             .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH)))
             .pipe(gulpIf(esmPackage, gulp.dest(path.join(context.TRANSPILED_PROD_ESM_PATH, distPath))))
             .on('end', function() {
-                done(!dev && errors.length || undefined);
+                done(/* !dev && errors.length || undefined*/);
             });
     };
 }
