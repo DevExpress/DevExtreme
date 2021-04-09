@@ -7,7 +7,7 @@ import {
 } from './scrollable_props';
 import { ScrollEventArgs } from './types.d';
 
-import { BaseWidgetProps } from '../../utils/base_props';
+import { BaseWidgetProps } from '../common/base_props';
 import { TopPocketProps } from './top_pocket';
 import { BottomPocketProps } from './bottom_pocket';
 

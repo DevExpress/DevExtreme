@@ -76,9 +76,9 @@ export type KeyUpEvent = ComponentNativeEvent<dxTagBox>;
 
 /** @public */
 export type MultiTagPreparingEvent = ComponentEvent<dxTagBox> & Cancelable & {
-    multiTagElement: TElement;
+    readonly multiTagElement: TElement;
     readonly selectedItems?: Array<string | number | any>;
-    readonly text?: string;
+    text?: string;
 }
 
 /** @public */

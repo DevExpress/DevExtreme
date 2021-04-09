@@ -2,7 +2,6 @@
 
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
-const gulpWatch = require('gulp-watch');
 const lazyPipe = require('lazypipe');
 const named = require('vinyl-named');
 const notify = require('gulp-notify');
@@ -14,9 +13,7 @@ const webpackStream = require('webpack-stream');
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const headerPipes = require('./header-pipes.js');
-const renovationPipes = require('./renovation-pipes');
 const webpackConfig = require('../../webpack.config.js');
-const webpackConfigDev = require('../../webpack.config.dev.js');
 
 const namedDebug = lazyPipe()
     .pipe(named, (file) => path.basename(file.path, path.extname(file.path)) + '.debug');
@@ -52,10 +49,8 @@ gulp.task('js-bundles-prod',
 );
 
 function prepareDebugMeta(watch) {
-    const debugConfig = Object.assign({}, watch ? webpackConfigDev : webpackConfig);
-    const bundlesPath = watch ?
-        renovationPipes.TEMP_PATH :
-        ctx.TRANSPILED_PROD_RENOVATION_PATH;
+    const debugConfig = Object.assign({ watch }, webpackConfig);
+    const bundlesPath = ctx.TRANSPILED_PROD_RENOVATION_PATH;
 
     const bundles = processBundles(DEBUG_BUNDLES, bundlesPath);
 
@@ -90,29 +85,10 @@ function createDebugBundlesStream(watch) {
     return task;
 }
 
-function createRenovationTemp(isWatch) {
-    const src = ['js/**/*.*'];
-    const pipe = isWatch ? gulpWatch(src).on('ready', () => console.log(
-        'create-renovation-temp task is watching for changes...'
-    )) : gulp.src(src);
-
-    return pipe
-        .pipe(renovationPipes.replaceWidgets(false))
-        .pipe(gulp.dest(renovationPipes.TEMP_PATH));
-}
-
-gulp.task('create-renovation-temp', () =>
-    createRenovationTemp(false)
-);
-
-gulp.task('create-renovation-temp-watch', () =>
-    createRenovationTemp(true)
-);
-
 gulp.task('js-bundles-debug', gulp.series(
     createDebugBundlesStream(false)
 ));
 
-gulp.task('js-bundles-dev', gulp.parallel(
+gulp.task('js-bundles-watch', gulp.parallel(
     createDebugBundlesStream(true)
 ));

@@ -15,6 +15,10 @@ import {
 } from '../../core/utils/deferred';
 
 import {
+    ComponentEvent
+} from '../../events/index';
+
+import {
     format
 } from '../../ui/widget/ui.widget';
 
@@ -24,6 +28,23 @@ import {
 
 export type WordWrapType = 'normal' | 'breakWord' | 'none';
 export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
+
+export interface ExportInfo {
+  readonly fileName: string;
+  readonly format: string;
+}
+
+export interface IncidentInfo {
+  readonly target: any;
+}
+
+export interface ComponentFileSavingEvent<T> {
+  readonly component: T;
+  readonly element: TElement;
+  readonly fileName: string;
+  readonly format: string;
+  readonly data: Blob;
+}
 
 export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
     /**
@@ -65,23 +86,34 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrawn?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onDrawn?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExported?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onExported?: ((e: ComponentEvent<T>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 format:string
@@ -90,10 +122,12 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExporting?: ((e: { component?: T, element?: TElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => void);
+    onExporting?: ((e: ComponentEvent<T> & ExportInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
      * @type_function_param1_field3 fileName:string
      * @type_function_param1_field4 format:string
      * @type_function_param1_field5 data:BLOB
@@ -103,17 +137,20 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onFileSaving?: ((e: { component?: T, element?: TElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => void);
+    onFileSaving?: ((e: ComponentFileSavingEvent<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:any
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onIncidentOccurred?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
+    onIncidentOccurred?: ((e: ComponentEvent<T> & IncidentInfo) => void);
     /**
      * @docid
      * @default false

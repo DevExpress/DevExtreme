@@ -16,16 +16,65 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 import { HatchingDirectionType } from './common';
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxSankey>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxSankey>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxSankey>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxSankey> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxSankey>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxSankey> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxSankey>;
+
+/** @public */
+export type LinkClickEvent = ComponentNativeEvent<dxSankey> & {
+    readonly target: dxSankeyLink;
+}
+/** @public */
+export type LinkHoverEvent = ComponentEvent<dxSankey> & {
+    readonly target: dxSankeyLink;
+}
+/** @public */
+export type NodeClickEvent = ComponentNativeEvent<dxSankey> & {
+    readonly target: dxSankeyNode;
+}
+/** @public */
+export type NodeHoverEvent = ComponentEvent<dxSankey> & {
+    readonly target: dxSankeyNode;
+}
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxSankey> & ChangedOptionInfo;
+
 
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
@@ -442,6 +491,9 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyLink
      * @notUsedInTheme
@@ -449,22 +501,28 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyLink }) => void) | string;
+    onLinkClick?: ((e: LinkClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyLink
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyLink }) => void);
+    onLinkHoverChanged?: ((e: LinkHoverEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyNode
      * @notUsedInTheme
@@ -472,18 +530,21 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyNode }) => void) | string;
+    onNodeClick?: ((e: NodeClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyNode }) => void);
+    onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
     /**
      * @docid
      * @extends CommonVizPalette

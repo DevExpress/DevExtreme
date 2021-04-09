@@ -10,7 +10,6 @@ const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
-const renovationPipes = require('./renovation-pipes');
 const { packageDir, isEsmPackage } = require('./utils');
 const { version } = require('../../package.json');
 
@@ -62,7 +61,6 @@ const distGlobsPattern = (jsFolder, exclude) => [
     `!${jsFolder}/dx-diagram*`,
     `!${jsFolder}/dx-gantt*`,
     `!${jsFolder}/dx-quill*`,
-    `!${renovationPipes.TEMP_PATH}/**/*.*`,
 ];
 
 const srcGlobs = esmSrcGlobs;
