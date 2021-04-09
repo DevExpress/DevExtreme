@@ -5,7 +5,7 @@ import { generateData } from './data.js';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 
-const displayModes = ['full', 'compact'];
+const displayModes = [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }];
 const allowedPageSizes = [5, 10, 'all'];
 class App extends React.Component {
   displayModeChange = (value) => {
@@ -58,6 +58,8 @@ class App extends React.Component {
               <SelectBox
                 id='displayModes'
                 items={displayModes}
+                displayExpr='text'
+                valueExpr='value'
                 value={this.state.displayMode}
                 onValueChange={this.displayModeChange} />
             </div>

@@ -22,7 +22,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         }
     };
     $scope.displayModeOptions = {
-        items: ["full", "compact"],
+        items: [{ text: "Display Mode 'full'", value: "full" }, { text: "Display Mode 'compact'", value: "compact" }],
+        displayExpr: "text",
+        valueExpr: "value",
         value: "full",
         onValueChanged: function(data) {
             $scope.dataGrid.option("pager.displayMode", data.value);

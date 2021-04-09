@@ -24,6 +24,8 @@
           <DxSelectBox
             id="dispalyModes"
             :items="displayModes"
+            display-expr="text"
+            value-expr="value"
             v-model:value="displayMode"
           />
         </div>
@@ -77,7 +79,7 @@ export default {
   data() {
     return {
       dataSource: generateData(100000),
-      displayModes: ['full', 'compact'],
+      displayModes: [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }],
       displayMode: 'full',
       pageSizes: [5, 10, 'all'],
       showPageSizeSelector: true,

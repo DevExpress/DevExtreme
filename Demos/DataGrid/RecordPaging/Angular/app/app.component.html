@@ -21,9 +21,10 @@
     <div class="caption">Options</div>
     <div class="option-container">
         <div class="option">
-            <span class="option-caption">Display Mode</span>
             <dx-select-box 
                 id="displayModes"
+                displayExpr="text"
+                valueExpr="value"
                 [items]="displayModes" 
                 [(value)]="displayMode">
             </dx-select-box>
