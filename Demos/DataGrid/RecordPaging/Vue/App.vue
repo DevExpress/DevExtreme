@@ -20,7 +20,6 @@
       <div class="caption">Options</div>
       <div class="option-container">
         <div class="option">
-          <span class="option-caption">Display Mode</span>
           <DxSelectBox
             id="dispalyModes"
             :items="displayModes"
