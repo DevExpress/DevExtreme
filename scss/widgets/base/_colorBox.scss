@@ -1,4 +1,5 @@
 // adduse
+$colorbox-input-left-padding: 40px;
 
 .dx-colorbox-input-container {
   &.dx-colorbox-color-is-not-defined {
@@ -34,6 +35,10 @@
       }
     }
   }
+
+  .dx-texteditor-label {
+    left: $colorbox-input-left-padding;
+  }
 }
 
 .dx-colorbox-color-result-preview {
@@ -49,7 +54,7 @@
 
 .dx-colorbox-input-container .dx-colorbox-input.dx-texteditor-input {
   -webkit-appearance: none; // stylelint-disable-line property-no-vendor-prefix
-  padding-left: 40px;
+  padding-left: $colorbox-input-left-padding;
 }
 
 .dx-colorbox-overlay {
@@ -78,6 +83,10 @@
   &.dx-colorbox {
     .dx-placeholder {
       right: 32px;
+    }
+
+    .dx-texteditor-label {
+      right: $colorbox-input-left-padding;
     }
 
     &.dx-dropdowneditor {
