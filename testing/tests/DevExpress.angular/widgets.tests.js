@@ -1056,7 +1056,7 @@ QUnit.test('Should display correct appointments dates', function(assert) {
     const dates = $markup.find('.dx-scheduler-appointment-content-date');
 
     assert.equal(dates.length, 3, 'Сorrect number of appointments displayed');
-    assert.equal(dates.first().text(), '11:00 AM - 8:00 PM', 'First appointment has correct date');
+    assert.equal(dates.eq(0).text(), '11:00 AM - 8:00 PM', 'First appointment has correct date');
     assert.equal(dates.eq(1).text(), '9:00 AM - 8:00 PM', 'Second appointment has correct date');
     assert.equal(dates.eq(2).text(), '9:00 AM - 11:30 AM', 'Last appointment has correct date');
 });
