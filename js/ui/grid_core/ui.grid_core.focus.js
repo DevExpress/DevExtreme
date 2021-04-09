@@ -723,7 +723,7 @@ export default {
                     const dataController = this.getController('data');
                     const rowKey = dataController.getKeyByRowIndex(rowIndex);
 
-                    deferred?.done(() => {
+                    deferred.done(() => {
                         const rowIndex = dataController.getRowIndexByKey(rowKey);
                         const visibleRows = dataController.getVisibleRows();
 
