@@ -4498,7 +4498,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/Form/Overview/",
             "Widget": "Form",
             "MvcAdditionalFiles": [
               "/Models/Company.cs",
