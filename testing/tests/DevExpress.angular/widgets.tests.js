@@ -1029,6 +1029,38 @@ QUnit.test('Should not merge element with ".dx-template-wrapper" class', functio
     assert.ok(template.parent().is('td'), 'Template\'s parent is cell');
 });
 
+QUnit.test('Should display correct appointments dates', function(assert) {
+    const $markup = $('<div dx-scheduler="schedulerOptions"></div>');
+
+    const controller = function($scope) {
+        $scope.schedulerOptions = {
+            dataSource: [
+                {
+                    text: 'agenda-angular',
+                    startDate: new Date(2021, 4, 3, 11),
+                    endDate: new Date(2021, 4, 5, 11, 30)
+                }
+            ],
+            views: ['agenda'],
+            currentView: 'agenda',
+            startDayHour: 9,
+            endDayHour: 20,
+            currentDate: new Date(2021, 4, 3),
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    this.clock.tick(0);
+
+    const dates = $markup.find('.dx-scheduler-appointment-content-date');
+
+    assert.equal(dates.length, 3, 'Сorrect number of appointments displayed');
+    assert.equal(dates.first().text(), '11:00 AM - 8:00 PM', 'First appointment has correct date');
+    assert.equal(dates.eq(1).text(), '9:00 AM - 8:00 PM', 'Second appointment has correct date');
+    assert.equal(dates.eq(2).text(), '9:00 AM - 11:30 AM', 'Last appointment has correct date');
+});
+
 QUnit.module('Widgets without model for template', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
