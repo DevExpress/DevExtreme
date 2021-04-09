@@ -8028,6 +8028,14 @@ declare module DevExpress.ui {
          */
         taskListWidth?: number;
         /**
+         * [descr:dxGanttOptions.taskProgressTooltipContentTemplate]
+         */
+        taskProgressTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, item: { progress?: number }) => string | Element | JQuery);
+        /**
+         * [descr:dxGanttOptions.taskTimeTooltipContentTemplate]
+         */
+        taskTimeTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, item: { start?: Date, end?: Date }) => string | Element | JQuery);
+        /**
          * [descr:dxGanttOptions.taskTitlePosition]
          */
         taskTitlePosition?: 'inside' | 'outside' | 'none';

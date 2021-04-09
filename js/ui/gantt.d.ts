@@ -217,6 +217,16 @@ export type TaskContentTemplateData = {
     readonly taskSize: any;
 }
 
+/** @public */
+export type ProgressTooltipTemplateData = {
+    readonly progress: number;
+}
+
+/** @public */
+export type TimeTooltipTemplateData = {
+    readonly start: Date;
+    readonly end: Date;
+}
 
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
@@ -922,6 +932,27 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     taskTooltipContentTemplate?: template | ((container: TElement, task: any) => string | TElement);
+    /**
+     * @docid
+     * @type_function_param1 container:dxElement
+     * @type_function_param2 item:object
+     * @type_function_param2_field1 start:Date
+     * @type_function_param2_field2 end:Date
+     * @type_function_return string|Element|jQuery
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    taskTimeTooltipContentTemplate?: template | ((container: TElement, item: TimeTooltipTemplateData) => string | TElement);
+    /**
+     * @docid
+     * @type_function_param1 container:dxElement
+     * @type_function_param2 item:object
+     * @type_function_param2_field1 progress:number
+     * @type_function_return string|Element|jQuery
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    taskProgressTooltipContentTemplate?: template | ((container: TElement, item: ProgressTooltipTemplateData) => string | TElement);
     /**
      * @docid
      * @type_function_param1 container:dxElement
