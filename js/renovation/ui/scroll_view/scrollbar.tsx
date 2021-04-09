@@ -322,7 +322,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   pullDownRefreshing(): void {
-    this.setPocketState(TopPocketState.STATE_LOADING);
+    this.setPocketState(TopPocketState.STATE_REFRESHING);
     this.executePullDown();
   }
 

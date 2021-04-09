@@ -757,7 +757,7 @@ describe('Methods', () => {
                   if (pocketState === TopPocketState.STATE_READY) {
                     if (pocketState !== TopPocketState.STATE_REFRESHING) {
                       expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
-                      expect(pocketStateChangeHandler).toHaveBeenCalledWith(3);
+                      expect(pocketStateChangeHandler).toHaveBeenCalledWith(2);
                       expect(reachBottomHandler).not.toHaveBeenCalled();
                       expect(pullDownHandler).toHaveBeenCalledTimes(1);
                     } else {
