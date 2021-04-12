@@ -69,8 +69,8 @@ export const format = function() {
         reg = new RegExp('\\{' + i + '\\}', 'gm');
         value = values[i];
         if(type(value) === 'string' && value.indexOf('$') >= 0) {
-            replaceDollarCount = '$'.replace('$', '$$').length;
-            value = value.replace('$', replaceDollarCount === 1 ? '$$$$' : '$$');
+            replaceDollarCount = '$'.replace('$', '$$').length; // lgtm[incomplete-sanitization]
+            value = value.replaceAll('$', replaceDollarCount === 1 ? '$$$$' : '$$');
         }
         s = s.replace(reg, value);
     }
@@ -80,7 +80,7 @@ export const format = function() {
 
 export const replaceAll = (function() {
     const quote = function(str) {
-        return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1');
+        return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1'); // lgtm[incomplete-sanitization]
     };
 
     return function(text, searchToken, replacementToken) {

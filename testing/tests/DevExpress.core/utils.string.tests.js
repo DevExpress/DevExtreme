@@ -31,3 +31,7 @@ QUnit.test('isEmpty', function(assert) {
     assert.ok(!stringUtils.isEmpty(' 1'));
     assert.ok(!stringUtils.isEmpty('text'));
 });
+
+QUnit.test('stringFormat with more than one "$" in argument', function(assert) {
+    assert.equal(stringUtils.format('{0}', '$$$'), '$$$');
+});
