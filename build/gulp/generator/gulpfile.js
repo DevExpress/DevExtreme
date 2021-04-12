@@ -15,6 +15,8 @@ const notify = require('gulp-notify');
 const watch = require('gulp-watch');
 const transpileConfig = require('../transpile-config');
 const env = require('../env-variables');
+const cached = require('gulp-cached');
+
 const {
     BASE_GENERATOR_OPTIONS,
     BASE_GENERATOR_OPTIONS_WITH_JQUERY
@@ -62,9 +64,11 @@ function generateJQueryComponents(isWatch) {
         generateJQueryOnly: true
     };
 
-    const pipe = isWatch ? watch(SRC).on('ready', () => console.log(
-        'generate-jquery-components task is watching for changes...'
-    )) : gulp.src(SRC);
+
+    const pipe = isWatch ?
+        watch(SRC).on('ready', () => console.log(
+            'generate-jquery-components task is watching for changes...'
+        )) : gulp.src(SRC);
 
     return pipe
         .pipe(generateComponents(generator))
@@ -82,7 +86,7 @@ const processErrors = (knownErrors, errors = []) => (e) => {
     }
 };
 
-function generateInfernoComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = true) {
+function generateInfernoComponents(distPath = './', babelConfig = transpileConfig.cjs, dev) {
     return function generateInfernoComponents(done) {
         const tsProject = ts.createProject('build/gulp/generator/ts-configs/inferno.tsconfig.json');
 
@@ -93,6 +97,7 @@ function generateInfernoComponents(distPath = './', babelConfig = transpileConfi
         const isDefault = distPath === './';
 
         return gulp.src(SRC, { base: 'js' })
+            .pipe(gulpIf(dev, cached('generate-inferno-component')))
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(tsProject({
@@ -105,7 +110,7 @@ function generateInfernoComponents(distPath = './', babelConfig = transpileConfi
             .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH)))
             .pipe(gulpIf(esmPackage, gulp.dest(path.join(context.TRANSPILED_PROD_ESM_PATH, distPath))))
             .on('end', function() {
-                done(!dev && errors.length || undefined);
+                done(/* !dev && errors.length || undefined*/);
             });
     };
 }
@@ -152,10 +157,18 @@ gulp.task('generate-components', gulp.series(
 gulp.task('generate-components-dev', gulp.series(
     'generate-jquery-components',
     generateInfernoComponents('./', transpileConfig.cjs, true),
-    ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm, true)),
-    ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs, true)),
     processRenovationMeta
 ));
+
+gulp.task('generate-inferno-components-watch', function() {
+    gulp
+        .watch(SRC, gulp.series(
+            generateInfernoComponents('./', transpileConfig.cjs, true)
+        ))
+        .on('ready', () => console.log(
+            'generate-inferno-components task is watching for changes...'
+        ));
+});
 
 function addGenerationTask(
     frameworkName,

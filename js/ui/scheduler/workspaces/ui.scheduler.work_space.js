@@ -1052,8 +1052,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     _visibilityChanged(visible) {
         this.cache.clear();
 
-        if(visible && this._isVerticalGroupedWorkSpace()) {
-            this._setHorizontalGroupHeaderCellsHeight();
+        if(visible) {
+            this._updateGroupTableHeight();
         }
 
         if(visible && this._needCreateCrossScrolling()) {
@@ -1110,9 +1110,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._attachHeaderTableClasses();
 
-        if(this._isVerticalGroupedWorkSpace()) {
-            this._setHorizontalGroupHeaderCellsHeight();
-        }
+        this._updateGroupTableHeight();
     }
 
     getWorkSpaceMinWidth() {

@@ -176,7 +176,7 @@ describe('Widget\'s container manipulations', () => {
     });
   });
 
-  it('repaint redraws component 2 times', () => {
+  it('repaint redraws component only one time', () => {
     $('#component').css('width', '123px');
     $('#component').css('height', '456px');
     $('#component').addClass('custom-css-class');
@@ -188,14 +188,9 @@ describe('Widget\'s container manipulations', () => {
 
     $('#component').dxTestWidget('repaint');
 
-    expect(subscribeEffect).toHaveBeenCalledTimes(3);
+    expect(subscribeEffect).toHaveBeenCalledTimes(2);
 
     expect(subscribeEffect.mock.calls[1][0]).toMatchObject({
-      className: '',
-      style: '',
-    });
-
-    expect(subscribeEffect.mock.calls[2][0]).toMatchObject({
       className: 'custom-css-class',
       style: { width: '123px', height: '456px' },
     });

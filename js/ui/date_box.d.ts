@@ -3,16 +3,89 @@ import {
 } from '../core/element';
 
 import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
+    ComponentDisabledDate,
     dxCalendarOptions
 } from './calendar';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    DropDownButtonTemplateDataModel
 } from './drop_down_editor/ui.drop_down_editor';
+
+import {
+    ValueChangedInfo
+} from './editor/editor';
 
 import {
     format
 } from './widget/ui.widget';
+
+/** @public */
+export type ChangeEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type ClosedEvent = ComponentEvent<dxDateBox>;
+
+/** @public */
+export type ContentReadyEvent = ComponentEvent<dxDateBox>;
+
+/** @public */
+export type CopyEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type CutEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxDateBox>;
+
+/** @public */
+export type EnterKeyEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type FocusInEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type FocusOutEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxDateBox>;
+
+/** @public */
+export type InputEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type KeyDownEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type KeyPressEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type KeyUpEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type OpenedEvent = ComponentEvent<dxDateBox>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxDateBox> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = ComponentNativeEvent<dxDateBox>;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxDateBox> & ValueChangedInfo;
+
+/** @public */
+export type DisabledDate = ComponentDisabledDate<dxDateBox>;
+
+/** @public */
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     /**
@@ -68,7 +141,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    disabledDates?: Array<Date> | ((data: { component?: dxDateBox, date?: Date, view?: string }) => boolean);
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
     /**
      * @docid
      * @default null

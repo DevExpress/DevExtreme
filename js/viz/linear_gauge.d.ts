@@ -3,13 +3,58 @@ import {
 } from '../core/element';
 
 import {
+    Cancelable,
+    ComponentEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
+} from './core/base_widget';
+
+import {
     BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
     BaseGaugeScale,
     BaseGaugeScaleLabel,
-    GaugeIndicator
+    GaugeIndicator,
+    TooltipInfo
 } from './gauges/base_gauge';
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxLinearGauge>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxLinearGauge>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxLinearGauge>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxLinearGauge> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxLinearGauge>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxLinearGauge> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxLinearGauge>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxLinearGauge> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxLinearGauge> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxLinearGauge> & TooltipInfo;
+
 
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**

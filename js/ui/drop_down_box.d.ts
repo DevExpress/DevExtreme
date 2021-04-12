@@ -10,17 +10,85 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
+} from '../events/index';
+
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    DropDownButtonTemplateDataModel
 } from './drop_down_editor/ui.drop_down_editor';
+
+import {
+    ValueChangedInfo
+} from './editor/editor';
 
 import {
     DataExpressionMixinOptions
 } from './editor/ui.data_expression';
 
-import {
-    dxPopupOptions
-} from './popup';
+/** @public */
+export type ChangeEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type ClosedEvent = ComponentEvent<dxDropDownBox>;
+
+/** @public */
+export type CopyEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type CutEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxDropDownBox>;
+
+/** @public */
+export type EnterKeyEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type FocusInEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type FocusOutEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxDropDownBox>;
+
+/** @public */
+export type InputEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type KeyDownEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type KeyPressEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type KeyUpEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type OpenedEvent = ComponentEvent<dxDropDownBox>;
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxDropDownBox> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = ComponentNativeEvent<dxDropDownBox>;
+
+/** @public */
+export type ValueChangedEvent = ComponentNativeEvent<dxDropDownBox> & ValueChangedInfo;
+
+/** @public */
+export type ContentTemplateData = {
+    component: dxDropDownBox;
+    readonly value?: any;
+}
+
+/** @public */
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
     /**
@@ -41,7 +109,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: TElement) => string | TElement);
+    contentTemplate?: template | ((templateData: ContentTemplateData, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null

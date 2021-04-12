@@ -10,8 +10,10 @@ fixture`Scheduler: Material theme layout`
 test('Scheduler should have correct height in month view (T927862)', async (t) => {
   const scheduler = new Scheduler('#container');
 
+  const boundingClientRect = await scheduler.dateTable.boundingClientRect;
+
   await t
-    .expect((await scheduler.dateTable.boundingClientRect).bottom)
+    .expect(boundingClientRect.bottom)
     .eql((await scheduler.workspaceScrollable.boundingClientRect).bottom);
 }).before(async () => {
   await createWidget('dxScheduler', {

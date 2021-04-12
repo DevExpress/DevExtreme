@@ -7,7 +7,11 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
+    Cancelable,
+    ComponentEvent,
+    ComponentNativeEvent,
+    ComponentInitializedEvent,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -27,7 +31,9 @@ import {
     BaseChart,
     BaseChartAdaptiveLayout,
     BaseChartLegend,
-    BaseChartOptions
+    BaseChartOptions,
+    PointInteractionInfo,
+    TooltipInfo
 } from './chart_components/base_chart';
 
 import {
@@ -40,11 +46,64 @@ import {
     Font,
     WordWrapType,
     VizTextOverflowType,
-    BaseWidgetAnnotationConfig
+    BaseWidgetAnnotationConfig,
+    ComponentFileSavingEvent,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
 export type SegmentsDirectionType = 'anticlockwise' | 'clockwise';
+
+
+/** @public */
+export type DisposingEvent = ComponentEvent<dxPieChart>;
+
+/** @public */
+export type DoneEvent = ComponentEvent<dxPieChart>;
+
+/** @public */
+export type DrawnEvent = ComponentEvent<dxPieChart>;
+
+/** @public */
+export type ExportedEvent = ComponentEvent<dxPieChart>;
+
+/** @public */
+export type ExportingEvent = ComponentEvent<dxPieChart> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxPieChart>;
+
+/** @public */
+export type IncidentOccurredEvent = ComponentEvent<dxPieChart> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = ComponentInitializedEvent<dxPieChart>;
+
+/** @public */
+export type LegendClickEvent = ComponentNativeEvent<dxPieChart> & {
+  readonly target: string | number;
+  readonly points: Array<piePointObject>;
+}
+
+/** @public */
+export type OptionChangedEvent = ComponentEvent<dxPieChart> & ChangedOptionInfo;
+
+/** @public */
+export type PointClickEvent = ComponentNativeEvent<dxPieChart> & PointInteractionInfo;
+
+/** @public */
+export type PointHoverChangedEvent = ComponentEvent<dxPieChart> & PointInteractionInfo;
+
+/** @public */
+export type PointSelectionChangedEvent = ComponentEvent<dxPieChart> & PointInteractionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = ComponentEvent<dxPieChart> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = ComponentEvent<dxPieChart> & TooltipInfo;
+
 
 /**
 * @docid
@@ -160,6 +219,9 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxPieChart
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:String|Number
      * @type_function_param1_field6 points:Array<piePointObject>
@@ -168,7 +230,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxPieChart, element?: TElement, model?: any, event?: TEvent, target?: string | number, points?: Array<piePointObject> }) => void) | string;
+    onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
      * @docid
      * @extends CommonVizPalette
