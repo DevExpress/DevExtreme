@@ -164,9 +164,7 @@ export class Button extends JSXComponent(ButtonProps) {
     const {
       onContentReady, text, icon, template,
     } = this.props;
-    ((x): unknown => x)(text);
-    ((y): unknown => y)(icon);
-    ((z): unknown => z)(template);
+    ((...args): unknown => args)(text, icon, template);
     onContentReady?.({ element: this.contentRef.current!.parentNode });
   }
 
