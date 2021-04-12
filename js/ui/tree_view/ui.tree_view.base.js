@@ -1045,9 +1045,14 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _toggleSelectAll: function(args) {
+        const prevSelectedCount = this._dataAdapter.getSelectedNodesKeys().length;
         this._dataAdapter.toggleSelectAll(args.value);
+        const newSelectedCount = this._dataAdapter.getSelectedNodesKeys().length;
+
         this._updateItemsUI();
-        this._fireSelectionChanged();
+        if(prevSelectedCount !== newSelectedCount) {
+            this._fireSelectionChanged();
+        }
     },
 
     _renderCheckBox: function($node, node) {
