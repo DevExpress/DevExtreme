@@ -129,7 +129,10 @@ const timeZoneDataUtils = {
     },
 
     getUtcOffset: function({ offsetsList, offsetIndicesList, datesList }, dateTimeStamp) {
-        let index = datesList.length - 2;
+        const infinityUntilCorrection = 1;
+        const lastIntervalStartIndex = datesList.length - 1 - infinityUntilCorrection;
+
+        let index = lastIntervalStartIndex;
         while(index >= 0 && dateTimeStamp < datesList[index]) {
             index--;
         }
