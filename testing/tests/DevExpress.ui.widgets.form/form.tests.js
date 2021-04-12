@@ -47,6 +47,7 @@ const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const LAST_COL_CLASS = 'dx-last-col';
+const DROPDOWN_MENU_CLASS = 'dx-dropdownmenu';
 
 QUnit.testStart(function() {
     const markup =
@@ -1411,10 +1412,9 @@ QUnit.test('optional mark aligned', function(assert) {
     assert.ok($optionalLabel.position().left < $optionalMark.position().left, 'optional mark should be after of the text');
 });
 
-[true, false].forEach(alignItemLabels => {
-    QUnit.test(`HtmlEditor with Toolbar is rendered inside form. alignItemLabels = ${alignItemLabels} (T986577)`, function(assert) {
-        const $form = $('#form').dxForm({
-            alignItemLabels,
+QUnit.module('T986577', () => {
+    function getFormConfig() {
+        return {
             width: 250,
             items: [ {
                 label: { text: 'text' },
@@ -1425,12 +1425,24 @@ QUnit.test('optional mark aligned', function(assert) {
             }, {
                 label: { text: 'Very very long text' }
             } ]
-        });
+        };
+    }
 
-        const toolbar = $form.find(`.${TOOLBAR_CLASS}`).eq(0).dxToolbar('instance');
-        const menuItems = toolbar._getMenuItems();
+    QUnit.test('HtmlEditor with Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
+        const config = extend({ alignItemLabels: false }, getFormConfig());
+        const $form = $('#form').dxForm(config);
 
-        assert.equal(menuItems.length, alignItemLabels ? 3 : 0, 'italic, strike and underline items are located in menu if alignItemLabels is enabled');
+        const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${DROPDOWN_MENU_CLASS}:visible`);
+        assert.equal($toolbarMenuButton.length, 0, 'menu button is not visible');
+    });
+
+
+    QUnit.test('HtmlEditor with Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
+        const config = extend({ alignItemLabels: true }, getFormConfig());
+        const $form = $('#form').dxForm(config);
+
+        const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${DROPDOWN_MENU_CLASS}:visible`);
+        assert.equal($toolbarMenuButton.length, 1, 'menu button is visible');
     });
 });
 
