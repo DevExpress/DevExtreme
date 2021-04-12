@@ -475,9 +475,11 @@ export default {
                             changeType: 'update',
                             rowIndices: [oldEditRowIndex, rowIndex]
                         });
-                    } else {
-                        this.callBase.apply(this, arguments);
+
+                        return new Deferred().resolve();
                     }
+
+                    return this.callBase.apply(this, arguments);
                 },
 
                 _updateEditRow: function(row, forceUpdateRow, isCustomSetCellValue) {

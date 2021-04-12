@@ -5959,6 +5959,33 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             assert.equal(this.option('focusedRowKey'), 'Dan', 'focusedRowKey was changed to the next row');
         });
 
+        // T987289
+        QUnit.testInActiveWindow('DataGrid should reset focused row key after last row removed', function(assert) {
+            this.options = {
+                keyExpr: 'id',
+                focusedRowEnabled: true,
+                focusedRowKey: 1,
+                editing: {
+                    allowDeleting: true,
+                    texts: { confirmDeleteMessage: '' }
+                }
+            };
+
+            this.data = [{ id: 1 }];
+
+            this.setupModule();
+            addOptionChangedHandlers(this);
+            this.gridView.render($('#container'));
+            this.clock.tick();
+
+            // act
+            this.deleteRow(0);
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.option('focusedRowKey'), null, 'focusedRowKey was reset');
+        });
+
         // T730760
         QUnit.testInActiveWindow('DataGrid should normalize the focused row index on paging', function(assert) {
         // arrange

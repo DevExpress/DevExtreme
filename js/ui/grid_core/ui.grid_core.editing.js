@@ -1207,10 +1207,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._addChange({ key: key, oldData: item.data, type: DATA_EDIT_DATA_REMOVE_TYPE });
             }
 
-            this._afterDeleteRow(rowIndex, oldEditRowIndex);
+            return this._afterDeleteRow(rowIndex, oldEditRowIndex);
         },
         _afterDeleteRow: function(rowIndex, oldEditRowIndex) {
-            this.saveEditData();
+            return this.saveEditData();
         },
         undeleteRow: function(rowIndex) {
             const dataController = this._dataController;
