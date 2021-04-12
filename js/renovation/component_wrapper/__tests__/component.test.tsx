@@ -135,7 +135,7 @@ describe('Widget\'s container manipulations', () => {
 
       expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
 
-      $('#component').dxTestWidget('repaint');
+      $('#component').dxTestWidget('instance').option('text', 'updated');
       expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
     });
 
@@ -147,7 +147,7 @@ describe('Widget\'s container manipulations', () => {
       $('#component').removeClass('dx-test-class');
 
       $('#component').dxTestWidget('repaint');
-      expect($('#component')[0].className).toBe('dx-test-widget test-class');
+      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
     });
 
     it('should allow to remove added classes', () => {
@@ -157,7 +157,7 @@ describe('Widget\'s container manipulations', () => {
 
       $('#component').removeClass('dx-test-class');
 
-      $('#component').dxTestWidget('repaint');
+      $('#component').dxTestWidget('instance').option('text', 'updated');
       expect($('#component')[0].className).toBe('dx-test-widget test-class');
     });
 
@@ -167,12 +167,12 @@ describe('Widget\'s container manipulations', () => {
       $('#component').addClass('dx-test-class');
 
       $('#component').removeClass('dx-test-widget');
-      $('#component').dxTestWidget('repaint');
+      $('#component').dxTestWidget('instance').option('text', 'updated_1');
       expect($('#component')[0].className).toBe('test-class dx-test-class');
 
       $('#component').addClass('dx-test-widget');
-      $('#component').dxTestWidget('repaint');
-      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
+      $('#component').dxTestWidget('instance').option('text', 'updated_2');
+      expect($('#component')[0].className).toBe('test-class dx-test-class dx-test-widget');
     });
   });
 
@@ -275,10 +275,10 @@ describe('Widget\'s container manipulations', () => {
 
     $('#my-id').addClass('custom-css-class2');
 
-    $('#my-id').dxTestWidget('repaint');
+    $('#my-id').dxTestWidget('instance').option('text', 'updated');
 
     expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
-      className: 'custom-css-class custom-css-class2 dx-custom-css-class',
+      className: 'custom-css-class dx-custom-css-class',
       class: '',
     });
   });
