@@ -36,6 +36,9 @@ const ContextMenu = Class.inherit({
     },
 
     _contextMenuHandler: function(e) {
+        if(touch || devices.isSimulator()) {
+            e.preventDefault();
+        }
         this._fireContextMenu(e);
     },
 

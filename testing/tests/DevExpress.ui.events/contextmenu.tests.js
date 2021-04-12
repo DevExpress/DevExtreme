@@ -29,6 +29,23 @@ QUnit.test('contextmenu should be fired on hold event', function(assert) {
     $element.trigger($.Event(holdEvent.name, { pointerType: 'touch' }));
 });
 
+QUnit.test('default\'s contextmenu should be prevented on hold event', function(assert) {
+    if(!support.touch) {
+        assert.ok(true);
+        return;
+    }
+    const $element = $('#element');
+
+    $element.on(contextMenuEvent.name, function(e) {
+        assert.strictEqual(e.target, $element[0]);
+    });
+    $element.on('contextmenu', function(e) {
+        assert.strictEqual(e.isDefaultPrevented(), true);
+    });
+
+    $element.trigger($.Event('contextmenu', { pointerType: 'touch' }));
+});
+
 QUnit.test('dxhold should be unsubscribed on unsubscribing contextmenu', function(assert) {
     const $element = $('#element');
 
@@ -95,4 +112,36 @@ QUnit.test('contextmenu should be unsubscribed on unsubscribing contextmenu', fu
     const holdEvents = events['contextmenu'] || [];
 
     assert.equal(holdEvents.length, 0, 'contextmenu event handler was removed');
+});
+
+[
+    { isSimulator: true, description: 'default\'s contextmenu should be prevented on dxhold in simulator' },
+    { isSimulator: false, description: 'default\'s contextmenu should not be prevented on dxhold' }
+].forEach(function(config) {
+    QUnit.test(config.description, function(assert) {
+        if(support.touch) {
+            assert.ok(true);
+            return;
+        }
+
+        assert.expect(2);
+
+        const originalIsSimulator = devices.isSimulator;
+
+        try {
+            devices.isSimulator = function() { return config.isSimulator; };
+            const $element = $('#element');
+
+            $element.on(contextMenuEvent.name, function(e) {
+                assert.strictEqual(e.target, $element[0]);
+            });
+            $element.on('contextmenu', function(e) {
+                assert.strictEqual(e.isDefaultPrevented(), config.isSimulator);
+            });
+
+            $element.trigger($.Event('contextmenu', { pointerType: 'mouse' }));
+        } finally {
+            devices.isSimulator = originalIsSimulator;
+        }
+    });
 });
