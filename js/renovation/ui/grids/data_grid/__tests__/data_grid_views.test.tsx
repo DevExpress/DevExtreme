@@ -49,4 +49,40 @@ describe('DataGridViews', () => {
       });
     });
   });
+
+  describe('Behavior', () => {
+    describe('Effects', () => {
+      it('update', () => {
+        const resizingController = {
+          resize: jest.fn(),
+          fireContentReadyAction: jest.fn(),
+        };
+        const dataController = {
+          isLoaded: jest.fn().mockReturnValue(true),
+        };
+        const props = {
+          instance: {
+            getController: jest.fn().mockImplementation((name) => (name === 'resizing' ? resizingController : dataController)),
+          },
+        } as any;
+        const component = new DataGridViews(props);
+
+        component.update();
+
+        expect(props.instance.getController).toBeCalledTimes(2);
+        expect(props.instance.getController.mock.calls).toEqual([['data'], ['resizing']]);
+
+        expect(resizingController.resize).toBeCalledTimes(1);
+        expect(resizingController.fireContentReadyAction).toBeCalledTimes(1);
+        expect(dataController.isLoaded).toBeCalledTimes(1);
+      });
+
+      it('update without instance', () => {
+        const props = {} as any;
+        const component = new DataGridViews(props);
+
+        expect(component.update.bind(component)).not.toThrow();
+      });
+    });
+  });
 });

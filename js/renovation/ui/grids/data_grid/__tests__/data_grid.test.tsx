@@ -104,6 +104,24 @@ describe('DataGrid', () => {
         expect(component.getComponentInstance()).toMatchObject(mockDataGridMethods);
       });
 
+      it('callMethod with diff args', () => {
+        (mockDataGridMethods as any).columnOption = jest.fn();
+        const component = new DataGrid({});
+        component.instance = mockDataGridMethods as any;
+
+        component.callMethod('columnOption', [0, 'visible', false]);
+
+        expect((mockDataGridMethods as any).columnOption).toBeCalledTimes(1);
+        expect((mockDataGridMethods as any).columnOption.mock.calls[0]).toEqual([0, 'visible', false]);
+
+        (mockDataGridMethods as any).columnOption.mockClear();
+
+        component.callMethod('columnOption', [0, 'visible', undefined]);
+
+        expect((mockDataGridMethods as any).columnOption).toBeCalledTimes(1);
+        expect((mockDataGridMethods as any).columnOption.mock.calls[0]).toEqual([0, 'visible']);
+      });
+
       each`
       methodName
       ${'beginCustomLoading'}
@@ -171,6 +189,7 @@ describe('DataGrid', () => {
       ${'isRowExpanded'}
       ${'totalCount'}
       ${'getController'}
+      ${'resize'}
     `
         .describe('Proxying the Grid methods', ({
           methodName,
@@ -207,6 +226,34 @@ describe('DataGrid', () => {
         component.dispose()();
 
         expect(component.instance.dispose).toBeCalledTimes(1);
+      });
+    });
+
+    describe('Events', () => {
+      it('onHoverStart, onHoverEnd handlers should update hover state', () => {
+        const component = new DataGrid({});
+        const currentTarget = {
+          classList: {
+            add: jest.fn(),
+            remove: jest.fn(),
+          },
+        } as any;
+
+        component.onHoverStart({
+          currentTarget,
+        } as Event);
+
+        expect(currentTarget.classList.remove).toBeCalledTimes(0);
+        expect(currentTarget.classList.add).toBeCalledTimes(1);
+        expect(currentTarget.classList.add).toHaveBeenCalledWith('dx-state-hover');
+
+        component.onHoverEnd({
+          currentTarget,
+        } as Event);
+
+        expect(currentTarget.classList.add).toBeCalledTimes(1);
+        expect(currentTarget.classList.remove).toBeCalledTimes(1);
+        expect(currentTarget.classList.remove).toHaveBeenCalledWith('dx-state-hover');
       });
     });
   });

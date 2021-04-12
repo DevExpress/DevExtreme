@@ -136,6 +136,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return this.instance?.columnCount();
   }
 
+  // TODO remove this after fix https://trello.com/c/I8ManehQ/2674-renovation-generated-jquery-methods-pass-all-aguments-even-it-is-optional
   callMethod(funcName: string, args: unknown): void {
     const normalizedArgs = [...args as unknown[]].filter((arg) => arg !== undefined);
 
@@ -144,7 +145,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   @Method()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  columnOption(id: number | string, optionName: any, optionValue: any): void {
+  columnOption(id: number | string, optionName: any, optionValue?: any): void {
     // eslint-disable-next-line prefer-rest-params
     return this.callMethod('columnOption', arguments);
   }
