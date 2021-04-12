@@ -2789,7 +2789,6 @@ QUnit.module('keyboard navigation through tags', {
 
                 const expectedValue = this.instance.option('value').slice();
                 const focusedTagIndex = this.getFocusedTag().index();
-
                 expectedValue.splice(focusedTagIndex, 1);
 
                 this.keyboard
