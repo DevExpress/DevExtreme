@@ -3481,6 +3481,53 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.strictEqual(visibleRows[6].rowType, 'group', 'seventh group row on scrolling up to the top');
         assert.deepEqual(visibleRows[6].key, ['Category 10'], 'seventh group row key on scrolling up to the top');
     });
+
+    QUnit.test('New mode. Data should be loaded without a delay on scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const customizeLoadResultSpy = sinon.spy();
+        const dataGrid = createDataGrid({
+            dataSource: getData(100),
+            keyExpr: 'id',
+            height: 300,
+            remoteOperations: {
+                filtering: true,
+                paging: true,
+                sorting: true
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            }
+        });
+
+        // act
+        this.clock.tick();
+        dataGrid.getDataSource().on('customizeLoadResult', customizeLoadResultSpy);
+        dataGrid.getScrollable().scrollTo({ top: 75 });
+        this.clock.tick();
+        dataGrid.getScrollable().scrollTo({ top: 85 });
+        this.clock.tick();
+        dataGrid.getScrollable().scrollTo({ top: 100 });
+        this.clock.tick();
+
+        // assert
+        assert.ok(customizeLoadResultSpy.callCount, 'called');
+        for(let i = 0; i < customizeLoadResultSpy.callCount; i++) {
+            assert.notOk(customizeLoadResultSpy.args[i][0].delay, `${i} call without a delay`);
+        }
+    });
 });
 
 
