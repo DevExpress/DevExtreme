@@ -146,8 +146,8 @@ describe('Widget\'s container manipulations', () => {
 
       $('#component').removeClass('dx-test-class');
 
-      $('#component').dxTestWidget('repaint');
-      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
+      $('#component').dxTestWidget('instance').option('text', 'updated');
+      expect($('#component')[0].className).toBe('dx-test-widget test-class');
     });
 
     it('should allow to remove added classes', () => {
