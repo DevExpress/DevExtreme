@@ -213,6 +213,37 @@ QUnit.test('T195986', function(assert) {
     assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), true);
 });
 
+['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
+    ['multiple', 'single'].forEach((selectionMode) => {
+        [false, true].forEach((selectNodesRecursive) => {
+            QUnit.test(`Click by checkbox. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
+                const wrapper = new TreeViewTestWrapper({
+                    showCheckBoxesMode, selectNodesRecursive, selectionMode,
+                    items: [ { text: 'item1', expanded: true, items: [
+                        { text: 'item1_1', expanded: true, items: [ { text: 'item1_1_1' } ] },
+                        { text: 'item1_2', expanded: true, items: [ { text: 'item1_2_1' } ] } ]
+                    } ],
+                });
+
+                wrapper.getElement()
+                    .find('[aria-label="item1_1"] .dx-checkbox')
+                    .eq(0).trigger('dxclick');
+
+                let expectedLog;
+                if(showCheckBoxesMode === 'none') {
+                    expectedLog = [];
+                } else if(showCheckBoxesMode === 'normal' || selectionMode === 'single') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged'];
+                } else if(showCheckBoxesMode === 'selectAll') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged', 'selectAllValueChanged'];
+                }
+
+                wrapper.checkEventLog(expectedLog, 'after click by item1_1 checkbox');
+            });
+        });
+    });
+});
+
 QUnit.test('Selection works correct with custom rootValue', function(assert) {
     const data = [
         { id: 0, parentId: 'none', text: 'Animals' },
