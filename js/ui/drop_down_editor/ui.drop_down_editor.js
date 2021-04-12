@@ -366,10 +366,10 @@ const DropDownEditor = TextBox.inherit({
         useHiddenSubmitElement && this._$submitElement?.detach();
 
         // NOTE: to prevent buttons disposition
-        const beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;
-        const afterButtonsContainerParent = this._$afterButtonsContainer && this._$afterButtonsContainer[0].parentNode;
-        beforeButtonsContainerParent && beforeButtonsContainerParent.removeChild(this._$beforeButtonsContainer[0]);
-        afterButtonsContainerParent && afterButtonsContainerParent.removeChild(this._$afterButtonsContainer[0]);
+        const beforeButtonsContainerParent = this._$beforeButtonsContainer?.[0].parentNode;
+        const afterButtonsContainerParent = this._$afterButtonsContainer?.[0].parentNode;
+        beforeButtonsContainerParent?.removeChild(this._$beforeButtonsContainer[0]);
+        afterButtonsContainerParent?.removeChild(this._$afterButtonsContainer[0]);
     },
 
     _attachWrapperContent($container) {
