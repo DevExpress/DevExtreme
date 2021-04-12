@@ -38,7 +38,7 @@ module('DropDownEditor markup', {
     });
 
     test('root element have only one child', function(assert) {
-        assert.strictEqual(this.rootElement.children.length, 1);
+        assert.strictEqual(this.rootElement.children().length, 1);
     });
 
     test('dxDropDownEditor must have a button which must be decorated with DROP_DOWN_EDITOR_BUTTON_CLASS', function(assert) {
