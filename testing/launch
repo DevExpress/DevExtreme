@@ -17,7 +17,7 @@ function execRunner () {
     spawn(
         'dotnet',
         [ join(__dirname, 'runner/bin/runner.dll') ],
-        { stdio: 'inherit' }
+        { stdio: 'inherit', shell: true }
     );
 
     waitForRunner();
