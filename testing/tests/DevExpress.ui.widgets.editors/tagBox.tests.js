@@ -2768,6 +2768,39 @@ QUnit.module('keyboard navigation through tags', {
         assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
     });
 
+    ['readOnly', 'disabled'].forEach((optionName) => {
+        ['backspace', 'del'].forEach((keyName) => {
+            QUnit.test(`the focused tag should be removed after pressing the '${keyName}' key after ${optionName} state (T986220)`, function(assert) {
+                const items = [1, 2, 3, 4];
+                this.reinit({
+                    items,
+                    value: items,
+                    focusStateEnabled: true,
+                    searchEnabled: true
+                });
+
+                this.instance.option(optionName, true);
+                this.instance.option(optionName, false);
+
+                this.keyboard
+                    .focus()
+                    .press('left')
+                    .press('left')
+                    .press('left');
+
+                const expectedValue = this.instance.option('value').slice();
+                const focusedTagIndex = this.getFocusedTag().index();
+                expectedValue.splice(focusedTagIndex, 1);
+
+                this.keyboard
+                    .press(keyName);
+
+                const value = this.instance.option('value');
+                assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
+            });
+        });
+    });
+
     QUnit.test('backspace should remove selected search text but not tag if any text is selected', function(assert) {
         this.reinit({
             items: ['item 1', 'item 2'],
@@ -4898,6 +4931,24 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), [], 'value was cleared');
         assert.equal($field.text(), '', 'text was cleared after the deselect');
+    });
+});
+
+QUnit.module('options changing', moduleSetup, () => {
+    ['readOnly', 'disabled'].forEach((optionName) => {
+        QUnit.test(`Typing events should be rerendered after ${optionName} option enabled (T986220)`, function(assert) {
+            const tagBox = $('#tagBox').dxTagBox({
+                items: [1, 2],
+                value: [1],
+                searchEnabled: true
+            }).dxTagBox('instance');
+            const typingEventsRenderSpy = sinon.spy(tagBox, '_renderTypingEvent');
+
+            tagBox.option(optionName, true);
+            tagBox.option(optionName, false);
+
+            assert.strictEqual(typingEventsRenderSpy.callCount, 1);
+        });
     });
 });
 
