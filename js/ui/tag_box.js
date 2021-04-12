@@ -557,7 +557,10 @@ const TagBox = SelectBox.inherit({
     },
 
     _renderTypingEvent: function() {
-        eventsEngine.on(this._input(), addNamespace('keydown', this.NAME), (e) => {
+        const input = this._input();
+        const namespace = addNamespace('keydown', this.NAME);
+        eventsEngine.off(input, namespace);
+        eventsEngine.on(input, namespace, (e) => {
             const keyName = normalizeKeyName(e);
             if(!this._isControlKey(keyName) && this._isEditable()) {
                 this._clearTagFocus();
@@ -1505,6 +1508,11 @@ const TagBox = SelectBox.inherit({
                 break;
             case 'selectAllText':
                 this._setListOption('selectAllText', this.option('selectAllText'));
+                break;
+            case 'readOnly':
+            case 'disabled':
+                this.callBase(args);
+                !args.value && this._renderTypingEvent();
                 break;
             case 'value':
                 this._valuesToUpdate = args?.value;
