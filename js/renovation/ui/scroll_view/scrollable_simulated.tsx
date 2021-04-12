@@ -285,12 +285,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   update(): void {
-    const contentEl = this.contentRef.current;
-
-    if (isDefined(contentEl)) {
-      this.updateSizes();
-      this.props.onUpdated?.(this.getEventArgs());
-    }
+    this.updateSizes();
+    this.onUpdated();
   }
 
   @Method()
@@ -337,13 +333,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     this.prepareDirections(true);
-    this.props.onStart?.(this.getEventArgs());
+    this.onStart();
     this.eventHandler(
       (scrollbar) => scrollbar.scrollByHandler(
         { x: location.left || 0, y: location.top || 0 },
       ),
     );
-    this.props.onEnd?.(this.getEventArgs());
+    this.onEnd();
   }
 
   @Method()
@@ -550,6 +546,22 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return (): void => dxScrollCancel.off(this.wrapperRef.current, { namespace });
   }
 
+  onStart(): void {
+    this.props.onStart?.(this.getEventArgs());
+  }
+
+  onEnd(): void {
+    this.props.onEnd?.(this.getEventArgs());
+  }
+
+  onStop(): void {
+    this.props.onStop?.(this.getEventArgs());
+  }
+
+  onUpdated(): void {
+    this.props.onUpdated?.(this.getEventArgs());
+  }
+
   onBounce(): void {
     this.props.onBounce?.(this.getEventArgs());
   }
@@ -563,7 +575,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   onRelease(): void {
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
-    this.props.onUpdated?.(this.getEventArgs());
+    this.onUpdated();
   }
 
   onReachBottom(): void {
@@ -621,7 +633,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       (scrollbar) => scrollbar.initHandler(e, crossThumbScrolling),
     );
 
-    this.props.onStop?.(this.getEventArgs());
+    this.onStop();
   }
 
   handleStart(e: Event): void {
@@ -629,7 +641,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     this.eventHandler((scrollbar) => scrollbar.startHandler());
 
-    this.props.onStart?.(this.getEventArgs());
+    this.onStart();
   }
 
   handleMove(e): void {
@@ -652,7 +664,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     this.eventHandler((scrollbar) => scrollbar.endHandler(e.velocity));
 
-    this.props.onEnd?.(this.getEventArgs());
+    this.onEnd();
   }
 
   handleStop(): void {
@@ -1007,7 +1019,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   windowResizeHandler(): void {
     this.updateSizes();
-    this.props.onUpdated?.(this.getEventArgs());
+    this.onUpdated();
   }
 
   updateSizes(): void {

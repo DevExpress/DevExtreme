@@ -25,11 +25,13 @@ describe('TopPocket', () => {
       const topPocket = mount<TopPocket>(<TopPocket {...props} />);
 
       expect(topPocket.props()).toEqual({
-        isFakeRefreshState: false,
         pocketState: 0,
+        pocketTop: 0,
         pullDownIconAngle: 0,
         pullDownOpacity: 0,
+        pullDownTop: 0,
         pullDownTopOffset: 0,
+        topPocketTranslateTop: 0,
       });
     });
   });
@@ -58,28 +60,36 @@ describe('TopPocket', () => {
 
         expect(iconElement.exists()).toBe(refreshStrategy === 'swipeDown');
       });
-    });
-  });
 
-  describe('Behavior', () => {
-    each([
-      { state: TopPocketState.STATE_RELEASED, expectedText: 'pullingText' },
-      { state: TopPocketState.STATE_READY, expectedText: 'pulledText' },
-      { state: TopPocketState.STATE_LOADING, expectedText: 'refreshingText' },
-    ]).describe('State: %o', (testConfig) => {
-      it('Correct text is visible depending of state', () => {
-        const viewModel = new TopPocket({
-          refreshStrategy: 'simulated',
-          pullingDownText: 'pullingText',
-          pulledDownText: 'pulledText',
-          refreshingText: 'refreshingText',
-          pocketState: testConfig.state,
+      each([
+        { pocketState: TopPocketState.STATE_RELEASED, expectedText: 'pullingText' },
+        { pocketState: TopPocketState.STATE_READY, expectedText: 'pulledText' },
+        { pocketState: TopPocketState.STATE_REFRESHING, expectedText: 'refreshingText' },
+        { pocketState: TopPocketState.STATE_LOADING },
+        { pocketState: TopPocketState.STATE_PULLED },
+        { pocketState: TopPocketState.STATE_TOUCHED },
+      ]).describe('PocketState: %o', (config) => {
+        it('Text visibility for corresponding pocketState', () => {
+          const { pocketState, expectedText } = config;
+
+          const viewModel = new TopPocket({
+            refreshStrategy,
+            pullingDownText: 'pullingText',
+            pulledDownText: 'pulledText',
+            refreshingText: 'refreshingText',
+            pocketState,
+          });
+
+          const topPocket = mount(viewFunction(viewModel) as JSX.Element);
+          const textElement = topPocket.find('.dx-scrollview-pull-down-text-visible');
+
+          if (expectedText && refreshStrategy !== 'swipeDown') {
+            expect(textElement.length).toBe(1);
+            expect(textElement.text()).toBe(expectedText);
+          } else {
+            expect(textElement.length).toBe(0);
+          }
         });
-
-        const topPocket = mount(viewFunction(viewModel) as JSX.Element);
-        const textElement = topPocket.find('.dx-scrollview-pull-down-text-visible');
-        expect(textElement.length).toBe(1);
-        expect(textElement.text()).toBe(testConfig.expectedText);
       });
     });
   });
