@@ -12,6 +12,7 @@ import { Deferred, when } from '../../core/utils/deferred';
 import { find } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { equalByValue } from '../../core/utils/common';
+import { isDefined } from '../../core/utils/type';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
@@ -30,16 +31,35 @@ export default class FileItemsController {
 
         this._defaultIconMap = this._createDefaultIconMap();
 
+        this.setSecurityController();
+        this.setProvider(options.fileProvider);
+        this._initialize();
+    }
+
+    setSecurityController() {
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
             maxFileSize: this._options.uploadMaxFileSize
         });
-
-        this._setProvider(options.fileProvider);
-        this._initialize();
+        this._resetState();
     }
 
-    _setProvider(fileProvider) {
+    setAllowedFileExtensions(allowedFileExtensions) {
+        if(isDefined(allowedFileExtensions)) {
+            this._options.uploadMaxFileSize = allowedFileExtensions;
+        }
+    }
+
+    setUploadOptions({ maxFileSize, chunkSize }) {
+        if(isDefined(maxFileSize)) {
+            this._options.uploadMaxFileSize = maxFileSize;
+        }
+        if(isDefined(chunkSize)) {
+            this._options.uploadChunkSize = chunkSize;
+        }
+    }
+
+    setProvider(fileProvider) {
         this._fileProvider = this._createFileProvider(fileProvider);
         this._resetState();
     }
@@ -593,6 +613,10 @@ export default class FileItemsController {
         const result = this._createDirectoryInfo(rootDirectory, null);
         result.displayName = text || DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME;
         return result;
+    }
+
+    setRootText(rootText) {
+        this._rootDirectoryInfo.displayName = rootText || DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME;
     }
 
     _raiseInitialized() {
