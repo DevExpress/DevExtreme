@@ -1,6 +1,10 @@
 import config, { getOption } from '../config';
-import { mount, React } from './setup';
-import { TestComponent, WidgetClass } from './test-component';
+import { render as testingRender, cleanup } from '@testing-library/react';
+import * as React from 'react';
+import {
+  TestComponent,
+  WidgetClass
+} from './test-component';
 
 class ComponentWithTemplates extends TestComponent {
   protected _templateProps = [{
@@ -20,6 +24,8 @@ describe('useLegacyTemplateEngine', () => {
 
   afterEach(() => {
     config({ useLegacyTemplateEngine: originalValue });
+    WidgetClass.mockClear();
+    cleanup();
   });
 
   it('works for render-function template', () => {
@@ -36,20 +42,21 @@ describe('useLegacyTemplateEngine', () => {
         {data.dxkey}
       </div>
     );
+    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
 
-    const component = mount(
-      <ComponentWithTemplates itemRender={ItemTemplate} />,
+    const { container } = testingRender(
+        <ComponentWithTemplates itemRender={ItemTemplate} >
+           <div ref={ref} />
+        </ComponentWithTemplates >
     );
 
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
 
     render({
-      container: document.createElement('div'),
+      container: ref.current,
       model: { value: 'Value', key: 'key_1' },
     });
-
-    component.update();
-    expect(component.find('.template').text()).toBe('value: Value, key: key_1, dxkey: key_1');
+    expect(container.querySelector('.template')?.textContent).toBe("value: Value, key: key_1, dxkey: key_1");
   });
 
   it('works for component template', () => {
@@ -67,18 +74,20 @@ describe('useLegacyTemplateEngine', () => {
       );
     };
 
-    const component = mount(
-      <ComponentWithTemplates itemComponent={ItemTemplate} />,
+    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+
+    const { container } = testingRender(
+      <ComponentWithTemplates itemComponent={ItemTemplate} >
+        <div ref={ref} />
+      </ComponentWithTemplates>
     );
 
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
 
     render({
-      container: document.createElement('div'),
+      container: ref.current,
       model: { value: 'Value', key: 'key_1' },
     });
-
-    component.update();
-    expect(component.find('.template').text()).toBe('value: Value, dxkey: key_1');
+    expect(container.querySelector('.template')?.textContent).toBe("value: Value, dxkey: key_1");
   });
 });

@@ -1,8 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import { ExtensionComponent } from '../extension-component';
 import ConfigurationComponent from '../nested-option';
-import { mount, React, shallow } from './setup';
-import { TestComponent, Widget, WidgetClass } from './test-component';
+import { render, cleanup } from '@testing-library/react';
+import * as React from 'react';
+import {
+  TestComponent,
+  Widget,
+  WidgetClass
+} from './test-component';
 
 const ExtensionWidgetClass = jest.fn(() => Widget);
 
@@ -14,13 +19,20 @@ class TestExtensionComponent<P = any> extends ExtensionComponent<P> {
   }
 }
 
+
+afterEach(() => {
+  WidgetClass.mockClear();
+  ExtensionWidgetClass.mockClear();
+  cleanup();
+})
+
 class NestedComponent extends ConfigurationComponent<{ a: number }> {
   public static OptionName = 'option1';
 }
 
 it('is initialized as a plugin-component', () => {
   const onMounted = jest.fn();
-  mount(
+  render(
     <TestExtensionComponent onMounted={onMounted} />,
   );
 
@@ -30,7 +42,7 @@ it('is initialized as a plugin-component', () => {
 });
 
 it('is initialized as a standalone widget', () => {
-  mount(
+  render(
     <TestExtensionComponent />,
   );
 
@@ -38,7 +50,7 @@ it('is initialized as a standalone widget', () => {
 });
 
 it('creates widget on componentDidMount inside another component on same element', () => {
-  mount(
+  render(
     <TestComponent>
       <TestExtensionComponent />
     </TestComponent>,
@@ -49,7 +61,7 @@ it('creates widget on componentDidMount inside another component on same element
 });
 
 it('unmounts without errors', () => {
-  const component = shallow(
+  const component = render(
     <TestExtensionComponent />,
   );
 
@@ -57,7 +69,7 @@ it('unmounts without errors', () => {
 });
 
 it('pulls options from a single nested component', () => {
-  mount(
+  render(
     <TestComponent>
       <TestExtensionComponent>
         <NestedComponent a={123} />

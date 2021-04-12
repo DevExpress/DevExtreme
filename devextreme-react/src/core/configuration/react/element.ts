@@ -41,7 +41,7 @@ function getElementInfo(
   element: React.ReactNode,
   parentExpectedChildren?: Record<string, IExpectedChild>,
 ): IElement {
-  const reactElement = element as any as React.ReactElement;
+  const reactElement = element as unknown as React.ReactElement;
   if (!reactElement || !reactElement.type) {
     return {
       type: ElementType.Unknown,

@@ -1,7 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import { requestAnimationFrame } from 'devextreme/animation/frame';
 import { deferUpdate } from 'devextreme/core/utils/common';
-import { React, mount } from './setup';
+import { render } from '@testing-library/react';
+import * as React from 'react';
 import { TemplatesRenderer } from '../templates-renderer';
 import { TemplatesStore } from '../templates-store';
 
@@ -49,14 +50,14 @@ jest.mock('devextreme/core/utils/common', () => ({
       const ref = React.createRef<TemplatesRenderer>();
       const templatesStore = new TemplatesStore(() => { });
 
-      const component = mount(<TemplatesRenderer templatesStore={templatesStore} ref={ref} />);
+      const { unmount } = render(<TemplatesRenderer templatesStore={templatesStore} ref={ref} />);
 
       expect(ref.current).not.toBeNull();
 
       expect(() => ref.current?.scheduleUpdate(useDeferUpdate)).not.toThrow();
       expect(() => updateCallback()).not.toThrow();
 
-      component.unmount();
+      unmount();
       expect(ref.current).toBeNull();
 
       expect(() => updateCallback()).not.toThrow();
@@ -66,7 +67,7 @@ jest.mock('devextreme/core/utils/common', () => ({
       const ref = React.createRef<TemplatesRenderer>();
       const templatesStore = new TemplatesStore(() => { });
 
-      mount(<TemplatesRenderer templatesStore={templatesStore} ref={ref} />);
+      render(<TemplatesRenderer templatesStore={templatesStore} ref={ref} />);
       expect(() => ref.current?.scheduleUpdate(useDeferUpdate)).not.toThrow();
       expect(updateFunctionMock).toHaveBeenCalledTimes(1);
     });
@@ -75,7 +76,7 @@ jest.mock('devextreme/core/utils/common', () => ({
       const ref = React.createRef<TemplatesRenderer>();
       const templatesStore = new TemplatesStore(() => { });
 
-      mount(<TemplatesRenderer templatesStore={templatesStore} ref={ref} />);
+      render(<TemplatesRenderer templatesStore={templatesStore} ref={ref} />);
       ref.current?.scheduleUpdate(useDeferUpdate);
       if (useDeferUpdate) {
         expect(deferUpdate).toHaveBeenCalledTimes(1);
