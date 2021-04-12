@@ -29,7 +29,7 @@ export type ContentReadyEvent = ComponentEvent<dxLoadPanel>;
 export type DisposingEvent = ComponentEvent<dxLoadPanel>;
 
 /** @public */
-export type HidingEvent = ComponentEvent<dxLoadPanel> & Cancelable;
+export type HidingEvent = Cancelable & ComponentEvent<dxLoadPanel>;
 
 /** @public */
 export type HiddenEvent = ComponentEvent<dxLoadPanel>;

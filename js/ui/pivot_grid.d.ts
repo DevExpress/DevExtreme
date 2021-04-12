@@ -26,7 +26,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & Cancelable & {
+export type CellClickEvent = Cancelable & ComponentNativeEvent<dxPivotGrid> & {
     readonly area?: string;
     readonly cellElement?: TElement;
     readonly cell?: dxPivotGridPivotGridCell;
@@ -70,7 +70,7 @@ export type DisposingEvent = ComponentEvent<dxPivotGrid>;
 export type ExportedEvent = ComponentEvent<dxPivotGrid>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxPivotGrid> & Cancelable & {
+export type ExportingEvent = Cancelable & ComponentEvent<dxPivotGrid> & {
     fileName?: string;
 }
 

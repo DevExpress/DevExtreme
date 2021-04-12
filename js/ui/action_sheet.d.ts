@@ -26,7 +26,7 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type CancelClickEvent = ComponentEvent<dxActionSheet> & Cancelable;
+export type CancelClickEvent = Cancelable & ComponentEvent<dxActionSheet>;
 
 /** @public */
 export type ContentReadyEvent = ComponentEvent<dxActionSheet>;

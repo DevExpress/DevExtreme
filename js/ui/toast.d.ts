@@ -30,7 +30,7 @@ export type ContentReadyEvent = ComponentEvent<dxToast>;
 export type DisposingEvent = ComponentEvent<dxToast>;
 
 /** @public */
-export type HidingEvent = ComponentEvent<dxToast> & Cancelable;
+export type HidingEvent = Cancelable & ComponentEvent<dxToast>;
 
 /** @public */
 export type HiddenEvent = ComponentEvent<dxToast>;

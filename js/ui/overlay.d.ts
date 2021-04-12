@@ -131,7 +131,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: ComponentEvent<T> & Cancelable) => void);
+    onHiding?: ((e: Cancelable & ComponentEvent<T>) => void);
     /**
      * @docid
      * @default null

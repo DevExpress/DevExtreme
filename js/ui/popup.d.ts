@@ -42,7 +42,7 @@ export type ContentReadyEvent = ComponentEvent<dxPopup>;
 export type DisposingEvent = ComponentEvent<dxPopup>;
 
 /** @public */
-export type HidingEvent = ComponentEvent<dxPopup> & Cancelable;
+export type HidingEvent = Cancelable & ComponentEvent<dxPopup>;
 
 /** @public */
 export type HiddenEvent = ComponentEvent<dxPopup>;

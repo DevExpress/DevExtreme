@@ -54,7 +54,7 @@ export type SubmenuHiddenEvent = ComponentEvent<dxMenu> & {
 }
 
 /** @public */
-export type SubmenuHidingEvent = ComponentEvent<dxMenu> & Cancelable & {
+export type SubmenuHidingEvent = Cancelable & ComponentEvent<dxMenu> & {
     readonly rootItem?: TElement;
 }
 

@@ -20,7 +20,7 @@ export type ContentReadyEvent = ComponentEvent<dxTooltip>;
 export type DisposingEvent = ComponentEvent<dxTooltip>;
 
 /** @public */
-export type HidingEvent = ComponentEvent<dxTooltip> & Cancelable;
+export type HidingEvent = Cancelable & ComponentEvent<dxTooltip>;
 
 /** @public */
 export type HiddenEvent = ComponentEvent<dxTooltip>;

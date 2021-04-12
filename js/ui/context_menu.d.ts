@@ -46,7 +46,7 @@ export type DisposingEvent = ComponentEvent<dxContextMenu>;
 export type HiddenEvent = ComponentEvent<dxContextMenu>;
 
 /** @public */
-export type HidingEvent = ComponentEvent<dxContextMenu> & Cancelable;
+export type HidingEvent = Cancelable & ComponentEvent<dxContextMenu>;
 
 /** @public */
 export type InitializedEvent = ComponentInitializedEvent<dxContextMenu>;
@@ -72,7 +72,7 @@ export type PositioningEvent = ComponentNativeEvent<dxContextMenu> & {
 export type SelectionChangedEvent = ComponentEvent<dxContextMenu> & SelectionChangedInfo;
 
 /** @public */
-export type ShowingEvent = ComponentEvent<dxContextMenu> & Cancelable;
+export type ShowingEvent = Cancelable & ComponentEvent<dxContextMenu>;
 
 /** @public */
 export type ShownEvent = ComponentEvent<dxContextMenu>;
