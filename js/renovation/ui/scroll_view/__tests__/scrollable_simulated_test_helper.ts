@@ -272,7 +272,6 @@ class ScrollableTestHelper {
       });
 
       scrollbar.updateMinOffset();
-      scrollbar.minLimit = scrollbar.minOffset;
 
       return scrollbar;
     };

@@ -268,8 +268,16 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   endHandler(velocity: { x: number; y: number }): void {
-    this.props.onAnimatorStart?.('inertia', velocity[this.axis], this.thumbScrolling, this.crossThumbScrolling);
+    this.onInertiaAnimatorStart(velocity[this.axis]);
     this.resetThumbScrolling();
+  }
+
+  onInertiaAnimatorStart(velocity: number): void {
+    this.props.onAnimatorStart?.('inertia', velocity, this.thumbScrolling, this.crossThumbScrolling);
+  }
+
+  onBounceAnimatorStart(): void {
+    this.props.onAnimatorStart?.('bounce');
   }
 
   @Method()
@@ -330,7 +338,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return;
     }
 
-    this.props.onAnimatorStart?.('bounce');
+    this.onBounceAnimatorStart();
   }
 
   @Method()
@@ -391,10 +399,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   moveToMouseLocation(e): void {
     const mouseLocation = e[`page${this.axis.toUpperCase()}`] - this.props.scrollableOffset;
-    const location = this.scrollLocation + mouseLocation
+    const delta = this.scrollLocation + mouseLocation
     / this.containerToContentRatio - this.props.containerSize / 2;
 
-    this.scrollStep(-Math.round(location));
+    this.scrollStep(-Math.round(delta));
   }
 
   @Method()
