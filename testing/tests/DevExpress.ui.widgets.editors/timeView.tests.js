@@ -23,6 +23,7 @@ const TIMEVIEW_FORMAT12_PM = 1;
 const BOX_CLASS = 'dx-box';
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const INPUT_CLASS = 'dx-texteditor-input';
+const NUMBERBOX_SPIN_UP_BUTTON_CLASS = 'dx-numberbox-spin-up';
 
 QUnit.module('rendering', () => {
     QUnit.test('widget class should be added', function(assert) {
@@ -436,6 +437,21 @@ QUnit.module('12 hours format', () => {
 
         assert.equal(instance.option('value').toString(), new Date(2011, 0, 1, 10, 5, 0, 0), 'value has not been changed');
         assert.equal(formatField.option('value'), TIMEVIEW_FORMAT12_AM, 'am is selected');
+    });
+
+    QUnit.test('hour numberbox can change value from 12 to 1 after spin up button click (T986347)', function(assert) {
+        const $element = $('#timeView').dxTimeView({
+            value: new Date(2014, 11, 11, 12, 1),
+            use24HourFormat: false
+        });
+
+        const $hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`);
+        const hourNumberBox = $hourNumberBox.dxNumberBox('instance');
+        const $spinUpButton = $($hourNumberBox.find(`.${NUMBERBOX_SPIN_UP_BUTTON_CLASS}`));
+
+        $spinUpButton.trigger('dxpointerdown');
+
+        assert.equal(hourNumberBox.option('value'), 1);
     });
 });
 
