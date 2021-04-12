@@ -4929,6 +4929,24 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
     });
 });
 
+QUnit.module('options changing', moduleSetup, () => {
+    ['readOnly', 'disabled'].forEach((option) => {
+        QUnit.test(`Typing events should be rerendered after ${option} option enabled (T986220)`, function(assert) {
+            const tagBox = $('#tagBox').dxTagBox({
+                items: [1, 2],
+                value: [1],
+                searchEnabled: true
+            }).dxTagBox('instance');
+            const typingEventsRenderSpy = sinon.spy(tagBox, '_renderTypingEvent');
+
+            tagBox.option(option, true);
+            tagBox.option(option, false);
+
+            assert.strictEqual(typingEventsRenderSpy.callCount, 1);
+        });
+    });
+});
+
 QUnit.module('applyValueMode = \'useButtons\'', {
     beforeEach: function() {
         fx.off = true;
