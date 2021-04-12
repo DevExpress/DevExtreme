@@ -51,7 +51,7 @@ jest.mock('../../../../core/utils/browser', () => ({ mozilla: false }));
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
-  actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
+  actualDevices.real = jest.fn(() => ({ platform: 'ios' }));
   return actualDevices;
 });
 
@@ -114,11 +114,11 @@ describe('Native > Effects', () => {
     optionValues.pocketState,
     optionValues.useSimulatedScrollbar,
     optionValues.isReachBottom,
+    [{ top: 2, left: 2 }, { top: -81, left: -81 }],
     [-1, -2, -3],
-    [jest.fn(), undefined],
-  ]))('Effect on "scroll", forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o, useSimulatedScrollbar: %s, isReachBottom: %s, prevLocationTop: %s, onReachBottom: %s',
+  ]))('Emit "scroll" event, forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o, useSimulatedScrollbar: %s, isReachBottom: %s, scrollLocation: %o,  prevLocationTop: %s,',
     (forceGeneratePockets, refreshStrategy, pullDownEnabled, pocketState,
-      useSimulatedScrollbar, isReachBottom, prevLocationTop, onReachBottom) => {
+      useSimulatedScrollbar, isReachBottom, scrollLocation, prevLocationTop) => {
       const e = {
         ...defaultEvent,
         stopImmediatePropagation: jest.fn(),
@@ -128,21 +128,21 @@ describe('Native > Effects', () => {
         useSimulatedScrollbar,
         forceGeneratePockets,
         pullDownEnabled,
-        onReachBottom,
       });
       Object.defineProperties(viewModel, {
         refreshStrategy: { get() { return refreshStrategy; } },
       });
       viewModel.wrapperRef = { current: {} } as RefObject;
       viewModel.containerRef = { current: {} } as RefObject;
-      viewModel.topPocketRef = { current: {} } as RefObject;
+      viewModel.topPocketRef = { current: { clientHeight: 80 } } as RefObject;
       viewModel.lastLocation = { top: -1, left: -1 };
-      viewModel.scrollLocation = () => ({ top: 2, left: 2 });
+      viewModel.scrollLocation = jest.fn(() => scrollLocation);
       viewModel.moveScrollbars = jest.fn();
+      viewModel.onReachBottom = jest.fn();
       viewModel.isReachBottom = jest.fn(() => isReachBottom);
       viewModel.topPocketState = pocketState;
       viewModel.pullDownOpacity = 0.5;
-      viewModel.pullDownTopOffset = 0;
+      viewModel.pullDownTranslateTop = 0;
       viewModel.pullDownIconAngle = 0;
       viewModel.locationTop = prevLocationTop;
 
@@ -151,7 +151,7 @@ describe('Native > Effects', () => {
 
       expect(e.stopImmediatePropagation).not.toBeCalled();
       expect(viewModel.eventForUserAction).toEqual(e);
-      expect(viewModel.lastLocation).toEqual({ top: 2, left: 2 });
+      expect(viewModel.lastLocation).toEqual(scrollLocation);
 
       if (useSimulatedScrollbar) {
         expect(viewModel.moveScrollbars).toHaveBeenCalledTimes(1);
@@ -161,43 +161,46 @@ describe('Native > Effects', () => {
 
       let expectedTopPocketState = pocketState;
       let expectedPullDownOpacity = 0.5;
-      const expectedPullDownTopOffset = 0;
+      const expectedPullDownTranslateTop = 0;
       const expectedPullDownIconAngle = 0;
       let onReachBottomCalled = false;
-      // const expectedLocationTop = prevLocationTop;
 
-      if (forceGeneratePockets && refreshStrategy === 'pullDown') {
-        return; // TODO
-      }
+      const scrollDelta = prevLocationTop + scrollLocation.top;
 
-      const scrollDelta = prevLocationTop + viewModel.scrollLocation().top;
+      if (forceGeneratePockets) {
+        if (pocketState !== TopPocketState.STATE_REFRESHING) {
+          if (refreshStrategy === 'swipeDown') {
+            if (scrollDelta > 0 && isReachBottom) {
+              onReachBottomCalled = true;
+            } else if (pocketState !== TopPocketState.STATE_RELEASED) {
+              expectedTopPocketState = TopPocketState.STATE_RELEASED;
+              expectedPullDownOpacity = 0;
+            }
+          }
 
-      if (forceGeneratePockets && refreshStrategy === 'swipeDown'
-                  && pocketState !== TopPocketState.STATE_REFRESHING) {
-        if (scrollDelta > 0 && isReachBottom) {
-          onReachBottomCalled = true;
-        } else if (pocketState !== TopPocketState.STATE_RELEASED) {
-          expectedTopPocketState = TopPocketState.STATE_RELEASED;
-          expectedPullDownOpacity = 0;
+          if (refreshStrategy === 'pullDown') {
+            if (pullDownEnabled && scrollLocation.top <= -80) {
+              if (pocketState !== TopPocketState.STATE_READY) {
+                expectedTopPocketState = TopPocketState.STATE_READY;
+              }
+            } else if (scrollDelta > 0 && isReachBottom) {
+              if (pocketState !== TopPocketState.STATE_LOADING) {
+                expectedTopPocketState = TopPocketState.STATE_LOADING;
+                onReachBottomCalled = true;
+              }
+            } else if (pocketState !== TopPocketState.STATE_RELEASED) {
+              expectedTopPocketState = TopPocketState.STATE_RELEASED;
+              expectedPullDownOpacity = 0;
+            }
+          }
         }
       }
 
-      if (onReachBottom) {
-        if (onReachBottomCalled) {
-          expect(onReachBottom).toHaveBeenCalledTimes(1);
-          expect(onReachBottom).toHaveBeenCalledWith({});
-        } else {
-          expect(onReachBottom).toHaveBeenCalledTimes(0);
-        }
-      }
-
-      // expect(viewModel.locationTop).toEqual(expectedLocationTop);
+      expect(viewModel.onReachBottom).toHaveBeenCalledTimes(onReachBottomCalled ? 1 : 0);
       expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
       expect(viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
-      expect(viewModel.pullDownTopOffset)
-        .toEqual(expectedPullDownTopOffset);
-      expect(viewModel.pullDownIconAngle)
-        .toEqual(expectedPullDownIconAngle);
+      expect(viewModel.pullDownTranslateTop).toEqual(expectedPullDownTranslateTop);
+      expect(viewModel.pullDownIconAngle).toEqual(expectedPullDownIconAngle);
       expect(e.preventDefault).toHaveBeenCalledTimes(0);
       expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(0);
     });
@@ -208,7 +211,7 @@ describe('Native > Effects', () => {
     optionValues.pullDownEnabled,
     optionValues.pocketState,
     [1, 0, -1],
-  ]))('Effect on "dxscrollinit", forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o, containerScrollTop: %o',
+  ]))('Emit "dxscrollinit" event, forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o, containerScrollTop: %o',
     (forceGeneratePockets, refreshStrategy, pullDownEnabled, pocketState, containerScrollTop) => {
       const e = { ...defaultEvent, originalEvent: { pageY: 50 } } as any;
       const viewModel = new Scrollable({
@@ -233,7 +236,7 @@ describe('Native > Effects', () => {
       emit('dxscrollinit', e);
 
       if (forceGeneratePockets && refreshStrategy === 'swipeDown'
-                  && pocketState === TopPocketState.STATE_RELEASED && containerScrollTop === 0) {
+          && pocketState === TopPocketState.STATE_RELEASED && containerScrollTop === 0) {
         expect(viewModel.initPageY).toEqual(50);
         expect(viewModel.topPocketState).toEqual(TopPocketState.STATE_TOUCHED);
       } else {
@@ -249,7 +252,7 @@ describe('Native > Effects', () => {
     optionValues.pocketState,
     [50, 100],
     [25, 75, 175, 200],
-  ]))('handleMove(), locked: false, tryGetAllowedDirection: vertical, forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o, initPageY: %d, pageY: %d',
+  ]))('Emit "dxscroll" event, locked: false, tryGetAllowedDirection: vertical, forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o, initPageY: %d, pageY: %d',
     (forceGeneratePockets, refreshStrategy, pullDownEnabled, pocketState, initPageY, pageY) => {
       const topPocketClientHeight = 40;
       const scrollableOffsetHeight = 200;
@@ -285,7 +288,7 @@ describe('Native > Effects', () => {
       viewModel.locked = false;
       viewModel.initPageY = initPageY;
       viewModel.pullDownOpacity = 0.5;
-      viewModel.pullDownTopOffset = 0;
+      viewModel.pullDownTranslateTop = 0;
       viewModel.pullDownIconAngle = 0;
 
       viewModel.moveEffect();
@@ -295,7 +298,7 @@ describe('Native > Effects', () => {
       let expectedTopPocketState = pocketState;
       let preventDefaultCalled = false;
       let expectedPullDownOpacity = 0.5;
-      let expectedPullDownTopOffset = 0;
+      let expectedPullDownTranslateTop = 0;
       let expectedPullDownIconAngle = 0;
 
       if (forceGeneratePockets && refreshStrategy === 'swipeDown') {
@@ -322,7 +325,7 @@ describe('Native > Effects', () => {
           const top = Math.min(height * 3, expectedDeltaY + startPosition);
           const angle = (180 * top) / height / 3;
 
-          expectedPullDownTopOffset = top;
+          expectedPullDownTranslateTop = top;
           expectedPullDownIconAngle = angle;
         }
       }
@@ -330,8 +333,8 @@ describe('Native > Effects', () => {
       expect(viewModel.deltaY).toEqual(expectedDeltaY);
       expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
       expect(viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
-      expect(viewModel.pullDownTopOffset)
-        .toEqual(expectedPullDownTopOffset);
+      expect(viewModel.pullDownTranslateTop)
+        .toEqual(expectedPullDownTranslateTop);
       expect(viewModel.pullDownIconAngle)
         .toEqual(expectedPullDownIconAngle);
       expect(e.preventDefault).toHaveBeenCalledTimes(preventDefaultCalled ? 1 : 0);
@@ -343,11 +346,9 @@ describe('Native > Effects', () => {
     optionValues.nativeRefreshStrategy,
     optionValues.pullDownEnabled,
     optionValues.pocketState,
-    [jest.fn(), undefined],
     optionValues.isSwipeDown,
-  ]))('handleEnd(), should call onPullDown, forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o, onPullDown: %o, isSwipeDown: %o',
-    (forceGeneratePockets, refreshStrategy, pullDownEnabled, pocketState, onPullDown,
-      isSwipeDown) => {
+  ]))('emit "dxscrollend" event, forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o, isSwipeDown: %o',
+    (forceGeneratePockets, refreshStrategy, pullDownEnabled, pocketState, isSwipeDown) => {
       const topPocketClientHeight = 40;
       const scrollableOffsetHeight = 200;
       const e = {
@@ -358,7 +359,6 @@ describe('Native > Effects', () => {
       const viewModel = new Scrollable({
         forceGeneratePockets,
         pullDownEnabled,
-        onPullDown,
       });
 
       Object.defineProperties(viewModel, {
@@ -378,9 +378,11 @@ describe('Native > Effects', () => {
         },
       } as RefObject;
       viewModel.isSwipeDown = jest.fn(() => isSwipeDown);
+      viewModel.onPullDown = jest.fn();
+      viewModel.pullDownComplete = jest.fn();
       viewModel.topPocketState = pocketState;
       viewModel.pullDownOpacity = 0.5;
-      viewModel.pullDownTopOffset = 0;
+      viewModel.pullDownTranslateTop = 0;
       viewModel.pullDownIconAngle = 0;
 
       viewModel.endEffect();
@@ -390,37 +392,34 @@ describe('Native > Effects', () => {
       let expectedTopPocketState = pocketState;
       const preventDefaultCalled = false;
       let expectedPullDownOpacity = 0.5;
-      let expectedPullDownTopOffset = 0;
+      let expectedPullDownTranslateTop = 0;
       const expectedPullDownIconAngle = 0;
       let onPullDownCalled = false;
 
       if (forceGeneratePockets && refreshStrategy === 'swipeDown') {
         if (isSwipeDown && pocketState !== TopPocketState.STATE_REFRESHING) {
           expectedTopPocketState = TopPocketState.STATE_REFRESHING;
-          expectedPullDownTopOffset = 10;
+          expectedPullDownTranslateTop = 10;
           onPullDownCalled = true;
         }
 
         if (expectedTopPocketState === TopPocketState.STATE_PULLED
-                      || expectedTopPocketState === TopPocketState.STATE_TOUCHED) {
+            || expectedTopPocketState === TopPocketState.STATE_TOUCHED) {
           expectedTopPocketState = TopPocketState.STATE_RELEASED;
           expectedPullDownOpacity = 0;
+        }
+
+        if (refreshStrategy === 'pullDown') {
+          expect(viewModel.pullDownComplete).toHaveBeenCalledTimes(1);
         }
       }
 
       expect(viewModel.deltaY).toEqual(expectedDeltaY);
       expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
       expect(viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
-      expect(viewModel.pullDownTopOffset).toEqual(expectedPullDownTopOffset);
+      expect(viewModel.pullDownTranslateTop).toEqual(expectedPullDownTranslateTop);
       expect(viewModel.pullDownIconAngle).toEqual(expectedPullDownIconAngle);
-      if (onPullDown) {
-        if (onPullDownCalled) {
-          expect(onPullDown).toHaveBeenCalledTimes(1);
-          expect(onPullDown).toHaveBeenCalledWith({});
-        } else {
-          expect(onPullDown).toHaveBeenCalledTimes(0);
-        }
-      }
+      expect(viewModel.onPullDown).toHaveBeenCalledTimes(onPullDownCalled ? 1 : 0);
       expect(e.preventDefault).toHaveBeenCalledTimes(preventDefaultCalled ? 1 : 0);
       expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(0);
     });
@@ -430,8 +429,11 @@ describe('Native > Effects', () => {
     optionValues.nativeRefreshStrategy,
     optionValues.pullDownEnabled,
     optionValues.pocketState,
-  ]))('handleStop(), forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o',
+  ]))('Emit "dxscrollstop" event, forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o',
     (forceGeneratePockets, refreshStrategy, pullDownEnabled, pocketState) => {
+      jest.clearAllTimers();
+      jest.useFakeTimers();
+
       const e = {
         ...defaultEvent,
         preventDefault: jest.fn(),
@@ -448,11 +450,13 @@ describe('Native > Effects', () => {
 
       viewModel.containerRef = { current: {} } as RefObject;
       viewModel.wrapperRef = { current: {} } as RefObject;
-      viewModel.topPocketRef = { current: {} } as RefObject;
+      viewModel.topPocketRef = { current: { clientHeight: 80 } } as RefObject;
       viewModel.topPocketState = pocketState;
+      viewModel.onPullDown = jest.fn();
       viewModel.pullDownOpacity = 0.5;
-      viewModel.pullDownTopOffset = 0;
+      viewModel.pullDownTranslateTop = 0;
       viewModel.pullDownIconAngle = 0;
+      viewModel.contentTranslateTop = 0;
 
       viewModel.stopEffect();
       emit('dxscrollstop', e);
@@ -461,21 +465,46 @@ describe('Native > Effects', () => {
       let expectedTopPocketState = pocketState;
       const preventDefaultCalled = false;
       let expectedPullDownOpacity = 0.5;
-      const expectedPullDownTopOffset = 0;
+      const expectedPullDownTranslateTop = 0;
       const expectedPullDownIconAngle = 0;
+      let expectedContentTranslateTop = 0;
+      let onPullDownCalled = false;
 
       if (forceGeneratePockets && refreshStrategy === 'swipeDown') {
         if (expectedTopPocketState === TopPocketState.STATE_PULLED
-                              || expectedTopPocketState === TopPocketState.STATE_TOUCHED) {
+            || expectedTopPocketState === TopPocketState.STATE_TOUCHED) {
           expectedTopPocketState = TopPocketState.STATE_RELEASED;
           expectedPullDownOpacity = 0;
         }
       }
 
+      if (forceGeneratePockets && refreshStrategy === 'pullDown') {
+        if (expectedTopPocketState === TopPocketState.STATE_READY) {
+          expectedContentTranslateTop = 80;
+
+          expect(setTimeout).toHaveBeenCalledTimes(1);
+          expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 400);
+
+          jest.runOnlyPendingTimers();
+
+          if (pocketState !== TopPocketState.STATE_REFRESHING) {
+            expectedTopPocketState = TopPocketState.STATE_REFRESHING;
+            onPullDownCalled = true;
+          }
+
+          expect(viewModel.refreshTimeout).not.toBe(undefined);
+
+          viewModel.disposeRefreshTimeout()();
+          expect(viewModel.refreshTimeout).toBe(undefined);
+        }
+      }
+
+      expect(viewModel.onPullDown).toHaveBeenCalledTimes(onPullDownCalled ? 1 : 0);
       expect(viewModel.deltaY).toEqual(expectedDeltaY);
       expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
+      expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
       expect(viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
-      expect(viewModel.pullDownTopOffset).toEqual(expectedPullDownTopOffset);
+      expect(viewModel.pullDownTranslateTop).toEqual(expectedPullDownTranslateTop);
       expect(viewModel.pullDownIconAngle).toEqual(expectedPullDownIconAngle);
       expect(e.preventDefault).toHaveBeenCalledTimes(preventDefaultCalled ? 1 : 0);
       expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(0);
@@ -554,6 +583,100 @@ describe('Native > Effects', () => {
   });
 
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
+    each([undefined, jest.fn()]).describe('handler: %o', (actionHandler) => {
+      it('onReachBottom()', () => {
+        const viewModel = new Scrollable({
+          onReachBottom: actionHandler,
+        });
+
+        viewModel.onReachBottom();
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+          expect(actionHandler).toHaveBeenLastCalledWith({});
+        }
+      });
+
+      test.each([true, false])('refresh(), loadingIndicatorEnabled: %o', (loadingIndicatorEnabled) => {
+        const viewModel = new Scrollable({
+          onPullDown: actionHandler,
+        });
+
+        viewModel.loadingIndicatorEnabled = loadingIndicatorEnabled;
+
+        viewModel.refresh();
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+          expect(actionHandler).toHaveBeenCalledWith({});
+        }
+
+        expect(viewModel.topPocketState).toEqual(TopPocketState.STATE_READY);
+        expect(viewModel.loadingIndicatorEnabled).toEqual(loadingIndicatorEnabled);
+        expect(viewModel.isLoadPanelVisible).toEqual(loadingIndicatorEnabled);
+        expect(viewModel.locked).toEqual(true);
+      });
+
+      test.each(getPermutations([
+        optionValues.pocketState,
+        optionValues.nativeRefreshStrategy,
+      ]))('refresh(), pocketState: %o, refreshStrategy: %o', (pocketState, refreshStrategy) => {
+        jest.clearAllTimers();
+        jest.useFakeTimers();
+
+        const viewModel = new Scrollable({});
+
+        viewModel.releaseTimeout = 10;
+        viewModel.topPocketState = pocketState;
+        Object.defineProperties(viewModel, {
+          refreshStrategy: { get() { return refreshStrategy; } },
+        });
+        viewModel.contentTranslateTop = 50;
+        viewModel.pullDownOpacity = 0.5;
+        viewModel.loadingIndicatorEnabled = false;
+
+        viewModel.release();
+
+        let expectedTopPocketState = pocketState;
+        const expectedTimeout = refreshStrategy === 'swipeDown' ? 800 : 400;
+        let expectedContentTranslateTop = 50;
+        let expectedPullDownOpacity = 0.5;
+
+        if (refreshStrategy === 'pullDown') {
+          if (pocketState === TopPocketState.STATE_LOADING) {
+            expectedTopPocketState = TopPocketState.STATE_RELEASED;
+          }
+        }
+
+        expect(viewModel.releaseTimeout).not.toBe(undefined);
+        expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
+        expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
+
+        expect(setTimeout).toHaveBeenCalledTimes(1);
+        expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), expectedTimeout);
+
+        jest.runOnlyPendingTimers();
+
+        if (refreshStrategy === 'pullDown') {
+          expectedContentTranslateTop = 0;
+        }
+
+        if (expectedTopPocketState !== TopPocketState.STATE_RELEASED) {
+          expectedTopPocketState = TopPocketState.STATE_RELEASED;
+          expectedPullDownOpacity = 0;
+        }
+
+        expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
+        expect(viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
+        expect(viewModel.loadingIndicatorEnabled).toEqual(true);
+        expect(viewModel.isLoadPanelVisible).toEqual(false);
+        expect(viewModel.locked).toEqual(false);
+
+        viewModel.disposeReleaseTimeout()();
+        expect(viewModel.releaseTimeout).toBe(undefined);
+      });
+    });
+
     it('effectResetInactiveState()', () => {
       const containerRef = {
         current: {
@@ -696,14 +819,52 @@ describe('Native > Effects', () => {
 describe('Getters', () => {
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
     it('Direction()', () => {
-      const scrollable = new Scrollable({ direction });
+      const viewModel = new Scrollable({ direction });
 
-      expect(scrollable.direction.isVertical)
+      expect(viewModel.direction.isVertical)
         .toEqual(direction === DIRECTION_VERTICAL || direction === DIRECTION_BOTH);
-      expect(scrollable.direction.isHorizontal)
+      expect(viewModel.direction.isHorizontal)
         .toEqual(direction === DIRECTION_HORIZONTAL || direction === DIRECTION_BOTH);
     });
   });
+
+  test.each([{ clientHeight: 80 }, null])('topPocketHeight(), topPocketEl: %o', (topPocketEl) => {
+    const viewModel = new Scrollable({ direction: 'vertical' });
+
+    viewModel.topPocketRef = { current: topPocketEl } as RefObject<HTMLDivElement>;
+
+    expect(viewModel.topPocketHeight).toEqual(topPocketEl ? 80 : 0);
+  });
+
+  test.each(getPermutations([
+    optionValues.reachBottomEnabled,
+    [{ top: 550, left: 550 }, { top: 500.5, left: 500.5 }, { top: 500.4, left: 500.4 },
+      { top: 500.6, left: 500.6 }, { top: 500, left: 500 },
+      { top: 550.4, left: 550.4 }, { top: 550.5, left: 550.5 }, { top: 550.6, left: 550.6 }],
+    [{ clientHeight: 50 }, null],
+  ]))('isReachBottom(), direction: vertical, reachBottomEnabled: %o, scrollLocation: %o, bottomPocketEl: %o',
+    (reachBottomEnabled, scrollLocation, bottomPocketEl) => {
+      const viewModel = new Scrollable({
+        direction: 'vertical',
+        reachBottomEnabled,
+      });
+
+      viewModel.bottomPocketRef = { current: bottomPocketEl } as RefObject;
+      viewModel.containerRef = { current: { scrollHeight: 750, clientHeight: 200 } } as RefObject;
+      viewModel.scrollLocation = jest.fn(() => scrollLocation);
+
+      let expectedIsReachBottom = false;
+
+      if (bottomPocketEl) {
+        if (reachBottomEnabled && scrollLocation.top >= 500.5) {
+          expectedIsReachBottom = true;
+        }
+      } else if (reachBottomEnabled && scrollLocation.top >= 550.5) {
+        expectedIsReachBottom = true;
+      }
+
+      expect(viewModel.isReachBottom()).toEqual(expectedIsReachBottom);
+    });
 
   test.each(getPermutations([
     optionValues.direction,
@@ -730,8 +891,7 @@ describe('Getters', () => {
     (viewModel as any).scrollableRef = scrollableRef;
     (viewModel as any).topPocketRef = topPocketRef;
 
-    if (pullDownEnabled
-                  && pocketState === TopPocketState.STATE_PULLED && deltaY >= 70) {
+    if (pullDownEnabled && pocketState === TopPocketState.STATE_PULLED && deltaY >= 70) {
       expect(viewModel.isSwipeDown()).toBe(true);
     } else {
       expect(viewModel.isSwipeDown()).toBe(false);
@@ -761,15 +921,6 @@ describe('Methods', () => {
       viewModel.unlock();
 
       expect(viewModel.locked).toEqual(!!disabled);
-    });
-  });
-
-  describe('Content', () => {
-    it('should get the content of the widget', () => {
-      const scrollable = new Scrollable({});
-      const content = { };
-      scrollable.contentRef = { current: content } as RefObject<HTMLDivElement>;
-      expect(scrollable.content()).toEqual(content);
     });
   });
 
@@ -1752,6 +1903,10 @@ describe('Methods', () => {
 
         expect(viewModel.needForceScrollbarsVisibility).toEqual(true);
 
+        jest.runOnlyPendingTimers();
+
+        expect(viewModel.needForceScrollbarsVisibility).toEqual(false);
+
         viewModel.disposeHideScrollbarTimeout()();
         expect(viewModel.hideScrollbarTimeout).toBe(undefined);
       });
@@ -1778,16 +1933,16 @@ describe('Methods', () => {
 describe('Scrollbar integration', () => {
   test.each(getPermutations([
     optionValues.direction,
-    optionValues.useSimulatedScrollbar,
+    [...optionValues.useSimulatedScrollbar, undefined],
     optionValues.platforms,
-  ]))('Scrollbar should render if useSimulatedScrollbar is set to true or device is android, direction: %o, useSimulatedScrollbar: %o, platform: %o',
+  ]))('cssClasses, direction: %o, useSimulatedScrollbar: %o, platform: %o',
     (direction, useSimulatedScrollbar, platform) => {
       devices.real = () => ({ platform });
 
       const viewModel = new Scrollable({
+        direction,
         useSimulatedScrollbar,
         showScrollbar: 'onScroll',
-        direction,
       });
       (viewModel as any).contentRef = React.createRef();
       (viewModel as any).containerRef = React.createRef();
@@ -1795,30 +1950,17 @@ describe('Scrollbar integration', () => {
       (viewModel as any).verticalScrollbarRef = React.createRef();
 
       const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-
       const scrollBar = scrollable.find(Scrollbar);
+
+      expect(viewModel.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
+      expect(viewModel.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+      expect(viewModel.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
+      expect(viewModel.cssClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
+      expect(viewModel.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
 
       let expectedScrollbarsCount = 0;
       if (useSimulatedScrollbar || (useSimulatedScrollbar === undefined && platform === 'android')) {
         expectedScrollbarsCount = direction === 'both' ? 2 : 1;
-      }
-      expect(scrollBar.length).toBe(expectedScrollbarsCount);
-    });
-
-  test.each(getPermutations([
-    optionValues.direction,
-    optionValues.useSimulatedScrollbar,
-    optionValues.platforms,
-  ]))('Should have correct css classes if useSimulatedScrollbar is set to true and nativeStrategy is used, direction: %o, useSimulatedScrollbar: %o, platform: %o',
-    (direction, useSimulatedScrollbar, platform) => {
-      devices.real = () => ({ platform });
-      const viewModel = new Scrollable({
-        direction,
-        useSimulatedScrollbar,
-        showScrollbar: 'onScroll',
-      });
-
-      if (useSimulatedScrollbar || (useSimulatedScrollbar === undefined && platform === 'android')) {
         expect(viewModel.cssClasses).toEqual(
           expect.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED),
         );
@@ -1827,6 +1969,8 @@ describe('Scrollbar integration', () => {
           expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED),
         );
       }
+
+      expect(scrollBar.length).toBe(expectedScrollbarsCount);
     });
 
   test.each(getPermutations([
@@ -1845,17 +1989,4 @@ describe('Scrollbar integration', () => {
 
       expect(viewModel.refreshStrategy).toEqual(platform === 'android' ? 'swipeDown' : 'pullDown');
     });
-});
-
-describe('Native Strategy > cssClasses', () => {
-  each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
-    it('should add scrolling classes by default', () => {
-      devices.real = () => ({ platform });
-      const instance = new Scrollable({});
-      expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
-
-      expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
-      expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
-    });
-  });
 });

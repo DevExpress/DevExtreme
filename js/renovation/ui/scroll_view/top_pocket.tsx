@@ -79,7 +79,7 @@ export class TopPocketProps {
 
   @OneWay() pullDownTop = 0;
 
-  @OneWay() pullDownTopOffset = 0;
+  @OneWay() pullDownTranslateTop = 0;
 
   @OneWay() pullDownIconAngle = 0;
 
@@ -164,7 +164,7 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
     if (this.props.refreshStrategy === 'swipeDown') {
       return {
         opacity: this.props.pullDownOpacity,
-        transform: `translate(0px, ${this.props.pullDownTopOffset}px)`,
+        transform: `translate(0px, ${this.props.pullDownTranslateTop}px)`,
       };
     }
 

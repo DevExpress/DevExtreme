@@ -258,7 +258,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   hide(): void {
     this.visibility = false;
 
-    /* istanbul ignore next */
     if (isDefined(this.showOnScrollByWheel) && this.props.showScrollbar === 'onScroll') {
       setTimeout(() => {
         this.showOnScrollByWheel = undefined;

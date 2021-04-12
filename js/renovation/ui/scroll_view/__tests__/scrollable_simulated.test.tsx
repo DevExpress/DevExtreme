@@ -1323,15 +1323,6 @@ describe('Simulated > Behavior', () => {
       });
     });
 
-    describe('Content', () => {
-      it('should get the content of the widget', () => {
-        const scrollable = new Scrollable({});
-        const content = { };
-        scrollable.contentRef = { current: content } as RefObject<HTMLDivElement>;
-        expect(scrollable.content()).toEqual(content);
-      });
-    });
-
     describe('ScrollBy', () => {
       each(['vertical', 'horizontal', 'both']).describe('Direction: %o', (direction) => {
         it('should scroll by positive distance as number', () => {
