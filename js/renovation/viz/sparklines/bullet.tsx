@@ -195,7 +195,7 @@ export class BulletProps extends BaseWidgetProps {
 
   @OneWay() endScaleValue?: number;
 
-  @Nested() tooltip?: TooltipProps;
+  @Nested() tooltip: TooltipProps = new TooltipProps();
 
   @Event() onTooltipHidden?: OnTooltipHiddenFn<BaseEventData>;
 

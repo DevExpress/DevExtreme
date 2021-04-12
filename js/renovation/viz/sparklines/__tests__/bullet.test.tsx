@@ -6,7 +6,7 @@ import {
   emit,
   getEventHandlers,
 } from '../../../test_utils/events_mock';
-import { Bullet, viewFunction as BulletComponent } from '../bullet';
+import { Bullet, BulletProps, viewFunction as BulletComponent } from '../bullet';
 import { PathSvgElement } from '../../common/renderers/svg_path';
 import { resolveRtlEnabled } from '../../../utils/resolve_rtl';
 import { TooltipProps } from '../../common/tooltip';
@@ -432,6 +432,14 @@ describe('Bullet', () => {
 
           expect(bullet.tooltipVisible).toBe(true);
         });
+      });
+    });
+
+    describe('BulletProps', () => {
+      it('should be enabled by default', () => {
+        const p = new BulletProps();
+
+        expect(p.tooltip.enabled).toBe(true);
       });
     });
   });
