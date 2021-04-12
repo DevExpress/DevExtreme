@@ -173,7 +173,7 @@ const TimeView = Editor.inherit({
     _createHourBox: function(is12HourFormat) {
         const editor = this._hourBox = this._createComponent($('<div>'), NumberBox, extend({
             min: -1,
-            max: is12HourFormat ? 12 : 24,
+            max: is12HourFormat ? 13 : 24,
             value: this._getValue().getHours(),
             onValueChanged: this._onHourBoxValueChanged.bind(this),
             onKeyboardHandled: opts => this._keyboardHandler(opts)

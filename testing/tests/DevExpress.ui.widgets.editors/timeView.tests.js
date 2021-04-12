@@ -464,7 +464,7 @@ QUnit.module('format rendering', () => {
         QUnit.test(`hour numberbox should have min/max constraints, use24HourFormat=${use24HourFormat}`, function(assert) {
             const $element = $('#timeView').dxTimeView({ use24HourFormat });
             const hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0).dxNumberBox('instance');
-            const expectedMaxValue = use24HourFormat ? 24 : 12;
+            const expectedMaxValue = use24HourFormat ? 24 : 13;
 
             assert.equal(hourNumberBox.option('min'), -1, 'min constraint set');
             assert.equal(hourNumberBox.option('max'), expectedMaxValue, 'max constraint set');
@@ -474,7 +474,7 @@ QUnit.module('format rendering', () => {
             const $element = $('#timeView').dxTimeView({ use24HourFormat });
             const timeView = $element.dxTimeView('instance');
             const newUse24HourFormatValue = !use24HourFormat;
-            const expectedMaxValue = newUse24HourFormatValue ? 24 : 12;
+            const expectedMaxValue = newUse24HourFormatValue ? 24 : 13;
 
             timeView.option('use24HourFormat', newUse24HourFormatValue);
             const hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0).dxNumberBox('instance');
