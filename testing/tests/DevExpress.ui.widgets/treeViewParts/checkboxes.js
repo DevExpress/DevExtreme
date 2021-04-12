@@ -244,6 +244,27 @@ QUnit.test('T195986', function(assert) {
     });
 });
 
+QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
+    let eventValue;
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { text: 'item1', expanded: true, items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
+        onSelectAllValueChanged: (args) => { eventValue = args.value; }
+    });
+    const clickByItemCheckbox = (item) => wrapper.getElement()
+        .find(`[aria-label="${item}"] .dx-checkbox`)
+        .eq(0).trigger('dxclick');
+
+    clickByItemCheckbox('item1_1');
+    assert.equal(eventValue, undefined, 'after click by item1_1');
+
+    clickByItemCheckbox('item1_2');
+    assert.equal(eventValue, true, 'after click by item1_2');
+
+    clickByItemCheckbox('item1');
+    assert.equal(eventValue, false, 'after click by item1');
+});
+
 QUnit.test('Selection works correct with custom rootValue', function(assert) {
     const data = [
         { id: 0, parentId: 'none', text: 'Animals' },
