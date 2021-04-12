@@ -70,7 +70,7 @@ export const format = function() {
         value = values[i];
         if(type(value) === 'string' && value.indexOf('$') >= 0) {
             replaceDollarCount = '$'.replace('$', '$$').length; // lgtm[incomplete-sanitization]
-            value = value.replaceAll('$', replaceDollarCount === 1 ? '$$$$' : '$$');
+            value = value.split('$').join(replaceDollarCount === 1 ? '$$' : '$');
         }
         s = s.replace(reg, value);
     }
