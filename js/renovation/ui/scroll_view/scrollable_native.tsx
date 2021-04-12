@@ -464,7 +464,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
       this.locationTop = currentLocation;
 
+      /* istanbul ignore next */
       if (this.isPullDown()) {
+        /* istanbul ignore next */
         this.pullDownReady();
       } else if (scrollDelta > 0 && this.isReachBottom()) {
         this.onReachBottom();
@@ -474,6 +476,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
   }
 
+  /* istanbul ignore next */
   pullDownReady(): void {
     if (this.topPocketState === TopPocketState.STATE_READY) {
       return;
@@ -740,6 +743,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
   }
 
+  /* istanbul ignore next */
   pullDownComplete(): void {
     if (this.topPocketState === TopPocketState.STATE_READY) {
       this.setPullDownOffset(this.topPocketHeight);
@@ -767,6 +771,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.contentTranslateTop = offset;
   }
 
+  /* istanbul ignore next */
   get topPocketHeight(): number {
     return this.topPocketRef.current?.clientHeight || 0;
   }
@@ -777,6 +782,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
     this.topPocketState = TopPocketState.STATE_REFRESHING;
 
+    /* istanbul ignore next */
     if (this.isSwipeDownStrategy) {
       this.pullDownTopOffset = this.getPullDownHeight();
     }
@@ -837,6 +843,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return this.props.pullDownEnabled && this.scrollLocation().top <= -this.topPocketHeight;
   }
 
+  /* istanbul ignore next */
   isReachBottom(): boolean {
     const { top } = this.scrollLocation();
 
@@ -844,6 +851,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       && top - getScrollTopMax(this.containerRef.current!) + this.bottomPocketHeight >= 0.5;
   }
 
+  /* istanbul ignore next */
   get bottomPocketHeight(): number {
     if (this.props.reachBottomEnabled && this.bottomPocketRef.current) {
       return this.bottomPocketRef.current.clientHeight;
@@ -923,6 +931,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return new ScrollDirection(this.props.direction);
   }
 
+  /* istanbul ignore next */
   get useSimulatedScrollbar(): boolean {
     if (!isDefined(this.props.useSimulatedScrollbar)) {
       return nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
