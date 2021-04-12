@@ -107,12 +107,7 @@ const permutations = (array1, array2) => {
 };
 
 export function getPermutations(sourceOptionArr: any[][]): any[] {
-  const start = performance.now();
-  const value = sourceOptionArr.reduce((arr1, arr2) => permutations(arr1, arr2), []);
-
-  console.log(performance.now() - start);
-
-  return value;
+  return sourceOptionArr.reduce((arr1, arr2) => permutations(arr1, arr2), []);
 }
 
 export const optionValues = {
@@ -124,10 +119,17 @@ export const optionValues = {
     TopPocketState.STATE_REFRESHING,
   ],
   pullDownEnabled: [true, false],
+  reachBottomEnabled: [true, false],
   nativeRefreshStrategy: ['swipeDown', 'pullDown'],
   forceGeneratePockets: [true, false],
   useSimulatedScrollbar: [true, false],
   isReachBottom: [true, false],
   isSwipeDown: [true, false],
   platforms: ['android', 'ios', 'generic'],
+  showScrollbar: ['never', 'always', 'onScroll', 'onHover'],
+  bounceEnabled: [true, false],
+  inertiaEnabled: [true, false],
+  isDxWheelEvent: [true, false],
+  scrollByThumb: [true, false],
+  scrollByContent: [true, false],
 };

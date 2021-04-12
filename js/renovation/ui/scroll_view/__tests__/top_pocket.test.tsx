@@ -26,9 +26,12 @@ describe('TopPocket', () => {
 
       expect(topPocket.props()).toEqual({
         pocketState: 0,
+        pocketTop: 0,
         pullDownIconAngle: 0,
         pullDownOpacity: 0,
+        pullDownTop: 0,
         pullDownTopOffset: 0,
+        topPocketTranslateTop: 0,
       });
     });
   });

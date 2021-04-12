@@ -841,7 +841,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const { top } = this.scrollLocation();
 
     return this.props.reachBottomEnabled
-      && top - getScrollTopMax(this.containerRef.current) + this.bottomPocketHeight >= 0.5;
+      && top - getScrollTopMax(this.containerRef.current!) + this.bottomPocketHeight >= 0.5;
   }
 
   get bottomPocketHeight(): number {

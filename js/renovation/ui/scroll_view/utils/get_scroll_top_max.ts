@@ -1,5 +1,3 @@
-export function getScrollTopMax(element: Element | null): number {
-  if (!element) return 0;
-
+export function getScrollTopMax(element: Element): number {
   return element.scrollHeight - element.clientHeight;
 }

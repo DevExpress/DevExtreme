@@ -72,8 +72,6 @@ export type ScrollbarPropsType = ScrollbarProps
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
-  @Mutable() location = 0;
-
   @Mutable() thumbScrolling = false;
 
   @Mutable() crossThumbScrolling = false;
@@ -95,8 +93,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @InternalState() maxOffset = 0;
 
   @InternalState() minOffset = 0;
-
-  @InternalState() minLimit = 0;
 
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
@@ -185,17 +181,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   reachedMin(): boolean {
-    return this.getLocation() <= this.minOffset;
+    return this.getScrollLocation() <= this.minOffset;
   }
 
   @Method()
   reachedMax(): boolean {
-    return this.getLocation() >= this.maxOffset;
-  }
-
-  @Method()
-  getLocation(): number {
-    return this.location;
+    return this.getScrollLocation() >= this.maxOffset;
   }
 
   @Method()
@@ -204,18 +195,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  setLocation(value: number): void {
-    this.location = value;
-  }
-
-  @Method()
   inBounds(): boolean {
-    return this.boundLocation() === this.getLocation();
+    return this.boundLocation() === this.getScrollLocation();
   }
 
   @Method()
   boundLocation(value?: number): number {
-    const currentLocation = isDefined(value) ? value : this.getLocation();
+    const currentLocation = isDefined(value) ? value : this.getScrollLocation();
 
     return Math.max(Math.min(currentLocation, this.maxOffset), this.minOffset);
   }
@@ -323,19 +309,18 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   pullDownRefreshing(): void {
     this.setPocketState(TopPocketState.STATE_REFRESHING);
-    this.executePullDown();
+    this.onPullDown();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   reachBottomLoading(): void {
-    this.executeReachBottom();
+    this.onReachBottom();
   }
 
-  executePullDown(): void {
+  onPullDown(): void {
     this.props.onPullDown?.();
   }
 
-  executeReachBottom(): void {
+  onReachBottom(): void {
     this.props.onReachBottom?.();
   }
 
@@ -368,6 +353,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   stopScrolling(): void {
     this.hide();
+    this.onAnimatorCancel();
+  }
+
+  onAnimatorCancel(): void {
     this.props.onAnimatorCancel?.();
   }
 
@@ -410,26 +399,21 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   scrollStep(delta: number): void {
-    this.setLocation(this.scrollLocation + delta);
-    this.suppressBounce();
-    this.moveScrollbar();
-  }
-
-  suppressBounce(): void {
-    if (this.props.bounceEnabled || this.inBounds()) {
-      return;
+    if (this.props.bounceEnabled) {
+      this.scrollLocation += delta;
+    } else {
+      this.scrollLocation = this.boundLocation(this.scrollLocation + delta);
     }
 
-    this.setLocation(this.boundLocation());
+    this.moveScrollbar();
   }
 
   @Method()
   moveScrollbar(location?: number): void {
     const currentLocation = isDefined(location)
       ? location * this.props.scaleRatio
-      : this.getLocation();
+      : this.getScrollLocation();
 
-    this.setLocation(currentLocation);
     this.scrollLocation = currentLocation;
 
     if (this.props.forceGeneratePockets) {
@@ -480,6 +464,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   stateReleased(): void {
     this.setPocketState(TopPocketState.STATE_RELEASED);
+    this.onRelease();
+  }
+
+  onRelease(): void {
     this.props.onRelease?.();
   }
 

@@ -1,5 +1,3 @@
-export function getScrollLeftMax(element: Element | null): number {
-  if (!element) return 0;
-
+export function getScrollLeftMax(element: Element): number {
   return element.scrollWidth - element.clientWidth;
 }
