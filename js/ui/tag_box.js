@@ -137,7 +137,6 @@ const TagBox = SelectBox.inherit({
 
                 const direction = rtlEnabled ? 'next' : 'prev';
                 this._moveTagFocus(direction);
-
                 !this.option('multiline') && this._scrollContainer(direction);
             },
             rightArrow: function(e) {
