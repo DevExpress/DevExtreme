@@ -30,7 +30,6 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    // $('body').append(markup);
 });
 
 import $ from 'jquery';
