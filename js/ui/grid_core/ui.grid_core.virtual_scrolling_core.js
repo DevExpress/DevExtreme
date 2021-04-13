@@ -308,7 +308,6 @@ export const VirtualScrollController = Class.inherit((function() {
             this._contentSize = 0;
             this._itemSizes = {};
             this._sizeRatio = 1;
-            this._items = [];
             this._cache = [];
             this._isVirtual = isVirtual;
             this._loadingPageIndexes = {};
