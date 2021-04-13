@@ -1432,6 +1432,7 @@ QUnit.module('T986577', () => {
 
     QUnit.test('HtmlEditor with Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
         const config = extend({ alignItemLabels: false }, getFormConfig());
+        assert.equal(JSON.stringify(config), 1, 'config');
         const $form = $('#form').dxForm(config);
 
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
@@ -1448,6 +1449,7 @@ QUnit.module('T986577', () => {
 
     QUnit.test('HtmlEditor with Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
         const config = extend({ alignItemLabels: true }, getFormConfig());
+        assert.equal(JSON.stringify(config), 1, 'config');
         const $form = $('#form').dxForm(config);
 
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
