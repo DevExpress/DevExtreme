@@ -1421,7 +1421,7 @@ QUnit.module('T986577', () => {
                 label: { text: 'text' },
                 editorType: 'dxHtmlEditor',
                 editorOptions: {
-                    toolbar: { multiline: false, items: [ 'bold', 'italic' ] }
+                    toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike' ] }
                 }
             }, {
                 label: { text: 'Very very long text' },
@@ -1440,6 +1440,8 @@ QUnit.module('T986577', () => {
         assert.equal($toolbarMenuButton.width(), 1, 'test only');
         assert.equal($form.find('.dx-htmleditor-toolbar-wrapper').width(), 1, 'toolbar wrapper width');
         assert.equal($form.find('.dx-toolbar').width(), 1, 'toolbar width');
+        assert.equal($form.find('.dx-toolbar-items-container').width(), 1, 'dx-toolbar-items-container width');
+        assert.equal($form.find('.dx-toolbar-after').width(), 1, 'dx-toolbar-after width');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), true, 'menu button is hidden');
     });
 
@@ -1454,6 +1456,9 @@ QUnit.module('T986577', () => {
         assert.equal($toolbarMenuButton.width(), 1, 'test only');
         assert.equal($form.find('.dx-htmleditor-toolbar-wrapper').width(), 1, 'toolbar wrapper width');
         assert.equal($form.find('.dx-toolbar').width(), 1, 'toolbar width');
+        assert.equal($form.find('.dx-toolbar-items-container').width(), 1, 'dx-toolbar-items-container width');
+        assert.equal($form.find('.dx-toolbar-items-container').width(), 1, 'dx-toolbar-items-container width');
+        assert.equal($form.find('.dx-toolbar-after').width(), 1, 'dx-toolbar-after width');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), false, 'menu button is visible');
     });
 });
