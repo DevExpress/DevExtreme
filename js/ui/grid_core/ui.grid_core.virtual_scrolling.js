@@ -839,7 +839,7 @@ export const virtualScrollingModule = {
                                     that._rowsScrollController.pageIndex(that._rowPageIndex);
                                 }
 
-                                if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
+                                if(!that._rowsScrollController._dataOptions.items().length && this.totalItemsCount()) return;
 
                                 that._rowsScrollController.handleDataChanged(change => {
                                     change = change || {};
@@ -855,7 +855,7 @@ export const virtualScrollingModule = {
                             updateLoading: function() {
                             },
                             itemsCount: function() {
-                                return that._rowsScrollController._dataSource.items().filter(isItemCountable).length;
+                                return that._rowsScrollController._dataOptions.items().filter(isItemCountable).length;
                             },
                             correctCount: function(items, count, fromEnd) {
                                 return correctCount(items, count, fromEnd, (item, isNextAfterLast, fromEnd) => {
@@ -1043,7 +1043,7 @@ export const virtualScrollingModule = {
                                 const { skipForCurrentPage, pageIndex } = this.getLoadPageParams();
                                 offset = pageIndex * this.pageSize() + skipForCurrentPage;
                             } else {
-                                offset = rowsScrollController.beginPageIndex() * rowsScrollController._dataSource.pageSize();
+                                offset = rowsScrollController.beginPageIndex() * rowsScrollController._dataOptions.pageSize();
                             }
                         } else if(this.option('scrolling.mode') === 'virtual' && dataSource) {
                             offset = dataSource.beginPageIndex() * dataSource.pageSize();
