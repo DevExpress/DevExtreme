@@ -1439,7 +1439,9 @@ QUnit.module('T986577', () => {
         assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
         assert.equal($toolbarMenuButton.attr('class'), 1, 'test only');
         assert.equal($toolbarMenuButton.width(), 1, 'test only');
+        assert.equal($form.eq(0).width(), 1, 'form width');
         assert.equal($form.find('.dx-field-item-content').eq(0).width(), 1, '1 item width');
+        assert.equal($form.find('.dx-field-item-content').eq(1).width(), 1, '2 item width');
         assert.equal($form.find('.dx-htmleditor-toolbar-wrapper').width(), 1, 'toolbar wrapper width');
         assert.equal($form.find('.dx-toolbar').width(), 1, 'toolbar width');
         assert.equal($form.find('.dx-toolbar-items-container').width(), 1, 'dx-toolbar-items-container width');
@@ -1457,10 +1459,11 @@ QUnit.module('T986577', () => {
         assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
         assert.equal($toolbarMenuButton.attr('class'), 1, 'test only');
         assert.equal($toolbarMenuButton.width(), 1, 'test only');
+        assert.equal($form.eq(0).width(), 1, 'form width');
         assert.equal($form.find('.dx-field-item-content').eq(0).width(), 1, '1 item width');
+        assert.equal($form.find('.dx-field-item-content').eq(1).width(), 1, '2 item width');
         assert.equal($form.find('.dx-htmleditor-toolbar-wrapper').width(), 1, 'toolbar wrapper width');
         assert.equal($form.find('.dx-toolbar').width(), 1, 'toolbar width');
-        assert.equal($form.find('.dx-toolbar-items-container').width(), 1, 'dx-toolbar-items-container width');
         assert.equal($form.find('.dx-toolbar-items-container').width(), 1, 'dx-toolbar-items-container width');
         assert.equal($form.find('.dx-toolbar-after').width(), 1, 'dx-toolbar-after width');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), false, 'menu button is visible');
