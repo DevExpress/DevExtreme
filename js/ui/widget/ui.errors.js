@@ -334,5 +334,5 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1018
     */
-    W1018: 'Infinite scrolling may not work properly with multiple selection. We recommend disable infinite scrolling or multiple selection or set \'selection.deferred\' property to true. ',
+    W1018: 'Infinite scrolling may not work properly with multiple selection. To use these features together, set \'selection.deferred\' to true or set \'selection.selectAllMode\' to \'page\'.',
 });
