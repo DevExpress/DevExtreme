@@ -57,23 +57,18 @@ export const quadToObject = function(raw) {
 export const format = function() {
     let s = arguments[0];
     const values = [].slice.call(arguments).slice(1);
-    let replaceDollarCount;
-    let reg;
-    let value;
 
     if(isFunction(s)) {
         return s.apply(this, values);
     }
 
-    for(let i = 0; i < values.length; i++) {
-        reg = new RegExp('\\{' + i + '\\}', 'gm');
-        value = values[i];
-        if(type(value) === 'string' && value.indexOf('$') >= 0) {
-            replaceDollarCount = '$'.replace('$', '$$').length; // lgtm[incomplete-sanitization]
-            value = value.replace(new RegExp('\\$', 'g'), replaceDollarCount === 1 ? '$$$$' : '$$');
+    values.forEach(function(value, index) {
+        const reg = new RegExp('\\{' + index + '\\}', 'gm');
+        if(type(value) === 'string') {
+            value = value.replace(/\$/g, '$$$$');
         }
         s = s.replace(reg, value);
-    }
+    });
 
     return s;
 };
