@@ -638,16 +638,21 @@ const VirtualScrollingRowsViewExtender = (function() {
         },
 
         _updateRowHeight: function() {
-            const that = this;
+            this.callBase.apply(this, arguments);
 
-            that.callBase.apply(that, arguments);
+            if(this._rowHeight) {
 
-            if(that._rowHeight) {
+                this._updateContentPosition();
 
-                that._updateContentPosition();
+                const viewportHeight = this._hasHeight ? this.element().outerHeight() : $(getWindow()).outerHeight();
+                const dataController = this._dataController;
+                dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
 
-                const viewportHeight = that._hasHeight ? that.element().outerHeight() : $(getWindow()).outerHeight();
-                that._dataController.viewportSize(Math.ceil(viewportHeight / that._rowHeight));
+                if(this.option(NEW_SCROLLING_MODE) && !isDefined(dataController._loadViewportParams)) {
+                    const viewportSize = dataController.viewportSize();
+                    const viewportIsNotFilled = viewportSize > dataController._items.length && dataController.totalItemsCount() > viewportSize;
+                    viewportIsNotFilled && dataController.loadViewport();
+                }
             }
         },
 

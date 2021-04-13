@@ -3528,6 +3528,42 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             assert.notOk(customizeLoadResultSpy.args[i][0].delay, `${i} call without a delay`);
         }
     });
+
+    QUnit.test('New mode. Rows should be rendered according to the viewport size', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(100),
+            keyExpr: 'id',
+            height: 500,
+            remoteOperations: true,
+            paging: {
+                pageSize: 10
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            }
+        });
+
+        // act
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'rendered row count');
+    });
 });
 
 
