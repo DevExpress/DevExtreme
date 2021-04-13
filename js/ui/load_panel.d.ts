@@ -183,6 +183,7 @@ export default class dxLoadPanel extends dxOverlay {
     constructor(element: TElement, options?: dxLoadPanelOptions)
 }
 
+/** @public */
 export type Options = dxLoadPanelOptions;
 
 /** @deprecated use Options instead */

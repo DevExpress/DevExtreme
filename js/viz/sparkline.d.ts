@@ -226,6 +226,7 @@ export default class dxSparkline extends BaseSparkline {
     getDataSource(): DataSource;
 }
 
+/** @public */
 export type Options = dxSparklineOptions;
 
 /** @deprecated use Options instead */

@@ -143,6 +143,7 @@ export default class dxColorBox extends dxDropDownEditor {
     constructor(element: TElement, options?: dxColorBoxOptions)
 }
 
+/** @public */
 export type Options = dxColorBoxOptions;
 
 /** @deprecated use Options instead */

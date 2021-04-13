@@ -2521,6 +2521,7 @@ export interface polarPointObject extends basePointObject {
 export interface polarChartSeriesObject extends baseSeriesObject {
 }
 
+/** @public */
 export type Options = dxPolarChartOptions;
 
 /** @deprecated use Options instead */

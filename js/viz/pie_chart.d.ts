@@ -998,6 +998,7 @@ export interface pieChartSeriesObject extends baseSeriesObject {
   isHovered(): boolean;
 }
 
+/** @public */
 export type Options = dxPieChartOptions;
 
 /** @deprecated use Options instead */

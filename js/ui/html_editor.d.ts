@@ -572,6 +572,7 @@ export interface dxHtmlEditorVariables {
     escapeChar?: string | Array<string>;
 }
 
+/** @public */
 export type Options = dxHtmlEditorOptions;
 
 /** @deprecated use Options instead */

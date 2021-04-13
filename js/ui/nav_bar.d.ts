@@ -80,6 +80,7 @@ export interface dxNavBarItem extends dxTabsItem {
     badge?: string;
 }
 
+/** @public */
 export type Options = dxNavBarOptions;
 
 /** @deprecated use Options instead */

@@ -198,6 +198,7 @@ export default class dxPopover extends dxPopup {
     show(target: string | TElement): TPromise<boolean>;
 }
 
+/** @public */
 export type Options = dxPopoverOptions;
 
 /** @deprecated use Options instead */

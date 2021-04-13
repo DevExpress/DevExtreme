@@ -86,6 +86,7 @@ export default class dxCheckBox extends Editor {
     constructor(element: TElement, options?: dxCheckBoxOptions)
 }
 
+/** @public */
 export type Options = dxCheckBoxOptions;
 
 /** @deprecated use Options instead */

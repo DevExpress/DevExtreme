@@ -102,6 +102,7 @@ export default class dxTextBox extends dxTextEditor {
     constructor(element: TElement, options?: dxTextBoxOptions)
 }
 
+/** @public */
 export type Options = dxTextBoxOptions;
 
 /** @deprecated use Options instead */

@@ -547,6 +547,7 @@ export interface dxFilterBuilderField {
     trueText?: string;
 }
 
+/** @public */
 export type Options = dxFilterBuilderOptions;
 
 /** @deprecated use Options instead */

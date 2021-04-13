@@ -562,6 +562,7 @@ export default class dxFileUploader extends Editor {
     removeFile(file: File): void;
 }
 
+/** @public */
 export type Options = dxFileUploaderOptions;
 
 /** @deprecated use Options instead */

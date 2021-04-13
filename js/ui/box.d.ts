@@ -132,6 +132,7 @@ export interface dxBoxItem extends CollectionWidgetItem {
     shrink?: number;
 }
 
+/** @public */
 export type Options = dxBoxOptions;
 
 /** @deprecated use Options instead */

@@ -319,6 +319,7 @@ export default class dxPopup extends dxOverlay {
     constructor(element: TElement, options?: dxPopupOptions)
 }
 
+/** @public */
 export type Options = dxPopupOptions;
 
 /** @deprecated use Options instead */

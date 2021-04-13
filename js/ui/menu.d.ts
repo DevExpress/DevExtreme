@@ -294,6 +294,7 @@ export interface dxMenuItem extends dxMenuBaseItem {
     items?: Array<dxMenuItem>;
 }
 
+/** @public */
 export type Options = dxMenuOptions;
 
 /** @deprecated use Options instead */

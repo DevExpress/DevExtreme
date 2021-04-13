@@ -154,6 +154,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 }
 
+/** @public */
 export type Options = dxToolbarOptions;
 
 /** @deprecated use Options instead */

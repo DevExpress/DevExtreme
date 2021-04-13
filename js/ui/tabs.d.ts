@@ -153,6 +153,7 @@ export interface dxTabsItem extends CollectionWidgetItem {
     icon?: string;
 }
 
+/** @public */
 export type Options = dxTabsOptions;
 
 /** @deprecated use Options instead */

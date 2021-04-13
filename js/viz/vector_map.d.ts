@@ -1036,6 +1036,7 @@ export default class dxVectorMap extends BaseWidget {
     zoomFactor(zoomFactor: number): void;
 }
 
+/** @public */
 export type Options = dxVectorMapOptions;
 
 /** @deprecated use Options instead */

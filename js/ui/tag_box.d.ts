@@ -241,6 +241,7 @@ export default class dxTagBox extends dxSelectBox {
     constructor(element: TElement, options?: dxTagBoxOptions)
 }
 
+/** @public */
 export type Options = dxTagBoxOptions;
 
 /** @deprecated use Options instead */

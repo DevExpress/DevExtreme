@@ -106,6 +106,7 @@ export interface dxValidationGroupResult {
     validators?: Array<any>;
 }
 
+/** @public */
 export type Options = dxValidationGroupOptions;
 
 /** @deprecated use Options instead */

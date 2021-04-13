@@ -1288,6 +1288,7 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     visible?: boolean;
 }
 
+/** @public */
 export type Options = dxSchedulerOptions;
 
 /**

@@ -190,6 +190,7 @@ export default class dxLinearGauge extends BaseGauge {
     constructor(element: TElement, options?: dxLinearGaugeOptions)
 }
 
+/** @public */
 export type Options = dxLinearGaugeOptions;
 
 /** @deprecated use Options instead */

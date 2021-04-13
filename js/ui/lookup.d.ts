@@ -472,6 +472,7 @@ export default class dxLookup extends dxDropDownList {
     constructor(element: TElement, options?: dxLookupOptions)
 }
 
+/** @public */
 export type Options = dxLookupOptions;
 
 /** @deprecated use Options instead */

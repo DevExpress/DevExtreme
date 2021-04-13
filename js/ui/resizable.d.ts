@@ -154,6 +154,7 @@ export default class dxResizable extends DOMComponent {
     constructor(element: TElement, options?: dxResizableOptions)
 }
 
+/** @public */
 export type Options = dxResizableOptions;
 
 /** @deprecated use Options instead */

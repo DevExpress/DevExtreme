@@ -1486,6 +1486,7 @@ export interface RowObject {
     readonly values: Array<any>;
 }
 
+/** @public */
 export type Options = dxTreeListOptions;
 
 export type IOptions = dxTreeListOptions;

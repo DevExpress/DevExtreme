@@ -792,6 +792,7 @@ export interface dxFunnelItem {
     value?: number;
 }
 
+/** @public */
 export type Options = dxFunnelOptions;
 
 /** @deprecated use Options instead */

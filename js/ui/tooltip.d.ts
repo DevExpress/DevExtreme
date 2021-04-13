@@ -52,6 +52,7 @@ export default class dxTooltip extends dxPopover {
     constructor(element: TElement, options?: dxTooltipOptions)
 }
 
+/** @public */
 export type Options = dxTooltipOptions;
 
 /** @deprecated use Options instead */

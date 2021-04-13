@@ -202,6 +202,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
+/** @public */
 export type Options = dxActionSheetOptions;
 
 /** @deprecated use Options instead */

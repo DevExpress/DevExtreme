@@ -364,6 +364,7 @@ export default class dxSortable extends DOMComponent implements DraggableBase {
     update(): void;
 }
 
+/** @public */
 export type Options = dxSortableOptions;
 
 /** @deprecated use Options instead */

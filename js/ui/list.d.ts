@@ -801,6 +801,7 @@ export interface dxListItem extends CollectionWidgetItem {
     showChevron?: boolean;
 }
 
+/** @public */
 export type Options = dxListOptions;
 
 /** @deprecated use Options instead */

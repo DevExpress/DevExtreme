@@ -253,6 +253,7 @@ export default class dxDateBox extends dxDropDownEditor {
     open(): void;
 }
 
+/** @public */
 export type Options = dxDateBoxOptions;
 
 /** @deprecated use Options instead */

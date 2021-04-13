@@ -175,6 +175,7 @@ export default class dxCalendar extends Editor {
     constructor(element: TElement, options?: dxCalendarOptions)
 }
 
+/** @public */
 export type Options = dxCalendarOptions;
 
 /** @deprecated use Options instead */

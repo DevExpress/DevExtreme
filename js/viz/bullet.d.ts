@@ -131,6 +131,7 @@ export default class dxBullet extends BaseSparkline {
     constructor(element: TElement, options?: dxBulletOptions)
 }
 
+/** @public */
 export type Options = dxBulletOptions;
 
 /** @deprecated use Options instead */

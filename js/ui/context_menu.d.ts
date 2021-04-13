@@ -269,6 +269,7 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
     items?: Array<dxContextMenuItem>;
 }
 
+/** @public */
 export type Options = dxContextMenuOptions;
 
 /** @deprecated use Options instead */

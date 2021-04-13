@@ -419,6 +419,7 @@ export default class dxMap extends Widget {
     removeRoute(route: any | number | Array<any>): TPromise<void>;
 }
 
+/** @public */
 export type Options = dxMapOptions;
 
 /** @deprecated use Options instead */

@@ -45,6 +45,7 @@ export default class dxLoadIndicator extends Widget {
     constructor(element: TElement, options?: dxLoadIndicatorOptions)
 }
 
+/** @public */
 export type Options = dxLoadIndicatorOptions;
 
 /** @deprecated use Options instead */

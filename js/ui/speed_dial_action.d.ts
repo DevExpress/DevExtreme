@@ -98,6 +98,7 @@ export default class dxSpeedDialAction extends Widget {
     constructor(element: TElement, options?: dxSpeedDialActionOptions)
 }
 
+/** @public */
 export type Options = dxSpeedDialActionOptions;
 
 /** @deprecated use Options instead */

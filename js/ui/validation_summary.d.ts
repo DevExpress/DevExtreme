@@ -50,6 +50,7 @@ export default class dxValidationSummary extends CollectionWidget {
     constructor(element: TElement, options?: dxValidationSummaryOptions)
 }
 
+/** @public */
 export type Options = dxValidationSummaryOptions;
 
 /** @deprecated use Options instead */

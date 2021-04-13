@@ -185,6 +185,7 @@ export default class dxSelectBox extends dxDropDownList {
     constructor(element: TElement, options?: dxSelectBoxOptions)
 }
 
+/** @public */
 export type Options = dxSelectBoxOptions;
 
 /** @deprecated use Options instead */

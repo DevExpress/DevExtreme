@@ -93,6 +93,7 @@ export default class dxSwitch extends Editor {
     constructor(element: TElement, options?: dxSwitchOptions)
 }
 
+/** @public */
 export type Options = dxSwitchOptions;
 
 /** @deprecated use Options instead */

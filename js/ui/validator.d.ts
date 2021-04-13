@@ -210,6 +210,7 @@ export interface dxValidatorResult {
     value?: any;
 }
 
+/** @public */
 export type Options = dxValidatorOptions;
 
 /** @deprecated use Options instead */

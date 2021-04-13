@@ -102,6 +102,7 @@ export default class dxRangeSlider extends dxTrackBar {
     constructor(element: TElement, options?: dxRangeSliderOptions)
 }
 
+/** @public */
 export type Options = dxRangeSliderOptions;
 
 /** @deprecated use Options instead */

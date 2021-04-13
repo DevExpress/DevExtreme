@@ -235,6 +235,7 @@ export interface dxAccordionItem extends CollectionWidgetItem {
     title?: string;
 }
 
+/** @public */
 export type Options = dxAccordionOptions;
 
 /** @deprecated use Options instead */

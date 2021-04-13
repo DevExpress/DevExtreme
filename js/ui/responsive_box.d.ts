@@ -208,6 +208,7 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
     } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
 }
 
+/** @public */
 export type Options = dxResponsiveBoxOptions;
 
 /** @deprecated use Options instead */

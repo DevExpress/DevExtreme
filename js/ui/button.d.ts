@@ -146,6 +146,7 @@ export default class dxButton extends Widget {
     constructor(element: TElement, options?: dxButtonOptions)
 }
 
+/** @public */
 export type Options = dxButtonOptions;
 
 /** @deprecated use Options instead */

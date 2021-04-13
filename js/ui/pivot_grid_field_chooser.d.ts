@@ -247,6 +247,7 @@ export default class dxPivotGridFieldChooser extends Widget {
     updateDimensions(): void;
 }
 
+/** @public */
 export type Options = dxPivotGridFieldChooserOptions;
 
 /** @deprecated use Options instead */

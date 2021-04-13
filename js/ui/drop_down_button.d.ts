@@ -339,6 +339,7 @@ export interface dxDropDownButtonItem extends dxListItem {
     onClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent }) => void) | string;
 }
 
+/** @public */
 export type Options = dxDropDownButtonOptions;
 
 /** @deprecated use Options instead */

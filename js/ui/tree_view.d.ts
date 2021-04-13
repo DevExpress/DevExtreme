@@ -698,6 +698,7 @@ export interface dxTreeViewNode {
     text?: string;
 }
 
+/** @public */
 export type Options = dxTreeViewOptions;
 
 /** @deprecated use Options instead */

@@ -227,6 +227,7 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
     menuTemplate?: template | (() => string | TElement);
 }
 
+/** @public */
 export type Options = dxSlideOutOptions;
 
 /** @deprecated use Options instead */

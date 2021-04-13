@@ -97,6 +97,7 @@ export default class dxDeferRendering extends Widget {
     constructor(element: TElement, options?: dxDeferRenderingOptions)
 }
 
+/** @public */
 export type Options = dxDeferRenderingOptions;
 
 /** @deprecated use Options instead */

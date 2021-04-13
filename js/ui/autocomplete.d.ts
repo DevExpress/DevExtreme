@@ -132,6 +132,7 @@ export default class dxAutocomplete extends dxDropDownList {
     constructor(element: TElement, options?: dxAutocompleteOptions)
 }
 
+/** @public */
 export type Options = dxAutocompleteOptions;
 
 /** @deprecated use Options instead */

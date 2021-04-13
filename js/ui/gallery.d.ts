@@ -224,6 +224,7 @@ export interface dxGalleryItem extends CollectionWidgetItem {
     imageSrc?: string;
 }
 
+/** @public */
 export type Options = dxGalleryOptions;
 
 /** @deprecated use Options instead */

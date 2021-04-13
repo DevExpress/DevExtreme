@@ -238,6 +238,7 @@ export interface dxTabPanelItem extends dxMultiViewItem {
     title?: string;
 }
 
+/** @public */
 export type Options = dxTabPanelOptions;
 
 /** @deprecated use Options instead */

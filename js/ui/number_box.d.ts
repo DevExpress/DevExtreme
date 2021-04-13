@@ -159,6 +159,7 @@ export default class dxNumberBox extends dxTextEditor {
     constructor(element: TElement, options?: dxNumberBoxOptions)
 }
 
+/** @public */
 export type Options = dxNumberBoxOptions;
 
 /** @deprecated use Options instead */

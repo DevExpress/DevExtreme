@@ -685,6 +685,7 @@ export interface dxFileManagerDetailsColumn {
     width?: number | string;
 }
 
+/** @public */
 export type Options = dxFileManagerOptions;
 
 /** @deprecated use Options instead */

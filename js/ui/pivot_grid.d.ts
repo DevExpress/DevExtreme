@@ -1057,6 +1057,7 @@ export interface dxPivotGridSummaryCell {
     value(postProcessed: boolean): any;
 }
 
+/** @public */
 export type Options = dxPivotGridOptions;
 
 /** @deprecated use Options instead */

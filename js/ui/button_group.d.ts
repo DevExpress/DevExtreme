@@ -181,6 +181,7 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
+/** @public */
 export type Options = dxButtonGroupOptions;
 
 /** @deprecated use Options instead */

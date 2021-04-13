@@ -837,6 +837,7 @@ export interface dxTreeMapNode {
     value(): number;
 }
 
+/** @public */
 export type Options = dxTreeMapOptions;
 
 /** @deprecated use Options instead */

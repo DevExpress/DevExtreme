@@ -248,6 +248,7 @@ export default class dxDraggable extends DOMComponent implements DraggableBase {
     constructor(element: TElement, options?: dxDraggableOptions)
 }
 
+/** @public */
 export type Options = dxDraggableOptions;
 
 /** @deprecated use Options instead */

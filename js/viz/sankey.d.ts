@@ -824,6 +824,7 @@ export interface dxSankeyNode {
     title?: string;
 }
 
+/** @public */
 export type Options = dxSankeyOptions;
 
 /** @deprecated use Options instead */

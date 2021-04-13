@@ -182,6 +182,7 @@ export default class dxToast extends dxOverlay {
     constructor(element: TElement, options?: dxToastOptions)
 }
 
+/** @public */
 export type Options = dxToastOptions;
 
 /** @deprecated use Options instead */

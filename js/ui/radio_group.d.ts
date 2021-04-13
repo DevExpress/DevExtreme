@@ -95,6 +95,7 @@ export default class dxRadioGroup extends Editor {
     getDataSource(): DataSource;
 }
 
+/** @public */
 export type Options = dxRadioGroupOptions;
 
 /** @deprecated use Options instead */

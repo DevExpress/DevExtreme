@@ -168,6 +168,7 @@ export default class dxDrawer extends Widget {
     toggle(): TPromise<void>;
 }
 
+/** @public */
 export type Options = dxDrawerOptions;
 
 /** @deprecated use Options instead */

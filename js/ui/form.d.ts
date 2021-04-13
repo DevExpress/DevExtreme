@@ -868,6 +868,7 @@ export interface dxFormTabbedItem {
     visibleIndex?: number;
 }
 
+/** @public */
 export type Options = dxFormOptions;
 
 /** @deprecated use Options instead */

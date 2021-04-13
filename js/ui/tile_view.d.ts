@@ -166,6 +166,7 @@ export interface dxTileViewItem extends CollectionWidgetItem {
     widthRatio?: number;
 }
 
+/** @public */
 export type Options = dxTileViewOptions;
 
 /** @deprecated use Options instead */

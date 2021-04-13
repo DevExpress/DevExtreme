@@ -171,6 +171,7 @@ export default class dxDropDownBox extends dxDropDownEditor {
     getDataSource(): DataSource;
 }
 
+/** @public */
 export type Options = dxDropDownBoxOptions;
 
 /** @deprecated use Options instead */

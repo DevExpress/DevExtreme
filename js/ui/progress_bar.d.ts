@@ -86,6 +86,7 @@ export default class dxProgressBar extends dxTrackBar {
     constructor(element: TElement, options?: dxProgressBarOptions)
 }
 
+/** @public */
 export type Options = dxProgressBarOptions;
 
 /** @deprecated use Options instead */

@@ -5079,6 +5079,7 @@ export interface RowObject {
     readonly values: Array<any>;
 }
 
+/** @public */
 export type Options = dxDataGridOptions;
 
 /** @deprecated use Options instead */

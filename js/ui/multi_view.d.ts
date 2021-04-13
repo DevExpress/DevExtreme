@@ -125,6 +125,7 @@ export default class dxMultiView extends CollectionWidget {
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 
+/** @public */
 export type Options = dxMultiViewOptions;
 
 /** @deprecated use Options instead */

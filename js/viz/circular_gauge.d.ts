@@ -167,6 +167,7 @@ export default class dxCircularGauge extends BaseGauge {
     constructor(element: TElement, options?: dxCircularGaugeOptions)
 }
 
+/** @public */
 export type Options = dxCircularGaugeOptions;
 
 /** @deprecated use Options instead */

@@ -916,6 +916,7 @@ export default class dxRangeSelector extends BaseWidget {
     setValue(value: Array<number | string | Date> | VizRange): void;
 }
 
+/** @public */
 export type Options = dxRangeSelectorOptions;
 
 /** @deprecated use Options instead */

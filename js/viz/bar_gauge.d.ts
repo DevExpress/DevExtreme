@@ -444,6 +444,7 @@ export default class dxBarGauge extends BaseWidget {
     values(values: Array<number>): void;
 }
 
+/** @public */
 export type Options = dxBarGaugeOptions;
 
 /** @deprecated use Options instead */

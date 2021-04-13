@@ -125,6 +125,7 @@ export default class dxScrollView extends dxScrollable {
     release(preventScrollBottom: boolean): TPromise<void>;
 }
 
+/** @public */
 export type Options = dxScrollViewOptions;
 
 /** @deprecated use Options instead */

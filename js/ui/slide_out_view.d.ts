@@ -122,6 +122,7 @@ export default class dxSlideOutView extends Widget {
     toggleMenuVisibility(): TPromise<void>;
 }
 
+/** @public */
 export type Options = dxSlideOutViewOptions;
 
 /** @deprecated use Options instead */

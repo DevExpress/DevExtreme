@@ -1274,6 +1274,7 @@ export interface dxGanttStripLine {
     title?: string;
 }
 
+/** @public */
 export type Options = dxGanttOptions;
 
 /** @deprecated use Options instead */

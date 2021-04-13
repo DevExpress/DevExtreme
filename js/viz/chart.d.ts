@@ -5843,6 +5843,7 @@ export interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCo
     customizeText?: ((pointInfo: any) => string);
 }
 
+/** @public */
 export type Options = dxChartOptions;
 
 /** @deprecated use Options instead */

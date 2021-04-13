@@ -108,6 +108,7 @@ export default class dxTextArea extends dxTextBox {
     constructor(element: TElement, options?: dxTextAreaOptions)
 }
 
+/** @public */
 export type Options = dxTextAreaOptions;
 
 /** @deprecated use Options instead */
