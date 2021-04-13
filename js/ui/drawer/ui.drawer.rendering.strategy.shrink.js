@@ -4,7 +4,7 @@ import $ from '../../core/renderer';
 import { camelize } from '../../core/utils/inflector';
 
 class ShrinkStrategy extends DrawerStrategy {
-    _internalRenderPosition(changePositionUsingFxAnimation, whenAnimationCompleted) {
+    _internalRenderPosition(changePositionUsingFxAnimation) {
         const drawer = this.getDrawerInstance();
         const direction = drawer.calcTargetPosition();
         const $panel = $(drawer.content());
@@ -15,9 +15,7 @@ class ShrinkStrategy extends DrawerStrategy {
         if(changePositionUsingFxAnimation) {
             if(revealMode === 'slide') {
                 animation.margin({
-                    complete: () => {
-                        whenAnimationCompleted.resolve();
-                    },
+                    complete: () => { this._elementsAnimationCompleteHandler(); },
                     $element: $panel,
                     duration: drawer.option('animationDuration'),
                     direction: direction,
@@ -25,9 +23,7 @@ class ShrinkStrategy extends DrawerStrategy {
                 });
             } else if(revealMode === 'expand') {
                 animation.size({
-                    complete: () => {
-                        whenAnimationCompleted.resolve();
-                    },
+                    complete: () => { this._elementsAnimationCompleteHandler(); },
                     $element: $panel,
                     duration: drawer.option('animationDuration'),
                     direction: direction,

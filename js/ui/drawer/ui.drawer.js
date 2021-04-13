@@ -94,6 +94,7 @@ const Drawer = Widget.inherit({
 
         this.$element().addClass(DRAWER_CLASS);
 
+        this._animations = [];
         this._whenAnimationCompleted = undefined;
         this._whenPanelContentRendered = undefined;
         this._whenPanelContentRefreshed = undefined;
@@ -399,6 +400,8 @@ const Drawer = Widget.inherit({
     _renderPosition(isDrawerOpened, disableAnimation, jumpToEnd) {
         this.stopAnimations(jumpToEnd);
 
+        this._animations = [];
+
         if(!hasWindow()) {
             return;
         }
@@ -426,6 +429,7 @@ const Drawer = Widget.inherit({
 
         if(this._whenAnimationCompleted) {
             this._whenAnimationCompleted.resolve();
+            this._animations = [];
         }
     },
 

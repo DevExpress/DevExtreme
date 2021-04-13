@@ -112,7 +112,7 @@ class OverlapStrategy extends DrawerStrategy {
         $(drawer.viewContent()).css('transform', 'inherit');
     }
 
-    _internalRenderPosition(changePositionUsingFxAnimation, whenAnimationCompleted) {
+    _internalRenderPosition(changePositionUsingFxAnimation) {
         const drawer = this.getDrawerInstance();
         const $panel = $(drawer.content());
         const $panelOverlayContent = drawer.getOverlay().$content();
@@ -130,9 +130,7 @@ class OverlapStrategy extends DrawerStrategy {
                 this._initialPosition = drawer.isHorizontalDirection() ? { left: panelOffset } : { top: panelOffset };
 
                 animation.moveTo({
-                    complete: () => {
-                        whenAnimationCompleted.resolve();
-                    },
+                    complete: () => { this._elementsAnimationCompleteHandler(); },
                     duration: drawer.option('animationDuration'),
                     direction: targetPanelPosition,
                     $element: $panel,
@@ -143,9 +141,7 @@ class OverlapStrategy extends DrawerStrategy {
                 move($panelOverlayContent, this._initialPosition);
 
                 animation.size({
-                    complete: () => {
-                        whenAnimationCompleted.resolve();
-                    },
+                    complete: () => { this._elementsAnimationCompleteHandler(); },
                     duration: drawer.option('animationDuration'),
                     direction: targetPanelPosition,
                     $element: $panelOverlayContent,

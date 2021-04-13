@@ -26,21 +26,33 @@ class DrawerStrategy {
     }
 
     renderPosition(isDrawerOpened, changePositionUsingFxAnimation, animationDuration) {
-        const whenPositionAnimationCompleted = new Deferred();
-        const whenShaderAnimationCompleted = new Deferred();
+        this._prepareAnimationDeferreds(changePositionUsingFxAnimation);
 
+        this._internalRenderPosition(changePositionUsingFxAnimation);
+        this.renderShaderVisibility(changePositionUsingFxAnimation, animationDuration);
+    }
+
+    _prepareAnimationDeferreds(changePositionUsingFxAnimation) {
         const drawer = this.getDrawerInstance();
 
+        this._contentAnimation = new Deferred();
+        this._panelAnimation = new Deferred();
+        this._shaderAnimation = new Deferred();
+
+        drawer._animations.push(this._contentAnimation, this._panelAnimation, this._shaderAnimation);
+
         if(changePositionUsingFxAnimation) {
-            when.apply($, [whenPositionAnimationCompleted, whenShaderAnimationCompleted]).done(() => {
+            when.apply($, drawer._animations).done(() => {
                 drawer._animationCompleteHandler();
             });
         } else {
             drawer.resizeViewContent();
         }
+    }
 
-        this._internalRenderPosition(changePositionUsingFxAnimation, whenPositionAnimationCompleted);
-        this.renderShaderVisibility(changePositionUsingFxAnimation, animationDuration, whenShaderAnimationCompleted);
+    _elementsAnimationCompleteHandler() {
+        this._contentAnimation.resolve();
+        this._panelAnimation.resolve();
     }
 
     _getPanelOffset(isDrawerOpened) {
@@ -58,7 +70,7 @@ class DrawerStrategy {
         return isDrawerOpened ? this.getDrawerInstance().getMaxSize() : this.getDrawerInstance().getMinSize();
     }
 
-    renderShaderVisibility(changePositionUsingFxAnimation, duration, whenAnimationCompleted) {
+    renderShaderVisibility(changePositionUsingFxAnimation, duration) {
         const drawer = this.getDrawerInstance();
         const isShaderVisible = drawer.option('opened');
         const fadeConfig = isShaderVisible ? { from: 0, to: 1 } : { from: 1, to: 0 };
@@ -66,7 +78,7 @@ class DrawerStrategy {
         if(changePositionUsingFxAnimation) {
             animation.fade($(drawer._$shader), fadeConfig, duration, () => {
                 this._drawer._toggleShaderVisibility(isShaderVisible);
-                whenAnimationCompleted.resolve();
+                this._shaderAnimation.resolve();
             });
         } else {
             drawer._toggleShaderVisibility(isShaderVisible);
