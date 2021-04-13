@@ -172,7 +172,7 @@ QUnit.module('Drawer behavior', () => {
         visibilityChange.triggerResizeEvent = ($element) => {
             assert.ok(true, 'resize event call is expected');
             assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
-            const rect = drawer.viewContent().getBoundingClientRect();
+            const rect = $(drawer.viewContent())[0].getBoundingClientRect();
             assert.strictEqual(rect.width, 90, 'ViewContent element width');
             assert.strictEqual(rect.height, 50, 'ViewContent element height');
 
@@ -199,7 +199,7 @@ QUnit.module('Drawer behavior', () => {
                 assert.ok(true, 'resize event call is expected');
                 assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
 
-                const rect = drawer.viewContent().getBoundingClientRect();
+                const rect = $(drawer.viewContent())[0].getBoundingClientRect();
                 // TODO: "Result: 100" - assert.strictEqual(rect.width, 90, 'ViewContent element width');
                 assert.strictEqual(rect.height, 50, 'ViewContent element height');
             };
