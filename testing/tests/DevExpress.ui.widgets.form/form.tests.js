@@ -1417,6 +1417,7 @@ QUnit.module('T986577', () => {
     function getFormConfig() {
         return {
             width: 220,
+            screenByWidth: (_) => { return 'md'; },
             items: [ {
                 label: { text: 'text' },
                 editorType: 'dxHtmlEditor',
@@ -1432,53 +1433,20 @@ QUnit.module('T986577', () => {
 
     QUnit.test('HtmlEditor with Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
         const config = extend({ alignItemLabels: false }, getFormConfig());
-        assert.equal(JSON.stringify(config), 1, 'config');
-        const $form = $('#form').dxForm({
-            alignItemLabels: false,
-            width: 220,
-            items: [ {
-                label: { text: 'text' },
-                editorType: 'dxHtmlEditor',
-                editorOptions: {
-                    toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike' ] }
-                }
-            }, {
-                label: { text: 'Very very long text' },
-                editorType: 'dxTextBox'
-            } ]
-        });
+        const $form = $('#form').dxForm(config);
 
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
         assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
-        assert.equal($toolbarMenuButton.attr('class'), 1, 'test only');
-        assert.equal($toolbarMenuButton.width(), 1, 'test only');
-        assert.equal($form.eq(0).width(), 1, 'form width');
-        assert.equal($form.find('.dx-field-item-content').eq(0).width(), 1, '1 item width');
-        assert.equal($form.find('.dx-field-item-content').eq(1).width(), 1, '2 item width');
-        assert.equal($form.find('.dx-htmleditor-toolbar-wrapper').width(), 1, 'toolbar wrapper width');
-        assert.equal($form.find('.dx-toolbar').width(), 1, 'toolbar width');
-        assert.equal($form.find('.dx-toolbar-items-container').width(), 1, 'dx-toolbar-items-container width');
-        assert.equal($form.find('.dx-toolbar-after').width(), 1, 'dx-toolbar-after width');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), true, 'menu button is hidden');
     });
 
 
     QUnit.test('HtmlEditor with Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
         const config = extend({ alignItemLabels: true }, getFormConfig());
-        assert.equal(JSON.stringify(config), 1, 'config');
         const $form = $('#form').dxForm(config);
 
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
         assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
-        assert.equal($toolbarMenuButton.attr('class'), 1, 'test only');
-        assert.equal($toolbarMenuButton.width(), 1, 'test only');
-        assert.equal($form.eq(0).width(), 1, 'form width');
-        assert.equal($form.find('.dx-field-item-content').eq(0).width(), 1, '1 item width');
-        assert.equal($form.find('.dx-field-item-content').eq(1).width(), 1, '2 item width');
-        assert.equal($form.find('.dx-htmleditor-toolbar-wrapper').width(), 1, 'toolbar wrapper width');
-        assert.equal($form.find('.dx-toolbar').width(), 1, 'toolbar width');
-        assert.equal($form.find('.dx-toolbar-items-container').width(), 1, 'dx-toolbar-items-container width');
-        assert.equal($form.find('.dx-toolbar-after').width(), 1, 'dx-toolbar-after width');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), false, 'menu button is visible');
     });
 });
