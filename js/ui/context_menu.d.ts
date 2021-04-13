@@ -77,7 +77,6 @@ export type ShowingEvent = Cancelable & EventInfo<dxContextMenu>;
 /** @public */
 export type ShownEvent = EventInfo<dxContextMenu>;
 
-/** @public */
 export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid
