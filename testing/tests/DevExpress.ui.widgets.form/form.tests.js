@@ -1418,11 +1418,20 @@ QUnit.module('T986577', () => {
         return {
             width: 220,
             screenByWidth: (_) => { return 'md'; },
+            colCountByScreen: {
+                md: 1
+            },
             items: [ {
                 label: { text: 'text' },
-                editorType: 'dxHtmlEditor',
-                editorOptions: {
-                    toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike' ] }
+                template: function() {
+                    return $('<div></div>').dxToolbar({
+                        multiline: false,
+                        items: [
+                            { text: 'Item1', locateInMenu: 'auto' },
+                            { text: 'Item2', locateInMenu: 'auto' },
+                            { text: 'Item3', locateInMenu: 'auto' }
+                        ]
+                    });
                 }
             }, {
                 label: { text: 'Very very long text' },
