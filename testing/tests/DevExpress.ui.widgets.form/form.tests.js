@@ -1416,12 +1416,12 @@ QUnit.test('optional mark aligned', function(assert) {
 QUnit.module('T986577', () => {
     function getFormConfig() {
         return {
-            width: 250,
+            width: 220,
             items: [ {
                 label: { text: 'text' },
                 editorType: 'dxHtmlEditor',
                 editorOptions: {
-                    toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike', 'underline' ] }
+                    toolbar: { multiline: false, items: [ 'bold', 'italic' ] }
                 }
             }, {
                 label: { text: 'Very very long text' },
