@@ -4,7 +4,7 @@ import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
-import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import visibilityEventsModule from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
@@ -47,8 +47,6 @@ const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const LAST_COL_CLASS = 'dx-last-col';
-const TOOLBAR_MENU_CONTAINER = 'dx-toolbar-menu-container';
-const INVISIBLE_CLASS = 'dx-state-invisible';
 
 QUnit.testStart(function() {
     const markup =
@@ -337,8 +335,8 @@ QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', f
     }).dxForm('instance');
 
     const refreshStub = sinon.stub(form, '_refresh');
-    triggerHidingEvent($testContainer);
-    triggerShownEvent($testContainer);
+    visibilityEventsModule.triggerHidingEvent($testContainer);
+    visibilityEventsModule.triggerShownEvent($testContainer);
 
     assert.equal(refreshStub.callCount, expectedRefreshCount, 'Refresh on visibility changed to \'true\' if browser is IE or Edge');
     refreshStub.restore();
@@ -1440,23 +1438,31 @@ QUnit.module('T986577', () => {
         };
     }
 
-    QUnit.test('HtmlEditor with Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
-        const config = extend({ alignItemLabels: false }, getFormConfig());
-        const $form = $('#form').dxForm(config);
+    QUnit.test('Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
+        const resizeEventSpy = sinon.spy(visibilityEventsModule, 'triggerResizeEvent');
+        const $form = $('#form').dxForm(extend({ alignItemLabels: false }, getFormConfig()));
 
-        const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
-        assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
-        assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), true, 'menu button is hidden');
+        const resizeEventArg = resizeEventSpy.getCall(0).args[0];
+        assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
+        assert.deepEqual(resizeEventArg, $form.find(`.${TOOLBAR_CLASS}`), 'element is toolbar');
+        assert.roughEqual(resizeEventArg.width(), 184, 5, 'toolbar width is correct');
+        assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
+
+        resizeEventSpy.restore();
     });
 
 
-    QUnit.test('HtmlEditor with Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
-        const config = extend({ alignItemLabels: true }, getFormConfig());
-        const $form = $('#form').dxForm(config);
+    QUnit.test('Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
+        const resizeEventSpy = sinon.spy(visibilityEventsModule, 'triggerResizeEvent');
+        const $form = $('#form').dxForm(extend({ alignItemLabels: true }, getFormConfig()));
 
-        const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
-        assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
-        assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), false, 'menu button is visible');
+        const resizeEventArg = resizeEventSpy.getCall(0).args[0];
+        assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
+        assert.deepEqual(resizeEventArg, $form.find(`.${TOOLBAR_CLASS}`), 'element is toolbar');
+        assert.roughEqual(resizeEventArg.width(), 93, 5, 'toolbar width is correct');
+        assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
+
+        resizeEventSpy.restore();
     });
 });
 
