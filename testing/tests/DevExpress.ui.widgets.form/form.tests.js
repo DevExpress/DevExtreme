@@ -1414,7 +1414,7 @@ QUnit.test('optional mark aligned', function(assert) {
 QUnit.module('T986577', () => {
     function getFormConfig() {
         return {
-            width: 220,
+            width: 200,
             screenByWidth: (_) => { return 'md'; },
             colCountByScreen: {
                 md: 1
@@ -1444,8 +1444,8 @@ QUnit.module('T986577', () => {
 
         const resizeEventArg = resizeEventSpy.getCall(0).args[0];
         assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
-        assert.deepEqual(resizeEventArg, $form.find(`.${TOOLBAR_CLASS}`), 'element is toolbar');
-        assert.roughEqual(resizeEventArg.width(), 184, 5, 'toolbar width is correct');
+        assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
+        assert.roughEqual(resizeEventArg.width(), 164, 5, 'toolbar width is correct');
         assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
 
         resizeEventSpy.restore();
@@ -1458,8 +1458,8 @@ QUnit.module('T986577', () => {
 
         const resizeEventArg = resizeEventSpy.getCall(0).args[0];
         assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
-        assert.deepEqual(resizeEventArg, $form.find(`.${TOOLBAR_CLASS}`), 'element is toolbar');
-        assert.roughEqual(resizeEventArg.width(), 93, 5, 'toolbar width is correct');
+        assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
+        assert.roughEqual(resizeEventArg.width(), 72, 5, 'toolbar width is correct');
         assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
 
         resizeEventSpy.restore();
