@@ -13,12 +13,12 @@ const getConvertedUntils = value => {
 };
 
 const parseTimezone = ({ offsets, offsetIndices, untils }) => {
-    const offsetsList = offsets.split('|').map(value => parseInt(value));
-    const offsetIndicesList = offsetIndices.split('').map(value => parseInt(value));
-    const datesList = getConvertedUntils(untils)
+    const offsetList = offsets.split('|').map(value => parseInt(value));
+    const offsetIndexList = offsetIndices.split('').map(value => parseInt(value));
+    const dateList = getConvertedUntils(untils)
         .map((accumulator => value => accumulator += value)(0));
 
-    return { offsetsList, offsetIndicesList, datesList };
+    return { offsetList, offsetIndexList, dateList };
 };
 
 class TimeZoneCache {
@@ -108,15 +108,15 @@ const timeZoneDataUtils = {
         return timeZoneInfo ? this.getTimeZoneDeclarationTupleCore(timeZoneInfo, year) : [];
     },
 
-    getTimeZoneDeclarationTupleCore: function({ offsetsList, offsetIndicesList, datesList }, year) {
+    getTimeZoneDeclarationTupleCore: function({ offsetList, offsetIndexList, dateList }, year) {
         const tupleResult = [];
 
-        for(let i = 0; i < datesList.length; i++) {
-            const currentDate = datesList[i];
+        for(let i = 0; i < dateList.length; i++) {
+            const currentDate = dateList[i];
             const currentYear = new Date(currentDate).getFullYear();
 
             if(currentYear === year) {
-                const offset = offsetsList[offsetIndicesList[i + 1]];
+                const offset = offsetList[offsetIndexList[i + 1]];
                 tupleResult.push({ date: currentDate, offset: -offset / 60 });
             }
 
@@ -128,16 +128,16 @@ const timeZoneDataUtils = {
         return tupleResult;
     },
 
-    getUtcOffset: function({ offsetsList, offsetIndicesList, datesList }, dateTimeStamp) {
+    getUtcOffset: function({ offsetList, offsetIndexList, dateList }, dateTimeStamp) {
         const infinityUntilCorrection = 1;
-        const lastIntervalStartIndex = datesList.length - 1 - infinityUntilCorrection;
+        const lastIntervalStartIndex = dateList.length - 1 - infinityUntilCorrection;
 
         let index = lastIntervalStartIndex;
-        while(index >= 0 && dateTimeStamp < datesList[index]) {
+        while(index >= 0 && dateTimeStamp < dateList[index]) {
             index--;
         }
 
-        const offset = offsetsList[offsetIndicesList[index + 1]];
+        const offset = offsetList[offsetIndexList[index + 1]];
         return -offset / 60 || offset;
     }
 };
