@@ -87,7 +87,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
     };
 
     const result = {
-        init: function(dataSource) {
+        init: function() {
             const that = this;
 
             that.callBase.apply(that, arguments);
@@ -95,7 +95,11 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             that._isLoaded = true;
             that._loadPageCount = 1;
 
-            that._virtualScrollController = new VirtualScrollController(that.component, {
+            that._virtualScrollController = new VirtualScrollController(that.component, that._getVirtualScrollDataOptions());
+        },
+        _getVirtualScrollDataOptions: function() {
+            const that = this;
+            return {
                 pageSize: function() {
                     return that.pageSize();
                 },
@@ -106,16 +110,16 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                     return that.hasKnownLastPage();
                 },
                 pageIndex: function(index) {
-                    return dataSource.pageIndex(index);
+                    return that._dataSource.pageIndex(index);
                 },
                 isLoading: function() {
-                    return dataSource.isLoading() && !that.isCustomLoading();
+                    return that._dataSource.isLoading() && !that.isCustomLoading();
                 },
                 pageCount: function() {
                     return that.pageCount();
                 },
                 load: function() {
-                    return dataSource.load();
+                    return that._dataSource.load();
                 },
                 updateLoading: function() {
                     updateLoading(that);
@@ -124,7 +128,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                     return that.itemsCount(true);
                 },
                 items: function() {
-                    return dataSource.items();
+                    return that._dataSource.items();
                 },
                 viewportItems: function(items) {
                     if(items) {
@@ -142,7 +146,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
                     return that._renderTime || 0;
                 }
-            });
+            };
         },
         _handleLoadingChanged: function(isLoading) {
             if(!isVirtualMode(this) || this._isLoadingAll) {
@@ -801,12 +805,28 @@ export const virtualScrollingModule = {
                         that._uncountableItemCount = 0;
 
                         that._visibleItems = that.option(NEW_SCROLLING_MODE) ? null : [];
+                        that._initRowsScrollDataOptions();
+                        that._rowsScrollController = new VirtualScrollController(that.component, that._rowsScrollDataOptions, true);
 
+                        that._rowsScrollController.positionChanged.add(() => {
+                            if(that.option(NEW_SCROLLING_MODE)) {
+                                that.loadViewport();
+                                return;
+                            }
+                            that._dataSource?.setViewportItemIndex(that._rowsScrollController.getViewportItemIndex());
+                        });
+
+                        if(that.isLoaded() && !that.option(NEW_SCROLLING_MODE)) {
+                            that._rowsScrollController.load();
+                        }
+                    },
+                    _initRowsScrollDataOptions: function() {
+                        const that = this;
                         const isItemCountable = function(item) {
                             return isItemCountableByDataSource(item, that._dataSource);
                         };
 
-                        that._rowsScrollController = new VirtualScrollController(that.component, {
+                        that._rowsScrollDataOptions = {
                             pageSize: function() {
                                 return that.getRowPageSize();
                             },
@@ -839,7 +859,7 @@ export const virtualScrollingModule = {
                                     that._rowsScrollController.pageIndex(that._rowPageIndex);
                                 }
 
-                                if(!that._rowsScrollController._dataOptions.items().length && this.totalItemsCount()) return;
+                                if(!that._rowsScrollDataOptions.items().length && this.totalItemsCount()) return;
 
                                 that._rowsScrollController.handleDataChanged(change => {
                                     change = change || {};
@@ -855,7 +875,7 @@ export const virtualScrollingModule = {
                             updateLoading: function() {
                             },
                             itemsCount: function() {
-                                return that._rowsScrollController._dataOptions.items().filter(isItemCountable).length;
+                                return that._rowsScrollDataOptions.items().filter(isItemCountable).length;
                             },
                             correctCount: function(items, count, fromEnd) {
                                 return correctCount(items, count, fromEnd, (item, isNextAfterLast, fromEnd) => {
@@ -913,19 +933,7 @@ export const virtualScrollingModule = {
 
                                 return dataSource?._renderTime || 0;
                             }
-                        }, true);
-
-                        that._rowsScrollController.positionChanged.add(() => {
-                            if(that.option(NEW_SCROLLING_MODE)) {
-                                that.loadViewport();
-                                return;
-                            }
-                            that._dataSource?.setViewportItemIndex(that._rowsScrollController.getViewportItemIndex());
-                        });
-
-                        if(that.isLoaded() && !that.option(NEW_SCROLLING_MODE)) {
-                            that._rowsScrollController.load();
-                        }
+                        };
                     },
                     _updateItemsCore: function(change) {
                         const delta = this.getRowIndexDelta();
@@ -1043,7 +1051,7 @@ export const virtualScrollingModule = {
                                 const { skipForCurrentPage, pageIndex } = this.getLoadPageParams();
                                 offset = pageIndex * this.pageSize() + skipForCurrentPage;
                             } else {
-                                offset = rowsScrollController.beginPageIndex() * rowsScrollController._dataOptions.pageSize();
+                                offset = rowsScrollController.beginPageIndex() * this._rowsScrollDataOptions.pageSize();
                             }
                         } else if(this.option('scrolling.mode') === 'virtual' && dataSource) {
                             offset = dataSource.beginPageIndex() * dataSource.pageSize();
