@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import each from 'jest-each';
+import { RefObject } from '@devextreme-generator/declarations';
 import { DataGrid, viewFunction as DataGridView } from '../data_grid';
 import { DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../../common/widget';
@@ -12,9 +13,13 @@ import { getUpdatedOptions } from '../utils/get_updated_options';
 jest.mock('../data_grid_views', () => ({ DataGridViews: () => null }));
 jest.mock('../../../../../ui/data_grid/ui.data_grid', () => jest.fn());
 jest.mock('../datagrid_component', () => ({
-  DataGridComponent: jest.fn().mockImplementation((options) => ({
+  DataGridComponent: jest.fn().mockImplementation((element, options) => ({
     option: () => options,
     dispose: jest.fn(),
+    element: () => element,
+    getController: jest.fn().mockImplementation(() => ({
+      updateSize: jest.fn(),
+    })),
   })),
 }));
 jest.mock('../utils/get_updated_options');
@@ -76,13 +81,10 @@ describe('DataGrid', () => {
       component.props = {
         columns: ['test'],
       } as DataGridProps;
-      const { instance } = component;
+
+      const instance = component.createInstance();
 
       expect(instance.option()).toMatchObject(component.props);
-
-      const instance2 = component.instance;
-
-      expect(instance).toBe(instance2);
     });
 
     it('Init when property as undefined', () => {
@@ -90,17 +92,47 @@ describe('DataGrid', () => {
       component.props = {
         columns: undefined,
       } as DataGridProps;
-      const { instance } = component;
+
+      const instance = component.createInstance();
 
       expect(Object.prototype.hasOwnProperty.call(instance.option(), 'columns')).toBe(false);
+    });
+
+    it('Init with widgetElementRef', () => {
+      const component = new DataGrid({});
+      component.widgetElementRef = {
+        current: {} as HTMLDivElement,
+      } as RefObject;
+
+      const instance = component.createInstance();
+
+      expect(instance.element()).toBe(component.widgetElementRef.current);
     });
 
     describe('Methods', () => {
       it('getComponentInstance', () => {
         const component = new DataGrid({});
-        component.componentInstance = mockDataGridMethods as any;
+        component.instance = mockDataGridMethods as any;
 
         expect(component.getComponentInstance()).toMatchObject(mockDataGridMethods);
+      });
+
+      it('callMethod with diff args', () => {
+        (mockDataGridMethods as any).columnOption = jest.fn();
+        const component = new DataGrid({});
+        component.instance = mockDataGridMethods as any;
+
+        component.callMethod('columnOption', [0, 'visible', false]);
+
+        expect((mockDataGridMethods as any).columnOption).toBeCalledTimes(1);
+        expect((mockDataGridMethods as any).columnOption.mock.calls[0]).toEqual([0, 'visible', false]);
+
+        (mockDataGridMethods as any).columnOption.mockClear();
+
+        component.callMethod('columnOption', [0, 'visible', undefined]);
+
+        expect((mockDataGridMethods as any).columnOption).toBeCalledTimes(1);
+        expect((mockDataGridMethods as any).columnOption.mock.calls[0]).toEqual([0, 'visible']);
       });
 
       each`
@@ -170,6 +202,7 @@ describe('DataGrid', () => {
       ${'isRowExpanded'}
       ${'totalCount'}
       ${'getController'}
+      ${'resize'}
     `
         .describe('Proxying the Grid methods', ({
           methodName,
@@ -177,7 +210,7 @@ describe('DataGrid', () => {
           it(methodName, () => {
             mockDataGridMethods[methodName] = jest.fn();
             const component = new DataGrid({});
-            component.componentInstance = mockDataGridMethods as any;
+            component.instance = mockDataGridMethods as any;
 
             component[methodName]();
 
@@ -187,7 +220,7 @@ describe('DataGrid', () => {
           it(`${methodName} if widget is not initialized`, () => {
             const component = new DataGrid({});
             component.createInstance = jest.fn();
-            component.componentInstance = null as any;
+            component.instance = null as any;
             component[methodName]();
 
             expect.assertions(0);
@@ -200,11 +233,40 @@ describe('DataGrid', () => {
     describe('Effects', () => {
       it('dispose', () => {
         const component = new DataGrid({});
-        const { instance } = component;
+
+        component.initInstanceElement();
 
         component.dispose()();
 
-        expect(instance.dispose).toBeCalledTimes(1);
+        expect(component.instance.dispose).toBeCalledTimes(1);
+      });
+    });
+
+    describe('Events', () => {
+      it('onHoverStart, onHoverEnd handlers should update hover state', () => {
+        const component = new DataGrid({});
+        const currentTarget = {
+          classList: {
+            add: jest.fn(),
+            remove: jest.fn(),
+          },
+        } as any;
+
+        component.onHoverStart({
+          currentTarget,
+        } as Event);
+
+        expect(currentTarget.classList.remove).toBeCalledTimes(0);
+        expect(currentTarget.classList.add).toBeCalledTimes(1);
+        expect(currentTarget.classList.add).toHaveBeenCalledWith('dx-state-hover');
+
+        component.onHoverEnd({
+          currentTarget,
+        } as Event);
+
+        expect(currentTarget.classList.add).toBeCalledTimes(1);
+        expect(currentTarget.classList.remove).toBeCalledTimes(1);
+        expect(currentTarget.classList.remove).toHaveBeenCalledWith('dx-state-hover');
       });
     });
   });
@@ -216,6 +278,9 @@ describe('DataGrid', () => {
         columns: ['test'],
       } as DataGridProps;
       const component = new DataGrid(initialProps);
+
+      component.initInstanceElement();
+
       component.instance.option = jest.fn();
       component.instance.beginUpdate = jest.fn();
       component.instance.endUpdate = jest.fn();
