@@ -47,7 +47,8 @@ const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const LAST_COL_CLASS = 'dx-last-col';
-const DROPDOWN_MENU_CLASS = 'dx-dropdownmenu';
+const TOOLBAR_MENU_CONTAINER = 'dx-toolbar-menu-container';
+const INVISIBLE_CLASS = 'dx-state-invisible';
 
 QUnit.testStart(function() {
     const markup =
@@ -1420,7 +1421,7 @@ QUnit.module('T986577', () => {
                 label: { text: 'text' },
                 editorType: 'dxHtmlEditor',
                 editorOptions: {
-                    toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike', 'underline' ] }
+                    toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike' ] }
                 }
             }, {
                 label: { text: 'Very very long text' }
@@ -1432,8 +1433,8 @@ QUnit.module('T986577', () => {
         const config = extend({ alignItemLabels: false }, getFormConfig());
         const $form = $('#form').dxForm(config);
 
-        const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${DROPDOWN_MENU_CLASS}:visible`);
-        assert.equal($toolbarMenuButton.length, 0, 'menu button is not visible');
+        const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
+        assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), true, 'menu button is hidden');
     });
 
 
@@ -1441,8 +1442,8 @@ QUnit.module('T986577', () => {
         const config = extend({ alignItemLabels: true }, getFormConfig());
         const $form = $('#form').dxForm(config);
 
-        const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${DROPDOWN_MENU_CLASS}:visible`);
-        assert.equal($toolbarMenuButton.length, 1, 'menu button is visible');
+        const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
+        assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), false, 'menu button is visible');
     });
 });
 
