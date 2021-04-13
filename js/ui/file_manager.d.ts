@@ -8,9 +8,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -34,10 +34,10 @@ import {
 
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxFileManager>;
+export type ContentReadyEvent = EventInfo<dxFileManager>;
 
 /** @public */
-export type ContextMenuItemClickEvent = ComponentNativeEvent<dxFileManager> & {
+export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemData: any;
     readonly itemElement: TElement;
     readonly itemIndex: number;
@@ -46,47 +46,47 @@ export type ContextMenuItemClickEvent = ComponentNativeEvent<dxFileManager> & {
 }
 
 /** @public */
-export type ContextMenuShowingEvent = Cancelable & ComponentNativeEvent<dxFileManager> & {
+export type ContextMenuShowingEvent = Cancelable & NativeEventInfo<dxFileManager> & {
     readonly fileSystemItem?: FileSystemItem;
     readonly targetElement?: TElement;
     readonly viewArea: 'navPane' | 'itemView';
 }
 
 /** @public */
-export type CurrentDirectoryChangedEvent = ComponentEvent<dxFileManager> & {
+export type CurrentDirectoryChangedEvent = EventInfo<dxFileManager> & {
     readonly directory: FileSystemItem;
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxFileManager>;
+export type DisposingEvent = EventInfo<dxFileManager>;
 
 /** @public */
-export type ErrorOccurredEvent =  ComponentEvent<dxFileManager> & {
+export type ErrorOccurredEvent =  EventInfo<dxFileManager> & {
     readonly errorCode?: number;
     errorText?: string;
     readonly fileSystemItem?: FileSystemItem;
 }
 
 /** @public */
-export type FocusedItemChangedEvent =  ComponentEvent<dxFileManager> & {
+export type FocusedItemChangedEvent =  EventInfo<dxFileManager> & {
     readonly item?: FileSystemItem;
     readonly itemElement?: TElement;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxFileManager>;
+export type InitializedEvent = InitializedEventInfo<dxFileManager>;
 
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxFileManager> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxFileManager> & ChangedOptionInfo;
 
 /** @public */
-export type SelectedFileOpenedEvent = ComponentEvent<dxFileManager> & {
+export type SelectedFileOpenedEvent = EventInfo<dxFileManager> & {
     readonly file: FileSystemItem;
 }
 
 /** @public */
-export type SelectionChangedEvent =  ComponentEvent<dxFileManager> & {
+export type SelectionChangedEvent =  EventInfo<dxFileManager> & {
     readonly currentSelectedItemKeys: Array<string>;
     readonly currentDeselectedItemKeys: Array<string>;
     readonly selectedItems: Array<FileSystemItem>;
@@ -94,7 +94,7 @@ export type SelectionChangedEvent =  ComponentEvent<dxFileManager> & {
 }
 
 /** @public */
-export type ToolbarItemClickEvent = ComponentNativeEvent<dxFileManager> & {
+export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemData: any;
     readonly itemElement: TElement;
     readonly itemIndex: number;

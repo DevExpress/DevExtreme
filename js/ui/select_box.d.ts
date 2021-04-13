@@ -11,9 +11,9 @@ import {
 } from '../core/templates/template';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -40,66 +40,66 @@ export interface CustomItemCreatingInfo {
 }
 
 /** @public */
-export type ChangeEvent = ComponentNativeEvent<dxSelectBox>;
+export type ChangeEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type ClosedEvent = ComponentEvent<dxSelectBox>;
+export type ClosedEvent = EventInfo<dxSelectBox>;
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxSelectBox>;
+export type ContentReadyEvent = EventInfo<dxSelectBox>;
 
 /** @public */
-export type CopyEvent = ComponentNativeEvent<dxSelectBox>;
+export type CopyEvent = NativeEventInfo<dxSelectBox>;
 /** @public */
-export type CustomItemCreatingEvent = ComponentEvent<dxSelectBox> & CustomItemCreatingInfo;
+export type CustomItemCreatingEvent = EventInfo<dxSelectBox> & CustomItemCreatingInfo;
 
 /** @public */
-export type CutEvent = ComponentNativeEvent<dxSelectBox>;
+export type CutEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSelectBox>;
+export type DisposingEvent = EventInfo<dxSelectBox>;
 
 /** @public */
-export type EnterKeyEvent = ComponentNativeEvent<dxSelectBox>;
+export type EnterKeyEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type FocusInEvent = ComponentNativeEvent<dxSelectBox>;
+export type FocusInEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type FocusOutEvent = ComponentNativeEvent<dxSelectBox>;
+export type FocusOutEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSelectBox>;
+export type InitializedEvent = InitializedEventInfo<dxSelectBox>;
 
 /** @public */
-export type InputEvent = ComponentNativeEvent<dxSelectBox>;
+export type InputEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxSelectBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxSelectBox> & ItemInfo;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxSelectBox>;
+export type KeyDownEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type KeyPressEvent = ComponentNativeEvent<dxSelectBox>;
+export type KeyPressEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type KeyUpEvent = ComponentNativeEvent<dxSelectBox>;
+export type KeyUpEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type OpenedEvent = ComponentEvent<dxSelectBox>;
+export type OpenedEvent = EventInfo<dxSelectBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSelectBox> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSelectBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = ComponentNativeEvent<dxSelectBox>;
+export type PasteEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxSelectBox> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxSelectBox> & SelectionChangedInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxSelectBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSelectBox> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;

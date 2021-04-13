@@ -10,18 +10,18 @@ export interface EventType { }
  */
 export type TEvent = {} extends EventType ? dxEvent : EventType;
 
-export interface ComponentInitializedEvent<T> {
+export interface InitializedEventInfo<T> {
     readonly component?: T;
     readonly element?: TElement;
 }
 
-export interface ComponentEvent<T> {
+export interface EventInfo<T> {
     readonly component: T;
     readonly element: TElement;
     readonly model?: any;
 }
 
-export interface ComponentNativeEvent<T> {
+export interface NativeEventInfo<T> {
     readonly component: T;
     readonly element: TElement;
     readonly model?: any;

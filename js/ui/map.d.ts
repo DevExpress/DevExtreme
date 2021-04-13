@@ -7,9 +7,9 @@ import {
 } from '../core/utils/deferred';
 
 import {
-  ComponentEvent,
-  ComponentNativeEvent,
-  ComponentInitializedEvent,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
   ChangedOptionInfo
 } from '../events/index';
 
@@ -18,41 +18,41 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ClickEvent = ComponentNativeEvent<dxMap>;
+export type ClickEvent = NativeEventInfo<dxMap>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxMap>;
+export type DisposingEvent = EventInfo<dxMap>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxMap>;
+export type InitializedEvent = InitializedEventInfo<dxMap>;
 
 /** @public */
-export type MarkerAddedEvent = ComponentEvent<dxMap> & {
+export type MarkerAddedEvent = EventInfo<dxMap> & {
   readonly options: any;
   originalMarker: any;
 }
 
 /** @public */
-export type MarkerRemovedEvent = ComponentEvent<dxMap> & {
+export type MarkerRemovedEvent = EventInfo<dxMap> & {
   readonly options?: any;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxMap> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxMap> & ChangedOptionInfo;
 
 /** @public */
-export type ReadyEvent = ComponentEvent<dxMap> & {
+export type ReadyEvent = EventInfo<dxMap> & {
   originalMap: any;
 }
 
 /** @public */
-export type RouteAddedEvent = ComponentEvent<dxMap> & {
+export type RouteAddedEvent = EventInfo<dxMap> & {
   readonly options: any;
   originalRoute: any;
 }
 
 /** @public */
-export type RouteRemovedEvent = ComponentEvent<dxMap> & {
+export type RouteRemovedEvent = EventInfo<dxMap> & {
   readonly options?: any;
 }
 

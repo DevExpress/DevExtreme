@@ -7,9 +7,9 @@ import {
 } from '../core/templates/template';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -24,22 +24,22 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxButtonGroup>;
+export type ContentReadyEvent = EventInfo<dxButtonGroup>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxButtonGroup>;
+export type DisposingEvent = EventInfo<dxButtonGroup>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxButtonGroup>;
+export type InitializedEvent = InitializedEventInfo<dxButtonGroup>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxButtonGroup> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxButtonGroup> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxButtonGroup> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxButtonGroup> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
 
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**

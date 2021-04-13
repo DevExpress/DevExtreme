@@ -3,9 +3,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -23,55 +23,55 @@ import {
 } from './editor/editor';
 
 /** @public */
-export type ChangeEvent = ComponentNativeEvent<dxColorBox>;
+export type ChangeEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type ClosedEvent = ComponentEvent<dxColorBox>;
+export type ClosedEvent = EventInfo<dxColorBox>;
 
 /** @public */
-export type CopyEvent = ComponentNativeEvent<dxColorBox>;
+export type CopyEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type CutEvent = ComponentNativeEvent<dxColorBox>;
+export type CutEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxColorBox>;
+export type DisposingEvent = EventInfo<dxColorBox>;
 
 /** @public */
-export type EnterKeyEvent = ComponentNativeEvent<dxColorBox>;
+export type EnterKeyEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type FocusInEvent = ComponentNativeEvent<dxColorBox>;
+export type FocusInEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type FocusOutEvent = ComponentNativeEvent<dxColorBox>;
+export type FocusOutEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxColorBox>;
+export type InitializedEvent = InitializedEventInfo<dxColorBox>;
 
 /** @public */
-export type InputEvent = ComponentNativeEvent<dxColorBox>;
+export type InputEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxColorBox>;
+export type KeyDownEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type KeyPressEvent = ComponentNativeEvent<dxColorBox>;
+export type KeyPressEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type KeyUpEvent = ComponentNativeEvent<dxColorBox>;
+export type KeyUpEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type OpenedEvent = ComponentEvent<dxColorBox>;
+export type OpenedEvent = EventInfo<dxColorBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxColorBox> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxColorBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = ComponentNativeEvent<dxColorBox>;
+export type PasteEvent = NativeEventInfo<dxColorBox>;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxColorBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxColorBox> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;

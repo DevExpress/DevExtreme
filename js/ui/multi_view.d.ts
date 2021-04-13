@@ -7,9 +7,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -21,31 +21,31 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxMultiView>;
+export type ContentReadyEvent = EventInfo<dxMultiView>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxMultiView>;
+export type DisposingEvent = EventInfo<dxMultiView>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxMultiView>;
+export type InitializedEvent = InitializedEventInfo<dxMultiView>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxMultiView> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxMultiView> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxMultiView> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxMultiView> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxMultiView> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxMultiView> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxMultiView> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxMultiView> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxMultiView> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxMultiView> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxMultiView> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxMultiView> & SelectionChangedInfo;
 
 export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
     /**

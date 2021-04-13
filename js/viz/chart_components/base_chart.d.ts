@@ -16,8 +16,8 @@ import DataSource, {
 } from '../../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent
+    EventInfo,
+    NativeEventInfo
 } from '../../events/index';
 
 import {
@@ -135,7 +135,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDone?: ((e: ComponentEvent<T>) => void);
+    onDone?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
@@ -150,7 +150,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: ComponentNativeEvent<T> & PointInteractionInfo) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<T> & PointInteractionInfo) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -162,7 +162,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointHoverChanged?: ((e: ComponentEvent<T> & PointInteractionInfo) => void);
+    onPointHoverChanged?: ((e: EventInfo<T> & PointInteractionInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -174,7 +174,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointSelectionChanged?: ((e: ComponentEvent<T> & PointInteractionInfo) => void);
+    onPointSelectionChanged?: ((e: EventInfo<T> & PointInteractionInfo) => void);
     /**
      * @docid
      * @default null
@@ -188,7 +188,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: ComponentEvent<T> & TooltipInfo) => void);
+    onTooltipHidden?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
      * @default null
@@ -202,7 +202,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: ComponentEvent<T> & TooltipInfo) => void);
+    onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
      * @extends CommonVizPalette

@@ -3,8 +3,8 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent
+    EventInfo,
+    NativeEventInfo
 } from '../events/index';
 
 import {
@@ -23,10 +23,10 @@ export interface ComponentDisabledDate<T> {
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxCalendar>;
+export type ContentReadyEvent = EventInfo<dxCalendar>;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxCalendar> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxCalendar> & ValueChangedInfo;
 
 /** @public */
 export type CellTemplateData = {

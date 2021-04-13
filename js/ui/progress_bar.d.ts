@@ -3,9 +3,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -18,22 +18,22 @@ import dxTrackBar, {
 } from './track_bar';
 
 /** @public */
-export type CompleteEvent = ComponentNativeEvent<dxProgressBar>;
+export type CompleteEvent = NativeEventInfo<dxProgressBar>;
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxProgressBar>;
+export type ContentReadyEvent = EventInfo<dxProgressBar>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxProgressBar>;
+export type DisposingEvent = EventInfo<dxProgressBar>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxProgressBar>;
+export type InitializedEvent = InitializedEventInfo<dxProgressBar>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxProgressBar> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxProgressBar> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxProgressBar> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInfo;
 
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**

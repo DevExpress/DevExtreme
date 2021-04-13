@@ -7,9 +7,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -21,31 +21,31 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTabs>;
+export type ContentReadyEvent = EventInfo<dxTabs>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTabs>;
+export type DisposingEvent = EventInfo<dxTabs>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTabs>;
+export type InitializedEvent = InitializedEventInfo<dxTabs>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxTabs> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxTabs> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxTabs> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxTabs> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxTabs> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxTabs> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxTabs> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxTabs> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTabs> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTabs> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTabs> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
 
 export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**

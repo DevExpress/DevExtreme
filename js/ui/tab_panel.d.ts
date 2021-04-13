@@ -11,9 +11,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -28,46 +28,46 @@ import dxMultiView, {
 } from './multi_view';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTabPanel>;
+export type ContentReadyEvent = EventInfo<dxTabPanel>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTabPanel>;
+export type DisposingEvent = EventInfo<dxTabPanel>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTabPanel>;
+export type InitializedEvent = InitializedEventInfo<dxTabPanel>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTabPanel> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTabPanel> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTabPanel> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo;
 
 /** @public */
-export type TitleClickEvent = ComponentNativeEvent<dxTabPanel> & {
+export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
 }
 
 /** @public */
-export type TitleHoldEvent = ComponentNativeEvent<dxTabPanel> & {
+export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
 }
 
 /** @public */
-export type TitleRenderedEvent = ComponentEvent<dxTabPanel> & {
+export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
 }

@@ -17,7 +17,7 @@ import {
 import {
     TEvent,
     Cancelable,
-    ComponentEvent
+    EventInfo
 } from '../events/index';
 
 import Widget, {
@@ -118,7 +118,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: ComponentEvent<T>) => void);
+    onHidden?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
@@ -131,7 +131,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: Cancelable & ComponentEvent<T>) => void);
+    onHiding?: ((e: Cancelable & EventInfo<T>) => void);
     /**
      * @docid
      * @default null
@@ -143,7 +143,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: ComponentEvent<T>) => void);
+    onShowing?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
@@ -155,7 +155,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: ComponentEvent<T>) => void);
+    onShown?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }

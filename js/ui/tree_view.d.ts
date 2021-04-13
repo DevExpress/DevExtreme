@@ -11,9 +11,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -30,16 +30,16 @@ import {
 } from './widget/ui.search_box_mixin';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTreeView>;
+export type ContentReadyEvent = EventInfo<dxTreeView>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTreeView>;
+export type DisposingEvent = EventInfo<dxTreeView>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTreeView>;
+export type InitializedEvent = InitializedEventInfo<dxTreeView>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number | any;
@@ -47,7 +47,7 @@ export type ItemClickEvent = ComponentNativeEvent<dxTreeView> & {
 }
 
 /** @public */
-export type ItemCollapsedEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
@@ -55,7 +55,7 @@ export type ItemCollapsedEvent = ComponentNativeEvent<dxTreeView> & {
 }
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number | any;
@@ -63,7 +63,7 @@ export type ItemContextMenuEvent = ComponentNativeEvent<dxTreeView> & {
 }
 
 /** @public */
-export type ItemExpandedEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
@@ -71,7 +71,7 @@ export type ItemExpandedEvent = ComponentNativeEvent<dxTreeView> & {
 }
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
@@ -79,7 +79,7 @@ export type ItemHoldEvent = ComponentNativeEvent<dxTreeView> & {
 }
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly itemIndex?: number;
@@ -87,7 +87,7 @@ export type ItemRenderedEvent = ComponentNativeEvent<dxTreeView> & {
 }
 
 /** @public */
-export type ItemSelectionChangedEvent = ComponentEvent<dxTreeView> & {
+export type ItemSelectionChangedEvent = EventInfo<dxTreeView> & {
     readonly node?: dxTreeViewNode;
     readonly itemElement?: TElement;
     readonly itemData?: any;
@@ -95,15 +95,15 @@ export type ItemSelectionChangedEvent = ComponentEvent<dxTreeView> & {
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTreeView> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTreeView> & ChangedOptionInfo;
 
 /** @public */
-export type SelectAllValueChangedEvent = ComponentEvent<dxTreeView> & {
+export type SelectAllValueChangedEvent = EventInfo<dxTreeView> & {
     readonly value?: boolean;
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTreeView>;
+export type SelectionChangedEvent = EventInfo<dxTreeView>;
 
 export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
     /**

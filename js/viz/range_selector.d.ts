@@ -13,9 +13,9 @@ import DataSource, {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -38,37 +38,37 @@ import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxRangeSelector>;
+export type DisposingEvent = EventInfo<dxRangeSelector>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxRangeSelector>;
+export type DrawnEvent = EventInfo<dxRangeSelector>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxRangeSelector>;
+export type ExportedEvent = EventInfo<dxRangeSelector>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxRangeSelector> & ExportInfo;
+export type ExportingEvent = EventInfo<dxRangeSelector> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxRangeSelector>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxRangeSelector>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxRangeSelector> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxRangeSelector> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxRangeSelector>;
+export type InitializedEvent = InitializedEventInfo<dxRangeSelector>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxRangeSelector> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxRangeSelector> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxRangeSelector> & {
+export type ValueChangedEvent = NativeEventInfo<dxRangeSelector> & {
   readonly value: Array<number | string | Date>,
   readonly previousValue: Array<number | string | Date>,
 }

@@ -4,13 +4,13 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
 import {
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -26,34 +26,34 @@ import {
 } from './gauges/base_gauge';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxLinearGauge>;
+export type DisposingEvent = EventInfo<dxLinearGauge>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxLinearGauge>;
+export type DrawnEvent = EventInfo<dxLinearGauge>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxLinearGauge>;
+export type ExportedEvent = EventInfo<dxLinearGauge>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxLinearGauge> & ExportInfo;
+export type ExportingEvent = EventInfo<dxLinearGauge> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxLinearGauge>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxLinearGauge>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxLinearGauge> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxLinearGauge> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxLinearGauge>;
+export type InitializedEvent = InitializedEventInfo<dxLinearGauge>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxLinearGauge> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxLinearGauge> & ChangedOptionInfo;
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxLinearGauge> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxLinearGauge> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
 
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {

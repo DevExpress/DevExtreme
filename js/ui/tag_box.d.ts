@@ -8,9 +8,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -33,70 +33,70 @@ import dxSelectBox, {
 } from './select_box';
 
 /** @public */
-export type ChangeEvent = ComponentNativeEvent<dxTagBox>;
+export type ChangeEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type ClosedEvent = ComponentEvent<dxTagBox>;
+export type ClosedEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTagBox>;
+export type ContentReadyEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type CustomItemCreatingEvent = ComponentEvent<dxTagBox> & CustomItemCreatingInfo;
+export type CustomItemCreatingEvent = EventInfo<dxTagBox> & CustomItemCreatingInfo;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTagBox>;
+export type DisposingEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type EnterKeyEvent = ComponentNativeEvent<dxTagBox>;
+export type EnterKeyEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type FocusInEvent = ComponentNativeEvent<dxTagBox>;
+export type FocusInEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type FocusOutEvent = ComponentNativeEvent<dxTagBox>;
+export type FocusOutEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTagBox>;
+export type InitializedEvent = InitializedEventInfo<dxTagBox>;
 
 /** @public */
-export type InputEvent = ComponentNativeEvent<dxTagBox>;
+export type InputEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxTagBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxTagBox> & ItemInfo;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxTagBox>;
+export type KeyDownEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type KeyPressEvent = ComponentNativeEvent<dxTagBox>;
+export type KeyPressEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type KeyUpEvent = ComponentNativeEvent<dxTagBox>;
+export type KeyUpEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type MultiTagPreparingEvent = Cancelable & ComponentEvent<dxTagBox> & {
+export type MultiTagPreparingEvent = Cancelable & EventInfo<dxTagBox> & {
     readonly multiTagElement: TElement;
     readonly selectedItems?: Array<string | number | any>;
     text?: string;
 }
 
 /** @public */
-export type OpenedEvent = ComponentEvent<dxTagBox>;
+export type OpenedEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTagBox> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTagBox> & ChangedOptionInfo;
 
 /** @public */
-export type SelectAllValueChangedEvent = ComponentEvent<dxTagBox> & {
+export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
     readonly value: boolean;
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTagBox> & SelectionChangedInfo<string | number | any>;
+export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangedInfo<string | number | any>;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxTagBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxTagBox> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;

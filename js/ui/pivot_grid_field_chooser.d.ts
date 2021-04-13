@@ -4,8 +4,8 @@ import {
 
 import {
     TEvent,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -18,10 +18,10 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxPivotGridFieldChooser>;
+export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
 
 /** @public */
-export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGridFieldChooser> & {
+export type ContextMenuPreparingEvent = EventInfo<dxPivotGridFieldChooser> & {
     readonly area?: string;
     readonly field?: PivotGridDataSourceField;
     readonly event?: TEvent;
@@ -29,13 +29,13 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGridFieldChooser> 
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxPivotGridFieldChooser>;
+export type DisposingEvent = EventInfo<dxPivotGridFieldChooser>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxPivotGridFieldChooser>;
+export type InitializedEvent = InitializedEventInfo<dxPivotGridFieldChooser>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxPivotGridFieldChooser> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxPivotGridFieldChooser> & ChangedOptionInfo;
 
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**

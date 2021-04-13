@@ -7,7 +7,7 @@ import {
 } from '../../core/templates/template';
 
 import {
-    ComponentEvent
+    EventInfo
 } from '../../events/index';
 
 import BaseWidget, {
@@ -45,7 +45,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: ComponentEvent<T>) => void);
+    onTooltipHidden?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
@@ -58,7 +58,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: ComponentEvent<T>) => void);
+    onTooltipShown?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz

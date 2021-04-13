@@ -5,9 +5,9 @@ import {
 import {
     TEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -40,7 +40,7 @@ import {
 } from '../core/utils/deferred';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxGantt>;
+export type ContentReadyEvent = EventInfo<dxGantt>;
 
 /** @public */
 export type ContextMenuPreparingEvent = Cancelable & {
@@ -61,114 +61,114 @@ export type CustomCommandEvent = {
 }
 
 /** @public */
-export type DependencyDeletedEvent = ComponentEvent<dxGantt> & {
+export type DependencyDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type DependencyDeletingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type DependencyDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type DependencyInsertedEvent = ComponentEvent<dxGantt> & {
+export type DependencyInsertedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type DependencyInsertingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type DependencyInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxGantt>;
+export type DisposingEvent = EventInfo<dxGantt>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxGantt>;
+export type InitializedEvent = InitializedEventInfo<dxGantt>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxGantt> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxGantt> & ChangedOptionInfo;
 
 /** @public */
-export type ResourceAssignedEvent = ComponentEvent<dxGantt> & {
-    readonly values: any;
-    readonly key: any;
-}
-
-/** @public */
-export type ResourceAssigningEvent = Cancelable & ComponentEvent<dxGantt> & {
-    readonly values: any;
-}
-
-/** @public */
-export type ResourceDeletedEvent = ComponentEvent<dxGantt> & {
+export type ResourceAssignedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type ResourceDeletingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type ResourceAssigningEvent = Cancelable & EventInfo<dxGantt> & {
+    readonly values: any;
+}
+
+/** @public */
+export type ResourceDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type ResourceInsertedEvent = ComponentEvent<dxGantt> & {
+export type ResourceDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type ResourceInsertingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    readonly values: any;
-}
-
-/** @public */
-export type ResourceUnassignedEvent = ComponentEvent<dxGantt> & {
+export type ResourceInsertedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type ResourceUnassigningEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type ResourceInsertingEvent = Cancelable & EventInfo<dxGantt> & {
+    readonly values: any;
+}
+
+/** @public */
+export type ResourceUnassignedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxGantt> & {
+export type ResourceUnassigningEvent = Cancelable & EventInfo<dxGantt> & {
+    readonly values: any;
+    readonly key: any;
+}
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxGantt> & {
     readonly selectedRowKey?: any;
 }
 
 /** @public */
-export type TaskClickEvent = ComponentNativeEvent<dxGantt> & {
+export type TaskClickEvent = NativeEventInfo<dxGantt> & {
     readonly key?: any;
     readonly data?: any;
 }
 
 /** @public */
-export type TaskDblClickEvent = Cancelable & ComponentNativeEvent<dxGantt> & {
+export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt> & {
     readonly key?: any;
     readonly data?: any;
 }
 
 /** @public */
-export type TaskDeletedEvent = ComponentEvent<dxGantt> & {
+export type TaskDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskDeletingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskEditDialogShowingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
     readonly readOnlyFields?: Array<string>;
@@ -176,31 +176,31 @@ export type TaskEditDialogShowingEvent = Cancelable & ComponentEvent<dxGantt> & 
 }
 
 /** @public */
-export type TaskInsertedEvent = ComponentEvent<dxGantt> & {
+export type TaskInsertedEvent = EventInfo<dxGantt> & {
     readonly value?: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskInsertingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
 }
 
 /** @public */
-export type TaskMovingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskMovingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskUpdatedEvent = ComponentEvent<dxGantt> & {
+export type TaskUpdatedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskUpdatingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
     readonly key: any

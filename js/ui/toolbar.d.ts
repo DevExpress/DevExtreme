@@ -11,9 +11,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -24,28 +24,28 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxToolbar>;
+export type ContentReadyEvent = EventInfo<dxToolbar>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxToolbar>;
+export type DisposingEvent = EventInfo<dxToolbar>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxToolbar>;
+export type InitializedEvent = InitializedEventInfo<dxToolbar>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxToolbar> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxToolbar> & ChangedOptionInfo;
 
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**

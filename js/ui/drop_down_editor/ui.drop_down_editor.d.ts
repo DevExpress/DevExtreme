@@ -20,7 +20,7 @@ import {
 } from '../popup';
 
 import {
-    ComponentEvent
+    EventInfo
 } from '../../events/index';
 
 export interface DropDownButtonTemplateDataModel {
@@ -96,7 +96,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: ComponentEvent<T>) => void);
+    onClosed?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
@@ -108,7 +108,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: ComponentEvent<T>) => void);
+    onOpened?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default false

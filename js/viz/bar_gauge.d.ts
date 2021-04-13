@@ -13,8 +13,8 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -32,7 +32,7 @@ import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -81,34 +81,34 @@ export interface TooltipInfo {
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxBarGauge>;
+export type DisposingEvent = EventInfo<dxBarGauge>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxBarGauge>;
+export type DrawnEvent = EventInfo<dxBarGauge>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxBarGauge>;
+export type ExportedEvent = EventInfo<dxBarGauge>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxBarGauge> & ExportInfo;
+export type ExportingEvent = EventInfo<dxBarGauge> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxBarGauge>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxBarGauge>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxBarGauge> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxBarGauge> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxBarGauge>;
+export type InitializedEvent = InitializedEventInfo<dxBarGauge>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxBarGauge> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxBarGauge> & ChangedOptionInfo;
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxBarGauge> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxBarGauge> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**

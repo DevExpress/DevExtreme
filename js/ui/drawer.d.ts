@@ -12,8 +12,8 @@ import {
 
 import {
     TEvent,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -22,13 +22,13 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDrawer>;
+export type DisposingEvent = EventInfo<dxDrawer>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDrawer>;
+export type InitializedEvent = InitializedEventInfo<dxDrawer>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDrawer> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDrawer> & ChangedOptionInfo;
 
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**

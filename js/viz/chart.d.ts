@@ -4,9 +4,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -42,7 +42,7 @@ import {
     Font,
     WordWrapType,
     VizTextOverflowType,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
@@ -54,70 +54,70 @@ interface SeriesInteractionInfo {
 }
 
 /** @public */
-export type ArgumentAxisClickEvent = ComponentNativeEvent<dxChart> & {
+export type ArgumentAxisClickEvent = NativeEventInfo<dxChart> & {
     readonly argument: Date | number | string;
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxChart>;
+export type DisposingEvent = EventInfo<dxChart>;
 
 /** @public */
-export type DoneEvent = ComponentEvent<dxChart>;
+export type DoneEvent = EventInfo<dxChart>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxChart>;
+export type DrawnEvent = EventInfo<dxChart>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxChart>;
+export type ExportedEvent = EventInfo<dxChart>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxChart> & ExportInfo;
+export type ExportingEvent = EventInfo<dxChart> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxChart>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxChart>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxChart> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxChart>;
+export type InitializedEvent = InitializedEventInfo<dxChart>;
 
 /** @public */
-export type LegendClickEvent  = ComponentNativeEvent<dxChart> & {
+export type LegendClickEvent  = NativeEventInfo<dxChart> & {
     readonly target: chartSeriesObject;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxChart> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = ComponentNativeEvent<dxChart> & PointInteractionInfo;
+export type PointClickEvent = NativeEventInfo<dxChart> & PointInteractionInfo;
 
 /** @public */
-export type PointHoverChangedEvent = ComponentEvent<dxChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
 /** @public */
-export type PointSelectionChangedEvent = ComponentEvent<dxChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
 /** @public */
-export type SeriesClickEvent = ComponentNativeEvent<dxChart> & {
+export type SeriesClickEvent = NativeEventInfo<dxChart> & {
     readonly target: chartSeriesObject;
 }
 
 /** @public */
-export type SeriesHoverChangedEvent = ComponentEvent<dxChart> & SeriesInteractionInfo;
+export type SeriesHoverChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
 /** @public */
-export type SeriesSelectionChangedEvent = ComponentEvent<dxChart> & SeriesInteractionInfo;
+export type SeriesSelectionChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
 
 /** @public */
-export type ZoomEndEvent = Cancelable & ComponentNativeEvent<dxChart> & {
+export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart> & {
     readonly rangeStart: Date | number;
     readonly rangeEnd: Date | number;
     readonly axis: chartAxisObject;
@@ -129,7 +129,7 @@ export type ZoomEndEvent = Cancelable & ComponentNativeEvent<dxChart> & {
 }
 
 /** @public */
-export type ZoomStartEvent = Cancelable & ComponentNativeEvent<dxChart> & {
+export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly actionType?: 'zoom' | 'pan';

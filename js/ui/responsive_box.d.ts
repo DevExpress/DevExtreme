@@ -7,9 +7,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-  ComponentEvent,
-  ComponentNativeEvent,
-  ComponentInitializedEvent,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
   ChangedOptionInfo,
   ItemInfo
 } from '../events/index';
@@ -20,28 +20,28 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxResponsiveBox>;
+export type ContentReadyEvent = EventInfo<dxResponsiveBox>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxResponsiveBox>;
+export type DisposingEvent = EventInfo<dxResponsiveBox>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxResponsiveBox>;
+export type InitializedEvent = InitializedEventInfo<dxResponsiveBox>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxResponsiveBox> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxResponsiveBox> & ChangedOptionInfo;
 
 export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
     /**

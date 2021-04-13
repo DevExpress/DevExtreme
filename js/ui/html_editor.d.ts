@@ -11,9 +11,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -27,25 +27,25 @@ import {
 } from './toolbar';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxHtmlEditor>;
+export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxHtmlEditor>;
+export type DisposingEvent = EventInfo<dxHtmlEditor>;
 
 /** @public */
-export type FocusInEvent = ComponentNativeEvent<dxHtmlEditor>;
+export type FocusInEvent = NativeEventInfo<dxHtmlEditor>;
 
 /** @public */
-export type FocusOutEvent = ComponentNativeEvent<dxHtmlEditor>;
+export type FocusOutEvent = NativeEventInfo<dxHtmlEditor>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxHtmlEditor>;
+export type InitializedEvent = InitializedEventInfo<dxHtmlEditor>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxHtmlEditor> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxHtmlEditor> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxHtmlEditor> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor> & ValueChangedInfo;
 
 /** @public */
 export interface MentionTemplateData {

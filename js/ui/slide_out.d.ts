@@ -15,9 +15,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -29,37 +29,37 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxSlideOut>;
+export type ContentReadyEvent = EventInfo<dxSlideOut>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSlideOut>;
+export type DisposingEvent = EventInfo<dxSlideOut>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSlideOut>;
+export type InitializedEvent = InitializedEventInfo<dxSlideOut>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxSlideOut> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxSlideOut> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxSlideOut> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxSlideOut> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
 
 /** @public */
-export type MenuGroupRenderedEvent = ComponentEvent<dxSlideOut>;
+export type MenuGroupRenderedEvent = EventInfo<dxSlideOut>;
 
 /** @public */
-export type MenuItemRenderedEvent = ComponentEvent<dxSlideOut>;
+export type MenuItemRenderedEvent = EventInfo<dxSlideOut>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSlideOut> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSlideOut> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxSlideOut> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxSlideOut> & SelectionChangedInfo;
 
 export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     /**

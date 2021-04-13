@@ -8,9 +8,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -47,7 +47,7 @@ import {
     WordWrapType,
     VizTextOverflowType,
     BaseWidgetAnnotationConfig,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -57,52 +57,52 @@ export type SegmentsDirectionType = 'anticlockwise' | 'clockwise';
 
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxPieChart>;
+export type DisposingEvent = EventInfo<dxPieChart>;
 
 /** @public */
-export type DoneEvent = ComponentEvent<dxPieChart>;
+export type DoneEvent = EventInfo<dxPieChart>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxPieChart>;
+export type DrawnEvent = EventInfo<dxPieChart>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxPieChart>;
+export type ExportedEvent = EventInfo<dxPieChart>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxPieChart> & ExportInfo;
+export type ExportingEvent = EventInfo<dxPieChart> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxPieChart>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxPieChart>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxPieChart> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxPieChart> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxPieChart>;
+export type InitializedEvent = InitializedEventInfo<dxPieChart>;
 
 /** @public */
-export type LegendClickEvent = ComponentNativeEvent<dxPieChart> & {
+export type LegendClickEvent = NativeEventInfo<dxPieChart> & {
   readonly target: string | number;
   readonly points: Array<piePointObject>;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxPieChart> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxPieChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = ComponentNativeEvent<dxPieChart> & PointInteractionInfo;
+export type PointClickEvent = NativeEventInfo<dxPieChart> & PointInteractionInfo;
 
 /** @public */
-export type PointHoverChangedEvent = ComponentEvent<dxPieChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo;
 
 /** @public */
-export type PointSelectionChangedEvent = ComponentEvent<dxPieChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo;
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxPieChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxPieChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
 
 
 /**

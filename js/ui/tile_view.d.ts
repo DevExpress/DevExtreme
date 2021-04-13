@@ -7,9 +7,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -20,28 +20,28 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTileView>;
+export type ContentReadyEvent = EventInfo<dxTileView>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTileView>;
+export type DisposingEvent = EventInfo<dxTileView>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTileView>;
+export type InitializedEvent = InitializedEventInfo<dxTileView>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxTileView> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxTileView> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxTileView> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxTileView> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxTileView> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTileView> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTileView> & ChangedOptionInfo;
 
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**

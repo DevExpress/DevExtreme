@@ -7,9 +7,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -25,22 +25,22 @@ export interface ResizeInfo {
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxResizable>;
+export type DisposingEvent = EventInfo<dxResizable>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxResizable>;
+export type InitializedEvent = InitializedEventInfo<dxResizable>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxResizable> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxResizable> & ChangedOptionInfo;
 
 /** @public */
-export type ResizeEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
+export type ResizeEvent = NativeEventInfo<dxResizable> & ResizeInfo;
 
 /** @public */
-export type ResizeStartEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
+export type ResizeStartEvent = NativeEventInfo<dxResizable> & ResizeInfo;
 
 /** @public */
-export type ResizeEndEvent = ComponentNativeEvent<dxResizable> & ResizeInfo;
+export type ResizeEndEvent = NativeEventInfo<dxResizable> & ResizeInfo;
 
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**

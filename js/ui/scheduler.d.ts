@@ -18,9 +18,9 @@ import DataSource, {
 
 import {
     TEvent,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     Cancelable
 } from '../events/index';
@@ -54,92 +54,92 @@ interface TargetedAppointmentInfo {
 }
 
 /** @public */
-export type AppointmentAddedEvent = ComponentEvent<dxScheduler> & {
+export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
   readonly error?: Error;
 }
 
 /** @public */
-export type AppointmentAddingEvent = ComponentEvent<dxScheduler> & {
+export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
   cancel: boolean | TPromise<boolean>;
 }
 
 /** @public */
-export type AppointmentClickEvent = Cancelable & ComponentNativeEvent<dxScheduler> & TargetedAppointmentInfo & {
+export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: TElement;
 }
 
 /** @public */
-export type AppointmentContextMenuEvent = ComponentNativeEvent<dxScheduler> & TargetedAppointmentInfo &{
+export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler> & TargetedAppointmentInfo &{
   readonly appointmentElement: TElement;
 }
 
 /** @public */
-export type AppointmentDblClickEvent = Cancelable & ComponentNativeEvent<dxScheduler> & TargetedAppointmentInfo & {
+export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: TElement;
 }
 
 /** @public */
-export type AppointmentDeletedEvent = ComponentEvent<dxScheduler> & {
+export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
   readonly error?: Error;
 }
 
 /** @public */
-export type AppointmentDeletingEvent = ComponentEvent<dxScheduler> & {
+export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
   cancel: boolean | TPromise<boolean>;
 }
 
 /** @public */
-export type AppointmentFormOpeningEvent = Cancelable & ComponentEvent<dxScheduler> & {
+export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & {
   readonly appointmentData?: any;
   readonly form: dxForm;
   readonly popup: dxPopup;
 }
 
 /** @public */
-export type AppointmentRenderedEvent = ComponentEvent<dxScheduler> & TargetedAppointmentInfo & {
+export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: TElement;
 }
 
 /** @public */
-export type AppointmentUpdatedEvent = ComponentEvent<dxScheduler> & {
+export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
   readonly error?: Error;
 }
 
 /** @public */
-export type AppointmentUpdatingEvent = ComponentEvent<dxScheduler> & {
+export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
   readonly oldData: any;
   readonly newData: any;
   cancel?: boolean | TPromise<boolean>;
 }
 
 /** @public */
-export type CellClickEvent = Cancelable & ComponentNativeEvent<dxScheduler> & {
+export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler> & {
   readonly cellData: any;
   readonly cellElement: TElement;
 }
 
 /** @public */
-export type CellContextMenuEvent = ComponentNativeEvent<dxScheduler> & {
+export type CellContextMenuEvent = NativeEventInfo<dxScheduler> & {
   readonly cellData: any;
   readonly cellElement: TElement;
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxScheduler>;
+export type ContentReadyEvent = EventInfo<dxScheduler>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxScheduler>;
+export type DisposingEvent = EventInfo<dxScheduler>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxScheduler>;
+export type InitializedEvent = InitializedEventInfo<dxScheduler>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxScheduler> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
 
 /** @public */
 export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {

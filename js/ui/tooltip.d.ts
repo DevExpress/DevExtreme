@@ -4,8 +4,8 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -14,28 +14,28 @@ import dxPopover, {
 } from './popover';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTooltip>;
+export type ContentReadyEvent = EventInfo<dxTooltip>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTooltip>;
+export type DisposingEvent = EventInfo<dxTooltip>;
 
 /** @public */
-export type HidingEvent = Cancelable & ComponentEvent<dxTooltip>;
+export type HidingEvent = Cancelable & EventInfo<dxTooltip>;
 
 /** @public */
-export type HiddenEvent = ComponentEvent<dxTooltip>;
+export type HiddenEvent = EventInfo<dxTooltip>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTooltip>;
+export type InitializedEvent = InitializedEventInfo<dxTooltip>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTooltip> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTooltip> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = ComponentEvent<dxTooltip>;
+export type ShowingEvent = EventInfo<dxTooltip>;
 
 /** @public */
-export type ShownEvent = ComponentEvent<dxTooltip>;
+export type ShownEvent = EventInfo<dxTooltip>;
 
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
 }

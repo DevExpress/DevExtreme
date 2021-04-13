@@ -15,9 +15,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -29,34 +29,34 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxAccordion>;
+export type ContentReadyEvent = EventInfo<dxAccordion>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxAccordion>;
+export type DisposingEvent = EventInfo<dxAccordion>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxAccordion>;
+export type InitializedEvent = InitializedEventInfo<dxAccordion>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxAccordion> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxAccordion> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxAccordion> & ItemInfo;
 
 /** @public */
-export type ItemTitleClickEvent = ComponentNativeEvent<dxAccordion> & ItemInfo;
+export type ItemTitleClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxAccordion> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxAccordion> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
 
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**

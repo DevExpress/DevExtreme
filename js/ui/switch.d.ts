@@ -3,9 +3,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -15,19 +15,19 @@ import Editor, {
 } from './editor/editor';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxSwitch>;
+export type ContentReadyEvent = EventInfo<dxSwitch>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSwitch>;
+export type DisposingEvent = EventInfo<dxSwitch>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSwitch>;
+export type InitializedEvent = InitializedEventInfo<dxSwitch>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSwitch> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxSwitch> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSwitch> & ValueChangedInfo;
 
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**

@@ -14,8 +14,8 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -25,13 +25,13 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxFilterBuilder>;
+export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxFilterBuilder>;
+export type DisposingEvent = EventInfo<dxFilterBuilder>;
 
 /** @public */
-export type EditorPreparedEvent = ComponentEvent<dxFilterBuilder> & {
+export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
     readonly value?: any;
     readonly setValue: any;
     readonly editorElement: TElement;
@@ -46,7 +46,7 @@ export type EditorPreparedEvent = ComponentEvent<dxFilterBuilder> & {
 }
 
 /** @public */
-export type EditorPreparingEvent = Cancelable & ComponentEvent<dxFilterBuilder> & {
+export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
     readonly value?: any;
     readonly setValue: any;
     readonly editorElement?: TElement;
@@ -62,13 +62,13 @@ export type EditorPreparingEvent = Cancelable & ComponentEvent<dxFilterBuilder> 
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxFilterBuilder>;
+export type InitializedEvent = InitializedEventInfo<dxFilterBuilder>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxFilterBuilder> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxFilterBuilder> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentEvent<dxFilterBuilder> & {
+export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
     readonly value?: any;
     readonly previousValue?: any;
 }

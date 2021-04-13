@@ -17,9 +17,9 @@ import DataSource, {
 import {
     TEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -37,45 +37,45 @@ import {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxContextMenu>;
+export type ContentReadyEvent = EventInfo<dxContextMenu>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxContextMenu>;
+export type DisposingEvent = EventInfo<dxContextMenu>;
 
 /** @public */
-export type HiddenEvent = ComponentEvent<dxContextMenu>;
+export type HiddenEvent = EventInfo<dxContextMenu>;
 
 /** @public */
-export type HidingEvent = Cancelable & ComponentEvent<dxContextMenu>;
+export type HidingEvent = Cancelable & EventInfo<dxContextMenu>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxContextMenu>;
+export type InitializedEvent = InitializedEventInfo<dxContextMenu>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxContextMenu> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxContextMenu> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
 
 /** @public */
-export type PositioningEvent = ComponentNativeEvent<dxContextMenu> & {
+export type PositioningEvent = NativeEventInfo<dxContextMenu> & {
     readonly position: positionConfig;
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxContextMenu> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxContextMenu> & SelectionChangedInfo;
 
 /** @public */
-export type ShowingEvent = Cancelable & ComponentEvent<dxContextMenu>;
+export type ShowingEvent = Cancelable & EventInfo<dxContextMenu>;
 
 /** @public */
-export type ShownEvent = ComponentEvent<dxContextMenu>;
+export type ShownEvent = EventInfo<dxContextMenu>;
 
 /** @public */
 export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {

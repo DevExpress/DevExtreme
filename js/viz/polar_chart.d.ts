@@ -5,9 +5,9 @@ import {
 import {
     TEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -46,7 +46,7 @@ import {
 
 import {
     Font,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -58,70 +58,70 @@ interface SeriesInteractionInfo {
 }
 
 /** @public */
-export type ArgumentAxisClickEvent = ComponentNativeEvent<dxPolarChart> & {
+export type ArgumentAxisClickEvent = NativeEventInfo<dxPolarChart> & {
     readonly argument: Date | number | string;
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxPolarChart>;
+export type DisposingEvent = EventInfo<dxPolarChart>;
 
 /** @public */
-export type DoneEvent = ComponentEvent<dxPolarChart>;
+export type DoneEvent = EventInfo<dxPolarChart>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxPolarChart>;
+export type DrawnEvent = EventInfo<dxPolarChart>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxPolarChart>;
+export type ExportedEvent = EventInfo<dxPolarChart>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxPolarChart> & ExportInfo;
+export type ExportingEvent = EventInfo<dxPolarChart> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxPolarChart>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxPolarChart>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxPolarChart> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxPolarChart> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxPolarChart>;
+export type InitializedEvent = InitializedEventInfo<dxPolarChart>;
 
 /** @public */
-export type LegendClickEvent = ComponentNativeEvent<dxPolarChart> & {
+export type LegendClickEvent = NativeEventInfo<dxPolarChart> & {
     readonly target: polarChartSeriesObject;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxPolarChart> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxPolarChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = ComponentNativeEvent<dxPolarChart> & PointInteractionInfo;
+export type PointClickEvent = NativeEventInfo<dxPolarChart> & PointInteractionInfo;
 
 /** @public */
-export type PointHoverChangedEvent = ComponentEvent<dxPolarChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
 
 /** @public */
-export type PointSelectionChangedEvent = ComponentEvent<dxPolarChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
 
 /** @public */
-export type SeriesClickEvent = ComponentNativeEvent<dxPolarChart> & {
+export type SeriesClickEvent = NativeEventInfo<dxPolarChart> & {
     readonly target: polarChartSeriesObject;
 }
 
 /** @public */
-export type SeriesHoverChangedEvent = ComponentEvent<dxPolarChart> & SeriesInteractionInfo;
+export type SeriesHoverChangedEvent = EventInfo<dxPolarChart> & SeriesInteractionInfo;
 
 /** @public */
-export type SeriesSelectionChangedEvent = ComponentEvent<dxPolarChart> & SeriesInteractionInfo;
+export type SeriesSelectionChangedEvent = EventInfo<dxPolarChart> & SeriesInteractionInfo;
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxPolarChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxPolarChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo;
 
 /** @public */
-export type ZoomEndEvent = Cancelable & ComponentNativeEvent<dxPolarChart> & {
+export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly previousRange: VizRange;
@@ -130,7 +130,7 @@ export type ZoomEndEvent = Cancelable & ComponentNativeEvent<dxPolarChart> & {
     readonly shift: number;
 }
 /** @public */
-export type ZoomStartEvent = Cancelable & ComponentNativeEvent<dxPolarChart> & {
+export type ZoomStartEvent = Cancelable & NativeEventInfo<dxPolarChart> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly actionType: 'zoom' | 'pan';

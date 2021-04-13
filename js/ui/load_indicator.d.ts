@@ -3,8 +3,8 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -13,16 +13,16 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxLoadIndicator>;
+export type ContentReadyEvent = EventInfo<dxLoadIndicator>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxLoadIndicator>;
+export type DisposingEvent = EventInfo<dxLoadIndicator>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxLoadIndicator>;
+export type InitializedEvent = InitializedEventInfo<dxLoadIndicator>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxLoadIndicator> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**

@@ -4,13 +4,13 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
 import {
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -20,34 +20,34 @@ import BaseSparkline, {
 } from './sparklines/base_sparkline';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxBullet>;
+export type DisposingEvent = EventInfo<dxBullet>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxBullet>;
+export type DrawnEvent = EventInfo<dxBullet>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxBullet>;
+export type ExportedEvent = EventInfo<dxBullet>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxBullet> & ExportInfo;
+export type ExportingEvent = EventInfo<dxBullet> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxBullet>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxBullet>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxBullet> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxBullet> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxBullet>;
+export type InitializedEvent = InitializedEventInfo<dxBullet>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxBullet> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxBullet> & ChangedOptionInfo;
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxBullet>;
+export type TooltipHiddenEvent = EventInfo<dxBullet>;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxBullet>;
+export type TooltipShownEvent = EventInfo<dxBullet>;
 
 
 export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {

@@ -15,9 +15,9 @@ import {
 import {
     TEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -44,10 +44,10 @@ export interface AddEvent {
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSortable>;
+export type DisposingEvent = EventInfo<dxSortable>;
 
 /** @public */
-export type DragChangeEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
+export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
     readonly itemElement: TElement;
     readonly fromIndex?: number;
@@ -60,7 +60,7 @@ export type DragChangeEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
 }
 
 /** @public */
-export type DragEndEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
     readonly itemElement: TElement;
     readonly fromIndex: number;
@@ -73,7 +73,7 @@ export type DragEndEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
 }
 
 /** @public */
-export type DragMoveEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
     readonly itemElement: TElement;
     readonly fromIndex: number;
@@ -86,7 +86,7 @@ export type DragMoveEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
 }
 
 /** @public */
-export type DragStartEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable> & {
     itemData?: any;
     readonly itemElement: TElement;
     readonly fromIndex: number;
@@ -94,13 +94,13 @@ export type DragStartEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSortable>;
+export type InitializedEvent = InitializedEventInfo<dxSortable>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSortable> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
 
 /** @public */
-export type RemoveEvent = ComponentNativeEvent<dxSortable> & {
+export type RemoveEvent = NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
     readonly itemElement: TElement;
     readonly fromIndex: number;
@@ -112,7 +112,7 @@ export type RemoveEvent = ComponentNativeEvent<dxSortable> & {
 }
 
 /** @public */
-export type ReorderEvent = ComponentNativeEvent<dxSortable> & {
+export type ReorderEvent = NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
     readonly itemElement: TElement;
     readonly fromIndex: number;

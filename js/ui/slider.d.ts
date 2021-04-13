@@ -3,9 +3,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -22,19 +22,19 @@ import {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxSlider>;
+export type ContentReadyEvent = EventInfo<dxSlider>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSlider>;
+export type DisposingEvent = EventInfo<dxSlider>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSlider>;
+export type InitializedEvent = InitializedEventInfo<dxSlider>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSlider> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxSlider> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSlider> & ValueChangedInfo;
 
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**

@@ -17,8 +17,8 @@ import {
 import {
     TEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -29,31 +29,31 @@ import dxPopup, {
 } from './popup';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxPopover>;
+export type ContentReadyEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxPopover>;
+export type DisposingEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type HidingEvent = Cancelable & ComponentEvent<dxPopover>;
+export type HidingEvent = Cancelable & EventInfo<dxPopover>;
 
 /** @public */
-export type HiddenEvent = ComponentEvent<dxPopover>;
+export type HiddenEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxPopover>;
+export type InitializedEvent = InitializedEventInfo<dxPopover>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxPopover> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxPopover> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = ComponentEvent<dxPopover>;
+export type ShowingEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type ShownEvent = ComponentEvent<dxPopover>;
+export type ShownEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type TitleRenderedEvent = ComponentEvent<dxPopup> & TitleRenderedInfo;
+export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
