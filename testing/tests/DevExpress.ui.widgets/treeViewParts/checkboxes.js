@@ -252,9 +252,7 @@ const clickByItemCheckbox = (wrapper, item) => wrapper.getElement()
                     } ],
                 });
 
-                wrapper.getElement()
-                    .find('[aria-label="item1_1"] .dx-checkbox')
-                    .eq(0).trigger('dxclick');
+                clickByItemCheckbox(wrapper, 'item1_1');
 
                 let expectedLog;
                 if(showCheckBoxesMode === 'none') {
@@ -293,11 +291,12 @@ QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(
     assert.deepEqual(selectAllValueChangedLog, [undefined, true, false], 'after click by item1');
 });
 
-['normal', 'none'].forEach((showCheckBoxesMode) => {
-    QUnit.test(`showCheckBoxesMode=${showCheckBoxesMode} -> showCheckBoxesMode=selectAll and click -> showCheckBoxesMode=${showCheckBoxesMode} and click -> showCheckBoxesMode=selectAll and click (T988756)`, function(assert) {
+
+QUnit.module('T988756', () => {
+    QUnit.test('showCheckBoxesMode=none -> showCheckBoxesMode=selectAll and click -> showCheckBoxesMode=none and click -> showCheckBoxesMode=selectAll and click (T988756)', function(assert) {
         const selectAllStub = sinon.stub();
         const wrapper = new TreeViewTestWrapper({
-            showCheckBoxesMode: showCheckBoxesMode,
+            showCheckBoxesMode: 'none',
             items: [ { text: 'item1' } ],
             onSelectAllValueChanged: selectAllStub
         });
@@ -308,7 +307,32 @@ QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(
         assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
 
         selectAllStub.reset();
-        wrapper.instance.option('showCheckBoxesMode', showCheckBoxesMode);
+        wrapper.instance.option('showCheckBoxesMode', 'none');
+        clickByItemCheckbox(wrapper, 'item1');
+        assert.ok('no error is thrown');
+        assert.equal(selectAllStub.callCount, 0, 'onSelectAllValueChanged is not fired');
+
+        wrapper.instance.option('showCheckBoxesMode', 'selectAll');
+        clickByItemCheckbox(wrapper, 'item1');
+        assert.ok('no error is thrown');
+        assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
+    });
+
+    QUnit.test('showCheckBoxesMode=normal -> showCheckBoxesMode=selectAll and click -> showCheckBoxesMode=normal and click -> showCheckBoxesMode=selectAll and click', function(assert) {
+        const selectAllStub = sinon.stub();
+        const wrapper = new TreeViewTestWrapper({
+            showCheckBoxesMode: 'normal',
+            items: [ { text: 'item1' } ],
+            onSelectAllValueChanged: selectAllStub
+        });
+
+        wrapper.instance.option('showCheckBoxesMode', 'selectAll');
+        clickByItemCheckbox(wrapper, 'item1');
+        assert.ok('no error is thrown');
+        assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
+
+        selectAllStub.reset();
+        wrapper.instance.option('showCheckBoxesMode', 'normal');
         clickByItemCheckbox(wrapper, 'item1');
         assert.ok('no error is thrown');
         assert.equal(selectAllStub.callCount, 0, 'onSelectAllValueChanged is not fired');
@@ -319,7 +343,6 @@ QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(
         assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
     });
 });
-
 
 QUnit.test('Selection works correct with custom rootValue', function(assert) {
     const data = [
