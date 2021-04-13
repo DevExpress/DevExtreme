@@ -1,4 +1,4 @@
-import { isFunction, type } from './type';
+import { isFunction, isString } from './type';
 
 export const encodeHtml = (function() {
     const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
@@ -54,33 +54,26 @@ export const quadToObject = function(raw) {
     return { top: top, right: right, bottom: bottom, left: left };
 };
 
-export const format = function() {
-    let s = arguments[0];
-    const values = [].slice.call(arguments).slice(1);
-    let replaceDollarCount;
-    let reg;
-    let value;
-
-    if(isFunction(s)) {
-        return s.apply(this, values);
+export function format(template, ...values) {
+    if(isFunction(template)) {
+        return template(...values);
     }
 
-    for(let i = 0; i < values.length; i++) {
-        reg = new RegExp('\\{' + i + '\\}', 'gm');
-        value = values[i];
-        if(type(value) === 'string' && value.indexOf('$') >= 0) {
-            replaceDollarCount = '$'.replace('$', '$$').length;
-            value = value.replace('$', replaceDollarCount === 1 ? '$$$$' : '$$');
+    values.forEach((value, index) => {
+        if(isString(value)) {
+            value = value.replace(/\$/g, '$$$$');
         }
-        s = s.replace(reg, value);
-    }
 
-    return s;
-};
+        const placeholderReg = new RegExp('\\{' + index + '\\}', 'gm');
+        template = template.replace(placeholderReg, value);
+    });
+
+    return template;
+}
 
 export const replaceAll = (function() {
     const quote = function(str) {
-        return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1');
+        return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1'); // lgtm[incomplete-sanitization]
     };
 
     return function(text, searchToken, replacementToken) {
