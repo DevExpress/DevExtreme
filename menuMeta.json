@@ -1776,17 +1776,9 @@
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Horizontal",
-            "Badge": "New",
-            "Name": "HorizontalVirtualScrolling",
-            "Widget": "Scheduler",
-            "MvcAdditionalFiles": [],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Vertical",
+            "Title": "Virtual Scrolling",
             "Badge": "Updated",
-            "Name": "VerticalVirtualScrolling",
+            "Name": "VirtualScrolling",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [],
             "DemoType": "Web"

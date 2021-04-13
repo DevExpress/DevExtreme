@@ -7,7 +7,21 @@ import {
 } from './data.js';
 
 const currentDate = new Date(2021, 1, 2);
-const views = ['workWeek', 'timelineWorkWeek', 'month'];
+const views = [
+  {
+    type: 'timelineWorkWeek',
+    name: 'Timeline',
+    groupOrientation: 'vertical'
+  },
+  {
+    type: 'workWeek',
+    groupOrientation: 'vertical'
+  },
+  {
+    type: 'month',
+    groupOrientation: 'horizontal'
+  }
+];
 const scrolling = { mode: 'virtual' };
 const resources = [{
   fieldExpr: 'humanId',

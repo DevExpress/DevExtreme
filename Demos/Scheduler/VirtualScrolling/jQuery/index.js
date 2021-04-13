@@ -5,7 +5,21 @@ $(function () {
         height: 600,
         currentDate: new Date(2021, 1, 2),
         dataSource: appointments,
-        views: ['workWeek', 'timelineWorkWeek', 'month'],
+        views: [    
+            {
+                type: 'timelineWorkWeek',
+                name: 'Timeline',
+                groupOrientation: 'vertical'
+            },
+            {
+                type: 'workWeek',
+                groupOrientation: 'vertical'
+            },
+            {
+                type: 'month',
+                groupOrientation: 'horizontal'
+            }
+        ],
         currentView: "timelineWorkWeek",
         firstDayOfWeek: 0,
         startDayHour: 8,
