@@ -1437,6 +1437,7 @@ QUnit.module('T986577', () => {
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
         assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
         assert.equal($toolbarMenuButton.attr('class'), 1, 'test only');
+        assert.equal($toolbarMenuButton.width(), 1, 'test only');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), true, 'menu button is hidden');
     });
 
@@ -1448,6 +1449,7 @@ QUnit.module('T986577', () => {
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
         assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
         assert.equal($toolbarMenuButton.attr('class'), 1, 'test only');
+        assert.equal($toolbarMenuButton.width(), 1, 'test only');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), false, 'menu button is visible');
     });
 });
