@@ -1,4 +1,4 @@
-import { isFunction, type } from './type';
+import { isFunction, isString } from './type';
 
 export const encodeHtml = (function() {
     const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
@@ -54,24 +54,22 @@ export const quadToObject = function(raw) {
     return { top: top, right: right, bottom: bottom, left: left };
 };
 
-export const format = function() {
-    let s = arguments[0];
-    const values = [].slice.call(arguments).slice(1);
-
-    if(isFunction(s)) {
-        return s.apply(this, values);
+export function format(template, ...values) {
+    if(isFunction(template)) {
+        return template(...values);
     }
 
-    values.forEach(function(value, index) {
-        const reg = new RegExp('\\{' + index + '\\}', 'gm');
-        if(type(value) === 'string') {
+    values.forEach((value, index) => {
+        if(isString(value)) {
             value = value.replace(/\$/g, '$$$$');
         }
-        s = s.replace(reg, value);
+
+        const placeholderReg = new RegExp('\\{' + index + '\\}', 'gm');
+        template = template.replace(placeholderReg, value);
     });
 
-    return s;
-};
+    return template;
+}
 
 export const replaceAll = (function() {
     const quote = function(str) {
