@@ -1421,10 +1421,11 @@ QUnit.module('T986577', () => {
                 label: { text: 'text' },
                 editorType: 'dxHtmlEditor',
                 editorOptions: {
-                    toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike' ] }
+                    toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike', 'underline' ] }
                 }
             }, {
-                label: { text: 'Very very long text' }
+                label: { text: 'Very very long text' },
+                editorType: 'dxTextBox'
             } ]
         };
     }
@@ -1435,6 +1436,7 @@ QUnit.module('T986577', () => {
 
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
         assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
+        assert.equal($toolbarMenuButton.attr('class'), 1, 'test only');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), true, 'menu button is hidden');
     });
 
@@ -1445,6 +1447,7 @@ QUnit.module('T986577', () => {
 
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
         assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
+        assert.equal($toolbarMenuButton.attr('class'), 1, 'test only');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), false, 'menu button is visible');
     });
 });
