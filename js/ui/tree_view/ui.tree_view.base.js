@@ -259,7 +259,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         switch(name) {
             case 'selectAllText':
                 if(this._$selectAllItem) {
-                    this._getSelectAllCheckbox().option('text', value);
+                    this._$selectAllItem.dxCheckBox('instance').option('text', value);
                 }
                 break;
             case 'showCheckBoxesMode':
@@ -311,10 +311,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             default:
                 this.callBase(args);
         }
-    },
-
-    _getSelectAllCheckbox: function() {
-        return this._$selectAllItem.dxCheckBox('instance');
     },
 
     _initDataSource: function() {
@@ -1040,15 +1036,17 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
             text: this.option('selectAllText'),
-            onValueChanged: function(args) {
-                this._toggleSelectAll(args);
-                this._fireSelectAllValueChanged(args.value);
-            }.bind(this)
+            onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
         });
 
         this._toggleSelectedClass(this._$selectAllItem, value);
 
         $container.before(this._$selectAllItem);
+    },
+
+    _onSelectAllCheckboxValueChanged: function(args) {
+        this._toggleSelectAll(args);
+        this._fireSelectAllValueChanged(args.value);
     },
 
     _toggleSelectAll: function(args) {
@@ -1178,13 +1176,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this._updateItemsUI();
 
                 this._fireItemSelectionChanged(this._getNode(key));
-                this._fireSelectionChanged();
             });
         }
 
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
         const isAllSelected = this._dataAdapter.isAllSelected();
-        const needFireSelectAllChanged = this._selectAllEnabled() && this._getSelectAllCheckbox().option('value') !== isAllSelected;
+        const needFireSelectAllChanged = this._selectAllEnabled() && this._$selectAllItem.dxCheckBox('instance').option('value') !== isAllSelected;
         this._updateItemsUI();
 
         this._fireItemSelectionChanged(node, dxEvent);
@@ -1229,9 +1226,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
 
         if(this._selectAllEnabled()) {
-            const selectAllCheckbox = this._getSelectAllCheckbox();
-            selectAllCheckbox._setOptionWithoutOptionChange('value', this._dataAdapter.isAllSelected());
-            selectAllCheckbox.repaint();
+            const selectAllCheckbox = this._$selectAllItem.dxCheckBox('instance');
+
+            selectAllCheckbox._setOptionWithoutOptionChange('onValueChanged', undefined);
+            selectAllCheckbox.option('value', this._dataAdapter.isAllSelected());
+            selectAllCheckbox._setOptionWithoutOptionChange('onValueChanged', this._onSelectAllCheckboxValueChanged.bind(this));
         }
     },
 
@@ -1585,7 +1584,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     selectAll: function() {
         if(this._selectAllEnabled()) {
-            this._getSelectAllCheckbox().option('value', true);
+            this._$selectAllItem.dxCheckBox('instance').option('value', true);
         } else {
             this._toggleSelectAll({ value: true });
         }
@@ -1593,7 +1592,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     unselectAll: function() {
         if(this._selectAllEnabled()) {
-            this._getSelectAllCheckbox().option('value', false);
+            this._$selectAllItem.dxCheckBox('instance').option('value', false);
         } else {
             this._toggleSelectAll({ value: false });
         }
