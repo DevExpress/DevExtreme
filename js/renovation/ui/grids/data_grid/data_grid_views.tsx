@@ -26,7 +26,7 @@ export class DataGridViews extends JSXComponent<DataGridViewProps, 'instance'>()
     }
 
     const views = VIEW_NAMES.map(
-      (viewName) => this.props.instance?.getView(viewName) as GridBaseView,
+      (viewName) => this.props.instance.getView(viewName) as GridBaseView,
     ).filter((view) => view);
 
     return views.map((view) => ({

@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import each from 'jest-each';
+import { RefObject } from '@devextreme-generator/declarations';
 import { DataGrid, viewFunction as DataGridView } from '../data_grid';
 import { DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../../common/widget';
@@ -12,9 +13,10 @@ import { getUpdatedOptions } from '../utils/get_updated_options';
 jest.mock('../data_grid_views', () => ({ DataGridViews: () => null }));
 jest.mock('../../../../../ui/data_grid/ui.data_grid', () => jest.fn());
 jest.mock('../datagrid_component', () => ({
-  DataGridComponent: jest.fn().mockImplementation((_, options) => ({
+  DataGridComponent: jest.fn().mockImplementation((element, options) => ({
     option: () => options,
     dispose: jest.fn(),
+    element: () => element,
     getController: jest.fn().mockImplementation(() => ({
       updateSize: jest.fn(),
     })),
@@ -94,6 +96,17 @@ describe('DataGrid', () => {
       const instance = component.createInstance();
 
       expect(Object.prototype.hasOwnProperty.call(instance.option(), 'columns')).toBe(false);
+    });
+
+    it('Init with widgetElementRef', () => {
+      const component = new DataGrid({});
+      component.widgetElementRef = {
+        current: {} as HTMLDivElement,
+      } as RefObject;
+
+      const instance = component.createInstance();
+
+      expect(instance.element()).toBe(component.widgetElementRef.current);
     });
 
     describe('Methods', () => {
