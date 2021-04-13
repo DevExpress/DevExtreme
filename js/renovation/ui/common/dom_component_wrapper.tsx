@@ -65,7 +65,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
 
   @Effect()
   updateWidget(): void {
-    this.getInstance()?.option(this.properties);
+    this.getInstance()?.option?.(this.properties);
   }
 
   @Effect({ run: 'once' })
