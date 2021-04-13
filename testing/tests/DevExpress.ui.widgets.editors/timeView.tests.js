@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import dateLocalization from 'localization/date';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/date_box/ui.time_view';
 
@@ -24,6 +25,7 @@ const BOX_CLASS = 'dx-box';
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const INPUT_CLASS = 'dx-texteditor-input';
 const NUMBERBOX_SPIN_UP_BUTTON_CLASS = 'dx-numberbox-spin-up';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 QUnit.module('rendering', () => {
     QUnit.test('widget class should be added', function(assert) {
@@ -516,6 +518,32 @@ QUnit.module('format rendering', () => {
 
                 assert.equal(hourNumberBox.option('value'), expectedValue, 'correct value');
             });
+        });
+
+        QUnit.test('hour numberbox should have correct value after some incorrect values applyings (T986347)', function(assert) {
+            const $element = $('#timeView').dxTimeView({ use24HourFormat });
+            const timeView = $element.dxTimeView('instance');
+            const maxValue = use24HourFormat ? 23 : 12;
+
+            timeView.option(use24HourFormat);
+            const $hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0);
+            const hourNumberBox = $hourNumberBox.dxNumberBox('instance');
+
+            const $input = $hourNumberBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const kb = keyboardMock($input);
+
+            kb.caret({ start: 0, end: 2 })
+                .type('30')
+                .blur();
+
+
+            kb.caret({ start: 0, end: 2 })
+                .press('30')
+                .blur();
+
+            const text = hourNumberBox.option('text');
+            assert.ok(text <= maxValue, `current text value is ${text}; expected max is ${maxValue}`);
+            assert.ok(hourNumberBox.option('value') <= maxValue, `current value is ${text}; expected max is ${maxValue}`);
         });
     });
 });

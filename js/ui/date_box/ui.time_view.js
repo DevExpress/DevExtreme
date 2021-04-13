@@ -186,10 +186,12 @@ const TimeView = Editor.inherit({
         return !this.option('use24HourFormat') && this._format12.option('value') === 1;
     },
 
-    _onHourBoxValueChanged: function(args) {
+    _onHourBoxValueChanged: function({ value, component }) {
         const currentValue = this._getValue();
         const newValue = new Date(currentValue);
-        let newHours = this._convertMaxHourToMin(args.value);
+        let newHours = this._convertMaxHourToMin(value);
+
+        component.option('value', newHours);
 
         if(this._isPM()) {
             newHours += 12;
