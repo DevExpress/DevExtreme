@@ -32,10 +32,6 @@ jest.mock('../../../../ui/themes', () => ({
   current: jest.fn(() => 'generic'),
 }));
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
-jest.mock('../../../../core/devices', () => ({
-  ...jest.requireActual('../../../../core/devices'),
-  real: jest.fn(() => ({ platform: 'generic' })),
-}));
 
 // eslint-disable-next-line import/first
 import {

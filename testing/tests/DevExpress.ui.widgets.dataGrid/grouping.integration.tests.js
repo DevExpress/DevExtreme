@@ -30,7 +30,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Cells in group row should not have \'dx-col-fixed\' class (T852898)', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [
                     { id: 1, value: 'value 1' }
@@ -148,7 +148,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }];
 
         $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: loadResult,
             keyExpr: 'ID',
             showBorders: true,
@@ -185,7 +185,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Check grouping context menu operability', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             grouping: {
                 contextMenuEnabled: true
             },
@@ -260,7 +260,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             sorting: {
                 mode: 'none'
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             allowGrouping: true,
             grouping: {
                 contextMenuEnabled: true
@@ -288,7 +288,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Ungroup one column via group row context menu', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', { dataField: 'field2', groupIndex: 1, showWhenGrouped: true }, { dataField: 'field3', groupIndex: 0, showWhenGrouped: true }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             sorting: {
                 mode: 'none'
             },
@@ -321,7 +321,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Ungroup all columns via group row context menu', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', { dataField: 'field2', groupIndex: 1, showWhenGrouped: true }, { dataField: 'field3', groupIndex: 0, showWhenGrouped: true }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             allowGrouping: true,
             grouping: {
                 contextMenuEnabled: true
@@ -349,7 +349,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Grouping with context menu - check custom texts', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2', { dataField: 'field3', showWhenGrouped: true }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             grouping: {
                 contextMenuEnabled: true,
                 texts: {
@@ -378,7 +378,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Context menu does not have grouping items when \'contextMenuEnabled\' is false', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2', 'field3'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             allowGrouping: false,
             grouping: {
                 contextMenuEnabled: false
@@ -405,7 +405,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('#container').width(600);
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ firstName: 'Blablabla', lastName: 'Psy', age: 40 }],
             columns: [{ dataField: 'firstName', hidingPriority: 0, groupIndex: 0 }, { dataField: 'lastName', hidingPriority: 1 }, { dataField: 'age', hidingPriority: 2 }]
         });
@@ -444,7 +444,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 columnRenderingMode: 'virtual'
             },
@@ -535,7 +535,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let loadResult = $.Deferred().resolve([{}]);
         const dataGrid = createDataGrid({
             columns: ['field1', 'field2', { dataField: 'field3', fixed: true, fixedPosition: 'right' }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             cacheEnabled: false,
             dataSource: {
                 load: function() {
@@ -561,7 +561,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let isRowClicked = false;
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             onRowPrepared: function(args) {
                 assert.equal(typeUtils.isRenderer(args.rowElement), !!config().useJQuery, 'rowElement is correct');
                 if(args.rowType === 'group') {
@@ -592,7 +592,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Default context menu shown when click on header panel items', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 allowAdding: true
             },
@@ -615,7 +615,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Default context menu shown when click on command column', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'row',
                 allowUpdating: true,
@@ -641,7 +641,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Default context menu shown when click on rows', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             grouping: {
                 contextMenuEnabled: true
             },
@@ -661,7 +661,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.test('Show contextMenu for hidden adaptive columns', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             grouping: {
                 contextMenuEnabled: true
             },
@@ -820,7 +820,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('Hide group panel and search panel when calculateDisplayValue is defined', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { field1: 1, field2: 'test1', field3: 'test2' },
                 { field1: 2, field2: 'test3', field3: 'test4' }
@@ -856,7 +856,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid({
             rtlEnabled: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ field1: '1', field2: '2', field3: '3', field4: '4', field5: '5' }]
             },
@@ -990,7 +990,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 { id: 2, col1: '2 1', col2: '2 2', col3: '2 3' },
                 { id: 3, col1: '3 1', col2: '3 2', col3: '3 3' }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             paging: {
                 pageSize: 2
             },
@@ -1025,7 +1025,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('Column widths should be updated after expand group row if repaintChangesOnly is true', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             dataSource: [
                 { id: 1, group: 'group1' },
@@ -1113,7 +1113,7 @@ QUnit.module('columnWidth auto option', {
 
         // act
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columnAutoWidth: true,
             columns: [{
@@ -1134,7 +1134,7 @@ QUnit.module('columnWidth auto option', {
     // T661361
     QUnit.test('Group space cells should have correct width if data rows are not visible', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ group1: 1, group2: 1, id: 1 }],
             grouping: {
                 autoExpandAll: false
@@ -1165,7 +1165,7 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
         // arrange
         const headerPanelWrapper = dataGridWrapper.headerPanel;
         createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2, field3: 3 }],
             groupPanel: {
                 visible: true

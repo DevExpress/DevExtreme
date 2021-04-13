@@ -2913,7 +2913,7 @@ QUnit.module('Selection SelectAllMode', {
 
         this.applyOptions({
             columns: ['id', 'field1', 'field3'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             selection: {
                 mode: 'multiple',
                 maxFilterLengthInRequest: 1
@@ -4134,7 +4134,7 @@ QUnit.module('Deferred selection', {
         let selectedRowsData = [];
 
         this.setupDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: createDataSource(this.data, { key: 'id', pageSize: 2 }),
             remoteOperations: { filtering: true, sorting: true, paging: true },
             columns: [
@@ -4174,7 +4174,7 @@ QUnit.module('Deferred selection', {
         let selectedRowsData = [];
 
         this.setupDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: createDataSource(this.data, { key: 'id', pageSize: 2 }),
             remoteOperations: { filtering: true, sorting: true, paging: true },
             columns: [

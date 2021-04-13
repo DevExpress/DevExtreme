@@ -16,6 +16,11 @@ import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TopPocketState } from '../common/consts';
 import { ScrollbarProps } from '../scrollbar_props';
 
+import {
+  optionValues,
+  getPermutations,
+} from './utils';
+
 describe('TopPocket', () => {
   it('render scrollbar with defaults', () => {
     const props = new ScrollbarProps();
@@ -231,7 +236,49 @@ describe('TopPocket', () => {
 
 describe('Methods', () => {
   each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
-    each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
+    it('updateContent(), should not raise any errors when position change events not defined', () => {
+      const viewModel = new Scrollbar({
+        showScrollbar: 'always',
+        direction,
+        contentPositionChange: undefined,
+        contentTranslateOffsetChange: undefined,
+      });
+
+      expect(viewModel.updateContent.bind(viewModel)).not.toThrow();
+    });
+
+    each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
+      each(optionValues.bounceEnabled).describe('BounceEnabled: %o', (bounceEnabled) => {
+        each([
+          { eventData: { pageX: 50, pageY: 50 }, expected: bounceEnabled ? 60 : 0 },
+          { eventData: { pageX: 150, pageY: 150 }, expected: -340 },
+          { eventData: { pageX: 250, pageY: 250 }, expected: bounceEnabled ? -740 : -590 },
+        ]).describe('ClickLocation: %o', (clickLocation) => {
+          it('moveToMouseLocation(e)', () => {
+            const viewModel = new Scrollbar({
+              showScrollbar,
+              direction,
+              bounceEnabled,
+              containerSize: 200,
+              scrollableOffset: 40,
+            });
+
+            viewModel.moveScrollbar = jest.fn();
+            viewModel.maxOffset = 0;
+            viewModel.minOffset = -590;
+            viewModel.scrollLocation = -250;
+            Object.defineProperties(viewModel, {
+              containerToContentRatio: { get() { return 0.25; } },
+            });
+
+            viewModel.moveToMouseLocation(clickLocation.eventData);
+
+            expect(viewModel.moveScrollbar).toHaveBeenCalledTimes(1);
+            expect(viewModel.scrollLocation).toEqual(clickLocation.expected);
+          });
+        });
+      });
+
       each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
         it('moveScrollbar(location) call should set correct location & scrollLocation values', () => {
           const viewModel = new Scrollbar({
@@ -247,7 +294,6 @@ describe('Methods', () => {
           viewModel.moveScrollbar(location);
 
           const expectedLocation = location * scaleRatio;
-          expect(viewModel.location).toEqual(expectedLocation);
           expect(viewModel.scrollLocation).toEqual(expectedLocation);
         });
 
@@ -260,125 +306,66 @@ describe('Methods', () => {
             contentSize: 500,
           });
 
-          viewModel.location = -20;
+          viewModel.scrollLocation = -20;
 
           viewModel.moveScrollbar();
 
           const expectedLocation = -20;
-          expect(viewModel.location).toEqual(expectedLocation);
+          expect(viewModel.scrollLocation).toEqual(expectedLocation);
           expect(viewModel.scrollLocation).toEqual(expectedLocation);
         });
 
         each([-500.25, -400, -100.25, 0.25, 100.25, 500.25]).describe('Location: %o', (location) => {
-          afterEach(() => {
-            jest.clearAllMocks();
-          });
+          each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+            each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+              it('updateContent() call should change position of content and scroll', () => {
+                const contentPositionChange = jest.fn();
+                const contentTranslateOffsetChange = jest.fn();
+                const topPocketSize = 85;
 
-          each([undefined, jest.fn()]).describe('contentPositionChange: %o', (contentPositionChange) => {
-            each([undefined, jest.fn()]).describe('contentTranslateOffsetChange: %o', (contentTranslateOffsetChange) => {
-              each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
-                each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-                  it('updateContent() call should change position of content and scroll', () => {
-                    const topPocketSize = 85;
-
-                    const viewModel = new Scrollbar({
-                      showScrollbar,
-                      direction,
-                      scaleRatio,
-                      forceGeneratePockets,
-                      pullDownEnabled,
-                      contentPositionChange,
-                      contentTranslateOffsetChange,
-                      topPocketSize,
-                    });
-
-                    const minOffset = -400;
-                    Object.defineProperties(viewModel, {
-                      minOffset: { get() { return minOffset; } },
-                    });
-
-                    viewModel.scrollLocation = location;
-
-                    viewModel.updateContent();
-
-                    if (contentPositionChange) {
-                      expect(contentPositionChange).toHaveBeenCalledTimes(1);
-                      expect(contentPositionChange)
-                        .toHaveBeenCalledWith(viewModel.fullScrollProp, location, scaleRatio);
-                    }
-
-                    if (contentTranslateOffsetChange) {
-                      let expectedContentTranslate = 0;
-                      if (location > 0) {
-                        expectedContentTranslate = location;
-                      } else if (location <= minOffset) {
-                        expectedContentTranslate = location - minOffset;
-                      } else {
-                        expectedContentTranslate = location % 1;
-                      }
-
-                      if (forceGeneratePockets && pullDownEnabled) {
-                        expectedContentTranslate -= topPocketSize;
-                      }
-
-                      expect(contentTranslateOffsetChange).toHaveBeenCalledTimes(1);
-                      expect(contentTranslateOffsetChange)
-                        .toHaveBeenCalledWith({ [viewModel.scrollProp]: expectedContentTranslate });
-                    }
-                  });
+                const viewModel = new Scrollbar({
+                  showScrollbar,
+                  direction,
+                  scaleRatio,
+                  forceGeneratePockets,
+                  pullDownEnabled,
+                  contentPositionChange,
+                  contentTranslateOffsetChange,
+                  topPocketSize,
                 });
+
+                const minOffset = -400;
+                Object.defineProperties(viewModel, {
+                  minOffset: { get() { return minOffset; } },
+                });
+
+                viewModel.scrollLocation = location;
+
+                viewModel.updateContent();
+
+                expect(contentPositionChange).toHaveBeenCalledTimes(1);
+                expect(contentPositionChange)
+                  .toHaveBeenCalledWith(viewModel.fullScrollProp, location, scaleRatio);
+
+                let expectedContentTranslate = 0;
+                if (location > 0) {
+                  expectedContentTranslate = location;
+                } else if (location <= minOffset) {
+                  expectedContentTranslate = location - minOffset;
+                } else {
+                  expectedContentTranslate = location % 1;
+                }
+
+                if (forceGeneratePockets && pullDownEnabled) {
+                  expectedContentTranslate -= topPocketSize;
+                }
+
+                expect(contentTranslateOffsetChange).toHaveBeenCalledTimes(1);
+                expect(contentTranslateOffsetChange)
+                  .toHaveBeenCalledWith({ [viewModel.scrollProp]: expectedContentTranslate });
               });
             });
           });
-        });
-      });
-
-      each([undefined, jest.fn()]).describe('handler: %o', (handler) => {
-        afterEach(() => {
-          jest.clearAllMocks();
-        });
-
-        it('setPocketState(state)', () => {
-          const viewModel = new Scrollbar({
-            showScrollbar,
-            direction,
-            pocketStateChange: handler,
-          } as ScrollbarProps) as any;
-
-          viewModel.setPocketState(TopPocketState.STATE_REFRESHING);
-
-          if (handler) {
-            expect(handler).toHaveBeenCalledTimes(1);
-            expect(handler).toHaveBeenCalledWith(TopPocketState.STATE_REFRESHING);
-          }
-        });
-
-        it('executePullDown()', () => {
-          const viewModel = new Scrollbar({
-            showScrollbar,
-            direction,
-            onPullDown: handler,
-          } as ScrollbarProps) as any;
-
-          viewModel.executePullDown();
-
-          if (handler) {
-            expect(handler).toHaveBeenCalledTimes(1);
-          }
-        });
-
-        it('executeReachBottom()', () => {
-          const viewModel = new Scrollbar({
-            showScrollbar,
-            direction,
-            onReachBottom: handler,
-          } as ScrollbarProps) as any;
-
-          viewModel.executeReachBottom();
-
-          if (handler) {
-            expect(handler).toHaveBeenCalledTimes(1);
-          }
         });
       });
 
@@ -487,14 +474,6 @@ describe('Methods', () => {
       expect(viewModel.getMaxOffset()).toBe(0);
     });
 
-    it('set/get Location(location)', () => {
-      const viewModel = new Scrollbar({ direction });
-
-      viewModel.setLocation(100);
-
-      expect(viewModel.getLocation()).toBe(100);
-    });
-
     it('get axis()', () => {
       const viewModel = new Scrollbar({ direction });
 
@@ -581,20 +560,20 @@ describe('Methods', () => {
     each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
       it('moveScrollbar()', () => {
         const viewModel = new Scrollbar({ direction, scaleRatio }) as any;
-        viewModel.location = 40;
+        viewModel.scrollLocation = 40;
 
         viewModel.moveScrollbar();
 
-        expect(viewModel.getLocation()).toBe(40);
+        expect(viewModel.getScrollLocation()).toBe(40);
       });
 
       it('moveScrollbar(50)', () => {
         const viewModel = new Scrollbar({ direction, scaleRatio }) as any;
-        viewModel.location = 40;
+        viewModel.scrollLocation = 40;
 
         viewModel.moveScrollbar(50);
 
-        expect(viewModel.getLocation()).toBe(50 * scaleRatio);
+        expect(viewModel.getScrollLocation()).toBe(50 * scaleRatio);
       });
     });
 
@@ -685,49 +664,46 @@ describe('Methods', () => {
 
         each([TopPocketState.STATE_RELEASED, TopPocketState.STATE_LOADING,
           TopPocketState.STATE_READY, TopPocketState.STATE_REFRESHING]).describe('pocketState: %o', (pocketState) => {
-          each([undefined, jest.fn()]).describe('releaseHandler: %o', (releaseHandler) => {
-            each([true, false]).describe('isPullDown: %o', (isPullDown) => {
-              it('set correct pocketState on content position change', () => {
-                const pocketStateChangeHandler = jest.fn();
+          each([true, false]).describe('isPullDown: %o', (isPullDown) => {
+            it('set correct pocketState on content position change', () => {
+              const pocketStateChangeHandler = jest.fn();
+              const releaseHandler = jest.fn();
 
-                const viewModel = new Scrollbar({
-                  direction,
-                  forceGeneratePockets,
-                  pocketState,
-                  onRelease: releaseHandler,
-                  pocketStateChange: pocketStateChangeHandler,
-                }) as any;
+              const viewModel = new Scrollbar({
+                direction,
+                forceGeneratePockets,
+                pocketState,
+                onRelease: releaseHandler,
+                pocketStateChange: pocketStateChangeHandler,
+              }) as any;
 
-                viewModel.isPullDown = jest.fn(() => isPullDown);
-                viewModel.isReachBottom = jest.fn(() => isReachBottom);
+              viewModel.isPullDown = jest.fn(() => isPullDown);
+              viewModel.isReachBottom = jest.fn(() => isReachBottom);
 
-                viewModel.moveScrollbar();
+              viewModel.moveScrollbar();
 
-                if (forceGeneratePockets) {
-                  if (isPullDown) {
-                    if (pocketState !== 1) {
-                      expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
-                      expect(pocketStateChangeHandler).toHaveBeenCalledWith(1);
-                      return;
-                    }
-                  } else if (isReachBottom) {
-                    if (pocketState !== 3) {
-                      expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
-                      expect(pocketStateChangeHandler).toHaveBeenCalledWith(3);
-                      return;
-                    }
-                  } else if (pocketState !== 0) {
+              if (forceGeneratePockets) {
+                if (isPullDown) {
+                  if (pocketState !== 1) {
                     expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
-                    expect(pocketStateChangeHandler).toHaveBeenCalledWith(0);
-                    if (releaseHandler) {
-                      expect(releaseHandler).toHaveBeenCalledTimes(1);
-                    }
+                    expect(pocketStateChangeHandler).toHaveBeenCalledWith(1);
                     return;
                   }
+                } else if (isReachBottom) {
+                  if (pocketState !== 3) {
+                    expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
+                    expect(pocketStateChangeHandler).toHaveBeenCalledWith(3);
+                    return;
+                  }
+                } else if (pocketState !== 0) {
+                  expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
+                  expect(pocketStateChangeHandler).toHaveBeenCalledWith(0);
+                  expect(releaseHandler).toHaveBeenCalledTimes(1);
+                  return;
                 }
+              }
 
-                expect(pocketStateChangeHandler).not.toHaveBeenCalled();
-              });
+              expect(pocketStateChangeHandler).not.toHaveBeenCalled();
             });
           });
 
@@ -757,7 +733,7 @@ describe('Methods', () => {
                   if (pocketState === TopPocketState.STATE_READY) {
                     if (pocketState !== TopPocketState.STATE_REFRESHING) {
                       expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
-                      expect(pocketStateChangeHandler).toHaveBeenCalledWith(3);
+                      expect(pocketStateChangeHandler).toHaveBeenCalledWith(2);
                       expect(reachBottomHandler).not.toHaveBeenCalled();
                       expect(pullDownHandler).toHaveBeenCalledTimes(1);
                     } else {
@@ -802,11 +778,9 @@ describe('Methods', () => {
             });
 
             viewModel.scrollLocation = location;
-            viewModel.location = location;
             viewModel.scrollStep = jest.fn();
 
             viewModel.updateMinOffset();
-            viewModel.minLimit = viewModel.minOffset;
             viewModel.scrollBy(delta);
 
             const axis = direction === 'horizontal' ? 'x' : 'y';
@@ -848,167 +822,146 @@ describe('Handlers', () => {
     });
 
     each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
-      each([undefined, jest.fn()]).describe('onInertiaAnimatorStart: %o', (onAnimatorStartHandler) => {
-        it('should start inertia animator on end', () => {
-          const velocity = { x: 10, y: 20 };
-          const e = { ...defaultEvent, velocity };
-          const viewModel = new Scrollbar({ direction, onAnimatorStart: onAnimatorStartHandler });
+      it('should start inertia animator on end', () => {
+        const onAnimatorStart = jest.fn();
+        const velocity = { x: 10, y: 20 };
+        const e = { ...defaultEvent, velocity };
+        const viewModel = new Scrollbar({ direction, onAnimatorStart });
 
-          viewModel.thumbScrolling = thumbScrolling;
-          viewModel.crossThumbScrolling = true;
+        viewModel.thumbScrolling = thumbScrolling;
+        viewModel.crossThumbScrolling = true;
 
-          viewModel.endHandler(e.velocity);
+        viewModel.endHandler(e.velocity);
 
-          if (onAnimatorStartHandler) {
-            expect(onAnimatorStartHandler).toHaveBeenCalledTimes(1);
-            expect(onAnimatorStartHandler).toHaveBeenCalledWith('inertia', velocity[viewModel.axis], thumbScrolling, true);
-          }
-          expect(viewModel.thumbScrolling).toEqual(false);
-          expect(viewModel.crossThumbScrolling).toEqual(false);
-        });
+        expect(onAnimatorStart).toHaveBeenCalledTimes(1);
+        expect(onAnimatorStart).toHaveBeenCalledWith('inertia', velocity[viewModel.axis], thumbScrolling, true);
+        expect(viewModel.thumbScrolling).toEqual(false);
+        expect(viewModel.crossThumbScrolling).toEqual(false);
       });
     });
 
-    each([true, false]).describe('CrossThumbScrolling: %o', (crossThumbScrolling) => {
-      each([undefined, jest.fn()]).describe('onAnimatorCancel: %o', (onAnimatorCancelHandler) => {
-        it('should stop animator on init', () => {
-          const e = { ...defaultEvent };
-          const viewModel = new Scrollbar({ direction, onAnimatorCancel: onAnimatorCancelHandler });
+    test.each(getPermutations([
+      optionValues.isDxWheelEvent,
+      [true, false],
+      optionValues.scrollByThumb,
+      ['dx-scrollable-scroll', 'dx-scrollable-scrollbar'],
+      optionValues.showScrollbar,
+    ]))('initHandler(e, crossThumbScrolling), isDxWheelEvent: %o, crossThumbScrolling: %o, scrollByThumb: %o, targetClass: %, showScrollbar: %o',
+      (isDxWheelEvent, crossThumbScrolling, scrollByThumb, targetClass, showScrollbar) => {
+        const onAnimatorCancel = jest.fn();
+        const e = { ...defaultEvent, originalEvent: {} };
+        if (isDxWheelEvent) {
+          (e as any).originalEvent.type = 'dxmousewheel';
+        }
 
-          viewModel.prepareThumbScrolling = jest.fn();
-
-          viewModel.initHandler(e, true);
-
-          if (onAnimatorCancelHandler) {
-            expect(onAnimatorCancelHandler).toHaveBeenCalledTimes(1);
-          }
-
-          expect(viewModel.visibility).toEqual(false);
+        const viewModel = new Scrollbar({
+          direction,
+          showScrollbar,
+          scrollByThumb,
+          onAnimatorCancel,
         });
+
+        const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
+
+        viewModel.moveToMouseLocation = jest.fn();
+        (e.originalEvent as any).target = scrollbar.find(`.${targetClass}`).getDOMNode();
+        (viewModel as any).scrollbarRef = { current: scrollbar.getDOMNode() };
+
+        viewModel.initHandler(e, crossThumbScrolling);
+
+        const isScrollbarClicked = (targetClass !== 'dx-scrollable-scroll' && scrollByThumb);
+
+        let expectedShowOnScrollByWheel;
+        let expectedThumbScrolling = false;
+        let expectedCrossThumbScrolling = crossThumbScrolling;
+
+        if (isDxWheelEvent || !isScrollbarClicked) {
+          expect(viewModel.moveToMouseLocation).toBeCalledTimes(0);
+        } else {
+          expect(viewModel.moveToMouseLocation).toBeCalledTimes(1);
+          expect(viewModel.moveToMouseLocation).toHaveBeenCalledWith(e);
+        }
+
+        if (isDxWheelEvent) {
+          expectedThumbScrolling = false;
+          expectedCrossThumbScrolling = false;
+
+          if (showScrollbar === 'onScroll') {
+            expectedShowOnScrollByWheel = true;
+          }
+        } else {
+          expectedThumbScrolling = isScrollbarClicked || (scrollByThumb && targetClass === 'dx-scrollable-scroll');
+          expectedCrossThumbScrolling = !expectedThumbScrolling && crossThumbScrolling;
+          expectedShowOnScrollByWheel = undefined;
+        }
+
+        expect(viewModel.showOnScrollByWheel).toEqual(expectedShowOnScrollByWheel);
+        expect(viewModel.thumbScrolling).toEqual(expectedThumbScrolling);
+        expect(viewModel.crossThumbScrolling).toEqual(expectedCrossThumbScrolling);
+        expect(onAnimatorCancel).toHaveBeenCalledTimes(1);
+        expect(viewModel.visibility).toEqual(false);
       });
 
-      each([true, false]).describe('ScrollByThumb: %o', (scrollByThumb) => {
-        each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
-          each(['dx-scrollable-scroll', 'dx-scrollable-scrollbar']).describe('Event target: %o', (targetClass) => {
-            each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
-              it('initHandler(e, crossThumbScrolling)', () => {
-                const e = { ...defaultEvent, originalEvent: {} };
-                if (isDxWheelEvent) {
-                  (e as any).originalEvent.type = 'dxmousewheel';
-                }
+    it('change visibility scrollbar state on scrollstart', () => {
+      const viewModel = new Scrollbar({ direction } as ScrollbarProps);
 
-                const viewModel = new Scrollbar({
-                  direction,
-                  showScrollbar,
-                  scrollByThumb,
-                } as ScrollbarProps);
+      viewModel.startHandler();
 
-                const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
+      expect(viewModel.visibility).toBe(true);
+    });
 
-                viewModel.moveToMouseLocation = jest.fn();
+    test.each([true, false])('scrollByHandler(delta), inBounds: %o,', (inBounds) => {
+      const onInertiaAnimatorStart = jest.fn();
+      const delta = { x: 50, y: 70 };
+      const viewModel = new Scrollbar({
+        direction,
+        onAnimatorStart: onInertiaAnimatorStart,
+      });
 
-                (e.originalEvent as any).target = scrollbar.find(`.${targetClass}`).getDOMNode();
-                (viewModel as any).scrollbarRef = { current: scrollbar.getDOMNode() };
-                viewModel.initHandler(e, crossThumbScrolling);
+      viewModel.scrollBy = jest.fn();
+      viewModel.inBounds = () => inBounds;
 
-                const isScrollbarClicked = (targetClass !== 'dx-scrollable-scroll' && scrollByThumb);
+      viewModel.scrollByHandler(delta);
 
-                if (isDxWheelEvent || !isScrollbarClicked) {
-                  expect(viewModel.moveToMouseLocation).toBeCalledTimes(0);
-                } else {
-                  expect(viewModel.moveToMouseLocation).toBeCalledTimes(1);
-                  expect(viewModel.moveToMouseLocation).toHaveBeenCalledWith(e);
-                }
+      expect(viewModel.scrollBy).toBeCalledTimes(1);
+      expect(viewModel.scrollBy).toHaveBeenCalledWith(delta);
 
-                if (isDxWheelEvent) {
-                  expect(viewModel.thumbScrolling).toBe(false);
-                  expect(viewModel.crossThumbScrolling).toBe(false);
+      if (inBounds) {
+        expect(onInertiaAnimatorStart).toHaveBeenCalledTimes(0);
+      } else {
+        expect(onInertiaAnimatorStart).toHaveBeenCalledTimes(1);
+        expect(onInertiaAnimatorStart).toHaveBeenCalledWith('bounce');
+      }
+    });
 
-                  if (showScrollbar === 'onScroll') {
-                    expect(viewModel.showOnScrollByWheel).toBe(true);
-                  }
-                } else {
-                  const expectedThumbScrolling = isScrollbarClicked || (scrollByThumb && targetClass === 'dx-scrollable-scroll');
-
-                  expect(viewModel.thumbScrolling).toBe(expectedThumbScrolling);
-                  expect(viewModel.crossThumbScrolling)
-                    .toBe(!expectedThumbScrolling && crossThumbScrolling);
-
-                  expect(viewModel.showOnScrollByWheel).toBe(undefined);
-                }
-              });
-            });
-          });
-        });
-
-        it('change visibility scrollbar state on scrollstart', () => {
-          const viewModel = new Scrollbar({ direction } as ScrollbarProps);
-
-          viewModel.startHandler();
-
-          expect(viewModel.visibility).toBe(true);
-        });
-
+    each([true, false]).describe('CrossThumbScrolling: %o', (crossThumbScrolling) => {
+      each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
         each([true, false]).describe('inBound: %o', (inBounds) => {
-          afterEach(() => {
-            jest.clearAllMocks();
-          });
+          it('stopHandler()', () => {
+            const onBounceAnimatorStartHandler = jest.fn();
 
-          each([undefined, jest.fn()]).describe('BounceAnimatorStart: %o', (animatorStartHandler) => {
-            it('scrollByHandler(delta)', () => {
-              const delta = { x: 50, y: 70 };
-              const viewModel = new Scrollbar({
-                direction,
-                onAnimatorStart: animatorStartHandler,
-              } as ScrollbarProps);
-
-              (viewModel as any).scrollBy = jest.fn();
-              (viewModel as any).inBounds = () => inBounds;
-
-              viewModel.scrollByHandler(delta);
-
-              expect((viewModel as any).scrollBy).toBeCalledTimes(1);
-              expect((viewModel as any).scrollBy).toHaveBeenCalledWith(delta);
-              if (inBounds) {
-                if (animatorStartHandler) {
-                  expect(animatorStartHandler).toHaveBeenCalledTimes(0);
-                }
-              } else if (animatorStartHandler) {
-                expect(animatorStartHandler).toHaveBeenCalledTimes(1);
-                expect(animatorStartHandler).toHaveBeenCalledWith('bounce');
-              }
+            const viewModel = new Scrollbar({
+              direction,
+              onAnimatorStart: onBounceAnimatorStartHandler,
             });
-          });
 
-          each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
-            each([undefined, jest.fn()]).describe('BounceAnimatorStart: %o', (onBounceAnimatorStartHandler) => {
-              it('stopHandler()', () => {
-                const viewModel = new Scrollbar({
-                  direction,
-                  onAnimatorStart: onBounceAnimatorStartHandler,
-                } as ScrollbarProps);
+            viewModel.thumbScrolling = thumbScrolling;
+            viewModel.crossThumbScrolling = true;
+            viewModel.inBounds = () => inBounds;
 
-                viewModel.thumbScrolling = thumbScrolling;
-                viewModel.crossThumbScrolling = true;
+            viewModel.stopHandler();
 
-                (viewModel as any).inBounds = () => inBounds;
-                (viewModel as any).bounceAnimator = undefined;
+            expect(viewModel.thumbScrolling).toEqual(false);
+            expect(viewModel.crossThumbScrolling).toEqual(false);
 
-                viewModel.stopHandler();
-
-                expect(viewModel.thumbScrolling).toEqual(false);
-                expect(viewModel.crossThumbScrolling).toEqual(false);
-
-                if (!inBounds && onBounceAnimatorStartHandler) {
-                  expect(onBounceAnimatorStartHandler).toHaveBeenCalledTimes(1);
-                  expect(onBounceAnimatorStartHandler).toHaveBeenCalledWith('bounce');
-                }
-              });
-            });
+            if (!inBounds) {
+              expect(onBounceAnimatorStartHandler).toHaveBeenCalledTimes(1);
+              expect(onBounceAnimatorStartHandler).toHaveBeenCalledWith('bounce');
+            }
           });
         });
 
-        each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
+        each([true, false]).describe('ScrollByThumb: %o', (scrollByThumb) => {
           each([{ x: 30, y: 35 }, { x: 10, y: 40 }]).describe('Event.Delta: %o', (delta) => {
             each([0, 0.2, 0.5, 1]).describe('containerToContentRatio: %o', (containerToContentRatio) => {
               it('moveHandler(e.delta)', () => {
@@ -1019,8 +972,7 @@ describe('Handlers', () => {
 
                 mount(ScrollbarComponent(viewModel as any) as JSX.Element);
 
-                const scrollByHandler = jest.fn();
-                (viewModel as any).scrollBy = scrollByHandler;
+                viewModel.scrollBy = jest.fn();
                 Object.defineProperties(viewModel, {
                   containerToContentRatio: { get() { return containerToContentRatio; } },
                 });
@@ -1031,7 +983,7 @@ describe('Handlers', () => {
                 viewModel.moveHandler(delta);
 
                 if (crossThumbScrolling) {
-                  expect(scrollByHandler).toBeCalledTimes(0);
+                  expect(viewModel.scrollBy).toBeCalledTimes(0);
                   return;
                 }
 
@@ -1041,12 +993,114 @@ describe('Handlers', () => {
                   expectedDelta[axis] = -expectedDelta[axis] / containerToContentRatio;
                 }
 
-                expect(scrollByHandler).toBeCalledTimes(1);
-                expect(scrollByHandler).toHaveBeenCalledWith(expectedDelta);
+                expect(viewModel.scrollBy).toBeCalledTimes(1);
+                expect(viewModel.scrollBy).toHaveBeenCalledWith(expectedDelta);
               });
             });
           });
         });
+      });
+    });
+  });
+});
+
+describe('Action handlers', () => {
+  each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    each([undefined, jest.fn()]).describe('handler: %o', (actionHandler) => {
+      it('onInertiaAnimatorStart()', () => {
+        const viewModel = new Scrollbar({ direction, showScrollbar: 'always', onAnimatorStart: actionHandler });
+
+        const velocity = 0.15;
+        viewModel.thumbScrolling = true;
+        viewModel.crossThumbScrolling = false;
+
+        viewModel.onInertiaAnimatorStart(velocity);
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+          expect(actionHandler).toHaveBeenCalledWith('inertia', 0.15, true, false);
+        }
+      });
+
+      it('onBounceAnimatorStart()', () => {
+        const viewModel = new Scrollbar({ direction, showScrollbar: 'always', onAnimatorStart: actionHandler });
+
+        viewModel.thumbScrolling = true;
+        viewModel.crossThumbScrolling = false;
+
+        viewModel.onBounceAnimatorStart();
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+          expect(actionHandler).toHaveBeenCalledWith('bounce');
+        }
+      });
+
+      it('onAnimatorCancel()', () => {
+        const viewModel = new Scrollbar({ direction, showScrollbar: 'always', onAnimatorCancel: actionHandler });
+
+        viewModel.onAnimatorCancel();
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+        }
+      });
+
+      it('onRelease()', () => {
+        const viewModel = new Scrollbar({ direction, showScrollbar: 'always', onRelease: actionHandler });
+
+        viewModel.onRelease();
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+        }
+      });
+
+      it('setPocketState(state)', () => {
+        const viewModel = new Scrollbar({
+          showScrollbar: 'always',
+          direction,
+          pocketStateChange: actionHandler,
+        } as ScrollbarProps) as any;
+
+        viewModel.setPocketState(TopPocketState.STATE_REFRESHING);
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+          expect(actionHandler).toHaveBeenCalledWith(TopPocketState.STATE_REFRESHING);
+        }
+      });
+
+      it('onPullDown()', () => {
+        const viewModel = new Scrollbar({
+          showScrollbar: 'always',
+          direction,
+          onPullDown: actionHandler,
+        } as ScrollbarProps) as any;
+
+        viewModel.onPullDown();
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+        }
+      });
+
+      it('onReachBottom()', () => {
+        const viewModel = new Scrollbar({
+          showScrollbar: 'always',
+          direction,
+          onReachBottom: actionHandler,
+        } as ScrollbarProps) as any;
+
+        viewModel.onReachBottom();
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+        }
       });
     });
   });

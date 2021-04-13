@@ -19,7 +19,6 @@ import {
   SCROLLVIEW_PULLDOWN_IMAGE_CLASS,
   SCROLLVIEW_PULLDOWN_INDICATOR_CLASS,
   SCROLLVIEW_PULLDOWN_READY_CLASS,
-  SCROLLVIEW_PULLDOWN_REFRESHING_CLASS,
   SCROLLVIEW_PULLDOWN_LOADING_CLASS,
   SCROLLVIEW_PULLDOWN_TEXT_CLASS,
   SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS,
@@ -34,12 +33,12 @@ export const viewFunction = (viewModel: TopPocket): JSX.Element => {
   const {
     releaseVisibleClass, readyVisibleClass, refreshVisibleClass,
     pullDownClasses, pullingDownText, pulledDownText, refreshingText,
-    pullDownStyles, pullDownIconStyles, pullDownRef,
+    pullDownStyles, pullDownIconStyles, pullDownRef, topPocketStyles,
     props: { topPocketRef, refreshStrategy },
   } = viewModel;
 
   return (
-    <div ref={topPocketRef} className={SCROLLVIEW_TOP_POCKET_CLASS}>
+    <div ref={topPocketRef} className={SCROLLVIEW_TOP_POCKET_CLASS} style={topPocketStyles}>
       <div ref={pullDownRef} className={pullDownClasses} style={pullDownStyles}>
         { refreshStrategy !== 'swipeDown' && <div className={SCROLLVIEW_PULLDOWN_IMAGE_CLASS} /> }
         { refreshStrategy === 'swipeDown' && <div className={PULLDOWN_ICON_CLASS} style={pullDownIconStyles} />}
@@ -78,13 +77,17 @@ export class TopPocketProps {
 
   @OneWay() pocketState: number = TopPocketState.STATE_RELEASED;
 
+  @OneWay() pullDownTop = 0;
+
   @OneWay() pullDownTopOffset = 0;
 
   @OneWay() pullDownIconAngle = 0;
 
   @OneWay() pullDownOpacity = 0;
 
-  @OneWay() isFakeRefreshState = false;
+  @OneWay() pocketTop = 0;
+
+  @OneWay() topPocketTranslateTop = 0;
 }
 
 export type TopPocketPropsType = TopPocketProps & Pick<BaseWidgetProps, 'visible'>;
@@ -109,7 +112,7 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
   }
 
   get refreshVisibleClass(): string | undefined {
-    return this.props.pocketState === TopPocketState.STATE_LOADING
+    return this.props.pocketState === TopPocketState.STATE_REFRESHING
       ? SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS
       : undefined;
   }
@@ -150,9 +153,7 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
     const classesMap = {
       [SCROLLVIEW_PULLDOWN]: true,
       [SCROLLVIEW_PULLDOWN_READY_CLASS]: pocketState === TopPocketState.STATE_READY,
-      [SCROLLVIEW_PULLDOWN_REFRESHING_CLASS]: pocketState === TopPocketState.STATE_REFRESHING
-        || this.props.isFakeRefreshState,
-      [SCROLLVIEW_PULLDOWN_LOADING_CLASS]: pocketState === TopPocketState.STATE_LOADING,
+      [SCROLLVIEW_PULLDOWN_LOADING_CLASS]: pocketState === TopPocketState.STATE_REFRESHING,
       'dx-state-invisible': !visible,
     };
 
@@ -164,6 +165,17 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
       return {
         opacity: this.props.pullDownOpacity,
         transform: `translate(0px, ${this.props.pullDownTopOffset}px)`,
+      };
+    }
+
+    return undefined;
+  }
+
+  get topPocketStyles(): { [key: string]: string | number } | undefined {
+    if (this.props.refreshStrategy === 'pullDown') {
+      return {
+        top: `${this.props.pocketTop}px`,
+        transform: `translate(0px, ${this.props.topPocketTranslateTop}px)`,
       };
     }
 
