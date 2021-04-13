@@ -1434,6 +1434,7 @@ QUnit.module('T986577', () => {
         const $form = $('#form').dxForm(config);
 
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
+        assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), true, 'menu button is hidden');
     });
 
@@ -1443,6 +1444,7 @@ QUnit.module('T986577', () => {
         const $form = $('#form').dxForm(config);
 
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
+        assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
         assert.equal($toolbarMenuButton.hasClass(INVISIBLE_CLASS), false, 'menu button is visible');
     });
 });
