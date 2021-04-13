@@ -1433,7 +1433,20 @@ QUnit.module('T986577', () => {
     QUnit.test('HtmlEditor with Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
         const config = extend({ alignItemLabels: false }, getFormConfig());
         assert.equal(JSON.stringify(config), 1, 'config');
-        const $form = $('#form').dxForm(config);
+        const $form = $('#form').dxForm({
+            alignItemLabels: false,
+            width: 220,
+            items: [ {
+                label: { text: 'text' },
+                editorType: 'dxHtmlEditor',
+                editorOptions: {
+                    toolbar: { multiline: false, items: [ 'bold', 'italic', 'strike' ] }
+                }
+            }, {
+                label: { text: 'Very very long text' },
+                editorType: 'dxTextBox'
+            } ]
+        });
 
         const $toolbarMenuButton = $form.find(`.${TOOLBAR_CLASS} .${TOOLBAR_MENU_CONTAINER}`);
         assert.equal($toolbarMenuButton.length, 1, 'menu button is rendered');
