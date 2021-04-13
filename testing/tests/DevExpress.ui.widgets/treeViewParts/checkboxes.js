@@ -216,7 +216,7 @@ QUnit.test('T195986', function(assert) {
 ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
     ['multiple', 'single'].forEach((selectionMode) => {
         [false, true].forEach((selectNodesRecursive) => {
-            QUnit.test(`Click by checkbox. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
+            QUnit.test(`All deselected -> select middle level item. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
                 const wrapper = new TreeViewTestWrapper({
                     showCheckBoxesMode, selectNodesRecursive, selectionMode,
                     items: [ { text: 'item1', expanded: true, items: [
@@ -240,29 +240,58 @@ QUnit.test('T195986', function(assert) {
 
                 wrapper.checkEventLog(expectedLog, 'after click by item1_1 checkbox');
             });
+
+            QUnit.test(`All selected -> deselect middle level item. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
+                const wrapper = new TreeViewTestWrapper({
+                    showCheckBoxesMode, selectNodesRecursive, selectionMode,
+                    items: [ { text: 'item1', selected: true, expanded: true, items: [
+                        { text: 'item1_1', selected: true, expanded: true, items: [ { text: 'item1_1_1' } ] },
+                        { text: 'item1_2', selected: true, expanded: true, items: [ { text: 'item1_2_1' } ] } ]
+                    } ],
+                });
+
+                wrapper.getElement()
+                    .find('[aria-label="item1_1"] .dx-checkbox')
+                    .eq(0).trigger('dxclick');
+
+                let expectedLog;
+                if(showCheckBoxesMode === 'none') {
+                    expectedLog = [];
+                } else if(selectionMode === 'single') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                } else if(showCheckBoxesMode === 'normal') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged'];
+                } else if(showCheckBoxesMode === 'selectAll') {
+                    expectedLog = selectNodesRecursive === false
+                        ? ['itemSelectionChanged', 'selectionChanged']
+                        : ['itemSelectionChanged', 'selectionChanged', 'selectAllValueChanged'];
+                }
+
+                wrapper.checkEventLog(expectedLog, 'after click by item1_1 checkbox');
+            });
         });
     });
 });
 
 QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
-    let eventValue;
+    const selectAllValueChangedLog = [];
     const wrapper = new TreeViewTestWrapper({
         showCheckBoxesMode: 'selectAll',
         items: [ { text: 'item1', expanded: true, items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
-        onSelectAllValueChanged: (args) => { eventValue = args.value; }
+        onSelectAllValueChanged: (args) => { selectAllValueChangedLog.push(args.value); }
     });
     const clickByItemCheckbox = (item) => wrapper.getElement()
         .find(`[aria-label="${item}"] .dx-checkbox`)
         .eq(0).trigger('dxclick');
 
     clickByItemCheckbox('item1_1');
-    assert.equal(eventValue, undefined, 'after click by item1_1');
+    assert.deepEqual(selectAllValueChangedLog, [undefined], 'after click by item1_1');
 
     clickByItemCheckbox('item1_2');
-    assert.equal(eventValue, true, 'after click by item1_2');
+    assert.deepEqual(selectAllValueChangedLog, [undefined, true], 'after click by item1_2');
 
     clickByItemCheckbox('item1');
-    assert.equal(eventValue, false, 'after click by item1');
+    assert.deepEqual(selectAllValueChangedLog, [undefined, true, false], 'after click by item1');
 });
 
 QUnit.test('Selection works correct with custom rootValue', function(assert) {
