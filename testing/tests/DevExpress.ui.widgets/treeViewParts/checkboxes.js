@@ -258,7 +258,7 @@ QUnit.test('T195986', function(assert) {
                 if(showCheckBoxesMode === 'none') {
                     expectedLog = [];
                 } else if(selectionMode === 'single') {
-                    expectedLog = ['itemSelectionChanged', 'selectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                    expectedLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
                 } else if(showCheckBoxesMode === 'normal') {
                     expectedLog = ['itemSelectionChanged', 'selectionChanged'];
                 } else if(showCheckBoxesMode === 'selectAll') {
@@ -689,7 +689,7 @@ configs.forEach(config => {
             if(config.selectionMode === 'single') {
                 expectedKeys = [0];
                 expectedNodes = [0];
-                expectedEventLog = ['itemSelectionChanged', 'selectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
             }
             if(!config.expanded) {
                 // unexpected result
@@ -1119,7 +1119,7 @@ QUnit.test('3 one-level items.selected: true. Selection mode: single -> selectIt
 
     wrapper.instance.selectItem(0);
     wrapper.checkSelection([0], [0]);
-    wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged', 'itemSelectionChanged', 'selectionChanged']);
+    wrapper.checkEventLog(['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged']);
 });
 
 QUnit.module('Delayed datasource', () => {

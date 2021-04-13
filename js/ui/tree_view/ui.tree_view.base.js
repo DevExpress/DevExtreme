@@ -1175,7 +1175,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this._updateItemsUI();
 
                 this._fireItemSelectionChanged(this._getNode(key));
-                this._fireSelectionChanged();
             });
         }
 
