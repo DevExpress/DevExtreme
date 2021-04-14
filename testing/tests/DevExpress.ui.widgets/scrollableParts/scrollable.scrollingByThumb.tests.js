@@ -382,7 +382,7 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for s
     const $scrollableContainer = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
     const $wrapScrollableContainer = $('.' + SCROLLABLE_CONTAINER_CLASS, $wrapScrollable).not($scrollableContainer);
     const $scrollableScroll = $scrollableContainer.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
-    const $wrapScrollableScroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
+    const $wrapScrollableScroll = $wrapScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
 
     $wrapScrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
     $scrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
@@ -437,7 +437,7 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
     const $wrapScrollableContainer = $('.' + SCROLLABLE_CONTAINER_CLASS, $wrapScrollable).not($scrollableContainer);
 
     const $scrollableScroll = $scrollableContainer.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
-    const $wrapScrollableScroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
+    const $wrapScrollableScroll = $wrapScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
 
     // enter outer
     $wrapScrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
