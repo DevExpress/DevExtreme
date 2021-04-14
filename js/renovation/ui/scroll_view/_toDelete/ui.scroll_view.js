@@ -27,10 +27,6 @@ const scrollViewServerConfig = {
 };
 
 const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
-    _init: function() {
-        this.callBase();
-    },
-
     _createStrategy: function() {
         const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
         // eslint-disable-next-line no-undef
