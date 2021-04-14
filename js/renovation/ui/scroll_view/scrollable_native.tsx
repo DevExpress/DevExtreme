@@ -40,7 +40,7 @@ import { isDxMouseWheelEvent } from '../../../events/utils/index';
 
 import {
   ensureLocation, normalizeCoordinate,
-  getElementLocation, getPublicCoordinate, getBoundaryProps,
+  getLocation, getPublicCoordinate, getBoundaryProps,
 } from './scrollable_utils';
 
 import {
@@ -263,7 +263,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @Method()
   update(): void {
     this.updateSizes();
-    this.props.onUpdated?.(this.getEventArgs());
+    this.onUpdated();
   }
 
   @Method()
@@ -351,36 +351,39 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-    if (element === undefined || element === null) {
+    if (!isDefined(element)) {
       return;
     }
 
     if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
-      const scrollOffset = {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        ...(offset as Partial<ScrollOffset>),
-      };
+      const top = this.getElementLocation(element, DIRECTION_VERTICAL, offset);
+      const left = this.getElementLocation(element, DIRECTION_HORIZONTAL, offset);
 
-      this.scrollTo({
-        top: getElementLocation(
-          element,
-          scrollOffset,
-          DIRECTION_VERTICAL,
-          this.containerRef.current!,
-          this.props.rtlEnabled,
-        ),
-        left: getElementLocation(
-          element,
-          scrollOffset,
-          DIRECTION_HORIZONTAL,
-          this.containerRef.current!,
-          this.props.rtlEnabled,
-        ),
-      });
+      this.scrollTo({ top, left });
     }
+  }
+
+  @Method()
+  getElementLocation(
+    element: HTMLElement,
+    direction: ScrollableDirection,
+    offset?: Partial<ScrollOffset>,
+  ): number {
+    const scrollOffset = {
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      ...(offset as Partial<ScrollOffset>),
+    };
+
+    return getLocation(
+      element,
+      scrollOffset,
+      direction,
+      this.containerRef.current!,
+      this.props.rtlEnabled,
+    );
   }
 
   @Method()

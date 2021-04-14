@@ -819,27 +819,14 @@ describe('Simulated > Behavior', () => {
       });
 
       describe('Validate(e)', () => {
-        it('disabled: true', () => {
-          const e = { ...defaultEvent } as any;
-          const scrollable = new Scrollable({ disabled: true });
-
-          expect(scrollable.validate(e)).toEqual(false);
-        });
-
-        it('locked: true, disabled: false', () => {
-          const e = { ...defaultEvent } as any;
-          const scrollable = new Scrollable({ disabled: false });
-          scrollable.locked = true;
-
-          expect(scrollable.validate(e)).toEqual(false);
-        });
-
         it('locked: true, disabled: false, bounceEnabled: true, ', () => {
           const e = { ...defaultEvent } as any;
-          const scrollable = new Scrollable({ disabled: false, bounceEnabled: true });
-          scrollable.locked = false;
+          const viewModel = new Scrollable({ direction, disabled: false, bounceEnabled: true });
+          viewModel.locked = false;
+          viewModel.update = jest.fn();
 
-          expect(scrollable.validate(e)).toEqual(true);
+          expect(viewModel.validate(e)).toEqual(true);
+          expect(viewModel.update).toHaveBeenCalledTimes(1);
         });
 
         each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
@@ -1224,7 +1211,6 @@ describe('Simulated > Behavior', () => {
 
         helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
         helper.viewModel.updateSizes = jest.fn();
-
         helper.viewModel.update();
 
         if (actionHandler) {

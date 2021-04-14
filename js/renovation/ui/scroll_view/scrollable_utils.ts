@@ -148,7 +148,7 @@ function getElementLocationInternal(
   return containerLocation;
 }
 
-export function getElementLocation(
+export function getLocation(
   element: HTMLElement,
   offset: ScrollOffset,
   direction: ScrollableDirection,
