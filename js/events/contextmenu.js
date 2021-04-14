@@ -24,7 +24,7 @@ const ContextMenu = Class.inherit({
 
         if(touch || devices.isSimulator()) {
             eventsEngine.on($element, HOLD_NAMESPACED_EVENT_NAME, this._holdHandler.bind(this));
-            eventsEngine.on($element, 'contextmenu', (e) => {
+            eventsEngine.on($element, CONTEXTMENU_NAMESPACED_EVENT_NAME, (e) => {
                 e.preventDefault();
             });
         }
