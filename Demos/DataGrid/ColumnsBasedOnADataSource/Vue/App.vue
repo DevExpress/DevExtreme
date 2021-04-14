@@ -2,6 +2,7 @@
   <DxDataGrid
     id="grid"
     :data-source="dataSource"
+    key-expr="OrderNumber"
     :show-borders="true"
   />
 </template>

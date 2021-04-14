@@ -8,6 +8,7 @@ class App extends React.Component {
       <DataGrid
         id="grid"
         dataSource={orders}
+        keyExpr="OrderNumber"
         showBorders={true}
       />
     );

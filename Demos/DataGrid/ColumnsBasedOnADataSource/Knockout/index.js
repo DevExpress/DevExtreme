@@ -2,6 +2,7 @@ window.onload = function() {
     var viewModel = {
     	gridOptions: {
             dataSource: orders,
+            keyExpr: "OrderNumber",
             showBorders: true
     	}
     };
