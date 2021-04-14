@@ -522,10 +522,8 @@ QUnit.module('format rendering', () => {
 
         QUnit.test('hour numberbox should have correct value after some incorrect values applyings (T986347)', function(assert) {
             const $element = $('#timeView').dxTimeView({ use24HourFormat });
-            const timeView = $element.dxTimeView('instance');
             const maxValue = use24HourFormat ? 23 : 12;
 
-            timeView.option(use24HourFormat);
             const $hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0);
             const hourNumberBox = $hourNumberBox.dxNumberBox('instance');
 
@@ -534,16 +532,16 @@ QUnit.module('format rendering', () => {
 
             kb.caret({ start: 0, end: 2 })
                 .type('30')
-                .blur();
-
+                .change();
 
             kb.caret({ start: 0, end: 2 })
-                .press('30')
-                .blur();
+                .type('30')
+                .change();
 
             const text = hourNumberBox.option('text');
+            const value = hourNumberBox.option('value');
             assert.ok(text <= maxValue, `current text value is ${text}; expected max is ${maxValue}`);
-            assert.ok(hourNumberBox.option('value') <= maxValue, `current value is ${text}; expected max is ${maxValue}`);
+            assert.ok(value <= maxValue, `current value is ${value}; expected max is ${maxValue}`);
         });
     });
 });
