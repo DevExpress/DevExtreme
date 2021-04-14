@@ -8,18 +8,75 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 import DxDataGrid from '../../../../../ui/data_grid';
-import type { Options, dxDataGridColumn, dxDataGridRowObject } from '../../../../../ui/data_grid';
+import type {
+  Options,
+  Column,
+  RowObject,
+  ColumnButtonClickEvent,
+  ColumnButtonTemplateData,
+  ColumnCustomizeTextArg,
+  RowDraggingAddEvent,
+  RowDraggingChangeEvent,
+  CustomSummaryInfo,
+  ColumnCellTemplateData,
+  RowDraggingTemplateData,
+  ColumnEditCellTemplateData,
+  ColumnGroupCellTemplateData,
+  ColumnHeaderCellTemplateData,
+  MasterDetailTemplateData,
+  SummaryItemTextInfo,
+  AdaptiveDetailRowPreparingEvent,
+  CellClickEvent,
+  CellDblClickEvent,
+  CellHoverChangedEvent,
+  CellPreparedEvent,
+  ContextMenuPreparingEvent,
+  ExcelCellInfo,
+  DataErrorOccurredEvent,
+  RowDraggingEndEvent,
+  RowDraggingMoveEvent,
+  RowDraggingStartEvent,
+  EditingStartEvent,
+  EditorPreparedEvent,
+  EditorPreparingEvent,
+  ExportedEvent,
+  ExportingEvent,
+  FileSavingEvent,
+  FilterPanelCustomizeTextArg,
+  FocusedCellChangedEvent,
+  FocusedCellChangingEvent,
+  FocusedRowChangedEvent,
+  FocusedRowChangingEvent,
+  InitNewRowEvent,
+  KeyDownEvent,
+  RowDraggingRemoveEvent,
+  RowDraggingReorderEvent,
+  RowClickEvent,
+  RowCollapsedEvent,
+  RowCollapsingEvent,
+  RowDblClickEvent,
+  RowExpandedEvent,
+  RowExpandingEvent,
+  RowInsertedEvent,
+  RowInsertingEvent,
+  RowPreparedEvent,
+  RowRemovedEvent,
+  RowRemovingEvent,
+  RowUpdatedEvent,
+  RowUpdatingEvent,
+  RowValidatingEvent,
+  SelectionChangedEvent,
+  ToolbarPreparingEvent,
+} from '../../../../../ui/data_grid';
 import { BaseWidgetProps } from '../../../common/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../../ui/filter_builder';
 import { TPromise } from '../../../../../core/utils/deferred'; // eslint-disable-line import/named
 import type { TElement } from '../../../../../core/element'; // eslint-disable-line import/named
 import type { template } from '../../../../../core/templates/template';
-import type { EventExtension, TEvent } from '../../../../../events/index';
 import DataSource from '../../../../../data/data_source';
 import type { DataSourceOptions } from '../../../../../data/data_source';
 import type { dxPopupOptions } from '../../../../../ui/popup';
-import type { dxToolbarOptions } from '../../../../../ui/toolbar';
 import type {
   RequiredRule,
   NumericRule,
@@ -33,12 +90,9 @@ import type {
 // eslint-disable-next-line import/extensions
 } from '../../../../../ui/validation_rules';
 import type { format } from '../../../../../ui/widget/ui.widget';
-import type dxSortable from '../../../../../ui/sortable';
-import type dxDraggable from '../../../../../ui/draggable';
 import type { dxFormSimpleItem, dxFormOptions } from '../../../../../ui/form';
 import type Store from '../../../../../data/abstract_store';
-import type { ExcelDataGridCell } from '../../../../../excel_exporter';
-import type { ExcelFont } from '../../../../../exporter/excel/excel.doc_comments';
+import messageLocalization from '../../../../../localization/message';
 
 @ComponentBindings()
 export class DataGridColumnButton {
@@ -47,31 +101,14 @@ export class DataGridColumnButton {
 
   @Event()
   onClick?:
-  | ((e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    event?: TEvent;
-    row?: dxDataGridRowObject;
-    column?: dxDataGridColumn;
-  }) => any)
-  | string;
+  | ((e: ColumnButtonClickEvent) => any);
 
   @OneWay()
   template?:
   | template
   | ((
     cellElement: TElement,
-    cellInfo: {
-      component?: DxDataGrid;
-      data?: any;
-      key?: any;
-      columnIndex?: number;
-      column?: dxDataGridColumn;
-      rowIndex?: number;
-      rowType?: string;
-      row?: dxDataGridRowObject;
-    },
+    cellInfo: ColumnButtonTemplateData,
   ) => string | TElement);
 
   @OneWay()
@@ -79,8 +116,8 @@ export class DataGridColumnButton {
   | boolean
   | ((options: {
     component?: DxDataGrid;
-    row?: dxDataGridRowObject;
-    column?: dxDataGridColumn;
+    row?: RowObject;
+    column?: Column;
   }) => boolean);
 }
 
@@ -130,7 +167,7 @@ export class DataGridColumnLookup {
 @ComponentBindings()
 export class DataGridColumn {
   @OneWay()
-  alignment?: 'center' | 'left' | 'right' | undefined;
+  alignment?: 'center' | 'left' | 'right';
 
   @OneWay()
   allowEditing?: boolean;
@@ -182,12 +219,7 @@ export class DataGridColumn {
   cssClass?: string;
 
   @Event()
-  customizeText?: (cellInfo: {
-    value?: string | number | Date;
-    valueText?: string;
-    target?: string;
-    groupInterval?: string | number;
-  }) => string;
+  customizeText?: (cellInfo: ColumnCustomizeTextArg) => string;
 
   @OneWay()
   dataField?: string;
@@ -297,7 +329,7 @@ export class DataGridColumn {
   sortIndex?: number;
 
   @OneWay()
-  sortOrder?: 'asc' | 'desc' | undefined;
+  sortOrder?: 'asc' | 'desc';
 
   @Event()
   sortingMethod?: (value1: any, value2: any) => number;
@@ -345,44 +377,18 @@ export class DataGridColumn {
   | template
   | ((
     cellElement: TElement,
-    cellInfo: {
-      data?: any;
-      component?: DxDataGrid;
-      value?: any;
-      oldValue?: any;
-      displayValue?: any;
-      text?: string;
-      columnIndex?: number;
-      rowIndex?: number;
-      column?: dxDataGridColumn;
-      row?: dxDataGridRowObject;
-      rowType?: string;
-      watch?: ((...args: any[]) => any);
-    },
+    cellInfo: ColumnCellTemplateData,
   ) => any);
 
   @OneWay()
-  columns?: (dxDataGridColumn | string)[];
+  columns?: (Column | string)[];
 
   @OneWay()
   editCellTemplate?:
   | template
   | ((
     cellElement: TElement,
-    cellInfo: {
-      setValue?: any;
-      data?: any;
-      component?: DxDataGrid;
-      value?: any;
-      displayValue?: any;
-      text?: string;
-      columnIndex?: number;
-      rowIndex?: number;
-      column?: dxDataGridColumn;
-      row?: dxDataGridRowObject;
-      rowType?: string;
-      watch?: ((...args: any[]) => any);
-    },
+    cellInfo: ColumnEditCellTemplateData,
   ) => any);
 
   @OneWay()
@@ -390,20 +396,7 @@ export class DataGridColumn {
   | template
   | ((
     cellElement: TElement,
-    cellInfo: {
-      data?: any;
-      component?: DxDataGrid;
-      value?: any;
-      text?: string;
-      displayValue?: any;
-      columnIndex?: number;
-      rowIndex?: number;
-      column?: dxDataGridColumn;
-      row?: dxDataGridRowObject;
-      summaryItems?: any[];
-      groupContinuesMessage?: string;
-      groupContinuedMessage?: string;
-    },
+    cellInfo: ColumnGroupCellTemplateData,
   ) => any);
 
   @OneWay()
@@ -414,11 +407,7 @@ export class DataGridColumn {
   | template
   | ((
     columnHeader: TElement,
-    headerInfo: {
-      component?: DxDataGrid;
-      columnIndex?: number;
-      column?: dxDataGridColumn;
-    },
+    headerInfo: ColumnHeaderCellTemplateData,
   ) => any);
 
   @OneWay()
@@ -469,12 +458,12 @@ export class DataGridEditing {
   @OneWay()
   allowDeleting?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: dxDataGridRowObject }) => boolean);
+  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean);
 
   @OneWay()
   allowUpdating?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: dxDataGridRowObject }) => boolean);
+  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean);
 
   @OneWay()
   confirmDelete?: boolean;
@@ -621,7 +610,7 @@ export class DataGridSummaryGroupItem {
   column?: string;
 
   @Event()
-  customizeText?: (itemInfo: { value?: string | number | Date; valueText?: string }) => string;
+  customizeText?: (itemInfo: SummaryItemTextInfo) => string;
 
   @OneWay()
   displayFormat?: string;
@@ -657,7 +646,7 @@ export class DataGridSummaryTotalItem {
   cssClass?: string;
 
   @Event()
-  customizeText?: (itemInfo: { value?: string | number | Date; valueText?: string }) => string;
+  customizeText?: (itemInfo: SummaryItemTextInfo) => string;
 
   @OneWay()
   displayFormat?: string;
@@ -681,14 +670,7 @@ export class DataGridSummaryTotalItem {
 @ComponentBindings()
 export class DataGridSummary {
   @Event()
-  calculateCustomSummary?: (options: {
-    component?: DxDataGrid;
-    name?: string;
-    summaryProcess?: string;
-    value?: any;
-    totalValue?: any;
-    groupIndex?: number;
-  }) => any;
+  calculateCustomSummary?: (options: CustomSummaryInfo) => any;
 
   @Nested()
   groupItems?: DataGridSummaryGroupItem[];
@@ -753,11 +735,7 @@ export class DataGridMasterDetail {
   | template
   | ((
     detailElement: TElement,
-    detailInfo: {
-      key?: any;
-      data?: any;
-      watch?: ((...args: any[]) => any);
-    },
+    detailInfo: MasterDetailTemplateData,
   ) => any);
 }
 
@@ -791,10 +769,7 @@ export class DataGridRowDragging {
   dragTemplate?:
   | template
   | ((
-    dragInfo: {
-      itemData?: any;
-      itemElement?: TElement;
-    },
+    dragInfo: RowDraggingTemplateData,
     containerElement: TElement,
   ) => string | TElement);
 
@@ -811,101 +786,25 @@ export class DataGridRowDragging {
   handle?: string;
 
   @Event()
-  onAdd?: (e: {
-    event?: TEvent;
-    itemData?: any;
-    itemElement?: TElement;
-    fromIndex?: number;
-    toIndex?: number;
-    fromComponent?: dxSortable | dxDraggable;
-    toComponent?: dxSortable | dxDraggable;
-    fromData?: any;
-    toData?: any;
-    dropInsideItem?: boolean;
-  }) => any;
+  onAdd?: (e: RowDraggingAddEvent) => any;
 
   @Event()
-  onDragChange?: (e: {
-    event?: TEvent;
-    cancel?: boolean;
-    itemData?: any;
-    itemElement?: TElement;
-    fromIndex?: number;
-    toIndex?: number;
-    fromComponent?: dxSortable | dxDraggable;
-    toComponent?: dxSortable | dxDraggable;
-    fromData?: any;
-    toData?: any;
-    dropInsideItem?: boolean;
-  }) => any;
+  onDragChange?: (e: RowDraggingChangeEvent) => any;
 
   @Event()
-  onDragEnd?: (e: {
-    event?: TEvent;
-    cancel?: boolean;
-    itemData?: any;
-    itemElement?: TElement;
-    fromIndex?: number;
-    toIndex?: number;
-    fromComponent?: dxSortable | dxDraggable;
-    toComponent?: dxSortable | dxDraggable;
-    fromData?: any;
-    toData?: any;
-    dropInsideItem?: boolean;
-  }) => any;
+  onDragEnd?: (e: RowDraggingEndEvent) => any;
 
   @Event()
-  onDragMove?: (e: {
-    event?: TEvent;
-    cancel?: boolean;
-    itemData?: any;
-    itemElement?: TElement;
-    fromIndex?: number;
-    toIndex?: number;
-    fromComponent?: dxSortable | dxDraggable;
-    toComponent?: dxSortable | dxDraggable;
-    fromData?: any;
-    toData?: any;
-    dropInsideItem?: boolean;
-  }) => any;
+  onDragMove?: (e: RowDraggingMoveEvent) => any;
 
   @Event()
-  onDragStart?: (e: {
-    event?: TEvent;
-    cancel?: boolean;
-    itemData?: any;
-    itemElement?: TElement;
-    fromIndex?: number;
-    fromData?: any;
-  }) => any;
+  onDragStart?: (e: RowDraggingStartEvent) => any;
 
   @Event()
-  onRemove?: (e: {
-    event?: TEvent;
-    itemData?: any;
-    itemElement?: TElement;
-    fromIndex?: number;
-    toIndex?: number;
-    fromComponent?: dxSortable | dxDraggable;
-    toComponent?: dxSortable | dxDraggable;
-    fromData?: any;
-    toData?: any;
-  }) => any;
+  onRemove?: (e: RowDraggingRemoveEvent) => any;
 
   @Event()
-  onReorder?: (e: {
-    event?: TEvent;
-    itemData?: any;
-    itemElement?: TElement;
-    fromIndex?: number;
-    toIndex?: number;
-    fromComponent?: dxSortable | dxDraggable;
-    toComponent?: dxSortable | dxDraggable;
-    fromData?: any;
-    toData?: any;
-    dropInsideItem?: boolean;
-    promise?: TPromise;
-  }) => any;
+  onReorder?: (e: RowDraggingReorderEvent) => any;
 
   @OneWay()
   scrollSensitivity?: number;
@@ -1024,7 +923,7 @@ export class DataGridStateStoring {
 @ComponentBindings()
 export class DataGridFilterPanel {
   @Event()
-  customizeText?: (e: { component?: DxDataGrid; filterValue?: any; text?: string }) => string;
+  customizeText?: (e: FilterPanelCustomizeTextArg<DxDataGrid>) => string;
 
   @OneWay()
   filterEnabled?: boolean;
@@ -1148,21 +1047,7 @@ export class DataGridLoadPanel {
 export class DataGridExport {
   @OneWay() allowExportSelectedData?: boolean;
 
-  @Event() customizeExcelCell?: ((options: {
-    component?: DxDataGrid;
-    horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' |
-    'general' | 'justify' | 'left' | 'right'; verticalAlignment?: 'bottom' |
-    'center' | 'distributed' | 'justify' | 'top';
-    wrapTextEnabled?: boolean;
-    backgroundColor?: string;
-    fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' |
-    'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' |
-    'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' |
-    'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
-    fillPatternColor?: string;
-    font?: ExcelFont; value?: string | number | Date;
-    numberFormat?: string; gridCell?: ExcelDataGridCell;
-  }) => any);
+  @Event() customizeExcelCell?: ((options: ExcelCellInfo) => any);
 
   @OneWay() enabled?: boolean;
 
@@ -1177,6 +1062,25 @@ export class DataGridExport {
   @OneWay() proxyUrl?: string;
 
   @OneWay() texts?: { exportAll?: string; exportSelectedRows?: string; exportTo?: string };
+}
+
+@ComponentBindings()
+export class DataGridCommonColumnSettings {
+  @OneWay() allowFiltering?: boolean;
+
+  @OneWay() allowHiding?: boolean;
+
+  @OneWay() allowSorting?: boolean;
+
+  @OneWay() allowEditing?: boolean;
+
+  @OneWay() allowExporting?: boolean;
+
+  @OneWay() encodeHtml?: boolean;
+
+  @OneWay() trueText?: string;
+
+  @OneWay() falseText?: string;
 }
 
 @ComponentBindings()
@@ -1224,16 +1128,23 @@ export class DataGridProps extends BaseWidgetProps implements Options {
   @Nested() searchPanel?: DataGridSearchPanel;
 
   @Nested() sorting?: DataGridSorting;
+  /* {
+    mode: 'single',
+    ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
+    descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
+    clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
+    showSortIndexes: true,
+  }; */
 
   @Nested() stateStoring?: DataGridStateStoring;
 
   @Template() rowTemplate?: template | ((rowElement: TElement, rowInfo: any) => any);
 
-  @OneWay() customizeColumns?: (columns: dxDataGridColumn[]) => any;
+  @OneWay() customizeColumns?: (columns: Column[]) => any;
 
   @OneWay() customizeExportData?: (
-    columns: dxDataGridColumn[],
-    rows: dxDataGridRowObject[],
+    columns: Column[],
+    rows: RowObject[],
   ) => any;
 
   @OneWay() keyExpr?: string | string[];
@@ -1306,6 +1217,19 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() wordWrapEnabled?: boolean;
 
+  @OneWay() loadingTimeout?: number = 30;
+
+  @OneWay() commonColumnSettings?: DataGridCommonColumnSettings = {
+    allowExporting: true,
+    allowFiltering: true,
+    allowHiding: true,
+    allowSorting: true,
+    allowEditing: true,
+    encodeHtml: true,
+    trueText: messageLocalization.format('dxDataGrid-trueText'),
+    falseText: messageLocalization.format('dxDataGrid-falseText'),
+  };
+
   // TODO Vitik: Default should be null, but declaration doesnt support it
   @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) = [];
 
@@ -1320,414 +1244,73 @@ export class DataGridProps extends BaseWidgetProps implements Options {
   @TwoWay() selectionFilter: string | any[] | ((...args: any[]) => any) = [];
 
   @Event() onCellClick?:
-  | string
-  | ((e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    event?: TEvent;
-    data?: any;
-    key?: any;
-    value?: any;
-    displayValue?: any;
-    text?: string;
-    columnIndex?: number;
-    column?: any;
-    rowIndex?: number;
-    rowType?: string;
-    cellElement?: TElement;
-    row?: dxDataGridRowObject;
-  } & EventExtension) => any);
+  | ((e: CellClickEvent) => any);
 
-  @Event() onCellDblClick?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    event?: TEvent;
-    data?: any;
-    key?: any;
-    value?: any;
-    displayValue?: any;
-    text?: string;
-    columnIndex?: number;
-    column?: dxDataGridColumn;
-    rowIndex?: number;
-    rowType?: string;
-    cellElement?: TElement;
-    row?: dxDataGridRowObject;
-  }) => any;
+  @Event() onCellDblClick?: (e: CellDblClickEvent) => any;
 
-  @Event() onCellHoverChanged?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    eventType?: string;
-    data?: any;
-    key?: any;
-    value?: any;
-    text?: string;
-    displayValue?: any;
-    columnIndex?: number;
-    rowIndex?: number;
-    column?: dxDataGridColumn;
-    rowType?: string;
-    cellElement?: TElement;
-    row?: dxDataGridRowObject;
-  }) => any;
+  @Event() onCellHoverChanged?: (e: CellHoverChangedEvent) => any;
 
-  @Event() onCellPrepared?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    data?: any;
-    key?: any;
-    value?: any;
-    displayValue?: any;
-    text?: string;
-    columnIndex?: number;
-    column?: dxDataGridColumn;
-    rowIndex?: number;
-    rowType?: string;
-    row?: dxDataGridRowObject;
-    isSelected?: boolean;
-    isExpanded?: boolean;
-    isNewRow?: boolean;
-    cellElement?: TElement;
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    watch?: Function;
-    oldValue?: any;
-  }) => any;
+  @Event() onCellPrepared?: (e: CellPreparedEvent) => any;
 
-  @Event() onContextMenuPreparing?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    items?: any[];
-    target?: string;
-    targetElement?: TElement;
-    columnIndex?: number;
-    column?: dxDataGridColumn;
-    rowIndex?: number;
-    row?: dxDataGridRowObject;
-  }) => any;
+  @Event() onContextMenuPreparing?: (e: ContextMenuPreparingEvent) => any;
 
-  @Event() onEditingStart?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    data?: any;
-    key?: any;
-    cancel?: boolean;
-    column?: any;
-  }) => any;
+  @Event() onEditingStart?: (e: EditingStartEvent) => any;
 
-  @Event() onEditorPrepared?: (options: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    parentType?: string;
-    value?: any;
-    setValue?: any;
-    updateValueTimeout?: number;
-    width?: number;
-    disabled?: boolean;
-    rtlEnabled?: boolean;
-    editorElement?: TElement;
-    readOnly?: boolean;
-    dataField?: string;
-    row?: dxDataGridRowObject;
-  }) => any;
+  @Event() onEditorPrepared?: (options: EditorPreparedEvent) => any;
 
-  @Event() onEditorPreparing?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    parentType?: string;
-    value?: any;
-    setValue?: any;
-    updateValueTimeout?: number;
-    width?: number;
-    disabled?: boolean;
-    rtlEnabled?: boolean;
-    cancel?: boolean;
-    editorElement?: TElement;
-    readOnly?: boolean;
-    editorName?: string;
-    editorOptions?: any;
-    dataField?: string;
-    row?: dxDataGridRowObject;
-  }) => any;
+  @Event() onEditorPreparing?: (e: EditorPreparingEvent) => any;
 
-  @Event() onExported?: (e: { component?: DxDataGrid; element?: TElement; model?: any }) => any;
+  @Event() onExported?: (e: ExportedEvent) => any;
 
-  @Event() onExporting?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    fileName?: string;
-    cancel?: boolean;
-  }) => any;
+  @Event() onExporting?: (e: ExportingEvent) => any;
 
-  @Event() onFileSaving?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    fileName?: string;
-    format?: string;
-    data?: Blob;
-    cancel?: boolean;
-  }) => any;
+  @Event() onFileSaving?: (e: FileSavingEvent) => any;
 
-  @Event() onFocusedCellChanged?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    cellElement?: TElement;
-    columnIndex?: number;
-    rowIndex?: number;
-    row?: dxDataGridRowObject;
-    column?: dxDataGridColumn;
-  }) => any;
+  @Event() onFocusedCellChanged?: (e: FocusedCellChangedEvent) => any;
 
-  @Event() onFocusedCellChanging?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    cellElement?: TElement;
-    prevColumnIndex?: number;
-    prevRowIndex?: number;
-    newColumnIndex?: number;
-    newRowIndex?: number;
-    event?: TEvent;
-    rows?: dxDataGridRowObject[];
-    columns?: dxDataGridColumn[];
-    cancel?: boolean;
-    isHighlighted?: boolean;
-  }) => any;
+  @Event() onFocusedCellChanging?: (e: FocusedCellChangingEvent) => any;
 
-  @Event() onFocusedRowChanged?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    rowElement?: TElement;
-    rowIndex?: number;
-    row?: dxDataGridRowObject;
-  }) => any;
+  @Event() onFocusedRowChanged?: (e: FocusedRowChangedEvent) => any;
 
-  @Event() onFocusedRowChanging?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    rowElement?: TElement;
-    prevRowIndex?: number;
-    newRowIndex?: number;
-    event?: TEvent;
-    rows?: dxDataGridRowObject[];
-    cancel?: boolean;
-  }) => any;
+  @Event() onFocusedRowChanging?: (e: FocusedRowChangingEvent) => any;
 
-  @Event() onRowClick?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    event?: TEvent;
-    data?: any;
-    key?: any;
-    values?: any[];
-    columns?: any[];
-    rowIndex?: number;
-    rowType?: string;
-    isSelected?: boolean;
-    isExpanded?: boolean;
-    isNewRow?: boolean;
-    groupIndex?: number;
-    rowElement?: TElement;
-    handled?: boolean;
-  } & EventExtension) => any;
+  @Event() onRowClick?: (e: RowClickEvent) => any;
 
-  @Event() onRowDblClick?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    event?: TEvent;
-    data?: any;
-    key?: any;
-    values?: any[];
-    columns?: dxDataGridColumn[];
-    rowIndex?: number;
-    rowType?: string;
-    isSelected?: boolean;
-    isExpanded?: boolean;
-    isNewRow?: boolean;
-    groupIndex?: number;
-    rowElement?: TElement;
-  }) => any;
+  @Event() onRowDblClick?: (e: RowDblClickEvent) => any;
 
-  @Event() onRowPrepared?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    data?: any;
-    key?: any;
-    values?: any[];
-    columns?: dxDataGridColumn[];
-    rowIndex?: number;
-    rowType?: string;
-    groupIndex?: number;
-    isSelected?: boolean;
-    isExpanded?: boolean;
-    isNewRow?: boolean;
-    rowElement?: TElement;
-  }) => any;
+  @Event() onRowPrepared?: (e: RowPreparedEvent) => any;
 
-  @Event() onAdaptiveDetailRowPreparing?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    formOptions?: any;
-  }) => any;
+  @Event() onAdaptiveDetailRowPreparing?: (e: AdaptiveDetailRowPreparingEvent) => any;
 
-  @Event() onDataErrorOccurred?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    error?: Error;
-  }) => any;
+  @Event() onDataErrorOccurred?: (e: DataErrorOccurredEvent) => any;
 
-  @Event() onInitNewRow?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    data?: any;
-    promise?: TPromise;
-  }) => any;
+  @Event() onInitNewRow?: (e: InitNewRowEvent) => any;
 
-  @Event() onKeyDown?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    event?: TEvent;
-    handled?: boolean;
-  } & EventExtension) => any;
+  @Event() onKeyDown?: (e: KeyDownEvent) => any;
 
-  @Event() onRowCollapsed?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    key?: any;
-  }) => any;
+  @Event() onRowCollapsed?: (e: RowCollapsedEvent) => any;
 
-  @Event() onRowCollapsing?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    key?: any;
-    cancel?: boolean;
-  }) => any;
+  @Event() onRowCollapsing?: (e: RowCollapsingEvent) => any;
 
-  @Event() onRowExpanded?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    key?: any;
-  }) => any;
+  @Event() onRowExpanded?: (e: RowExpandedEvent) => any;
 
-  @Event() onRowExpanding?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    key?: any;
-    cancel?: boolean;
-  }) => any;
+  @Event() onRowExpanding?: (e: RowExpandingEvent) => any;
 
-  @Event() onRowInserted?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    data?: any;
-    key?: any;
-    error?: Error;
-  }) => any;
+  @Event() onRowInserted?: (e: RowInsertedEvent) => any;
 
-  @Event() onRowInserting?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    data?: any;
-    cancel?: boolean | TPromise;
-  }) => any;
+  @Event() onRowInserting?: (e: RowInsertingEvent) => any;
 
-  @Event() onRowRemoved?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    data?: any;
-    key?: any;
-    error?: Error;
-  }) => any;
+  @Event() onRowRemoved?: (e: RowRemovedEvent) => any;
 
-  @Event() onRowRemoving?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    data?: any;
-    key?: any;
-    cancel?: boolean | TPromise;
-  }) => any;
+  @Event() onRowRemoving?: (e: RowRemovingEvent) => any;
 
-  @Event() onRowUpdated?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    data?: any;
-    key?: any;
-    error?: Error;
-  }) => any;
+  @Event() onRowUpdated?: (e: RowUpdatedEvent) => any;
 
-  @Event() onRowUpdating?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    oldData?: any;
-    newData?: any;
-    key?: any;
-    cancel?: boolean | TPromise;
-  }) => any;
+  @Event() onRowUpdating?: (e: RowUpdatingEvent) => any;
 
-  @Event() onRowValidating?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    brokenRules?: (| RequiredRule
-    | NumericRule
-    | RangeRule
-    | StringLengthRule
-    | CustomRule
-    | CompareRule
-    | PatternRule
-    | EmailRule
-    | AsyncRule)[];
-    isValid?: boolean;
-    key?: any;
-    newData?: any;
-    oldData?: any;
-    errorText?: string;
-    promise?: TPromise;
-  }) => any;
+  @Event() onRowValidating?: (e: RowValidatingEvent) => any;
 
-  @Event() onSelectionChanged?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    currentSelectedRowKeys?: any[];
-    currentDeselectedRowKeys?: any[];
-    selectedRowKeys?: any[];
-    selectedRowsData?: any[];
-  }) => any;
+  @Event() onSelectionChanged?: (e: SelectionChangedEvent) => any;
 
-  @Event() onToolbarPreparing?: (e: {
-    component?: DxDataGrid;
-    element?: TElement;
-    model?: any;
-    toolbarOptions?: dxToolbarOptions;
-  }) => any;
+  @Event() onToolbarPreparing?: (e: ToolbarPreparingEvent) => any;
 }

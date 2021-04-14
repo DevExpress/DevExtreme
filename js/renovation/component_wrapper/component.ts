@@ -36,7 +36,6 @@ export default class ComponentWrapper extends DOMComponent {
     elements: string[],
     templates: string[]
   };
-  _shouldRefresh!: boolean;
   _storedClasses?: string;
   _supportedKeys!: () => {
     [name: string]: Function,
@@ -45,7 +44,7 @@ export default class ComponentWrapper extends DOMComponent {
   _viewComponent!: any;
 
   get viewRef() {
-    return this._viewRef.current;
+    return this._viewRef?.current;
   }
   _getDefaultOptions() {
     return extend(
@@ -78,18 +77,6 @@ export default class ComponentWrapper extends DOMComponent {
 
   _initMarkup() {
     const props = this.getProps();
-    if (this._shouldRefresh) {
-      this._shouldRefresh = false;
-
-      this._renderWrapper({
-        ...props,
-        width: null,
-        height: null,
-        style: '',
-        className: '',
-        children: null,
-      });
-    }
     this._renderWrapper(props);
   }
 
@@ -360,7 +347,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   // Public API
   repaint() {
-    this._shouldRefresh = true;
+    this._isNodeReplaced = false;
     this._refresh();
   }
 

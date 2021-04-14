@@ -1505,7 +1505,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
                 this.data = [{ name: 'Alex', lastName: 'John' }],
                 this.options = {
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     selection: {
                         mode: 'multiple',
                         showCheckBoxesMode: 'always'

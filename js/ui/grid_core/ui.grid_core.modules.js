@@ -209,8 +209,6 @@ const View = ModuleItem.inherit({
 
     _resizeCore: function() { },
 
-    _afterRender: function() { },
-
     _parentElement: function() {
         return this._$parent;
     },
@@ -263,7 +261,6 @@ const View = ModuleItem.inherit({
             this.component._optionCache = {};
             this._renderCore(options);
             this.component._optionCache = undefined;
-            this._afterRender($parent);
             this.renderCompleted.fire(options);
         }
     },

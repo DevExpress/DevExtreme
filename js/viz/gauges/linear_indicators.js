@@ -287,11 +287,9 @@ const textCloud = BaseTextCloudMarker.inherit({
         let minBound;
         let maxBound;
         const arrowLength = _Number(that._options.arrowLength) || 0;
-        let indent;
 
         that._measureText();
         if(that.vertical) {
-            indent = that._textFullHeight;
             if(that._inverted) {
                 minBound = layout.x;
                 maxBound = layout.x + arrowLength + that._textFullWidth;
@@ -300,7 +298,6 @@ const textCloud = BaseTextCloudMarker.inherit({
                 maxBound = layout.x;
             }
         } else {
-            indent = that._textFullWidth;
             if(that._inverted) {
                 minBound = layout.y;
                 maxBound = layout.y + arrowLength + that._textFullHeight;
@@ -309,7 +306,21 @@ const textCloud = BaseTextCloudMarker.inherit({
                 maxBound = layout.y;
             }
         }
-        return { min: minBound, max: maxBound, indent: indent };
+        return { min: minBound, max: maxBound, indent: 0 };
+    },
+
+    _correctCloudType(type, { x, y }, { width, height }) {
+        if((type === 'right-top' || type === 'right-bottom')) {
+            if((x - width) < this._translator.getCodomainStart()) {
+                type = `left-${type.split('-')[1]}`;
+            }
+        } else if(type === 'top-left' || type === 'top-right') {
+            if((y + height) > this._translator.getCodomainStart()) {
+                type = `bottom-${type.split('-')[1]}`;
+            }
+        }
+        return type;
+
     }
 });
 

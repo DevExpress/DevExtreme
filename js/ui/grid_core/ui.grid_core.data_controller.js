@@ -715,7 +715,9 @@ export const dataControllerModule = {
                         return true;
                     };
 
-                    const oldItems = this._items.slice();
+                    const currentItems = this._items;
+                    const oldItems = currentItems.slice();
+
                     change.items.forEach(function(item, index) {
                         const key = getRowKey(item);
                         newIndexByKey[key] = index;
@@ -740,7 +742,7 @@ export const dataControllerModule = {
                                 rowIndices.push(index);
                                 changeTypes.push('update');
                                 items.push(newItem);
-                                this._items[index] = newItem;
+                                currentItems[index] = newItem;
                                 columnIndices.push(changedColumnIndices);
                                 break;
                             }
@@ -749,12 +751,12 @@ export const dataControllerModule = {
                                 changeTypes.push('insert');
                                 items.push(change.data);
                                 columnIndices.push(undefined);
-                                this._items.splice(change.index, 0, change.data);
+                                currentItems.splice(change.index, 0, change.data);
                                 break;
                             case 'remove':
                                 rowIndices.push(change.index);
                                 changeTypes.push('remove');
-                                this._items.splice(change.index, 1);
+                                currentItems.splice(change.index, 1);
                                 items.push(change.oldItem);
                                 columnIndices.push(undefined);
                                 break;
@@ -780,33 +782,36 @@ export const dataControllerModule = {
                     });
                 },
                 _correctRowIndices: noop,
+                _afterProcessItems: function(items) {
+                    return items;
+                },
                 _updateItemsCore: function(change) {
-                    const that = this;
                     let items;
-                    const dataSource = that._dataSource;
+                    const dataSource = this._dataSource;
                     const changeType = change.changeType || 'refresh';
 
                     change.changeType = changeType;
 
                     if(dataSource) {
                         items = change.items || dataSource.items();
-                        items = that._beforeProcessItems(items);
-                        items = that._processItems(items, change);
+                        items = this._beforeProcessItems(items);
+                        items = this._processItems(items, change);
+                        items = this._afterProcessItems(items, change);
 
                         change.items = items;
-                        const oldItems = that._items.length === items.length && that._items;
+                        const oldItems = this._items.length === items.length && this._items;
 
-                        that._applyChange(change);
+                        this._applyChange(change);
 
-                        const rowIndexDelta = that.getRowIndexDelta();
-                        each(that._items, function(index, item) {
+                        const rowIndexDelta = this.getRowIndexDelta();
+                        each(this._items, (index, item) => {
                             item.rowIndex = index - rowIndexDelta;
                             if(oldItems) {
                                 item.cells = oldItems[index].cells || [];
                             }
                         });
                     } else {
-                        that._items = [];
+                        this._items = [];
                     }
                 },
                 _handleChanging: function(e) {

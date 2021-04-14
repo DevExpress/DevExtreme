@@ -10,9 +10,10 @@ export const viewFunction = ({
   props: {
     views,
     className,
+    role,
   },
 }: GridBaseViews): JSX.Element => (
-  <div className={`${className} ${GRIDBASE_CONTAINER_CLASS}`}>
+  <div className={`${className} ${GRIDBASE_CONTAINER_CLASS}`} role={role}>
     {(views.map(({ name, view }) => (<GridBaseViewWrapper key={name} view={view} />)))}
   </div>
 );

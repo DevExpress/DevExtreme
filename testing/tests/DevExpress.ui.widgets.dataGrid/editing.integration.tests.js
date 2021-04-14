@@ -344,7 +344,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const dataItem0 = new DataItem(0, 'text0');
         const dataItem1 = new DataItem(1, 'text1');
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['ID', 'Text'],
             dataSource: {
                 store: [dataItem0, dataItem1]
@@ -383,7 +383,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         const dataItem0 = new DataItem(0, 'text0');
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['ID', 'Text'],
             dataSource: {
                 store: [dataItem0]
@@ -430,7 +430,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['config.enable', 'name'],
             dataSource: {
                 store: [new Item('Test')]
@@ -471,7 +471,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let counter = 0;
         let modifiedData;
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [
                 'ID',
                 {
@@ -513,7 +513,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             items: [{
                 template: function(options, container) {
                     dataGrid = $('<div>').appendTo(container).dxDataGrid({
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         dataSource: [{ firstName: 1, lastName: 2 }],
                         editing: {
                             allowUpdating: true,
@@ -536,7 +536,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ firstName: 1, lastName: 2 }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             editing: {
                 allowUpdating: true,
@@ -556,7 +556,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Add row to empty dataGrid - freeSpaceRow element is hidden', function(assert) {
         // arrange
         const $grid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             editing: {
                 allowAdding: true,
@@ -656,7 +656,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange
         const data = [{ firstName: 'Super', lastName: 'Man' }, { firstName: 'Super', lastName: 'Zi' }];
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'form',
                 allowUpdating: true
@@ -681,7 +681,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
             dataSource: [{ col1: '1', col2: '2' }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'batch',
                 allowDeleting: true
@@ -707,7 +707,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ field: 30 }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'cell',
                 allowUpdating: true
@@ -740,7 +740,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             width: 1000,
             dataSource: [{ id: 1 }],
             keyExpr: 'id',
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'batch',
                 allowAdding: true,
@@ -768,7 +768,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Command cell should not have dx-hidden-cell class if it is not fixed', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field: 'data' }],
             columns: [{
                 dataField: 'field',
@@ -825,7 +825,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     groupIndex: grouping ? 0 : undefined
                 }
                 ],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const firstDataRowIndex = grouping ? 1 : 0;
@@ -881,7 +881,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 useNative: false
             },
             columns: ['id'],
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         // act
@@ -925,7 +925,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     useNative: false
                 },
                 columns: ['id'],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             // act
@@ -968,7 +968,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     useNative: false
                 },
                 columns: ['id'],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             // act
@@ -1049,7 +1049,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource,
             height: 150,
             editing: {
@@ -1088,7 +1088,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource,
             height: 440,
             editing: {
@@ -1145,7 +1145,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource,
             height: 150,
             editing: {
@@ -1180,7 +1180,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Toolbar should not be rerendered if editing.popup options were changed', function(assert) {
         const onToolbarPreparingSpy = sinon.spy();
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             onToolbarPreparing: onToolbarPreparingSpy,
             editing: {
@@ -1199,7 +1199,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let $tableElements;
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ Test: '' }],
             editing: {
                 mode: 'batch',
@@ -1238,7 +1238,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{
                 'ID': 1,
                 'FirstName': 'John',
@@ -1284,7 +1284,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Editor should be rendered for hidden columns while editing in row mode with repaintChangesOnly', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'row',
                 allowUpdating: true
@@ -1321,7 +1321,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Row\'s height should be correct after updateDimensions while editing with popup edit mode', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 300,
             columnHidingEnabled: true,
             keyExpr: 'ID',
@@ -1555,7 +1555,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         let focusedRowChangingFiresCount = 0;
         let focusedRowChangedFiresCount = 0;
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { field1: 1, field2: 2 },
                 { field1: 11, field2: 12 },
@@ -1585,7 +1585,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         let focusedRowChangingFiresCount = 0;
         let focusedRowChangedFiresCount = 0;
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { field1: 1, field2: 2 },
                 { field1: 11, field2: 12 },
@@ -1623,7 +1623,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             let counter = 0;
             const rowsViewWrapper = dataGridWrapper.rowsView;
             const dataGrid = createDataGrid({
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 height: 100,
                 dataSource: [
                     { name: 'Alex', phone: '111111', room: 1 },
@@ -1664,7 +1664,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
     QUnit.test('Popup should apply data changes after editorOptions changing (T817880)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { 'name': 'Alex', 'text': '123' }
             ],
@@ -1699,7 +1699,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         ['cell', 'batch'].forEach(editingMode => {
             // arrange
             const dataGrid = createDataGrid({
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 dataSource: [{
                     'ID': 1,
                     'FirstName': 'John',
@@ -2250,7 +2250,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
                         validationCallback
                     }]
                 }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             });
 
             // act
@@ -2297,7 +2297,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
                         mode: editMode.toLowerCase(),
                         allowUpdating: true
                     },
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 });
 
                 // act
@@ -2356,7 +2356,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 dataField: 'field2',
                 validationRules: [{ type: 'required' }]
             }],
-            loadingTimeout: undefined
+            loadingTimeout: null
         });
 
         // act
@@ -2394,7 +2394,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 mode: 'batch',
                 allowUpdating: true
             },
-            loadingTimeout: undefined
+            loadingTimeout: null
         });
 
         // act
@@ -2424,7 +2424,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     allowDeleting: true,
                     confirmDelete: false
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             });
 
             // act
@@ -2480,7 +2480,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     allowDeleting: true,
                     confirmDelete: false
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             });
 
             // act
@@ -3241,7 +3241,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const array = [{ id: 1, name: 'Test 1' }];
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'batch'
             },
@@ -3268,7 +3268,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('Disable editing buttons after insert a row', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }],
             editing: {
                 mode: 'batch',
@@ -3305,7 +3305,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             height: 200,
             dataSource: array,
             keyExpr: 'id',
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             paging: {
                 pageSize: 10
             },
@@ -3344,7 +3344,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('insert row', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }]
         });
 
@@ -3579,55 +3579,56 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(enterKeyHandler(), true, 'dateBox enter key handler is replaced');
     });
 
-
-    QUnit.testInActiveWindow('Datebox editor\'s value should be selected from calendar by keyboard (T848039)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
-            return;
-        }
-
+    // T848039, T988258
+    ['date', 'datetime'].forEach(dataType => {
         [true, false].forEach(useMaskBehavior => {
-            // arrange
-            const rowsViewWrapper = dataGridWrapper.rowsView;
-            const dataGrid = createDataGrid({
-                dataSource: [{ dateField: '01/01/2000' }],
-                editing: {
-                    mode: 'cell',
-                    allowUpdating: true
-                },
-                columns: [{
-                    dataField: 'dateField',
-                    dataType: 'date',
-                    editorOptions: {
-                        useMaskBehavior: useMaskBehavior
-                    }
-                }]
+            QUnit.testInActiveWindow(`Datebox editor's value should be selected from calendar by keyboard (useMaskBehavior = ${useMaskBehavior}, dataType = ${dataType})`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+                    return;
+                }
+
+                // arrange
+                const rowsViewWrapper = dataGridWrapper.rowsView;
+                const dataGrid = createDataGrid({
+                    dataSource: [{ dateField: '01/01/2000' }],
+                    editing: {
+                        mode: 'cell',
+                        allowUpdating: true
+                    },
+                    columns: [{
+                        dataField: 'dateField',
+                        dataType,
+                        editorOptions: { useMaskBehavior }
+                    }]
+                });
+                this.clock.tick();
+
+                // act
+                dataGrid.editCell(0, 0);
+                this.clock.tick();
+
+                let editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+                const instance = editor.getElement().dxDateBox('instance');
+                const keyboard = keyboardMock(editor.getInputElement());
+
+                instance.open();
+                keyboard
+                    .keyDown('left')
+                    .press('enter');
+
+                // assert
+                editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+                const expectedValue = dataType === 'date' ? '12/31/1999' : '12/31/1999, 12:00 AM';
+                assert.equal(editor.getInputElement().val(), expectedValue, 'dateBox value is changed');
             });
-            this.clock.tick();
-
-            // act
-            dataGrid.editCell(0, 0);
-            this.clock.tick();
-
-            let editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
-            const instance = editor.getElement().dxDateBox('instance');
-            const keyboard = keyboardMock(editor.getInputElement());
-
-            instance.open();
-            keyboard
-                .keyDown('left')
-                .press('enter');
-
-            // assert
-            editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
-            assert.equal(editor.getInputElement().val(), '12/31/1999', `dateBox value is changed if useMaskBehavior is ${useMaskBehavior}`);
         });
     });
 
     QUnit.testInActiveWindow('dataGrid resize generates exception if fixed column presents and validation applied in cell edit mode (T629168)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ Test: 'a', c1: 'b' }, { Test: 'c', c1: 'd' }],
             showColumnHeaders: false,
             editing: {
@@ -3665,7 +3666,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('Update should work after scrolling if scrolling mode is infinite and refresh mode is repaint', function(assert) {
         const dataGrid = createDataGrid({
             height: 100,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             remoteOperations: true,
             dataSource: {
                 key: 'id',
@@ -3715,7 +3716,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // arrange act
         let eventArray = [];
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'id', fixed: true }, { dataField: 'name' }],
             editing: {
                 mode: 'cell',
@@ -3753,7 +3754,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnFixing: {
                 enabled: true
             },
@@ -3803,7 +3804,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const items = [{ firstName: 'Alex', lastName: 'Black' }, { firstName: 'John', lastName: 'Dow' }];
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'form',
                 allowUpdating: true
@@ -3838,7 +3839,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const items = [{ firstName: 'Alex', lastName: 'Black' }, { firstName: 'John', lastName: 'Dow' }];
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'form',
                 allowUpdating: true,
@@ -3888,7 +3889,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('Column widths must be kept after cell edit', function(assert) {
         // arrange
         const $grid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ name: 'James Bond', code: '007' }],
             columnAutoWidth: true,
             editing: {
@@ -3920,7 +3921,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 { id: 2, value: true }
             ],
             keyExpr: 'id',
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             editing: {
                 mode: 'cell',
@@ -3958,7 +3959,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 mode: 'cell',
                 allowUpdating: true
             },
-            loadingTimeout: undefined
+            loadingTimeout: null
         });
 
         // act
@@ -3989,7 +3990,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: ['id', 'field1'],
             editing: {
@@ -4033,7 +4034,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 { id: 2, field1: 'test2' }
             ],
             keyExpr: 'id',
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             editing: {
                 mode: 'cell'
@@ -4083,7 +4084,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
         let watchUpdateCount = 0;
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: ['id', 'field1'],
             editing: {
@@ -4132,7 +4133,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: ['id', 'field1'],
             editing: {
@@ -4175,7 +4176,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('No error after detail collapse and popup editing form closing if repaintChangesOnly is true', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             dataSource: [{
                 'Id': 1,
@@ -4242,7 +4243,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const origIsMaterial = themes.isMaterial;
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ Test: '' }],
             editing: {
                 mode: 'batch',
@@ -4281,7 +4282,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('insert row when master detail autoExpandAll is active', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1111 }],
             masterDetail: {
                 enabled: true,
@@ -4340,7 +4341,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('Create new row when grouping and group summary (T644293)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [
                 'field1',
                 {
@@ -4554,7 +4555,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 mode: 'row',
                 editRowKey: 1
             },
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         // assert
@@ -4573,7 +4574,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 mode: 'form',
                 editRowKey: 1
             },
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         // assert
@@ -4594,7 +4595,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 mode: 'popup',
                 editRowKey: 1
             },
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         // assert
@@ -4615,7 +4616,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     mode: editMode,
                     editRowKey: 1
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             // assert
@@ -4637,7 +4638,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     mode: editMode,
                     editColumnName: 'id'
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             // assert
@@ -4660,7 +4661,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     editRowKey: 1,
                     editColumnName: 'id'
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             // assert
@@ -4684,7 +4685,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     mode: editMode,
                     changes: [{ type: 'remove', key: 1 }]
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             // assert
@@ -5286,7 +5287,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     mode: editMode,
                     changes
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             // assert
@@ -5312,7 +5313,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     allowUpdating: true,
                     mode: 'row'
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 onOptionChanged: e => {
                     if(e.fullName === 'editing.changes' && e.value.length) {
                         setTimeout(() => {
@@ -5351,7 +5352,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     allowUpdating: true,
                     mode: 'row'
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 onOptionChanged: e => {
                     if(e.fullName === 'editing.changes' && e.value.length) {
                         dataGrid.option('editing.changes', []);
@@ -5384,7 +5385,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         allowAdding: true,
                         mode: editMode.toLowerCase()
                     },
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     onToolbarPreparing: onToolbarPreparingSpy
                 }).dxDataGrid('instance');
 

@@ -243,4 +243,15 @@ export default class DataGrid extends Widget {
       return result ? result.status : null;
     }, { dependencies: { getGridInstance, rowIndex, columnIndex } })();
   }
+
+  apiGetVisibleRows(): Promise<any> {
+    const { getGridInstance } = this;
+    return ClientFunction(() => {
+      const dataGrid = getGridInstance() as any;
+      return dataGrid.getVisibleRows().map((r) => ({
+        key: r.key,
+        rowType: r.rowType,
+      }));
+    }, { dependencies: { getGridInstance } })();
+  }
 }

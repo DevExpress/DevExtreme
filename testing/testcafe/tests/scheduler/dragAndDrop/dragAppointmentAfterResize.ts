@@ -20,7 +20,8 @@ fixture`Drag-n-drop appointment after resize(T835545)`
     await t
       .drag(isVertical ? resizableHandle.bottom : resizableHandle.right, 50, 50);
 
-    await t.expect(isVertical ? await element.clientHeight : await element.clientWidth)
+    const size = isVertical ? await element.clientHeight : await element.clientWidth;
+    await t.expect(size)
       .gt(isVertical ? initSize.height : initSize.width);
 
     const sizeBeforeDrag = {

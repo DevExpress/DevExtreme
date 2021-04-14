@@ -9,12 +9,15 @@ import {
   Mutable,
   InternalState,
   OneWay,
+  ForwardRef,
 } from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
 import { ScrollViewLoadPanel } from './load_panel';
 
 import { combineClasses } from '../../utils/combine_classes';
+import { getScrollLeftMax } from './utils/get_scroll_left_max';
+import { getScrollTopMax } from './utils/get_scroll_top_max';
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
 import { isDefined } from '../../../core/utils/type';
@@ -30,13 +33,13 @@ import '../../../events/gesture/emitter.gesture.scroll';
 
 import {
   ScrollEventArgs,
-  ScrollableLocation, ScrollOffset, ScrollableDirection,
+  ScrollableLocation, ScrollOffset, ScrollableDirection, RefreshStrategy,
 } from './types.d';
 
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
 
 import {
-  ensureLocation, normalizeCoordinate, getMaxScrollOffset,
+  ensureLocation, normalizeCoordinate,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
 } from './scrollable_utils';
 
@@ -63,17 +66,21 @@ import { Scrollbar } from './scrollbar';
 import {
   dxScrollInit,
   dxScrollMove,
+  dxScrollEnd,
+  dxScrollStop,
 } from '../../../events/short';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
 
 export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
-    cssClasses, wrapperRef, contentRef, containerRef, direction,
+    cssClasses, wrapperRef, contentRef, containerRef, topPocketRef, bottomPocketRef, direction,
     horizontalScrollbarRef, verticalScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
     windowResizeHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
-    scrollableRef, isLoadPanelVisible, topPocketState,
+    scrollableRef, isLoadPanelVisible, topPocketState, refreshStrategy,
+    pullDownTranslateTop, pullDownIconAngle, pullDownOpacity,
+    topPocketTop, contentStyles, scrollViewContentRef, contentTranslateTop,
     props: {
       disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -102,19 +109,34 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
             {forceGeneratePockets && (
             <TopPocket
+              topPocketRef={topPocketRef}
               pullingDownText={pullingDownText}
               pulledDownText={pulledDownText}
               refreshingText={refreshingText}
               pocketState={topPocketState}
-              useNative
+              refreshStrategy={refreshStrategy}
+              pullDownTranslateTop={pullDownTranslateTop}
+              pullDownIconAngle={pullDownIconAngle}
+              topPocketTranslateTop={contentTranslateTop}
+              pullDownOpacity={pullDownOpacity}
+              pocketTop={topPocketTop}
               visible={!!pullDownEnabled}
             />
             )}
             {needScrollViewContentWrapper
-              ? <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>
+              ? (
+                <div
+                  className={SCROLLVIEW_CONTENT_CLASS}
+                  ref={scrollViewContentRef}
+                  style={contentStyles}
+                >
+                  {children}
+                </div>
+              )
               : <div>{children}</div>}
             {forceGeneratePockets && (
             <BottomPocket
+              bottomPocketRef={bottomPocketRef}
               reachBottomText={reachBottomText}
               visible={!!reachBottomEnabled}
             />
@@ -173,11 +195,17 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
+  @Ref() scrollViewContentRef!: RefObject<HTMLDivElement>;
+
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @Ref() verticalScrollbarRef!: RefObject<Scrollbar>;
 
   @Ref() horizontalScrollbarRef!: RefObject<Scrollbar>;
+
+  @ForwardRef() topPocketRef!: RefObject<HTMLDivElement>;
+
+  @ForwardRef() bottomPocketRef!: RefObject<HTMLDivElement>;
 
   @Mutable() locked = false;
 
@@ -185,9 +213,19 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Mutable() hideScrollbarTimeout?: any;
 
+  @Mutable() releaseTimeout?: any;
+
+  @Mutable() refreshTimeout?: any;
+
   @Mutable() eventForUserAction?: Event;
 
+  @Mutable() initPageY = 0;
+
+  @Mutable() deltaY = 0;
+
   @Mutable() lastLocation: { top: number; left: number } = { top: 0, left: 0 };
+
+  @Mutable() locationTop = 0;
 
   @InternalState() containerClientWidth = 0;
 
@@ -203,8 +241,22 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @InternalState() isLoadPanelVisible = false;
 
+  @InternalState() pullDownTranslateTop = 0;
+
+  @InternalState() pullDownIconAngle = 0;
+
+  @InternalState() pullDownOpacity = 0;
+
+  @InternalState() topPocketTop = -80; // TODO: set default as topPocketClientHeight
+
+  @InternalState() contentTranslateTop = 0;
+
   @Method()
   content(): HTMLDivElement {
+    if (this.props.needScrollViewContentWrapper) {
+      return this.scrollViewContentRef.current!;
+    }
+
     return this.contentRef.current!;
   }
 
@@ -214,31 +266,68 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
     if (isDefined(contentEl)) {
       this.updateSizes();
-      this.props.onUpdated?.(this.getEventArgs());
+      this.onUpdated();
     }
   }
 
-  // @Method()
-  // refresh(): void {
-  //   this.topPocketState = TopPocketState.STATE_READY;
+  @Method()
+  refresh(): void {
+    this.topPocketState = TopPocketState.STATE_READY;
 
-  //   this.startLoading();
-  //   this.props.onPullDown?.({});
-  // }
-
-  // startLoading(): void {
-  //   if (this.loadingIndicatorEnabled) {
-  //     // TODO: check visibility - && this.$element().is(':visible')
-  //     this.isLoadPanelVisible = true;
-  //   }
-  //   this.lock();
-  // }
+    this.startLoading();
+    this.onPullDown();
+  }
 
   @Method()
-  /* istanbul ignore next */
-  // eslint-disable-next-line class-methods-use-this
   release(): void {
-    // TODO
+    this.clearReleaseTimeout();
+
+    if (this.isPullDownStrategy) {
+      if (this.topPocketState === TopPocketState.STATE_LOADING) {
+        this.topPocketState = TopPocketState.STATE_RELEASED;
+      }
+    }
+
+    this.releaseTimeout = setTimeout((() => {
+      if (this.isPullDownStrategy) {
+        this.contentTranslateTop = 0;
+      }
+      this.stateReleased();
+      this.onRelease();
+    }), this.isSwipeDownStrategy ? 800 : 400);
+  }
+
+  clearReleaseTimeout(): void {
+    clearTimeout(this.releaseTimeout);
+    this.releaseTimeout = undefined;
+  }
+
+  @Effect({ run: 'once' })
+  disposeReleaseTimeout(): DisposeEffectReturn {
+    return (): void => this.clearReleaseTimeout();
+  }
+
+  onRelease(): void {
+    this.loadingIndicatorEnabled = true;
+    this.finishLoading();
+    this.onUpdated();
+  }
+
+  onUpdated(): void {
+    this.props.onUpdated?.(this.getEventArgs());
+  }
+
+  startLoading(): void {
+    if (this.loadingIndicatorEnabled) {
+      // TODO: check visibility - && this.$element().is(':visible')
+      this.isLoadPanelVisible = true;
+    }
+    this.lock();
+  }
+
+  finishLoading(): void {
+    this.isLoadPanelVisible = false;
+    this.unlock();
   }
 
   @Method()
@@ -310,11 +399,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   scrollOffset(): ScrollableLocation {
-    const maxScrollLeftOffset = getMaxScrollOffset('width', this.containerRef.current!);
-
     return {
-      left: getPublicCoordinate('left', this.containerRef.current!.scrollLeft, maxScrollLeftOffset, this.props.rtlEnabled),
-      top: this.containerRef.current!.scrollTop,
+      left: getPublicCoordinate('left', this.scrollLocation().left, getScrollLeftMax(this.containerRef.current!), this.props.rtlEnabled),
+      top: this.scrollLocation().top,
     };
   }
 
@@ -341,20 +428,80 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @Effect() scrollEffect(): EffectReturn {
     return subscribeToScrollEvent(this.containerRef.current!,
       (e: Event) => {
-        // https://supportcenter.devexpress.com/internal/ticket/details/B250122
-        // if (!this.isScrollLocationChanged()) { // TODO: need check it after renovation
-        //   e.stopImmediatePropagation();
-        //   return;
-        // }
+        this.handleScroll(e);
+      });
+  }
 
-        this.eventForUserAction = e;
-        if (this.useSimulatedScrollbar) {
-          this.moveScrollbars();
+  handleScroll(e: Event): void {
+    // https://supportcenter.devexpress.com/internal/ticket/details/B250122
+    // if (!this.isScrollLocationChanged()) { // TODO: need check it after renovation
+    //   e.stopImmediatePropagation();
+    //   return;
+    // }
+
+    this.eventForUserAction = e;
+    if (this.useSimulatedScrollbar) {
+      this.moveScrollbars();
+    }
+
+    this.props.onScroll?.(this.getEventArgs());
+    this.lastLocation = this.scrollLocation();
+
+    if (this.props.forceGeneratePockets) {
+      if (this.topPocketState === TopPocketState.STATE_REFRESHING) {
+        return;
+      }
+
+      const currentLocation = -this.scrollLocation().top;
+      const scrollDelta = this.locationTop - currentLocation;
+
+      this.locationTop = currentLocation;
+
+      if (this.isSwipeDownStrategy && scrollDelta > 0 && this.isReachBottom()) {
+        this.onReachBottom();
+        return;
+      }
+
+      if (this.isPullDownStrategy) {
+        if (this.isPullDown()) {
+          this.pullDownReady();
+          return;
         }
 
-        this.props.onScroll?.(this.getEventArgs());
-        this.lastLocation = this.location();
-      });
+        if (scrollDelta > 0 && this.isReachBottom()) {
+          if (this.topPocketState !== TopPocketState.STATE_LOADING) {
+            this.topPocketState = TopPocketState.STATE_LOADING;
+            this.onReachBottom();
+          }
+          return;
+        }
+      }
+
+      this.stateReleased();
+    }
+  }
+
+  pullDownReady(): void {
+    if (this.topPocketState === TopPocketState.STATE_READY) {
+      return;
+    }
+    this.topPocketState = TopPocketState.STATE_READY;
+  }
+
+  onReachBottom(): void {
+    this.props.onReachBottom?.({});
+  }
+
+  onPullDown(): void {
+    this.props.onPullDown?.({});
+  }
+
+  stateReleased(): void {
+    if (this.topPocketState === TopPocketState.STATE_RELEASED) {
+      return;
+    }
+
+    this.releaseState();
   }
 
   getEventArgs(): ScrollEventArgs {
@@ -368,8 +515,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   // isScrollLocationChanged(): boolean {
   //   const currentLocation = this.location();
 
-  //   const isTopChanged = this.lastLocation.top !== currentLocation.top;
-  //   const isLeftChanged = this.lastLocation.left !== currentLocation.left;
+  //   const isTopChanged = this.lastLocation.top !== -currentLocation.top;
+  //   const isLeftChanged = this.lastLocation.left !== -currentLocation.left;
 
   //   return isTopChanged || isLeftChanged;
   // }
@@ -412,7 +559,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   windowResizeHandler(): void { // update if simulatedScrollbars are using
     this.updateSizes();
-    this.props.onUpdated?.(this.getEventArgs());
+    this.onUpdated();
   }
 
   updateSizes(): void {
@@ -431,19 +578,19 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   moveScrollbars(): void {
-    const { top, left } = this.location();
+    const { top, left } = this.scrollLocation();
 
     if (this.direction.isHorizontal) {
       const scrollbarEl = this.horizontalScrollbarRef.current;
       if (isDefined(scrollbarEl)) {
-        this.horizontalScrollbarRef.current!.moveScrollbar(left);
+        this.horizontalScrollbarRef.current!.moveScrollbar(-left);
       }
     }
 
     if (this.direction.isVertical) {
       const scrollbarEl = this.verticalScrollbarRef.current;
       if (isDefined(scrollbarEl)) {
-        this.verticalScrollbarRef.current!.moveScrollbar(top);
+        this.verticalScrollbarRef.current!.moveScrollbar(-top);
       }
     }
 
@@ -451,9 +598,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
     this.clearHideScrollbarTimeout();
 
-    /* istanbul ignore next */
     this.hideScrollbarTimeout = setTimeout(() => {
-      /* istanbul ignore next */
       this.needForceScrollbarsVisibility = false;
     }, HIDE_SCROLLBAR_TIMEOUT);
   }
@@ -468,10 +613,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.hideScrollbarTimeout = undefined;
   }
 
-  location(): { top: number; left: number } {
+  scrollLocation(): { top: number; left: number } {
     return {
-      top: -this.containerRef.current!.scrollTop,
-      left: -this.containerRef.current!.scrollLeft,
+      top: this.containerRef.current!.scrollTop,
+      left: this.containerRef.current!.scrollLeft,
     };
   }
 
@@ -513,9 +658,39 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return (): void => dxScrollMove.off(this.wrapperRef.current, { namespace });
   }
 
-  /* istanbul ignore next */
-  // eslint-disable-next-line
-  handleInit(e): void {}
+  @Effect()
+  endEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollEnd.on(this.wrapperRef.current,
+      () => {
+        this.handleEnd();
+      }, { namespace });
+
+    return (): void => dxScrollEnd.off(this.wrapperRef.current, { namespace });
+  }
+
+  @Effect()
+  stopEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollStop.on(this.wrapperRef.current,
+      () => {
+        this.handleStop();
+      }, { namespace });
+
+    return (): void => dxScrollStop.off(this.wrapperRef.current, { namespace });
+  }
+
+  handleInit(e): void {
+    if (this.props.forceGeneratePockets && this.isSwipeDownStrategy) {
+      if (this.topPocketState === TopPocketState.STATE_RELEASED
+        && this.scrollLocation().top === 0) {
+        this.initPageY = e.originalEvent.pageY;
+        this.topPocketState = TopPocketState.STATE_TOUCHED;
+      }
+    }
+  }
 
   handleMove(e): void {
     if (this.locked) {
@@ -526,6 +701,156 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     if (isDefined(this.tryGetAllowedDirection())) {
       e.originalEvent.isScrollingEvent = true;
     }
+
+    if (this.props.forceGeneratePockets && this.isSwipeDownStrategy) {
+      this.deltaY = e.originalEvent.pageY - this.initPageY;
+
+      if (this.topPocketState === TopPocketState.STATE_TOUCHED) {
+        if (this.pullDownEnabled && this.deltaY > 0) {
+          this.topPocketState = TopPocketState.STATE_PULLED;
+        } else {
+          this.complete();
+        }
+      }
+
+      if (this.topPocketState === TopPocketState.STATE_PULLED) {
+        e.preventDefault();
+        this.movePullDown();
+      }
+    }
+  }
+
+  handleEnd(): void {
+    if (this.props.forceGeneratePockets) {
+      if (this.isSwipeDownStrategy) {
+        if (this.isSwipeDown()) {
+          this.pullDownRefreshing();
+        }
+
+        this.complete();
+      }
+
+      if (this.isPullDownStrategy) {
+        this.pullDownComplete();
+      }
+    }
+  }
+
+  handleStop(): void {
+    if (this.props.forceGeneratePockets) {
+      if (this.isSwipeDownStrategy) {
+        this.complete();
+      }
+
+      if (this.isPullDownStrategy) {
+        this.pullDownComplete();
+      }
+    }
+  }
+
+  pullDownComplete(): void {
+    if (this.topPocketState === TopPocketState.STATE_READY) {
+      this.contentTranslateTop = this.topPocketHeight;
+      this.clearRefreshTimeout();
+      this.refreshTimeout = setTimeout((() => {
+        this.pullDownRefreshing();
+      }), 400);
+    }
+  }
+
+  clearRefreshTimeout(): void {
+    clearTimeout(this.refreshTimeout);
+    this.refreshTimeout = undefined;
+  }
+
+  @Effect({ run: 'once' })
+  disposeRefreshTimeout(): DisposeEffectReturn {
+    return (): void => this.clearRefreshTimeout();
+  }
+
+  get topPocketHeight(): number {
+    return this.topPocketRef.current?.clientHeight || 0;
+  }
+
+  pullDownRefreshing(): void {
+    if (this.topPocketState === TopPocketState.STATE_REFRESHING) {
+      return;
+    }
+    this.topPocketState = TopPocketState.STATE_REFRESHING;
+
+    if (this.isSwipeDownStrategy) {
+      this.pullDownTranslateTop = this.getPullDownHeight();
+    }
+
+    this.onPullDown();
+  }
+
+  movePullDown(): void {
+    const pullDownHeight = this.getPullDownHeight();
+    const top = Math.min(pullDownHeight * 3, this.deltaY + this.getPullDownStartPosition());
+    const angle = (180 * top) / pullDownHeight / 3;
+
+    this.pullDownOpacity = 1;
+    this.pullDownTranslateTop = top;
+    this.pullDownIconAngle = angle;
+  }
+
+  getPullDownHeight(): number {
+    return Math.round(this.scrollableRef.current!.offsetHeight * 0.05);
+  }
+
+  getPullDownStartPosition(): number {
+    return -Math.round(this.topPocketRef.current!.clientHeight * 1.5);
+  }
+
+  complete(): void {
+    if (this.topPocketState === TopPocketState.STATE_TOUCHED
+      || this.topPocketState === TopPocketState.STATE_PULLED) {
+      this.releaseState();
+    }
+  }
+
+  releaseState(): void {
+    this.topPocketState = TopPocketState.STATE_RELEASED;
+    this.pullDownOpacity = 0;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get refreshStrategy(): RefreshStrategy {
+    return this.platform === 'android' ? 'swipeDown' : 'pullDown';
+  }
+
+  get isSwipeDownStrategy(): boolean {
+    return this.refreshStrategy === 'swipeDown';
+  }
+
+  get isPullDownStrategy(): boolean {
+    return this.refreshStrategy === 'pullDown';
+  }
+
+  isSwipeDown(): boolean {
+    return this.pullDownEnabled
+      && this.topPocketState === TopPocketState.STATE_PULLED
+      && this.deltaY >= this.getPullDownHeight() - this.getPullDownStartPosition();
+  }
+
+  isPullDown(): boolean {
+    return this.pullDownEnabled && this.scrollLocation().top <= -this.topPocketHeight;
+  }
+
+  isReachBottom(): boolean {
+    const { top } = this.scrollLocation();
+
+    return this.props.reachBottomEnabled
+      && top - getScrollTopMax(this.containerRef.current!) + this.bottomPocketHeight >= 0.5;
+  }
+
+  get bottomPocketHeight(): number {
+    if (this.props.reachBottomEnabled && this.bottomPocketRef.current) {
+      return this.bottomPocketRef.current.clientHeight;
+    }
+
+    return 0;
   }
 
   tryGetAllowedDirection(): ScrollableDirection | undefined {
@@ -535,9 +860,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const containerEl = this.containerRef.current;
 
     const isOverflowVertical = (isVertical && contentEl!.clientHeight > containerEl!.clientHeight)
-      || this.props.pullDownEnabled;
+      || this.pullDownEnabled;
     const isOverflowHorizontal = (isHorizontal && contentEl!.clientWidth > containerEl!.clientWidth)
-      || this.props.pullDownEnabled;
+      || this.pullDownEnabled;
 
     if (isBoth && isOverflowVertical && isOverflowHorizontal) {
       return DIRECTION_BOTH;
@@ -585,7 +910,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     } = this.props;
 
     const classesMap = {
-      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${devices.real().platform} dx-scrollable-renovated`]: true,
+      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${this.platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar && this.useSimulatedScrollbar,
@@ -595,15 +920,34 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return combineClasses(classesMap);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  get platform(): string | undefined {
+    return devices.real().platform;
+  }
+
   get direction(): { isVertical: boolean; isHorizontal: boolean } {
     return new ScrollDirection(this.props.direction);
   }
 
   get useSimulatedScrollbar(): boolean {
     if (!isDefined(this.props.useSimulatedScrollbar)) {
-      return nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
+      return nativeScrolling && this.platform === 'android' && !browser.mozilla;
     }
 
     return this.props.useSimulatedScrollbar;
+  }
+
+  get pullDownEnabled(): boolean {
+    return this.props.pullDownEnabled && this.platform !== 'generic';
+  }
+
+  get contentStyles(): { [key: string]: string | number } | undefined {
+    if (this.props.forceGeneratePockets && this.isPullDownStrategy) {
+      return {
+        transform: `translate(0px, ${this.contentTranslateTop}px)`,
+      };
+    }
+
+    return undefined;
   }
 }

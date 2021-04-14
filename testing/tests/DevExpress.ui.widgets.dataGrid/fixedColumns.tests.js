@@ -1482,7 +1482,7 @@ QUnit.module('Fixed columns', {
                 template: function(container) {
                     detailDataGrid = $('<div>').appendTo(container).dxDataGrid({
                         height: 100,
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         scrolling: { useNative: false },
                         dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
                         columns: ['id']
@@ -3067,7 +3067,7 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         that.gridContainer = $('#container > .dx-datagrid');
 
         that.options = {
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             columns: [{ dataField: 'field1', fixed: true }, 'field2', 'field3', 'field4'],
             dataSource: [
