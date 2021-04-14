@@ -262,12 +262,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   update(): void {
-    const contentEl = this.contentRef.current;
-
-    if (isDefined(contentEl)) {
-      this.updateSizes();
-      this.onUpdated();
-    }
+    this.updateSizes();
+    this.props.onUpdated?.(this.getEventArgs());
   }
 
   @Method()
@@ -558,8 +554,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   windowResizeHandler(): void { // update if simulatedScrollbars are using
-    this.updateSizes();
-    this.onUpdated();
+    this.update();
   }
 
   updateSizes(): void {
@@ -878,7 +873,13 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   validate(e: Event): boolean {
     const { disabled } = this.props;
 
-    if (this.isLocked() || disabled || (isDxMouseWheelEvent(e) && this.isScrollingOutOfBound(e))) {
+    if (this.isLocked()) {
+      return false;
+    }
+
+    this.update();
+
+    if (disabled || (isDxMouseWheelEvent(e) && this.isScrollingOutOfBound(e))) {
       return false;
     }
 

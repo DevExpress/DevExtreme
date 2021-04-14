@@ -388,6 +388,22 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
         ...(offset as Partial<ScrollOffset>),
       };
 
+      console.log(getElementLocation(
+        element,
+        scrollOffset,
+        DIRECTION_VERTICAL,
+        this.containerRef.current!,
+        this.props.rtlEnabled,
+      ));
+
+      console.log(getElementLocation(
+        element,
+        scrollOffset,
+        DIRECTION_HORIZONTAL,
+        this.containerRef.current!,
+        this.props.rtlEnabled,
+      ));
+
       this.scrollTo({
         top: getElementLocation(
           element,
@@ -805,7 +821,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   validate(e: Event): boolean {
-    if (this.isLocked() || this.props.disabled
+    if (this.isLocked()) {
+      return false;
+    }
+
+    this.update();
+
+    if (this.props.disabled
     || (isDxMouseWheelEvent(e) && isCommandKeyPressed({
       ctrlKey: (e as any).ctrlKey,
       metaKey: (e as any).metaKey,
@@ -1028,8 +1050,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   windowResizeHandler(): void {
-    this.updateSizes();
-    this.onUpdated();
+    this.update();
   }
 
   updateSizes(): void {

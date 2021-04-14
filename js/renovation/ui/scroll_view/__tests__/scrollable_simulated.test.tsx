@@ -126,18 +126,14 @@ describe('Simulated > Render', () => {
 });
 
 describe('Simulated > Behavior', () => {
-  describe('windowResizeHandler', () => {
-    it('update sizes on window resize and trigger onUpdated', () => {
-      const helper = new ScrollableTestHelper({});
+  it('windowResizeHandler()', () => {
+    const helper = new ScrollableTestHelper({});
 
-      helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
-      helper.viewModel.updateSizes = jest.fn();
+    helper.viewModel.update = jest.fn();
 
-      helper.viewModel.windowResizeHandler();
+    helper.viewModel.windowResizeHandler();
 
-      expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
-      helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ fakeEventArg: { value: 5 } }]]);
-    });
+    expect(helper.viewModel.update).toBeCalledTimes(1);
   });
 
   describe('Effects', () => {

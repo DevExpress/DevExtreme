@@ -511,7 +511,7 @@ describe('Native > Effects', () => {
     });
 
   describe('windowResizeHandler', () => {
-    it('should update sizes on window resize and trigger onUpdated', () => {
+    it('windowResizeHandler', () => {
       const onUpdatedMock = jest.fn();
       const viewModel = new Scrollable({ onUpdated: onUpdatedMock });
       viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
@@ -565,20 +565,6 @@ describe('Native > Effects', () => {
       viewModel.update();
 
       expect(viewModel.updateSizes).toBeCalledTimes(1);
-    });
-
-    it('should update sizes on update() method call, onUpdated, contentRef.current = null', () => {
-      const onUpdatedMock = jest.fn();
-      const viewModel = new Scrollable({ onUpdated: onUpdatedMock });
-      viewModel.contentRef = { current: null } as RefObject<HTMLDivElement>;
-      (viewModel as any).containerRef = React.createRef();
-      viewModel.getEventArgs = jest.fn();
-
-      viewModel.updateSizes = jest.fn();
-      viewModel.update();
-
-      expect(viewModel.updateSizes).not.toBeCalled();
-      expect(onUpdatedMock).not.toBeCalled();
     });
   });
 
