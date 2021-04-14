@@ -16,6 +16,7 @@ jest.mock('../datagrid_component', () => ({
   DataGridComponent: jest.fn().mockImplementation((element, options) => ({
     option: () => options,
     dispose: jest.fn(),
+    on: jest.fn(),
     element: () => element,
     getController: jest.fn().mockImplementation(() => ({
       updateSize: jest.fn(),
@@ -296,6 +297,121 @@ describe('DataGrid', () => {
       expect(component.instance.option).toBeCalledWith('columns', ['test', 'test2']);
       expect(component.instance.beginUpdate).toBeCalledTimes(1);
       expect(component.instance.endUpdate).toBeCalledTimes(1);
+    });
+  });
+
+  describe('Two way props synchronization', () => {
+    it('initInstanceElement effect subscribes to optionChanged event with instanceOptionChangedHandler handler', () => {
+      const initialProps = {
+      } as DataGridProps;
+      const component = new DataGrid(initialProps);
+      const e = { component: { option: jest.fn() } };
+
+      component.instanceOptionChangedHandler = jest.fn();
+
+      component.initInstanceElement();
+
+      expect(component.instance.on).toBeCalledWith('optionChanged', expect.any(Function));
+
+      const calledOptionChangedHandler = (component.instance.on as jest.Mock).mock.calls[0][1];
+      calledOptionChangedHandler(e);
+
+      expect(component.instanceOptionChangedHandler).toBeCalledWith(e);
+    });
+
+    test.each`
+    propName
+    ${'focusedRowKey'}
+    ${'focusedRowIndex'}
+    ${'focusedColumnIndex'}
+    ${'filterValue'}
+    ${'selectedRowKeys'}
+    ${'selectionFilter'}
+    `('$propName property should be assigned on optionChanged event call', ({ propName }) => {
+      const prevValue = null;
+      const newValue = {};
+      const props = {
+      } as DataGridProps;
+      props[propName] = prevValue;
+      const component = new DataGrid(props);
+
+      component.instanceOptionChangedHandler({
+        name: propName,
+        fullName: propName,
+        value: newValue,
+        previousValue: null,
+        component: { option: (name) => name === propName && newValue },
+      });
+
+      expect(component.props[propName]).toBe(newValue);
+    });
+
+    test.each`
+    propName
+    ${'changes'}
+    ${'editRowKey'}
+    ${'editColumnName'}
+    `('edting.$propName property should be assigned on optionChanged event call', ({ propName }) => {
+      const prevValue = null;
+      const newValue = {};
+      const props = {
+      } as DataGridProps;
+      props.editing = { [propName]: prevValue };
+      const component = new DataGrid(props);
+      const fullPropName = `editing.${propName}`;
+
+      component.instanceOptionChangedHandler({
+        name: 'editing',
+        fullName: fullPropName,
+        value: newValue,
+        previousValue: null,
+        component: { option: (name) => name === fullPropName && newValue },
+      });
+
+      expect((component.props.editing as any)[propName]).toBe(newValue);
+    });
+
+    test('property should not be assigned if compomnent value is changed during updating', () => {
+      const oldValue = -1;
+      const newValue = 1;
+      const componentValue = 2;
+      const propName = 'focusedRowIndex';
+
+      const props = {
+      } as DataGridProps;
+      props[propName] = oldValue;
+      const component = new DataGrid(props);
+
+      component.instanceOptionChangedHandler({
+        name: propName,
+        fullName: propName,
+        value: newValue,
+        previousValue: null,
+        component: { option: (name) => name === propName && componentValue },
+      });
+
+      expect(component.props[propName]).toBe(oldValue);
+    });
+
+    test('property should not be assigned if value is not changed', () => {
+      const oldValue = null;
+      const newValue = [];
+      const propName = 'focusedRowKey';
+
+      const props = {
+      } as DataGridProps;
+      props[propName] = oldValue;
+      const component = new DataGrid(props);
+
+      component.instanceOptionChangedHandler({
+        name: propName,
+        fullName: propName,
+        value: newValue,
+        previousValue: newValue,
+        component: { option: (name) => name === propName && newValue },
+      });
+
+      expect(component.props[propName]).toBe(oldValue);
     });
   });
 });
