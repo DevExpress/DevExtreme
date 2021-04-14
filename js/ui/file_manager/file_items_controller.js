@@ -99,9 +99,13 @@ export default class FileItemsController {
         return this._currentDirectoryInfo;
     }
 
-    setCurrentDirectory(directoryInfo) {
+    setCurrentDirectory(directoryInfo, checkActuality) {
         if(!directoryInfo) {
             return;
+        }
+
+        if(checkActuality) {
+            directoryInfo = this._getActualDirectoryInfo(directoryInfo);
         }
 
         if(this._currentDirectoryInfo && this._currentDirectoryInfo === directoryInfo) {
