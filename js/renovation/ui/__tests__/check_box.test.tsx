@@ -573,6 +573,12 @@ describe('CheckBox', () => {
 
           expect(checkBox.targetCurrent).toEqual(expectedCurrent);
         });
+
+        it('should return undefined when target is not specified', () => {
+          const checkBox = new CheckBox({});
+
+          expect(checkBox.targetCurrent).toEqual(undefined);
+        });
       });
 
       describe('shouldShowValidationMessage', () => {

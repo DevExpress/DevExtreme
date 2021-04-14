@@ -266,7 +266,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     return allValidationErrors;
   }
 
-  get targetCurrent(): HTMLDivElement | null {
+  get targetCurrent(): HTMLDivElement | null | undefined {
     return this.target?.current;
   }
 
