@@ -596,9 +596,9 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
  */
 export interface dxTreeViewItem extends CollectionWidgetItem {
     /**

@@ -96,16 +96,16 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      */
     animation?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       hide?: animationConfig,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       show?: animationConfig
     };
     /**
@@ -319,7 +319,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
-
      */
     popupWidth?: number | string | (() => number | string);
     /**

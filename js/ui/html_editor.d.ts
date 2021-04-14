@@ -393,9 +393,9 @@ export default class dxHtmlEditor extends Editor {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorMediaResizing {
     /**
      * @docid
@@ -414,9 +414,9 @@ export interface dxHtmlEditorMediaResizing {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorMention {
     /**
      * @docid
@@ -497,9 +497,9 @@ export interface dxHtmlEditorMention {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorToolbar {
     /**
      * @docid
@@ -524,9 +524,9 @@ export interface dxHtmlEditorToolbar {
 }
 
 /**
-* @docid
-* @inherits dxToolbarItem
-*/
+ * @docid
+ * @inherits dxToolbarItem
+ */
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid
@@ -552,9 +552,9 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorVariables {
     /**
      * @docid

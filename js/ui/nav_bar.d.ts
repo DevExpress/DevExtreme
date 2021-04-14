@@ -67,10 +67,10 @@ export default class dxNavBar extends dxTabs {
 }
 
 /**
-* @docid
-* @inherits dxTabsItem
-* @type object
-*/
+ * @docid
+ * @inherits dxTabsItem
+ * @type object
+ */
 export interface dxNavBarItem extends dxTabsItem {
     /**
      * @docid

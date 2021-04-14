@@ -50,9 +50,7 @@ export type ContentReadyEvent = ComponentEvent<dxSelectBox>;
 
 /** @public */
 export type CopyEvent = ComponentNativeEvent<dxSelectBox>;
-/**
- * @public
-*/
+/** @public */
 export type CustomItemCreatingEvent = ComponentEvent<dxSelectBox> & CustomItemCreatingInfo;
 
 /** @public */

@@ -51,29 +51,29 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      */
     cols?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type number | Enums.Mode
-      * @default 0
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type number | Enums.Mode
+       * @default 0
+       */
       baseSize?: number | 'auto',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 1
+       */
       ratio?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       screen?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 1
+       */
       shrink?: number
     }>;
     /**
@@ -105,29 +105,29 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      */
     rows?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type number | Enums.Mode
-      * @default 0
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type number | Enums.Mode
+       * @default 0
+       */
       baseSize?: number | 'auto',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 1
+       */
       ratio?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       screen?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 1
+       */
       shrink?: number
     }>;
     /**
@@ -166,10 +166,10 @@ export default class dxResponsiveBox extends CollectionWidget {
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxResponsiveBoxItem extends CollectionWidgetItem {
     /**
      * @docid
@@ -178,32 +178,32 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
      */
     location?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       col?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       colspan?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       row?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       rowspan?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       screen?: string
     } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
 }

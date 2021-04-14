@@ -4,7 +4,7 @@ import {
 
 /**
  * @public
-*/
+ */
 export interface ValidationCallbackData {
     value?: string | number,
     rule: any,

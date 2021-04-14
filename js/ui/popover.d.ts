@@ -129,7 +129,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
        * @default undefined
        */
       delay?: number,
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default undefined

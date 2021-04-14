@@ -274,28 +274,28 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     fieldPanel?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowFieldDragging?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       showColumnFields?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       showDataFields?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       showFilterFields?: boolean,
       /**
       * @docid
@@ -304,40 +304,40 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       */
       showRowFields?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       texts?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Drop Column Fields Here"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Drop Column Fields Here"
+         */
         columnFieldArea?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Drop Data Fields Here"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Drop Data Fields Here"
+         */
         dataFieldArea?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Drop Filter Fields Here"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Drop Filter Fields Here"
+         */
         filterFieldArea?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Drop Row Fields Here"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Drop Row Fields Here"
+         */
         rowFieldArea?: string
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
       visible?: boolean
     };
     /**
@@ -831,8 +831,8 @@ export default class dxPivotGrid extends Widget {
 }
 
 /**
-* @docid
-* @type object
+ * @docid
+ * @type object
  */
 export interface dxPivotGridPivotGridCell {
     /**
@@ -904,8 +904,8 @@ export interface dxPivotGridPivotGridCell {
 }
 
 /**
-* @docid
-* @type object
+ * @docid
+ * @type object
  */
 export interface dxPivotGridSummaryCell {
     /**

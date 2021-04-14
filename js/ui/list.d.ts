@@ -233,16 +233,16 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     menuItems?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type_function_param1 itemElement:dxElement
-      * @type_function_param2 itemData:object
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 itemElement:dxElement
+       * @type_function_param2 itemData:object
+       */
       action?: ((itemElement: TElement, itemData: any) => any),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       text?: string
     }>;
     /**
@@ -770,10 +770,10 @@ export default class dxList extends CollectionWidget {
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxListItem extends CollectionWidgetItem {
     /**
      * @docid

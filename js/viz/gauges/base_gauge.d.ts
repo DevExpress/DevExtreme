@@ -146,10 +146,10 @@ export interface BaseGaugeAnimation {
 }
 export interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     /**
-    * @docid BaseGaugeOptions.loadingIndicator.enabled
-    * @prevFileNamespace DevExpress.viz
-    * @hidden
-    */
+     * @docid BaseGaugeOptions.loadingIndicator.enabled
+     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
     enabled?: boolean;
 }
 export interface BaseGaugeRangeContainer {
@@ -260,7 +260,7 @@ export interface BaseGaugeScale {
        * @default '#FFFFFF'
        */
       color?: string,
-    /**
+      /**
        * @docid BaseGaugeOptions.scale.minorTick.length
        * @prevFileNamespace DevExpress.viz
        * @default 3
@@ -313,7 +313,7 @@ export interface BaseGaugeScale {
      * @public
      */
     tick?: {
-    /**
+      /**
        * @docid BaseGaugeOptions.scale.tick.color
        * @prevFileNamespace DevExpress.viz
        * @default '#FFFFFF'
@@ -477,11 +477,11 @@ export class BaseGauge extends BaseWidget {
 }
 
 /**
-* @docid
-* @section CommonIndicators
-* @type object
-* @hidden
-*/
+ * @docid
+ * @section CommonIndicators
+ * @type object
+ * @hidden
+ */
 export interface CommonIndicator {
     /**
      * @docid
@@ -610,37 +610,37 @@ export interface CommonIndicator {
      */
     text?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 indicatedValue:object
-      * @type_function_param1_field1 value:Number
-      * @type_function_param1_field2 valueText:string
-      * @type_function_return string
-      * @notUsedInTheme
-      * @default undefined
-      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 indicatedValue:object
+       * @type_function_param1_field1 value:Number
+       * @type_function_param1_field2 valueText:string
+       * @type_function_return string
+       * @notUsedInTheme
+       * @default undefined
+       * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
+       */
       customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-      * @default 14 [prop](size)
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
+       * @default 14 [prop](size)
+       */
       font?: Font,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizFormat
-      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @extends CommonVizFormat
+       * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
+       */
       format?: format,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      * @propertyOf circularRangeBar,linearRangeBar
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       * @propertyOf circularRangeBar,linearRangeBar
+       */
       indent?: number
     };
     /**

@@ -324,9 +324,9 @@ export default class dxTextEditor extends Editor {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxTextEditorButton {
     /**
      * @docid
