@@ -90,27 +90,27 @@ QUnit.test('scrollbar appears when scrolling is begun', function(assert) {
         inertiaEnabled: false
     });
 
-    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
-    assert.equal(scrollbar.option('visible'), false, 'scrollbar is hidden before scrolling');
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden before scrolling');
 
     pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
         .start()
         .down()
         .move(0, -1);
 
-    assert.equal(scrollbar.option('visible'), true, 'scrollbar is shown during scrolling');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'scrollbar is shown during scrolling');
 });
 
 QUnit.test('scrollbar is hidden when scrolling is completed', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
-            assert.equal(scrollbar.option('visible'), false, 'scrollbar is hidden');
+            assert.equal($scroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden');
         }
     });
 
-    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
     pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
         .start()
@@ -579,9 +579,12 @@ QUnit.test('scrollBar is not hoverable when scrollByThumb options is false', fun
         scrollByThumb: false
     });
 
-    const scrollbar = Scrollbar.getInstance($scrollable.find('.dx-scrollable-scrollbar'));
+    const $scrollbar = $('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable);
+    const $scroll = $scrollbar.find('.dx-scrollable-scroll');
 
-    assert.equal(scrollbar.option('hoverStateEnabled'), false, 'scrollbar is not hoverable');
+    $scrollbar.trigger('mouseenter');
+
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'scrollbar is not hoverable');
 });
 
 QUnit.test('container size should be rounded to prevent unexpected scrollbar appearance', function(assert) {
