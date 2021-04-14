@@ -369,7 +369,43 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(dataGridWrapper.rowsView.isRowVisible(3, 1), 'Navigation row is visible');
     });
 
-    QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual', function(assert) {
+    QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual and useNative is true (T988877)', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({ id: i + 1 });
+        }
+
+        // act
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: data,
+            focusedRowEnabled: true,
+            focusedRowKey: 11,
+            paging: {
+                pageSize: 5
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                useNative: true
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        const $scrollContainer = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-scrollable-container');
+        $scrollContainer.trigger('scroll');
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'Visible row count');
+        assert.equal(dataGrid.getTopVisibleRowData().id, 11, 'Focused row is visible');
+        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
+    });
+
+    QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual ()', function(assert) {
         // arrange
         const data = [];
 
