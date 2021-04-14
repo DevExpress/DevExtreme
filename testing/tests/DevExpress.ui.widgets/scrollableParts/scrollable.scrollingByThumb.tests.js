@@ -325,8 +325,8 @@ QUnit.test('showScrollbar option change', function(assert) {
     const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
     assert.equal($scrollbar.is(':hidden'), true);
-    assert.equal($scrollbar.hasClass('dx-state-invisible'), true, false);
-    assert.equal($scroll.hasClass('dx-state-invisible'), true, false);
+    assert.equal($scrollbar.css('display'), 'none');
+    assert.equal($scroll.hasClass('dx-state-invisible'), true);
 });
 
 QUnit.test('scrolling by thumb does not cause inertia', function(assert) {
@@ -387,8 +387,8 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for s
     $wrapScrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
     $scrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
 
-    assert.equal($scrollableScroll.hasClass('dx-state-invisible'), true, 'scrollbar is visible for inner scrollable');
-    assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), false, 'scrollbar is hidden for outer scrollable');
+    assert.equal($scrollableScroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible for inner scrollable');
+    assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden for outer scrollable');
 });
 
 QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of scrollable', function(assert) {
@@ -413,7 +413,7 @@ QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of s
 
     $container.trigger($.Event('mouseleave', { originalEvent: {} }));
 
-    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'scrollbar is visible after mouseleave');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible after mouseleave');
 });
 
 QUnit.test('leaving inner scroller and releasing in outer scroller should hide inner scrollbar and show outer scrollbar', function(assert) {
@@ -451,8 +451,8 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
     // up on outer
     pointerMock($wrapScrollableContainer).up();
 
-    assert.equal($scrollableScroll.hasClass('dx-state-invisible'), false, 'scrollbar is hidden for inner scrollable');
-    assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), true, 'scrollbar is visible for outer scrollable');
+    assert.equal($scrollableScroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden for inner scrollable');
+    assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible for outer scrollable');
 });
 
 QUnit.test('scrollbar is visible for parent scrollable after mouse leave for children scrollable', function(assert) {
