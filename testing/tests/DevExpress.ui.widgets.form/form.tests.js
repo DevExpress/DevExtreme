@@ -26,6 +26,8 @@ import 'ui/tag_box';
 import 'common.css!';
 import 'generic_light.css!';
 
+import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
+
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
@@ -1394,6 +1396,60 @@ QUnit.test('optional mark aligned', function(assert) {
     assert.ok($optionalLabel.position().left < $optionalMark.position().left, 'optional mark should be after of the text');
 });
 
+QUnit.module('T986577', () => {
+    function getFormConfig() {
+        return {
+            width: 200,
+            screenByWidth: (_) => { return 'md'; },
+            colCountByScreen: {
+                md: 1
+            },
+            items: [ {
+                label: { text: 'text' },
+                template: function() {
+                    return $('<div></div>').dxToolbar({
+                        multiline: false,
+                        items: [
+                            { text: 'Item1', locateInMenu: 'auto' },
+                            { text: 'Item2', locateInMenu: 'auto' },
+                            { text: 'Item3', locateInMenu: 'auto' }
+                        ]
+                    });
+                }
+            }, {
+                label: { text: 'Very very long text' },
+                editorType: 'dxTextBox'
+            } ]
+        };
+    }
+
+    QUnit.test('Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
+        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+        const $form = $('#form').dxForm(extend({ alignItemLabels: false }, getFormConfig()));
+
+        const resizeEventArg = resizeEventSpy.getCall(0).args[0];
+        assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
+        assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
+        assert.roughEqual(resizeEventArg.width(), 164, 5, 'toolbar width is correct');
+        assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
+
+        resizeEventSpy.restore();
+    });
+
+
+    QUnit.test('Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
+        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+        const $form = $('#form').dxForm(extend({ alignItemLabels: true }, getFormConfig()));
+
+        const resizeEventArg = resizeEventSpy.getCall(0).args[0];
+        assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
+        assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
+        assert.roughEqual(resizeEventArg.width(), 72, 5, 'toolbar width is correct');
+        assert.roughEqual(resizeEventArg.height(), 36, 1, 'toolbar height is correct');
+
+        resizeEventSpy.restore();
+    });
+});
 
 QUnit.module('Public API', {
     beforeEach: function() {
