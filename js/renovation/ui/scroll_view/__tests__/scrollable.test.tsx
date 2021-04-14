@@ -53,7 +53,7 @@ describe('Public methods', () => {
 
         if (isDefined(viewModel.scrollableRef)) {
           if (methodInfo.argsCount === 2) {
-            viewModel[methodInfo.name || methodInfo.name]('arg1', 'arg2');
+            viewModel[methodInfo.name]('arg1', 'arg2');
             expect(funcHandler).toHaveBeenCalledWith('arg1', 'arg2');
           } else if (methodInfo.argsCount === 1) {
             viewModel[methodInfo.name]('arg1');
