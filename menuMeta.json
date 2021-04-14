@@ -156,7 +156,6 @@
             "Title": "Row Editing and Editing Events",
             "Name": "RowEditingAndEditingEvents",
             "Widget": "DataGrid",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
               "/Controllers/ApiControllers/DataGridEmployeesController.cs",
@@ -322,7 +321,6 @@
             "Widget": "DataGrid",
             "DemoType": "Web",
             "Equivalents": "",
-            "Badge": "New",
             "Modules": "whatwg-fetch,devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridBatchUpdateWebApiController.cs",
@@ -337,7 +335,7 @@
             "Widget": "DataGrid",
             "DemoType": "Web",
             "Equivalents": "",
-            "Badge": "New",
+            "Badge": "Updated",
             "Modules": "whatwg-fetch,vuex",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridWebApiController.cs",
@@ -451,7 +449,6 @@
           {
             "Title": "Remote Reordering",
             "Name": "RemoteReordering",
-            "Badge": "Updated",
             "Widget": "DataGrid",
             "DemoType": "Web",
             "Modules": "devextreme-aspnet-data-nojquery",
