@@ -21,16 +21,16 @@ export default class extends React.Component<any, { visible: boolean; text: stri
     this.handleTextUpdate = this.handleTextUpdate.bind(this);
   }
 
+  private handleTextUpdate(e: unknown) {
+    this.setState({
+      text: e.value,
+    });
+  }
+
   private toggle(visible: boolean) {
     const { text } = this.state;
     this.setState({
       visible: visible || !validateText(text),
-    });
-  }
-
-  private handleTextUpdate(e: any) {
-    this.setState({
-      text: e.value,
     });
   }
 

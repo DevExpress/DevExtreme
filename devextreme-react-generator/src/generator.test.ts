@@ -26,7 +26,8 @@ describe('collectIndependentEvents', () => {
         ],
         props: [],
         firedEvents: ['func1'],
-      }, {
+      },
+      {
         name: 'onOption',
         isSubscribable: false,
         types: [
@@ -38,7 +39,8 @@ describe('collectIndependentEvents', () => {
         ],
         props: [],
         firedEvents: [],
-      }, {
+      },
+      {
         name: 'option3',
         isSubscribable: true,
         types: [
@@ -55,7 +57,8 @@ describe('collectIndependentEvents', () => {
         ],
         props: [],
         firedEvents: [],
-      }, {
+      },
+      {
         name: 'onOption4',
         isSubscribable: true,
         types: [
@@ -72,7 +75,8 @@ describe('collectIndependentEvents', () => {
         ],
         props: [],
         firedEvents: ['func1'],
-      }, {
+      },
+      {
         name: 'option5',
         isSubscribable: true,
         types: [
@@ -91,7 +95,7 @@ describe('collectIndependentEvents', () => {
         firedEvents: [],
       },
       {
-        name: 'onOptionChanged',
+        name: 'onSomeOptionChanged',
         isSubscribable: true,
         types: [
           {
@@ -103,10 +107,42 @@ describe('collectIndependentEvents', () => {
         props: [],
         firedEvents: [],
       },
+      {
+        name: 'onSomeOptionChange',
+        isSubscribable: true,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: [],
+      },
+      {
+        name: 'onSomeOptionChanged',
+        isSubscribable: true,
+        types: [
+          {
+            type: 'Function',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+          {
+            type: 'Number',
+            acceptableValues: [],
+            isCustomType: true,
+          },
+        ],
+        props: [],
+        firedEvents: [],
+      },
     ];
     const independentEvents = collectIndependentEvents(options);
-    expect(independentEvents.length).toBe(1);
+    expect(independentEvents.length).toBe(2);
     expect(independentEvents[0]).toEqual(options[1]);
+    expect(independentEvents[1]).toEqual(options[6]);
   });
 });
 

@@ -17,15 +17,15 @@ export default class extends React.Component<any, { text: string }> {
     this.handleTextChange = this.handleTextChange.bind(this);
   }
 
-  private clearText() {
+  private handleTextChange(e: unknown) {
     this.setState({
-      text: '',
+      text: e.value,
     });
   }
 
-  private handleTextChange(e: any) {
+  private clearText() {
     this.setState({
-      text: e.value,
+      text: '',
     });
   }
 

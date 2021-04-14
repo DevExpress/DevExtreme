@@ -31,6 +31,26 @@ class App extends React.Component<any, {
     this.onMenuClick = this.onMenuClick.bind(this);
   }
 
+  onOpenedStateModeChanged({ value }) {
+    this.setState({ openedStateMode: value });
+  }
+
+  onRevealModeChanged({ value }) {
+    this.setState({ revealMode: value });
+  }
+
+  onPositionChanged({ value }) {
+    this.setState({ position: value });
+  }
+
+  onOutsideClick() {
+    this.setState({ opened: false });
+  }
+
+  onMenuClick() {
+    this.setState((prevState) => ({ opened: !prevState }));
+  }
+
   render() {
     const {
       opened, openedStateMode, position, revealMode,
@@ -102,26 +122,6 @@ class App extends React.Component<any, {
         </div>
       </Example>
     );
-  }
-
-  onOpenedStateModeChanged({ value }) {
-    this.setState({ openedStateMode: value });
-  }
-
-  onRevealModeChanged({ value }) {
-    this.setState({ revealMode: value });
-  }
-
-  onPositionChanged({ value }) {
-    this.setState({ position: value });
-  }
-
-  onOutsideClick() {
-    this.setState({ opened: false });
-  }
-
-  onMenuClick() {
-    this.setState((prevState) => ({ opened: !prevState }));
   }
 }
 
