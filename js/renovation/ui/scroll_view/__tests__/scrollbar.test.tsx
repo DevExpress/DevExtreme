@@ -910,6 +910,32 @@ describe('Handlers', () => {
       expect(viewModel.visibility).toBe(true);
     });
 
+    test.each(optionValues.showScrollbar)('change visibility scrollbar on hide(), showScrollbar: %o,', (showScrollbar) => {
+      jest.clearAllTimers();
+      jest.useFakeTimers();
+
+      const viewModel = new Scrollbar({
+        direction,
+        showScrollbar,
+      } as ScrollbarProps);
+      viewModel.showOnScrollByWheel = true;
+
+      viewModel.hide();
+
+      if (showScrollbar === 'onScroll') {
+        expect(setTimeout).toHaveBeenCalledTimes(1);
+        expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 500);
+      }
+
+      jest.runOnlyPendingTimers();
+
+      if (showScrollbar === 'onScroll') {
+        expect(viewModel.showOnScrollByWheel).toEqual(undefined);
+      } else {
+        expect(viewModel.showOnScrollByWheel).toEqual(true);
+      }
+    });
+
     test.each([true, false])('scrollByHandler(delta), inBounds: %o,', (inBounds) => {
       const onInertiaAnimatorStart = jest.fn();
       const delta = { x: 50, y: 70 };
@@ -948,7 +974,6 @@ describe('Handlers', () => {
             viewModel.thumbScrolling = thumbScrolling;
             viewModel.crossThumbScrolling = true;
             viewModel.inBounds = () => inBounds;
-
             viewModel.stopHandler();
 
             expect(viewModel.thumbScrolling).toEqual(false);
