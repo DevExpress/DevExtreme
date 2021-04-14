@@ -401,7 +401,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $scrollContainer.trigger('scroll');
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 15, 'Visible row count');
+        assert.equal(dataGrid.getVisibleRows().length, 10, 'Visible row count');
         assert.equal(dataGrid.getTopVisibleRowData().id, 11, 'Focused row is visible');
         assert.equal(dataGrid.pageIndex(), 2, 'Page index');
     });
