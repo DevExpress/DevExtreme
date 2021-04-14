@@ -34,6 +34,9 @@ QUnit.test('default\'s contextmenu should be prevented on hold event', function(
         assert.ok(true);
         return;
     }
+
+    assert.expect(2);
+
     const $element = $('#element');
 
     $element.on(contextMenuEvent.name, function(e) {
@@ -114,34 +117,56 @@ QUnit.test('contextmenu should be unsubscribed on unsubscribing contextmenu', fu
     assert.equal(holdEvents.length, 0, 'contextmenu event handler was removed');
 });
 
-[
-    { isSimulator: true, description: 'default\'s contextmenu should be prevented on dxhold in simulator' },
-    { isSimulator: false, description: 'default\'s contextmenu should not be prevented on dxhold' }
-].forEach(function(config) {
-    QUnit.test(config.description, function(assert) {
-        if(support.touch) {
-            assert.ok(true);
-            return;
-        }
+QUnit.test('default\'s contextmenu should be prevented on dxhold in simulator', function(assert) {
+    if(support.touch) {
+        assert.ok(true);
+        return;
+    }
 
-        assert.expect(2);
+    assert.expect(2);
 
-        const originalIsSimulator = devices.isSimulator;
+    const originalIsSimulator = devices.isSimulator;
 
-        try {
-            devices.isSimulator = function() { return config.isSimulator; };
-            const $element = $('#element');
+    try {
+        devices.isSimulator = function() { return true; };
+        const $element = $('#element');
 
-            $element.on(contextMenuEvent.name, function(e) {
-                assert.strictEqual(e.target, $element[0]);
-            });
-            $element.on('contextmenu', function(e) {
-                assert.strictEqual(e.isDefaultPrevented(), config.isSimulator);
-            });
+        $element.on(contextMenuEvent.name, function(e) {
+            assert.strictEqual(e.target, $element[0]);
+        });
+        $element.on('contextmenu', function(e) {
+            assert.strictEqual(e.isDefaultPrevented(), true);
+        });
 
-            $element.trigger($.Event('contextmenu', { pointerType: 'mouse' }));
-        } finally {
-            devices.isSimulator = originalIsSimulator;
-        }
-    });
+        $element.trigger($.Event('contextmenu', { pointerType: 'mouse' }));
+    } finally {
+        devices.isSimulator = originalIsSimulator;
+    }
+});
+
+QUnit.test('default\'s contextmenu should not be prevented on dxhold', function(assert) {
+    if(support.touch) {
+        assert.ok(true);
+        return;
+    }
+
+    assert.expect(2);
+
+    const originalIsSimulator = devices.isSimulator;
+
+    try {
+        devices.isSimulator = function() { return false; };
+        const $element = $('#element');
+
+        $element.on(contextMenuEvent.name, function(e) {
+            assert.strictEqual(e.target, $element[0]);
+        });
+        $element.on('contextmenu', function(e) {
+            assert.strictEqual(e.isDefaultPrevented(), false);
+        });
+
+        $element.trigger($.Event('contextmenu', { pointerType: 'mouse' }));
+    } finally {
+        devices.isSimulator = originalIsSimulator;
+    }
 });
