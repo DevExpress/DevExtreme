@@ -713,7 +713,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }).length;
         },
 
-        _createInsertInfo: function(rowIndex, change) {
+        _createInsertInfo: function() {
             const insertInfo = {};
 
             insertInfo[INSERT_INDEX] = this._getInsertIndex();
