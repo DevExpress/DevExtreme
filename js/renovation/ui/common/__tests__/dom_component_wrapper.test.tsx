@@ -187,13 +187,6 @@ describe('DomComponentWrapper', () => {
         expect(instance.option).toBeCalledWith(spy.mock.results[0].value);
       });
 
-      it('updateWidget don\'t throw error if instance don\'t have option method', () => {
-        const component = createWidget();
-        component.getInstance = jest.fn().mockReturnValue({});
-
-        expect(() => component.updateWidget()).not.toThrow();
-      });
-
       it('setRootElementRef, set rootElementRef to div ref', () => {
         const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
         const component = new DomComponentWrapper({
