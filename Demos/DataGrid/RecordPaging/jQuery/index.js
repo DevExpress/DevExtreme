@@ -1,8 +1,11 @@
-$(function(){
+$(function() {
     const dataGrid = $("#gridContainer").dxDataGrid({
         dataSource: generateData(100000),
         showBorders: true,
-        scrolling: { 
+        customizeColumns: function(columns) {
+            columns[0].width = 70;
+        },
+        scrolling: {
             rowRenderingMode: 'virtual'
         },
         paging: {

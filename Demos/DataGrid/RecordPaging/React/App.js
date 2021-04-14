@@ -23,6 +23,9 @@ class App extends React.Component {
   isCompactMode() {
     return this.state.displayMode === 'compact';
   }
+  customizeColumns(columns) {
+    columns[0].width = 70;
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -39,6 +42,7 @@ class App extends React.Component {
           id='gridContainer'
           dataSource={generateData(100000)}
           showBorders={true}
+          customizeColumns={this.customizeColumns}
         >
           <Scrolling rowRenderingMode='virtual'></Scrolling>
           <Paging defaultPageSize={10} />
@@ -54,7 +58,6 @@ class App extends React.Component {
           <div className='caption'>Options</div>
           <div className='option-container'>
             <div className='option'>
-              <span className='option-caption'>Display Mode</span>
               <SelectBox
                 id='displayModes'
                 items={displayModes}

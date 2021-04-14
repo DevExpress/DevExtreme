@@ -4,7 +4,10 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.dataGridOptions = {
         dataSource: generateData(100000),
         showBorders: true,
-        scrolling: { 
+        customizeColumns: function(columns) {
+            columns[0].width = 70;
+        },
+        scrolling: {
             rowRenderingMode: 'virtual'
         },
         paging: {
@@ -49,7 +52,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             $scope.pageInfo = e.component;
         }
     };
-    $scope.showNavButtonsOptions =  {
+    $scope.showNavButtonsOptions = {
         text: "Show Navigation Buttons",
         value: true,
         onValueChanged: function(data) {

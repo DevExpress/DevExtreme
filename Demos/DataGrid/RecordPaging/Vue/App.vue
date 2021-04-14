@@ -2,6 +2,7 @@
   <div>
     <DxDataGrid
       id="gridContainer"
+      :customize-columns="customizeColumns"
       :data-source="dataSource"
       :show-borders="true"
     >
@@ -91,5 +92,10 @@ export default {
       return this.displayMode === 'compact';
     },
   },
+  methods: {
+    customizeColumns(columns) {
+      columns[0].width = 70;
+    }
+  }
 };
 </script>

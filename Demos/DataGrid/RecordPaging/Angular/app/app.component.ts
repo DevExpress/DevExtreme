@@ -22,6 +22,9 @@ export class AppComponent {
     showPageSizeSelector = true;
     showInfo = true;
     showNavButtons = true;
+    customizeColumns(columns) {
+        columns[0].width = 70;
+    }
     get isCompactMode() {
         return this.displayMode === "compact";
     }
