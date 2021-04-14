@@ -2,4 +2,4 @@ With virtual scrolling, you can improve the overall performance of your applicat
 
 To enable virtual scrolling mode, set the [scrolling](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/scrolling).[mode](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/scrolling/#mode) property to *"virtual"*.
 
-Virtual scrolling support is available in the following Scheduler [views](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/): *"day"*, *"week"*, and *"workWeek"*.
+Virtual scrolling is available for all [views](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/) except *"agenda"*.
