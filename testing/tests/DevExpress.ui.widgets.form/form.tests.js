@@ -13,6 +13,7 @@ import domAdapter from 'core/dom_adapter';
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
 
+import 'ui/toolbar';
 import 'ui/text_area';
 import 'ui/autocomplete';
 import 'ui/calendar';
