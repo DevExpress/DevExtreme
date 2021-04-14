@@ -132,6 +132,7 @@ export default class ComponentWrapper extends DOMComponent {
           return a;
         }, {}),
       };
+      this._storedClasses = this.$element()[0].getAttribute('class') || '';
     }
     const elemStyle = this.$element()[0].style;
 
@@ -141,8 +142,6 @@ export default class ComponentWrapper extends DOMComponent {
     }
     this._elementAttr.style = style;
 
-    const cssClass = this.$element()[0].getAttribute('class') || '';
-    this._storedClasses = this._storedClasses ?? cssClass;
     this._elementAttr.class = this._storedClasses;
 
     return this._elementAttr;
