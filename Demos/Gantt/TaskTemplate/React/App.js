@@ -13,7 +13,7 @@ class App extends React.Component {
       <div id="form-demo">
         <div className="widget-container">
           <Gantt
-            taskListWidth={300}
+            taskListWidth={500}
             height={700}
             scaleType="days"
             taskContentRender={TaskTemplate}>
@@ -23,9 +23,9 @@ class App extends React.Component {
             <Resources dataSource={resources} />
             <ResourceAssignments dataSource={resourceAssignments} />
 
-            <Column dataField="title" caption="Subject" width={200} />
-            <Column dataField="start" caption="Start Date" width={50} />
-            <Column dataField="end" caption="End Date" width={50} />
+            <Column dataField="title" caption="Subject" width={300} />
+            <Column dataField="start" caption="Start Date" />
+            <Column dataField="end" caption="End Date" />
 
             <Editing enabled={false} />
           </Gantt>

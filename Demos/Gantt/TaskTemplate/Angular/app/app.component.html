@@ -1,7 +1,7 @@
 <div id="demo-container">
     <div class="widget-container">
         <dx-gantt 
-            taskListWidth="300"
+            taskListWidth="500"
             height="700"
             scaleType="days"
             taskContentTemplate="taskContentTemplate">
@@ -11,9 +11,9 @@
             <dxo-resources [dataSource]="resources"></dxo-resources>
             <dxo-resource-assignments [dataSource]="resourceAssignments"></dxo-resource-assignments>
 
-            <dxi-column dataField="title" caption="Subject" [width]="200"></dxi-column>
-            <dxi-column dataField="start" caption="Start Date" dataType="date" [width]="50"></dxi-column>
-            <dxi-column dataField="end" caption="End Date" dataType="date" [width]="50"></dxi-column>
+            <dxi-column dataField="title" caption="Subject" [width]="300"></dxi-column>
+            <dxi-column dataField="start" caption="Start Date" dataType="date"></dxi-column>
+            <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
 
             <dxo-editing [enabled]="false"></dxo-editing>
             <div *dxTemplate="let item of 'taskContentTemplate'" class="custom-task {{getTaskColor(item.taskData.id)}}" style.width="{{item.taskSize.width}}px">

@@ -20,19 +20,15 @@ $(function() {
         columns: [{
             dataField: "title",
             caption: "Subject",
-            width: 200
+            width: 300
         }, {
             dataField: "start",
-            caption: "Start Date",
-            width: 50
-
+            caption: "Start Date"
         }, {
             dataField: "end",
-            caption: "End Date",
-            width: 50
-
+            caption: "End Date"
         }],
-        taskListWidth: 300,
+        taskListWidth: 500,
         taskContentTemplate: getTaskContentTemplate
     }).dxGantt("instance");
 

@@ -2,7 +2,7 @@
   <div id="form-demo">
     <div class="widget-container">
       <DxGantt
-        :task-list-width="300"
+        :task-list-width="500"
         :height="700"
         scale-type="days"
         :task-content-template="taskContentTemplate"
@@ -16,17 +16,15 @@
         <DxEditing :enabled="false"/>
 
         <DxColumn
-          :width="200"
+          :width="300"
           data-field="title"
           caption="Subject"
         />
         <DxColumn
-          :width="50"
           data-field="start"
           caption="Start Date"
         />
         <DxColumn
-          :width="50"
           data-field="end"
           caption="End Date"
         />
