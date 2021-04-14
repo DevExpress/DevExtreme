@@ -56,21 +56,30 @@ $(function(){
                 }
             }, {
                 locateInMenu: 'always',
-                text: 'Save',
-                onClick: function() {
-                    DevExpress.ui.notify("Save option has been clicked!");
+                widget: 'dxButton',
+                options: {
+                    text: 'Save',
+                    onClick: function() {
+                        DevExpress.ui.notify("Save option has been clicked!");
+                    }
                 }
             }, {
                 locateInMenu: 'always',
-                text: 'Print',
-                onClick: function() {
-                    DevExpress.ui.notify("Print option has been clicked!");
+                widget: 'dxButton',
+                options: {
+                    text: 'Print',
+                    onClick: function() {
+                        DevExpress.ui.notify("Print option has been clicked!");
+                    }
                 }
             }, {
                 locateInMenu: 'always',
-                text: 'Settings',
-                onClick: function() {
-                    DevExpress.ui.notify("Settings option has been clicked!");
+                widget: 'dxButton',
+                options: {
+                    text: 'Settings',
+                    onClick: function() {
+                        DevExpress.ui.notify("Settings option has been clicked!");
+                    }
                 }
             }
         ]
