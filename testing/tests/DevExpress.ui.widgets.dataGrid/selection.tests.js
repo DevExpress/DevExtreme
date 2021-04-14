@@ -18,6 +18,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import clickEvent from 'events/click';
+import errors from 'ui/widget/ui.errors';
 
 const dataGridWrapper = new DataGridWrapper('#container');
 
@@ -1493,6 +1494,36 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(this.totalCount(), 6, 'total count');
         assert.strictEqual(this.getSelectedRowKeys().length, 6, 'selected row count');
         assert.strictEqual(this.selectionController.isSelectAll(), true, 'isSelectAll');
+    });
+
+    QUnit.module('W1018', () => {
+        [true, false].forEach(deferred => {
+            ['infinite', 'virtual', 'standard'].forEach(scrollingMode => {
+                ['multiple', 'single', 'none'].forEach(selectionMode => {
+                    ['page', 'allPages'].forEach(selectAllMode => {
+                        QUnit.test(`scrolling mode = ${scrollingMode}, deferred = ${deferred}, selection mode = ${selectionMode}, selectAllMode = ${selectAllMode}`, function(assert) {
+                            // arrange
+                            sinon.spy(errors, 'log');
+
+                            this.applyOptions({
+                                selection: { mode: selectionMode, deferred, selectAllMode },
+                                scrolling: { mode: scrollingMode }
+                            });
+
+                            // assert
+                            if(scrollingMode === 'infinite' && selectionMode === 'multiple' && !deferred && selectAllMode === 'allPages') {
+                                assert.equal(errors.log.callCount, 1, 'warning was thrown');
+                                assert.equal(errors.log.lastCall.args[0], 'W1018', 'warning code');
+                            } else {
+                                assert.equal(errors.log.callCount, 0, 'warning was not thrown');
+                            }
+
+                            errors.log.restore();
+                        });
+                    });
+                });
+            });
+        });
     });
 });
 
