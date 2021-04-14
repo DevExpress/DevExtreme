@@ -207,7 +207,7 @@ class FileManager extends Widget {
         const $breadcrumbs = $('<div>').appendTo($container);
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
             rootFolderDisplayName: this.option('rootFolderName'),
-            onCurrentDirectoryChanging: ({ currentDirectory }) => this._setCurrentDirectory(currentDirectory)
+            onCurrentDirectoryChanging: ({ currentDirectory }) => this._setCurrentDirectory(currentDirectory, true)
         });
         this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
     }
@@ -625,8 +625,8 @@ class FileManager extends Widget {
         return this._commandManager.executeCommand(commandName);
     }
 
-    _setCurrentDirectory(directoryInfo) {
-        this._controller.setCurrentDirectory(directoryInfo);
+    _setCurrentDirectory(directoryInfo, checkActuality) {
+        this._controller.setCurrentDirectory(directoryInfo, checkActuality);
     }
 
     _getCurrentDirectory() {
