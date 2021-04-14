@@ -1093,7 +1093,7 @@ export class DataGridCommonColumnSettings {
 export class DataGridProps extends BaseWidgetProps implements Options {
   @Nested() columns?: (DataGridColumn | string)[];
 
-  @Nested() editing?: DataGridEditing = {
+  @Nested() editing?: DataGridEditing /* = {
     mode: 'row',
     refreshMode: 'full',
     allowAdding: false,
@@ -1110,7 +1110,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
     editRowKey: null,
     editColumnName: undefined,
     changes: [],
-  };
+  } */;
 
   @OneWay() export?: DataGridExport;
 
