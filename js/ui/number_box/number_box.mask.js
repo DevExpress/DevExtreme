@@ -776,9 +776,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
         switch(args.name) {
             case 'format':
             case 'useMaskBehavior':
+                this._renderInputType();
                 this._updateFormat();
                 this._renderFormatter();
                 this._renderValue();
+                this._refreshValueChangeEvent();
+                this._refreshEvents();
                 break;
             case 'min':
             case 'max':
