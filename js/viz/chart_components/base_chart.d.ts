@@ -1,5 +1,6 @@
 import {
-    TElement
+    TElement,
+    THTMLElement
 } from '../../core/element';
 
 import {
@@ -304,7 +305,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointInfo: any, element: TElement) => string | TElement);
+    contentTemplate?: template | ((pointInfo: any, element: THTMLElement) => string | THTMLElement);
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
      * @type_function_param1 pointInfo:object
@@ -337,7 +338,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export class BaseChart extends BaseWidget {
-    constructor(element: TElement, options?: BaseChartOptions)
+    constructor(element: THTMLElement, options?: BaseChartOptions)
     /**
      * @docid
      * @publicName clearSelection()

@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -120,7 +120,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default "title"
@@ -131,7 +131,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @fires dxAccordionOptions.onOptionChanged
@@ -186,7 +186,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @public
  */
 export default class dxAccordion extends CollectionWidget {
-    constructor(element: TElement, options?: dxAccordionOptions)
+    constructor(element: THTMLElement, options?: dxAccordionOptions)
     /**
      * @docid
      * @publicName collapseItem(index)

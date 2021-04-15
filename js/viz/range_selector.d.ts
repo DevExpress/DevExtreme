@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -887,7 +887,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
  * @public
  */
 export default class dxRangeSelector extends BaseWidget {
-    constructor(element: TElement, options?: dxRangeSelectorOptions)
+    constructor(element: THTMLElement, options?: dxRangeSelectorOptions)
     getDataSource(): DataSource;
     /**
      * @docid

@@ -1,5 +1,6 @@
 import {
-    TElement
+    TElement,
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -2974,7 +2975,7 @@ export interface dxChartValueAxisTitle extends dxChartCommonAxisSettingsTitle {
  * @public
  */
 export default class dxChart extends BaseChart {
-    constructor(element: TElement, options?: dxChartOptions)
+    constructor(element: THTMLElement, options?: dxChartOptions)
     /**
      * @docid
      * @publicName getArgumentAxis()
@@ -3075,7 +3076,7 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: TElement) => string | TElement);
+    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: THTMLElement) => string | THTMLElement);
 }
 
 /**

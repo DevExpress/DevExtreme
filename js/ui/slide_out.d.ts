@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -77,7 +77,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((container: TElement) => string | TElement);
+    contentTemplate?: template | ((container: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default null
@@ -102,7 +102,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | TElement);
+    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | THTMLElement);
     /**
      * @docid
      * @default false
@@ -120,7 +120,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @type Enums.SlideOutMenuPosition
@@ -184,7 +184,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
  * @public
  */
 export default class dxSlideOut extends CollectionWidget {
-    constructor(element: TElement, options?: dxSlideOutOptions)
+    constructor(element: THTMLElement, options?: dxSlideOutOptions)
     /**
      * @docid
      * @publicName hideMenu()
@@ -224,7 +224,7 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuTemplate?: template | (() => string | TElement);
+    menuTemplate?: template | (() => string | THTMLElement);
 }
 
 /** @public */

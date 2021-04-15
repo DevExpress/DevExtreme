@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -642,7 +642,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: TElement) => string | TElement);
+    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: THTMLElement) => string | THTMLElement);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
      * @type_function_param1 info:object
@@ -655,7 +655,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: TElement) => string | TElement);
+    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: THTMLElement) => string | THTMLElement);
 }
 /**
  * @docid
@@ -666,7 +666,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxSankey extends BaseWidget {
-    constructor(element: TElement, options?: dxSankeyOptions)
+    constructor(element: THTMLElement, options?: dxSankeyOptions)
     /**
      * @docid
      * @publicName getAllLinks()

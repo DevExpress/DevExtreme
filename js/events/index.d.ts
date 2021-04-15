@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 export interface EventExtension { }
@@ -13,20 +13,20 @@ export type TEvent = {} extends EventType ? dxEvent : EventType;
 /** @public */
 export interface InitializedEventInfo<T> {
     readonly component?: T;
-    readonly element?: TElement;
+    readonly element?: THTMLElement;
 }
 
 /** @public */
 export interface EventInfo<T> {
     readonly component: T;
-    readonly element: TElement;
+    readonly element: THTMLElement;
     readonly model?: any;
 }
 
 /** @public */
 export interface NativeEventInfo<T> {
     readonly component: T;
-    readonly element: TElement;
+    readonly element: THTMLElement;
     readonly model?: any;
     readonly event?: TEvent;
 }
@@ -41,7 +41,7 @@ export interface ChangedOptionInfo {
 
 export interface ItemInfo {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly itemIndex: number;
 }
 

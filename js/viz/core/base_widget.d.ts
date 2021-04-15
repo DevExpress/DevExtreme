@@ -7,7 +7,7 @@ import {
 } from '../../core/devices';
 
 import {
-    TElement
+    THTMLElement
 } from '../../core/element';
 
 import {
@@ -40,7 +40,7 @@ export interface IncidentInfo {
 
 export interface FileSavingEventInfo<T> {
   readonly component: T;
-  readonly element: TElement;
+  readonly element: THTMLElement;
   readonly fileName: string;
   readonly format: string;
   readonly data: Blob;
@@ -551,7 +551,7 @@ export interface BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    container?: string | TElement;
+    container?: string | THTMLElement;
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0
@@ -654,7 +654,7 @@ export interface BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseWidget extends DOMComponent {
-    constructor(element: TElement, options?: BaseWidgetOptions)
+    constructor(element: THTMLElement, options?: BaseWidgetOptions)
     /**
      * @docid
      * @static

@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -269,7 +269,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
  * @public
  */
 export default class dxForm extends Widget {
-    constructor(element: TElement, options?: dxFormOptions)
+    constructor(element: THTMLElement, options?: dxFormOptions)
     /**
      * @docid
      * @publicName getButton(name)
@@ -568,7 +568,7 @@ export interface dxFormGroupItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: GroupItemTemplateData, itemElement: TElement) => string | TElement);
+    template?: template | ((data: GroupItemTemplateData, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default true
@@ -709,7 +709,7 @@ export interface dxFormSimpleItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: SimpleItemTemplateData, itemElement: TElement) => string | TElement);
+    template?: template | ((data: SimpleItemTemplateData, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default undefined
@@ -835,7 +835,7 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:dxElement
        * @default undefined
        */
-      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: TElement) => any),
+      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: THTMLElement) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -844,7 +844,7 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:dxElement
        * @default undefined
        */
-      template?: template | ((tabData: any, tabIndex: number, tabElement: TElement) => any),
+      template?: template | ((tabData: any, tabIndex: number, tabElement: THTMLElement) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui

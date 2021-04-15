@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -607,7 +607,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }, element: TElement) => string | TElement);
+    contentTemplate?: template | ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }, element: THTMLElement) => string | THTMLElement);
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
@@ -630,7 +630,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxTreeMap extends BaseWidget {
-    constructor(element: TElement, options?: dxTreeMapOptions)
+    constructor(element: THTMLElement, options?: dxTreeMapOptions)
     /**
      * @docid
      * @publicName clearSelection()

@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -115,7 +115,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: string, fieldElement: TElement) => string | TElement);
+    fieldTemplate?: template | ((value: string, fieldElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default 1
@@ -140,7 +140,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
  * @public
  */
 export default class dxColorBox extends dxDropDownEditor {
-    constructor(element: TElement, options?: dxColorBoxOptions)
+    constructor(element: THTMLElement, options?: dxColorBoxOptions)
 }
 
 /** @public */

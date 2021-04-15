@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../../core/element';
 
 import {
@@ -90,7 +90,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointsInfo: any, element: TElement) => string | TElement);
+    contentTemplate?: template | ((pointsInfo: any, element: THTMLElement) => string | THTMLElement);
     /**
      * @docid BaseSparklineOptions.tooltip.customizeTooltip
      * @type_function_param1 pointsInfo:object
@@ -123,7 +123,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseSparkline extends BaseWidget {
-    constructor(element: TElement, options?: BaseSparklineOptions)
+    constructor(element: THTMLElement, options?: BaseSparklineOptions)
 
     /**
      * @docid

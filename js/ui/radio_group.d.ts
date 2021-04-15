@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import DataSource from '../data/data_source';
@@ -91,7 +91,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
  * @public
  */
 export default class dxRadioGroup extends Editor {
-    constructor(element: TElement, options?: dxRadioGroupOptions)
+    constructor(element: THTMLElement, options?: dxRadioGroupOptions)
     getDataSource(): DataSource;
 }
 

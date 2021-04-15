@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -38,7 +38,7 @@ import {
 
 interface ListItemInfo {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly itemIndex: number | { group: number; item: number; };
 }
 
@@ -59,7 +59,7 @@ export type DisposingEvent = EventInfo<dxList>;
 /** @public */
 export type GroupRenderedEvent = EventInfo<dxList> & {
     readonly groupData?: any;
-    readonly groupElement?: TElement;
+    readonly groupElement?: THTMLElement;
     readonly groupIndex?: number;
 }
 
@@ -180,7 +180,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: TElement) => string | TElement);
+    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default false
@@ -238,7 +238,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @type_function_param1 itemElement:dxElement
        * @type_function_param2 itemData:object
        */
-      action?: ((itemElement: TElement, itemData: any) => any),
+      action?: ((itemElement: THTMLElement, itemData: any) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -575,7 +575,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
  * @public
  */
 export default class dxList extends CollectionWidget {
-    constructor(element: TElement, options?: dxListOptions)
+    constructor(element: THTMLElement, options?: dxListOptions)
     /**
      * @docid
      * @publicName clientHeight()

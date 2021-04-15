@@ -3,7 +3,7 @@ import {
 } from '../animation/fx';
 
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -52,7 +52,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: TElement) => string | TElement);
+    contentTemplate?: template | ((contentElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default true
@@ -220,7 +220,7 @@ export interface dxOverlayAnimation {
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxOverlay extends Widget {
-    constructor(element: TElement, options?: dxOverlayOptions)
+    constructor(element: THTMLElement, options?: dxOverlayOptions)
     /**
      * @docid
      * @publicName content()
@@ -228,7 +228,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): TElement;
+    content(): THTMLElement;
     /**
      * @docid
      * @publicName hide()

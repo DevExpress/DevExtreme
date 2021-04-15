@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -47,7 +47,7 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
  * @public
  */
 export default class dxValidationSummary extends CollectionWidget {
-    constructor(element: TElement, options?: dxValidationSummaryOptions)
+    constructor(element: THTMLElement, options?: dxValidationSummaryOptions)
 }
 
 /** @public */

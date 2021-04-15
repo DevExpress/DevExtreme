@@ -3,7 +3,7 @@ import DOMComponent, {
 } from '../../core/dom_component';
 
 import {
-    TElement
+    THTMLElement
 } from '../../core/element';
 
 import {
@@ -89,7 +89,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class Widget extends DOMComponent {
-    constructor(element: TElement, options?: WidgetOptions)
+    constructor(element: THTMLElement, options?: WidgetOptions)
     /**
      * @docid
      * @publicName focus()

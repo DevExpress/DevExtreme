@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -380,7 +380,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
  * @public
  */
 export default class dxMap extends Widget {
-    constructor(element: TElement, options?: dxMapOptions)
+    constructor(element: THTMLElement, options?: dxMapOptions)
     /**
      * @docid
      * @publicName addMarker(markerOptions)

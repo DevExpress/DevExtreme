@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import Editor, {
@@ -29,5 +29,5 @@ export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxTrackBar extends Editor {
-    constructor(element: TElement, options?: dxTrackBarOptions)
+    constructor(element: THTMLElement, options?: dxTrackBarOptions)
 }

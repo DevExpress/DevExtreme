@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -49,7 +49,7 @@ export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
  * @public
  */
 export default class dxTooltip extends dxPopover {
-    constructor(element: TElement, options?: dxTooltipOptions)
+    constructor(element: THTMLElement, options?: dxTooltipOptions)
 }
 
 /** @public */

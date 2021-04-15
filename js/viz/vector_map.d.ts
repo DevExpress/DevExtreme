@@ -1,5 +1,6 @@
 import {
-    TElement
+    TElement,
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -784,7 +785,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: TElement) => string | TElement);
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: THTMLElement) => string | THTMLElement);
 }
 
 export interface dxVectorMapLegends extends BaseLegend {
@@ -894,7 +895,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: MapLayerElement, element: TElement) => string | TElement);
+    contentTemplate?: template | ((info: MapLayerElement, element: THTMLElement) => string | THTMLElement);
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
      * @type_function_param1 info:MapLayerElement
@@ -921,7 +922,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxVectorMap extends BaseWidget {
-    constructor(element: TElement, options?: dxVectorMapOptions)
+    constructor(element: THTMLElement, options?: dxVectorMapOptions)
     /**
      * @docid
      * @publicName center()

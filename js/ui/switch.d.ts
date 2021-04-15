@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -90,7 +90,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @public
  */
 export default class dxSwitch extends Editor {
-    constructor(element: TElement, options?: dxSwitchOptions)
+    constructor(element: THTMLElement, options?: dxSwitchOptions)
 }
 
 /** @public */

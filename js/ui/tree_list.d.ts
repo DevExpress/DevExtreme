@@ -1,5 +1,5 @@
 import {
-    TElement,
+    THTMLElement,
     TElementsArray
 } from '../core/element';
 
@@ -68,7 +68,7 @@ interface CellInfo {
     readonly column: Column;
     readonly rowIndex: number;
     readonly rowType: string;
-    readonly cellElement: TElement;
+    readonly cellElement: THTMLElement;
     readonly row: RowObject;
 }
 
@@ -102,7 +102,7 @@ export type ContentReadyEvent = EventInfo<dxTreeList>;
 export type ContextMenuPreparingEvent = EventInfo<dxTreeList> & {
     items?: Array<any>;
     readonly target: string;
-    readonly targetElement: TElement;
+    readonly targetElement: THTMLElement;
     readonly columnIndex: number;
     readonly column?: Column;
     readonly rowIndex: number;
@@ -137,7 +137,7 @@ export type EditorPreparedEvent = EventInfo<dxTreeList> & {
     readonly width?: number;
     readonly disabled: boolean;
     readonly rtlEnabled: boolean;
-    readonly editorElement: TElement;
+    readonly editorElement: THTMLElement;
     readonly readOnly: boolean;
     readonly dataField?: string;
     readonly row?: RowObject;
@@ -152,7 +152,7 @@ export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
     readonly width?: number;
     readonly disabled: boolean;
     readonly rtlEnabled: boolean;
-    readonly editorElement: TElement;
+    readonly editorElement: THTMLElement;
     readonly readOnly: boolean;
     editorName: string;
     editorOptions: any;
@@ -162,7 +162,7 @@ export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
 
 /** @public */
 export type FocusedCellChangedEvent = EventInfo<dxTreeList> & {
-    readonly cellElement: TElement;
+    readonly cellElement: THTMLElement;
     readonly columnIndex: number;
     readonly rowIndex: number;
     readonly row: RowObject;
@@ -171,7 +171,7 @@ export type FocusedCellChangedEvent = EventInfo<dxTreeList> & {
 
 /** @public */
 export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> & {
-    readonly cellElement: TElement;
+    readonly cellElement: THTMLElement;
     readonly prevColumnIndex: number;
     readonly prevRowIndex: number;
     newColumnIndex: number;
@@ -183,14 +183,14 @@ export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> 
 
 /** @public */
 export type FocusedRowChangedEvent = EventInfo<dxTreeList> & {
-    readonly rowElement: TElement;
+    readonly rowElement: THTMLElement;
     readonly rowIndex: number;
     readonly row: RowObject;
 }
 
 /** @public */
 export type FocusedRowChangingEvent = NativeEventInfo<dxTreeList> & {
-    readonly rowElement: TElement;
+    readonly rowElement: THTMLElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
     readonly rows: Array<RowObject>;
@@ -224,7 +224,7 @@ export type RowClickEvent = NativeEventInfo<dxTreeList> & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
-    readonly rowElement: TElement;
+    readonly rowElement: THTMLElement;
     readonly handled: boolean;
     readonly node: Node;
     readonly level: number;
@@ -247,7 +247,7 @@ export type RowDblClickEvent = NativeEventInfo<dxTreeList> & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
-    readonly rowElement: TElement;
+    readonly rowElement: THTMLElement;
 }
 
 /** @public */
@@ -273,7 +273,7 @@ export type RowPreparedEvent = EventInfo<dxTreeList> & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
-    readonly rowElement: TElement;
+    readonly rowElement: THTMLElement;
     readonly node: Node;
     readonly level: number;
 }
@@ -977,7 +977,7 @@ export interface Selection extends SelectionBase {
  * @public
  */
 export default class dxTreeList extends Widget implements GridBase {
-    constructor(element: TElement, options?: dxTreeListOptions)
+    constructor(element: THTMLElement, options?: dxTreeListOptions)
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -1181,14 +1181,14 @@ export default class dxTreeList extends Widget implements GridBase {
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: TElement): void;
-    getCellElement(rowIndex: number, dataField: string): TElement | undefined;
-    getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
+    focus(element: THTMLElement): void;
+    getCellElement(rowIndex: number, dataField: string): THTMLElement | undefined;
+    getCellElement(rowIndex: number, visibleColumnIndex: number): THTMLElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
     getKeyByRowIndex(rowIndex: number): any;
-    getRowElement(rowIndex: number): TElementsArray | undefined;
+    getRowElement(rowIndex: number): TElementsArray<Element> | undefined;
     getRowIndexByKey(key: any | string | number): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
@@ -1253,7 +1253,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnCellTemplateData) => any);
+    cellTemplate?: template | ((cellElement: THTMLElement, cellInfo: ColumnCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.columns
      * @type Array<dxTreeListColumn|string>
@@ -1281,7 +1281,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editCellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnEditCellTemplateData) => any);
+    editCellTemplate?: template | ((cellElement: THTMLElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.headerCellTemplate
      * @type_function_param1 columnHeader:dxElement
@@ -1292,7 +1292,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: ColumnHeaderCellTemplateData) => any);
+    headerCellTemplate?: template | ((columnHeader: THTMLElement, headerInfo: ColumnHeaderCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.type
      * @publicName type
@@ -1348,7 +1348,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplateData) => string | TElement);
+    template?: template | ((cellElement: THTMLElement, cellInfo: ColumnButtonTemplateData) => string | THTMLElement);
     /**
      * @docid dxTreeListColumnButton.visible
      * @default true

@@ -1,5 +1,6 @@
 import {
-    TElement
+    TElement,
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -395,7 +396,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: TElement) => string | TElement);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: THTMLElement) => string | THTMLElement);
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -425,7 +426,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxBarGauge extends BaseWidget {
-    constructor(element: TElement, options?: dxBarGaugeOptions)
+    constructor(element: THTMLElement, options?: dxBarGaugeOptions)
     /**
      * @docid
      * @publicName values()

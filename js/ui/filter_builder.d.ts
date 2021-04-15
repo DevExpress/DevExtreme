@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -34,7 +34,7 @@ export type DisposingEvent = EventInfo<dxFilterBuilder>;
 export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
     readonly value?: any;
     readonly setValue: any;
-    readonly editorElement: TElement;
+    readonly editorElement: THTMLElement;
     readonly editorName: string;
     readonly dataField?: string;
     readonly filterOperation?: string;
@@ -49,7 +49,7 @@ export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
 export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
     readonly value?: any;
     readonly setValue: any;
-    readonly editorElement?: TElement;
+    readonly editorElement?: THTMLElement;
     editorName: string;
     editorOptions?: any;
     readonly dataField?: string;
@@ -322,7 +322,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
  * @public
  */
 export default class dxFilterBuilder extends Widget {
-    constructor(element: TElement, options?: dxFilterBuilderOptions)
+    constructor(element: THTMLElement, options?: dxFilterBuilderOptions)
     /**
      * @docid
      * @publicName getFilterExpression()
@@ -384,7 +384,7 @@ export interface dxFilterBuilderCustomOperation {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: CustomOperationEditorTemplate, container: TElement) => string | TElement);
+    editorTemplate?: template | ((conditionInfo: CustomOperationEditorTemplate, container: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default true
@@ -472,7 +472,7 @@ export interface dxFilterBuilderField {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: FieldEditorTemplate, container: TElement) => string | TElement);
+    editorTemplate?: template | ((conditionInfo: FieldEditorTemplate, container: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default "false"

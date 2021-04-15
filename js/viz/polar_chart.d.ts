@@ -1,5 +1,6 @@
 import {
-    TElement
+    TElement,
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -303,7 +304,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, argument?: Date | number | string }) => void) | string;
+    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: THTMLElement, model?: any, event?: TEvent, argument?: Date | number | string }) => void) | string;
     /**
      * @docid
      * @default null
@@ -1459,7 +1460,7 @@ export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSetting
  * @public
  */
 export default class dxPolarChart extends BaseChart {
-    constructor(element: TElement, options?: dxPolarChartOptions)
+    constructor(element: THTMLElement, options?: dxPolarChartOptions)
     /**
      * @docid dxPolarChart.getValueAxis
      * @publicName getValueAxis()
@@ -1541,7 +1542,7 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: TElement) => string | TElement);
+    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: THTMLElement) => string | THTMLElement);
 }
 
 /**

@@ -3,7 +3,7 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -34,14 +34,14 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    boundary?: string | TElement;
+    boundary?: string | THTMLElement;
     /**
      * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | TElement;
+    container?: string | THTMLElement;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -120,7 +120,7 @@ export type DisposingEvent = EventInfo<dxDraggable>;
 /** @public */
 export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
@@ -130,7 +130,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
 /** @public */
 export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
@@ -140,7 +140,7 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
 /** @public */
 export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly fromData?: any;
 }
 
@@ -154,7 +154,7 @@ export type OptionChangedEvent = EventInfo<dxDraggable> & ChangedOptionInfo;
 /** @public */
 export type DragTemplateData = {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
 }
 
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
@@ -176,7 +176,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: TElement) => string | TElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default null
@@ -245,7 +245,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
  * @public
  */
 export default class dxDraggable extends DOMComponent implements DraggableBase {
-    constructor(element: TElement, options?: dxDraggableOptions)
+    constructor(element: THTMLElement, options?: dxDraggableOptions)
 }
 
 /** @public */

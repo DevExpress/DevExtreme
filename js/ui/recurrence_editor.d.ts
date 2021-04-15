@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import Editor, {
@@ -26,7 +26,7 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
  * @public
  */
 export default class dxRecurrenceEditor extends Editor {
-    constructor(element: TElement, options?: dxRecurrenceEditorOptions)
+    constructor(element: THTMLElement, options?: dxRecurrenceEditorOptions)
 }
 
 export type Options = dxRecurrenceEditorOptions;

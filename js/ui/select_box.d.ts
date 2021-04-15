@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -121,7 +121,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: TElement) => string | TElement);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @extends Action
@@ -182,7 +182,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
  * @public
  */
 export default class dxSelectBox extends dxDropDownList {
-    constructor(element: TElement, options?: dxSelectBoxOptions)
+    constructor(element: THTMLElement, options?: dxSelectBoxOptions)
 }
 
 /** @public */

@@ -1,7 +1,7 @@
 import DOMComponent from '../core/dom_component';
 
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -29,11 +29,11 @@ import dxDraggable, {
 /** @public */
 export interface AddEvent {
     readonly component: dxSortable;
-    readonly element: TElement;
+    readonly element: THTMLElement;
     readonly model?: any;
     readonly event: TEvent;
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -49,7 +49,7 @@ export type DisposingEvent = EventInfo<dxSortable>;
 /** @public */
 export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly fromIndex?: number;
     readonly toIndex?: number;
     readonly fromComponent?: dxSortable | dxDraggable;
@@ -62,7 +62,7 @@ export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
 /** @public */
 export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -75,7 +75,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
 /** @public */
 export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -88,7 +88,7 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
 /** @public */
 export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable> & {
     itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly fromIndex: number;
     readonly fromData?: any;
 }
@@ -102,7 +102,7 @@ export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
 /** @public */
 export type RemoveEvent = NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -114,7 +114,7 @@ export type RemoveEvent = NativeEventInfo<dxSortable> & {
 /** @public */
 export type ReorderEvent = NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -128,7 +128,7 @@ export type ReorderEvent = NativeEventInfo<dxSortable> & {
 /** @public */
 export interface DragTemplateData {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly fromIndex: number;
 }
 
@@ -159,7 +159,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: TElement) => string | TElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @type Enums.DropFeedbackMode
@@ -354,7 +354,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
  * @public
  */
 export default class dxSortable extends DOMComponent implements DraggableBase {
-    constructor(element: TElement, options?: dxSortableOptions)
+    constructor(element: THTMLElement, options?: dxSortableOptions)
     /**
      * @docid
      * @publicName update()

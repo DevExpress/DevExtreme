@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -19,7 +19,7 @@ export interface animationConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    complete?: (($element: TElement, config: any) => void);
+    complete?: (($element: THTMLElement, config: any) => void);
     /**
      * @docid
      * @default 0
@@ -70,7 +70,7 @@ export interface animationConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    start?: (($element: TElement, config: any) => void);
+    start?: (($element: THTMLElement, config: any) => void);
     /**
      * @docid
      * @default {}

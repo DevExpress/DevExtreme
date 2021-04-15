@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -113,7 +113,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @deprecated
      * @public
      */
-    target?: string | TElement;
+    target?: string | THTMLElement;
     /**
      * @docid
      * @type_function_param1 Element:dxElement
@@ -121,7 +121,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((Element: TElement) => any);
+    template?: template | ((Element: THTMLElement) => any);
 }
 /**
  * @docid
@@ -133,7 +133,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
  * @public
  */
 export default class dxDrawer extends Widget {
-    constructor(element: TElement, options?: dxDrawerOptions)
+    constructor(element: THTMLElement, options?: dxDrawerOptions)
     /**
      * @docid
      * @publicName content()
@@ -141,7 +141,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): TElement;
+    content(): THTMLElement;
     /**
      * @docid
      * @publicName hide()

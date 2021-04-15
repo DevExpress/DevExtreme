@@ -1,5 +1,6 @@
 import {
-    TElement
+    TElement,
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -663,7 +664,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: TElement) => string | TElement);
+    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: THTMLElement) => string | THTMLElement);
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
@@ -688,7 +689,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxFunnel extends BaseWidget {
-    constructor(element: TElement, options?: dxFunnelOptions)
+    constructor(element: THTMLElement, options?: dxFunnelOptions)
     /**
      * @docid
      * @publicName clearSelection()

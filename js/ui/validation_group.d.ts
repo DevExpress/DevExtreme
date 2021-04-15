@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import DOMComponent, {
@@ -49,7 +49,7 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @public
  */
 export default class dxValidationGroup extends DOMComponent {
-    constructor(element: TElement, options?: dxValidationGroupOptions)
+    constructor(element: THTMLElement, options?: dxValidationGroupOptions)
     /**
      * @docid
      * @publicName reset()

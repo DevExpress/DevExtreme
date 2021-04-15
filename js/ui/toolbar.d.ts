@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -72,7 +72,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @deprecated
@@ -92,7 +92,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @public
  */
 export default class dxToolbar extends CollectionWidget {
-    constructor(element: TElement, options?: dxToolbarOptions)
+    constructor(element: THTMLElement, options?: dxToolbarOptions)
 }
 
 /**
@@ -130,7 +130,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | (() => string | TElement);
+    menuItemTemplate?: template | (() => string | THTMLElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

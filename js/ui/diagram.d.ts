@@ -1,5 +1,6 @@
 import {
-    TElement
+    TElement,
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -28,7 +29,7 @@ export type ContentReadyEvent = EventInfo<dxDiagram>;
 /** @public */
 export type CustomCommandEvent = {
     readonly component: dxDiagram;
-    readonly element: TElement;
+    readonly element: THTMLElement;
     readonly name: string;
 }
 
@@ -1231,7 +1232,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
  * @public
  */
 export default class dxDiagram extends Widget {
-    constructor(element: TElement, options?: dxDiagramOptions)
+    constructor(element: THTMLElement, options?: dxDiagramOptions)
     /**
      * @docid
      * @publicName getNodeDataSource()

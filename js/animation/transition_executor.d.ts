@@ -27,7 +27,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    enter(elements: TElementsArray, animation: animationConfig | string): void;
+    enter(elements: TElementsArray<Element>, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName leave(elements, animation)
@@ -36,7 +36,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    leave(elements: TElementsArray, animation: animationConfig | string): void;
+    leave(elements: TElementsArray<Element>, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName reset()

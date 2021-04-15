@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../../core/element';
 
 import {
@@ -50,7 +50,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @fires CollectionWidgetOptions.onOptionChanged
@@ -190,7 +190,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
  * @prevFileNamespace DevExpress.ui
  */
 export default class CollectionWidget extends Widget {
-    constructor(element: TElement, options?: CollectionWidgetOptions)
+    constructor(element: THTMLElement, options?: CollectionWidgetOptions)
     getDataSource(): DataSource;
 }
 
@@ -219,7 +219,7 @@ export interface CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    template?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

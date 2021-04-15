@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -41,7 +41,7 @@ export type InitializedEvent = InitializedEventInfo<dxTreeView>;
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
 }
@@ -49,7 +49,7 @@ export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
 /** @public */
 export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
@@ -57,7 +57,7 @@ export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
 /** @public */
 export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
 }
@@ -65,7 +65,7 @@ export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
 /** @public */
 export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
@@ -73,7 +73,7 @@ export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
 /** @public */
 export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
@@ -81,7 +81,7 @@ export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
 /** @public */
 export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
@@ -89,7 +89,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
 /** @public */
 export type ItemSelectionChangedEvent = EventInfo<dxTreeView> & {
     readonly node?: dxTreeViewNode;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
     readonly itemData?: any;
     readonly itemIndex?: number;
 }
@@ -399,7 +399,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
  * @public
  */
 export default class dxTreeView extends HierarchicalCollectionWidget {
-    constructor(element: TElement, options?: dxTreeViewOptions)
+    constructor(element: THTMLElement, options?: dxTreeViewOptions)
     /**
      * @docid
      * @publicName collapseAll()

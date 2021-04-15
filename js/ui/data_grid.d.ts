@@ -1,5 +1,5 @@
 import {
-  TElement,
+  THTMLElement,
   TElementsArray
 } from '../core/element';
 
@@ -166,7 +166,7 @@ export interface RowDraggingEventInfo<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   readonly itemData?: any;
-  readonly itemElement: TElement;
+  readonly itemElement: THTMLElement;
   readonly fromIndex: number;
   readonly toIndex: number;
   readonly fromComponent: dxSortable | dxDraggable;
@@ -179,7 +179,7 @@ export interface DragStartEventInfo<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   itemData?: any;
-  readonly itemElement: TElement;
+  readonly itemElement: THTMLElement;
   readonly fromIndex: number;
   readonly fromData?: any;
 }
@@ -195,7 +195,7 @@ export interface DragReorderInfo {
 
 export interface RowDraggingTemplateDataModel {
   readonly itemData: any;
-  readonly itemElement: TElement;
+  readonly itemElement: THTMLElement;
 }
 
 export interface FilterPanelCustomizeTextArg<T> { 
@@ -261,13 +261,13 @@ export interface RowDragging<T extends GridBase> {
      * @prevFileNamespace DevExpress.ui
      * @default undefined
      */
-    boundary?: string | TElement,
+    boundary?: string | THTMLElement,
     /**
      * @docid GridBaseOptions.rowDragging.container
      * @prevFileNamespace DevExpress.ui
      * @default undefined
      */
-    container?: string | TElement,
+    container?: string | THTMLElement,
     /**
      * @docid GridBaseOptions.rowDragging.cursorOffset
      * @prevFileNamespace DevExpress.ui
@@ -309,7 +309,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_return string|Element|jQuery
      * @default undefined
      */
-    dragTemplate?: template | ((dragInfo: RowDraggingTemplateData, containerElement: TElement) => string | TElement),
+    dragTemplate?: template | ((dragInfo: RowDraggingTemplateData, containerElement: THTMLElement) => string | THTMLElement),
     /**
      * @docid GridBaseOptions.rowDragging.dropFeedbackMode
      * @prevFileNamespace DevExpress.ui
@@ -2256,7 +2256,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    focus(element: TElement): void;
+    focus(element: THTMLElement): void;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, dataField)
@@ -2266,7 +2266,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getCellElement(rowIndex: number, dataField: string): TElement | undefined;
+    getCellElement(rowIndex: number, dataField: string): THTMLElement | undefined;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
@@ -2276,7 +2276,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
+    getCellElement(rowIndex: number, visibleColumnIndex: number): THTMLElement | undefined;
     /**
      * @docid
      * @publicName getCombinedFilter()
@@ -2312,7 +2312,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getRowElement(rowIndex: number): TElementsArray | undefined;
+    getRowElement(rowIndex: number): TElementsArray<Element> | undefined;
     /**
      * @docid
      * @publicName getRowIndexByKey(key)
@@ -3067,7 +3067,7 @@ export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly column: any;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly cellElement: TElement;
+  readonly cellElement: THTMLElement;
   readonly row: RowObject;
 }
 
@@ -3082,7 +3082,7 @@ export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly column: Column;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly cellElement: TElement;
+  readonly cellElement: THTMLElement;
   readonly row: RowObject;
 }
 
@@ -3098,7 +3098,7 @@ export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
   readonly rowIndex: number;
   readonly column: Column;
   readonly rowType: string;
-  readonly cellElement: TElement;
+  readonly cellElement: THTMLElement;
   readonly row: RowObject;
 }
 
@@ -3117,7 +3117,7 @@ export type CellPreparedEvent = EventInfo<dxDataGrid> & {
   readonly isSelected?: boolean;
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
-  readonly cellElement: TElement;
+  readonly cellElement: THTMLElement;
   readonly watch?: Function;
   readonly oldValue?: any;
 }
@@ -3129,7 +3129,7 @@ export type ContentReadyEvent = EventInfo<dxDataGrid>;
 export type ContextMenuPreparingEvent = EventInfo<dxDataGrid> & {
   items?: Array<any>;
   readonly target: string;
-  readonly targetElement: TElement;
+  readonly targetElement: THTMLElement;
   readonly columnIndex: number;
   readonly column?: Column;
   readonly rowIndex: number;
@@ -3164,7 +3164,7 @@ export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
   readonly width?: number;
   readonly disabled: boolean;
   readonly rtlEnabled: boolean;
-  readonly editorElement: TElement;
+  readonly editorElement: THTMLElement;
   readonly readOnly: boolean;
   readonly dataField?: string;
   readonly row?: RowObject;
@@ -3180,7 +3180,7 @@ export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
   readonly disabled: boolean;
   readonly rtlEnabled: boolean;
   cancel: boolean;
-  readonly editorElement: TElement;
+  readonly editorElement: THTMLElement;
   readonly readOnly: boolean;
   editorName: string;
   editorOptions: any;
@@ -3199,7 +3199,7 @@ export type ExportingEvent = Cancelable & EventInfo<dxDataGrid> & {
 /** @public */
 export type FileSavingEvent = Cancelable & {
   readonly component: dxDataGrid;
-  readonly element: TElement;
+  readonly element: THTMLElement;
   fileName?: string;
   format?: string;
   readonly data: Blob;
@@ -3207,7 +3207,7 @@ export type FileSavingEvent = Cancelable & {
 
 /** @public */
 export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
-  readonly cellElement: TElement;
+  readonly cellElement: THTMLElement;
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly row?: RowObject;
@@ -3216,7 +3216,7 @@ export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
 
 /** @public */
 export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
-  readonly cellElement: TElement;
+  readonly cellElement: THTMLElement;
   readonly prevColumnIndex: number;
   readonly prevRowIndex: number;
   newColumnIndex: number;
@@ -3228,14 +3228,14 @@ export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> 
 
 /** @public */
 export type FocusedRowChangedEvent = EventInfo<dxDataGrid> & {
-  readonly rowElement: TElement;
+  readonly rowElement: THTMLElement;
   readonly rowIndex: number;
   readonly row?: RowObject;
 }
 
 /** @public */
 export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
-  readonly rowElement: TElement;
+  readonly rowElement: THTMLElement;
   readonly prevRowIndex: number;
   newRowIndex: number;
   readonly rows: Array<RowObject>;
@@ -3265,7 +3265,7 @@ export type RowClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
   readonly groupIndex?: number;
-  readonly rowElement: TElement;
+  readonly rowElement: THTMLElement;
   readonly handled: boolean;
 }
 
@@ -3287,7 +3287,7 @@ export type RowDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
   readonly groupIndex?: number;
-  readonly rowElement: TElement;
+  readonly rowElement: THTMLElement;
 }
 
 /** @public */
@@ -3314,7 +3314,7 @@ export type RowPreparedEvent = EventInfo<dxDataGrid> & {
   readonly isSelected?: boolean;
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
-  readonly rowElement: TElement;
+  readonly rowElement: THTMLElement;
 }
 
 /** @public */
@@ -3963,7 +3963,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowTemplate?: template | ((rowElement: TElement, rowInfo: RowTemplateData) => any);
+    rowTemplate?: template | ((rowElement: THTMLElement, rowInfo: RowTemplateData) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -4225,7 +4225,7 @@ export interface MasterDetail {
    * @type_function_param2_field2 data:object
    * @type_function_param2_field3 watch:function
    */
-  template?: template | ((detailElement: TElement, detailInfo: MasterDetailTemplateData) => any)
+  template?: template | ((detailElement: THTMLElement, detailInfo: MasterDetailTemplateData) => any)
 }
 
 export interface dxDataGridSortByGroupSummaryInfoItem {
@@ -4591,7 +4591,7 @@ export interface Selection extends SelectionBase {
  * @public
  */
 declare class dxDataGrid extends Widget implements GridBase {
-    constructor(element: TElement, options?: dxDataGridOptions)
+    constructor(element: THTMLElement, options?: dxDataGridOptions)
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -4766,14 +4766,14 @@ declare class dxDataGrid extends Widget implements GridBase {
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: TElement): void;
-    getCellElement(rowIndex: number, dataField: string): TElement | undefined;
-    getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
+    focus(element: THTMLElement): void;
+    getCellElement(rowIndex: number, dataField: string): THTMLElement | undefined;
+    getCellElement(rowIndex: number, visibleColumnIndex: number): THTMLElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
     getKeyByRowIndex(rowIndex: number): any;
-    getRowElement(rowIndex: number): TElementsArray | undefined;
+    getRowElement(rowIndex: number): TElementsArray<Element> | undefined;
     getRowIndexByKey(key: any | string | number): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
@@ -4867,7 +4867,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnCellTemplateData) => any);
+    cellTemplate?: template | ((cellElement: THTMLElement, cellInfo: ColumnCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.columns
      * @type Array<dxDataGridColumn|string>
@@ -4895,7 +4895,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editCellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnEditCellTemplateData) => any);
+    editCellTemplate?: template | ((cellElement: THTMLElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.groupCellTemplate
      * @type_function_param1 cellElement:dxElement
@@ -4915,7 +4915,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupCellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnGroupCellTemplateData) => any);
+    groupCellTemplate?: template | ((cellElement: THTMLElement, cellInfo: ColumnGroupCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.groupIndex
      * @default undefined
@@ -4934,7 +4934,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: ColumnHeaderCellTemplateData) => any);
+    headerCellTemplate?: template | ((columnHeader: THTMLElement, headerInfo: ColumnHeaderCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.showWhenGrouped
      * @default false
@@ -4995,7 +4995,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplateData) => string | TElement);
+    template?: template | ((cellElement: THTMLElement, cellInfo: ColumnButtonTemplateData) => string | THTMLElement);
     /**
      * @docid dxDataGridColumnButton.visible
      * @default true

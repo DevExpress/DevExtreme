@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -45,7 +45,7 @@ export type ContentReadyEvent = EventInfo<dxGantt>;
 /** @public */
 export type ContextMenuPreparingEvent = Cancelable & {
     readonly component?: dxGantt;
-    readonly element?: TElement;
+    readonly element?: THTMLElement;
     readonly event?: TEvent;
     readonly targetKey?: any;
     readonly targetType?: string;
@@ -56,7 +56,7 @@ export type ContextMenuPreparingEvent = Cancelable & {
 /** @public */
 export type CustomCommandEvent = {
     readonly component?: dxGantt;
-    readonly element?: TElement;
+    readonly element?: THTMLElement;
     readonly name: string;
 }
 
@@ -931,7 +931,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskTooltipContentTemplate?: template | ((container: TElement, task: any) => string | TElement);
+    taskTooltipContentTemplate?: template | ((container: THTMLElement, task: any) => string | THTMLElement);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -942,7 +942,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskTimeTooltipContentTemplate?: template | ((container: TElement, item: TimeTooltipTemplateData) => string | TElement);
+    taskTimeTooltipContentTemplate?: template | ((container: THTMLElement, item: TimeTooltipTemplateData) => string | THTMLElement);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -952,7 +952,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskProgressTooltipContentTemplate?: template | ((container: TElement, item: ProgressTooltipTemplateData) => string | TElement);
+    taskProgressTooltipContentTemplate?: template | ((container: THTMLElement, item: ProgressTooltipTemplateData) => string | THTMLElement);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -968,7 +968,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskContentTemplate?: template | ((container: TElement, item: TaskContentTemplateData) => string | TElement);
+    taskContentTemplate?: template | ((container: THTMLElement, item: TaskContentTemplateData) => string | THTMLElement);
     /**
      * @docid
      * @default 0
@@ -986,7 +986,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
  * @public
  */
 export default class dxGantt extends Widget {
-    constructor(element: TElement, options?: dxGanttOptions)
+    constructor(element: THTMLElement, options?: dxGanttOptions)
     /**
      * @docid
      * @publicName getTaskData(key)

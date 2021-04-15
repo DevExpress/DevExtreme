@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -51,7 +51,7 @@ export type InitializedEvent = InitializedEventInfo<dxDropDownButton>;
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxDropDownButton> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
 };
 
 /** @public */
@@ -96,7 +96,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: TElement) => string | TElement);
+    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default {}
@@ -135,7 +135,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default null
@@ -282,7 +282,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
  * @public
  */
 export default class dxDropDownButton extends Widget {
-    constructor(element: TElement, options?: dxDropDownButtonOptions)
+    constructor(element: THTMLElement, options?: dxDropDownButtonOptions)
     /**
      * @docid
      * @publicName close()
@@ -336,7 +336,7 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: { component?: dxDropDownButton, element?: THTMLElement, model?: any, event?: TEvent }) => void) | string;
 }
 
 /** @public */

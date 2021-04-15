@@ -3,7 +3,7 @@ import {
 } from '../animation/fx';
 
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -53,7 +53,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => void);
+    onRendered?: ((e: { component?: dxDeferRendering, element?: THTMLElement, model?: any }) => void);
     /**
      * @docid
      * @default null
@@ -61,7 +61,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => void);
+    onShown?: ((e: { component?: dxDeferRendering, element?: THTMLElement, model?: any }) => void);
     /**
      * @docid
      * @type TPromise|bool
@@ -94,7 +94,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
  * @public
  */
 export default class dxDeferRendering extends Widget {
-    constructor(element: TElement, options?: dxDeferRenderingOptions)
+    constructor(element: THTMLElement, options?: dxDeferRenderingOptions)
 }
 
 /** @public */

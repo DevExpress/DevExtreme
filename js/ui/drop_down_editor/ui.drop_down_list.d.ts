@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../../core/element';
 
 import {
@@ -50,7 +50,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default false
@@ -200,6 +200,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxDropDownList extends dxDropDownEditor {
-    constructor(element: TElement, options?: dxDropDownListOptions)
+    constructor(element: THTMLElement, options?: dxDropDownListOptions)
     getDataSource(): DataSource;
 }

@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -128,7 +128,7 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
  * @public
  */
 export default class dxBullet extends BaseSparkline {
-    constructor(element: TElement, options?: dxBulletOptions)
+    constructor(element: THTMLElement, options?: dxBulletOptions)
 }
 
 /** @public */

@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../../core/element';
 
 import {
@@ -84,7 +84,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: TElement) => string | TElement);
+    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default null
@@ -149,7 +149,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxDropDownEditor extends dxTextBox {
-    constructor(element: TElement, options?: dxDropDownEditorOptions)
+    constructor(element: THTMLElement, options?: dxDropDownEditorOptions)
     /**
      * @docid
      * @publicName close()
@@ -164,7 +164,7 @@ export default class dxDropDownEditor extends dxTextBox {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): TElement;
+    content(): THTMLElement;
     /**
      * @docid
      * @publicName field()
@@ -172,7 +172,7 @@ export default class dxDropDownEditor extends dxTextBox {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    field(): TElement;
+    field(): THTMLElement;
     /**
      * @docid
      * @publicName open()

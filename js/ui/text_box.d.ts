@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -99,7 +99,7 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
  * @public
  */
 export default class dxTextBox extends dxTextEditor {
-    constructor(element: TElement, options?: dxTextBoxOptions)
+    constructor(element: THTMLElement, options?: dxTextBoxOptions)
 }
 
 /** @public */

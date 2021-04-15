@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import DataSource, {
@@ -130,7 +130,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
  * @public
  */
 export default class dxTabs extends CollectionWidget {
-    constructor(element: TElement, options?: dxTabsOptions)
+    constructor(element: THTMLElement, options?: dxTabsOptions)
 }
 
 /**

@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -39,7 +39,7 @@ export type ContentReadyEvent = EventInfo<dxFileManager>;
 /** @public */
 export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemData: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly itemIndex: number;
     readonly fileSystemItem?: FileSystemItem;
     readonly viewArea: 'navPane' | 'itemView';
@@ -48,7 +48,7 @@ export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
 /** @public */
 export type ContextMenuShowingEvent = Cancelable & NativeEventInfo<dxFileManager> & {
     readonly fileSystemItem?: FileSystemItem;
-    readonly targetElement?: TElement;
+    readonly targetElement?: THTMLElement;
     readonly viewArea: 'navPane' | 'itemView';
 }
 
@@ -70,7 +70,7 @@ export type ErrorOccurredEvent =  EventInfo<dxFileManager> & {
 /** @public */
 export type FocusedItemChangedEvent =  EventInfo<dxFileManager> & {
     readonly item?: FileSystemItem;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
 }
 
 /** @public */
@@ -96,7 +96,7 @@ export type SelectionChangedEvent =  EventInfo<dxFileManager> & {
 /** @public */
 export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemData: any;
-    readonly itemElement: TElement;
+    readonly itemElement: THTMLElement;
     readonly itemIndex: number;
 }
 
@@ -443,7 +443,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
  * @public
  */
 export default class dxFileManager extends Widget {
-    constructor(element: TElement, options?: dxFileManagerOptions)
+    constructor(element: THTMLElement, options?: dxFileManagerOptions)
     /**
      * @docid
      * @publicName getCurrentDirectory()
@@ -514,7 +514,7 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | TElement);
+    template?: template | (() => string | THTMLElement);
 }
 
 /**
@@ -586,13 +586,13 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | TElement);
+    template?: template | (() => string | THTMLElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    menuItemTemplate?: template | (() => string | TElement);
+    menuItemTemplate?: template | (() => string | THTMLElement);
 }
 
 

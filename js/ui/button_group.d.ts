@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -51,7 +51,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    buttonTemplate?: template | ((buttonData: any, buttonContent: TElement) => string | TElement);
+    buttonTemplate?: template | ((buttonData: any, buttonContent: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @default true
@@ -150,7 +150,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
  * @public
  */
 export default class dxButtonGroup extends Widget {
-    constructor(element: TElement, options?: dxButtonGroupOptions)
+    constructor(element: THTMLElement, options?: dxButtonGroupOptions)
 }
 
 /**

@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import DataSource, {
@@ -133,7 +133,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
  * @public
  */
 export default class dxTileView extends CollectionWidget {
-    constructor(element: TElement, options?: dxTileViewOptions)
+    constructor(element: THTMLElement, options?: dxTileViewOptions)
     /**
      * @docid
      * @publicName scrollPosition()

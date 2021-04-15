@@ -3,7 +3,7 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -206,7 +206,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | TElement;
+    target?: string | THTMLElement;
     /**
      * @docid
      * @default false
@@ -226,7 +226,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
  * @public
  */
 export default class dxContextMenu extends dxMenuBase {
-    constructor(element: TElement, options?: dxContextMenuOptions)
+    constructor(element: THTMLElement, options?: dxContextMenuOptions)
     /**
      * @docid
      * @publicName hide()

@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import DataSource, {
@@ -114,7 +114,7 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
  * @public
  */
 export default class dxMultiView extends CollectionWidget {
-    constructor(element: TElement, options?: dxMultiViewOptions)
+    constructor(element: THTMLElement, options?: dxMultiViewOptions)
 }
 
 /**

@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -106,7 +106,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | TElement;
+    target?: string | THTMLElement;
     /**
      * @docid
      * @default ""
@@ -140,7 +140,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @public
  */
 export default class dxActionSheet extends CollectionWidget {
-    constructor(element: TElement, options?: dxActionSheetOptions)
+    constructor(element: THTMLElement, options?: dxActionSheetOptions)
     /**
      * @docid
      * @publicName hide()
@@ -191,7 +191,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: { component?: dxActionSheet, element?: THTMLElement, model?: any, event?: TEvent }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType

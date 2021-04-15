@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../../core/element';
 
 import {
@@ -413,7 +413,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: TElement) => string | TElement);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: THTMLElement) => string | THTMLElement);
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -441,7 +441,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export class BaseGauge extends BaseWidget {
-    constructor(element: TElement, options?: BaseGaugeOptions)
+    constructor(element: THTMLElement, options?: BaseGaugeOptions)
     /**
      * @docid
      * @publicName subvalues()

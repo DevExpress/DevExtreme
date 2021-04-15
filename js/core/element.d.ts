@@ -6,13 +6,14 @@ export interface ElementWrapper<T extends Element> { }
  * @type dxElement|dxSVGElement
  * @prevFileNamespace DevExpress.core
  */
-export type TElement<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>
+export type TElement<T extends Element> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>;
+export type THTMLElement = TElement<HTMLElement>;
 
 export interface InternalElementWrapper<T extends Element> { }
-export type TInternalElement<T extends Element = HTMLElement> = {} extends InternalElementWrapper<T> ? dxElementWrapper : InternalElementWrapper<T>
+export type TInternalElement<T extends Element> = {} extends InternalElementWrapper<T> ? dxElementWrapper : InternalElementWrapper<T>;
 
 export interface ElementsArrayWrapper<T extends Element> { }
-export type TElementsArray<T extends Element = HTMLElement> = {} extends ElementsArrayWrapper<T> ? Array<T> : ElementsArrayWrapper<T>
+export type TElementsArray<T extends Element> = {} extends ElementsArrayWrapper<T> ? Array<T> : ElementsArrayWrapper<T>;
 
 /**
  * @docid
@@ -32,5 +33,5 @@ export type dxElement = TElement<HTMLElement>;
  */
 export type dxSVGElement = TElement<SVGElement>;
 
-export function getPublicElement(element: TInternalElement): TElement;
-export function setPublicElementWrapper(newStrategy: (element: TInternalElement) => TElement): void;
+export function getPublicElement(element: TInternalElement<Element>): TElement<Element>;
+export function setPublicElementWrapper(newStrategy: (element: TInternalElement<Element>) => TElement<Element>): void;

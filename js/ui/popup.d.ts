@@ -7,7 +7,7 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -32,7 +32,7 @@ import {
 } from './resizable';
 
 export interface TitleRenderedInfo {
-    readonly titleElement: TElement
+    readonly titleElement: THTMLElement
 }
 
 /** @public */
@@ -86,7 +86,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | TElement;
+    container?: string | THTMLElement;
     /**
      * @docid
      * @default false
@@ -210,7 +210,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    titleTemplate?: template | ((titleElement: TElement) => string | TElement);
+    titleTemplate?: template | ((titleElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @type Array<Object>
@@ -316,7 +316,7 @@ export interface dxPopupToolbarItem {
  * @public
  */
 export default class dxPopup extends dxOverlay {
-    constructor(element: TElement, options?: dxPopupOptions)
+    constructor(element: THTMLElement, options?: dxPopupOptions)
 }
 
 /** @public */

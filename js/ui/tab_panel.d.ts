@@ -1,5 +1,5 @@
 import {
-    TElement
+    THTMLElement
 } from '../core/element';
 
 import {
@@ -57,19 +57,19 @@ export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo
 /** @public */
 export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
 }
 
 /** @public */
 export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
 }
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: THTMLElement;
 }
 
 export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
@@ -105,7 +105,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
     /**
      * @docid
      * @fires dxTabPanelOptions.onOptionChanged
@@ -202,7 +202,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @public
  */
 export default class dxTabPanel extends dxMultiView {
-    constructor(element: TElement, options?: dxTabPanelOptions)
+    constructor(element: THTMLElement, options?: dxTabPanelOptions)
 }
 
 /**
@@ -229,7 +229,7 @@ export interface dxTabPanelItem extends dxMultiViewItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tabTemplate?: template | (() => string | TElement);
+    tabTemplate?: template | (() => string | THTMLElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
