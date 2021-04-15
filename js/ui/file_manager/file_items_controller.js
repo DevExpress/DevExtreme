@@ -46,7 +46,7 @@ export default class FileItemsController {
 
     setAllowedFileExtensions(allowedFileExtensions) {
         if(isDefined(allowedFileExtensions)) {
-            this._options.uploadMaxFileSize = allowedFileExtensions;
+            this._options.allowedFileExtensions = allowedFileExtensions;
         }
     }
 
