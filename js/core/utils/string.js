@@ -73,7 +73,7 @@ export function format(template, ...values) {
 
 export const replaceAll = (function() {
     const quote = function(str) {
-        return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1'); // lgtm[incomplete-sanitization]
+        return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1'); // lgtm[js/incomplete-sanitization]
     };
 
     return function(text, searchToken, replacementToken) {
