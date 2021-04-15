@@ -21,6 +21,7 @@ jest.mock('../datagrid_component', () => ({
     getController: jest.fn().mockImplementation(() => ({
       updateSize: jest.fn(),
     })),
+    updateDimensions: jest.fn(),
   })),
 }));
 jest.mock('../utils/get_updated_options');
@@ -202,8 +203,9 @@ describe('DataGrid', () => {
       ${'getVisibleRows'}
       ${'isRowExpanded'}
       ${'totalCount'}
-      ${'getController'}
       ${'resize'}
+      ${'isScrollbarVisible'}
+      ${'getTopVisibleRowData'}
     `
         .describe('Proxying the Grid methods', ({
           methodName,
@@ -268,6 +270,23 @@ describe('DataGrid', () => {
         expect(currentTarget.classList.add).toBeCalledTimes(1);
         expect(currentTarget.classList.remove).toBeCalledTimes(1);
         expect(currentTarget.classList.remove).toHaveBeenCalledWith('dx-state-hover');
+      });
+
+      it('The updateDimensions should be raised on dimensionChanged event', () => {
+        const component = new DataGrid({});
+
+        component.initInstanceElement();
+
+        component.onDimensionChanged();
+
+        expect(component.getComponentInstance().updateDimensions).toBeCalledTimes(1);
+        expect(component.getComponentInstance().updateDimensions).toBeCalledWith(true);
+      });
+
+      it('The dimensionChanged event without instance', () => {
+        const component = new DataGrid({});
+
+        expect(component.onDimensionChanged.bind(component)).not.toThrow();
       });
     });
   });

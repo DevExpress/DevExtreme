@@ -15,19 +15,41 @@ describe('GridBaseViews', () => {
             { name: 'view1', view: 'viewComponent1' },
             { name: 'view2', view: 'viewComponent2' },
           ],
-          className: 'myClass',
         },
+        className: 'myClass',
       } as unknown as GridBaseViews;
       const tree = mount(viewFunction(options));
 
       expect(tree.hasClass('myClass')).toBe(true);
-      expect(tree.hasClass(GRIDBASE_CONTAINER_CLASS)).toBe(true);
       expect(tree.children().length).toBe(2);
       expect(tree.find(GridBaseViewWrapper).length).toBe(2);
       expect(tree.find(GridBaseViewWrapper).get(0).key).toBe('view1');
       expect(tree.find(GridBaseViewWrapper).get(0).props.view).toBe('viewComponent1');
       expect(tree.find(GridBaseViewWrapper).get(1).key).toBe('view2');
       expect(tree.find(GridBaseViewWrapper).get(1).props.view).toBe('viewComponent2');
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      it('Get className', () => {
+        const props = {
+          className: 'my-widget',
+        } as any;
+        const component = new GridBaseViews(props);
+
+        expect(component.className).toBe(`${GRIDBASE_CONTAINER_CLASS} my-widget`);
+      });
+
+      it('Get className with showBorders is true', () => {
+        const props = {
+          className: 'my-widget',
+          showBorders: true,
+        } as any;
+        const component = new GridBaseViews(props);
+
+        expect(component.className).toBe(`${GRIDBASE_CONTAINER_CLASS} my-widget my-widget-borders`);
+      });
     });
   });
 });

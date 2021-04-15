@@ -1,7 +1,6 @@
 /* eslint-disable */
 import Component from './component';
 import type { DataGrid } from '../ui/grids/data_grid/data_grid';
-import { FunctionTemplate } from 'js/core/templates/function_template';
 
 export default class DataGridWrapper extends Component {
     beginUpdate() {
