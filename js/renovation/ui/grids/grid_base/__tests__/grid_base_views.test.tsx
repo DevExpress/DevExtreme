@@ -1,6 +1,7 @@
 import { mount } from 'enzyme';
 import { GridBaseViews, viewFunction } from '../grid_base_views';
 import { GridBaseViewWrapper } from '../grid_base_view_wrapper';
+import { GridBaseViewProps } from '../common/grid_base_view_props';
 
 jest.mock('../grid_base_view_wrapper', () => ({ GridBaseViewWrapper: () => null }));
 
@@ -9,15 +10,17 @@ const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
 describe('GridBaseViews', () => {
   describe('View', () => {
     it('default render', () => {
+      const props = {
+        views: [
+          { name: 'view1', view: 'viewComponent1' },
+          { name: 'view2', view: 'viewComponent2' },
+        ],
+      } as unknown as Partial<GridBaseViewProps>;
       const options = {
-        props: {
-          views: [
-            { name: 'view1', view: 'viewComponent1' },
-            { name: 'view2', view: 'viewComponent2' },
-          ],
-        },
+        props: new GridBaseViewProps(),
         className: 'myClass',
       } as unknown as GridBaseViews;
+      options.props = { ...options.props, ...props };
       const tree = mount(viewFunction(options));
 
       expect(tree.hasClass('myClass')).toBe(true);

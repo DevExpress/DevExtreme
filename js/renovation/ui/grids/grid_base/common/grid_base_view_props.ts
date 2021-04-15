@@ -8,6 +8,4 @@ export class GridBaseViewProps {
   @OneWay() className!: string;
 
   @OneWay() role!: string;
-
-  @OneWay() showBorders!: boolean;
 }
