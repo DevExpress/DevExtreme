@@ -4492,20 +4492,17 @@
           {
             "Title": "Customize Item",
             "Name": "CustomizeItem",
-            "DocUrl": "Guide/UI_Components/Form/Configure_Simple_Items/#Create_a_Simple_Item",
             "Widget": "Form"
           },
           {
             "Title": "Grouped Fields",
             "Name": "GroupedFields",
-            "DocUrl": "Guide/UI_Components/Form/Organize_Simple_Items/",
             "Widget": "Form"
           },
           {
             "Title": "Columns Adaptability",
             "Equivalents": "adaptive",
             "Name": "ColumnsAdaptability",
-            "DocUrl": "Guide/UI_Components/Form/Organize_Simple_Items/In_Columns/#Layout_Depending_on_the_Screen_Width",
             "Widget": "Form",
             "DemoType": "Adaptivity"
           },
@@ -4515,7 +4512,6 @@
             "Title": "Validation",
             "Equivalents": "Submit",
             "Name": "Validation",
-            "DocUrl": "Guide/UI_Components/Form/Validate_and_Submit_the_Form/",
             "Widget": "Form",
             "MvcAdditionalFiles": [
               "/Views/Form/SuccessValidation.cshtml",
