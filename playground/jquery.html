@@ -28,16 +28,164 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <!-- RENOVATION -->
     <!-- <script type="text/javascript" src="../artifacts/js-renovation/dx.all.debug.js" charset="utf-8"></script> -->
+
+    <style>
+        /*.toolbar-label,*/
+        /*.toolbar-label > b {*/
+        /*    font-size: 16px;*/
+        /*}*/
+
+        /*#products {*/
+        /*    margin-top: 10px;*/
+        /*}*/
+
+        /*.dx-toolbar-before {*/
+        /*    position: relative !important;*/
+        /*    float: left !important;*/
+        /*}*/
+
+        /*.dx-toolbar-after {*/
+        /*    position: relative !important;*/
+        /*    float: right !important;*/
+        /*}*/
+
+        /*.dx-toolbar-center {*/
+        /*    float: left !important;*/
+        /*}*/
+    </style>
 </head>
 <body>
-    <div id="button"></div>
+
+    <div class="dx-viewport demo-container">
+        <div id="toolbar"></div>
+        <div id="products"></div>
+    </div>
+
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+        $(function(){
+            $("#toolbar").dxToolbar({
+                items: [{
+                    location: 'before',
+                    locateInMenu: 'auto',
+                    text: 'AAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAA AAAAA1 AAA2 AAA3 AAA4 AAA5',
+                }, {
+                    location: 'center',
+                    locateInMenu: 'never',
+                    text: 'Products BBBBBBBBB BBBBBB1 BBBBBB2 BBBBBB3 BBBBBB4 BBBBBB5'
+                }, {
+                    location: 'center',
+                    locateInMenu: 'never',
+                    text: 'Products BBBBBBBBB BBBBBB1 BBBBBB2 BBBBBB3 BBBBBB4 BBBBBB5'
+                }, {
+                    location: 'after',
+                    widget: 'dxSelectBox',
+                    locateInMenu: 'auto',
+                    options: {
+                        width: 140,
+                        items: productTypes,
+                        valueExpr: "id",
+                        displayExpr: "text",
+                        value: productTypes[0].id,
+                        onValueChanged: function(args) {
+                            if(args.value > 1) {
+                                productsStore.filter("type" , "=", args.value);
+                            } else {
+                                productsStore.filter(null);
+                            }
+                            productsStore.load();
+                        }
+                    }
+                }, {
+                    location: 'after',
+                    widget: 'dxButton',
+                    locateInMenu: 'auto',
+                    options: {
+                        icon: "plus",
+                        onClick: function() {
+                            DevExpress.ui.notify("Add button has been clicked!");
+                        }
+                    }
+                }, {
+                    locateInMenu: 'always',
+                    text: 'Save',
+                    onClick: function() {
+                        DevExpress.ui.notify("Save option has been clicked!");
+                    }
+                }, {
+                    locateInMenu: 'always',
+                    text: 'Print',
+                    onClick: function() {
+                        DevExpress.ui.notify("Print option has been clicked!");
+                    }
+                }, {
+                    locateInMenu: 'always',
+                    text: 'Settings',
+                    onClick: function() {
+                        DevExpress.ui.notify("Settings option has been clicked!");
+                    }
+                }
+                ]
+            });
+
+            var productsStore = new DevExpress.data.DataSource(products);
+
+            $("#products").dxList({
+                dataSource: productsStore
             });
         });
+
+        var productTypes = [{
+            id: 1,
+            text: "All"
+        }, {
+            id: 2,
+            text: "Video Players"
+        }, {
+            id: 3,
+            text: "Televisions"
+        }, {
+            id: 4,
+            text: "Monitors"
+        }, {
+            id: 5,
+            text: "Projectors"
+        }];
+
+        var products = [{
+            text: "HD Video Player",
+            type: 2
+        }, {
+            text: "SuperHD Video Player",
+            type: 2
+        }, {
+            text: "SuperLCD 42",
+            type: 3
+        }, {
+            text: "SuperLED 42",
+            type: 3
+        }, {
+            text: "SuperLED 50",
+            type: 3
+        }, {
+            text: "SuperLCD 55",
+            type: 3
+        }, {
+            text: "DesktopLCD 19",
+            type: 4
+        }, {
+            text: "DesktopLCD 21",
+            type: 4
+        }, {
+            text: "DesktopLED 21",
+            type: 4
+        }, {
+            text: "Projector Plus",
+            type: 5
+        }, {
+            text: "Projector PlusHD",
+            type: 5
+        }];
+
     </script>
 </body>
 </html>

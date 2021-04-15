@@ -4204,5 +4204,36 @@ QUnit.module('Deferred selection', {
         // assert
         assert.equal(selectedRowsData.length, 0, 'selected rows data count');
     });
+
+    // T959045
+    QUnit.test('The selectionFilter should be correctly after select all -> deselect row when there is filter', function(assert) {
+        // arrange
+        this.setupDataGrid({
+            dataSource: [
+                { id: 1, name: 'Alex' },
+                { id: 5, name: 'Sergey' }
+            ],
+            keyExpr: 'id',
+            columns: [{ dataField: 'id', filterValue: 1, dataType: 'number' }],
+            selection: { mode: 'multiple', deferred: true }
+        });
+
+        this.clock.tick();
+
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, 'filtered items');
+
+        // act
+        this.selectionController.selectAll();
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), ['id', '=', 1], 'selectionFilter');
+
+        // act
+        this.selectionController.deselectRows(1);
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), [], 'selectionFilter');
+    });
 });
 

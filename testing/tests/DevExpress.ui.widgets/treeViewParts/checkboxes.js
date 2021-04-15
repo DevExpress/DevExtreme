@@ -291,7 +291,6 @@ QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(
     assert.deepEqual(selectAllValueChangedLog, [undefined, true, false], 'after click by item1');
 });
 
-
 QUnit.module('T988756', () => {
     QUnit.test('showCheckBoxesMode=none -> showCheckBoxesMode=selectAll and click -> showCheckBoxesMode=none and click -> showCheckBoxesMode=selectAll and click (T988756)', function(assert) {
         const selectAllStub = sinon.stub();
