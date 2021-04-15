@@ -155,26 +155,56 @@ QUnit.module('Drawer behavior', () => {
         assert.equal(count, 0, 'callback not fired at animation start');
     });
 
-    QUnit.test('dxresize event should be fired for content at the end of animation', function(assert) {
-        const $element = $('#drawer').dxDrawer({
-            opened: false
-        });
+    QUnit.test('Check dxresize event: opened:false,animationEnabled:true -> drawer.toggle()', function(assert) {
+        const done = assert.async();
+        const drawer = $('#drawer').dxDrawer({
+            opened: false,
+            animationEnabled: true,
+            animationDuration: 1,
+            width: 100,
+            height: 50,
+            template: () => $('<div style="width: 10px; height: 10px; background-color: red"></div>')
+        }).dxDrawer('instance');
 
-        const instance = $element.dxDrawer('instance');
+        const triggerResizeEventInitial = domUtils.triggerResizeEvent;
+
+        domUtils.triggerResizeEvent = ($element) => {
+            assert.ok(true, 'resize event call is expected');
+            assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
+            const rect = $(drawer.viewContent())[0].getBoundingClientRect();
+            assert.strictEqual(rect.width, 90, 'ViewContent element width');
+            assert.strictEqual(rect.height, 50, 'ViewContent element height');
+
+            domUtils.triggerResizeEvent = triggerResizeEventInitial;
+            done();
+        };
+
+        drawer.toggle();
+    });
+
+    QUnit.test('Check dxresize event: opened:false,animationEnabled:false -> drawer.toggle()', function(assert) {
+        const drawer = $('#drawer').dxDrawer({
+            opened: false,
+            animationEnabled: false,
+            width: 100,
+            height: 50,
+            template: () => $('<div style="width: 10px; height: 10px; background-color: red"></div>')
+        }).dxDrawer('instance');
+
         const triggerFunction = domUtils.triggerResizeEvent;
-        assert.expect(2);
 
         try {
-            fx.off = true;
             domUtils.triggerResizeEvent = ($element) => {
-                assert.ok(true, 'event was triggered');
-                assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
+                assert.ok(true, 'resize event call is expected');
+                assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
+
+                const rect = $(drawer.viewContent())[0].getBoundingClientRect();
+                // TODO: "Result: 100" - assert.strictEqual(rect.width, 90, 'ViewContent element width');
+                assert.strictEqual(rect.height, 50, 'ViewContent element height');
             };
 
-            instance.toggle();
-
+            drawer.toggle();
         } finally {
-            fx.off = false;
             domUtils.triggerResizeEvent = triggerFunction;
         }
     });
