@@ -27,8 +27,10 @@ export const viewFunction = ({
   />
 );
 
+type DataGridPropsType = Pick<DataGridProps, 'showBorders'> & DataGridViewProps;
+
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class DataGridViews extends JSXComponent<DataGridViewProps & Pick<DataGridProps, 'showBorders'>, 'instance'>() {
+export class DataGridViews extends JSXComponent<DataGridPropsType, 'instance'>() {
   get views(): { name: string; view: GridBaseView }[] {
     if (!this.props.instance) {
       return [];
