@@ -6,7 +6,7 @@ import { Template } from '../../../template';
 
 import {
   ElementType,
-  getElementInfo
+  getElementInfo,
 } from '../element';
 
 class MinimalConfigurationComponent extends ConfigurationComponent<any> {
@@ -64,7 +64,7 @@ const otherComponents = [
 describe('getElementInfo', () => {
   configurationComponents.forEach((component) => {
     it('parses Configuration component', () => {
-      const element = React.createElement(component)
+      const element = React.createElement(component);
 
       const elementInfo = getElementInfo(element);
 
@@ -91,7 +91,7 @@ describe('getElementInfo', () => {
         name: 'template-name',
       },
       'Template content',
-    )
+    );
 
     const elementInfo = getElementInfo(element);
 
@@ -105,7 +105,7 @@ describe('getElementInfo', () => {
 
   otherComponents.forEach((component) => {
     it('parses Other components', () => {
-      const element = React.createElement(component)
+      const element = React.createElement(component);
 
       render(React.createElement(component));
       const elementInfo = getElementInfo(element);

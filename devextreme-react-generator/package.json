@@ -36,6 +36,8 @@
     "del-cli": "^3.0.1",
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^13.0.1"
   }
 }

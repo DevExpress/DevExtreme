@@ -1,5 +1,6 @@
 import * as events from 'devextreme/events';
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 
 import { OptionsManager } from './options-manager';
 import { ITemplateMeta } from './template';
@@ -11,6 +12,7 @@ import { elementPropNames, getClassName } from './widget-config';
 import { IConfigNode } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
+import { isIE } from './configuration/utils';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -21,11 +23,26 @@ interface IHtmlOptions {
 }
 
 abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent<P> {
+  static get displayContentsStyle(): React.CSSProperties {
+    return isIE()
+      ? {
+        width: '100%',
+        height: '100%',
+        padding: 0,
+        margin: 0,
+      }
+      : { display: 'contents' };
+  }
+
   protected _WidgetClass: any;
 
   protected _instance: any;
 
   protected _element: HTMLDivElement;
+
+  protected portalContainer: HTMLElement | null;
+
+  protected isPortalComponent = false;
 
   protected readonly _defaults: Record<string, string>;
 
@@ -161,18 +178,43 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     return children;
   }
 
+  protected renderContent(): React.ReactNode {
+    const { children } = this.props;
+
+    return this.isPortalComponent && children
+      ? React.createElement('div', {
+        ref: (node: HTMLDivElement | null) => {
+          if (node && this.portalContainer !== node) {
+            this.portalContainer = node;
+            this.forceUpdate();
+          }
+        },
+        style: ComponentBase.displayContentsStyle,
+      })
+      : this.renderChildren();
+  }
+
+  protected renderPortal(): React.ReactNode {
+    return this.portalContainer && createPortal(
+      this.renderChildren(),
+      this.portalContainer,
+    );
+  }
+
   public render(): React.ReactNode {
     return React.createElement(
-      'div',
-      this._getElementProps(),
-      this.renderChildren(),
+      React.Fragment,
+      {},
       React.createElement(
-        TemplatesRenderer,
-        {
+        'div',
+        this._getElementProps(),
+        this.renderContent(),
+        React.createElement(TemplatesRenderer, {
           templatesStore: this._templatesStore,
           ref: this._setTemplatesRendererRef,
-        },
+        }),
       ),
+      this.isPortalComponent && this.renderPortal(),
     );
   }
 }

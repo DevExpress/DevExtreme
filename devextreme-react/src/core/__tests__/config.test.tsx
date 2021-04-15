@@ -1,9 +1,9 @@
-import config, { getOption } from '../config';
 import { render as testingRender, cleanup } from '@testing-library/react';
 import * as React from 'react';
+import config, { getOption } from '../config';
 import {
   TestComponent,
-  WidgetClass
+  WidgetClass,
 } from './test-component';
 
 class ComponentWithTemplates extends TestComponent {
@@ -45,9 +45,9 @@ describe('useLegacyTemplateEngine', () => {
     const ref = React.createRef() as React.RefObject<HTMLDivElement>;
 
     const { container } = testingRender(
-        <ComponentWithTemplates itemRender={ItemTemplate} >
-           <div ref={ref} />
-        </ComponentWithTemplates >
+      <ComponentWithTemplates itemRender={ItemTemplate}>
+        <div ref={ref} />
+      </ComponentWithTemplates>,
     );
 
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
@@ -56,7 +56,7 @@ describe('useLegacyTemplateEngine', () => {
       container: ref.current,
       model: { value: 'Value', key: 'key_1' },
     });
-    expect(container.querySelector('.template')?.textContent).toBe("value: Value, key: key_1, dxkey: key_1");
+    expect(container.querySelector('.template')?.textContent).toBe('value: Value, key: key_1, dxkey: key_1');
   });
 
   it('works for component template', () => {
@@ -77,9 +77,9 @@ describe('useLegacyTemplateEngine', () => {
     const ref = React.createRef() as React.RefObject<HTMLDivElement>;
 
     const { container } = testingRender(
-      <ComponentWithTemplates itemComponent={ItemTemplate} >
+      <ComponentWithTemplates itemComponent={ItemTemplate}>
         <div ref={ref} />
-      </ComponentWithTemplates>
+      </ComponentWithTemplates>,
     );
 
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
@@ -88,6 +88,6 @@ describe('useLegacyTemplateEngine', () => {
       container: ref.current,
       model: { value: 'Value', key: 'key_1' },
     });
-    expect(container.querySelector('.template')?.textContent).toBe("value: Value, dxkey: key_1");
+    expect(container.querySelector('.template')?.textContent).toBe('value: Value, dxkey: key_1');
   });
 });

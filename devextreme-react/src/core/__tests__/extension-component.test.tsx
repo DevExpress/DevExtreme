@@ -1,12 +1,12 @@
 /* eslint-disable max-classes-per-file */
-import { ExtensionComponent } from '../extension-component';
-import ConfigurationComponent from '../nested-option';
 import { render, cleanup } from '@testing-library/react';
 import * as React from 'react';
+import { ExtensionComponent } from '../extension-component';
+import ConfigurationComponent from '../nested-option';
 import {
   TestComponent,
   Widget,
-  WidgetClass
+  WidgetClass,
 } from './test-component';
 
 const ExtensionWidgetClass = jest.fn(() => Widget);
@@ -19,12 +19,11 @@ class TestExtensionComponent<P = any> extends ExtensionComponent<P> {
   }
 }
 
-
 afterEach(() => {
   WidgetClass.mockClear();
   ExtensionWidgetClass.mockClear();
   cleanup();
-})
+});
 
 class NestedComponent extends ConfigurationComponent<{ a: number }> {
   public static OptionName = 'option1';

@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
-import ConfigurationComponent from '../nested-option';
-import { OptionsManager } from '../options-manager';
 import { cleanup, render } from '@testing-library/react';
 import * as React from 'react';
+import ConfigurationComponent from '../nested-option';
+import { OptionsManager } from '../options-manager';
 import {
   eventHandlers,
   fireOptionChange,
@@ -10,6 +10,7 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
+
 jest.useFakeTimers();
 
 interface IControlledComponentProps {
@@ -77,23 +78,23 @@ describe('option update', () => {
     jest.clearAllMocks();
     jest.clearAllTimers();
     cleanup();
-  })
+  });
 
-   it('calls option method on props update', () => {
-     const { rerender } = render(
-       <TestComponent />,
-     );
-     expect(Widget.option.mock.calls.length).toBe(0);
+  it('calls option method on props update', () => {
+    const { rerender } = render(
+      <TestComponent />,
+    );
+    expect(Widget.option.mock.calls.length).toBe(0);
 
-     const sampleProps = { text: '1' };
+    const sampleProps = { text: '1' };
 
-     rerender(<TestComponent sampleProps={sampleProps}/>,)
+    rerender(<TestComponent sampleProps={sampleProps} />);
 
-     expect(Widget.option.mock.calls.length).toBe(1);
-     expect(Object.keys(Widget.option.mock.calls[0][1])[0]).toEqual('text');
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Object.keys(Widget.option.mock.calls[0][1])[0]).toEqual('text');
 
-     expect(Widget.option.mock.calls[0][1]?.text).toEqual('1');
-   });
+    expect(Widget.option.mock.calls[0][1]?.text).toEqual('1');
+  });
 
   it('updates nested collection item', () => {
     const TestContainer = (props: any) => {
@@ -105,8 +106,8 @@ describe('option update', () => {
       );
     };
 
-    const { rerender } = render(<TestContainer value={123} />)
-    rerender(<TestContainer value={234} />)
+    const { rerender } = render(<TestContainer value={123} />);
+    rerender(<TestContainer value={234} />);
 
     jest.runAllTimers();
     expect(Widget.option.mock.calls.length).toBe(1);
@@ -124,8 +125,8 @@ describe('option update', () => {
         </TestComponentWithExpectation>
       );
     };
-    const { rerender } = render(<TestContainer value={123} />)
-    rerender(<TestContainer value={234} />)
+    const { rerender } = render(<TestContainer value={123} />);
+    rerender(<TestContainer value={234} />);
 
     jest.runAllTimers();
     expect(Widget.option.mock.calls.length).toBe(1);
@@ -138,7 +139,7 @@ describe('option control', () => {
     jest.clearAllMocks();
     jest.clearAllTimers();
     cleanup();
-  })
+  });
 
   it('binds callback for optionChanged', () => {
     render(
@@ -153,7 +154,7 @@ describe('option control', () => {
       jest.clearAllMocks();
       jest.clearAllTimers();
       cleanup();
-    })
+    });
 
     it('is not fired when option changed on props updating', () => {
       const handler = jest.fn();
@@ -170,7 +171,7 @@ describe('option control', () => {
           }
         },
       );
-      rerender(<ControlledComponent controlledOption= "changed" />)
+      rerender(<ControlledComponent controlledOption="changed" />);
 
       expect(handler.mock.calls.length).toBe(0);
 
@@ -183,11 +184,11 @@ describe('option control', () => {
       const handler = jest.fn();
 
       const { rerender } = render(
-          <ControlledComponent
-            controlledOption="controlled"
-            onControlledOptionChanged={jest.fn()}
-          />
-        );
+        <ControlledComponent
+          controlledOption="controlled"
+          onControlledOptionChanged={jest.fn()}
+        />,
+      );
 
       Widget.option.mockImplementation(
         (name: string) => {
@@ -199,11 +200,11 @@ describe('option control', () => {
 
       rerender(<ControlledComponent
         onControlledOptionChanged={handler}
-      />)
+      />);
 
       rerender(<ControlledComponent
         controlledOption="changed"
-      />)
+      />);
 
       expect(handler.mock.calls.length).toBe(0);
 
@@ -260,7 +261,6 @@ describe('option control', () => {
   });
 
   it('rolls back complex option controlled field', () => {
-
     render(
       <ControlledComponent complexOption={{ a: 123 }} />,
     );
@@ -278,7 +278,7 @@ describe('option control', () => {
 
     fireOptionChange('anotherOption', 'changed');
     rerender(
-      <ControlledComponent everyOption={234}/>,
+      <ControlledComponent everyOption={234} />,
     );
 
     jest.runAllTimers();
@@ -296,7 +296,7 @@ describe('option control', () => {
     fireOptionChange('everyOption', 234);
     rerender(
       <ControlledComponent everyOption={234} />,
-    )
+    );
 
     jest.runAllTimers();
     expect(Widget.option.mock.calls.length).toBe(1);
@@ -311,7 +311,7 @@ describe('option control', () => {
     fireOptionChange('complexOption.b', 234);
     rerender(
       <ControlledComponent complexOption={{ a: 123, b: 234 }} />,
-    )
+    );
 
     jest.runAllTimers();
     expect(Widget.option.mock.calls.length).toBe(1);
@@ -354,7 +354,7 @@ describe('option defaults control', () => {
     jest.clearAllMocks();
     jest.clearAllTimers();
     cleanup();
-  })
+  });
 
   it('pass default values to widget', () => {
     render(
@@ -381,7 +381,7 @@ describe('option defaults control', () => {
     );
     rerender(
       <ControlledComponent defaultControlledOption="changed" />,
-    )
+    );
 
     jest.runAllTimers();
     expect(Widget.option.mock.calls.length).toBe(0);
@@ -393,7 +393,7 @@ describe('cfg-component option control', () => {
     jest.clearAllMocks();
     jest.clearAllTimers();
     cleanup();
-  })
+  });
 
   it('rolls cfg-component option value back', () => {
     render(
@@ -475,7 +475,7 @@ describe('cfg-component option control', () => {
     const { rerender } = render(<TestContainer value={123} />);
 
     fireOptionChange('nestedOption.b', 'changed');
-    rerender(<TestContainer value={234} />)
+    rerender(<TestContainer value={234} />);
 
     jest.runAllTimers();
     expect(Widget.option.mock.calls.length).toBe(2);
@@ -496,7 +496,7 @@ describe('cfg-component option control', () => {
     const { rerender } = render(<TestContainer value={123} />);
     fireOptionChange('nestedOption.a', 234);
 
-    rerender(<TestContainer value={234} />)
+    rerender(<TestContainer value={234} />);
 
     jest.runAllTimers();
     expect(Widget.option.mock.calls.length).toBe(1);
@@ -521,7 +521,7 @@ describe('cfg-component option defaults control', () => {
     jest.clearAllMocks();
     jest.clearAllTimers();
     cleanup();
-  })
+  });
 
   it('pass nested default values to widget', () => {
     render(
@@ -566,8 +566,8 @@ describe('cfg-component option defaults control', () => {
       );
     };
 
-    const { rerender } = render(<TestContainer optionDefValue="default" />)
-    rerender(<TestContainer optionDefValue="changed" />)
+    const { rerender } = render(<TestContainer optionDefValue="default" />);
+    rerender(<TestContainer optionDefValue="changed" />);
 
     jest.runAllTimers();
     expect(Widget.option.mock.calls.length).toBe(0);
@@ -603,7 +603,7 @@ describe('mutation detection', () => {
     jest.clearAllMocks();
     jest.clearAllTimers();
     cleanup();
-  })
+  });
 
   const expectNoPropsUpdate = () => {
     expect(Widget.option.mock.calls.length).toBe(0);
@@ -640,7 +640,7 @@ describe('mutation detection', () => {
     arr[0] = 123;
     rerender(
       <TestComponent prop={arr} />,
-    )
+    );
 
     expectNoPropsUpdate();
   });
@@ -656,7 +656,7 @@ describe('mutation detection', () => {
     obj.field = 456;
     rerender(
       <TestComponent prop={obj} />,
-    )
+    );
 
     expectNoPropsUpdate();
   });
@@ -668,7 +668,7 @@ describe('mutation detection', () => {
 
     rerender(
       <TestComponent prop={[1, 2, 3, 4]} />,
-    )
+    );
 
     expectPropsUpdated('prop', [1, 2, 3, 4]);
   });
@@ -680,7 +680,7 @@ describe('mutation detection', () => {
 
     rerender(
       <TestComponent prop="123" anotherProp={456} />,
-    )
+    );
 
     expectPropsUpdated('anotherProp', 456);
   });
@@ -692,7 +692,7 @@ describe('onXXXChange', () => {
       jest.clearAllMocks();
       jest.clearAllTimers();
       cleanup();
-    })
+    });
 
     beforeAll(() => {
       jest.spyOn(
@@ -743,7 +743,7 @@ describe('onXXXChange', () => {
           {...sampleProps}
           onTextChange={onPropChange}
         />,
-      )
+      );
       expect(onPropChange).not.toBeCalled();
 
       fireOptionChange('text', '2');
@@ -755,41 +755,39 @@ describe('onXXXChange', () => {
       expect(onPropChange).toBeCalledWith('3');
     });
 
-     it('is not called if received value is being modified', () => {
+    it('is not called if received value is being modified', () => {
       const ref = React.createRef() as React.RefObject<TestComponent>;
       const onPropChange = jest.fn();
       const defaultProps = {
-        text:"0",
-        onTextChange:onPropChange,
-        ref
-      }
+        text: '0',
+        onTextChange: onPropChange,
+        ref,
+      };
 
-       const { rerender } = render(
-         <TestComponent
-           {...defaultProps}
-         />
-       );
+      const { rerender } = render(
+        <TestComponent
+          {...defaultProps}
+        />,
+      );
 
-       onPropChange.mockImplementation((value) => {
-         rerender(
-           <TestComponent
-             {...defaultProps}
-             text={`X${value}`}
-             />,
-         )
-       });
+      onPropChange.mockImplementation((value) => {
+        rerender(
+          <TestComponent
+            {...defaultProps}
+            text={`X${value}`}
+          />,
+        );
+      });
 
+      fireOptionChange('text', '2');
 
-       fireOptionChange('text', '2');
+      expect(onPropChange).toHaveBeenCalledTimes(1);
 
-       expect(onPropChange).toHaveBeenCalledTimes(1);
-
-       expect(ref.current?.props.text).toBe("X2");
-       fireOptionChange('text', 'X22');
-       expect(onPropChange).toHaveBeenCalledTimes(2);
-       expect(ref.current?.props.text).toBe("XX22");
-
-     });
+      expect(ref.current?.props.text).toBe('X2');
+      fireOptionChange('text', 'X22');
+      expect(onPropChange).toHaveBeenCalledTimes(2);
+      expect(ref.current?.props.text).toBe('XX22');
+    });
 
     it('is not called if new value is equal', () => {
       const onPropChange = jest.fn();
@@ -914,7 +912,7 @@ describe('onXXXChange', () => {
       jest.clearAllMocks();
       jest.clearAllTimers();
       cleanup();
-    })
+    });
 
     it('is not called on create', () => {
       const onPropChange = jest.fn();
@@ -950,12 +948,12 @@ describe('onXXXChange', () => {
       )
         .mockImplementation(() => true);
     });
-    
+
     afterEach(() => {
       jest.clearAllMocks();
       jest.clearAllTimers();
       cleanup();
-    })
+    });
 
     it('is not called on create', () => {
       const onPropChange = jest.fn();
@@ -993,7 +991,7 @@ describe('onXXXChange', () => {
         <TestComponent
           {...sampleProps}
         />,
-      )
+      );
       expect(onPropChange).toHaveBeenCalledTimes(1);
     });
   });
@@ -1011,7 +1009,7 @@ describe('onXXXChange', () => {
       jest.clearAllMocks();
       jest.clearAllTimers();
       cleanup();
-    })
+    });
 
     it('it is fired on outher change', () => {
       const onPropChange = jest.fn();
@@ -1035,7 +1033,8 @@ describe('onXXXChange', () => {
           text="0"
           onTextChange={onPropChange}
           sampleProps={sampleProps}
-        />,      )
+        />,
+      );
       expect(onPropChange).toHaveBeenCalledTimes(0);
     });
   });
