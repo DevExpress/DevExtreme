@@ -4,7 +4,7 @@ import $ from '../../core/renderer';
 import { move } from '../../animation/translator';
 
 class PushStrategy extends DrawerStrategy {
-    _internalRenderPosition(changePositionUsingFxAnimation) {
+    _internalRenderPosition(changePositionUsingFxAnimation, whenAnimationCompleted) {
         const drawer = this.getDrawerInstance();
         const openedPanelSize = this._getPanelSize(true);
         const contentPosition = this._getPanelSize(drawer.option('opened')) * drawer._getPositionCorrection();
@@ -31,7 +31,7 @@ class PushStrategy extends DrawerStrategy {
                 direction: drawer.calcTargetPosition(),
                 duration: drawer.option('animationDuration'),
                 complete: () => {
-                    this._elementsAnimationCompleteHandler();
+                    whenAnimationCompleted.resolve();
                 }
             });
         } else {
