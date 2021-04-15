@@ -1,4 +1,4 @@
-const resources = [{
+export const resources = [{
   id: 0,
   text: 'David Carter',
   color: '#74d57b'

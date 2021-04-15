@@ -2,7 +2,7 @@ import React from 'react';
 
 import Scheduler from 'devextreme-react/scheduler';
 import {
-  humans,
+  resources,
   generateAppointments
 } from './data.js';
 
@@ -22,11 +22,14 @@ const views = [
     groupOrientation: 'horizontal'
   }
 ];
+
 const scrolling = { mode: 'virtual' };
-const resources = [{
+
+const resourcesData = [{
   fieldExpr: 'humanId',
-  dataSource: humans
+  dataSource: resources
 }];
+
 const groups = ['humanId'];
 const appointments = generateAppointments();
 class App extends React.Component {
@@ -45,7 +48,7 @@ class App extends React.Component {
         showAllDayPanel={false}
         scrolling={scrolling}
         groups={groups}
-        resources={resources}
+        resources={resourcesData}
       />
     );
   }
