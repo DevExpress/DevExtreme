@@ -227,7 +227,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const selectAllExists = this._$selectAllItem && this._$selectAllItem.length;
         switch(value) {
             case 'selectAll':
-                !selectAllExists && this._renderSelectAllItem();
+                if(!selectAllExists) {
+                    this._createSelectAllValueChangedAction();
+                    this._renderSelectAllItem();
+                }
                 break;
             case 'normal':
                 if(selectAllExists) {
