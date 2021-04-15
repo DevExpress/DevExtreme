@@ -4,11 +4,11 @@ import dxPivotGrid, { dxPivotGridPivotGridCell } from './ui/pivot_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
 /**
-* @docid
-* @namespace DevExpress.excelExporter
-* @prevFileNamespace DevExpress
-* @type object
-*/
+ * @docid
+ * @namespace DevExpress.excelExporter
+ * @prevFileNamespace DevExpress
+ * @type object
+ */
 export interface ExcelDataGridCell {
     /**
      * @docid
@@ -31,14 +31,14 @@ export interface ExcelDataGridCell {
      */
     groupSummaryItems?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress
-      */
+       * @docid
+       * @prevFileNamespace DevExpress
+       */
       name?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress
-      */
+       * @docid
+       * @prevFileNamespace DevExpress
+       */
       value?: any
     }>;
     /**
@@ -59,10 +59,10 @@ export interface ExcelDataGridCell {
 }
 
 /**
-* @docid
-* @namespace DevExpress.excelExporter
-* @inherits dxPivotGridPivotGridCell
-*/
+ * @docid
+ * @namespace DevExpress.excelExporter
+ * @inherits dxPivotGridPivotGridCell
+ */
 export interface ExcelPivotGridCell extends dxPivotGridPivotGridCell {
     /**
      * @docid
@@ -82,11 +82,11 @@ export interface ExcelPivotGridCell extends dxPivotGridPivotGridCell {
 }
 
 /**
-* @docid
-* @prevFileNamespace DevExpress
-* @namespace DevExpress.excelExporter
-* @type object
-*/
+ * @docid
+ * @prevFileNamespace DevExpress
+ * @namespace DevExpress.excelExporter
+ * @type object
+ */
 export interface CellAddress {
     /**
      * @docid
@@ -101,11 +101,11 @@ export interface CellAddress {
 }
 
 /**
-* @docid
-* @prevFileNamespace DevExpress
-* @namespace DevExpress.excelExporter
-* @type object
-*/
+ * @docid
+ * @prevFileNamespace DevExpress
+ * @namespace DevExpress.excelExporter
+ * @type object
+ */
 export interface CellRange {
     /**
      * @docid
@@ -120,10 +120,10 @@ export interface CellRange {
 }
 
 /**
-* @docid
-* @namespace DevExpress.excelExporter
-* @hidden
-*/
+ * @docid
+ * @namespace DevExpress.excelExporter
+ * @hidden
+ */
 export interface ExcelExportBaseProps {
     /**
      * @docid
@@ -151,10 +151,10 @@ export interface ExcelExportBaseProps {
 }
 
 /**
-* @docid
-* @namespace DevExpress.excelExporter
-* @inherits ExcelExportBaseProps
-*/
+ * @docid
+ * @namespace DevExpress.excelExporter
+ * @inherits ExcelExportBaseProps
+ */
 export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
     /**
      * @docid
@@ -185,10 +185,10 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
 }
 
 /**
-* @docid
-* @namespace DevExpress.excelExporter
-* @inherits ExcelExportBaseProps
-*/
+ * @docid
+ * @namespace DevExpress.excelExporter
+ * @inherits ExcelExportBaseProps
+ */
 export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
     /**
      * @docid
@@ -196,7 +196,7 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @public
      */
     component?: dxPivotGrid;
-      /**
+    /**
      * @docid
      * @default true
      * @public

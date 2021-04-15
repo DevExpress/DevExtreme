@@ -67,29 +67,29 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      */
     animation?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1000
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1000
+       */
       duration?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.VizAnimationEasing
-      * @default 'easeOutCubic'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.VizAnimationEasing
+       * @default 'easeOutCubic'
+       */
       easing?: 'easeOutCubic' | 'linear',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       enabled?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 300
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 300
+       */
       maxPointCountSupported?: number
     } | boolean;
     /**
@@ -398,10 +398,10 @@ export class BaseChart extends BaseWidget {
 }
 
 /**
-* @docid
-* @type object
-* @inherits BaseLegendItem
-*/
+ * @docid
+ * @type object
+ * @inherits BaseLegendItem
+ */
 export interface BaseChartLegendItem extends BaseLegendItem {
     /**
      * @docid
@@ -412,10 +412,10 @@ export interface BaseChartLegendItem extends BaseLegendItem {
 }
 
 /**
-* @docid
-* @type object
-* @inherits BaseWidgetAnnotationConfig
-*/
+ * @docid
+ * @type object
+ * @inherits BaseWidgetAnnotationConfig
+ */
 export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * @docid

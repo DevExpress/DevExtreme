@@ -38,14 +38,14 @@ export interface ComponentOptions<T = Component> {
   onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => void);
 }
 /**
-* @docid
-* @module core/component
-* @export default
-* @namespace DevExpress
-* @hidden
-* @wrappable
-* @prevFileNamespace DevExpress.core
-*/
+ * @docid
+ * @module core/component
+ * @export default
+ * @namespace DevExpress
+ * @hidden
+ * @wrappable
+ * @prevFileNamespace DevExpress.core
+ */
 export default class Component {
   constructor(options?: ComponentOptions);
   /**

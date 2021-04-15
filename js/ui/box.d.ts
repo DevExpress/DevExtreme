@@ -96,10 +96,10 @@ export default class dxBox extends CollectionWidget {
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxBoxItem extends CollectionWidgetItem {
     /**
      * @docid

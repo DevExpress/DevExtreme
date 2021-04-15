@@ -457,10 +457,11 @@ const ResizingController = modules.ViewController.inherit({
         return Math.round(result);
     },
 
-    updateSize: function($rootElement) {
+    updateSize: function(rootElement) {
         const that = this;
         let $groupElement;
         let width;
+        const $rootElement = $(rootElement);
         const importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
         if(that._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && $rootElement.width()) {

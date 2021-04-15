@@ -328,7 +328,7 @@ export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxTreeList>;
 export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxTreeList> & DragReorderInfo;
 
 
-/** @public */ 
+/** @public */
 export type ColumnButtonClickEvent = ComponentNativeEvent<dxTreeList> & {
     row?: RowObject;
     column?: Column;
@@ -833,7 +833,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @public
      */
     remoteOperations?: {
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default false
@@ -1428,19 +1428,19 @@ export interface RowObject {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isEditing?: boolean;
+    readonly isEditing?: boolean;
     /**
      * @docid dxTreeListRowObject.isExpanded
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isExpanded?: boolean;
+    readonly isExpanded?: boolean;
     /**
      * @docid dxTreeListRowObject.isNewRow
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isNewRow?: boolean;
+    readonly isNewRow?: boolean;
     /**
      * @docid dxTreeListRowObject.isSelected
      * @prevFileNamespace DevExpress.ui
@@ -1483,7 +1483,7 @@ export interface RowObject {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly values: Array<any>;
+    readonly values: Array<any>;
 }
 
 export type Options = dxTreeListOptions;

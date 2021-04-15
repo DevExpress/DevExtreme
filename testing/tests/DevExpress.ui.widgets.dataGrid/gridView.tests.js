@@ -2009,7 +2009,7 @@ QUnit.module('Synchronize columns', {
         // arrange
         const $testElement = $('<div />').appendTo($('#container'));
         const gridView = this.createGridView({}, {
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
             columns: [
                 { dataField: 'field1' },
@@ -2051,7 +2051,7 @@ QUnit.module('Synchronize columns', {
         // arrange
         const $testElement = $('<div />').appendTo($('#container'));
         const gridView = this.createGridView({}, {
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
             columnFixing: { enabled: true },
             selection: { mode: 'multiple', showCheckBoxesMode: 'always' },
@@ -2282,7 +2282,7 @@ QUnit.module('Fixed columns', {
         const $testElement = $('<div />').width(400).appendTo($('#container'));
         const gridView = this.createGridView({}, {
             columnAutoWidth: false,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
             columnFixing: { enabled: true },
             editing: {
@@ -2318,7 +2318,7 @@ QUnit.module('Fixed columns', {
         const $testElement = $('<div />').width(400).appendTo($('#container'));
         const gridView = this.createGridView({}, {
             columnAutoWidth: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2' }],
             columns: [
                 {

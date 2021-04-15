@@ -27,13 +27,13 @@ declare function config(): globalConfig;
 declare function config(config: globalConfig): void;
 
 /**
-* @docid
-* @section commonObjectStructures
-* @namespace DevExpress
-* @module core/config
-* @export default
-* @type object
-*/
+ * @docid
+ * @section commonObjectStructures
+ * @namespace DevExpress
+ * @module core/config
+ * @export default
+ * @type object
+ */
 export interface globalConfig {
     /**
      * @docid
@@ -65,48 +65,48 @@ export interface globalConfig {
      */
     floatingActionButtonConfig?: {
       /**
-      * @docid
-      * @default "close"
-      * @prevFileNamespace DevExpress.core
-      */
+       * @docid
+       * @default "close"
+       * @prevFileNamespace DevExpress.core
+       */
       closeIcon?: string,
       /**
-      * @docid
-      * @type Enums.floatingActionButtonDirection
-      * @default "auto"
-      * @prevFileNamespace DevExpress.core
-      */
+       * @docid
+       * @type Enums.floatingActionButtonDirection
+       * @default "auto"
+       * @prevFileNamespace DevExpress.core
+       */
       direction?: 'auto' | 'up' | 'down',
       /**
-      * @docid
-      * @default "add"
-      * @prevFileNamespace DevExpress.core
-      */
+       * @docid
+       * @default "add"
+       * @prevFileNamespace DevExpress.core
+       */
       icon?: string,
       /**
-      * @docid
-      * @default ""
-      * @prevFileNamespace DevExpress.core
-      */
+       * @docid
+       * @default ""
+       * @prevFileNamespace DevExpress.core
+       */
       label?: string,
       /**
-      * @docid
-      * @default 5
-      * @prevFileNamespace DevExpress.core
-      */
+       * @docid
+       * @default 5
+       * @prevFileNamespace DevExpress.core
+       */
       maxSpeedDialActionCount?: number,
       /**
-      * @docid
-      * @type Enums.PositionAlignment|positionConfig|function
-      * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
-      * @prevFileNamespace DevExpress.core
-      */
+       * @docid
+       * @type Enums.PositionAlignment|positionConfig|function
+       * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
+       * @prevFileNamespace DevExpress.core
+       */
       position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function,
       /**
-      * @docid
-      * @default false
-      * @prevFileNamespace DevExpress.core
-      */
+       * @docid
+       * @default false
+       * @prevFileNamespace DevExpress.core
+       */
       shading?: boolean
     };
     /**

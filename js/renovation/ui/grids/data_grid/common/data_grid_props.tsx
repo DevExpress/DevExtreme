@@ -92,6 +92,7 @@ import type {
 import type { format } from '../../../../../ui/widget/ui.widget';
 import type { dxFormSimpleItem, dxFormOptions } from '../../../../../ui/form';
 import type Store from '../../../../../data/abstract_store';
+import messageLocalization from '../../../../../localization/message';
 
 @ComponentBindings()
 export class DataGridColumnButton {
@@ -1064,6 +1065,25 @@ export class DataGridExport {
 }
 
 @ComponentBindings()
+export class DataGridCommonColumnSettings {
+  @OneWay() allowFiltering?: boolean;
+
+  @OneWay() allowHiding?: boolean;
+
+  @OneWay() allowSorting?: boolean;
+
+  @OneWay() allowEditing?: boolean;
+
+  @OneWay() allowExporting?: boolean;
+
+  @OneWay() encodeHtml?: boolean;
+
+  @OneWay() trueText?: string;
+
+  @OneWay() falseText?: string;
+}
+
+@ComponentBindings()
 export class DataGridProps extends BaseWidgetProps implements Options {
   @Nested() columns?: (DataGridColumn | string)[];
 
@@ -1108,6 +1128,13 @@ export class DataGridProps extends BaseWidgetProps implements Options {
   @Nested() searchPanel?: DataGridSearchPanel;
 
   @Nested() sorting?: DataGridSorting;
+  /* {
+    mode: 'single',
+    ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
+    descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
+    clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
+    showSortIndexes: true,
+  }; */
 
   @Nested() stateStoring?: DataGridStateStoring;
 
@@ -1189,6 +1216,19 @@ export class DataGridProps extends BaseWidgetProps implements Options {
   @OneWay() twoWayBindingEnabled?: boolean;
 
   @OneWay() wordWrapEnabled?: boolean;
+
+  @OneWay() loadingTimeout?: number = 30;
+
+  @OneWay() commonColumnSettings?: DataGridCommonColumnSettings = {
+    allowExporting: true,
+    allowFiltering: true,
+    allowHiding: true,
+    allowSorting: true,
+    allowEditing: true,
+    encodeHtml: true,
+    trueText: messageLocalization.format('dxDataGrid-trueText'),
+    falseText: messageLocalization.format('dxDataGrid-falseText'),
+  };
 
   // TODO Vitik: Default should be null, but declaration doesnt support it
   @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) = [];

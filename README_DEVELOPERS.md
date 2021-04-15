@@ -48,7 +48,7 @@ Tests are in the [testing](testing) directory, and you can execute them as descr
 
 ### Locally in Browser
 
-Run "testing/launch" (for Mac and Linux) or "testing/launch.cmd" (for Windows). This command starts the testing server and opens the test running UI in the default web browser and is the primary way for development and debugging.
+Run `npm run dev`. This command starts the testing server and opens the test running UI in the default web browser and is the primary way for development and debugging.
 
 ### Locally in Docker
 

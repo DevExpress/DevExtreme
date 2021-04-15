@@ -181,16 +181,16 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     showEvent?: {
       /**
-      * @docid
-      * @default undefined
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @default undefined
+       * @prevFileNamespace DevExpress.ui
+       */
       delay?: number,
       /**
-      * @docid
-      * @default undefined
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @default undefined
+       * @prevFileNamespace DevExpress.ui
+       */
       name?: string
     } | string;
     /**

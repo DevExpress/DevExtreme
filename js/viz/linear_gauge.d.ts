@@ -63,7 +63,7 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
      * @public
      */
     geometry?: {
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.viz
        * @type Enums.Orientation

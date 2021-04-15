@@ -171,23 +171,23 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
         columns?: Array<dxFileManagerDetailsColumn | string>
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type Enums.FileManagerItemViewMode
-      * @default "details"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.FileManagerItemViewMode
+       * @default "details"
+       */
       mode?: 'details' | 'thumbnails',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       showFolders?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       showParentFolder?: boolean
     };
     /**
@@ -421,16 +421,16 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      */
     upload?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 0
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 0
+       */
       maxFileSize?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 200000
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 200000
+       */
       chunkSize?: number
     };
 }
@@ -587,7 +587,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @hidden
      */
     template?: template | (() => string | TElement);
-     /**
+    /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @hidden

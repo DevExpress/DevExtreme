@@ -238,7 +238,7 @@ export interface FilterPanel<T extends GridBase> {
 }
 
 export interface RowDragging<T extends GridBase> {
-  /**
+    /**
      * @docid GridBaseOptions.rowDragging.allowDropInsideItem
      * @prevFileNamespace DevExpress.ui
      * @default false
@@ -466,10 +466,10 @@ export interface RowDragging<T extends GridBase> {
      */
     scrollSpeed?: number,
     /**
-    * @docid GridBaseOptions.rowDragging.showDragIcons
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
+     * @docid GridBaseOptions.rowDragging.showDragIcons
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
     showDragIcons?: boolean
 }
 
@@ -1136,7 +1136,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
 }
 
 export interface ColumnChooser {
-  /**
+    /**
      * @docid GridBaseOptions.columnChooser.allowSearch
      * @prevFileNamespace DevExpress.ui
      * @default false
@@ -1188,11 +1188,11 @@ export interface ColumnChooser {
 }
 
 export interface ColumnFixing {
-  /**
-    * @docid GridBaseOptions.columnFixing.enabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
+    /**
+     * @docid GridBaseOptions.columnFixing.enabled
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
     enabled?: boolean,
     /**
      * @docid GridBaseOptions.columnFixing.texts
@@ -1251,7 +1251,7 @@ export interface FilterPanelTexts {
 }
 
 export interface FilterRow {
-   /**
+    /**
      * @docid GridBaseOptions.filterRow.applyFilter
      * @prevFileNamespace DevExpress.ui
      * @type Enums.GridApplyFilterMode
@@ -1283,16 +1283,16 @@ export interface FilterRow {
      */
     operationDescriptions?: FilterRowOperationDescriptions,
     /**
-    * @docid GridBaseOptions.filterRow.resetOperationText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Reset"
-    */
+     * @docid GridBaseOptions.filterRow.resetOperationText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Reset"
+     */
     resetOperationText?: string,
     /**
-    * @docid GridBaseOptions.filterRow.showAllText
-    * @prevFileNamespace DevExpress.ui
-    * @default "(All)"
-    */
+     * @docid GridBaseOptions.filterRow.showAllText
+     * @prevFileNamespace DevExpress.ui
+     * @default "(All)"
+     */
     showAllText?: string,
     /**
      * @docid GridBaseOptions.filterRow.showOperationChooser
@@ -1378,7 +1378,7 @@ export interface FilterRowOperationDescriptions {
 }
 
 export interface HeaderFilter {
-  /**
+    /**
      * @docid GridBaseOptions.headerFilter.allowSearch
      * @prevFileNamespace DevExpress.ui
      * @default false
@@ -1439,7 +1439,7 @@ export interface HeaderFilterTexts {
 }
 
 export interface KeyboardNavigation {
-  /**
+    /**
      * @docid GridBaseOptions.keyboardNavigation.editOnKeyPress
      * @prevFileNamespace DevExpress.ui
      * @default false
@@ -1468,7 +1468,7 @@ export interface KeyboardNavigation {
 }
 
 export interface LoadPanel {
-  /**
+    /**
      * @docid GridBaseOptions.loadPanel.enabled
      * @prevFileNamespace DevExpress.ui
      * @type boolean|Enums.Mode
@@ -1482,34 +1482,34 @@ export interface LoadPanel {
      */
     height?: number,
     /**
-    * @docid GridBaseOptions.loadPanel.indicatorSrc
-    * @prevFileNamespace DevExpress.ui
-    * @default ""
-    */
+     * @docid GridBaseOptions.loadPanel.indicatorSrc
+     * @prevFileNamespace DevExpress.ui
+     * @default ""
+     */
     indicatorSrc?: string,
     /**
-    * @docid GridBaseOptions.loadPanel.shading
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
+     * @docid GridBaseOptions.loadPanel.shading
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
     shading?: boolean,
     /**
-    * @docid GridBaseOptions.loadPanel.shadingColor
-    * @prevFileNamespace DevExpress.ui
-    * @default ''
-    */
+     * @docid GridBaseOptions.loadPanel.shadingColor
+     * @prevFileNamespace DevExpress.ui
+     * @default ''
+     */
     shadingColor?: string,
     /**
-    * @docid GridBaseOptions.loadPanel.showIndicator
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
+     * @docid GridBaseOptions.loadPanel.showIndicator
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
     showIndicator?: boolean,
     /**
-    * @docid GridBaseOptions.loadPanel.showPane
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
+     * @docid GridBaseOptions.loadPanel.showPane
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
     showPane?: boolean,
     /**
      * @docid GridBaseOptions.loadPanel.text
@@ -1526,7 +1526,7 @@ export interface LoadPanel {
 }
 
 export interface Pager {
-  /**
+    /**
      * @docid GridBaseOptions.pager.allowedPageSizes
      * @prevFileNamespace DevExpress.ui
      * @type Array<number, Enums.GridPagerPageSize>|Enums.Mode
@@ -1562,7 +1562,7 @@ export interface Pager {
      * @docid GridBaseOptions.pager.showPageSizeSelector
      * @prevFileNamespace DevExpress.ui
      * @default false
-    */
+     */
     showPageSizeSelector?: boolean,
     /**
      * @docid GridBaseOptions.pager.visible
@@ -1620,41 +1620,41 @@ export interface SearchPanel {
 }
 
 export interface Sorting {
-  /**
-    * @docid GridBaseOptions.sorting.ascendingText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Sort Ascending"
-    */
+    /**
+     * @docid GridBaseOptions.sorting.ascendingText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Sort Ascending"
+     */
     ascendingText?: string,
     /**
-    * @docid GridBaseOptions.sorting.clearText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Clear Sorting"
-    */
+     * @docid GridBaseOptions.sorting.clearText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Clear Sorting"
+     */
     clearText?: string,
     /**
-    * @docid GridBaseOptions.sorting.descendingText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Sort Descending"
-    */
+     * @docid GridBaseOptions.sorting.descendingText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Sort Descending"
+     */
     descendingText?: string,
     /**
-    * @docid GridBaseOptions.sorting.mode
-    * @prevFileNamespace DevExpress.ui
-    * @type Enums.GridSortingMode
-    * @default "single"
-    */
+     * @docid GridBaseOptions.sorting.mode
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.GridSortingMode
+     * @default "single"
+     */
     mode?: 'multiple' | 'none' | 'single',
     /**
-    * @docid GridBaseOptions.sorting.showSortIndexes
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
+     * @docid GridBaseOptions.sorting.showSortIndexes
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
     showSortIndexes?: boolean
 }
 
 export interface StateStoring {
-  /**
+    /**
      * @docid GridBaseOptions.stateStoring.customLoad
      * @prevFileNamespace DevExpress.ui
      * @type_function_return Promise<Object>
@@ -1714,14 +1714,14 @@ export interface EditingBase {
      * @default null
      * @fires GridBaseOptions.onOptionChanged
      * @public
-    */
+     */
     editColumnName?: string;
     /**
      * @docid GridBaseOptions.editing.editRowKey
      * @default null
      * @fires GridBaseOptions.onOptionChanged
      * @public
-    */
+     */
     editRowKey?: any;
     /**
      * @docid GridBaseOptions.editing.form
@@ -1784,12 +1784,12 @@ export interface EditingBase {
 }
 
 /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  */
+ * @docid
+ * @prevFileNamespace DevExpress.ui
+ */
 export interface DataChange {
     /**
-     * @docid 
+     * @docid
      */
     key: any;
     /**
@@ -2945,7 +2945,7 @@ export interface ColumnBase {
 }
 
 export interface ColumnHeaderFilter {
-/**
+  /**
    * @docid GridBaseColumn.headerFilter.allowSearch
    * @prevFileNamespace DevExpress.ui
    * @default false
@@ -2989,7 +2989,7 @@ export interface ColumnHeaderFilter {
 }
 
 export interface ColumnLookup {
-/**
+  /**
    * @docid GridBaseColumn.lookup.allowClearing
    * @prevFileNamespace DevExpress.ui
    * @default false
@@ -3909,7 +3909,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @public
      */
     remoteOperations?: boolean | {
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default false
@@ -4020,212 +4020,212 @@ export interface ExcelCellInfo {
 
 export interface Export {
   /**
-    * @docid dxDataGridOptions.export.allowExportSelectedData
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   allowExportSelectedData?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.customizeExcelCell
-    * @prevFileNamespace DevExpress.ui
-    * @deprecated
-    * @type_function_param1 options:object
-    * @type_function_param1_field1 component:dxDataGrid
-    * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
-    * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
-    * @type_function_param1_field4 wrapTextEnabled:boolean
-    * @type_function_param1_field5 backgroundColor:string
-    * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
-    * @type_function_param1_field7 fillPatternColor:string
-    * @type_function_param1_field8 font:ExcelFont
-    * @type_function_param1_field9 value:string|number|date
-    * @type_function_param1_field10 numberFormat:string
-    * @type_function_param1_field11 gridCell:ExcelDataGridCell
-    */
-   customizeExcelCell?: ((options: ExcelCellInfo) => void),
-   /**
-    * @docid dxDataGridOptions.export.enabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   enabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.excelFilterEnabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    * @deprecated
-    */
-   excelFilterEnabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.excelWrapTextEnabled
-    * @prevFileNamespace DevExpress.ui
-    * @default undefined
-    * @deprecated
-    */
-   excelWrapTextEnabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.fileName
-    * @prevFileNamespace DevExpress.ui
-    * @default "DataGrid"
-    * @deprecated
-    */
-   fileName?: string,
-   /**
+   * @docid dxDataGridOptions.export.allowExportSelectedData
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  allowExportSelectedData?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.customizeExcelCell
+   * @prevFileNamespace DevExpress.ui
+   * @deprecated
+   * @type_function_param1 options:object
+   * @type_function_param1_field1 component:dxDataGrid
+   * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
+   * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
+   * @type_function_param1_field4 wrapTextEnabled:boolean
+   * @type_function_param1_field5 backgroundColor:string
+   * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
+   * @type_function_param1_field7 fillPatternColor:string
+   * @type_function_param1_field8 font:ExcelFont
+   * @type_function_param1_field9 value:string|number|date
+   * @type_function_param1_field10 numberFormat:string
+   * @type_function_param1_field11 gridCell:ExcelDataGridCell
+   */
+  customizeExcelCell?: ((options: ExcelCellInfo) => void),
+  /**
+   * @docid dxDataGridOptions.export.enabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  enabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.excelFilterEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   * @deprecated
+   */
+  excelFilterEnabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.excelWrapTextEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   * @deprecated
+   */
+  excelWrapTextEnabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.fileName
+   * @prevFileNamespace DevExpress.ui
+   * @default "DataGrid"
+   * @deprecated
+   */
+  fileName?: string,
+  /**
    * @docid dxDataGridOptions.export.ignoreExcelErrors
    * @prevFileNamespace DevExpress.ui
    * @default true
    * @deprecated
    */
-   ignoreExcelErrors?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.proxyUrl
-    * @prevFileNamespace DevExpress.ui
-    * @default undefined
-    * @deprecated
-    */
-   proxyUrl?: string,
-   /**
-    * @docid dxDataGridOptions.export.texts
-    * @type object
-    * @prevFileNamespace DevExpress.ui
-    */
-   texts?: ExportTexts
+  ignoreExcelErrors?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.proxyUrl
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   * @deprecated
+   */
+  proxyUrl?: string,
+  /**
+   * @docid dxDataGridOptions.export.texts
+   * @type object
+   * @prevFileNamespace DevExpress.ui
+   */
+  texts?: ExportTexts
 }
 
 export interface ExportTexts {
-   /**
-    * @docid dxDataGridOptions.export.texts.exportAll
-    * @prevFileNamespace DevExpress.ui
-    * @default "Export all data"
-    */
-   exportAll?: string,
-   /**
-    * @docid dxDataGridOptions.export.texts.exportSelectedRows
-    * @prevFileNamespace DevExpress.ui
-    * @default "Export selected rows"
-    */
-   exportSelectedRows?: string,
-   /**
-    * @docid dxDataGridOptions.export.texts.exportTo
-    * @prevFileNamespace DevExpress.ui
-    * @default "Export"
-    */
-   exportTo?: string
+  /**
+   * @docid dxDataGridOptions.export.texts.exportAll
+   * @prevFileNamespace DevExpress.ui
+   * @default "Export all data"
+   */
+  exportAll?: string,
+  /**
+   * @docid dxDataGridOptions.export.texts.exportSelectedRows
+   * @prevFileNamespace DevExpress.ui
+   * @default "Export selected rows"
+   */
+  exportSelectedRows?: string,
+  /**
+   * @docid dxDataGridOptions.export.texts.exportTo
+   * @prevFileNamespace DevExpress.ui
+   * @default "Export"
+   */
+  exportTo?: string
 }
 
 export interface GroupPanel {
   /**
-    * @docid dxDataGridOptions.groupPanel.allowColumnDragging
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
-   allowColumnDragging?: boolean,
-   /**
-    * @docid dxDataGridOptions.groupPanel.emptyPanelText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Drag a column header here to group by that column"
-    */
-   emptyPanelText?: string,
-   /**
-    * @docid dxDataGridOptions.groupPanel.visible
-    * @prevFileNamespace DevExpress.ui
-    * @type boolean|Enums.Mode
-    * @default false
-    */
-   visible?: boolean | 'auto'
+   * @docid dxDataGridOptions.groupPanel.allowColumnDragging
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  allowColumnDragging?: boolean,
+  /**
+   * @docid dxDataGridOptions.groupPanel.emptyPanelText
+   * @prevFileNamespace DevExpress.ui
+   * @default "Drag a column header here to group by that column"
+   */
+  emptyPanelText?: string,
+  /**
+   * @docid dxDataGridOptions.groupPanel.visible
+   * @prevFileNamespace DevExpress.ui
+   * @type boolean|Enums.Mode
+   * @default false
+   */
+  visible?: boolean | 'auto'
 }
 
 export interface Grouping {
- /**
-    * @docid dxDataGridOptions.grouping.allowCollapsing
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
-   allowCollapsing?: boolean,
-   /**
-    * @docid dxDataGridOptions.grouping.autoExpandAll
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
-   autoExpandAll?: boolean,
-   /**
-    * @docid dxDataGridOptions.grouping.contextMenuEnabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   contextMenuEnabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.grouping.expandMode
-    * @prevFileNamespace DevExpress.ui
-    * @default 'rowClick' [for](mobile_devices)
-    * @type Enums.GridGroupingExpandMode
-    * @default "buttonClick"
-    */
-   expandMode?: 'buttonClick' | 'rowClick',
-   /**
-    * @docid dxDataGridOptions.grouping.texts
-    * @type object
-    * @prevFileNamespace DevExpress.ui
-    */
-   texts?: GroupingTexts
+  /**
+   * @docid dxDataGridOptions.grouping.allowCollapsing
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  allowCollapsing?: boolean,
+  /**
+   * @docid dxDataGridOptions.grouping.autoExpandAll
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  autoExpandAll?: boolean,
+  /**
+   * @docid dxDataGridOptions.grouping.contextMenuEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  contextMenuEnabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.grouping.expandMode
+   * @prevFileNamespace DevExpress.ui
+   * @default 'rowClick' [for](mobile_devices)
+   * @type Enums.GridGroupingExpandMode
+   * @default "buttonClick"
+   */
+  expandMode?: 'buttonClick' | 'rowClick',
+  /**
+   * @docid dxDataGridOptions.grouping.texts
+   * @type object
+   * @prevFileNamespace DevExpress.ui
+   */
+  texts?: GroupingTexts
 }
 
 export interface GroupingTexts {
-   /**
+  /**
    * @docid dxDataGridOptions.grouping.texts.groupByThisColumn
    * @prevFileNamespace DevExpress.ui
    * @default "Group by This Column"
    */
-   groupByThisColumn?: string,
-   /**
-    * @docid dxDataGridOptions.grouping.texts.groupContinuedMessage
-    * @prevFileNamespace DevExpress.ui
-    * @default "Continued from the previous page"
-    */
-   groupContinuedMessage?: string,
-   /**
+  groupByThisColumn?: string,
+  /**
+   * @docid dxDataGridOptions.grouping.texts.groupContinuedMessage
+   * @prevFileNamespace DevExpress.ui
+   * @default "Continued from the previous page"
+   */
+  groupContinuedMessage?: string,
+  /**
    * @docid dxDataGridOptions.grouping.texts.groupContinuesMessage
    * @prevFileNamespace DevExpress.ui
    * @default "Continues on the next page"
    */
-   groupContinuesMessage?: string,
-   /**
+  groupContinuesMessage?: string,
+  /**
    * @docid dxDataGridOptions.grouping.texts.ungroup
    * @prevFileNamespace DevExpress.ui
    * @default "Ungroup"
    */
-   ungroup?: string,
-   /**
+  ungroup?: string,
+  /**
    * @docid dxDataGridOptions.grouping.texts.ungroupAll
    * @prevFileNamespace DevExpress.ui
    * @default "Ungroup All"
    */
-   ungroupAll?: string
+  ungroupAll?: string
 }
 
 export interface MasterDetail {
-   /**
-    * @docid dxDataGridOptions.masterDetail.autoExpandAll
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   autoExpandAll?: boolean,
-   /**
-    * @docid dxDataGridOptions.masterDetail.enabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   enabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.masterDetail.template
-    * @prevFileNamespace DevExpress.ui
-    * @type_function_param1 detailElement:dxElement
-    * @type_function_param2 detailInfo:object
-    * @type_function_param2_field1 key:any
-    * @type_function_param2_field2 data:object
-    * @type_function_param2_field3 watch:function
-    */
-   template?: template | ((detailElement: TElement, detailInfo: MasterDetailTemplateData) => any)
+  /**
+   * @docid dxDataGridOptions.masterDetail.autoExpandAll
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  autoExpandAll?: boolean,
+  /**
+   * @docid dxDataGridOptions.masterDetail.enabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  enabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.masterDetail.template
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 detailElement:dxElement
+   * @type_function_param2 detailInfo:object
+   * @type_function_param2_field1 key:any
+   * @type_function_param2_field2 data:object
+   * @type_function_param2_field3 watch:function
+   */
+  template?: template | ((detailElement: TElement, detailInfo: MasterDetailTemplateData) => any)
 }
 
 export interface dxDataGridSortByGroupSummaryInfoItem {
@@ -5034,7 +5034,7 @@ export interface RowObject {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isEditing?: boolean;
+    readonly isEditing?: boolean;
     /**
      * @docid dxDataGridRowObject.isExpanded
      * @prevFileNamespace DevExpress.ui

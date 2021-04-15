@@ -33,7 +33,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         const data = [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }];
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: data,
             columns: ['firstName', { dataField: 'lastName', cellTemplate: $('#scriptTestTemplate1') }]
@@ -70,7 +70,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
             columnWidth: 100,
             columnHidingEnabled: true,
             repaintChangesOnly: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             dataSource: dataSource
         });
@@ -92,7 +92,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         $('#container').width(200);
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }],
             columns: ['firstName', 'lastName']
@@ -134,7 +134,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         $('#container').width(200);
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }],
             columns: [{ dataField: 'firstName', hidingPriority: 0 }, { dataField: 'lastName', hidingPriority: 1 }]
         });
@@ -179,7 +179,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // arrange
         $('#container').width(80);
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy van Dyk', age: 40, country: 'India' }],
             columns: [{ dataField: 'firstName', hidingPriority: 0 }, { dataField: 'lastName', hidingPriority: 1 }, 'age', 'country']
         });
@@ -230,7 +230,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             width: 300,
             columnWidth: 100,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: [{}],
             columns: ['field1', 'field2', 'field3', 'field4']
@@ -253,7 +253,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         const dataSource = [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }];
         const eventArgs = [];
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: dataSource,
             columns: ['firstName', 'lastName'],
@@ -289,7 +289,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         let column;
         let columnIndex;
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: dataSource,
             columns: ['firstName', 'lastName'],
