@@ -781,6 +781,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
                 this._updateFormat();
                 this._renderFormatter();
                 this._renderValue();
+                this._refreshValueChangeEvent();
+                this._refreshEvents();
                 break;
             case 'min':
             case 'max':
