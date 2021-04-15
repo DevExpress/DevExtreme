@@ -2,22 +2,19 @@ import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import browser from '../../core/utils/browser';
-import { isObject, isString } from '../../core/utils/type';
 import positionUtils from '../../animation/position';
 import { each } from '../../core/utils/iterator';
 import Class from '../../core/class';
-import { Deferred, when } from '../../core/utils/deferred';
+import { Deferred } from '../../core/utils/deferred';
 import Callbacks from '../../core/utils/callbacks';
+import { VirtualDataLoader } from './ui.grid.core.virtual_data_loader';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 const NEW_SCROLLING_MODE = 'scrolling.newMode';
 
 const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
-
 const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
-
-const needTwoPagesLoading = (that) => that.option('scrolling.loadTwoPagesOnStart') || that._isVirtual || that._viewportItemIndex > 0;
 
 export let getPixelRatio = (window) => window.devicePixelRatio || 1;
 
@@ -123,195 +120,19 @@ export function subscribeToExternalScrollers($element, scrollChangedHandler, $ta
 }
 
 export const VirtualScrollController = Class.inherit((function() {
-    const getViewportPageCount = function(that) {
-        const pageSize = that._dataOptions.pageSize();
-        const preventPreload = that.option('scrolling.preventPreload');
-
-        if(preventPreload) {
-            return 0;
-        }
-
-        let realViewportSize = that._viewportSize;
-
-        if(isVirtualMode(that) && that.option('scrolling.removeInvisiblePages')) {
-            realViewportSize = 0;
-
-            const viewportSize = that._viewportSize * that._viewportItemSize;
-
-            let offset = that.getContentOffset();
-            const position = that._position || 0;
-
-            const virtualItemsCount = that.virtualItemsCount();
-            const totalItemsCount = that._dataOptions.totalItemsCount();
-
-            for(let itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex++) {
-                if(offset >= position + viewportSize) break;
-
-                const itemSize = that._itemSizes[itemIndex] || that._viewportItemSize;
-                offset += itemSize;
-                if(offset >= position) {
-                    realViewportSize++;
-                }
-            }
-        }
-
-        return (pageSize && realViewportSize > 0) ? Math.ceil(realViewportSize / pageSize) : 1;
-    };
-
-    const getPreloadPageCount = function(that, previous) {
-        const preloadEnabled = that.option('scrolling.preloadEnabled');
-        let pageCount = getViewportPageCount(that);
-
-        if(pageCount) {
-            if(previous) {
-                pageCount = preloadEnabled ? 1 : 0;
-            } else {
-                if(preloadEnabled) {
-                    pageCount++;
-                }
-
-                if(isAppendMode(that) || !needTwoPagesLoading(that)) {
-                    pageCount--;
-                }
-            }
-        }
-
-        return pageCount;
-    };
-
-    const getPageIndexForLoad = function(that) {
-        let result = -1;
-        const beginPageIndex = getBeginPageIndex(that);
-        const dataOptions = that._dataOptions;
-
-        if(beginPageIndex < 0) {
-            result = that._pageIndex;
-        } else if(!that._cache[that._pageIndex - beginPageIndex]) {
-            result = that._pageIndex;
-        } else if(beginPageIndex >= 0 && that._viewportSize >= 0) {
-            if(beginPageIndex > 0) {
-                const needToLoadPageBeforeLast = getEndPageIndex(that) + 1 === dataOptions.pageCount() && that._cache.length < getPreloadPageCount(that) + 1;
-                const needToLoadPrevPage = needToLoadPageBeforeLast || that._pageIndex === beginPageIndex && getPreloadPageCount(that, true);
-
-                if(needToLoadPrevPage) {
-                    result = beginPageIndex - 1;
-                }
-            }
-
-            if(result < 0) {
-                const needToLoadNextPage = beginPageIndex + that._cache.length <= that._pageIndex + getPreloadPageCount(that);
-
-                if(needToLoadNextPage) {
-                    result = beginPageIndex + that._cache.length;
-                }
-            }
-        }
-
-        if(that._loadingPageIndexes[result]) {
-            result = -1;
-        }
-
-        return result;
-    };
-
-    function getBeginPageIndex(that) {
-        return that._cache.length ? that._cache[0].pageIndex : -1;
-    }
-
-    function getEndPageIndex(that) {
-        return that._cache.length ? that._cache[that._cache.length - 1].pageIndex : -1;
-    }
-
-    const fireChanged = function(that, changed, args) {
-        that._isChangedFiring = true;
-        changed(args);
-        that._isChangedFiring = false;
-    };
-
-    const processDelayChanged = function(that, changed, args) {
-        if(that._isDelayChanged) {
-            that._isDelayChanged = false;
-            fireChanged(that, changed, args);
-            return true;
-        }
-    };
-
-    const processChanged = function(that, changed, changeType, isDelayChanged, removeCacheItem) {
-        const dataOptions = that._dataOptions;
-        const items = dataOptions.items().slice();
-        let change = isObject(changeType) ? changeType : undefined;
-        const isPrepend = changeType === 'prepend';
-        const viewportItems = dataOptions.viewportItems();
-
-        if(changeType && isString(changeType) && !that._isDelayChanged) {
-            change = {
-                changeType: changeType,
-                items: items
-            };
-            if(removeCacheItem) {
-                change.removeCount = removeCacheItem.itemsCount;
-                if(change.removeCount && dataOptions.correctCount) {
-                    change.removeCount = dataOptions.correctCount(viewportItems, change.removeCount, isPrepend);
-                }
-            }
-        }
-        let removeItemCount = removeCacheItem ? removeCacheItem.itemsLength : 0;
-
-        if(removeItemCount && dataOptions.correctCount) {
-            removeItemCount = dataOptions.correctCount(viewportItems, removeItemCount, isPrepend);
-        }
-
-        if(changeType === 'append') {
-            viewportItems.push.apply(viewportItems, items);
-            if(removeCacheItem) {
-                viewportItems.splice(0, removeItemCount);
-            }
-        } else if(isPrepend) {
-            viewportItems.unshift.apply(viewportItems, items);
-            if(removeCacheItem) {
-                viewportItems.splice(-removeItemCount);
-            }
-        } else {
-            that._dataOptions.viewportItems(items);
-        }
-        dataOptions.updateLoading();
-        that._lastPageIndex = that.pageIndex();
-        that._isDelayChanged = isDelayChanged;
-
-        if(!isDelayChanged) {
-            fireChanged(that, changed, change);
-        }
-    };
-
-    const loadCore = function(that, pageIndex) {
-        const dataOptions = that._dataOptions;
-
-        if(pageIndex === that.pageIndex() || (!dataOptions.isLoading() && pageIndex < dataOptions.pageCount() || (!dataOptions.hasKnownLastPage() && pageIndex === dataOptions.pageCount()))) {
-            dataOptions.pageIndex(pageIndex);
-
-            that._loadingPageIndexes[pageIndex] = true;
-            return when(dataOptions.load()).always(function() {
-                that._loadingPageIndexes[pageIndex] = false;
-            });
-        }
-    };
-
-    return {
+    const members = {
         ctor: function(component, dataOptions, isVirtual) {
             this._dataOptions = dataOptions;
             this.component = component;
-            this._pageIndex = this._lastPageIndex = dataOptions.pageIndex();
-
             this._viewportSize = 0;
             this._viewportItemSize = 20;
             this._viewportItemIndex = 0;
             this._contentSize = 0;
             this._itemSizes = {};
             this._sizeRatio = 1;
-            this._cache = [];
             this._isVirtual = isVirtual;
-            this._loadingPageIndexes = {};
             this.positionChanged = Callbacks();
+            this._dataLoader = new VirtualDataLoader(this, this._dataOptions);
         },
 
         getItemSizes: function() {
@@ -320,6 +141,10 @@ export const VirtualScrollController = Class.inherit((function() {
 
         option: function() {
             return this.component.option.apply(this.component, arguments);
+        },
+
+        isVirtual: function() {
+            return this._isVirtual;
         },
 
         virtualItemsCount: function() {
@@ -334,17 +159,7 @@ export const VirtualScrollController = Class.inherit((function() {
                     };
                 }
 
-                let pageIndex = getBeginPageIndex(this);
-                if(pageIndex < 0) {
-                    pageIndex = this._dataOptions.pageIndex();
-                }
-                const beginItemsCount = pageIndex * this._dataOptions.pageSize();
-                const itemsCount = this._cache.length * this._dataOptions.pageSize();
-                const endItemsCount = Math.max(0, this._dataOptions.totalItemsCount() - itemsCount - beginItemsCount);
-                return {
-                    begin: beginItemsCount,
-                    end: endItemsCount
-                };
+                return this._dataLoader.virtualItemsCount.apply(this._dataLoader, arguments);
             }
         },
 
@@ -470,34 +285,7 @@ export const VirtualScrollController = Class.inherit((function() {
                 return;
             }
 
-            const pageSize = this._dataOptions.pageSize();
-            const pageCount = this._dataOptions.pageCount();
-            const virtualMode = isVirtualMode(this);
-            const appendMode = isAppendMode(this);
-            const totalItemsCount = this._dataOptions.totalItemsCount();
-            let newPageIndex;
-
-            if(pageSize && (virtualMode || appendMode) && totalItemsCount >= 0) {
-                if(this._viewportSize && (itemIndex + this._viewportSize) >= totalItemsCount && !this._isVirtual) {
-                    if(this._dataOptions.hasKnownLastPage()) {
-                        newPageIndex = pageCount - 1;
-                        const lastPageSize = totalItemsCount % pageSize;
-                        if(newPageIndex > 0 && lastPageSize > 0 && lastPageSize < this._viewportSize) {
-                            newPageIndex--;
-                        }
-                    } else {
-                        newPageIndex = pageCount;
-                    }
-                } else {
-                    newPageIndex = Math.floor(itemIndex / pageSize);
-                    const maxPageIndex = pageCount - 1;
-                    newPageIndex = Math.max(newPageIndex, 0);
-                    newPageIndex = Math.min(newPageIndex, maxPageIndex);
-                }
-
-                this.pageIndex(newPageIndex);
-                return this.load();
-            }
+            return this._dataLoader.viewportItemIndexChanged.apply(this._dataLoader, arguments);
         },
         viewportItemSize: function(size) {
             if(size !== undefined) {
@@ -511,149 +299,9 @@ export const VirtualScrollController = Class.inherit((function() {
             }
             return this._viewportSize;
         },
-        pageIndex: function(pageIndex) {
-            if(!this.option(NEW_SCROLLING_MODE) && (isVirtualMode(this) || isAppendMode(this))) {
-                if(pageIndex !== undefined) {
-                    this._pageIndex = pageIndex;
-                }
-                return this._pageIndex;
-            } else {
-                return this._dataOptions.pageIndex(pageIndex);
-            }
-        },
-        beginPageIndex: function(defaultPageIndex) {
-            let beginPageIndex = getBeginPageIndex(this);
-            if(beginPageIndex < 0) {
-                beginPageIndex = defaultPageIndex !== undefined ? defaultPageIndex : this.pageIndex();
-            }
-            return beginPageIndex;
-        },
-        endPageIndex: function() {
-            const endPageIndex = getEndPageIndex(this);
-            return endPageIndex > 0 ? endPageIndex : this._lastPageIndex;
-        },
-        pageSize: function() {
-            return this._dataOptions.pageSize();
-        },
-        load: function() {
-            const dataOptions = this._dataOptions;
-            let result;
-
-            if(!this.option(NEW_SCROLLING_MODE) && (isVirtualMode(this) || isAppendMode(this))) {
-                const pageIndexForLoad = getPageIndexForLoad(this);
-
-                if(pageIndexForLoad >= 0) {
-                    const loadResult = loadCore(this, pageIndexForLoad);
-                    if(loadResult) {
-                        result = new Deferred();
-                        loadResult.done(() => {
-                            const delayDeferred = this._delayDeferred;
-                            if(delayDeferred) {
-                                delayDeferred.done(result.resolve).fail(result.reject);
-                            } else {
-                                result.resolve();
-                            }
-                        }).fail(result.reject);
-                        dataOptions.updateLoading();
-                    }
-                }
-            } else {
-                result = dataOptions.load();
-            }
-
-            if(!result && this._lastPageIndex !== this.pageIndex()) {
-                this._dataOptions.onChanged({
-                    changeType: 'pageIndex'
-                });
-            }
-
-            return result || new Deferred().resolve();
-        },
-        loadIfNeed: function() {
-            if((isVirtualMode(this) || isAppendMode(this)) && !this._dataOptions.isLoading() && (!this._isChangedFiring || this._isVirtual)) {
-                const position = this.getViewportPosition();
-                if(position > 0) {
-                    this._setViewportPositionCore(position);
-                } else {
-                    this.load();
-                }
-            }
-        },
-        handleDataChanged: function(callBase, e) {
-            const dataOptions = this._dataOptions;
-            let lastCacheLength = this._cache.length;
-            let changeType;
-            let removeInvisiblePages;
-
-            if(e && e.changes) {
-                fireChanged(this, callBase, e);
-            } else if(!this.option(NEW_SCROLLING_MODE) && (isVirtualMode(this) || isAppendMode(this))) {
-                const beginPageIndex = getBeginPageIndex(this);
-                if(beginPageIndex >= 0) {
-                    if(isVirtualMode(this) && beginPageIndex + this._cache.length !== dataOptions.pageIndex() && beginPageIndex - 1 !== dataOptions.pageIndex()) {
-                        lastCacheLength = 0;
-                        this._cache = [];
-                    }
-                    if(isAppendMode(this)) {
-                        if(dataOptions.pageIndex() === 0) {
-                            this._cache = [];
-                        } else if(dataOptions.pageIndex() < getEndPageIndex(this)) {
-                            fireChanged(this, callBase, { changeType: 'append', items: [] });
-                            return;
-                        }
-                    }
-                }
-
-                const cacheItem = { pageIndex: dataOptions.pageIndex(), itemsLength: dataOptions.items(true).length, itemsCount: this.itemsCount(true) };
-
-                if(this.option('scrolling.removeInvisiblePages') && isVirtualMode(this)) {
-                    removeInvisiblePages = this._cache.length > Math.max(getPreloadPageCount(this) + (this.option('scrolling.preloadEnabled') ? 1 : 0), 2);
-                } else {
-                    processDelayChanged(this, callBase, { isDelayed: true });
-                }
-
-                let removeCacheItem;
-                if(beginPageIndex === dataOptions.pageIndex() + 1) {
-                    if(removeInvisiblePages) {
-                        removeCacheItem = this._cache.pop();
-                    }
-                    changeType = 'prepend';
-                    this._cache.unshift(cacheItem);
-                } else {
-                    if(removeInvisiblePages) {
-                        removeCacheItem = this._cache.shift();
-                    }
-                    changeType = 'append';
-                    this._cache.push(cacheItem);
-                }
-
-                const isDelayChanged = isVirtualMode(this) && lastCacheLength === 0 && needTwoPagesLoading(this);
-                processChanged(this, callBase, this._cache.length > 1 ? changeType : undefined, isDelayChanged, removeCacheItem);
-                this._delayDeferred = this.load().done(() => {
-                    if(processDelayChanged(this, callBase)) {
-                        this.load(); // needed for infinite scrolling when height is not defined
-                    }
-                });
-            } else {
-                processChanged(this, callBase, e);
-            }
-        },
-        itemsCount: function(isBase) {
-            let itemsCount = 0;
-
-            if(!isBase && isVirtualMode(this)) {
-                each(this._cache, function() {
-                    itemsCount += this.itemsCount;
-                });
-            } else {
-                itemsCount = this._dataOptions.itemsCount();
-            }
-            return itemsCount;
-        },
 
         reset: function(isRefresh) {
-            this._loadingPageIndexes = {};
-            this._cache = [];
+            this._dataLoader.reset();
             if(!isRefresh) {
                 this._itemSizes = {};
             }
@@ -677,6 +325,14 @@ export const VirtualScrollController = Class.inherit((function() {
             this._windowScroll && this._windowScroll.scrollTo(pos);
         },
 
+        isVirtualMode: function() {
+            return isVirtualMode(this);
+        },
+
+        isAppendMode: function() {
+            return isAppendMode(this);
+        },
+
         // new mode
         getViewportParams: function() {
             const skip = Math.floor(this._viewportItemIndex);
@@ -692,4 +348,16 @@ export const VirtualScrollController = Class.inherit((function() {
             };
         }
     };
+
+    [
+        'pageIndex', 'beginPageIndex', 'endPageIndex',
+        'pageSize', 'load', 'loadIfNeed', 'handleDataChanged',
+        'itemsCount', 'getDelayDeferred'
+    ].forEach(function(name) {
+        members[name] = function() {
+            return this._dataLoader[name].apply(this._dataLoader, arguments);
+        };
+    });
+
+    return members;
 })());
