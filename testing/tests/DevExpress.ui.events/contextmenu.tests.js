@@ -29,7 +29,7 @@ QUnit.test('contextmenu should be fired on hold event', function(assert) {
     $element.trigger($.Event(holdEvent.name, { pointerType: 'touch' }));
 });
 
-QUnit.test('default\'s contextmenu should be prevented on hold event', function(assert) {
+QUnit.test('default\'s contextmenu should be prevented on contextmenu event', function(assert) {
     if(!support.touch) {
         assert.ok(true);
         return;
@@ -117,7 +117,7 @@ QUnit.test('contextmenu should be unsubscribed on unsubscribing contextmenu', fu
     assert.equal(holdEvents.length, 0, 'contextmenu event handler was removed');
 });
 
-QUnit.test('default\'s contextmenu should be prevented on dxhold in simulator', function(assert) {
+QUnit.test('default\'s contextmenu should be prevented on contextmenu event in simulator', function(assert) {
     if(support.touch) {
         assert.ok(true);
         return;
@@ -144,7 +144,7 @@ QUnit.test('default\'s contextmenu should be prevented on dxhold in simulator', 
     }
 });
 
-QUnit.test('default\'s contextmenu should not be prevented on dxhold', function(assert) {
+QUnit.test('default\'s contextmenu should not be prevented on contextmenu event', function(assert) {
     if(support.touch) {
         assert.ok(true);
         return;
