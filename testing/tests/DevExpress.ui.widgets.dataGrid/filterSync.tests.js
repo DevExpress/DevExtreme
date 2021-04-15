@@ -205,7 +205,6 @@ QUnit.module('Sync with FilterValue', {
 
         // act
         this.option('filterValue', null);
-        this.dataController.optionChanged({ name: 'filterValue' });
 
         // assert
         assert.deepEqual(this.option('filterValue'), null);

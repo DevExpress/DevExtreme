@@ -289,10 +289,9 @@ QUnit.module('Editor Factory', {
         assert.ok(!textBox, 'dxTextBox not created');
 
         // arrange
-        this.options.onEditorPreparing = function(options) {
+        this.editorFactoryController.option('onEditorPreparing', (options) => {
             options.cancel = false;
-        };
-        this.editorFactoryController.optionChanged({ name: 'onEditorPreparing' });
+        });
 
         // act
         this.editorFactoryController.createEditor($container, {
