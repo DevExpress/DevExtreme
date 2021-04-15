@@ -118,10 +118,10 @@ export default class dxMultiView extends CollectionWidget {
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 

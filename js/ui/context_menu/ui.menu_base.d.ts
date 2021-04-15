@@ -35,16 +35,16 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
      */
     animation?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default { type: "fade", from: 1, to: 0, duration: 100 }
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default { type: "fade", from: 1, to: 0, duration: 100 }
+       */
       hide?: animationConfig,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default { type: "fade", from: 0, to: 1, duration: 100 }
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default { type: "fade", from: 0, to: 1, duration: 100 }
+       */
       show?: animationConfig
     };
     /**
@@ -91,30 +91,30 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
      */
     showSubmenuMode?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default { show: 50, hide: 300 }
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default { show: 50, hide: 300 }
+       */
       delay?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default 300
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default 300
+         */
         hide?: number,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default 50
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default 50
+         */
         show?: number
       } | number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type Enums.ShowSubmenuMode
-      * @default "onHover"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.ShowSubmenuMode
+       * @default "onHover"
+       */
       name?: 'onClick' | 'onHover'
     } | 'onClick' | 'onHover';
 }

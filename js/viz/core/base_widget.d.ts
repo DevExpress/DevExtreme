@@ -764,9 +764,9 @@ export interface Font {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface BaseWidgetAnnotationConfig {
     /**
      * @docid
@@ -796,42 +796,42 @@ export interface BaseWidgetAnnotationConfig {
      */
     border?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#dddddd'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#dddddd'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      * @default 4 [for](Material)
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       * @default 4 [for](Material)
+       */
       cornerRadius?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.DashStyle
-      * @default 'solid'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.DashStyle
+       * @default 'solid'
+       */
       dashStyle?: DashStyleType,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       opacity?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       visible?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       width?: number
     };
     /**
@@ -875,22 +875,22 @@ export interface BaseWidgetAnnotationConfig {
      */
     image?: string | {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 30
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 30
+       */
       height?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       url?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 30
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 30
+       */
       width?: number
     };
     /**
@@ -935,34 +935,34 @@ export interface BaseWidgetAnnotationConfig {
      */
     shadow?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 4
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 4
+       */
       blur?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#000000'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#000000'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       */
       offsetX?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       offsetY?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.15
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0.15
+       */
       opacity?: number
     };
     /**

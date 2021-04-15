@@ -1,12 +1,12 @@
 import {
-  TElement
+    TElement
 } from '../core/element';
 
 /**
-* @docid
-* @namespace DevExpress
-* @type object
-*/
+ * @docid
+ * @namespace DevExpress
+ * @type object
+ */
 export interface positionConfig {
     /**
      * @docid
@@ -16,16 +16,16 @@ export interface positionConfig {
      */
     at?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | {
       /**
-      * @docid
-      * @type Enums.HorizontalAlignment
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @type Enums.HorizontalAlignment
+       * @prevFileNamespace DevExpress.animation
+       */
       x?: 'center' | 'left' | 'right',
       /**
-      * @docid
-      * @type Enums.VerticalAlignment
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @type Enums.VerticalAlignment
+       * @prevFileNamespace DevExpress.animation
+       */
       y?: 'bottom' | 'center' | 'top'
     };
     /**
@@ -41,16 +41,16 @@ export interface positionConfig {
      */
     boundaryOffset?: string | {
       /**
-      * @docid
-      * @default 0
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @default 0
+       * @prevFileNamespace DevExpress.animation
+       */
       x?: number,
       /**
-      * @docid
-      * @default 0
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @default 0
+       * @prevFileNamespace DevExpress.animation
+       */
       y?: number
     };
     /**
@@ -61,18 +61,18 @@ export interface positionConfig {
      */
     collision?: 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit' | {
       /**
-      * @docid
-      * @type Enums.PositionResolveCollision
-      * @default 'none'
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @type Enums.PositionResolveCollision
+       * @default 'none'
+       * @prevFileNamespace DevExpress.animation
+       */
       x?: 'fit' | 'flip' | 'flipfit' | 'none',
       /**
-      * @docid
-      * @type Enums.PositionResolveCollision
-      * @default 'none'
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @type Enums.PositionResolveCollision
+       * @default 'none'
+       * @prevFileNamespace DevExpress.animation
+       */
       y?: 'fit' | 'flip' | 'flipfit' | 'none'
     };
     /**
@@ -83,16 +83,16 @@ export interface positionConfig {
      */
     my?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | {
       /**
-      * @docid
-      * @type Enums.HorizontalAlignment
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @type Enums.HorizontalAlignment
+       * @prevFileNamespace DevExpress.animation
+       */
       x?: 'center' | 'left' | 'right',
       /**
-      * @docid
-      * @type Enums.VerticalAlignment
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @type Enums.VerticalAlignment
+       * @prevFileNamespace DevExpress.animation
+       */
       y?: 'bottom' | 'center' | 'top'
     };
     /**
@@ -108,16 +108,16 @@ export interface positionConfig {
      */
     offset?: string | {
       /**
-      * @docid
-      * @default 0
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @default 0
+       * @prevFileNamespace DevExpress.animation
+       */
       x?: number,
       /**
-      * @docid
-      * @default 0
-      * @prevFileNamespace DevExpress.animation
-      */
+       * @docid
+       * @default 0
+       * @prevFileNamespace DevExpress.animation
+       */
       y?: number
     };
 }

@@ -83,22 +83,22 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     apiKey?: string | {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default ""
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default ""
+       */
       bing?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default ""
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default ""
+       */
       google?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default ""
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default ""
+       */
       googleStatic?: string
     };
     /**
@@ -148,22 +148,22 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     key?: string | {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default ""
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default ""
+       */
       bing?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default ""
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default ""
+       */
       google?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default ""
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default ""
+       */
       googleStatic?: string
     };
     /**
@@ -181,37 +181,37 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     markers?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       iconSrc?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @extends MapLocationType
-      * @inherits MapLocation
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @extends MapLocationType
+       * @inherits MapLocation
+       */
       location?: any | string | Array<number>,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       onClick?: Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       tooltip?: string | {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default false
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default false
+         */
         isShown?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         */
         text?: string
       }
     }>;
@@ -313,37 +313,37 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     routes?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default '#0000FF'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default '#0000FF'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @extends MapLocationType
-      * @inherits MapLocation
-      * @type Array<object>
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @extends MapLocationType
+       * @inherits MapLocation
+       * @type Array<object>
+       */
       locations?: Array<any>,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type Enums.GeoMapRouteMode
-      * @default 'driving'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.GeoMapRouteMode
+       * @default 'driving'
+       */
       mode?: 'driving' | 'walking',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 0.5
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 0.5
+       */
       opacity?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 5
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 5
+       */
       weight?: number
     }>;
     /**

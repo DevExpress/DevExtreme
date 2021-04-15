@@ -38,9 +38,9 @@ import BaseWidget, {
 } from './core/base_widget';
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface BarGaugeBarInfo {
     /**
      * @docid
@@ -63,10 +63,10 @@ export interface BarGaugeBarInfo {
 }
 
 /**
-* @docid
-* @inherits BaseLegendItem
-* @type object
-*/
+ * @docid
+ * @inherits BaseLegendItem
+ * @type object
+ */
 export interface BarGaugeLegendItem extends BaseLegendItem {
     /**
      * @docid
@@ -155,16 +155,16 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     geometry?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 315
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 315
+       */
       endAngle?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 225
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 225
+       */
       startAngle?: number
     };
     /**
@@ -174,50 +174,50 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     label?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       connectorColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 2
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 2
+       */
       connectorWidth?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 barValue:object
-      * @type_function_param1_field1 value:Number
-      * @type_function_param1_field2 valueText:string
-      * @type_function_return string
-      * @notUsedInTheme
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 barValue:object
+       * @type_function_param1_field1 value:Number
+       * @type_function_param1_field2 valueText:string
+       * @type_function_return string
+       * @notUsedInTheme
+       */
       customizeText?: ((barValue: { value?: number, valueText?: string }) => string),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 16 [prop](size)
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 16 [prop](size)
+       */
       font?: Font,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizFormat
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @extends CommonVizFormat
+       */
       format?: format,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 20
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 20
+       */
       indent?: number,
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       visible?: boolean
     };
     /**
@@ -376,10 +376,10 @@ export interface dxBarGaugeLegend extends BaseLegend {
 }
 export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     /**
-    * @docid dxBarGaugeOptions.loadingIndicator.enabled
-    * @prevFileNamespace DevExpress.viz
-    * @hidden
-    */
+     * @docid dxBarGaugeOptions.loadingIndicator.enabled
+     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
     enabled?: boolean
 }
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {

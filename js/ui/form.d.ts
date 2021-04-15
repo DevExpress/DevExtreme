@@ -807,7 +807,7 @@ export interface dxFormTabbedItem {
        * @extends ColCountResponsibleType
        * @inherits ColCountResponsible
        * @default undefined
-      */
+       */
       colCountByScreen?: any,
       /**
        * @docid

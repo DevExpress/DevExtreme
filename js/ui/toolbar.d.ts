@@ -95,12 +95,11 @@ export default class dxToolbar extends CollectionWidget {
     constructor(element: TElement, options?: dxToolbarOptions)
 }
 
-
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxToolbarItem extends CollectionWidgetItem {
     /**
      * @docid

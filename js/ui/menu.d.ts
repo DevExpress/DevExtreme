@@ -166,30 +166,30 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     showFirstSubmenuMode?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default { show: 50, hide: 300 }
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default { show: 50, hide: 300 }
+       */
       delay?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default 300
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default 300
+         */
         hide?: number,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default 50
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default 50
+         */
         show?: number
       } | number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type Enums.ShowSubmenuMode
-      * @default "onClick"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.ShowSubmenuMode
+       * @default "onClick"
+       */
       name?: 'onClick' | 'onHover'
     } | 'onClick' | 'onHover';
     /**
@@ -281,9 +281,9 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
 }
 
 /**
-* @docid
-* @inherits dxMenuBaseItem
-* @type object
+ * @docid
+ * @inherits dxMenuBaseItem
+ * @type object
  */
 export interface dxMenuItem extends dxMenuBaseItem {
     /**

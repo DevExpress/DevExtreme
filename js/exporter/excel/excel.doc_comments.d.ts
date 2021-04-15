@@ -1,8 +1,8 @@
 /**
-* @docid
-* @deprecated
-* @type object
-*/
+ * @docid
+ * @deprecated
+ * @type object
+ */
 export interface ExcelFont {
     /**
      * @docid
