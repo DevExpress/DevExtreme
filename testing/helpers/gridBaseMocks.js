@@ -992,8 +992,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                             result[path[i]] = value;
 
                             if(that.needFireOptionChange && that._initialized && !that.preventOptionChanged) {
-                                Object.entries({ ...that._controllers, ...that._views }).forEach(([_, controller]) => {
-                                    controller.optionChanged?.({ name: path[0], fullName: options, value, previousValue });
+                                const controllersAndViews = { ...that._controllers, ...that._views };
+                                Object.keys(controllersAndViews).forEach((key) => {
+                                    controllersAndViews[key].optionChanged?.({ name: path[0], fullName: options, value, previousValue });
                                 });
                             }
 
