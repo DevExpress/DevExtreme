@@ -24,9 +24,6 @@ const ContextMenu = Class.inherit({
 
         if(touch || devices.isSimulator()) {
             eventsEngine.on($element, HOLD_NAMESPACED_EVENT_NAME, this._holdHandler.bind(this));
-            eventsEngine.on($element, CONTEXTMENU_NAMESPACED_EVENT_NAME, (e) => {
-                e.preventDefault();
-            });
         }
     },
 
@@ -39,6 +36,11 @@ const ContextMenu = Class.inherit({
     },
 
     _contextMenuHandler: function(e) {
+        // T983617. Prevent the browser's context menu appears on desktop touch screens.
+        if(touch || devices.isSimulator()) {
+            e.preventDefault();
+        }
+
         this._fireContextMenu(e);
     },
 
