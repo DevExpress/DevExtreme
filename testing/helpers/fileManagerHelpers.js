@@ -903,7 +903,9 @@ export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
 };
 
 export const stubFileReader = object => {
-    sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+    if(!(object['_createFileReader'].restore && object['_createFileReader'].restore.sinon)) {
+        sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+    }
 };
 
 export const isDesktopDevice = () => {
