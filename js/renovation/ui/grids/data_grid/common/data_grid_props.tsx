@@ -494,6 +494,12 @@ export class DataGridEditing {
 
   @TwoWay()
   changes?: [];
+
+  @TwoWay()
+  editRowKey?: any;
+
+  @TwoWay()
+  editColumnName?: string;
 }
 
 @ComponentBindings()
@@ -1087,7 +1093,24 @@ export class DataGridCommonColumnSettings {
 export class DataGridProps extends BaseWidgetProps implements Options {
   @Nested() columns?: (DataGridColumn | string)[];
 
-  @Nested() editing?: DataGridEditing;
+  @Nested() editing?: DataGridEditing /* = {
+    mode: 'row',
+    refreshMode: 'full',
+    allowAdding: false,
+    allowUpdating: false,
+    allowDeleting: false,
+    useIcons: false,
+    selectTextOnEditStart: false,
+    confirmDelete: true,
+    form: {
+      colCount: 2,
+    },
+    popup: {},
+    startEditAction: 'click',
+    editRowKey: null,
+    editColumnName: undefined,
+    changes: [],
+  } */;
 
   @OneWay() export?: DataGridExport;
 

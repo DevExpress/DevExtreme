@@ -459,6 +459,42 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Effect({ run: 'once' })
   initInstanceElement(): void {
     this.instance = this.createInstance();
+    this.instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+  }
+
+  instanceOptionChangedHandler(e: any): void {
+    const isValueCorrect = e.value === e.component.option(e.fullName); // T867777
+    if (e.value !== e.previousValue && isValueCorrect) {
+      if (e.name === 'editing' && this.props.editing) {
+        if (e.fullName === 'editing.changes') {
+          this.props.editing.changes = e.value;
+        }
+        if (e.fullName === 'editing.editRowKey') {
+          this.props.editing.editRowKey = e.value;
+        }
+        if (e.fullName === 'editing.editColumnName') {
+          this.props.editing.editColumnName = e.value;
+        }
+      }
+      if (e.fullName === 'focusedRowKey') {
+        this.props.focusedRowKey = e.value;
+      }
+      if (e.fullName === 'focusedRowIndex') {
+        this.props.focusedRowIndex = e.value;
+      }
+      if (e.fullName === 'focusedColumnIndex') {
+        this.props.focusedColumnIndex = e.value;
+      }
+      if (e.fullName === 'filterValue') {
+        this.props.filterValue = e.value;
+      }
+      if (e.fullName === 'selectedRowKeys') {
+        this.props.selectedRowKeys = e.value;
+      }
+      if (e.fullName === 'selectionFilter') {
+        this.props.selectionFilter = e.value;
+      }
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
