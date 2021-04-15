@@ -2,7 +2,6 @@ import $ from 'jquery';
 import translator from 'animation/translator';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import animationFrame from 'animation/frame';
-import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -402,12 +401,12 @@ QUnit.test('simulated strategy should subscribe to the poiner events after disab
 
     scrollableInstance.option('disabled', false);
 
-    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS));
+    const $scroll = $scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS} .dx-scrollable-scroll`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     $container.trigger('mouseenter');
 
-    assert.equal(scrollbar.option('visible'), true, 'thumb is visible after mouse enter');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after mouse enter');
 });
 
 QUnit.test('disabled option add class to root element', function(assert) {
@@ -612,7 +611,7 @@ QUnit.test('scrollToElement does not scroll when element is placed in visible ar
     assert.equal(scrollable.scrollTop(), 0);
 });
 
-QUnit.test('scrollToElements scrolls in both directions', function(assert) {
+QUnit.test('scrollToElement scrolls in both directions', function(assert) {
     const topPosition = 30;
     const leftPosition = 50;
     const itemSize = 30;
