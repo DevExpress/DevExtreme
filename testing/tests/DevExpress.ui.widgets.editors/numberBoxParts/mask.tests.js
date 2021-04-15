@@ -1054,13 +1054,13 @@ QUnit.module('format: text input', moduleConfig, () => {
         assert.notOk(caretIsUpdatedOnFocusOut);
     });
 
-    QUnit.test('caret position should be updated correctly after setting the "format" options runtime and "valueChangeEvent" is "input"', function(assert) {
+    QUnit.testInActiveWindow('caret position should be updated correctly after setting the "format" options runtime and "valueChangeEvent" is "input"', function(assert) {
         const $element = $('#widget');
         const instance = $element.dxNumberBox({
             valueChangeEvent: 'input'
         }).dxNumberBox('instance');
 
-        instance.option('format', 'currency');
+        instance.option('format', '$###,##0');
 
         const keyboard = keyboardMock($element.find(`.${INPUT_CLASS}`), true);
 
