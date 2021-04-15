@@ -17,11 +17,11 @@ export const owners = [{
 }];
 
 export const priorities = [{
-  text: 'High priority',
+  text: 'High',
   id: 1,
   color: '#cc5c53'
 }, {
-  text: 'Low priority',
+  text: 'Low',
   id: 2,
   color: '#ff9747'
 }];
