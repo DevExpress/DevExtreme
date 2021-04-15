@@ -14,8 +14,16 @@ const DATA_GRID_ROLE_NAME = 'grid';
 
 export const viewFunction = ({
   views,
+  props: {
+    showBorders,
+  },
 }: DataGridViews): JSX.Element => (
-  <GridBaseViews views={views} className={DATA_GRID_CLASS} role={DATA_GRID_ROLE_NAME} />
+  <GridBaseViews
+    views={views}
+    className={DATA_GRID_CLASS}
+    showBorders={showBorders}
+    role={DATA_GRID_ROLE_NAME}
+  />
 );
 
 @Component({ defaultOptionRules: null, view: viewFunction })

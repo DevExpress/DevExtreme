@@ -27,6 +27,7 @@ export const viewFunction = ({
   widgetElementRef,
   onHoverStart,
   onHoverEnd,
+  onDimensionChanged,
   props: {
     accessKey,
     activeStateEnabled,
@@ -40,6 +41,7 @@ export const viewFunction = ({
     tabIndex,
     visible,
     width,
+    showBorders,
   },
   restAttributes,
 }: DataGrid): JSX.Element => (
@@ -61,10 +63,11 @@ export const viewFunction = ({
     width={width}
     onHoverStart={onHoverStart}
     onHoverEnd={onHoverEnd}
+    onDimensionChanged={onDimensionChanged}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
-    <DataGridViews instance={instance} />
+    <DataGridViews instance={instance} showBorders={showBorders} />
   </Widget>
 );
 
@@ -435,8 +438,13 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getController(name: string): any {
-    return this.instance?.getController(name);
+  isScrollbarVisible(): boolean {
+    return this.instance?.isScrollbarVisible();
+  }
+
+  @Method()
+  getTopVisibleRowData(): any {
+    return this.instance?.getTopVisibleRowData();
   }
   // #endregion
 
@@ -505,6 +513,10 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   // eslint-disable-next-line class-methods-use-this
   onHoverEnd(event: Event): void {
     (event.currentTarget as HTMLElement).classList.remove('dx-state-hover');
+  }
+
+  onDimensionChanged(): void {
+    this.instance?.updateDimensions(true);
   }
 
   // TODO without normalization all nested props defaults overwrite by undefined

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Component from './component';
 import type { DataGrid } from '../ui/grids/data_grid/data_grid';
+import { FunctionTemplate } from 'js/core/templates/function_template';
 
 export default class DataGridWrapper extends Component {
     beginUpdate() {
@@ -46,7 +47,14 @@ export default class DataGridWrapper extends Component {
         const gridInstance = (this.viewRef as DataGrid)?.getComponentInstance();
 
         gridInstance?.option(e.fullName, e.value);
+        if(e.name !== e.fullName) {
+            gridInstance?._optionChanged(e);
+        }
 
         super._optionChanged(e);
+    }
+
+    _createTemplateComponent(props: any, templateOption: any): any {
+        return templateOption;
     }
 }
