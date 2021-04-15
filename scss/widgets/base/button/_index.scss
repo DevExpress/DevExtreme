@@ -57,7 +57,10 @@
 }
 
 .dx-button-submit-input {
-  display: none;
+  height: 0;
+  width: 0;
+  border: 0;
+  padding: 0;
 }
 
 .dx-state-disabled {
