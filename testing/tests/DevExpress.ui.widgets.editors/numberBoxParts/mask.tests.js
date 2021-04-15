@@ -1064,7 +1064,9 @@ QUnit.module('format: text input', moduleConfig, () => {
 
         const keyboard = keyboardMock($element.find(`.${INPUT_CLASS}`), true);
 
-        keyboard.type('123456'); // $123,456
+        keyboard
+            .caret(2) // $0|
+            .type('123456'); // $123,456
         assert.deepEqual(keyboard.caret(), { start: 8, end: 8 }, 'caret position is OK');
         assert.strictEqual(instance.option('value'), 123456, 'Widget has the expected value');
     });
