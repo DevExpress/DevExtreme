@@ -29,26 +29,6 @@ QUnit.test('contextmenu should be fired on hold event', function(assert) {
     $element.trigger($.Event(holdEvent.name, { pointerType: 'touch' }));
 });
 
-QUnit.test('default\'s contextmenu should be prevented on contextmenu event', function(assert) {
-    if(!support.touch) {
-        assert.ok(true);
-        return;
-    }
-
-    assert.expect(2);
-
-    const $element = $('#element');
-
-    $element.on(contextMenuEvent.name, function(e) {
-        assert.strictEqual(e.target, $element[0]);
-    });
-    $element.on('contextmenu', function(e) {
-        assert.strictEqual(e.isDefaultPrevented(), true);
-    });
-
-    $element.trigger($.Event('contextmenu', { pointerType: 'touch' }));
-});
-
 QUnit.test('dxhold should be unsubscribed on unsubscribing contextmenu', function(assert) {
     const $element = $('#element');
 
@@ -118,16 +98,13 @@ QUnit.test('contextmenu should be unsubscribed on unsubscribing contextmenu', fu
 });
 
 QUnit.test('default\'s contextmenu should be prevented on contextmenu event in simulator', function(assert) {
-    if(support.touch) {
-        assert.ok(true);
-        return;
-    }
-
     assert.expect(2);
 
+    const originalTouch = support.touch;
     const originalIsSimulator = devices.isSimulator;
 
     try {
+        support.touch = true;
         devices.isSimulator = function() { return true; };
         const $element = $('#element');
 
@@ -138,23 +115,21 @@ QUnit.test('default\'s contextmenu should be prevented on contextmenu event in s
             assert.strictEqual(e.isDefaultPrevented(), true);
         });
 
-        $element.trigger($.Event('contextmenu', { pointerType: 'mouse' }));
+        $element.trigger('contextmenu');
     } finally {
+        support.touch = originalTouch;
         devices.isSimulator = originalIsSimulator;
     }
 });
 
 QUnit.test('default\'s contextmenu should not be prevented on contextmenu event', function(assert) {
-    if(support.touch) {
-        assert.ok(true);
-        return;
-    }
-
     assert.expect(2);
 
+    const originalTouch = support.touch;
     const originalIsSimulator = devices.isSimulator;
 
     try {
+        support.touch = false;
         devices.isSimulator = function() { return false; };
         const $element = $('#element');
 
@@ -165,8 +140,9 @@ QUnit.test('default\'s contextmenu should not be prevented on contextmenu event'
             assert.strictEqual(e.isDefaultPrevented(), false);
         });
 
-        $element.trigger($.Event('contextmenu', { pointerType: 'mouse' }));
+        $element.trigger('contextmenu');
     } finally {
+        support.touch = originalTouch;
         devices.isSimulator = originalIsSimulator;
     }
 });
