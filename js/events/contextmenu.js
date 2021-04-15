@@ -37,7 +37,7 @@ const ContextMenu = Class.inherit({
 
     _contextMenuHandler: function(e) {
         // T983617. Prevent the browser's context menu appears on desktop touch screens.
-        if(touch || devices.isSimulator()) {
+        if(support.touch || devices.isSimulator()) {
             e.preventDefault();
         }
 
