@@ -1,14 +1,21 @@
 import $ from 'jquery';
 import exporter from 'exporter';
-
 const imageCreator = exporter.image.creator;
 import typeUtils from 'core/utils/type';
 const testingMarkupStart = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'>';
 const testingMarkupEnd = '</svg>';
 import browser from 'core/utils/browser';
-import proxyUrlFormatter from 'data/proxy_url_formatter';
 import svgUtils from 'core/utils/svg';
 import { Deferred } from 'core/utils/deferred';
+
+const pathNameByUrl = (url) => {
+    const a = document.createElement('a');
+    a.href = url;
+
+    return a.pathname.charAt(0) === '/'
+        ? a.pathname
+        : '/' + a.pathname;
+};
 
 function setupCanvasStub(drawnElements, paths) {
     const prototype = window.CanvasRenderingContext2D.prototype;
@@ -20,7 +27,7 @@ function setupCanvasStub(drawnElements, paths) {
             type: 'image',
             args: {
                 node: img.nodeName,
-                src: proxyUrlFormatter.parseUrl(img.src).pathname,
+                src: pathNameByUrl(img.src),
                 x: x,
                 y: y,
                 width: width,
