@@ -46,7 +46,14 @@ export default class DataGridWrapper extends Component {
         const gridInstance = (this.viewRef as DataGrid)?.getComponentInstance();
 
         gridInstance?.option(e.fullName, e.value);
+        if(e.name !== e.fullName) {
+            gridInstance?._optionChanged(e);
+        }
 
         super._optionChanged(e);
+    }
+
+    _createTemplateComponent(props: any, templateOption: any): any {
+        return templateOption;
     }
 }

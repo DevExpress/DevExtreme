@@ -10,6 +10,7 @@ describe('DataGridViews', () => {
           { name: 'view1', view: 'viewComponent1' },
           { name: 'view2', view: 'viewComponent2' },
         ],
+        props: {},
       } as any;
       const tree = mount(viewFunction(props));
 

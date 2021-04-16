@@ -37,7 +37,7 @@ QUnit.testStart(function() {
 import '../../../node_modules/underscore/underscore-min.js';
 import '../../../node_modules/jsrender/jsrender.min.js';
 
-import DataGrid from 'ui/data_grid/ui.data_grid';
+import DataGrid from 'ui/data_grid';
 import $ from 'jquery';
 import Class from 'core/class';
 import { logger } from 'core/utils/console';
@@ -1826,7 +1826,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataSource.load();
 
         // assert
-        assert.ok(!dataGrid.getController('data').dataSource(), 'no dataSource');
+        assert.ok(!dataGrid.getDataSource(), 'no dataSource');
         assert.ok(!dataSource._disposed, 'dataSource is not disposed');
     });
 
@@ -2033,7 +2033,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.equal(contentReadyCallCount, 1);
 
         // act
-        dataGrid._render();
+        dataGrid.repaint();
 
         // assert
         assert.equal($('#dataGrid').find('.dx-data-row').length, 3);
@@ -3378,7 +3378,7 @@ QUnit.module('templates', baseModuleConfig, () => {
         const container = $('<div />');
 
         // act
-        dataGrid._getTemplate('#scriptTestTemplate2').render({ container: container });
+        (DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid)._getTemplate('#scriptTestTemplate2').render({ container: container });
 
         // assert
         assert.equal(container.html().trim().toLowerCase(), '<span>Template2</span>'.toLowerCase());

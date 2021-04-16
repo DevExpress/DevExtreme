@@ -1105,7 +1105,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
         sinon.spy(dataGrid.getController('resizing'), '_synchronizeColumns');
 
         // act
-        dataGrid._dimensionChanged();
+        resizeCallbacks.fire();
 
         // assert
         assert.equal(dataGrid.getController('resizing')._synchronizeColumns.callCount, 0, 'synchronizeColumns is not called');
@@ -1113,7 +1113,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
 
         // act
         $(dataGrid.$element()).height(500);
-        dataGrid._dimensionChanged();
+        resizeCallbacks.fire();
 
         // assert
         assert.equal(dataGrid.getController('resizing')._synchronizeColumns.callCount, 1, 'synchronizeColumns is called');
@@ -1140,7 +1140,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
 
         // act
         $('#qunit-fixture').hide();
-        dataGrid._dimensionChanged();
+        resizeCallbacks.fire();
         $('#qunit-fixture').show();
 
         // assert

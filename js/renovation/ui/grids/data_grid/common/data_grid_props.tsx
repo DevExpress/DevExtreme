@@ -1228,13 +1228,13 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() rowAlternationEnabled?: boolean;
 
-  @OneWay() showBorders?: boolean;
+  @OneWay() showBorders?: boolean = false;
 
   @OneWay() showColumnHeaders?: boolean = true;
 
-  @OneWay() showColumnLines?: boolean;
+  @OneWay() showColumnLines?: boolean = true;
 
-  @OneWay() showRowLines?: boolean;
+  @OneWay() showRowLines?: boolean = false;
 
   @OneWay() twoWayBindingEnabled?: boolean;
 
