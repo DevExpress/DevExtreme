@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -236,7 +236,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
  * @public
  */
 export default class dxDateBox extends dxDropDownEditor {
-    constructor(element: THTMLElement, options?: dxDateBoxOptions)
+    constructor(element: ElementIntake, options?: dxDateBoxOptions)
     /**
      * @docid
      * @publicName close()

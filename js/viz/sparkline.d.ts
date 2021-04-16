@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -222,7 +222,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
  * @public
  */
 export default class dxSparkline extends BaseSparkline {
-    constructor(element: THTMLElement, options?: dxSparklineOptions)
+    constructor(element: ElementIntake, options?: dxSparklineOptions)
     getDataSource(): DataSource;
 }
 

@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -173,7 +173,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
  * @public
  */
 export default class dxGallery extends CollectionWidget {
-    constructor(element: THTMLElement, options?: dxGalleryOptions)
+    constructor(element: ElementIntake, options?: dxGalleryOptions)
     /**
      * @docid
      * @publicName goToItem(itemIndex, animation)

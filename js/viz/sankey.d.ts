@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -642,7 +643,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: THTMLElement) => string | THTMLElement);
+    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: THTMLElement) => string | ElementIntake);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
      * @type_function_param1 info:object
@@ -655,7 +656,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: THTMLElement) => string | THTMLElement);
+    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: THTMLElement) => string | ElementIntake);
 }
 /**
  * @docid
@@ -666,7 +667,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxSankey extends BaseWidget {
-    constructor(element: THTMLElement, options?: dxSankeyOptions)
+    constructor(element: ElementIntake, options?: dxSankeyOptions)
     /**
      * @docid
      * @publicName getAllLinks()

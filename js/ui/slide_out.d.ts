@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -77,7 +78,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((container: THTMLElement) => string | THTMLElement);
+    contentTemplate?: template | ((container: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default null
@@ -102,7 +103,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | THTMLElement);
+    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | ElementIntake);
     /**
      * @docid
      * @default false
@@ -120,7 +121,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @type Enums.SlideOutMenuPosition
@@ -184,7 +185,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
  * @public
  */
 export default class dxSlideOut extends CollectionWidget {
-    constructor(element: THTMLElement, options?: dxSlideOutOptions)
+    constructor(element: ElementIntake, options?: dxSlideOutOptions)
     /**
      * @docid
      * @publicName hideMenu()
@@ -224,7 +225,7 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuTemplate?: template | (() => string | THTMLElement);
+    menuTemplate?: template | (() => string | ElementIntake);
 }
 
 /** @public */

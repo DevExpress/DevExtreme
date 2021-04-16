@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -102,7 +103,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: TemplateData, contentElement: THTMLElement) => string | THTMLElement);
+    template?: template | ((data: TemplateData, contentElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default ""
@@ -143,7 +144,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
  * @public
  */
 export default class dxButton extends Widget {
-    constructor(element: THTMLElement, options?: dxButtonOptions)
+    constructor(element: ElementIntake, options?: dxButtonOptions)
 }
 
 /** @public */

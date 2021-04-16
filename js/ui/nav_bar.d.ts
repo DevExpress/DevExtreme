@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -63,7 +63,7 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @public
  */
 export default class dxNavBar extends dxTabs {
-    constructor(element: THTMLElement, options?: dxNavBarOptions)
+    constructor(element: ElementIntake, options?: dxNavBarOptions)
 }
 
 /**

@@ -9,6 +9,8 @@ export interface ElementWrapper<T extends Element> { }
 export type TElement<T extends Element> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>;
 export type THTMLElement = TElement<HTMLElement>;
 
+export type ElementIntake<T extends Element = Element> = {} extends ElementWrapper<T> ? T : ElementWrapper<T> | T;
+
 export interface InternalElementWrapper<T extends Element> { }
 export type TInternalElement<T extends Element> = {} extends InternalElementWrapper<T> ? dxElementWrapper : InternalElementWrapper<T>;
 

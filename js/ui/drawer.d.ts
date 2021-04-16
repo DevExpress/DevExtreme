@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -113,7 +114,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @deprecated
      * @public
      */
-    target?: string | THTMLElement;
+    target?: string | ElementIntake;
     /**
      * @docid
      * @type_function_param1 Element:dxElement
@@ -133,7 +134,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
  * @public
  */
 export default class dxDrawer extends Widget {
-    constructor(element: THTMLElement, options?: dxDrawerOptions)
+    constructor(element: ElementIntake, options?: dxDrawerOptions)
     /**
      * @docid
      * @publicName content()

@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -443,7 +444,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
  * @public
  */
 export default class dxFileManager extends Widget {
-    constructor(element: THTMLElement, options?: dxFileManagerOptions)
+    constructor(element: ElementIntake, options?: dxFileManagerOptions)
     /**
      * @docid
      * @publicName getCurrentDirectory()
@@ -514,7 +515,7 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | THTMLElement);
+    template?: template | (() => string | ElementIntake);
 }
 
 /**
@@ -586,13 +587,13 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | THTMLElement);
+    template?: template | (() => string | ElementIntake);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    menuItemTemplate?: template | (() => string | THTMLElement);
+    menuItemTemplate?: template | (() => string | ElementIntake);
 }
 
 

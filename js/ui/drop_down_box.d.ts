@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -109,7 +110,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((templateData: ContentTemplateData, contentElement: THTMLElement) => string | THTMLElement);
+    contentTemplate?: template | ((templateData: ContentTemplateData, contentElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default null
@@ -134,7 +135,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: any, fieldElement: THTMLElement) => string | THTMLElement);
+    fieldTemplate?: template | ((value: any, fieldElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -167,7 +168,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
  * @public
  */
 export default class dxDropDownBox extends dxDropDownEditor {
-    constructor(element: THTMLElement, options?: dxDropDownBoxOptions)
+    constructor(element: ElementIntake, options?: dxDropDownBoxOptions)
     getDataSource(): DataSource;
 }
 

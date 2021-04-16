@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     TElement,
     THTMLElement
 } from '../core/element';
@@ -177,7 +178,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | TElement<SVGElement>);
+    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | ElementIntake<SVGElement>);
     /**
      * @docid
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
@@ -396,7 +397,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | ElementIntake<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
@@ -406,7 +407,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: THTMLElement) => string | THTMLElement);
+    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: THTMLElement) => string | ElementIntake);
 }
 export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
@@ -466,7 +467,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | ElementIntake<SVGElement>);
 }
 /**
  * @docid
@@ -477,7 +478,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
  * @public
  */
 export default class dxPieChart extends BaseChart {
-    constructor(element: THTMLElement, options?: dxPieChartOptions)
+    constructor(element: ElementIntake, options?: dxPieChartOptions)
     /**
      * @docid
      * @publicName getInnerRadius()

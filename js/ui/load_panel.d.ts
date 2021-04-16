@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -61,7 +62,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | THTMLElement;
+    container?: string | ElementIntake;
     /**
      * @docid
      * @default 0
@@ -180,7 +181,7 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxLoadPanel extends dxOverlay {
-    constructor(element: THTMLElement, options?: dxLoadPanelOptions)
+    constructor(element: ElementIntake, options?: dxLoadPanelOptions)
 }
 
 /** @public */

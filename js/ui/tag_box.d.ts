@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -219,7 +220,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tagTemplate?: template | ((itemData: any, itemElement: THTMLElement) => string | THTMLElement);
+    tagTemplate?: template | ((itemData: any, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default []
@@ -238,7 +239,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
  * @public
  */
 export default class dxTagBox extends dxSelectBox {
-    constructor(element: THTMLElement, options?: dxTagBoxOptions)
+    constructor(element: ElementIntake, options?: dxTagBoxOptions)
 }
 
 /** @public */

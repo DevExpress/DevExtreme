@@ -5,7 +5,7 @@ import {
 import DataSource, { DataSourceOptions } from '../../data/data_source';
 import { WidgetProps } from './common/widget';
 import LegacyList, { dxListItem } from '../../ui/list';
-import { TElement } from '../../core/element';
+import { THTMLElement } from '../../core/element';
 import { EventExtension, TEvent } from '../../events/index';
 
 // import renderTemplate from '../utils/render_template';
@@ -44,7 +44,7 @@ export class ListProps extends WidgetProps {
   @OneWay() focusStateEnabled?: boolean;
 
   // @Template() groupTemplate?: template
-  // | ((groupData: any, groupIndex: number, groupElement: TElement) => string | TElement);
+  // | ((groupData: any, groupIndex: number, groupElement: THTMLElement) => string | ElementIntake);
 
   // @OneWay() grouped?: boolean;
 
@@ -60,73 +60,73 @@ export class ListProps extends WidgetProps {
   // @TwoWay() items?: Array<string | dxListItem | any>;
 
   // @OneWay() menuItems?:
-  // Array<{ action?: ((itemElement: TElement, itemData: any) => any), text?: string }>;
+  // Array<{ action?: ((itemElement: THTMLElement, itemData: any) => any), text?: string }>;
 
   // @OneWay() menuMode?: 'context' | 'slide';
 
   // @OneWay() nextButtonText?: string;
 
   // @Event()onGroupRendered?:((e: {
-  //   component?: dxList, element?: TElement, model?: any, groupData?: any,
-  //   groupElement?: TElement, groupIndex?: number
+  //   component?: dxList, element?: THTMLElement, model?: any, groupData?: any,
+  //   groupElement?: THTMLElement, groupIndex?: number
   // }) => any);
 
   @Event() onItemClick?: ((e: {
     component?: LegacyList;
-    element?: TElement;
+    element?: THTMLElement;
     model?: any;
     itemData: any;
-    itemElement?: TElement;
+    itemElement?: THTMLElement;
     itemIndex?: number | any;
     event?: TEvent;
   } & EventExtension) => any) | string;
 
   // @Event() onItemContextMenu?: ((e: {
-  //   component?: dxList, element?: TElement, model?: any, itemData?: any,
-  //   itemElement?: TElement, itemIndex?: number | any,
+  //   component?: dxList, element?: THTMLElement, model?: any, itemData?: any,
+  //   itemElement?: THTMLElement, itemIndex?: number | any,
   //   event?: event
   // }) => any);
 
   // @Event()onItemDeleted?: ((e: {
-  //   component?: dxList, element?: TElement, model?: any,
-  //   itemData?: any, itemElement?: TElement, itemIndex?: number | any
+  //   component?: dxList, element?: THTMLElement, model?: any,
+  //   itemData?: any, itemElement?: THTMLElement, itemIndex?: number | any
   // }) => any);
 
   // @Event()onItemDeleting?: ((e: {
-  //   component?: dxList, element?: TElement, model?: any, itemData?: any,
-  //   itemElement?: TElement, itemIndex?: number | any,
+  //   component?: dxList, element?: THTMLElement, model?: any, itemData?: any,
+  //   itemElement?: THTMLElement, itemIndex?: number | any,
   //   cancel?: boolean | TPromise
   // }) => any);
 
   // @Event()onItemHold?: ((e: {
-  //   component?: dxList, element?: TElement, model?: any, itemData?: any,
-  //   itemElement?: TElement, itemIndex?: number | any,
+  //   component?: dxList, element?: THTMLElement, model?: any, itemData?: any,
+  //   itemElement?: THTMLElement, itemIndex?: number | any,
   //   event?: event
   // }) => any);
 
   // @Event()onItemReordered?: ((e: {
-  //   component?: dxList, element?: TElement, model?: any, itemData?: any,
-  //   itemElement?: TElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number
+  //   component?: dxList, element?: THTMLElement, model?: any, itemData?: any,
+  //   itemElement?: THTMLElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number
   // }) => any);
 
   // @Event()onItemSwipe?: ((e: {
-  //   component?: dxList, element?: TElement, model?: any,
+  //   component?: dxList, element?: THTMLElement, model?: any,
   //   event?: event,
-  //   itemData?: any, itemElement?: TElement, itemIndex?: number | any, direction?: string
+  //   itemData?: any, itemElement?: THTMLElement, itemIndex?: number | any, direction?: string
   // }) => any);
 
-  // @Event()onPageLoading?: ((e: { component?: dxList, element?: TElement, model?: any }) => any);
+  // @Event()onPageLoading?:((e:{component?: dxList, element?: THTMLElement, model?: any }) => any);
 
-  // @Event()onPullRefresh?: ((e: { component?: dxList, element?: TElement, model?: any }) => any);
+  // @Event()onPullRefresh?:((e:{component?: dxList, element?: THTMLElement, model?: any }) => any);
 
   // @Event()onScroll?: ((e: {
-  // component?: dxList, element?: TElement, model?: any,
+  // component?: dxList, element?: THTMLElement, model?: any,
   // event?: event, scrollOffset?: any, reachedLeft?: boolean,
   // reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean
   // }) => any);
 
   // @Event()onSelectAllValueChanged?: ((e: {
-  //   component?: dxList, element?: TElement, model?: any, value?: boolean
+  //   component?: dxList, element?: THTMLElement, model?: any, value?: boolean
   // }) => any);
 
   // @OneWay()pageLoadMode?: 'nextButton' | 'scrollBottom';

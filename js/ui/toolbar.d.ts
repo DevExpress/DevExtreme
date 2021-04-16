@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -72,7 +73,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @deprecated
@@ -92,7 +93,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @public
  */
 export default class dxToolbar extends CollectionWidget {
-    constructor(element: THTMLElement, options?: dxToolbarOptions)
+    constructor(element: ElementIntake, options?: dxToolbarOptions)
 }
 
 /**
@@ -130,7 +131,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | (() => string | THTMLElement);
+    menuItemTemplate?: template | (() => string | ElementIntake);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

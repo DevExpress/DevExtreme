@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../../core/element';
 
 import {
@@ -297,7 +297,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxTextEditor extends Editor {
-    constructor(element: THTMLElement, options?: dxTextEditorOptions)
+    constructor(element: ElementIntake, options?: dxTextEditorOptions)
     /**
      * @docid
      * @publicName blur()

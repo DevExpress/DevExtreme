@@ -3,7 +3,7 @@ import {
 } from '../../animation/fx';
 
 import {
-  THTMLElement
+    ElementIntake
 } from '../../core/element';
 
 import DataSource, {
@@ -125,7 +125,7 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxMenuBase extends HierarchicalCollectionWidget {
-    constructor(element: THTMLElement, options?: dxMenuBaseOptions)
+    constructor(element: ElementIntake, options?: dxMenuBaseOptions)
     /**
      * @docid
      * @publicName selectItem(itemElement)

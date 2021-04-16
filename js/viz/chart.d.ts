@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     TElement,
     THTMLElement
 } from '../core/element';
@@ -2117,7 +2118,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((data: object, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((data: object, element: SVGGElement) => string | ElementIntake<SVGElement>);
     /**
      * @docid dxChartOptions.commonAxisSettings.label.alignment
      * @type Enums.HorizontalAlignment
@@ -2975,7 +2976,7 @@ export interface dxChartValueAxisTitle extends dxChartCommonAxisSettingsTitle {
  * @public
  */
 export default class dxChart extends BaseChart {
-    constructor(element: THTMLElement, options?: dxChartOptions)
+    constructor(element: ElementIntake, options?: dxChartOptions)
     /**
      * @docid
      * @publicName getArgumentAxis()
@@ -3066,7 +3067,7 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | ElementIntake<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxChartAnnotationConfig|any
@@ -3076,7 +3077,7 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: THTMLElement) => string | THTMLElement);
+    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: THTMLElement) => string | ElementIntake);
 }
 
 /**

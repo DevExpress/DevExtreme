@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import DOMComponent, {
@@ -125,7 +125,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @public
  */
 export default class dxValidator extends DOMComponent {
-    constructor(element: THTMLElement, options?: dxValidatorOptions)
+    constructor(element: ElementIntake, options?: dxValidatorOptions)
     /**
      * @docid
      * @publicName focus()

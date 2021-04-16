@@ -3,6 +3,7 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -34,14 +35,14 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    boundary?: string | THTMLElement;
+    boundary?: string | ElementIntake;
     /**
      * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | THTMLElement;
+    container?: string | ElementIntake;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -176,7 +177,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: THTMLElement) => string | THTMLElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default null
@@ -245,7 +246,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
  * @public
  */
 export default class dxDraggable extends DOMComponent implements DraggableBase {
-    constructor(element: THTMLElement, options?: dxDraggableOptions)
+    constructor(element: ElementIntake, options?: dxDraggableOptions)
 }
 
 /** @public */

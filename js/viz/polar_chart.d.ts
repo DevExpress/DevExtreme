@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     TElement,
     THTMLElement
 } from '../core/element';
@@ -1460,7 +1461,7 @@ export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSetting
  * @public
  */
 export default class dxPolarChart extends BaseChart {
-    constructor(element: THTMLElement, options?: dxPolarChartOptions)
+    constructor(element: ElementIntake, options?: dxPolarChartOptions)
     /**
      * @docid dxPolarChart.getValueAxis
      * @publicName getValueAxis()
@@ -1532,7 +1533,7 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | ElementIntake<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
@@ -1542,7 +1543,7 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: THTMLElement) => string | THTMLElement);
+    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: THTMLElement) => string | ElementIntake);
 }
 
 /**

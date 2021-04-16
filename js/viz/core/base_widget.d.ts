@@ -7,6 +7,7 @@ import {
 } from '../../core/devices';
 
 import {
+    ElementIntake,
     THTMLElement
 } from '../../core/element';
 
@@ -551,7 +552,7 @@ export interface BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    container?: string | THTMLElement;
+    container?: string | ElementIntake;
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0
@@ -654,7 +655,7 @@ export interface BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseWidget extends DOMComponent {
-    constructor(element: THTMLElement, options?: BaseWidgetOptions)
+    constructor(element: ElementIntake, options?: BaseWidgetOptions)
     /**
      * @docid
      * @static

@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -129,7 +129,7 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @public
  */
 export default class dxAutocomplete extends dxDropDownList {
-    constructor(element: THTMLElement, options?: dxAutocompleteOptions)
+    constructor(element: ElementIntake, options?: dxAutocompleteOptions)
 }
 
 /** @public */

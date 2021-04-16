@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../../core/element';
 
@@ -50,7 +51,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default false
@@ -200,6 +201,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxDropDownList extends dxDropDownEditor {
-    constructor(element: THTMLElement, options?: dxDropDownListOptions)
+    constructor(element: ElementIntake, options?: dxDropDownListOptions)
     getDataSource(): DataSource;
 }

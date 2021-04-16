@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../../core/element';
 
@@ -50,7 +51,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @fires CollectionWidgetOptions.onOptionChanged
@@ -190,7 +191,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
  * @prevFileNamespace DevExpress.ui
  */
 export default class CollectionWidget extends Widget {
-    constructor(element: THTMLElement, options?: CollectionWidgetOptions)
+    constructor(element: ElementIntake, options?: CollectionWidgetOptions)
     getDataSource(): DataSource;
 }
 
@@ -219,7 +220,7 @@ export interface CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    template?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

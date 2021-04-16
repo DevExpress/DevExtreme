@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -931,7 +932,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskTooltipContentTemplate?: template | ((container: THTMLElement, task: any) => string | THTMLElement);
+    taskTooltipContentTemplate?: template | ((container: THTMLElement, task: any) => string | ElementIntake);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -942,7 +943,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskTimeTooltipContentTemplate?: template | ((container: THTMLElement, item: TimeTooltipTemplateData) => string | THTMLElement);
+    taskTimeTooltipContentTemplate?: template | ((container: THTMLElement, item: TimeTooltipTemplateData) => string | ElementIntake);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -952,7 +953,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskProgressTooltipContentTemplate?: template | ((container: THTMLElement, item: ProgressTooltipTemplateData) => string | THTMLElement);
+    taskProgressTooltipContentTemplate?: template | ((container: THTMLElement, item: ProgressTooltipTemplateData) => string | ElementIntake);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -968,7 +969,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskContentTemplate?: template | ((container: THTMLElement, item: TaskContentTemplateData) => string | THTMLElement);
+    taskContentTemplate?: template | ((container: THTMLElement, item: TaskContentTemplateData) => string | ElementIntake);
     /**
      * @docid
      * @default 0
@@ -986,7 +987,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
  * @public
  */
 export default class dxGantt extends Widget {
-    constructor(element: THTMLElement, options?: dxGanttOptions)
+    constructor(element: ElementIntake, options?: dxGanttOptions)
     /**
      * @docid
      * @publicName getTaskData(key)

@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -106,7 +107,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | THTMLElement;
+    target?: string | ElementIntake;
     /**
      * @docid
      * @default ""
@@ -140,7 +141,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @public
  */
 export default class dxActionSheet extends CollectionWidget {
-    constructor(element: THTMLElement, options?: dxActionSheetOptions)
+    constructor(element: ElementIntake, options?: dxActionSheetOptions)
     /**
      * @docid
      * @publicName hide()

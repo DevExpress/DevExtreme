@@ -3,6 +3,7 @@ import {
 } from '../animation/fx';
 
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -94,7 +95,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
  * @public
  */
 export default class dxDeferRendering extends Widget {
-    constructor(element: THTMLElement, options?: dxDeferRenderingOptions)
+    constructor(element: ElementIntake, options?: dxDeferRenderingOptions)
 }
 
 /** @public */

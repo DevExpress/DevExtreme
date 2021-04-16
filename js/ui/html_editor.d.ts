@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -164,7 +165,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
  * @public
  */
 export default class dxHtmlEditor extends Editor {
-    constructor(element: THTMLElement, options?: dxHtmlEditorOptions)
+    constructor(element: ElementIntake, options?: dxHtmlEditorOptions)
     /**
      * @docid
      * @publicName blur()
@@ -444,7 +445,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default "@"
@@ -486,7 +487,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((mentionData: MentionTemplateData, contentElement: THTMLElement) => string | THTMLElement);
+    template?: template | ((mentionData: MentionTemplateData, contentElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default "this"
@@ -506,7 +507,7 @@ export interface dxHtmlEditorToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | THTMLElement;
+    container?: string | ElementIntake;
     /**
      * @docid
      * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>

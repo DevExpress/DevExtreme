@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -269,7 +270,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
  * @public
  */
 export default class dxForm extends Widget {
-    constructor(element: THTMLElement, options?: dxFormOptions)
+    constructor(element: ElementIntake, options?: dxFormOptions)
     /**
      * @docid
      * @publicName getButton(name)
@@ -568,7 +569,7 @@ export interface dxFormGroupItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: GroupItemTemplateData, itemElement: THTMLElement) => string | THTMLElement);
+    template?: template | ((data: GroupItemTemplateData, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default true
@@ -709,7 +710,7 @@ export interface dxFormSimpleItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: SimpleItemTemplateData, itemElement: THTMLElement) => string | THTMLElement);
+    template?: template | ((data: SimpleItemTemplateData, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default undefined

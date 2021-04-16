@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -120,7 +121,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default "title"
@@ -131,7 +132,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @fires dxAccordionOptions.onOptionChanged
@@ -186,7 +187,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @public
  */
 export default class dxAccordion extends CollectionWidget {
-    constructor(element: THTMLElement, options?: dxAccordionOptions)
+    constructor(element: ElementIntake, options?: dxAccordionOptions)
     /**
      * @docid
      * @publicName collapseItem(index)

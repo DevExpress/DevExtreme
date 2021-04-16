@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -99,7 +99,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @public
  */
 export default class dxRangeSlider extends dxTrackBar {
-    constructor(element: THTMLElement, options?: dxRangeSliderOptions)
+    constructor(element: ElementIntake, options?: dxRangeSliderOptions)
 }
 
 /** @public */

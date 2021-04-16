@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -389,14 +390,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dialogTrigger?: string | THTMLElement;
+    dialogTrigger?: string | ElementIntake;
     /**
      * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropZone?: string | THTMLElement;
+    dropZone?: string | ElementIntake;
     /**
      * @docid
      * @default "Upload"
@@ -497,7 +498,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
  * @public
  */
 export default class dxFileUploader extends Editor {
-    constructor(element: THTMLElement, options?: dxFileUploaderOptions)
+    constructor(element: ElementIntake, options?: dxFileUploaderOptions)
     /**
      * @docid
      * @publicName upload()

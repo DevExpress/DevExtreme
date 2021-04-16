@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -322,7 +323,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
  * @public
  */
 export default class dxFilterBuilder extends Widget {
-    constructor(element: THTMLElement, options?: dxFilterBuilderOptions)
+    constructor(element: ElementIntake, options?: dxFilterBuilderOptions)
     /**
      * @docid
      * @publicName getFilterExpression()
@@ -384,7 +385,7 @@ export interface dxFilterBuilderCustomOperation {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: CustomOperationEditorTemplate, container: THTMLElement) => string | THTMLElement);
+    editorTemplate?: template | ((conditionInfo: CustomOperationEditorTemplate, container: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default true
@@ -472,7 +473,7 @@ export interface dxFilterBuilderField {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: FieldEditorTemplate, container: THTMLElement) => string | THTMLElement);
+    editorTemplate?: template | ((conditionInfo: FieldEditorTemplate, container: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default "false"

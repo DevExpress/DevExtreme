@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     TElement,
     THTMLElement
 } from '../core/element';
@@ -366,7 +367,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | ElementIntake<SVGElement>);
     /**
      * @docid dxBarGaugeOptions.legend.visible
      * @default false
@@ -396,7 +397,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: THTMLElement) => string | THTMLElement);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: THTMLElement) => string | ElementIntake);
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -426,7 +427,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxBarGauge extends BaseWidget {
-    constructor(element: THTMLElement, options?: dxBarGaugeOptions)
+    constructor(element: ElementIntake, options?: dxBarGaugeOptions)
     /**
      * @docid
      * @publicName values()

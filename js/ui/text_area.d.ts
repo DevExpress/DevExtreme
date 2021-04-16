@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -105,7 +105,7 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
  * @public
  */
 export default class dxTextArea extends dxTextBox {
-    constructor(element: THTMLElement, options?: dxTextAreaOptions)
+    constructor(element: ElementIntake, options?: dxTextAreaOptions)
 }
 
 /** @public */

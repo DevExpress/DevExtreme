@@ -3,6 +3,7 @@ import {
 } from '../animation/fx';
 
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -52,7 +53,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: THTMLElement) => string | THTMLElement);
+    contentTemplate?: template | ((contentElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default true
@@ -220,7 +221,7 @@ export interface dxOverlayAnimation {
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxOverlay extends Widget {
-    constructor(element: THTMLElement, options?: dxOverlayOptions)
+    constructor(element: ElementIntake, options?: dxOverlayOptions)
     /**
      * @docid
      * @publicName content()

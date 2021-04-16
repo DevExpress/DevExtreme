@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../element';
 
 export interface dxTemplateOptions {
@@ -28,4 +28,4 @@ export class Template {
  * @prevFileNamespace DevExpress.core
  * @public
  */
-export type template = string | Function | THTMLElement;
+export type template = string | Function | ElementIntake;

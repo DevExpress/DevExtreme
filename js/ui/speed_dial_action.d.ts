@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -95,7 +96,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @public
  */
 export default class dxSpeedDialAction extends Widget {
-    constructor(element: THTMLElement, options?: dxSpeedDialActionOptions)
+    constructor(element: ElementIntake, options?: dxSpeedDialActionOptions)
 }
 
 /** @public */

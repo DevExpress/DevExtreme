@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -79,7 +80,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
  * @public
  */
 export default class dxSlideOutView extends Widget {
-    constructor(element: THTMLElement, options?: dxSlideOutViewOptions)
+    constructor(element: ElementIntake, options?: dxSlideOutViewOptions)
     /**
      * @docid
      * @publicName content()

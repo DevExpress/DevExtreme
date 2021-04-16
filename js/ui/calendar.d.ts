@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -59,7 +60,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((itemData: CellTemplateData, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    cellTemplate?: template | ((itemData: CellTemplateData, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default undefined
@@ -172,7 +173,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @public
  */
 export default class dxCalendar extends Editor {
-    constructor(element: THTMLElement, options?: dxCalendarOptions)
+    constructor(element: ElementIntake, options?: dxCalendarOptions)
 }
 
 /** @public */

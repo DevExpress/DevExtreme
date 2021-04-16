@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 /**
@@ -33,7 +33,7 @@ export interface positionConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    boundary?: string | THTMLElement | Window;
+    boundary?: string | ElementIntake | Window;
     /**
      * @docid
      * @prevFileNamespace DevExpress.animation
@@ -100,7 +100,7 @@ export interface positionConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    of?: string | THTMLElement | Window;
+    of?: string | ElementIntake | Window;
     /**
      * @docid
      * @prevFileNamespace DevExpress.animation

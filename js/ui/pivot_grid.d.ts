@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -779,7 +780,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
  * @public
  */
 export default class dxPivotGrid extends Widget {
-    constructor(element: THTMLElement, options?: dxPivotGridOptions)
+    constructor(element: ElementIntake, options?: dxPivotGridOptions)
     /**
      * @docid
      * @publicName bindChart(chart, integrationOptions)

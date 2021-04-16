@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -164,7 +164,7 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @public
  */
 export default class dxCircularGauge extends BaseGauge {
-    constructor(element: THTMLElement, options?: dxCircularGaugeOptions)
+    constructor(element: ElementIntake, options?: dxCircularGaugeOptions)
 }
 
 /** @public */

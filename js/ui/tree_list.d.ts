@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement,
     TElementsArray
 } from '../core/element';
@@ -977,7 +978,7 @@ export interface Selection extends SelectionBase {
  * @public
  */
 export default class dxTreeList extends Widget implements GridBase {
-    constructor(element: THTMLElement, options?: dxTreeListOptions)
+    constructor(element: ElementIntake, options?: dxTreeListOptions)
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -1181,7 +1182,7 @@ export default class dxTreeList extends Widget implements GridBase {
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: THTMLElement): void;
+    focus(element: ElementIntake): void;
     getCellElement(rowIndex: number, dataField: string): THTMLElement | undefined;
     getCellElement(rowIndex: number, visibleColumnIndex: number): THTMLElement | undefined;
     getCombinedFilter(): any;
@@ -1348,7 +1349,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: THTMLElement, cellInfo: ColumnButtonTemplateData) => string | THTMLElement);
+    template?: template | ((cellElement: THTMLElement, cellInfo: ColumnButtonTemplateData) => string | ElementIntake);
     /**
      * @docid dxTreeListColumnButton.visible
      * @default true

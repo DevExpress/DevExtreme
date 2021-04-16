@@ -1,4 +1,5 @@
 import {
+  ElementIntake,
   THTMLElement,
   TElementsArray
 } from '../core/element';
@@ -261,13 +262,13 @@ export interface RowDragging<T extends GridBase> {
      * @prevFileNamespace DevExpress.ui
      * @default undefined
      */
-    boundary?: string | THTMLElement,
+    boundary?: string | ElementIntake,
     /**
      * @docid GridBaseOptions.rowDragging.container
      * @prevFileNamespace DevExpress.ui
      * @default undefined
      */
-    container?: string | THTMLElement,
+    container?: string | ElementIntake,
     /**
      * @docid GridBaseOptions.rowDragging.cursorOffset
      * @prevFileNamespace DevExpress.ui
@@ -309,7 +310,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_return string|Element|jQuery
      * @default undefined
      */
-    dragTemplate?: template | ((dragInfo: RowDraggingTemplateData, containerElement: THTMLElement) => string | THTMLElement),
+    dragTemplate?: template | ((dragInfo: RowDraggingTemplateData, containerElement: THTMLElement) => string | ElementIntake),
     /**
      * @docid GridBaseOptions.rowDragging.dropFeedbackMode
      * @prevFileNamespace DevExpress.ui
@@ -2256,7 +2257,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    focus(element: THTMLElement): void;
+    focus(element: ElementIntake): void;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, dataField)
@@ -4591,7 +4592,7 @@ export interface Selection extends SelectionBase {
  * @public
  */
 declare class dxDataGrid extends Widget implements GridBase {
-    constructor(element: THTMLElement, options?: dxDataGridOptions)
+    constructor(element: ElementIntake, options?: dxDataGridOptions)
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -4766,7 +4767,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: THTMLElement): void;
+    focus(element: ElementIntake): void;
     getCellElement(rowIndex: number, dataField: string): THTMLElement | undefined;
     getCellElement(rowIndex: number, visibleColumnIndex: number): THTMLElement | undefined;
     getCombinedFilter(): any;
@@ -4995,7 +4996,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: THTMLElement, cellInfo: ColumnButtonTemplateData) => string | THTMLElement);
+    template?: template | ((cellElement: THTMLElement, cellInfo: ColumnButtonTemplateData) => string | ElementIntake);
     /**
      * @docid dxDataGridColumnButton.visible
      * @default true

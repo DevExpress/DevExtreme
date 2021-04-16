@@ -1,6 +1,7 @@
 import DOMComponent from '../core/dom_component';
 
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -159,7 +160,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: THTMLElement) => string | THTMLElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @type Enums.DropFeedbackMode
@@ -354,7 +355,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
  * @public
  */
 export default class dxSortable extends DOMComponent implements DraggableBase {
-    constructor(element: THTMLElement, options?: dxSortableOptions)
+    constructor(element: ElementIntake, options?: dxSortableOptions)
     /**
      * @docid
      * @publicName update()

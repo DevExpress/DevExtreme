@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../../core/element';
 
@@ -41,7 +42,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

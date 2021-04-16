@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../../core/element';
 
@@ -84,7 +85,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: THTMLElement) => string | THTMLElement);
+    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default null
@@ -149,7 +150,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxDropDownEditor extends dxTextBox {
-    constructor(element: THTMLElement, options?: dxDropDownEditorOptions)
+    constructor(element: ElementIntake, options?: dxDropDownEditorOptions)
     /**
      * @docid
      * @publicName close()

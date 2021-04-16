@@ -72,7 +72,7 @@ import { BaseWidgetProps } from '../../../common/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../../ui/filter_builder';
 import { TPromise } from '../../../../../core/utils/deferred'; // eslint-disable-line import/named
-import type { TElement } from '../../../../../core/element'; // eslint-disable-line import/named
+import type { ElementIntake, THTMLElement } from '../../../../../core/element'; // eslint-disable-line import/named
 import type { template } from '../../../../../core/templates/template';
 import DataSource from '../../../../../data/data_source';
 import type { DataSourceOptions } from '../../../../../data/data_source';
@@ -107,9 +107,9 @@ export class DataGridColumnButton {
   template?:
   | template
   | ((
-    cellElement: TElement,
+    cellElement: THTMLElement,
     cellInfo: ColumnButtonTemplateData,
-  ) => string | TElement);
+  ) => string | ElementIntake);
 
   @OneWay()
   visible?:
@@ -376,7 +376,7 @@ export class DataGridColumn {
   cellTemplate?:
   | template
   | ((
-    cellElement: TElement,
+    cellElement: THTMLElement,
     cellInfo: ColumnCellTemplateData,
   ) => any);
 
@@ -387,7 +387,7 @@ export class DataGridColumn {
   editCellTemplate?:
   | template
   | ((
-    cellElement: TElement,
+    cellElement: THTMLElement,
     cellInfo: ColumnEditCellTemplateData,
   ) => any);
 
@@ -395,7 +395,7 @@ export class DataGridColumn {
   groupCellTemplate?:
   | template
   | ((
-    cellElement: TElement,
+    cellElement: THTMLElement,
     cellInfo: ColumnGroupCellTemplateData,
   ) => any);
 
@@ -406,7 +406,7 @@ export class DataGridColumn {
   headerCellTemplate?:
   | template
   | ((
-    columnHeader: TElement,
+    columnHeader: THTMLElement,
     headerInfo: ColumnHeaderCellTemplateData,
   ) => any);
 
@@ -769,7 +769,7 @@ export class DataGridMasterDetail {
   template?:
   | template
   | ((
-    detailElement: TElement,
+    detailElement: THTMLElement,
     detailInfo: MasterDetailTemplateData,
   ) => any);
 }
@@ -786,10 +786,10 @@ export class DataGridRowDragging {
   autoScroll?: boolean;
 
   @OneWay()
-  boundary?: string | TElement;
+  boundary?: string | ElementIntake;
 
   @OneWay()
-  container?: string | TElement;
+  container?: string | ElementIntake;
 
   @OneWay()
   cursorOffset?: string | { x?: number; y?: number };
@@ -805,8 +805,8 @@ export class DataGridRowDragging {
   | template
   | ((
     dragInfo: RowDraggingTemplateData,
-    containerElement: TElement,
-  ) => string | TElement);
+    containerElement: THTMLElement,
+  ) => string | ElementIntake);
 
   @OneWay()
   dropFeedbackMode?: 'push' | 'indicate';
@@ -1235,7 +1235,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @Nested() stateStoring?: DataGridStateStoring;
 
-  @Template() rowTemplate?: template | ((rowElement: TElement, rowInfo: any) => any);
+  @Template() rowTemplate?: template | ((rowElement: THTMLElement, rowInfo: any) => any);
 
   @OneWay() customizeColumns?: (columns: Column[]) => any;
 

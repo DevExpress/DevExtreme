@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -399,7 +400,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
  * @public
  */
 export default class dxTreeView extends HierarchicalCollectionWidget {
-    constructor(element: THTMLElement, options?: dxTreeViewOptions)
+    constructor(element: ElementIntake, options?: dxTreeViewOptions)
     /**
      * @docid
      * @publicName collapseAll()

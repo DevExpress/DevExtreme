@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     TElement,
     THTMLElement
 } from '../core/element';
@@ -775,7 +776,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | ElementIntake<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
@@ -785,7 +786,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: THTMLElement) => string | THTMLElement);
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: THTMLElement) => string | ElementIntake);
 }
 
 export interface dxVectorMapLegends extends BaseLegend {
@@ -863,7 +864,7 @@ export interface dxVectorMapLegends extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | ElementIntake<SVGElement>);
     /**
      * @docid dxVectorMapOptions.legends.source
      * @notUsedInTheme
@@ -895,7 +896,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: MapLayerElement, element: THTMLElement) => string | THTMLElement);
+    contentTemplate?: template | ((info: MapLayerElement, element: THTMLElement) => string | ElementIntake);
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
      * @type_function_param1 info:MapLayerElement
@@ -922,7 +923,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxVectorMap extends BaseWidget {
-    constructor(element: THTMLElement, options?: dxVectorMapOptions)
+    constructor(element: ElementIntake, options?: dxVectorMapOptions)
     /**
      * @docid
      * @publicName center()

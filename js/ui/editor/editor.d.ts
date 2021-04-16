@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../../core/element';
 
 import {
@@ -102,7 +102,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class Editor extends Widget {
-    constructor(element: THTMLElement, options?: EditorOptions)
+    constructor(element: ElementIntake, options?: EditorOptions)
     /**
      * @docid
      * @publicName reset()

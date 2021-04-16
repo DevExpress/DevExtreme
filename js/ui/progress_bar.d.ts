@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -83,7 +83,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
  * @public
  */
 export default class dxProgressBar extends dxTrackBar {
-    constructor(element: THTMLElement, options?: dxProgressBarOptions)
+    constructor(element: ElementIntake, options?: dxProgressBarOptions)
 }
 
 /** @public */

@@ -7,6 +7,7 @@ import {
 } from '../animation/position';
 
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -86,7 +87,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | THTMLElement;
+    container?: string | ElementIntake;
     /**
      * @docid
      * @default false
@@ -210,7 +211,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    titleTemplate?: template | ((titleElement: THTMLElement) => string | THTMLElement);
+    titleTemplate?: template | ((titleElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @type Array<Object>
@@ -316,7 +317,7 @@ export interface dxPopupToolbarItem {
  * @public
  */
 export default class dxPopup extends dxOverlay {
-    constructor(element: THTMLElement, options?: dxPopupOptions)
+    constructor(element: ElementIntake, options?: dxPopupOptions)
 }
 
 /** @public */

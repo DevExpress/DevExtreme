@@ -7,7 +7,7 @@ import {
 } from '../animation/position';
 
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -179,7 +179,7 @@ export interface dxToastAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxToast extends dxOverlay {
-    constructor(element: THTMLElement, options?: dxToastOptions)
+    constructor(element: ElementIntake, options?: dxToastOptions)
 }
 
 /** @public */

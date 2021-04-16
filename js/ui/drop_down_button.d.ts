@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -96,7 +97,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: THTMLElement) => string | THTMLElement);
+    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default {}
@@ -135,7 +136,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default null
@@ -282,7 +283,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
  * @public
  */
 export default class dxDropDownButton extends Widget {
-    constructor(element: THTMLElement, options?: dxDropDownButtonOptions)
+    constructor(element: ElementIntake, options?: dxDropDownButtonOptions)
     /**
      * @docid
      * @publicName close()

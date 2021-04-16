@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -106,7 +106,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @public
  */
 export default class dxScrollView extends dxScrollable {
-    constructor(element: THTMLElement, options?: dxScrollViewOptions)
+    constructor(element: ElementIntake, options?: dxScrollViewOptions)
     /**
      * @docid
      * @publicName refresh()

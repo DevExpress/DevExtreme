@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     TElement,
     THTMLElement
 } from '../core/element';
@@ -1232,7 +1233,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
  * @public
  */
 export default class dxDiagram extends Widget {
-    constructor(element: THTMLElement, options?: dxDiagramOptions)
+    constructor(element: ElementIntake, options?: dxDiagramOptions)
     /**
      * @docid
      * @publicName getNodeDataSource()

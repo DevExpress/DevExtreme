@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -105,7 +106,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | THTMLElement);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @fires dxTabPanelOptions.onOptionChanged
@@ -202,7 +203,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @public
  */
 export default class dxTabPanel extends dxMultiView {
-    constructor(element: THTMLElement, options?: dxTabPanelOptions)
+    constructor(element: ElementIntake, options?: dxTabPanelOptions)
 }
 
 /**
@@ -229,7 +230,7 @@ export interface dxTabPanelItem extends dxMultiViewItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tabTemplate?: template | (() => string | THTMLElement);
+    tabTemplate?: template | (() => string | ElementIntake);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../../core/element';
 
 import CollectionWidget, {
@@ -68,5 +68,5 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
  * @prevFileNamespace DevExpress.ui
  */
 export default class HierarchicalCollectionWidget extends CollectionWidget {
-    constructor(element: THTMLElement, options?: HierarchicalCollectionWidgetOptions)
+    constructor(element: ElementIntake, options?: HierarchicalCollectionWidgetOptions)
 }

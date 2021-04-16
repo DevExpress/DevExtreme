@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -180,7 +181,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: THTMLElement) => string | THTMLElement);
+    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: THTMLElement) => string | ElementIntake);
     /**
      * @docid
      * @default false
@@ -575,7 +576,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
  * @public
  */
 export default class dxList extends CollectionWidget {
-    constructor(element: THTMLElement, options?: dxListOptions)
+    constructor(element: ElementIntake, options?: dxListOptions)
     /**
      * @docid
      * @publicName clientHeight()

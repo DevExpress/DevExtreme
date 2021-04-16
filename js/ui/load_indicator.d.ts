@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -42,7 +42,7 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
  * @public
  */
 export default class dxLoadIndicator extends Widget {
-    constructor(element: THTMLElement, options?: dxLoadIndicatorOptions)
+    constructor(element: ElementIntake, options?: dxLoadIndicatorOptions)
 }
 
 /** @public */

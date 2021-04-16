@@ -3,6 +3,7 @@ import DOMComponent, {
 } from '../../core/dom_component';
 
 import {
+    ElementIntake,
     THTMLElement
 } from '../../core/element';
 
@@ -125,7 +126,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxScrollable extends DOMComponent {
-    constructor(element: THTMLElement, options?: dxScrollableOptions)
+    constructor(element: ElementIntake, options?: dxScrollableOptions)
     /**
      * @docid
      * @publicName clientHeight()
@@ -197,7 +198,7 @@ export default class dxScrollable extends DOMComponent {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToElement(element: THTMLElement): void;
+    scrollToElement(element: ElementIntake): void;
     /**
      * @docid
      * @publicName scrollTop()

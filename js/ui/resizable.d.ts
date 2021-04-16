@@ -3,7 +3,7 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -151,7 +151,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @public
  */
 export default class dxResizable extends DOMComponent {
-    constructor(element: THTMLElement, options?: dxResizableOptions)
+    constructor(element: ElementIntake, options?: dxResizableOptions)
 }
 
 /** @public */

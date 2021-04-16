@@ -1,5 +1,5 @@
 import {
-    THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import {
@@ -83,7 +83,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @public
  */
 export default class dxCheckBox extends Editor {
-    constructor(element: THTMLElement, options?: dxCheckBoxOptions)
+    constructor(element: ElementIntake, options?: dxCheckBoxOptions)
 }
 
 /** @public */

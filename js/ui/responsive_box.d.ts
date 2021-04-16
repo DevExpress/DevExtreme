@@ -1,5 +1,5 @@
 import {
-  THTMLElement
+    ElementIntake
 } from '../core/element';
 
 import DataSource, {
@@ -162,7 +162,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
  * @public
  */
 export default class dxResponsiveBox extends CollectionWidget {
-    constructor(element: THTMLElement, options?: dxResponsiveBoxOptions)
+    constructor(element: ElementIntake, options?: dxResponsiveBoxOptions)
 }
 
 /**

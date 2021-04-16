@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     THTMLElement
 } from '../core/element';
 
@@ -210,7 +211,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  * @public
  */
 export default class dxMenu extends dxMenuBase {
-    constructor(element: THTMLElement, options?: dxMenuOptions)
+    constructor(element: ElementIntake, options?: dxMenuOptions)
 }
 
 /**

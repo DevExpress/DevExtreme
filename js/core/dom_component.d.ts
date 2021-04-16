@@ -7,7 +7,7 @@ import {
 } from './devices';
 
 import {
-    TElement,
+    ElementIntake,
     THTMLElement
 } from './element';
 
@@ -80,7 +80,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @prevFileNamespace DevExpress.core
  */
 export default class DOMComponent extends Component {
-    constructor(element: THTMLElement, options?: DOMComponentOptions);
+    constructor(element: ElementIntake, options?: DOMComponentOptions);
     /**
      * @docid
      * @static
@@ -118,9 +118,9 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    static getInstance(element: TElement<Element>): DOMComponent;
+    static getInstance(element: ElementIntake): DOMComponent;
 
-    $element(): THTMLElement;
+    $element(): ElementIntake;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;

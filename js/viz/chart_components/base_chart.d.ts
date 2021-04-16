@@ -1,4 +1,5 @@
 import {
+    ElementIntake,
     TElement,
     THTMLElement
 } from '../../core/element';
@@ -286,7 +287,7 @@ export interface BaseChartLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | ElementIntake<SVGElement>);
 }
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
@@ -305,7 +306,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointInfo: any, element: THTMLElement) => string | THTMLElement);
+    contentTemplate?: template | ((pointInfo: any, element: THTMLElement) => string | ElementIntake);
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
      * @type_function_param1 pointInfo:object
@@ -338,7 +339,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export class BaseChart extends BaseWidget {
-    constructor(element: THTMLElement, options?: BaseChartOptions)
+    constructor(element: ElementIntake, options?: BaseChartOptions)
     /**
      * @docid
      * @publicName clearSelection()
