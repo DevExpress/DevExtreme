@@ -563,22 +563,24 @@ const EditingController = modules.ViewController.inherit((function() {
             const isLastPage = endPageIndex === dataSource.pageCount() - 1;
 
             if(scrollingMode !== 'standard') {
-                const needInsertOnLastPosition = !isDefined(change.pageIndex) && change.index === -1;
+                const pageSize = dataSource.pageSize() || 1;
+                const changePageIndex = Math.floor(change.index / pageSize);
+                const needInsertOnLastPosition = isLastPage && change.index === -1;
 
                 switch(changeType) {
                     case 'append':
-                        return change.pageIndex === endPageIndex || needInsertOnLastPosition && isLastPage;
+                        return changePageIndex === endPageIndex || needInsertOnLastPosition;
                     case 'prepend':
-                        return change.pageIndex === beginPageIndex;
+                        return changePageIndex === beginPageIndex;
                     default: {
                         const topItemIndex = dataController.topItemIndex?.();
                         const bottomItemIndex = dataController.bottomItemIndex?.();
 
                         if(this.option(NEW_SCROLLING_MODE) && isDefined(topItemIndex)) {
-                            return change.index >= topItemIndex && change.index <= bottomItemIndex || needInsertOnLastPosition && isLastPage;
+                            return change.index >= topItemIndex && change.index <= bottomItemIndex || needInsertOnLastPosition;
                         }
 
-                        return change.pageIndex >= beginPageIndex && change.pageIndex <= endPageIndex || needInsertOnLastPosition && isLastPage;
+                        return changePageIndex >= beginPageIndex && changePageIndex <= endPageIndex || needInsertOnLastPosition;
                     }
                 }
             }
@@ -764,11 +766,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             change.index = change.index ?? this._calculateIndex(rowIndex);
 
-            if(this.option('scrolling.mode') === 'virtual') {
-                if(change.index !== -1) {
-                    change.pageIndex = Math.min(dataController.pageCount() - 1, Math.floor(change.index / dataController.pageSize()));
-                }
-            } else {
+            if(this.option('scrolling.mode') !== 'virtual') {
                 change.pageIndex = change.pageIndex ?? dataController.pageIndex();
             }
         },
