@@ -638,10 +638,10 @@ describe('CheckBox', () => {
       afterEach(() => jest.resetAllMocks());
 
       describe('useInkRiple', () => {
-        it('should be true if material theme', () => {
+        it('should be true (temporaly replaced with false) if material theme', () => {
           // eslint-disable-next-line  @typescript-eslint/no-explicit-any
           (current as Mock).mockImplementation(() => 'material');
-          expect(getDefaultOptions().useInkRipple).toBe(true);
+          expect(getDefaultOptions().useInkRipple).toBe(false);
         });
 
         it('should be false if theme is not material', () => {
