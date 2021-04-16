@@ -5370,7 +5370,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGridOptions.onCellClick]
          */
-        onCellClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any) | string;
+        onCellClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /**
          * [descr:dxDataGridOptions.onCellDblClick]
          */
@@ -5432,7 +5432,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGridOptions.onRowClick]
          */
-        onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
+        onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any);
         /**
          * [descr:dxDataGridOptions.onRowDblClick]
          */
@@ -5665,7 +5665,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGridColumnButton.onClick]
          */
-        onClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any) | string;
+        onClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any);
         /**
          * [descr:dxDataGridColumnButton.template]
          */
@@ -5682,7 +5682,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGridRowObject.data]
          */
-        data?: any;
+        data: any;
         /**
          * [descr:dxDataGridRowObject.groupIndex]
          */
@@ -5706,19 +5706,19 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGridRowObject.key]
          */
-        key?: any;
+        key: any;
         /**
          * [descr:dxDataGridRowObject.rowIndex]
          */
-        rowIndex?: number;
+        rowIndex: number;
         /**
          * [descr:dxDataGridRowObject.rowType]
          */
-        rowType?: string;
+        rowType: string;
         /**
          * [descr:dxDataGridRowObject.values]
          */
-        values?: Array<any>;
+        values: Array<any>;
     }
     /**
      * [descr:dxDateBoxOptions]
@@ -11969,23 +11969,23 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListOptions.onCellClick]
          */
-        onCellClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any) | string;
+        onCellClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.TElement, row?: dxTreeListRowObject }) => any);
         /**
          * [descr:dxTreeListOptions.onCellDblClick]
          */
-        onCellDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
+        onCellDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.TElement, row?: dxTreeListRowObject }) => any);
         /**
          * [descr:dxTreeListOptions.onCellHoverChanged]
          */
-        onCellHoverChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
+        onCellHoverChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.TElement, row?: dxTreeListRowObject }) => any);
         /**
          * [descr:dxTreeListOptions.onCellPrepared]
          */
-        onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function, oldValue?: any }) => any);
+        onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: DevExpress.core.TElement, watch?: Function, oldValue?: any }) => any);
         /**
          * [descr:dxTreeListOptions.onContextMenuPreparing]
          */
-        onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
+        onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.TElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /**
          * [descr:dxTreeListOptions.onEditingStart]
          */
@@ -11993,27 +11993,27 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListOptions.onEditorPrepared]
          */
-        onEditorPrepared?: ((options: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, dataField?: string, row?: dxTreeListRowObject }) => any);
+        onEditorPrepared?: ((options: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.TElement, readOnly?: boolean, dataField?: string, row?: dxTreeListRowObject }) => any);
         /**
          * [descr:dxTreeListOptions.onEditorPreparing]
          */
-        onEditorPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
+        onEditorPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.TElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
         /**
          * [descr:dxTreeListOptions.onFocusedCellChanged]
          */
-        onFocusedCellChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any);
+        onFocusedCellChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, cellElement?: DevExpress.core.TElement, columnIndex?: number, rowIndex?: number, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any);
         /**
          * [descr:dxTreeListOptions.onFocusedCellChanging]
          */
-        onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, cellElement?: DevExpress.core.dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: DevExpress.events.event, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
+        onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, cellElement?: DevExpress.core.TElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: DevExpress.events.event, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
         /**
          * [descr:dxTreeListOptions.onFocusedRowChanged]
          */
-        onFocusedRowChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, rowElement?: DevExpress.core.dxElement, rowIndex?: number, row?: dxTreeListRowObject }) => any);
+        onFocusedRowChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, rowElement?: DevExpress.core.TElement, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /**
          * [descr:dxTreeListOptions.onFocusedRowChanging]
          */
-        onFocusedRowChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, rowElement?: DevExpress.core.dxElement, prevRowIndex?: number, newRowIndex?: number, event?: DevExpress.events.event, rows?: Array<dxTreeListRowObject>, cancel?: boolean }) => any);
+        onFocusedRowChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, rowElement?: DevExpress.core.TElement, prevRowIndex?: number, newRowIndex?: number, event?: DevExpress.events.event, rows?: Array<dxTreeListRowObject>, cancel?: boolean }) => any);
         /**
          * [descr:dxTreeListOptions.onNodesInitialized]
          */
@@ -12021,15 +12021,15 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListOptions.onRowClick]
          */
-        onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
+        onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.TElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any);
         /**
          * [descr:dxTreeListOptions.onRowDblClick]
          */
-        onRowDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
+        onRowDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.TElement }) => any);
         /**
          * [descr:dxTreeListOptions.onRowPrepared]
          */
-        onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement, node?: dxTreeListNode, level?: number }) => any);
+        onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.TElement, node?: dxTreeListNode, level?: number }) => any);
         /**
          * [descr:dxTreeListOptions.paging]
          */
@@ -12210,7 +12210,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListColumn.cellTemplate]
          */
-        cellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { data?: any, component?: dxTreeList, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
+        cellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.TElement, cellInfo: { data?: any, component?: dxTreeList, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
         /**
          * [descr:dxTreeListColumn.columns]
          */
@@ -12218,7 +12218,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListColumn.editCellTemplate]
          */
-        editCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { setValue?: any, data?: any, component?: dxTreeList, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
+        editCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.TElement, cellInfo: { setValue?: any, data?: any, component?: dxTreeList, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
         /**
          * [descr:dxTreeListColumn.headerCellTemplate]
          */
@@ -12239,11 +12239,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListColumnButton.onClick]
          */
-        onClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
+        onClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.TElement, model?: any, event?: DevExpress.events.event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any);
         /**
          * [descr:dxTreeListColumnButton.template]
          */
-        template?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { component?: dxTreeList, data?: any, key?: any, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject }) => string | Element | JQuery);
+        template?: DevExpress.core.template | ((cellElement: DevExpress.core.TElement, cellInfo: { component?: dxTreeList, data?: any, key?: any, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject }) => string | Element | JQuery);
         /**
          * [descr:dxTreeListColumnButton.visible]
          */
@@ -12268,11 +12268,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListNode.key]
          */
-        key?: any;
+        key: any;
         /**
          * [descr:dxTreeListNode.level]
          */
-        level?: number;
+        level: number;
         /**
          * [descr:dxTreeListNode.parent]
          */
@@ -12305,27 +12305,27 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeListRowObject.key]
          */
-        key?: any;
+        key: any;
         /**
          * [descr:dxTreeListRowObject.level]
          */
-        level?: number;
+        level: number;
         /**
          * [descr:dxTreeListRowObject.node]
          */
-        node?: dxTreeListNode;
+        node: dxTreeListNode;
         /**
          * [descr:dxTreeListRowObject.rowIndex]
          */
-        rowIndex?: number;
+        rowIndex: number;
         /**
          * [descr:dxTreeListRowObject.rowType]
          */
-        rowType?: string;
+        rowType: string;
         /**
          * [descr:dxTreeListRowObject.values]
          */
-        values?: Array<any>;
+        values: Array<any>;
     }
     /**
      * [descr:dxTreeViewOptions]
