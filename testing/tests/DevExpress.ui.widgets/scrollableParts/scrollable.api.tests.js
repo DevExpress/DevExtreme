@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import animationFrame from 'animation/frame';
 import config from 'core/config';
@@ -43,7 +44,7 @@ const moduleConfig = {
 const getScrollOffset = function($scrollable) {
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const location = translator.locate($content);
+    const location = getTranslateValues($content.get(0));
 
     return {
         top: location.top - $container.scrollTop(),

@@ -1,5 +1,5 @@
 import animationFrame from 'animation/frame';
-import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import 'generic_light.css!';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
@@ -50,7 +50,7 @@ const moduleConfig = {
 const getScrollOffset = function($scrollable) {
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const location = translator.locate($content);
+    const location = getTranslateValues($content.get(0));
 
     return {
         top: location.top - $container.scrollTop(),
@@ -323,11 +323,10 @@ QUnit.module('Hoverable interaction',
                             }
 
                             const $scrollBar = $scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
-                            const scrollBar = Scrollbar.getInstance($scrollBar);
+
 
                             const isScrollbarHoverable = (showScrollbarMode === 'onHover' || showScrollbarMode === 'always');
 
-                            assert.strictEqual(scrollBar.option('hoverStateEnabled'), isScrollbarHoverable, 'scrollbar.hoverStateEnabled');
                             assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isScrollbarHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
                             assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, 'scrollable-disabled-class');
 
