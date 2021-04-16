@@ -99,7 +99,7 @@ export class AppComponent {
         this.popupVisible = false;
     }
     cancelEditEmployee() {
-        this.currentEmployee = undefined;
+        this.currentEmployee = new Employee();
         this.popupVisible = false;
     }
 }
