@@ -16,9 +16,9 @@ import DataSource, {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -37,7 +37,7 @@ import BaseWidget, {
     BaseWidgetTooltip,
     Font,
     BaseWidgetAnnotationConfig,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -51,52 +51,52 @@ export interface TooltipInfo {
 }
 
 /** @public */
-export type CenterChangedEvent = ComponentEvent<dxVectorMap> & {
+export type CenterChangedEvent = EventInfo<dxVectorMap> & {
     readonly center: Array<number>;
 }
 
 /** @public */
-export type ClickEvent = ComponentNativeEvent<dxVectorMap> & {
+export type ClickEvent = NativeEventInfo<dxVectorMap> & {
     readonly target: MapLayerElement;
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxVectorMap>;
+export type DisposingEvent = EventInfo<dxVectorMap>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxVectorMap>;
+export type DrawnEvent = EventInfo<dxVectorMap>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxVectorMap>;
+export type ExportedEvent = EventInfo<dxVectorMap>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxVectorMap> & ExportInfo;
+export type ExportingEvent = EventInfo<dxVectorMap> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxVectorMap>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxVectorMap>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxVectorMap> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxVectorMap> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxVectorMap>;
+export type InitializedEvent = InitializedEventInfo<dxVectorMap>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxVectorMap> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxVectorMap> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxVectorMap> & {
+export type SelectionChangedEvent = EventInfo<dxVectorMap> & {
     readonly target: MapLayerElement;
 }
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxVectorMap> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxVectorMap> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
 /** @public */
-export type ZoomFactorChangedEvent = ComponentEvent<dxVectorMap> & {
+export type ZoomFactorChangedEvent = EventInfo<dxVectorMap> & {
     readonly zoomFactor: number;
 }
 
@@ -1036,6 +1036,7 @@ export default class dxVectorMap extends BaseWidget {
     zoomFactor(zoomFactor: number): void;
 }
 
+/** @public */
 export type Options = dxVectorMapOptions;
 
 /** @deprecated use Options instead */

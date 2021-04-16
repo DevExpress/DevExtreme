@@ -17,9 +17,9 @@ import DataSource, {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -27,7 +27,7 @@ import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -35,45 +35,45 @@ import BaseWidget, {
 import { HatchingDirectionType } from './common';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSankey>;
+export type DisposingEvent = EventInfo<dxSankey>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxSankey>;
+export type DrawnEvent = EventInfo<dxSankey>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxSankey>;
+export type ExportedEvent = EventInfo<dxSankey>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxSankey> & ExportInfo;
+export type ExportingEvent = EventInfo<dxSankey> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxSankey>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxSankey>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxSankey> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSankey>;
+export type InitializedEvent = InitializedEventInfo<dxSankey>;
 
 /** @public */
-export type LinkClickEvent = ComponentNativeEvent<dxSankey> & {
+export type LinkClickEvent = NativeEventInfo<dxSankey> & {
     readonly target: dxSankeyLink;
 }
 /** @public */
-export type LinkHoverEvent = ComponentEvent<dxSankey> & {
+export type LinkHoverEvent = EventInfo<dxSankey> & {
     readonly target: dxSankeyLink;
 }
 /** @public */
-export type NodeClickEvent = ComponentNativeEvent<dxSankey> & {
+export type NodeClickEvent = NativeEventInfo<dxSankey> & {
     readonly target: dxSankeyNode;
 }
 /** @public */
-export type NodeHoverEvent = ComponentEvent<dxSankey> & {
+export type NodeHoverEvent = EventInfo<dxSankey> & {
     readonly target: dxSankeyNode;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSankey> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 
 
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
@@ -824,6 +824,7 @@ export interface dxSankeyNode {
     title?: string;
 }
 
+/** @public */
 export type Options = dxSankeyOptions;
 
 /** @deprecated use Options instead */

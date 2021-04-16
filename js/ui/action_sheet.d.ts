@@ -13,9 +13,9 @@ import DataSource, {
 import {
     TEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -26,31 +26,31 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type CancelClickEvent = ComponentEvent<dxActionSheet> & Cancelable;
+export type CancelClickEvent = Cancelable & EventInfo<dxActionSheet>;
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxActionSheet>;
+export type ContentReadyEvent = EventInfo<dxActionSheet>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxActionSheet>;
+export type DisposingEvent = EventInfo<dxActionSheet>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxActionSheet>;
+export type InitializedEvent = InitializedEventInfo<dxActionSheet>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxActionSheet> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxActionSheet> & ChangedOptionInfo;
 
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**
@@ -202,6 +202,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
+/** @public */
 export type Options = dxActionSheetOptions;
 
 /** @deprecated use Options instead */

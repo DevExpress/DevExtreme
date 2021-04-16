@@ -7,7 +7,7 @@ import {
 } from '../../core/element';
 
 import {
-    ComponentEvent
+    EventInfo
 } from '../../events/index';
 
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
@@ -64,7 +64,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: ComponentEvent<T>) => void);
+    onContentReady?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default 0

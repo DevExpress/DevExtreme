@@ -4,8 +4,8 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -23,28 +23,28 @@ import dxOverlay, {
 } from './overlay';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxLoadPanel>;
+export type ContentReadyEvent = EventInfo<dxLoadPanel>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxLoadPanel>;
+export type DisposingEvent = EventInfo<dxLoadPanel>;
 
 /** @public */
-export type HidingEvent = ComponentEvent<dxLoadPanel> & Cancelable;
+export type HidingEvent = Cancelable & EventInfo<dxLoadPanel>;
 
 /** @public */
-export type HiddenEvent = ComponentEvent<dxLoadPanel>;
+export type HiddenEvent = EventInfo<dxLoadPanel>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxLoadPanel>;
+export type InitializedEvent = InitializedEventInfo<dxLoadPanel>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxLoadPanel> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxLoadPanel> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = ComponentEvent<dxLoadPanel>;
+export type ShowingEvent = EventInfo<dxLoadPanel>;
 
 /** @public */
-export type ShownEvent = ComponentEvent<dxLoadPanel>;
+export type ShownEvent = EventInfo<dxLoadPanel>;
 
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
@@ -183,6 +183,7 @@ export default class dxLoadPanel extends dxOverlay {
     constructor(element: TElement, options?: dxLoadPanelOptions)
 }
 
+/** @public */
 export type Options = dxLoadPanelOptions;
 
 /** @deprecated use Options instead */

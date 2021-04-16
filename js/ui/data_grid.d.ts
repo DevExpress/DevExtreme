@@ -20,9 +20,9 @@ import DataSource, {
 import {
     TEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -162,7 +162,7 @@ export interface ToolbarPreparingInfo {
   toolbarOptions: dxToolbarOptions;
 }
 
-export interface ComponentRowDraggingEvent<T extends GridBase> {
+export interface RowDraggingEventInfo<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   readonly itemData?: any;
@@ -175,7 +175,7 @@ export interface ComponentRowDraggingEvent<T extends GridBase> {
   readonly toData?: any;
 }
 
-export interface ComponentDragStartEvent<T extends GridBase> {
+export interface DragStartEventInfo<T extends GridBase> {
   readonly component: T;
   readonly event: TEvent;
   itemData?: any;
@@ -351,7 +351,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field10 toData:any
      * @type_function_param1_field11 dropInsideItem:boolean
      */
-    onAdd?: ((e: ComponentRowDraggingEvent<T> & DragDropInfo) => void),
+    onAdd?: ((e: RowDraggingEventInfo<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragChange
      * @prevFileNamespace DevExpress.ui
@@ -369,7 +369,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 toData:any
      * @type_function_param1_field12 dropInsideItem:boolean
      */
-    onDragChange?: ((e: Cancelable & ComponentRowDraggingEvent<T> & DragDropInfo) => void),
+    onDragChange?: ((e: Cancelable & RowDraggingEventInfo<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragEnd
      * @prevFileNamespace DevExpress.ui
@@ -387,7 +387,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 toData:any
      * @type_function_param1_field12 dropInsideItem:boolean
      */
-    onDragEnd?: ((e: Cancelable & ComponentRowDraggingEvent<T> & DragDropInfo) => void),
+    onDragEnd?: ((e: Cancelable & RowDraggingEventInfo<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragMove
      * @prevFileNamespace DevExpress.ui
@@ -405,7 +405,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 toData:any
      * @type_function_param1_field12 dropInsideItem:boolean
      */
-    onDragMove?: ((e: Cancelable & ComponentRowDraggingEvent<T> & DragDropInfo) => void),
+    onDragMove?: ((e: Cancelable & RowDraggingEventInfo<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragStart
      * @prevFileNamespace DevExpress.ui
@@ -418,7 +418,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field6 fromIndex:number
      * @type_function_param1_field7 fromData:any
      */
-    onDragStart?: ((e: Cancelable & ComponentDragStartEvent<T>) => void),
+    onDragStart?: ((e: Cancelable & DragStartEventInfo<T>) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onRemove
      * @prevFileNamespace DevExpress.ui
@@ -434,7 +434,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field9 fromData:any
      * @type_function_param1_field10 toData:any
      */
-    onRemove?: ((e: ComponentRowDraggingEvent<T>) => void),
+    onRemove?: ((e: RowDraggingEventInfo<T>) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onReorder
      * @prevFileNamespace DevExpress.ui
@@ -452,7 +452,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 dropInsideItem:boolean
      * @type_function_param1_field12 promise:Promise<void>
      */
-    onReorder?: ((e: ComponentRowDraggingEvent<dxDataGrid> & DragReorderInfo) => void),
+    onReorder?: ((e: RowDraggingEventInfo<dxDataGrid> & DragReorderInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.scrollSensitivity
      * @prevFileNamespace DevExpress.ui
@@ -719,7 +719,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAdaptiveDetailRowPreparing?: ((e: ComponentEvent<T> & AdaptiveDetailRowPreparingInfo) => void);
+    onAdaptiveDetailRowPreparing?: ((e: EventInfo<T> & AdaptiveDetailRowPreparingInfo) => void);
     /**
      * @docid
      * @default null
@@ -732,7 +732,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDataErrorOccurred?: ((e: ComponentEvent<T> & DataErrorOccurredInfo) => void);
+    onDataErrorOccurred?: ((e: EventInfo<T> & DataErrorOccurredInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -744,7 +744,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onEditCanceled?: ((e: ComponentEvent<T> & DataChangeInfo) => void);
+    onEditCanceled?: ((e: EventInfo<T> & DataChangeInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -757,7 +757,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onEditCanceling?: ((e: Cancelable & ComponentEvent<T> & DataChangeInfo) => void);
+    onEditCanceling?: ((e: Cancelable & EventInfo<T> & DataChangeInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -771,7 +771,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onInitNewRow?: ((e: ComponentEvent<T> & NewRowInfo) => void);
+    onInitNewRow?: ((e: EventInfo<T> & NewRowInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -785,7 +785,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: ComponentNativeEvent<T> & KeyDownInfo) => void);
+    onKeyDown?: ((e: NativeEventInfo<T> & KeyDownInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -798,34 +798,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowCollapsed?: ((e: ComponentEvent<T> & RowKeyInfo) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 key:any
-     * @type_function_param1_field5 cancel:boolean
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onRowCollapsing?: ((e: Cancelable & ComponentEvent<T> & RowKeyInfo) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 key:any
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onRowExpanded?: ((e: ComponentEvent<T> & RowKeyInfo) => void);
+    onRowCollapsed?: ((e: EventInfo<T> & RowKeyInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -839,7 +812,34 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowExpanding?: ((e: Cancelable & ComponentEvent<T> & RowKeyInfo) => void);
+    onRowCollapsing?: ((e: Cancelable & EventInfo<T> & RowKeyInfo) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 key:any
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRowExpanded?: ((e: EventInfo<T> & RowKeyInfo) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 key:any
+     * @type_function_param1_field5 cancel:boolean
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRowExpanding?: ((e: Cancelable & EventInfo<T> & RowKeyInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -854,7 +854,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowInserted?: ((e: ComponentEvent<T> & RowInsertedInfo) => void);
+    onRowInserted?: ((e: EventInfo<T> & RowInsertedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -868,7 +868,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowInserting?: ((e: ComponentEvent<T> & RowInsertingInfo) => void);
+    onRowInserting?: ((e: EventInfo<T> & RowInsertingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -883,7 +883,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowRemoved?: ((e: ComponentEvent<T> & RowRemovedInfo) => void);
+    onRowRemoved?: ((e: EventInfo<T> & RowRemovedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -898,7 +898,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowRemoving?: ((e: ComponentEvent<T> & RowRemovingInfo) => void);
+    onRowRemoving?: ((e: EventInfo<T> & RowRemovingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -913,7 +913,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowUpdated?: ((e: ComponentEvent<T> & RowUpdatedInfo) => void);
+    onRowUpdated?: ((e: EventInfo<T> & RowUpdatedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -929,7 +929,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowUpdating?: ((e: ComponentEvent<T> & RowUpdatingInfo) => void);
+    onRowUpdating?: ((e: EventInfo<T> & RowUpdatingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -948,7 +948,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowValidating?: ((e: ComponentEvent<T> & RowValidatingInfo) => void);
+    onRowValidating?: ((e: EventInfo<T> & RowValidatingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -960,7 +960,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onSaved?: ((e: ComponentEvent<T> & DataChangeInfo) => void);
+    onSaved?: ((e: EventInfo<T> & DataChangeInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -974,7 +974,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onSaving?: ((e: ComponentEvent<T> & SavingInfo) => void);
+    onSaving?: ((e: EventInfo<T> & SavingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -990,7 +990,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: ComponentEvent<T> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1003,7 +1003,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onToolbarPreparing?: ((e: ComponentEvent<T> & ToolbarPreparingInfo) => void);
+    onToolbarPreparing?: ((e: EventInfo<T> & ToolbarPreparingInfo) => void);
     /**
      * @docid
      * @type object
@@ -3054,10 +3054,10 @@ export interface ColumnButtonBase {
 }
 
 /** @public */
-export type AdaptiveDetailRowPreparingEvent = ComponentEvent<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
+export type AdaptiveDetailRowPreparingEvent = EventInfo<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -3072,7 +3072,7 @@ export type CellClickEvent = ComponentNativeEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type CellDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -3087,7 +3087,7 @@ export type CellDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type CellHoverChangedEvent = ComponentEvent<dxDataGrid> & {
+export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
   readonly eventType: string;
   readonly data: any;
   readonly key: any;
@@ -3103,7 +3103,7 @@ export type CellHoverChangedEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type CellPreparedEvent = ComponentEvent<dxDataGrid> & {
+export type CellPreparedEvent = EventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -3123,10 +3123,10 @@ export type CellPreparedEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxDataGrid>;
+export type ContentReadyEvent = EventInfo<dxDataGrid>;
 
 /** @public */
-export type ContextMenuPreparingEvent = ComponentEvent<dxDataGrid> & {
+export type ContextMenuPreparingEvent = EventInfo<dxDataGrid> & {
   items?: Array<any>;
   readonly target: string;
   readonly targetElement: TElement;
@@ -3137,26 +3137,26 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type DataErrorOccurredEvent = ComponentEvent<dxDataGrid> & DataErrorOccurredInfo;
+export type DataErrorOccurredEvent = EventInfo<dxDataGrid> & DataErrorOccurredInfo;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDataGrid>;
+export type DisposingEvent = EventInfo<dxDataGrid>;
 
 /** @public */
-export type EditCanceledEvent = ComponentEvent<dxDataGrid> & DataChangeInfo;
+export type EditCanceledEvent = EventInfo<dxDataGrid> & DataChangeInfo;
 
 /** @public */
-export type EditCancelingEvent = Cancelable & ComponentEvent<dxDataGrid> & DataChangeInfo;
+export type EditCancelingEvent = Cancelable & EventInfo<dxDataGrid> & DataChangeInfo;
 
 /** @public */
-export type EditingStartEvent = Cancelable & ComponentEvent<dxDataGrid> & {
+export type EditingStartEvent = Cancelable & EventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly column?: any;
 }
 
 /** @public */
-export type EditorPreparedEvent = ComponentEvent<dxDataGrid> & {
+export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
   readonly parentType: string;
   readonly value?: any;
   readonly setValue?: any;
@@ -3171,7 +3171,7 @@ export type EditorPreparedEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type EditorPreparingEvent = ComponentEvent<dxDataGrid> & {
+export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
   readonly parentType: string;
   readonly value?: any;
   readonly setValue?: any;
@@ -3189,10 +3189,10 @@ export type EditorPreparingEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type ExportedEvent  = ComponentEvent<dxDataGrid>;
+export type ExportedEvent  = EventInfo<dxDataGrid>;
 
 /** @public */
-export type ExportingEvent = Cancelable & ComponentEvent<dxDataGrid> & {
+export type ExportingEvent = Cancelable & EventInfo<dxDataGrid> & {
   fileName?: string;
 }
 
@@ -3206,7 +3206,7 @@ export type FileSavingEvent = Cancelable & {
 }
 
 /** @public */
-export type FocusedCellChangedEvent = ComponentEvent<dxDataGrid> & {
+export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
   readonly cellElement: TElement;
   readonly columnIndex: number;
   readonly rowIndex: number;
@@ -3215,7 +3215,7 @@ export type FocusedCellChangedEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type FocusedCellChangingEvent = Cancelable & ComponentNativeEvent<dxDataGrid> & {
+export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
   readonly cellElement: TElement;
   readonly prevColumnIndex: number;
   readonly prevRowIndex: number;
@@ -3227,14 +3227,14 @@ export type FocusedCellChangingEvent = Cancelable & ComponentNativeEvent<dxDataG
 }
 
 /** @public */
-export type FocusedRowChangedEvent = ComponentEvent<dxDataGrid> & {
+export type FocusedRowChangedEvent = EventInfo<dxDataGrid> & {
   readonly rowElement: TElement;
   readonly rowIndex: number;
   readonly row?: RowObject;
 }
 
 /** @public */
-export type FocusedRowChangingEvent = Cancelable & ComponentNativeEvent<dxDataGrid> & {
+export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
   readonly rowElement: TElement;
   readonly prevRowIndex: number;
   newRowIndex: number;
@@ -3242,19 +3242,19 @@ export type FocusedRowChangingEvent = Cancelable & ComponentNativeEvent<dxDataGr
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDataGrid>;
+export type InitializedEvent = InitializedEventInfo<dxDataGrid>;
 
 /** @public */
-export type InitNewRowEvent = ComponentEvent<dxDataGrid> & NewRowInfo;
+export type InitNewRowEvent = EventInfo<dxDataGrid> & NewRowInfo;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxDataGrid> & KeyDownInfo;
+export type KeyDownEvent = NativeEventInfo<dxDataGrid> & KeyDownInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDataGrid> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDataGrid> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type RowClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -3270,13 +3270,13 @@ export type RowClickEvent = ComponentNativeEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type RowCollapsedEvent = ComponentEvent<dxDataGrid> & RowKeyInfo;
+export type RowCollapsedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowCollapsingEvent = Cancelable & ComponentEvent<dxDataGrid> & RowKeyInfo;
+export type RowCollapsingEvent = Cancelable & EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type RowDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -3291,19 +3291,19 @@ export type RowDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type RowExpandedEvent = ComponentEvent<dxDataGrid> & RowKeyInfo;
+export type RowExpandedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowExpandingEvent = Cancelable & ComponentEvent<dxDataGrid> & RowKeyInfo;
+export type RowExpandingEvent = Cancelable & EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowInsertedEvent = ComponentEvent<dxDataGrid> & RowInsertedInfo;
+export type RowInsertedEvent = EventInfo<dxDataGrid> & RowInsertedInfo;
 
 /** @public */
-export type RowInsertingEvent = ComponentEvent<dxDataGrid> & RowInsertingInfo;
+export type RowInsertingEvent = EventInfo<dxDataGrid> & RowInsertingInfo;
 
 /** @public */
-export type RowPreparedEvent = ComponentEvent<dxDataGrid> & {
+export type RowPreparedEvent = EventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -3318,56 +3318,56 @@ export type RowPreparedEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type RowRemovedEvent = ComponentEvent<dxDataGrid> & RowRemovedInfo;
+export type RowRemovedEvent = EventInfo<dxDataGrid> & RowRemovedInfo;
 
 /** @public */
-export type RowRemovingEvent = ComponentEvent<dxDataGrid> & RowRemovingInfo;
+export type RowRemovingEvent = EventInfo<dxDataGrid> & RowRemovingInfo;
 
 /** @public */
-export type RowUpdatedEvent = ComponentEvent<dxDataGrid> & RowUpdatedInfo;
+export type RowUpdatedEvent = EventInfo<dxDataGrid> & RowUpdatedInfo;
 
 /** @public */
-export type RowUpdatingEvent = ComponentEvent<dxDataGrid> & RowUpdatingInfo;
+export type RowUpdatingEvent = EventInfo<dxDataGrid> & RowUpdatingInfo;
 
 /** @public */
-export type RowValidatingEvent = ComponentEvent<dxDataGrid> & RowValidatingInfo;
+export type RowValidatingEvent = EventInfo<dxDataGrid> & RowValidatingInfo;
 
 /** @public */
-export type SavedEvent = ComponentEvent<dxDataGrid> & DataChangeInfo;
+export type SavedEvent = EventInfo<dxDataGrid> & DataChangeInfo;
 
 /** @public */
-export type SavingEvent = ComponentEvent<dxDataGrid> & SavingInfo;
+export type SavingEvent = EventInfo<dxDataGrid> & SavingInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxDataGrid> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxDataGrid> & SelectionChangedInfo;
 
 /** @public */
-export type ToolbarPreparingEvent = ComponentEvent<dxDataGrid> & ToolbarPreparingInfo;
+export type ToolbarPreparingEvent = EventInfo<dxDataGrid> & ToolbarPreparingInfo;
 
 
 /** @public */
-export type RowDraggingAddEvent = ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
+export type RowDraggingAddEvent = RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type RowDraggingChangeEvent = Cancelable & ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
+export type RowDraggingChangeEvent = Cancelable & RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type RowDraggingEndEvent = Cancelable & ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
+export type RowDraggingEndEvent = Cancelable & RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type RowDraggingMoveEvent = Cancelable & ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
+export type RowDraggingMoveEvent = Cancelable & RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type RowDraggingStartEvent = Cancelable & ComponentDragStartEvent<dxDataGrid>;
+export type RowDraggingStartEvent = Cancelable & DragStartEventInfo<dxDataGrid>;
 
 /** @public */
-export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxDataGrid>;
+export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxDataGrid>;
 
 /** @public */
-export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxDataGrid> & DragReorderInfo;
+export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReorderInfo;
 
 /** @public */ 
-export type ColumnButtonClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
   row?: RowObject;
   column?: Column;
 }
@@ -5079,6 +5079,7 @@ export interface RowObject {
     readonly values: Array<any>;
 }
 
+/** @public */
 export type Options = dxDataGridOptions;
 
 /** @deprecated use Options instead */
