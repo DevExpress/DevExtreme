@@ -137,9 +137,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: { focusStateEnabled: true },
 }, {
-  // NOTE: useInkRipple temporarily set to false
-  //       untill inlRipple styles dosn't
-  //       look properly.
+  // NOTE: it's disabled until styles fix: see https://trello.com/c/5Pbm18YA/4165-enable-inkripple-after-fixing-styles
   // eslint-disable-next-line import/no-named-as-default-member
   device: (): boolean => isMaterial(current()),
   options: { useInkRipple: false },

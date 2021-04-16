@@ -638,10 +638,12 @@ describe('CheckBox', () => {
       afterEach(() => jest.resetAllMocks());
 
       describe('useInkRiple', () => {
-        it('should be true (temporaly replaced with false) if material theme', () => {
+        // NOTE: it's disabled until styles fix: see https://trello.com/c/5Pbm18YA/4165-enable-inkripple-after-fixing-styles
+        // eslint-disable-next-line
+        it.skip('should be true if material theme', () => {
           // eslint-disable-next-line  @typescript-eslint/no-explicit-any
           (current as Mock).mockImplementation(() => 'material');
-          expect(getDefaultOptions().useInkRipple).toBe(false);
+          expect(getDefaultOptions().useInkRipple).toBe(true);
         });
 
         it('should be false if theme is not material', () => {
