@@ -2075,13 +2075,9 @@ QUnit.module('Markup', () => {
 
 
 [
-    {
-        view: 'month'
-    },
-    {
-        view: 'week'
-    }
-].forEach(({ view }) => {
+    'month',
+    'week'
+].forEach(view => {
     QUnit.test(`First day of week should be correct in "en-GB" locale (T988896) in ${view} view`, function(assert) {
         const locale = localization.locale();
         localization.locale('en-GB');
