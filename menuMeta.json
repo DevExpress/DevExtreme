@@ -1268,7 +1268,6 @@
           {
             "Title": "Paging",
             "Name": "Paging",
-            "DocUrl": "Guide/UI_Components/TreeList/Paging/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListTasksController.cs",
