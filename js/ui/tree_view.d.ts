@@ -99,7 +99,7 @@ export type OptionChangedEvent = ComponentEvent<dxTreeView> & ChangedOptionInfo;
 
 /** @public */
 export type SelectAllValueChangedEvent = ComponentEvent<dxTreeView> & {
-    readonly value?: boolean;
+    readonly value?: boolean | undefined;
 }
 
 /** @public */
@@ -289,6 +289,8 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1_field1 component:dxTreeView
      * @type_function_param1_field2 element:TElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field6 itemData:object
+     * @type_function_param1_field7 itemIndex:number
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -298,7 +300,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:boolean
+     * @type_function_param1_field4 value:boolean | undefined
      * @type_function_param1_field1 component:dxTreeView
      * @type_function_param1_field2 element:TElement
      * @type_function_param1_field3 model:any
