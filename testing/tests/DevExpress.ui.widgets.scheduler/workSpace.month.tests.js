@@ -439,7 +439,7 @@ module('Work Space Month', () => {
         });
     });
 
-    module('Week day orders', {
+    module('Day of the week order', {
         beforeEach: function() {
             initTestMarkup();
         }
