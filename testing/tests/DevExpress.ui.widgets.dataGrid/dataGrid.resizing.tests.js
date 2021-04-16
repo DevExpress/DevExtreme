@@ -889,6 +889,31 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($(dataGrid.getCellElement(0, 3)).outerWidth(), 125, 'last column width');
     });
 
+    // T983067
+    QUnit.test('Column width should be correct after resizing if it is specified and other columns have percent width (zoom 150%)', function(assert) {
+        // arrange, act
+        $('#container').css('zoom', 1.5);
+        $('#container').width(603.333);
+
+        const $dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{}],
+            columns: [
+                { dataField: 'field1', width: '15%' },
+                { dataField: 'field2', width: '30%' },
+                { dataField: 'field3', width: '50%' },
+                { dataField: 'field4', width: 125 }
+            ],
+            showBorders: true
+        });
+        const dataGrid = $dataGrid.dxDataGrid('instance');
+
+        dataGrid.updateDimensions();
+
+        // assert
+        assert.roughEqual($(dataGrid.getCellElement(0, 3)).outerWidth(), 125, 0.51, 'last column width');
+    });
+
     // T344125
     QUnit.test('column width does not changed after changing grid\'s width when columnAutoWidth enabled', function(assert) {
         // arrange, act
