@@ -5590,7 +5590,7 @@
           {
             "Title": "Using Intl",
             "Name": "UsingIntl",
-            "DocUrl": "Guide/UI_Components/Common/UI_Components/Localization/",
+            "DocUrl": "Guide/Common/Localization/",
             "Widget": "Localization",
             "Modules": "devextreme-intl",
             "MvcAdditionalFiles": [
@@ -5610,7 +5610,7 @@
           {
             "Title": "Using Globalize",
             "Name": "UsingGlobalize",
-            "DocUrl": "Guide/UI_Components/Common/UI_Components/Localization_-_Use_Globalize/",
+            "DocUrl": "Guide/Common/Localization/",
             "Widget": "Localization",
             "Modules": "globalize",
             "MvcAdditionalFiles": [
