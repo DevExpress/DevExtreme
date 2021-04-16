@@ -262,7 +262,7 @@ const FrameAnimationStrategy = {
     _parseTransform: function(transformString) {
         const result = {};
 
-        each(transformString.match(/\w+\d*\w*\([^)]*\)\s*/g), function(i, part) {
+        each(transformString.match(/(\w|\d)+\([^)]*\)\s*/g), function(i, part) {
             const translateData = parseTranslate(part);
             const scaleData = part.match(/scale\((.+?)\)/);
             const rotateData = part.match(/(rotate.)\((.+)deg\)/);
