@@ -1,6 +1,5 @@
 import { Deferred, when } from '../../core/utils/deferred';
 import { isObject, isString } from '../../core/utils/type';
-import { each } from '../../core/utils/iterator';
 
 
 const NEW_SCROLLING_MODE = 'scrolling.newMode';
@@ -381,8 +380,8 @@ export class VirtualDataLoader {
         const isVirtualMode = this._controller.isVirtualMode();
 
         if(!isBase && isVirtualMode) {
-            each(this._cache, function() {
-                itemsCount += this.itemsCount;
+            this._cache.forEach((cacheItem) => {
+                itemsCount += cacheItem.itemsCount;
             });
         } else {
             itemsCount = this._dataOptions.itemsCount();
