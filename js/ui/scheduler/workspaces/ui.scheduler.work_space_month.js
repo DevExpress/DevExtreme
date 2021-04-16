@@ -5,7 +5,6 @@ import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
 import { getBoundingRect } from '../../../core/utils/position';
 import dateLocalization from '../../../localization/date';
-import { isDefined } from '../../../core/utils/type';
 
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 
@@ -137,11 +136,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     _setFirstViewDate() {
         const firstMonthDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
 
-        const firstDayOfWeekOption = this._firstDayOfWeek();
-
-        const firstDayOfWeek = isDefined(firstDayOfWeekOption)
-            ? firstDayOfWeekOption
-            : dateLocalization.firstDayOfWeekIndex();
+        const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
 
         this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
         this._setStartDayHour(this._firstViewDate);
