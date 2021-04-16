@@ -12,8 +12,8 @@ import DataSource, {
 
 
 import {
-  ComponentEvent,
-  ComponentInitializedEvent,
+  EventInfo,
+  InitializedEventInfo,
   ChangedOptionInfo
 } from '../events/index';
 
@@ -23,7 +23,7 @@ import Widget, {
 
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxDiagram>;
+export type ContentReadyEvent = EventInfo<dxDiagram>;
 
 /** @public */
 export type CustomCommandEvent = {
@@ -33,26 +33,26 @@ export type CustomCommandEvent = {
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDiagram>;
+export type DisposingEvent = EventInfo<dxDiagram>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDiagram>;
+export type InitializedEvent = InitializedEventInfo<dxDiagram>;
 
 /** @public */
-export type ItemClickEvent = ComponentEvent<dxDiagram> & {
+export type ItemClickEvent = EventInfo<dxDiagram> & {
     readonly item: dxDiagramItem;
 }
 
 /** @public */
-export type ItemDblClickEvent = ComponentEvent<dxDiagram> & {
+export type ItemDblClickEvent = EventInfo<dxDiagram> & {
     readonly item: dxDiagramItem;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDiagram> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDiagram> & ChangedOptionInfo;
 
 /** @public */
-export type RequestEditOperationEvent = ComponentEvent<dxDiagram> & {
+export type RequestEditOperationEvent = EventInfo<dxDiagram> & {
     readonly operation: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
     readonly args: dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs;
     readonly reason: 'checkUIElementAvailability' | 'modelModification';
@@ -60,13 +60,13 @@ export type RequestEditOperationEvent = ComponentEvent<dxDiagram> & {
 }
 
 /** @public */
-export type RequestLayoutUpdateEvent = ComponentEvent<dxDiagram> & {
+export type RequestLayoutUpdateEvent = EventInfo<dxDiagram> & {
     readonly changes: any[];
     allowed?: boolean 
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxDiagram> & {
+export type SelectionChangedEvent = EventInfo<dxDiagram> & {
     readonly items: Array<dxDiagramItem>;
 }
 
@@ -1843,6 +1843,7 @@ export interface dxDiagramMoveShapeArgs {
   };
 }
 
+/** @public */
 export type Options = dxDiagramOptions;
 
 /** @deprecated use Options instead */

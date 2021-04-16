@@ -3,9 +3,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -14,23 +14,23 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ClickEvent = ComponentNativeEvent<dxSpeedDialAction> & {
+export type ClickEvent = NativeEventInfo<dxSpeedDialAction> & {
     actionElement?: TElement
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxSpeedDialAction> & {
+export type ContentReadyEvent = EventInfo<dxSpeedDialAction> & {
     actionElement?: TElement
 };
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSpeedDialAction>;
+export type DisposingEvent = EventInfo<dxSpeedDialAction>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSpeedDialAction>;
+export type InitializedEvent = InitializedEventInfo<dxSpeedDialAction>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSpeedDialAction> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSpeedDialAction> & ChangedOptionInfo;
 
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
@@ -98,6 +98,7 @@ export default class dxSpeedDialAction extends Widget {
     constructor(element: TElement, options?: dxSpeedDialActionOptions)
 }
 
+/** @public */
 export type Options = dxSpeedDialActionOptions;
 
 /** @deprecated use Options instead */

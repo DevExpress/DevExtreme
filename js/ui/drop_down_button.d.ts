@@ -16,9 +16,9 @@ import DataSource, {
 
 import {
     TEvent,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
@@ -35,30 +35,30 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ButtonClickEvent = ComponentNativeEvent<dxDropDownButton> & {
+export type ButtonClickEvent = NativeEventInfo<dxDropDownButton> & {
     readonly selectedItem?: any;
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxDropDownButton>;
+export type ContentReadyEvent = EventInfo<dxDropDownButton>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDropDownButton>;
+export type DisposingEvent = EventInfo<dxDropDownButton>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDropDownButton>;
+export type InitializedEvent = InitializedEventInfo<dxDropDownButton>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxDropDownButton> & {
+export type ItemClickEvent = NativeEventInfo<dxDropDownButton> & {
     readonly itemData?: any;
     readonly itemElement: TElement;
 };
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDropDownButton> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDropDownButton> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentNativeEvent<dxDropDownButton> & {
+export type SelectionChangedEvent = NativeEventInfo<dxDropDownButton> & {
     readonly item: any;
     readonly previousItem: any;
 }
@@ -339,6 +339,7 @@ export interface dxDropDownButtonItem extends dxListItem {
     onClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent }) => void) | string;
 }
 
+/** @public */
 export type Options = dxDropDownButtonOptions;
 
 /** @deprecated use Options instead */
