@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import translator from 'animation/translator';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import animationFrame from 'animation/frame';
@@ -278,7 +277,7 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
         onEnd: function() {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
-                assert.roughEqual(location.top, -50, 1, 'scroll to correctly vertical position');
+                assert.roughEqual(location.top, -50, 1.01, 'scroll to correctly vertical position');
             }
             wasFirstMove = true;
         }
@@ -299,18 +298,25 @@ QUnit.test('scrollOffset', function(assert) {
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
 
-    translator.move($content, { top: -10 });
+    pointerMock($content)
+        .start()
+        .down()
+        .move(0, -10);
 
     assert.deepEqual($scrollable.dxScrollable('scrollOffset'), { top: 10, left: 0 }, 'scrollOffset is correct');
 });
 
 QUnit.test('scrollLeft', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
-        useNative: false
+        useNative: false,
+        direction: 'horizontal'
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
 
-    translator.move($content, { left: -10 });
+    pointerMock($content)
+        .start()
+        .down()
+        .move(-10, 0);
 
     assert.equal($scrollable.dxScrollable('scrollLeft'), 10, 'scrollLeft is correct');
 });
@@ -321,7 +327,10 @@ QUnit.test('scrollTop', function(assert) {
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
 
-    translator.move($content, { top: -10 });
+    pointerMock($content)
+        .start()
+        .down()
+        .move(0, -10);
 
     assert.equal($scrollable.dxScrollable('scrollTop'), 10, 'scrollTop is correct');
 });
