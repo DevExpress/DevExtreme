@@ -137,9 +137,12 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: { focusStateEnabled: true },
 }, {
+  // NOTE: useInkRipple temporarily set to false
+  //       untill inlRipple styles dosn't
+  //       look properly.
   // eslint-disable-next-line import/no-named-as-default-member
   device: (): boolean => isMaterial(current()),
-  options: { useInkRipple: true },
+  options: { useInkRipple: false },
 }]);
 
 @Component({
