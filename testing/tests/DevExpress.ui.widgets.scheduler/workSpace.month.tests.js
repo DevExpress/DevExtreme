@@ -1,8 +1,6 @@
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import localization from 'localization';
 
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
@@ -436,32 +434,6 @@ module('Work Space Month', () => {
 
             this.instance.option('intervalCount', 4);
             assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 4, 28, 0, 0), new Date(2017, 8, 30, 23, 59)], 'Range is OK');
-        });
-    });
-
-    module('Day of the week order', {
-        beforeEach: function() {
-            initTestMarkup();
-        }
-    }, () => {
-        test('First day of week should be correct in "en-GB" locale (T988896)', function(assert) {
-            const locale = localization.locale();
-            localization.locale('en-GB');
-
-            const scheduler = createWrapper({
-                views: ['month'],
-                currentView: 'month',
-                currentDate: new Date(2021, 4, 27),
-                firstDayOfWeek: 0,
-            });
-
-            const firstDayOfWeek = scheduler.workSpace.getOrdinaryHeaderPanelCells().eq(0).text();
-            const lastDayOfWeek = scheduler.workSpace.getOrdinaryHeaderPanelCells().eq(6).text();
-
-            assert.equal(firstDayOfWeek, 'Sun', 'First day of weel is sunday');
-            assert.equal(lastDayOfWeek, 'Sat', 'First day of weel is saturday');
-
-            localization.locale(locale);
         });
     });
 });
