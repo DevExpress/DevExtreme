@@ -1394,7 +1394,6 @@
           {
             "Title": "Single Row Selection",
             "Name": "SingleRowSelection",
-            "DocUrl": "Guide/UI_Components/TreeList/Selection/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",

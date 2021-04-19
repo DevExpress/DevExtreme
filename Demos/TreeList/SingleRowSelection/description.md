@@ -1,1 +1,1 @@
-The TreeList component supports two row selection modes: single and multiple. In&nbsp;this demo, the single mode is&nbsp;utilized. To&nbsp;select a&nbsp;row, just click&nbsp;it.
+In this demo, the TreeList allows you to select only one row at a time. To enable this mode, set the **selection**.[mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/selection/#mode) property to *"single"*.
