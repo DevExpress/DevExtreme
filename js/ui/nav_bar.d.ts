@@ -3,9 +3,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -20,31 +20,31 @@ import dxTabs, {
 } from './tabs';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxNavBar>;
+export type ContentReadyEvent = EventInfo<dxNavBar>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxNavBar>;
+export type DisposingEvent = EventInfo<dxNavBar>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxNavBar>;
+export type InitializedEvent = InitializedEventInfo<dxNavBar>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxNavBar> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxNavBar> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxNavBar> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxNavBar> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxNavBar> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxNavBar> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxNavBar> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxNavBar> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxNavBar> & SelectionChangedInfo;
 
 export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
     /**
@@ -80,6 +80,7 @@ export interface dxNavBarItem extends dxTabsItem {
     badge?: string;
 }
 
+/** @public */
 export type Options = dxNavBarOptions;
 
 /** @deprecated use Options instead */

@@ -17,9 +17,9 @@ import DataSource, {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -30,7 +30,7 @@ import BaseWidget, {
     Font,
     WordWrapType,
     VizTextOverflowType,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -40,54 +40,54 @@ export interface InteractionInfo {
 }
 
 /** @public */
-export type ClickEvent = ComponentNativeEvent<dxTreeMap> & {
+export type ClickEvent = NativeEventInfo<dxTreeMap> & {
   readonly node: dxTreeMapNode
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTreeMap>;
+export type DisposingEvent = EventInfo<dxTreeMap>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxTreeMap>;
+export type DrawnEvent = EventInfo<dxTreeMap>;
 
 /** @public */
-export type DrillEvent = ComponentEvent<dxTreeMap> & {
+export type DrillEvent = EventInfo<dxTreeMap> & {
   readonly node: dxTreeMapNode;
 }
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxTreeMap>;
+export type ExportedEvent = EventInfo<dxTreeMap>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxTreeMap> & ExportInfo;
+export type ExportingEvent = EventInfo<dxTreeMap> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxTreeMap>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxTreeMap>;
 
 /** @public */
-export type HoverChangedEvent = ComponentEvent<dxTreeMap> & InteractionInfo;
+export type HoverChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxTreeMap> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxTreeMap> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTreeMap>;
+export type InitializedEvent = InitializedEventInfo<dxTreeMap>;
 
 /** @public */
-export type NodesInitializedEvent = ComponentEvent<dxTreeMap> & {
+export type NodesInitializedEvent = EventInfo<dxTreeMap> & {
     readonly root: dxTreeMapNode;
 }
 
 /** @public */
-export type NodesRenderingEvent = ComponentEvent<dxTreeMap> & {
+export type NodesRenderingEvent = EventInfo<dxTreeMap> & {
     readonly node: dxTreeMapNode;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTreeMap> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTreeMap> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTreeMap> & InteractionInfo;
+export type SelectionChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
 
 
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
@@ -837,6 +837,7 @@ export interface dxTreeMapNode {
     value(): number;
 }
 
+/** @public */
 export type Options = dxTreeMapOptions;
 
 /** @deprecated use Options instead */

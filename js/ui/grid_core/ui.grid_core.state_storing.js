@@ -183,6 +183,7 @@ export const stateStoringModule = {
                     }
 
                     if(that.option('focusedRowEnabled') && state.focusedRowKey !== undefined) {
+                        that.option('focusedRowIndex', -1);
                         that.option('focusedRowKey', state.focusedRowKey);
                     }
 

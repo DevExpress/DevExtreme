@@ -16,9 +16,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -36,40 +36,40 @@ export interface TitleRenderedInfo {
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxPopup>;
+export type ContentReadyEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxPopup>;
+export type DisposingEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type HidingEvent = ComponentEvent<dxPopup> & Cancelable;
+export type HidingEvent = Cancelable & EventInfo<dxPopup>;
 
 /** @public */
-export type HiddenEvent = ComponentEvent<dxPopup>;
+export type HiddenEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxPopup>;
+export type InitializedEvent = InitializedEventInfo<dxPopup>;
 
 /** @public */
-export type ShownEvent = ComponentEvent<dxPopup>;
+export type ShownEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type ResizeEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
+export type ResizeEvent = NativeEventInfo<dxPopup> & ResizeInfo;
 
 /** @public */
-export type ResizeStartEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
+export type ResizeStartEvent = NativeEventInfo<dxPopup> & ResizeInfo;
 
 /** @public */
-export type ResizeEndEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
+export type ResizeEndEvent = NativeEventInfo<dxPopup> & ResizeInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxPopup> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = ComponentEvent<dxPopup>;
+export type ShowingEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type TitleRenderedEvent = ComponentEvent<dxPopup> & TitleRenderedInfo;
+export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
@@ -319,6 +319,7 @@ export default class dxPopup extends dxOverlay {
     constructor(element: TElement, options?: dxPopupOptions)
 }
 
+/** @public */
 export type Options = dxPopupOptions;
 
 /** @deprecated use Options instead */

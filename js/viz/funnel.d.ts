@@ -17,9 +17,9 @@ import DataSource, {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -40,7 +40,7 @@ import BaseWidget, {
     Font,
     WordWrapType,
     VizTextOverflowType,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -64,40 +64,40 @@ interface FunnelItemInfo {
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxFunnel>;
+export type DisposingEvent = EventInfo<dxFunnel>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxFunnel>;
+export type DrawnEvent = EventInfo<dxFunnel>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxFunnel>;
+export type ExportedEvent = EventInfo<dxFunnel>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxFunnel> & ExportInfo;
+export type ExportingEvent = EventInfo<dxFunnel> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxFunnel>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxFunnel>;
 
 /** @public */
-export type HoverChangedEvent = ComponentEvent<dxFunnel> & FunnelItemInfo;
+export type HoverChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxFunnel> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxFunnel> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxFunnel>;
+export type InitializedEvent = InitializedEventInfo<dxFunnel>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxFunnel> & FunnelItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
 
 /** @public */
-export type LegendClickEvent = ComponentNativeEvent<dxFunnel> & FunnelItemInfo;
+export type LegendClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxFunnel> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxFunnel> & FunnelItemInfo;
+export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
 
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
@@ -792,6 +792,7 @@ export interface dxFunnelItem {
     value?: number;
 }
 
+/** @public */
 export type Options = dxFunnelOptions;
 
 /** @deprecated use Options instead */

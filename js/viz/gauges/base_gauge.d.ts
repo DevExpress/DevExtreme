@@ -12,7 +12,7 @@ import {
 } from '../../core/templates/template';
 
 import {
-    ComponentEvent
+    EventInfo
 } from '../../events/index';
 
 import {
@@ -65,7 +65,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: ComponentEvent<T> & TooltipInfo) => void);
+    onTooltipHidden?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
      * @default null
@@ -79,7 +79,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: ComponentEvent<T> & TooltipInfo) => void);
+    onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
      * @type object

@@ -15,7 +15,7 @@ import {
 } from '../../core/utils/deferred';
 
 import {
-    ComponentEvent
+    EventInfo
 } from '../../events/index';
 
 import {
@@ -38,7 +38,7 @@ export interface IncidentInfo {
   readonly target: any;
 }
 
-export interface ComponentFileSavingEvent<T> {
+export interface FileSavingEventInfo<T> {
   readonly component: T;
   readonly element: TElement;
   readonly fileName: string;
@@ -95,7 +95,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrawn?: ((e: ComponentEvent<T>) => void);
+    onDrawn?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
@@ -107,7 +107,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExported?: ((e: ComponentEvent<T>) => void);
+    onExported?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -122,7 +122,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExporting?: ((e: ComponentEvent<T> & ExportInfo) => void);
+    onExporting?: ((e: EventInfo<T> & ExportInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -137,7 +137,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onFileSaving?: ((e: ComponentFileSavingEvent<T>) => void);
+    onFileSaving?: ((e: FileSavingEventInfo<T>) => void);
     /**
      * @docid
      * @default null
@@ -150,7 +150,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onIncidentOccurred?: ((e: ComponentEvent<T> & IncidentInfo) => void);
+    onIncidentOccurred?: ((e: EventInfo<T> & IncidentInfo) => void);
     /**
      * @docid
      * @default false

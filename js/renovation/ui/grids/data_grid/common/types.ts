@@ -5,4 +5,7 @@ export interface GridInstance extends dxDataGrid {
   getView: (name: string) => any;
   getController: (name: string) => any;
   resize: () => void;
+  updateDimensions: (checkSize?: boolean) => void;
+  isScrollbarVisible: () => boolean;
+  getTopVisibleRowData: () => any;
 }

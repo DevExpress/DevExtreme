@@ -15,9 +15,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -51,71 +51,71 @@ export interface ScrollInfo {
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxList>;
+export type ContentReadyEvent = EventInfo<dxList>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxList>;
+export type DisposingEvent = EventInfo<dxList>;
 
 /** @public */
-export type GroupRenderedEvent = ComponentEvent<dxList> & {
+export type GroupRenderedEvent = EventInfo<dxList> & {
     readonly groupData?: any;
     readonly groupElement?: TElement;
     readonly groupIndex?: number;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxList>;
+export type InitializedEvent = InitializedEventInfo<dxList>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxList> & ListItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxList> & ListItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxList> & ListItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxList> & ListItemInfo;
 
 /** @public */
-export type ItemDeletedEvent = ComponentEvent<dxList> & ListItemInfo;
+export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
 
 /** @public */
-export type ItemDeletingEvent = ComponentEvent<dxList> & ListItemInfo & {
+export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
     cancel?: boolean | TPromise<void>;
 }
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxList> & ListItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxList> & ListItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxList> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxList> & ItemInfo;
 
 /** @public */
-export type ItemReorderedEvent = ComponentEvent<dxList> & ListItemInfo & {
+export type ItemReorderedEvent = EventInfo<dxList> & ListItemInfo & {
     readonly fromIndex: number;
     readonly toIndex: number;
 }
 
 /** @public */
-export type ItemSwipeEvent = ComponentNativeEvent<dxList> & ListItemInfo & {
+export type ItemSwipeEvent = NativeEventInfo<dxList> & ListItemInfo & {
     readonly direction: string;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxList> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxList> & ChangedOptionInfo;
 
 /** @public */
-export type PageLoadingEvent = ComponentEvent<dxList>;
+export type PageLoadingEvent = EventInfo<dxList>;
 
 /** @public */
-export type PullRefreshEvent = ComponentEvent<dxList>;
+export type PullRefreshEvent = EventInfo<dxList>;
 
 /** @public */
-export type ScrollEvent = ComponentNativeEvent<dxList> & ScrollInfo;
+export type ScrollEvent = NativeEventInfo<dxList> & ScrollInfo;
 
 /** @public */
-export type SelectAllValueChangedEvent = ComponentEvent<dxList> & {
+export type SelectAllValueChangedEvent = EventInfo<dxList> & {
     readonly value: boolean;
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxList> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxList> & SelectionChangedInfo;
 
 export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
     /**
@@ -801,6 +801,7 @@ export interface dxListItem extends CollectionWidgetItem {
     showChevron?: boolean;
 }
 
+/** @public */
 export type Options = dxListOptions;
 
 /** @deprecated use Options instead */

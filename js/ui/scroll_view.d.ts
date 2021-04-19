@@ -7,36 +7,36 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
 import dxScrollable, {
     dxScrollableOptions,
-    ComponentScrollEvent
+    ScrollEventInfo
 } from './scroll_view/ui.scrollable';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxScrollView>;
+export type DisposingEvent = EventInfo<dxScrollView>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxScrollView>;
+export type InitializedEvent = InitializedEventInfo<dxScrollView>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxScrollView> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxScrollView> & ChangedOptionInfo;
 
 /** @public */
-export type PullDownEvent = ComponentEvent<dxScrollView>;
+export type PullDownEvent = EventInfo<dxScrollView>;
 
 /** @public */
-export type ReachBottomEvent = ComponentEvent<dxScrollView>;
+export type ReachBottomEvent = EventInfo<dxScrollView>;
 
 /** @public */
-export type ScrollEvent = ComponentScrollEvent<dxScrollView>;
+export type ScrollEvent = ScrollEventInfo<dxScrollView>;
 
 /** @public */
-export type UpdatedEvent = ComponentScrollEvent<dxScrollView>;
+export type UpdatedEvent = ScrollEventInfo<dxScrollView>;
 
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
@@ -125,6 +125,7 @@ export default class dxScrollView extends dxScrollable {
     release(preventScrollBottom: boolean): TPromise<void>;
 }
 
+/** @public */
 export type Options = dxScrollViewOptions;
 
 /** @deprecated use Options instead */

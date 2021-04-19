@@ -3,9 +3,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -20,19 +20,19 @@ import {
 import dxTrackBar from './track_bar';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxRangeSlider>;
+export type ContentReadyEvent = EventInfo<dxRangeSlider>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxRangeSlider>;
+export type DisposingEvent = EventInfo<dxRangeSlider>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxRangeSlider>;
+export type InitializedEvent = InitializedEventInfo<dxRangeSlider>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxRangeSlider> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxRangeSlider> & ValueChangedInfo & {
+export type ValueChangedEvent = NativeEventInfo<dxRangeSlider> & ValueChangedInfo & {
     readonly start?: number;
     readonly end?: number;
     readonly value?: Array<number>;
@@ -102,6 +102,7 @@ export default class dxRangeSlider extends dxTrackBar {
     constructor(element: TElement, options?: dxRangeSliderOptions)
 }
 
+/** @public */
 export type Options = dxRangeSliderOptions;
 
 /** @deprecated use Options instead */

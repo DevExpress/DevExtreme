@@ -11,8 +11,8 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -21,22 +21,22 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxDeferRendering>;
+export type ContentReadyEvent = EventInfo<dxDeferRendering>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDeferRendering>;
+export type DisposingEvent = EventInfo<dxDeferRendering>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDeferRendering>;
+export type InitializedEvent = InitializedEventInfo<dxDeferRendering>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDeferRendering> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDeferRendering> & ChangedOptionInfo;
 
 /** @public */
-export type RenderedEvent = ComponentEvent<dxDeferRendering>;
+export type RenderedEvent = EventInfo<dxDeferRendering>;
 
 /** @public */
-export type ShownEvent = ComponentEvent<dxDeferRendering>;
+export type ShownEvent = EventInfo<dxDeferRendering>;
 
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
@@ -97,6 +97,7 @@ export default class dxDeferRendering extends Widget {
     constructor(element: TElement, options?: dxDeferRenderingOptions)
 }
 
+/** @public */
 export type Options = dxDeferRenderingOptions;
 
 /** @deprecated use Options instead */
