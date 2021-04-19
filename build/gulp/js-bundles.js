@@ -56,6 +56,10 @@ function prepareDebugMeta(watch) {
 
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
+    debugConfig.resolve = {
+        mainFields: ['main'],
+        modules: ['node_modules'],
+    };
 
     if(!ctx.uglify) {
         debugConfig.devtool = 'eval-source-map';

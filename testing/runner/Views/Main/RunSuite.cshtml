@@ -190,7 +190,7 @@
                     'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
                     'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
-                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom/dist/cjs/index.js")',
+                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
                     'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/artifacts/js/dx-gantt.js")',
@@ -214,6 +214,11 @@
                     'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
                 },
                 packages: {
+                    '@@devextreme/vdom': {
+                        main: './dist/cjs/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
                     '': {
                         defaultExtension: 'js'
                     },
@@ -234,6 +239,9 @@
                         main: 'index'
                     },
                 },
+                packageConfigPaths: [
+                    "@@devextreme/*/package.json",
+                ],
                 meta: {
                     '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")': {
                         format: 'global',
