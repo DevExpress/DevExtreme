@@ -4,7 +4,10 @@ import type { DataGrid } from '../ui/grids/data_grid/data_grid';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
 
 export default class DataGridWrapper extends Component {
+    _onInitialized!: Function;
+
     static registerModule = gridCore.registerModule.bind(gridCore);
+
     beginUpdate() {
         const gridInstance = (this.viewRef as DataGrid)?.getComponentInstance();
 
