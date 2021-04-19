@@ -227,7 +227,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const selectAllExists = this._$selectAllItem && this._$selectAllItem.length;
         switch(value) {
             case 'selectAll':
-                !selectAllExists && this._renderSelectAllItem();
+                if(!selectAllExists) {
+                    this._createSelectAllValueChangedAction();
+                    this._renderSelectAllItem();
+                }
                 break;
             case 'normal':
                 if(selectAllExists) {
@@ -1033,15 +1036,17 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
             text: this.option('selectAllText'),
-            onValueChanged: function(args) {
-                this._toggleSelectAll(args);
-                this._fireSelectAllValueChanged(args.value);
-            }.bind(this)
+            onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
         });
 
         this._toggleSelectedClass(this._$selectAllItem, value);
 
         $container.before(this._$selectAllItem);
+    },
+
+    _onSelectAllCheckboxValueChanged: function(args) {
+        this._toggleSelectAll(args);
+        this._fireSelectAllValueChanged(args.value);
     },
 
     _toggleSelectAll: function(args) {
@@ -1171,15 +1176,19 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this._updateItemsUI();
 
                 this._fireItemSelectionChanged(this._getNode(key));
-                this._fireSelectionChanged();
             });
         }
 
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
+        const isAllSelected = this._dataAdapter.isAllSelected();
+        const needFireSelectAllChanged = this._selectAllEnabled() && this._$selectAllItem.dxCheckBox('instance').option('value') !== isAllSelected;
         this._updateItemsUI();
 
         this._fireItemSelectionChanged(node, dxEvent);
         this._fireSelectionChanged();
+        if(needFireSelectAllChanged) {
+            this._fireSelectAllValueChanged(isAllSelected);
+        }
         return true;
     },
 
@@ -1217,7 +1226,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
 
         if(this._selectAllEnabled()) {
-            this._$selectAllItem.dxCheckBox('instance').option('value', this._dataAdapter.isAllSelected());
+            const selectAllCheckbox = this._$selectAllItem.dxCheckBox('instance');
+
+            selectAllCheckbox._setOptionWithoutOptionChange('onValueChanged', undefined);
+            selectAllCheckbox.option('value', this._dataAdapter.isAllSelected());
+            selectAllCheckbox._setOptionWithoutOptionChange('onValueChanged', this._onSelectAllCheckboxValueChanged.bind(this));
         }
     },
 
