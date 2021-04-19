@@ -638,7 +638,6 @@ describe('CheckBox', () => {
       afterEach(() => jest.resetAllMocks());
 
       describe('useInkRiple', () => {
-        // NOTE: it's disabled until styles fix: see https://trello.com/c/5Pbm18YA/4165-enable-inkripple-after-fixing-styles
         // eslint-disable-next-line
         it.skip('should be true if material theme', () => {
           // eslint-disable-next-line  @typescript-eslint/no-explicit-any
