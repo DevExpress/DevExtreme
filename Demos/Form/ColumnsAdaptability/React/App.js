@@ -5,27 +5,27 @@ import employee from './data.js';
 
 const colCountByScreen = {
   sm: 2,
-  md: 3
+  md: 4
 };
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      useColCountByScreen: true
+      calculateColCountAutomatically: false
     };
-    this.onUseColCountByScreenChanged = this.onUseColCountByScreenChanged.bind(this);
+    this.onCalculateColCountAutomaticallyChanged = this.onCalculateColCountAutomaticallyChanged.bind(this);
   }
 
   render() {
-    const { useColCountByScreen } = this.state;
+    const { calculateColCountAutomatically } = this.state;
 
     return (
       <div>
         <Form
           id="form"
           formData={employee}
-          colCountByScreen={useColCountByScreen ? colCountByScreen : null}
+          colCountByScreen={calculateColCountAutomatically ? null : colCountByScreen}
           labelLocation="top"
           minColWidth={233}
           colCount="auto"
@@ -35,9 +35,9 @@ class App extends React.Component {
           <div className="caption">Options</div>
           <div className="option">
             <CheckBox
-              text="Set the count of columns regardless of screen size"
-              value={useColCountByScreen}
-              onValueChanged={this.onUseColCountByScreenChanged}
+              text="Calculate the number of columns automatically"
+              value={calculateColCountAutomatically}
+              onValueChanged={this.onCalculateColCountAutomaticallyChanged}
             />
           </div>
         </div>
@@ -45,9 +45,9 @@ class App extends React.Component {
     );
   }
 
-  onUseColCountByScreenChanged(e) {
+  onCalculateColCountAutomaticallyChanged(e) {
     this.setState({
-      useColCountByScreen: e.value
+      calculateColCountAutomatically: e.value
     });
   }
 }

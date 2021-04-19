@@ -5,7 +5,7 @@ $(function(){
         minColWidth: 233,
         colCount: "auto",
         colCountByScreen: {
-            md: 3,
+            md: 4,
             sm: 2
         },
         screenByWidth: function(width) {
@@ -16,16 +16,14 @@ $(function(){
     $("#useColCountByScreen").dxCheckBox({
         onValueChanged: function(e) {
             if(e.value) {
-                form.option("colCountByScreen.sm", 2);
-                form.option("colCountByScreen.md", 3);
-            } else {
                 form.option("colCountByScreen.sm", undefined);
                 form.option("colCountByScreen.md", undefined);
+            } else {
+                form.option("colCountByScreen.sm", 2);
+                form.option("colCountByScreen.md", 4);
             }
         },
-        text: "Set the count of columns regardless of screen size",
-        value: true
+        text: "Calculate the number of columns automatically",
+        value: false
     });
-    
-    
 });

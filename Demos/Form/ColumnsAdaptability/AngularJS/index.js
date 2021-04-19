@@ -2,7 +2,7 @@ var DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.colCountByScreen = {
-        md: 3,
+        md: 4,
         sm: 2
     };
     
@@ -22,14 +22,14 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.useColCountByScreen = {
         onValueChanged: function(e) {
             if(e.value) {
-                $scope.colCountByScreen.sm = 2;
-                $scope.colCountByScreen.md = 3;
-            } else {
                 $scope.colCountByScreen.sm = null;
                 $scope.colCountByScreen.md = null;
+            } else {
+                $scope.colCountByScreen.sm = 2;
+                $scope.colCountByScreen.md = 4;
             }
         },
-        text: "Set the count of columns regardless of screen size",
-        value: true
+        text: "Calculate the number of columns automatically",
+        value: false
     };
 });

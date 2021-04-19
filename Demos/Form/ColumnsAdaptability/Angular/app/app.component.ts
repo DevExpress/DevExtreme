@@ -22,7 +22,7 @@ export class AppComponent {
     constructor( service: Service) { 
         this.employee = service.getEmployee();
         this.colCountByScreen = {
-            md: 3,
+            md: 4,
             sm: 2
         };
     }
@@ -32,12 +32,12 @@ export class AppComponent {
     }
     valueChanged(e) {
         if (e.value) {
-            this.colCountByScreen = {
-                md: 3,
-                sm: 2
-            }
-        } else {
             this.colCountByScreen = null;
+        } else {
+            this.colCountByScreen = {
+                md: 4,
+                sm: 2
+            };
         }
     }
 }
