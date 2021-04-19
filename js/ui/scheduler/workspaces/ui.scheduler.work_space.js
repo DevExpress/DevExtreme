@@ -1537,8 +1537,18 @@ class SchedulerWorkSpace extends WidgetObserver {
         }, 0);
     }
 
+    _getCalculatedFirstDayOfWeek() {
+        const firstDayOfWeekOption = this._firstDayOfWeek();
+
+        const firstDayOfWeek = isDefined(firstDayOfWeekOption)
+            ? firstDayOfWeekOption
+            : dateLocalization.firstDayOfWeekIndex();
+
+        return firstDayOfWeek;
+    }
+
     _setFirstViewDate() {
-        const firstDayOfWeek = isDefined(this._firstDayOfWeek()) ? this._firstDayOfWeek() : dateLocalization.firstDayOfWeekIndex();
+        const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
 
         this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), firstDayOfWeek);
         this._setStartDayHour(this._firstViewDate);

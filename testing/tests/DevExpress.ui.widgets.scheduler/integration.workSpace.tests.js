@@ -4,6 +4,7 @@ import dateLocalization from 'localization/date';
 import { SchedulerTestWrapper, createWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import localization from 'localization';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -2071,3 +2072,30 @@ QUnit.module('Markup', () => {
         assert.roughEqual(rowWidth, rowWidthByCells, 3.1, 'Correct row width');
     });
 });
+
+
+[
+    'month',
+    'week'
+].forEach(view => {
+    QUnit.test(`First day of week should be correct in "en-GB" locale (T988896) in ${view} view`, function(assert) {
+        const locale = localization.locale();
+        localization.locale('en-GB');
+
+        const scheduler = createWrapper({
+            views: [view],
+            currentView: view,
+            currentDate: new Date(2021, 4, 27),
+            firstDayOfWeek: 0,
+        });
+
+        const firstDayOfWeek = scheduler.workSpace.getOrdinaryHeaderPanelCells().eq(0).text().substr(0, 3);
+        const lastDayOfWeek = scheduler.workSpace.getOrdinaryHeaderPanelCells().eq(6).text().substr(0, 3);
+
+        assert.equal(firstDayOfWeek, 'Sun', 'First day of week is sunday');
+        assert.equal(lastDayOfWeek, 'Sat', 'Last day of week is saturday');
+
+        localization.locale(locale);
+    });
+});
+
