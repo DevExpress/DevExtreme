@@ -9,7 +9,7 @@ class Dummy {
 it('simple value', () => {
   const props = { name: 'a' };
   const option = { name: 'b' };
-  updatePropsImmutable(props, option, 'name', 'name', 'b');
+  updatePropsImmutable(props, option, 'name', 'name');
   expect(props.name).toBe('b');
 });
 
