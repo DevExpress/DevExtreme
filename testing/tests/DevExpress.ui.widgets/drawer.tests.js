@@ -854,7 +854,7 @@ QUnit.module('Drawer behavior', () => {
 
                             QUnit.test(`dxResize event: {opened: false} -> {opened: true} for {${openedStateMode}, ${revealMode}, ${position}, shading: ${shading}, minSize: ${minSize}, animation: ${animationEnabled}}`, function(assert) {
                                 const done = assert.async();
-                                const triggerResizeEventInitial = visibilityChange.triggerResizeEvent;
+                                const triggerResizeEventInitial = domUtils.triggerResizeEvent;
                                 let resizeCallCount = 0;
 
                                 const drawer = $('#drawer').dxDrawer({
@@ -871,7 +871,7 @@ QUnit.module('Drawer behavior', () => {
                                     minSize: minSize
                                 }).dxDrawer('instance');
 
-                                visibilityChange.triggerResizeEvent = ($element) => {
+                                domUtils.triggerResizeEvent = ($element) => {
                                     resizeCallCount++;
                                     assert.strictEqual(resizeCallCount, 1, 'resize event should be triggered once');
                                     assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
@@ -885,7 +885,7 @@ QUnit.module('Drawer behavior', () => {
                                     assert.strictEqual(viewRect.width, expectedViewRect.width, 'ViewContent width');
                                     assert.strictEqual(viewRect.height, expectedViewRect.height, 'ViewContent height');
 
-                                    visibilityChange.triggerResizeEvent = triggerResizeEventInitial;
+                                    domUtils.triggerResizeEvent = triggerResizeEventInitial;
                                     done();
                                 };
 
