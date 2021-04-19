@@ -4,6 +4,7 @@ import each from 'jest-each';
 import {
   ScrollView,
   viewFunction,
+  ScrollViewProps,
 } from '../scroll_view';
 
 import {
@@ -14,7 +15,6 @@ import devices from '../../../../core/devices';
 import { touch } from '../../../../core/utils/support';
 import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
-import { ScrollViewProps } from '../scroll_view_props';
 
 import { isDefined } from '../../../../core/utils/type';
 

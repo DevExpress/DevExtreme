@@ -12,9 +12,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -115,10 +115,10 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
 export interface DraggableBase { }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDraggable>;
+export type DisposingEvent = EventInfo<dxDraggable>;
 
 /** @public */
-export type DragEndEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -128,7 +128,7 @@ export type DragEndEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
 }
 
 /** @public */
-export type DragMoveEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     readonly itemData?: any;
     readonly itemElement?: TElement;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -138,17 +138,17 @@ export type DragMoveEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
 }
 
 /** @public */
-export type DragStartEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     itemData?: any;
     readonly itemElement?: TElement;
     readonly fromData?: any;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDraggable>;
+export type InitializedEvent = InitializedEventInfo<dxDraggable>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDraggable> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDraggable> & ChangedOptionInfo;
 
 
 /** @public */
@@ -248,6 +248,7 @@ export default class dxDraggable extends DOMComponent implements DraggableBase {
     constructor(element: TElement, options?: dxDraggableOptions)
 }
 
+/** @public */
 export type Options = dxDraggableOptions;
 
 /** @deprecated use Options instead */

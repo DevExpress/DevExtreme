@@ -8,7 +8,7 @@ import {
 
 /**
  * @public
-*/
+ */
 export interface CustomDialogOptions {
     title?: string,
     messageHtml?: string,

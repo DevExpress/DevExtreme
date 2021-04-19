@@ -7,10 +7,10 @@ import {
 } from '../core/utils/deferred';
 
 /**
-* @docid
-* @namespace DevExpress
-* @type object
-*/
+ * @docid
+ * @namespace DevExpress
+ * @type object
+ */
 export interface animationConfig {
     /**
      * @docid
@@ -89,12 +89,12 @@ export interface animationConfig {
 }
 
 /**
-* @docid
-* @section utils
-* @module animation/fx
-* @namespace DevExpress
-* @export default
-*/
+ * @docid
+ * @section utils
+ * @module animation/fx
+ * @namespace DevExpress
+ * @export default
+ */
 declare const fx: {
     /**
      * @docid

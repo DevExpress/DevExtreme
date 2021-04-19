@@ -4,9 +4,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -42,7 +42,7 @@ import {
     Font,
     WordWrapType,
     VizTextOverflowType,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
@@ -54,70 +54,70 @@ interface SeriesInteractionInfo {
 }
 
 /** @public */
-export type ArgumentAxisClickEvent = ComponentNativeEvent<dxChart> & {
+export type ArgumentAxisClickEvent = NativeEventInfo<dxChart> & {
     readonly argument: Date | number | string;
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxChart>;
+export type DisposingEvent = EventInfo<dxChart>;
 
 /** @public */
-export type DoneEvent = ComponentEvent<dxChart>;
+export type DoneEvent = EventInfo<dxChart>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxChart>;
+export type DrawnEvent = EventInfo<dxChart>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxChart>;
+export type ExportedEvent = EventInfo<dxChart>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxChart> & ExportInfo;
+export type ExportingEvent = EventInfo<dxChart> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxChart>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxChart>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxChart> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxChart>;
+export type InitializedEvent = InitializedEventInfo<dxChart>;
 
 /** @public */
-export type LegendClickEvent  = ComponentNativeEvent<dxChart> & {
+export type LegendClickEvent  = NativeEventInfo<dxChart> & {
     readonly target: chartSeriesObject;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxChart> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = ComponentNativeEvent<dxChart> & PointInteractionInfo;
+export type PointClickEvent = NativeEventInfo<dxChart> & PointInteractionInfo;
 
 /** @public */
-export type PointHoverChangedEvent = ComponentEvent<dxChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
 /** @public */
-export type PointSelectionChangedEvent = ComponentEvent<dxChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
 /** @public */
-export type SeriesClickEvent = ComponentNativeEvent<dxChart> & {
+export type SeriesClickEvent = NativeEventInfo<dxChart> & {
     readonly target: chartSeriesObject;
 }
 
 /** @public */
-export type SeriesHoverChangedEvent = ComponentEvent<dxChart> & SeriesInteractionInfo;
+export type SeriesHoverChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
 /** @public */
-export type SeriesSelectionChangedEvent = ComponentEvent<dxChart> & SeriesInteractionInfo;
+export type SeriesSelectionChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
 
 /** @public */
-export type ZoomEndEvent = Cancelable & ComponentNativeEvent<dxChart> & {
+export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart> & {
     readonly rangeStart: Date | number;
     readonly rangeEnd: Date | number;
     readonly axis: chartAxisObject;
@@ -129,18 +129,17 @@ export type ZoomEndEvent = Cancelable & ComponentNativeEvent<dxChart> & {
 }
 
 /** @public */
-export type ZoomStartEvent = Cancelable & ComponentNativeEvent<dxChart> & {
+export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly actionType?: 'zoom' | 'pan';
 }
 
-
 /**
-* @docid
-* @publicName Label
-* @type object
-*/
+ * @docid
+ * @publicName Label
+ * @type object
+ */
 export interface baseLabelObject {
     /**
      * @docid
@@ -191,10 +190,10 @@ export interface baseLabelObject {
 }
 
 /**
-* @docid
-* @publicName Point
-* @type object
-*/
+ * @docid
+ * @publicName Point
+ * @type object
+ */
 export interface basePointObject {
     /**
      * @docid
@@ -309,10 +308,10 @@ export interface basePointObject {
 }
 
 /**
-* @docid
-* @publicName Series
-* @type object
-*/
+ * @docid
+ * @publicName Series
+ * @type object
+ */
 export interface baseSeriesObject {
     /**
      * @docid
@@ -465,9 +464,9 @@ export interface baseSeriesObject {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface chartAxisObject {
     /**
      * @docid
@@ -488,10 +487,10 @@ export interface chartAxisObject {
 }
 
 /**
-* @docid
-* @publicName aggregationInfo
-* @type object
-*/
+ * @docid
+ * @publicName aggregationInfo
+ * @type object
+ */
 export interface chartPointAggregationInfoObject {
     /**
      * @docid
@@ -520,11 +519,11 @@ export interface chartPointAggregationInfoObject {
 }
 
 /**
-* @docid
-* @publicName Point
-* @type object
-* @inherits basePointObject
-*/
+ * @docid
+ * @publicName Point
+ * @type object
+ * @inherits basePointObject
+ */
 export interface chartPointObject extends basePointObject {
     /**
      * @docid
@@ -578,11 +577,11 @@ export interface chartPointObject extends basePointObject {
     size?: number | string;
 }
 /**
-* @docid
-* @publicName Series
-* @type object
-* @inherits baseSeriesObject
-*/
+ * @docid
+ * @publicName Series
+ * @type object
+ * @inherits baseSeriesObject
+ */
 export interface chartSeriesObject extends baseSeriesObject {
     /**
      * @docid
@@ -716,63 +715,63 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     crosshair?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#f05b41'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#f05b41'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.DashStyle
-      * @default 'solid'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.DashStyle
+       * @default 'solid'
+       */
       dashStyle?: DashStyleType,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       enabled?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       horizontalLine?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default "#f05b41"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default "#f05b41"
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.DashStyle
-        * @default 'solid'
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.DashStyle
+         * @default 'solid'
+         */
         dashStyle?: DashStyleType,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         label?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default "#f05b41"
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default "#f05b41"
+           */
           backgroundColor?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @type_function_param1 info:object
-          * @type_function_param1_field1 value:Date|Number|string
-          * @type_function_param1_field2 valueText:string
-          * @type_function_param1_field3 point:chartPointObject
-          * @type_function_return string
-          * @notUsedInTheme
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @type_function_param1 info:object
+           * @type_function_param1_field1 value:Date|Number|string
+           * @type_function_param1_field2 valueText:string
+           * @type_function_param1_field3 point:chartPointObject
+           * @type_function_return string
+           * @notUsedInTheme
+           */
           customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string),
           /**
            * @docid
@@ -781,10 +780,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
            */
           font?: Font,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @extends CommonVizFormat
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @extends CommonVizFormat
+           */
           format?: format,
           /**
            * @docid
@@ -794,50 +793,50 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           visible?: boolean
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         opacity?: number,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default true
+         */
         visible?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
         width?: number
       } | boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       label?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default "#f05b41"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default "#f05b41"
+         */
         backgroundColor?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type_function_param1 info:object
-        * @type_function_param1_field1 value:Date|Number|string
-        * @type_function_param1_field2 valueText:string
-        * @type_function_param1_field3 point:chartPointObject
-        * @type_function_return string
-        * @notUsedInTheme
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @type_function_param1 info:object
+         * @type_function_param1_field1 value:Date|Number|string
+         * @type_function_param1_field2 valueText:string
+         * @type_function_param1_field3 point:chartPointObject
+         * @type_function_return string
+         * @notUsedInTheme
+         */
         customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string),
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#FFFFFF' [prop](color)
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default '#FFFFFF' [prop](color)
          */
         font?: Font,
         /**
@@ -854,50 +853,50 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
         visible?: boolean
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       opacity?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       verticalLine?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default "#f05b41"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default "#f05b41"
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.DashStyle
-        * @default 'solid'
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.DashStyle
+         * @default 'solid'
+         */
         dashStyle?: DashStyleType,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         label?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default "#f05b41"
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default "#f05b41"
+           */
           backgroundColor?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @type_function_param1 info:object
-          * @type_function_param1_field1 value:Date|Number|string
-          * @type_function_param1_field2 valueText:string
-          * @type_function_param1_field3 point:chartPointObject
-          * @type_function_return string
-          * @notUsedInTheme
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @type_function_param1 info:object
+           * @type_function_param1_field1 value:Date|Number|string
+           * @type_function_param1_field2 valueText:string
+           * @type_function_param1_field3 point:chartPointObject
+           * @type_function_return string
+           * @notUsedInTheme
+           */
           customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string),
           /**
            * @docid
@@ -906,10 +905,10 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
            */
           font?: Font,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @extends CommonVizFormat
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @extends CommonVizFormat
+           */
           format?: format,
           /**
            * @docid
@@ -919,29 +918,29 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           visible?: boolean
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         opacity?: number,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default true
+         */
         visible?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
         width?: number
       } | boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       width?: number
     };
     /**
@@ -961,25 +960,25 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     dataPrepareSettings?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       checkTypeForAllData?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       convertToAxisDataType?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 a:object
-      * @type_function_param2 b:object
-      * @type_function_return Number
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 a:object
+       * @type_function_param2 b:object
+       * @type_function_return Number
+       * @default true
+       */
       sortingMethod?: boolean | ((a: any, b: any) => number)
     };
     /**
@@ -1173,22 +1172,22 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     scrollBar?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 'gray'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 'gray'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 5
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 5
+       */
       offset?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       opacity?: number,
       /**
        * @docid
@@ -1198,16 +1197,16 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        */
       position?: 'bottom' | 'left' | 'right' | 'top',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       visible?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 10
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 10
+       */
       width?: number
     };
     /**
@@ -1237,17 +1236,17 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     seriesTemplate?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 seriesName:any
-      * @type_function_return ChartSeries
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 seriesName:any
+       * @type_function_return ChartSeries
+       */
       customizeSeries?: ((seriesName: any) => ChartSeries),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 'series'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 'series'
+       */
       nameField?: string
     };
     /**
@@ -1286,61 +1285,61 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      */
     zoomAndPan?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       allowMouseWheel?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       allowTouchGestures?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.ChartZoomAndPanMode
-      * @default 'none'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.ChartZoomAndPanMode
+       * @default 'none'
+       */
       argumentAxis?: 'both' | 'none' | 'pan' | 'zoom',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       dragBoxStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         opacity?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       dragToZoom?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.EventKeyModifier
-      * @default 'shift'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.EventKeyModifier
+       * @default 'shift'
+       */
       panKey?: 'alt' | 'ctrl' | 'meta' | 'shift',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.ChartZoomAndPanMode
-      * @default 'none'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.ChartZoomAndPanMode
+       * @default 'none'
+       */
       valueAxis?: 'both' | 'none' | 'pan' | 'zoom'
     };
 }
@@ -1762,23 +1761,23 @@ export interface dxChartCommonAxisSettings {
      */
     breakStyle?: {
       /**
-      * @docid dxChartOptions.commonAxisSettings.breakStyle.color
-      * @prevFileNamespace DevExpress.viz
-      * @default "#ababab"
-      */
+       * @docid dxChartOptions.commonAxisSettings.breakStyle.color
+       * @prevFileNamespace DevExpress.viz
+       * @default "#ababab"
+       */
       color?: string,
       /**
-      * @docid dxChartOptions.commonAxisSettings.breakStyle.line
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.ScaleBreakLineStyle
-      * @default "waved"
-      */
+       * @docid dxChartOptions.commonAxisSettings.breakStyle.line
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.ScaleBreakLineStyle
+       * @default "waved"
+       */
       line?: 'straight' | 'waved',
       /**
-      * @docid dxChartOptions.commonAxisSettings.breakStyle.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 5
-      */
+       * @docid dxChartOptions.commonAxisSettings.breakStyle.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 5
+       */
       width?: number
     };
     /**
@@ -1817,28 +1816,28 @@ export interface dxChartCommonAxisSettings {
      */
     grid?: {
       /**
-      * @docid dxChartOptions.commonAxisSettings.grid.color
-      * @prevFileNamespace DevExpress.viz
-      * @default '#d3d3d3'
-      */
+       * @docid dxChartOptions.commonAxisSettings.grid.color
+       * @prevFileNamespace DevExpress.viz
+       * @default '#d3d3d3'
+       */
       color?: string,
       /**
-      * @docid dxChartOptions.commonAxisSettings.grid.opacity
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid dxChartOptions.commonAxisSettings.grid.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       opacity?: number,
       /**
-      * @docid dxChartOptions.commonAxisSettings.grid.visible
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid dxChartOptions.commonAxisSettings.grid.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       visible?: boolean,
       /**
-      * @docid dxChartOptions.commonAxisSettings.grid.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid dxChartOptions.commonAxisSettings.grid.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       width?: number
     };
     /**
@@ -1876,28 +1875,28 @@ export interface dxChartCommonAxisSettings {
      */
     minorGrid?: {
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorGrid.color
-      * @prevFileNamespace DevExpress.viz
-      * @default '#d3d3d3'
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorGrid.color
+       * @prevFileNamespace DevExpress.viz
+       * @default '#d3d3d3'
+       */
       color?: string,
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorGrid.opacity
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorGrid.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       opacity?: number,
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorGrid.visible
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorGrid.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       visible?: boolean,
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorGrid.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorGrid.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       width?: number
     };
     /**
@@ -1907,40 +1906,40 @@ export interface dxChartCommonAxisSettings {
      */
     minorTick?: {
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorTick.color
-      * @prevFileNamespace DevExpress.viz
-      * @default '#767676'
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorTick.color
+       * @prevFileNamespace DevExpress.viz
+       * @default '#767676'
+       */
       color?: string,
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorTick.length
-      * @prevFileNamespace DevExpress.viz
-      * @default 7
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorTick.length
+       * @prevFileNamespace DevExpress.viz
+       * @default 7
+       */
       length?: number,
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorTick.opacity
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.3
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorTick.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default 0.3
+       */
       opacity?: number,
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorTick.shift
-      * @prevFileNamespace DevExpress.viz
-      * @default 3
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorTick.shift
+       * @prevFileNamespace DevExpress.viz
+       * @default 3
+       */
       shift?: number,
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorTick.visible
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorTick.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       visible?: boolean,
       /**
-      * @docid dxChartOptions.commonAxisSettings.minorTick.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid dxChartOptions.commonAxisSettings.minorTick.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       width?: number
     };
     /**
@@ -1971,40 +1970,40 @@ export interface dxChartCommonAxisSettings {
      */
     tick?: {
       /**
-      * @docid dxChartOptions.commonAxisSettings.tick.color
-      * @prevFileNamespace DevExpress.viz
-      * @default '#767676'
-      */
+       * @docid dxChartOptions.commonAxisSettings.tick.color
+       * @prevFileNamespace DevExpress.viz
+       * @default '#767676'
+       */
       color?: string,
       /**
-      * @docid dxChartOptions.commonAxisSettings.tick.length
-      * @prevFileNamespace DevExpress.viz
-      * @default 7
-      */
+       * @docid dxChartOptions.commonAxisSettings.tick.length
+       * @prevFileNamespace DevExpress.viz
+       * @default 7
+       */
       length?: number,
       /**
-      * @docid dxChartOptions.commonAxisSettings.tick.opacity
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid dxChartOptions.commonAxisSettings.tick.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       opacity?: number,
       /**
-      * @docid dxChartOptions.commonAxisSettings.tick.shift
-      * @prevFileNamespace DevExpress.viz
-      * @default 3
-      */
+       * @docid dxChartOptions.commonAxisSettings.tick.shift
+       * @prevFileNamespace DevExpress.viz
+       * @default 3
+       */
       shift?: number,
       /**
-      * @docid dxChartOptions.commonAxisSettings.tick.visible
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid dxChartOptions.commonAxisSettings.tick.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       visible?: boolean,
       /**
-      * @docid dxChartOptions.commonAxisSettings.tick.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid dxChartOptions.commonAxisSettings.tick.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       width?: number
     };
     /**
@@ -2306,59 +2305,59 @@ export interface dxChartCommonPaneSettings {
      */
     border?: {
       /**
-      * @docid dxChartOptions.commonPaneSettings.border.bottom
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid dxChartOptions.commonPaneSettings.border.bottom
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       bottom?: boolean,
       /**
-      * @docid dxChartOptions.commonPaneSettings.border.color
-      * @prevFileNamespace DevExpress.viz
-      * @default '#d3d3d3'
-      */
+       * @docid dxChartOptions.commonPaneSettings.border.color
+       * @prevFileNamespace DevExpress.viz
+       * @default '#d3d3d3'
+       */
       color?: string,
       /**
-      * @docid dxChartOptions.commonPaneSettings.border.dashStyle
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.DashStyle
-      * @default 'solid'
-      */
+       * @docid dxChartOptions.commonPaneSettings.border.dashStyle
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.DashStyle
+       * @default 'solid'
+       */
       dashStyle?: DashStyleType,
       /**
-      * @docid dxChartOptions.commonPaneSettings.border.left
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid dxChartOptions.commonPaneSettings.border.left
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       left?: boolean,
       /**
-      * @docid dxChartOptions.commonPaneSettings.border.opacity
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid dxChartOptions.commonPaneSettings.border.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       opacity?: number,
       /**
-      * @docid dxChartOptions.commonPaneSettings.border.right
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid dxChartOptions.commonPaneSettings.border.right
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       right?: boolean,
       /**
-      * @docid dxChartOptions.commonPaneSettings.border.top
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid dxChartOptions.commonPaneSettings.border.top
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       top?: boolean,
       /**
-      * @docid dxChartOptions.commonPaneSettings.border.visible
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid dxChartOptions.commonPaneSettings.border.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       visible?: boolean,
       /**
-      * @docid dxChartOptions.commonPaneSettings.border.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid dxChartOptions.commonPaneSettings.border.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       width?: number
     };
 }
@@ -3020,10 +3019,10 @@ export default class dxChart extends BaseChart {
 }
 
 /**
-* @docid
-* @type object
-* @inherits dxChartCommonAnnotationConfig
-*/
+ * @docid
+ * @type object
+ * @inherits dxChartCommonAnnotationConfig
+ */
 export interface dxChartAnnotationConfig extends dxChartCommonAnnotationConfig {
     /**
      * @docid
@@ -3035,10 +3034,10 @@ export interface dxChartAnnotationConfig extends dxChartCommonAnnotationConfig {
 }
 
 /**
-* @docid
-* @type object
-* @inherits BaseChartAnnotationConfig
-*/
+ * @docid
+ * @type object
+ * @inherits BaseChartAnnotationConfig
+ */
 export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
     /**
      * @docid
@@ -3080,9 +3079,9 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxChartSeriesTypes {
     /**
      * @docid
@@ -3786,19 +3785,19 @@ export interface dxChartSeriesTypesCommonSeries {
      */
     reduction?: {
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.reduction.color
-      * @prevFileNamespace DevExpress.viz
-      * @default '#ff0000'
-      * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.reduction.color
+       * @prevFileNamespace DevExpress.viz
+       * @default '#ff0000'
+       * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
+       */
       color?: string,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.reduction.level
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.FinancialChartReductionLevel
-      * @default 'close'
-      * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.reduction.level
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.FinancialChartReductionLevel
+       * @default 'close'
+       * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
+       */
       level?: 'close' | 'high' | 'low' | 'open'
     };
     /**
@@ -3854,60 +3853,60 @@ export interface dxChartSeriesTypesCommonSeries {
      */
     valueErrorBar?: {
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.color
-      * @prevFileNamespace DevExpress.viz
-      * @default 'black'
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.color
+       * @prevFileNamespace DevExpress.viz
+       * @default 'black'
+       */
       color?: string,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.displayMode
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.ValueErrorBarDisplayMode
-      * @default 'auto'
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.displayMode
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.ValueErrorBarDisplayMode
+       * @default 'auto'
+       */
       displayMode?: 'auto' | 'high' | 'low' | 'none',
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.edgeLength
-      * @prevFileNamespace DevExpress.viz
-      * @default 8
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.edgeLength
+       * @prevFileNamespace DevExpress.viz
+       * @default 8
+       */
       edgeLength?: number,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.highValueField
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.highValueField
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       highValueField?: string,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.lineWidth
-      * @prevFileNamespace DevExpress.viz
-      * @default 2
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.lineWidth
+       * @prevFileNamespace DevExpress.viz
+       * @default 2
+       */
       lineWidth?: number,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.lowValueField
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.lowValueField
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       lowValueField?: string,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.opacity
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       opacity?: number,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.type
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.ValueErrorBarType
-      * @default undefined
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.type
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.ValueErrorBarType
+       * @default undefined
+       */
       type?: 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance',
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.value
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.valueErrorBar.value
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       value?: number
     };
     /**
@@ -4130,29 +4129,29 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      */
     border?: {
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.label.border.color
-      * @prevFileNamespace DevExpress.viz
-      * @default  '#d3d3d3'
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.label.border.color
+       * @prevFileNamespace DevExpress.viz
+       * @default  '#d3d3d3'
+       */
       color?: string,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.DashStyle
-      * @default 'solid'
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.DashStyle
+       * @default 'solid'
+       */
       dashStyle?: DashStyleType,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.label.border.visible
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.label.border.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       visible?: boolean,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.label.border.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.label.border.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       width?: number
     };
     /**
@@ -4163,25 +4162,25 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      */
     connector?: {
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.label.connector.color
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.label.connector.color
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
+       */
       color?: string,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.label.connector.visible
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.label.connector.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
+       */
       visible?: boolean,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.label.connector.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.label.connector.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
+       */
       width?: number
     };
     /**
@@ -4263,25 +4262,25 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      */
     border?: {
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.border.color
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.border.color
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       color?: string,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.border.visible
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.border.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       visible?: boolean,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.border.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.border.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       width?: number
     };
     /**
@@ -4309,46 +4308,46 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      */
     hoverStyle?: {
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.border
-      * @prevFileNamespace DevExpress.viz
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.border
+       * @prevFileNamespace DevExpress.viz
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       border?: {
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.color
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.color
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+         */
         color?: string,
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.visible
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.visible
+         * @prevFileNamespace DevExpress.viz
+         * @default true
+         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+         */
         visible?: boolean,
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.width
-        * @prevFileNamespace DevExpress.viz
-        * @default 4
-        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.width
+         * @prevFileNamespace DevExpress.viz
+         * @default 4
+         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+         */
         width?: number
       },
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.color
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.color
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       color?: string,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.size
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.size
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       size?: number
     };
     /**
@@ -4360,69 +4359,69 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      */
     image?: string | {
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.image.height
-      * @prevFileNamespace DevExpress.viz
-      * @default 30
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.image.height
+       * @prevFileNamespace DevExpress.viz
+       * @default 30
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       height?: number | {
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        * @propertyOf dxChartSeriesTypes.RangeAreaSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         * @propertyOf dxChartSeriesTypes.RangeAreaSeries
+         */
         rangeMaxPoint?: number,
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        * @propertyOf dxChartSeriesTypes.RangeAreaSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         * @propertyOf dxChartSeriesTypes.RangeAreaSeries
+         */
         rangeMinPoint?: number
       },
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.image.url
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.image.url
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       url?: string | {
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        * @propertyOf dxChartSeriesTypes.RangeAreaSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         * @propertyOf dxChartSeriesTypes.RangeAreaSeries
+         */
         rangeMaxPoint?: string,
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        * @propertyOf dxChartSeriesTypes.RangeAreaSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         * @propertyOf dxChartSeriesTypes.RangeAreaSeries
+         */
         rangeMinPoint?: string
       },
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.image.width
-      * @prevFileNamespace DevExpress.viz
-      * @default 30
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.image.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 30
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       width?: number | {
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.image.width.rangeMaxPoint
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        * @propertyOf dxChartSeriesTypes.RangeAreaSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.image.width.rangeMaxPoint
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         * @propertyOf dxChartSeriesTypes.RangeAreaSeries
+         */
         rangeMaxPoint?: number,
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.image.width.rangeMinPoint
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        * @propertyOf dxChartSeriesTypes.RangeAreaSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.image.width.rangeMinPoint
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         * @propertyOf dxChartSeriesTypes.RangeAreaSeries
+         */
         rangeMinPoint?: number
       }
     };
@@ -4443,46 +4442,46 @@ export interface dxChartSeriesTypesCommonSeriesPoint {
      */
     selectionStyle?: {
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.border
-      * @prevFileNamespace DevExpress.viz
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.border
+       * @prevFileNamespace DevExpress.viz
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       border?: {
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.color
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.color
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+         */
         color?: string,
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.visible
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.visible
+         * @prevFileNamespace DevExpress.viz
+         * @default true
+         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+         */
         visible?: boolean,
         /**
-        * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.width
-        * @prevFileNamespace DevExpress.viz
-        * @default 4
-        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-        */
+         * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.width
+         * @prevFileNamespace DevExpress.viz
+         * @default 4
+         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+         */
         width?: number
       },
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.color
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.color
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       color?: string,
       /**
-      * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.size
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
-      */
+       * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.size
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
+       */
       size?: number
     };
     /**
@@ -5844,6 +5843,7 @@ export interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCo
     customizeText?: ((pointInfo: any) => string);
 }
 
+/** @public */
 export type Options = dxChartOptions;
 
 /** @deprecated use Options instead */

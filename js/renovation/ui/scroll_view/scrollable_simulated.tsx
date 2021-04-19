@@ -26,7 +26,7 @@ import eventsEngine from '../../../events/core/events_engine';
 
 import {
   normalizeLocation,
-  getElementLocation, getBoundaryProps,
+  getLocation, getBoundaryProps,
   updateAllowedDirection,
 } from './scrollable_utils';
 
@@ -374,37 +374,40 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-    if (element === undefined || element === null) {
+    if (!isDefined(element)) {
       return;
     }
 
     /* istanbul ignore next */
     if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
-      const scrollOffset = {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        ...(offset as Partial<ScrollOffset>),
-      };
+      const top = this.getElementLocation(element, DIRECTION_VERTICAL, offset);
+      const left = this.getElementLocation(element, DIRECTION_HORIZONTAL, offset);
 
-      this.scrollTo({
-        top: getElementLocation(
-          element,
-          scrollOffset,
-          DIRECTION_VERTICAL,
-          this.containerRef.current!,
-          this.props.rtlEnabled,
-        ),
-        left: getElementLocation(
-          element,
-          scrollOffset,
-          DIRECTION_HORIZONTAL,
-          this.containerRef.current!,
-          this.props.rtlEnabled,
-        ),
-      });
+      this.scrollTo({ top, left });
     }
+  }
+
+  @Method()
+  getElementLocation(
+    element: HTMLElement,
+    direction: ScrollableDirection,
+    offset?: Partial<ScrollOffset>,
+  ): number {
+    const scrollOffset = {
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      ...(offset as Partial<ScrollOffset>),
+    };
+
+    return getLocation(
+      element,
+      scrollOffset,
+      direction,
+      this.containerRef.current!,
+      this.props.rtlEnabled,
+    );
   }
 
   @Method()
@@ -774,11 +777,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   eventHandler(handler: (scrollbarInstance: any) => void): void {
-    if (this.direction.isVertical) {
-      handler(this.verticalScrollbarRef.current!);
-    }
     if (this.direction.isHorizontal) {
       handler(this.horizontalScrollbarRef.current!);
+    }
+    if (this.direction.isVertical) {
+      handler(this.verticalScrollbarRef.current!);
     }
   }
 
@@ -805,7 +808,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   validate(e: Event): boolean {
-    if (this.isLocked() || this.props.disabled
+    if (this.isLocked()) {
+      return false;
+    }
+
+    this.update();
+
+    if (this.props.disabled
     || (isDxMouseWheelEvent(e) && isCommandKeyPressed({
       ctrlKey: (e as any).ctrlKey,
       metaKey: (e as any).metaKey,
@@ -1028,8 +1037,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   windowResizeHandler(): void {
-    this.updateSizes();
-    this.onUpdated();
+    this.update();
   }
 
   updateSizes(): void {

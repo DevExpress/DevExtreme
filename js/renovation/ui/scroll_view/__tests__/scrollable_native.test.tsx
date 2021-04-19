@@ -511,79 +511,50 @@ describe('Native > Effects', () => {
     });
 
   describe('windowResizeHandler', () => {
-    it('should update sizes on window resize and trigger onUpdated', () => {
-      const onUpdatedMock = jest.fn();
-      const viewModel = new Scrollable({ onUpdated: onUpdatedMock });
-      viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-      (viewModel as any).containerRef = React.createRef();
-      viewModel.getEventArgs = jest.fn();
+    it('windowResizeHandler', () => {
+      const viewModel = new Scrollable({});
 
       viewModel.updateSizes = jest.fn();
+      viewModel.onUpdated = jest.fn();
+
       viewModel.windowResizeHandler();
 
       expect(viewModel.updateSizes).toBeCalledTimes(1);
-      expect(onUpdatedMock).toBeCalledTimes(1);
-      expect(onUpdatedMock).toHaveBeenCalledWith(viewModel.getEventArgs());
-    });
-
-    it('should update sizes on window resize, onUpdated: undefined', () => {
-      const viewModel = new Scrollable({ onUpdated: undefined });
-      viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-      (viewModel as any).containerRef = React.createRef();
-      viewModel.getEventArgs = jest.fn();
-
-      viewModel.updateSizes = jest.fn();
-      viewModel.windowResizeHandler();
-
-      expect(viewModel.updateSizes).toBeCalledTimes(1);
+      expect(viewModel.onUpdated).toBeCalledTimes(1);
     });
   });
 
   describe('update()', () => {
     it('should update sizes on update() method call and trigger onUpdated', () => {
-      const onUpdatedMock = jest.fn();
-      const viewModel = new Scrollable({ onUpdated: onUpdatedMock });
-      viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-      (viewModel as any).containerRef = React.createRef();
-      viewModel.getEventArgs = jest.fn();
+      const viewModel = new Scrollable({ });
 
       viewModel.updateSizes = jest.fn();
+      viewModel.onUpdated = jest.fn();
+
       viewModel.update();
 
       expect(viewModel.updateSizes).toBeCalledTimes(1);
-      expect(onUpdatedMock).toBeCalledTimes(1);
-      expect(onUpdatedMock).toHaveBeenCalledWith(viewModel.getEventArgs());
-    });
-
-    it('should update sizes on update() method call, onUpdated: undefined', () => {
-      const viewModel = new Scrollable({ onUpdated: undefined });
-      viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-      (viewModel as any).containerRef = React.createRef();
-      viewModel.getEventArgs = jest.fn();
-
-      viewModel.updateSizes = jest.fn();
-      viewModel.update();
-
-      expect(viewModel.updateSizes).toBeCalledTimes(1);
-    });
-
-    it('should update sizes on update() method call, onUpdated, contentRef.current = null', () => {
-      const onUpdatedMock = jest.fn();
-      const viewModel = new Scrollable({ onUpdated: onUpdatedMock });
-      viewModel.contentRef = { current: null } as RefObject<HTMLDivElement>;
-      (viewModel as any).containerRef = React.createRef();
-      viewModel.getEventArgs = jest.fn();
-
-      viewModel.updateSizes = jest.fn();
-      viewModel.update();
-
-      expect(viewModel.updateSizes).not.toBeCalled();
-      expect(onUpdatedMock).not.toBeCalled();
+      expect(viewModel.onUpdated).toBeCalledTimes(1);
     });
   });
 
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
     each([undefined, jest.fn()]).describe('handler: %o', (actionHandler) => {
+      it('onUpdated()', () => {
+        const viewModel = new Scrollable({
+          onUpdated: actionHandler,
+        });
+
+        (viewModel as any).getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 3 } }));
+
+        viewModel.onUpdated();
+
+        if (actionHandler) {
+          expect(actionHandler).toHaveBeenCalledTimes(1);
+          expect(actionHandler).toHaveBeenLastCalledWith({ fakeEventArg: { value: 3 } });
+        }
+      });
+
       it('onReachBottom()', () => {
         const viewModel = new Scrollable({
           onReachBottom: actionHandler,
@@ -1651,46 +1622,36 @@ describe('Methods', () => {
 
   describe('ClientWidth', () => {
     it('should get client width of the scroll container', () => {
-      const scrollable = new Scrollable({});
-      scrollable.containerRef = { current: { clientWidth: 120 } } as RefObject<HTMLDivElement>;
+      const viewModel = new Scrollable({});
+      viewModel.containerRef = { current: { clientWidth: 120 } } as RefObject<HTMLDivElement>;
 
-      expect(scrollable.clientWidth()).toEqual(120);
+      expect(viewModel.clientWidth()).toEqual(120);
     });
   });
 
   describe('Validate(e)', () => {
-    it('disabled: true', () => {
-      const e = { ...defaultEvent } as any;
-      const scrollable = new Scrollable({ disabled: true });
-
-      expect(scrollable.validate(e)).toEqual(false);
-    });
-
-    it('locked: true', () => {
-      const e = { ...defaultEvent } as any;
-      const scrollable = new Scrollable({});
-      scrollable.locked = true;
-
-      expect(scrollable.validate(e)).toEqual(false);
-    });
-
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH, undefined]).describe('allowedDirection: %o', (allowedDirection) => {
       each([true, false]).describe('isScrollingOutOfBound: %o', (isScrollingOutOfBound) => {
-        it(`isWheelEvent: true, isScrollingOutOfBound: ${isScrollingOutOfBound}, disabled: false, locked: false`, () => {
+        it('isWheelEvent: true, disabled: false, locked: false', () => {
           const e = { ...defaultEvent, type: 'dxmousewheel' } as any;
 
           const scrollable = new Scrollable({ disabled: false });
           scrollable.locked = false;
           scrollable.isScrollingOutOfBound = jest.fn(() => isScrollingOutOfBound);
           scrollable.tryGetAllowedDirection = jest.fn(() => allowedDirection);
+          scrollable.update = jest.fn();
 
-          if (isScrollingOutOfBound) {
-            expect(scrollable.validate(e)).toEqual(false);
-            expect((scrollable as any).isScrollingOutOfBound).toHaveBeenCalledTimes(1);
-          } else {
-            expect(scrollable.validate(e)).toEqual(!!allowedDirection);
-            expect((scrollable as any).isScrollingOutOfBound).toHaveBeenCalledTimes(1);
+          let expectedValidateResult = false;
+
+          if (!isScrollingOutOfBound) {
+            expectedValidateResult = !!allowedDirection;
           }
+
+          const actualValidateResult = scrollable.validate(e);
+
+          expect(scrollable.update).toHaveBeenCalledTimes(1);
+          expect(scrollable.isScrollingOutOfBound).toHaveBeenCalledTimes(1);
+          expect(actualValidateResult).toEqual(expectedValidateResult);
         });
       });
 
@@ -1705,12 +1666,18 @@ describe('Methods', () => {
           scrollable.locked = false;
           scrollable.isScrollingOutOfBound = jest.fn(() => true);
           scrollable.tryGetAllowedDirection = jest.fn(() => allowedDirection);
+          scrollable.update = jest.fn();
 
-          if (isWheelEvent) {
-            expect(scrollable.validate(e)).toEqual(false);
-          } else {
-            expect(scrollable.validate(e)).toEqual(!!allowedDirection);
+          let expectedValidateResult = false;
+
+          if (!isWheelEvent) {
+            expectedValidateResult = !!allowedDirection;
           }
+
+          const actualValidateResult = scrollable.validate(e);
+
+          expect(scrollable.update).toHaveBeenCalledTimes(1);
+          expect(actualValidateResult).toEqual(expectedValidateResult);
         });
       });
     });

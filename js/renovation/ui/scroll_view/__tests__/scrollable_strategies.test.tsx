@@ -511,6 +511,30 @@ each([{
       });
     });
 
+    describe('Methods', () => {
+      it('validate(e), locked: false, disabled: true', () => {
+        const e = { ...defaultEvent } as any;
+        const viewModel = new Scrollable({ disabled: true });
+
+        viewModel.locked = false;
+        viewModel.update = jest.fn();
+
+        expect((viewModel as any).validate(e)).toEqual(false);
+        expect(viewModel.update).toHaveBeenCalledTimes(1);
+      });
+
+      it('validate(e), locked: true, disabled: false', () => {
+        const e = { ...defaultEvent } as any;
+        const viewModel = new Scrollable({});
+
+        viewModel.locked = true;
+        viewModel.update = jest.fn();
+
+        expect((viewModel as any).validate(e)).toEqual(false);
+        expect(viewModel.update).toHaveBeenCalledTimes(0);
+      });
+    });
+
     describe('Getters', () => {
       describe('cssClasses', () => {
         it('should add vertical direction class', () => {

@@ -16,4 +16,8 @@ export class DataGridComponent extends DataGridBase {
 
   // prevent render
   _updateDOMComponent(): void {}
+
+  _isDimensionChangeSupported(): boolean {
+    return false;
+  }
 }

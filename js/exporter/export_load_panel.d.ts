@@ -1,8 +1,8 @@
 /**
-* @docid
-* @prevFileNamespace DevExpress
-* @type object
-*/
+ * @docid
+ * @prevFileNamespace DevExpress
+ * @type object
+ */
 export interface ExportLoadPanel {
     /**
      * @docid

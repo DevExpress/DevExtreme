@@ -7,7 +7,7 @@ import {
 } from '../../core/element';
 
 import {
-    ComponentEvent
+    EventInfo
 } from '../../events/index';
 
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
@@ -64,7 +64,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: ComponentEvent<T>) => void);
+    onContentReady?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default 0
@@ -135,33 +135,33 @@ export var dxItem: any;
  */
 export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | {
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   */
   currency?: string,
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  * @type_function_param1 value:number|date
-  * @type_function_return string
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 value:number|date
+   * @type_function_return string
+   */
   formatter?: ((value: number | Date) => string),
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  * @type_function_param1 value:string
-  * @type_function_return number|date
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 value:string
+   * @type_function_return number|date
+   */
   parser?: ((value: string) => number | Date),
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   */
   precision?: number,
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  * @type Enums.Format
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @type Enums.Format
+   */
   type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime'
 };

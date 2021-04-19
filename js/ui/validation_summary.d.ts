@@ -3,9 +3,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -15,19 +15,19 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxValidationSummary>;
+export type ContentReadyEvent = EventInfo<dxValidationSummary>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxValidationSummary>;
+export type DisposingEvent = EventInfo<dxValidationSummary>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxValidationSummary>;
+export type InitializedEvent = InitializedEventInfo<dxValidationSummary>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxValidationSummary> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxValidationSummary> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxValidationSummary> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxValidationSummary> & ChangedOptionInfo;
 
 export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
     /**
@@ -50,6 +50,7 @@ export default class dxValidationSummary extends CollectionWidget {
     constructor(element: TElement, options?: dxValidationSummaryOptions)
 }
 
+/** @public */
 export type Options = dxValidationSummaryOptions;
 
 /** @deprecated use Options instead */

@@ -16,9 +16,9 @@ import DataSource, {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -37,7 +37,7 @@ import BaseWidget, {
     BaseWidgetTooltip,
     Font,
     BaseWidgetAnnotationConfig,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -51,52 +51,52 @@ export interface TooltipInfo {
 }
 
 /** @public */
-export type CenterChangedEvent = ComponentEvent<dxVectorMap> & {
+export type CenterChangedEvent = EventInfo<dxVectorMap> & {
     readonly center: Array<number>;
 }
 
 /** @public */
-export type ClickEvent = ComponentNativeEvent<dxVectorMap> & {
+export type ClickEvent = NativeEventInfo<dxVectorMap> & {
     readonly target: MapLayerElement;
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxVectorMap>;
+export type DisposingEvent = EventInfo<dxVectorMap>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxVectorMap>;
+export type DrawnEvent = EventInfo<dxVectorMap>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxVectorMap>;
+export type ExportedEvent = EventInfo<dxVectorMap>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxVectorMap> & ExportInfo;
+export type ExportingEvent = EventInfo<dxVectorMap> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxVectorMap>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxVectorMap>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxVectorMap> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxVectorMap> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxVectorMap>;
+export type InitializedEvent = InitializedEventInfo<dxVectorMap>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxVectorMap> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxVectorMap> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxVectorMap> & {
+export type SelectionChangedEvent = EventInfo<dxVectorMap> & {
     readonly target: MapLayerElement;
 }
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxVectorMap> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxVectorMap> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
 /** @public */
-export type ZoomFactorChangedEvent = ComponentEvent<dxVectorMap> & {
+export type ZoomFactorChangedEvent = EventInfo<dxVectorMap> & {
     readonly zoomFactor: number;
 }
 
@@ -218,10 +218,10 @@ export interface MapLayerElement {
 }
 
 /**
-* @docid
-* @inherits BaseLegendItem
-* @type object
-*/
+ * @docid
+ * @inherits BaseLegendItem
+ * @type object
+ */
 export interface VectorMapLegendItem extends BaseLegendItem {
     /**
      * @docid
@@ -256,17 +256,17 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @public
      */
     background?: {
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#cacaca'
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#cacaca'
+       */
       borderColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#ffffff'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#ffffff'
+       */
       color?: string
     };
     /**
@@ -291,49 +291,49 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @public
      */
     controlBar?: {
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#5d5d5d'
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#5d5d5d'
+       */
       borderColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#ffffff'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#ffffff'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       enabled?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.HorizontalAlignment
-      * @default 'left'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.HorizontalAlignment
+       * @default 'left'
+       */
       horizontalAlignment?: 'center' | 'left' | 'right',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 20
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 20
+       */
       margin?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.3
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0.3
+       */
       opacity?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.VerticalEdge
-      * @default 'top'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.VerticalEdge
+       * @default 'top'
+       */
       verticalAlignment?: 'bottom' | 'top'
     };
     /**
@@ -345,200 +345,200 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      */
     layers?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#9d9d9d'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#9d9d9d'
+       */
       borderColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       borderWidth?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#d2d2d2'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#d2d2d2'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       colorGroupingField?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       colorGroups?: Array<number>,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 elements:Array<MapLayerElement>
-      * @notUsedInTheme
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 elements:Array<MapLayerElement>
+       * @notUsedInTheme
+       */
       customize?: ((elements: Array<MapLayerElement>) => void),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       dataField?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type object|DataSource|DataSourceOptions|string|Array<any>
-      * @extends CommonVizDataSource
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type object|DataSource|DataSourceOptions|string|Array<any>
+       * @extends CommonVizDataSource
+       */
       dataSource?: any | DataSource | DataSourceOptions | string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.VectorMapMarkerType
-      * @notUsedInTheme
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.VectorMapMarkerType
+       * @notUsedInTheme
+       */
       elementType?: 'bubble' | 'dot' | 'image' | 'pie',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       hoverEnabled?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#303030'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#303030'
+       */
       hoveredBorderColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       hoveredBorderWidth?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#d2d2d2'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#d2d2d2'
+       */
       hoveredColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       label?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         dataField?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default <i>true</i> for markers; <i>false</i> for areas
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default <i>true</i> for markers; <i>false</i> for areas
+         */
         enabled?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#2b2b2b' [prop](color)
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default '#2b2b2b' [prop](color)
+         */
         font?: Font
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 50
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 50
+       */
       maxSize?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 20
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 20
+       */
       minSize?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @notUsedInTheme
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @notUsedInTheme
+       */
       name?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       opacity?: number,
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizPalette
-      * @type Array<string>|Enums.VizPalette
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @extends CommonVizPalette
+       * @type Array<string>|Enums.VizPalette
+       */
       palette?: Array<string> | PaletteType,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       */
       paletteSize?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       paletteIndex?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#303030'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#303030'
+       */
       selectedBorderColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 2
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 2
+       */
       selectedBorderWidth?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#d2d2d2'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#d2d2d2'
+       */
       selectedColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.SelectionMode
-      * @default 'single'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.SelectionMode
+       * @default 'single'
+       */
       selectionMode?: 'multiple' | 'none' | 'single',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 8
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 8
+       */
       size?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       sizeGroupingField?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       sizeGroups?: Array<number>,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.VectorMapLayerType
-      * @notUsedInTheme
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.VectorMapLayerType
+       * @notUsedInTheme
+       */
       type?: 'area' | 'line' | 'marker'
     }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | PaletteType, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
     /**
@@ -728,10 +728,10 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
 }
 
 /**
-* @docid
-* @inherits dxVectorMapCommonAnnotationConfig
-* @type object
-*/
+ * @docid
+ * @inherits dxVectorMapCommonAnnotationConfig
+ * @type object
+ */
 export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
     /**
      * @docid
@@ -743,10 +743,10 @@ export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotation
 }
 
 /**
-* @docid
-* @inherits BaseWidgetAnnotationConfig
-* @type object
-*/
+ * @docid
+ * @inherits BaseWidgetAnnotationConfig
+ * @type object
+ */
 export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * @docid
@@ -1036,6 +1036,7 @@ export default class dxVectorMap extends BaseWidget {
     zoomFactor(zoomFactor: number): void;
 }
 
+/** @public */
 export type Options = dxVectorMapOptions;
 
 /** @deprecated use Options instead */

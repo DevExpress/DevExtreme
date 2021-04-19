@@ -203,7 +203,7 @@ function getFormatByValueText(valueText, formatter, isPercent, isNegative) {
     format = format.replace(/1+/, '1').replace(/1/g, '#');
 
     if(!isPercent) {
-        format = format.replace('%', '\'%\''); // lgtm[incomplete-sanitization]
+        format = format.replace('%', '\'%\''); // lgtm[js/incomplete-sanitization]
     }
 
     return format;

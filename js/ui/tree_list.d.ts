@@ -15,9 +15,9 @@ import DataSource from '../data/data_source';
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -34,8 +34,8 @@ import {
     AdaptiveDetailRowPreparingInfo,
     DataErrorOccurredInfo,
     DataChangeInfo,
-    ComponentDragStartEvent,
-    ComponentRowDraggingEvent,
+    DragStartEventInfo,
+    RowDraggingEventInfo,
     DragDropInfo,
     DragReorderInfo,
     KeyDownInfo,
@@ -73,21 +73,21 @@ interface CellInfo {
 }
 
 /** @public */
-export type AdaptiveDetailRowPreparingEvent = ComponentEvent<dxTreeList> & AdaptiveDetailRowPreparingInfo;
+export type AdaptiveDetailRowPreparingEvent = EventInfo<dxTreeList> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent = ComponentNativeEvent<dxTreeList> & CellInfo;
+export type CellClickEvent = NativeEventInfo<dxTreeList> & CellInfo;
 
 /** @public */
-export type CellDblClickEvent = ComponentNativeEvent<dxTreeList> & CellInfo;
+export type CellDblClickEvent = NativeEventInfo<dxTreeList> & CellInfo;
 
 /** @public */
-export type CellHoverChangedEvent = ComponentEvent<dxTreeList> & CellInfo & {
+export type CellHoverChangedEvent = EventInfo<dxTreeList> & CellInfo & {
     readonly eventType: string;
 }
 
 /** @public */
-export type CellPreparedEvent = ComponentEvent<dxTreeList> & CellInfo & {
+export type CellPreparedEvent = EventInfo<dxTreeList> & CellInfo & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
@@ -96,10 +96,10 @@ export type CellPreparedEvent = ComponentEvent<dxTreeList> & CellInfo & {
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTreeList>;
+export type ContentReadyEvent = EventInfo<dxTreeList>;
 
 /** @public */
-export type ContextMenuPreparingEvent = ComponentEvent<dxTreeList> & {
+export type ContextMenuPreparingEvent = EventInfo<dxTreeList> & {
     items?: Array<any>;
     readonly target: string;
     readonly targetElement: TElement;
@@ -110,26 +110,26 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxTreeList> & {
 }
 
 /** @public */
-export type DataErrorOccurredEvent = ComponentEvent<dxTreeList> & DataErrorOccurredInfo;
+export type DataErrorOccurredEvent = EventInfo<dxTreeList> & DataErrorOccurredInfo;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTreeList>;
+export type DisposingEvent = EventInfo<dxTreeList>;
 
 /** @public */
-export type EditCanceledEvent = ComponentEvent<dxTreeList> & DataChangeInfo;
+export type EditCanceledEvent = EventInfo<dxTreeList> & DataChangeInfo;
 
 /** @public */
-export type EditCancelingEvent = Cancelable & ComponentEvent<dxTreeList> & DataChangeInfo;
+export type EditCancelingEvent = Cancelable & EventInfo<dxTreeList> & DataChangeInfo;
 
 /** @public */
-export type EditingStartEvent = Cancelable & ComponentEvent<dxTreeList> & {
+export type EditingStartEvent = Cancelable & EventInfo<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly column: any;
 }
 
 /** @public */
-export type EditorPreparedEvent = ComponentEvent<dxTreeList> & {
+export type EditorPreparedEvent = EventInfo<dxTreeList> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -144,7 +144,7 @@ export type EditorPreparedEvent = ComponentEvent<dxTreeList> & {
 }
 
 /** @public */
-export type EditorPreparingEvent = Cancelable & ComponentEvent<dxTreeList> & {
+export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -161,7 +161,7 @@ export type EditorPreparingEvent = Cancelable & ComponentEvent<dxTreeList> & {
 }
 
 /** @public */
-export type FocusedCellChangedEvent = ComponentEvent<dxTreeList> & {
+export type FocusedCellChangedEvent = EventInfo<dxTreeList> & {
     readonly cellElement: TElement;
     readonly columnIndex: number;
     readonly rowIndex: number;
@@ -170,7 +170,7 @@ export type FocusedCellChangedEvent = ComponentEvent<dxTreeList> & {
 }
 
 /** @public */
-export type FocusedCellChangingEvent = Cancelable & ComponentNativeEvent<dxTreeList> & {
+export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> & {
     readonly cellElement: TElement;
     readonly prevColumnIndex: number;
     readonly prevRowIndex: number;
@@ -182,14 +182,14 @@ export type FocusedCellChangingEvent = Cancelable & ComponentNativeEvent<dxTreeL
 }
 
 /** @public */
-export type FocusedRowChangedEvent = ComponentEvent<dxTreeList> & {
+export type FocusedRowChangedEvent = EventInfo<dxTreeList> & {
     readonly rowElement: TElement;
     readonly rowIndex: number;
     readonly row: RowObject;
 }
 
 /** @public */
-export type FocusedRowChangingEvent = ComponentNativeEvent<dxTreeList> & {
+export type FocusedRowChangingEvent = NativeEventInfo<dxTreeList> & {
     readonly rowElement: TElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
@@ -197,24 +197,24 @@ export type FocusedRowChangingEvent = ComponentNativeEvent<dxTreeList> & {
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTreeList>;
+export type InitializedEvent = InitializedEventInfo<dxTreeList>;
 
 /** @public */
-export type InitNewRowEvent = ComponentEvent<dxTreeList> & NewRowInfo;
+export type InitNewRowEvent = EventInfo<dxTreeList> & NewRowInfo;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxTreeList> & KeyDownInfo;
+export type KeyDownEvent = NativeEventInfo<dxTreeList> & KeyDownInfo;
 
 /** @public */
-export type NodesInitializedEvent = ComponentEvent<dxTreeList> & {
+export type NodesInitializedEvent = EventInfo<dxTreeList> & {
     readonly root: Node;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTreeList> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTreeList> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent = ComponentNativeEvent<dxTreeList> & {
+export type RowClickEvent = NativeEventInfo<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -231,13 +231,13 @@ export type RowClickEvent = ComponentNativeEvent<dxTreeList> & {
 }
 
 /** @public */
-export type RowCollapsedEvent = ComponentEvent<dxTreeList> & RowKeyInfo;
+export type RowCollapsedEvent = EventInfo<dxTreeList> & RowKeyInfo;
 
 /** @public */
-export type RowCollapsingEvent = Cancelable & ComponentEvent<dxTreeList> & RowKeyInfo;
+export type RowCollapsingEvent = Cancelable & EventInfo<dxTreeList> & RowKeyInfo;
 
 /** @public */
-export type RowDblClickEvent = ComponentNativeEvent<dxTreeList> & {
+export type RowDblClickEvent = NativeEventInfo<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -251,19 +251,19 @@ export type RowDblClickEvent = ComponentNativeEvent<dxTreeList> & {
 }
 
 /** @public */
-export type RowExpandedEvent = ComponentEvent<dxTreeList> & RowKeyInfo;
+export type RowExpandedEvent = EventInfo<dxTreeList> & RowKeyInfo;
 
 /** @public */
-export type RowExpandingEvent = Cancelable & ComponentEvent<dxTreeList> & RowKeyInfo;
+export type RowExpandingEvent = Cancelable & EventInfo<dxTreeList> & RowKeyInfo;
 
 /** @public */
-export type RowInsertedEvent = ComponentEvent<dxTreeList> & RowInsertedInfo;
+export type RowInsertedEvent = EventInfo<dxTreeList> & RowInsertedInfo;
 
 /** @public */
-export type RowInsertingEvent = ComponentEvent<dxTreeList> & RowInsertingInfo;
+export type RowInsertingEvent = EventInfo<dxTreeList> & RowInsertingInfo;
 
 /** @public */
-export type RowPreparedEvent = ComponentEvent<dxTreeList> & {
+export type RowPreparedEvent = EventInfo<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -279,57 +279,57 @@ export type RowPreparedEvent = ComponentEvent<dxTreeList> & {
 }
 
 /** @public */
-export type RowRemovedEvent = ComponentEvent<dxTreeList> & RowRemovedInfo;
+export type RowRemovedEvent = EventInfo<dxTreeList> & RowRemovedInfo;
 
 /** @public */
-export type RowRemovingEvent = ComponentEvent<dxTreeList> & RowRemovingInfo;
+export type RowRemovingEvent = EventInfo<dxTreeList> & RowRemovingInfo;
 
 /** @public */
-export type RowUpdatedEvent = ComponentEvent<dxTreeList> & RowUpdatedInfo;
+export type RowUpdatedEvent = EventInfo<dxTreeList> & RowUpdatedInfo;
 
 /** @public */
-export type RowUpdatingEvent = ComponentEvent<dxTreeList> & RowUpdatingInfo;
+export type RowUpdatingEvent = EventInfo<dxTreeList> & RowUpdatingInfo;
 
 /** @public */
-export type RowValidatingEvent = ComponentEvent<dxTreeList> & RowValidatingInfo;
+export type RowValidatingEvent = EventInfo<dxTreeList> & RowValidatingInfo;
 
 /** @public */
-export type SavedEvent = ComponentEvent<dxTreeList> & DataChangeInfo;
+export type SavedEvent = EventInfo<dxTreeList> & DataChangeInfo;
 
 /** @public */
-export type SavingEvent = ComponentEvent<dxTreeList> & SavingInfo;
+export type SavingEvent = EventInfo<dxTreeList> & SavingInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTreeList> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxTreeList> & SelectionChangedInfo;
 
 /** @public */
-export type ToolbarPreparingEvent = ComponentEvent<dxTreeList> & ToolbarPreparingInfo;
+export type ToolbarPreparingEvent = EventInfo<dxTreeList> & ToolbarPreparingInfo;
 
 
 /** @public */
-export type RowDraggingAddEvent = ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
+export type RowDraggingAddEvent = RowDraggingEventInfo<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type RowDraggingChangeEvent = Cancelable & ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
+export type RowDraggingChangeEvent = Cancelable & RowDraggingEventInfo<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type RowDraggingEndEvent = Cancelable & ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
+export type RowDraggingEndEvent = Cancelable & RowDraggingEventInfo<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type RowDraggingMoveEvent = Cancelable & ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
+export type RowDraggingMoveEvent = Cancelable & RowDraggingEventInfo<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type RowDraggingStartEvent = Cancelable & ComponentDragStartEvent<dxTreeList>;
+export type RowDraggingStartEvent = Cancelable & DragStartEventInfo<dxTreeList>;
 
 /** @public */
-export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxTreeList>;
+export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxTreeList>;
 
 /** @public */
-export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxTreeList> & DragReorderInfo;
+export type RowDraggingReorderEvent = RowDraggingEventInfo<dxTreeList> & DragReorderInfo;
 
 
-/** @public */ 
-export type ColumnButtonClickEvent = ComponentNativeEvent<dxTreeList> & {
+/** @public */
+export type ColumnButtonClickEvent = NativeEventInfo<dxTreeList> & {
     row?: RowObject;
     column?: Column;
 }
@@ -833,7 +833,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @public
      */
     remoteOperations?: {
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default false
@@ -1428,19 +1428,19 @@ export interface RowObject {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isEditing?: boolean;
+    readonly isEditing?: boolean;
     /**
      * @docid dxTreeListRowObject.isExpanded
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isExpanded?: boolean;
+    readonly isExpanded?: boolean;
     /**
      * @docid dxTreeListRowObject.isNewRow
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isNewRow?: boolean;
+    readonly isNewRow?: boolean;
     /**
      * @docid dxTreeListRowObject.isSelected
      * @prevFileNamespace DevExpress.ui
@@ -1483,9 +1483,10 @@ export interface RowObject {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly values: Array<any>;
+    readonly values: Array<any>;
 }
 
+/** @public */
 export type Options = dxTreeListOptions;
 
 export type IOptions = dxTreeListOptions;

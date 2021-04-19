@@ -9,8 +9,8 @@ import {
 import DataSource from '../../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
+    EventInfo,
+    NativeEventInfo,
     ItemInfo
 } from '../../events/index';
 
@@ -87,7 +87,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
+    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -100,7 +100,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: ComponentEvent<T> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default null
@@ -115,7 +115,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e:  ComponentNativeEvent<T> & ValueChangedInfo) => void);
+    onValueChanged?: ((e:  NativeEventInfo<T> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false

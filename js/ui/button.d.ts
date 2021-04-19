@@ -7,9 +7,9 @@ import {
 } from '../core/templates/template';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -18,21 +18,21 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ClickEvent = ComponentNativeEvent<dxButton> & {
+export type ClickEvent = NativeEventInfo<dxButton> & {
     validationGroup?: any;
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxButton>;
+export type ContentReadyEvent = EventInfo<dxButton>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxButton>;
+export type DisposingEvent = EventInfo<dxButton>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxButton>;
+export type InitializedEvent = InitializedEventInfo<dxButton>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxButton> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
 
 /** @public */
 export type TemplateData = {
@@ -146,6 +146,7 @@ export default class dxButton extends Widget {
     constructor(element: TElement, options?: dxButtonOptions)
 }
 
+/** @public */
 export type Options = dxButtonOptions;
 
 /** @deprecated use Options instead */

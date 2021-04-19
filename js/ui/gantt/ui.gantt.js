@@ -15,6 +15,7 @@ import { GanttDialog } from './ui.gantt.dialogs';
 import LoadPanel from '../load_panel';
 import { getPublicElement } from '../../core/element';
 import { GanttDataCache } from './ui.gantt.cache';
+import { GanttExportHelper } from './ui.gantt.export_helper';
 
 const window = getWindow();
 
@@ -172,7 +173,7 @@ class Gantt extends Widget {
             onExpandAll: this._expandAll.bind(this),
             onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener(),
-            exportHelper: this._createGanttViewExportHelper(),
+            exportHelper: this._getExportHelper(),
             taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
             taskProgressTooltipContentTemplate: this._getTaskProgressTooltipContentTemplateFunc(this.option('taskProgressTooltipContentTemplate')),
             taskTimeTooltipContentTemplate: this._getTaskTimeTooltipContentTemplateFunc(this.option('taskTimeTooltipContentTemplate')),
@@ -576,7 +577,7 @@ class Gantt extends Widget {
     }
     _appendCustomFields(data) {
         const modelData = this._tasksOption && this._tasksOption._getItems();
-        const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+        const keyGetter = this._getTaskKeyGetter();
         const invertedData = this.getInvertedData(modelData, keyGetter);
         return data.reduce((previous, item) => {
             const key = keyGetter(item);
@@ -592,6 +593,9 @@ class Gantt extends Widget {
             }
             return previous;
         }, []);
+    }
+    _getTaskKeyGetter() {
+        return compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
     }
     getInvertedData(data, keyGetter) {
         const inverted = { };
@@ -1446,6 +1450,7 @@ class Gantt extends Widget {
 
     // export
     exportToPdf(options) {
+        this._exportHelper.reset();
         const fullOptions = extend({}, options);
         fullOptions.docCreateMethod ??= window['jspdf']?.['jsPDF'] ?? window['jsPDF'];
         fullOptions.format ??= 'a4';
@@ -1454,94 +1459,9 @@ class Gantt extends Widget {
             resolve(doc);
         });
     }
-    getTreeListTableStyle() {
-        const table = this._treeList._$element.find('.dx-treelist-table').get(0);
-        const style = window.getComputedStyle(table);
-        return {
-            color: style.color,
-            backgroundColor: style.backgroundColor,
-            fontSize: style.fontSize,
-            fontFamily: style.fontFamily,
-            fontWeight: style.fontWeight,
-            fontStyle: style.fontStyle,
-            textAlign: 'left',
-            verticalAlign: 'middle'
-        };
-    }
-    getTreeListColCount() {
-        const headerView = this.getHeaderView();
-        const widths = headerView.getColumnWidths().filter(w => w > 0);
-        return widths.length;
-    }
-    getTreeListHeaderInfo(colIndex) {
-        const element = this.getHeaderElement(colIndex);
-        if(!element) return null;
-
-        const style = window.getComputedStyle(element);
-        const styleForExport = {
-            color: style.color,
-            padding: style.padding,
-            verticalAlign: style.verticalAlign,
-            width: element.clientWidth
-        };
-        return {
-            content: element.textContent,
-            styles: styleForExport
-        };
-    }
-
-    getTreeListCellInfo(rowIndex, colIndex) {
-        const treeList = this._treeList;
-        const cellElement = treeList.getCellElement(rowIndex, colIndex);
-        const cell = cellElement[0];
-        if(!cell) return null;
-
-        const style = window.getComputedStyle(cell);
-        const styleForExport = {
-            color: style.color,
-            padding: style.padding,
-            width: cellElement.clientWidth
-        };
-
-        const nodeKey = treeList.getKeyByRowIndex(rowIndex);
-        const isRowSelected = treeList.isRowSelected(nodeKey);
-
-        let cellBackColor = null;
-        if(isRowSelected) {
-            cellBackColor = style.backgroundColor;
-        } else {
-            const node = treeList.getNodeByKey(nodeKey);
-            const nodeHasChildren = node?.children.length > 0;
-            if(nodeHasChildren) {
-                cellBackColor = window.getComputedStyle(cell.parentNode).backgroundColor;
-            }
-        }
-        if(cellBackColor) {
-            styleForExport.backgroundColor = cellBackColor;
-        }
-
-        const icon = cellElement.find('.dx-treelist-icon-container')[0];
-        const extraSpace = icon?.offsetWidth;
-        if(extraSpace) { styleForExport.extraLeftPadding = extraSpace; }
-
-        return {
-            content: cell.textContent,
-            styles: styleForExport
-        };
-    }
-    getHeaderView() {
-        return this._treeList._views.columnHeadersView;
-    }
-    getHeaderElement(index) {
-        return this.getHeaderView().getHeaderElement(index).get(0);
-    }
-    _createGanttViewExportHelper() {
-        return {
-            getTreeListTableStyle: this.getTreeListTableStyle.bind(this),
-            getTreeListColCount: this.getTreeListColCount.bind(this),
-            getTreeListHeaderInfo: this.getTreeListHeaderInfo.bind(this),
-            getTreeListCellInfo: this.getTreeListCellInfo.bind(this),
-        };
+    _getExportHelper() {
+        this._exportHelper ??= new GanttExportHelper(this);
+        return this._exportHelper;
     }
 
     _optionChanged(args) {

@@ -7,9 +7,9 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -20,39 +20,39 @@ import Editor, {
 import UploadInfo from '../file_management/upload_info';
 
 /** @public */
-export type BeforeSendEvent = ComponentEvent<dxFileUploader> & {
+export type BeforeSendEvent = EventInfo<dxFileUploader> & {
     readonly request: XMLHttpRequest;
     readonly file: File;
     readonly uploadInfo?: UploadInfo;
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxFileUploader>;
+export type ContentReadyEvent = EventInfo<dxFileUploader>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxFileUploader>;
+export type DisposingEvent = EventInfo<dxFileUploader>;
 
 /** @public */
-export type DropZoneEnterEvent = ComponentNativeEvent<dxFileUploader> & {
+export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader> & {
     readonly dropZoneElement: TElement;
 }
 
 /** @public */
-export type DropZoneLeaveEvent = ComponentNativeEvent<dxFileUploader> & {
+export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader> & {
     readonly dropZoneElement: TElement;
 }
 
 /** @public */
-export type FilesUploadedEvent = ComponentEvent<dxFileUploader>;
+export type FilesUploadedEvent = EventInfo<dxFileUploader>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxFileUploader>;
+export type InitializedEvent = InitializedEventInfo<dxFileUploader>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxFileUploader> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxFileUploader> & ChangedOptionInfo;
 
 /** @public */
-export type ProgressEvent = ComponentNativeEvent<dxFileUploader> & {
+export type ProgressEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly segmentSize: number;
     readonly bytesLoaded: number;
@@ -61,21 +61,21 @@ export type ProgressEvent = ComponentNativeEvent<dxFileUploader> & {
 }
 
 /** @public */
-export type UploadAbortedEvent = ComponentNativeEvent<dxFileUploader> & {
+export type UploadAbortedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest;
     message: string
 }
 
 /** @public */
-export type UploadedEvent = ComponentNativeEvent<dxFileUploader> & {
+export type UploadedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest;
     message: string;
 }
 
 /** @public */
-export type UploadErrorEvent = ComponentNativeEvent<dxFileUploader> & {
+export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest;
     readonly error: any;
@@ -83,13 +83,13 @@ export type UploadErrorEvent = ComponentNativeEvent<dxFileUploader> & {
 }
 
 /** @public */
-export type UploadStartedEvent = ComponentNativeEvent<dxFileUploader> & {
+export type UploadStartedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest 
 }
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxFileUploader> & {
+export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
     readonly value?: Array<File>;
     readonly previousValue?: Array<File>;
 }
@@ -562,6 +562,7 @@ export default class dxFileUploader extends Editor {
     removeFile(file: File): void;
 }
 
+/** @public */
 export type Options = dxFileUploaderOptions;
 
 /** @deprecated use Options instead */

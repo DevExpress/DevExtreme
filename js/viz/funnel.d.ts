@@ -17,9 +17,9 @@ import DataSource, {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -40,16 +40,16 @@ import BaseWidget, {
     Font,
     WordWrapType,
     VizTextOverflowType,
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
 
 /**
-* @docid
-* @inherits BaseLegendItem
-* @type object
-*/
+ * @docid
+ * @inherits BaseLegendItem
+ * @type object
+ */
 export interface FunnelLegendItem extends BaseLegendItem {
     /**
      * @docid
@@ -64,40 +64,40 @@ interface FunnelItemInfo {
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxFunnel>;
+export type DisposingEvent = EventInfo<dxFunnel>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxFunnel>;
+export type DrawnEvent = EventInfo<dxFunnel>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxFunnel>;
+export type ExportedEvent = EventInfo<dxFunnel>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxFunnel> & ExportInfo;
+export type ExportingEvent = EventInfo<dxFunnel> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxFunnel>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxFunnel>;
 
 /** @public */
-export type HoverChangedEvent = ComponentEvent<dxFunnel> & FunnelItemInfo;
+export type HoverChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxFunnel> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxFunnel> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxFunnel>;
+export type InitializedEvent = InitializedEventInfo<dxFunnel>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxFunnel> & FunnelItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
 
 /** @public */
-export type LegendClickEvent = ComponentNativeEvent<dxFunnel> & FunnelItemInfo;
+export type LegendClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxFunnel> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxFunnel> & FunnelItemInfo;
+export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
 
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
@@ -107,23 +107,23 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @public
      */
     adaptiveLayout?: {
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 80
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 80
+       */
       height?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       keepLabels?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 80
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 80
+       */
       width?: number
     };
     /**
@@ -176,148 +176,148 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      */
     item?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       border?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default #ffffff
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default #ffffff
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default false
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default false
+         */
         visible?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 2
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 2
+         */
         width?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       hoverStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           color?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           visible?: boolean,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           width?: number
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         hatching?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @type Enums.HatchingDirection
-          * @default 'right'
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @type Enums.HatchingDirection
+           * @default 'right'
+           */
           direction?: HatchingDirectionType,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 0.75
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 0.75
+           */
           opacity?: number,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 6
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 6
+           */
           step?: number,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 2
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 2
+           */
           width?: number
         }
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       selectionStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           color?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           visible?: boolean,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           width?: number
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         hatching?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @type Enums.HatchingDirection
-          * @default "right"
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @type Enums.HatchingDirection
+           * @default "right"
+           */
           direction?: HatchingDirectionType,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 0.5
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 0.5
+           */
           opacity?: number,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 6
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 6
+           */
           step?: number,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 2
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 2
+           */
           width?: number
         }
       }
@@ -329,134 +329,134 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      */
     label?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       backgroundColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       border?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#d3d3d3'
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default '#d3d3d3'
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.DashStyle
-        * @default 'solid'
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.DashStyle
+         * @default 'solid'
+         */
         dashStyle?: DashStyleType,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default false
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default false
+         */
         visible?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
         width?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       connector?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 0.5
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 0.5
+         */
         opacity?: number,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default true
+         */
         visible?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
         width?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 itemInfo:object
-      * @type_function_param1_field1 item:dxFunnelItem
-      * @type_function_param1_field2 value:Number
-      * @type_function_param1_field3 valueText:string
-      * @type_function_param1_field4 percent:Number
-      * @type_function_param1_field5 percentText:string
-      * @type_function_return string
-      * @notUsedInTheme
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 itemInfo:object
+       * @type_function_param1_field1 item:dxFunnelItem
+       * @type_function_param1_field2 value:Number
+       * @type_function_param1_field3 valueText:string
+       * @type_function_param1_field4 percent:Number
+       * @type_function_param1_field5 percentText:string
+       * @type_function_return string
+       * @notUsedInTheme
+       */
       customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#767676' [prop](color)
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#767676' [prop](color)
+       */
       font?: Font,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizFormat
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @extends CommonVizFormat
+       */
       format?: format,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.HorizontalEdge
-      * @default 'right'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.HorizontalEdge
+       * @default 'right'
+       */
       horizontalAlignment?: 'left' | 'right',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       */
       horizontalOffset?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.FunnelLabelPosition
-      * @default 'columns'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.FunnelLabelPosition
+       * @default 'columns'
+       */
       position?: 'columns' | 'inside' | 'outside',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       showForZeroValues?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.VizTextOverflow
-      * @default 'ellipsis'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.VizTextOverflow
+       * @default 'ellipsis'
+       */
       textOverflow?: VizTextOverflowType,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       visible?: boolean,
       /**
        * @docid
@@ -715,9 +715,9 @@ export default class dxFunnel extends BaseWidget {
 }
 
 /**
-* @docid
-* @publicName Item
-*/
+ * @docid
+ * @publicName Item
+ */
 export interface dxFunnelItem {
     /**
      * @docid
@@ -792,6 +792,7 @@ export interface dxFunnelItem {
     value?: number;
 }
 
+/** @public */
 export type Options = dxFunnelOptions;
 
 /** @deprecated use Options instead */

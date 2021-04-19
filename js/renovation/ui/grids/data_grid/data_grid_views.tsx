@@ -5,6 +5,7 @@ import { GridBaseViews } from '../grid_base/grid_base_views';
 import { GridBaseView } from '../grid_base/common/types';
 import { DataGridViewProps } from './common/data_grid_view_props';
 import { gridViewModule } from '../../../../ui/grid_core/ui.grid_core.grid_view';
+import { DataGridProps } from './common/data_grid_props';
 
 const { VIEW_NAMES } = gridViewModule;
 
@@ -14,12 +15,22 @@ const DATA_GRID_ROLE_NAME = 'grid';
 
 export const viewFunction = ({
   views,
+  props: {
+    showBorders,
+  },
 }: DataGridViews): JSX.Element => (
-  <GridBaseViews views={views} className={DATA_GRID_CLASS} role={DATA_GRID_ROLE_NAME} />
+  <GridBaseViews
+    views={views}
+    className={DATA_GRID_CLASS}
+    showBorders={showBorders}
+    role={DATA_GRID_ROLE_NAME}
+  />
 );
 
+type DataGridPropsType = Pick<DataGridProps, 'showBorders'> & DataGridViewProps;
+
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class DataGridViews extends JSXComponent<DataGridViewProps, 'instance'>() {
+export class DataGridViews extends JSXComponent<DataGridPropsType, 'instance'>() {
   get views(): { name: string; view: GridBaseView }[] {
     if (!this.props.instance) {
       return [];

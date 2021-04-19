@@ -3,9 +3,9 @@ import {
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -22,19 +22,19 @@ import {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxSlider>;
+export type ContentReadyEvent = EventInfo<dxSlider>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSlider>;
+export type DisposingEvent = EventInfo<dxSlider>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSlider>;
+export type InitializedEvent = InitializedEventInfo<dxSlider>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSlider> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxSlider> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSlider> & ValueChangedInfo;
 
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**
@@ -100,23 +100,23 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
      */
     label?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default function(value) { return value }
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default function(value) { return value }
+       */
       format?: format,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type Enums.VerticalEdge
-      * @default 'bottom'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.VerticalEdge
+       * @default 'bottom'
+       */
       position?: 'bottom' | 'top',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
       visible?: boolean
     };
     /**
@@ -147,34 +147,35 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
      */
     tooltip?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
       enabled?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default function(value) { return value }
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default function(value) { return value }
+       */
       format?: format,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type Enums.VerticalEdge
-      * @default 'top'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.VerticalEdge
+       * @default 'top'
+       */
       position?: 'bottom' | 'top',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type Enums.SliderTooltipShowMode
-      * @default 'onHover'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.SliderTooltipShowMode
+       * @default 'onHover'
+       */
       showMode?: 'always' | 'onHover'
     };
 }
 
+/** @public */
 export type Options = dxSliderOptions;
 
 /** @deprecated use Options instead */

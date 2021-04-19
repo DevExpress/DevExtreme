@@ -11,8 +11,8 @@ import {
 } from '../core/templates/template';
 
 import {
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -47,27 +47,27 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxForm>;
+export type ContentReadyEvent = EventInfo<dxForm>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxForm>;
+export type DisposingEvent = EventInfo<dxForm>;
 
 /** @public */
-export type EditorEnterKeyEvent = ComponentEvent<dxForm> & {
+export type EditorEnterKeyEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
 }
 
 /** @public */
-export type FieldDataChangedEvent = ComponentEvent<dxForm> & {
+export type FieldDataChangedEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
     readonly value?: any;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxForm>;
+export type InitializedEvent = InitializedEventInfo<dxForm>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxForm> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 
 /** @public */
 export type GroupItemTemplateData = {
@@ -807,7 +807,7 @@ export interface dxFormTabbedItem {
        * @extends ColCountResponsibleType
        * @inherits ColCountResponsible
        * @default undefined
-      */
+       */
       colCountByScreen?: any,
       /**
        * @docid
@@ -868,6 +868,7 @@ export interface dxFormTabbedItem {
     visibleIndex?: number;
 }
 
+/** @public */
 export type Options = dxFormOptions;
 
 /** @deprecated use Options instead */

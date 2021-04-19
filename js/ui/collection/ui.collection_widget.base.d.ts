@@ -11,8 +11,8 @@ import DataSource, {
 } from '../../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
+    EventInfo,
+    NativeEventInfo,
     ItemInfo
 } from '../../events/index';
 
@@ -87,7 +87,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ComponentNativeEvent<T> & ItemInfo) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void) | string;
     /**
      * @docid
      * @default null
@@ -103,7 +103,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -119,7 +119,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
+    onItemHold?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -134,7 +134,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
+    onItemRendered?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -148,7 +148,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: ComponentEvent<T> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default -1

@@ -8,9 +8,9 @@ import {
 
 import {
     Cancelable,
-    ComponentNativeEvent,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    NativeEventInfo,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -26,7 +26,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & Cancelable & {
+export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid> & {
     readonly area?: string;
     readonly cellElement?: TElement;
     readonly cell?: dxPivotGridPivotGridCell;
@@ -38,7 +38,7 @@ export type CellClickEvent = ComponentNativeEvent<dxPivotGrid> & Cancelable & {
 }
 
 /** @public */
-export type CellPreparedEvent = ComponentEvent<dxPivotGrid> & {
+export type CellPreparedEvent = EventInfo<dxPivotGrid> & {
     readonly area?: string;
     readonly cellElement?: TElement;
     readonly cell?: dxPivotGridPivotGridCell;
@@ -47,10 +47,10 @@ export type CellPreparedEvent = ComponentEvent<dxPivotGrid> & {
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxPivotGrid>;
+export type ContentReadyEvent = EventInfo<dxPivotGrid>;
 
 /** @public */
-export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGrid> & {
+export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
     readonly area?: string;
     readonly cell?: dxPivotGridPivotGridCell;
     readonly cellElement?: TElement;
@@ -64,13 +64,13 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxPivotGrid> & {
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxPivotGrid>;
+export type DisposingEvent = EventInfo<dxPivotGrid>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxPivotGrid>;
+export type ExportedEvent = EventInfo<dxPivotGrid>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxPivotGrid> & Cancelable & {
+export type ExportingEvent = Cancelable & EventInfo<dxPivotGrid> & {
     fileName?: string;
 }
 
@@ -84,10 +84,10 @@ export type FileSavingEvent = Cancelable & {
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxPivotGrid>;
+export type InitializedEvent = InitializedEventInfo<dxPivotGrid>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxPivotGrid> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxPivotGrid> & ChangedOptionInfo;
 
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
@@ -274,28 +274,28 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     fieldPanel?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowFieldDragging?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       showColumnFields?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       showDataFields?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       showFilterFields?: boolean,
       /**
       * @docid
@@ -304,40 +304,40 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       */
       showRowFields?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       texts?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Drop Column Fields Here"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Drop Column Fields Here"
+         */
         columnFieldArea?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Drop Data Fields Here"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Drop Data Fields Here"
+         */
         dataFieldArea?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Drop Filter Fields Here"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Drop Filter Fields Here"
+         */
         filterFieldArea?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Drop Row Fields Here"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Drop Row Fields Here"
+         */
         rowFieldArea?: string
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
       visible?: boolean
     };
     /**
@@ -831,8 +831,8 @@ export default class dxPivotGrid extends Widget {
 }
 
 /**
-* @docid
-* @type object
+ * @docid
+ * @type object
  */
 export interface dxPivotGridPivotGridCell {
     /**
@@ -904,8 +904,8 @@ export interface dxPivotGridPivotGridCell {
 }
 
 /**
-* @docid
-* @type object
+ * @docid
+ * @type object
  */
 export interface dxPivotGridSummaryCell {
     /**
@@ -1057,6 +1057,7 @@ export interface dxPivotGridSummaryCell {
     value(postProcessed: boolean): any;
 }
 
+/** @public */
 export type Options = dxPivotGridOptions;
 
 /** @deprecated use Options instead */

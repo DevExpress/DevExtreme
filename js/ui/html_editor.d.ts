@@ -11,9 +11,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -27,25 +27,25 @@ import {
 } from './toolbar';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxHtmlEditor>;
+export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxHtmlEditor>;
+export type DisposingEvent = EventInfo<dxHtmlEditor>;
 
 /** @public */
-export type FocusInEvent = ComponentNativeEvent<dxHtmlEditor>;
+export type FocusInEvent = NativeEventInfo<dxHtmlEditor>;
 
 /** @public */
-export type FocusOutEvent = ComponentNativeEvent<dxHtmlEditor>;
+export type FocusOutEvent = NativeEventInfo<dxHtmlEditor>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxHtmlEditor>;
+export type InitializedEvent = InitializedEventInfo<dxHtmlEditor>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxHtmlEditor> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxHtmlEditor> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxHtmlEditor> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor> & ValueChangedInfo;
 
 /** @public */
 export interface MentionTemplateData {
@@ -393,9 +393,9 @@ export default class dxHtmlEditor extends Editor {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorMediaResizing {
     /**
      * @docid
@@ -414,9 +414,9 @@ export interface dxHtmlEditorMediaResizing {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorMention {
     /**
      * @docid
@@ -497,9 +497,9 @@ export interface dxHtmlEditorMention {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorToolbar {
     /**
      * @docid
@@ -524,9 +524,9 @@ export interface dxHtmlEditorToolbar {
 }
 
 /**
-* @docid
-* @inherits dxToolbarItem
-*/
+ * @docid
+ * @inherits dxToolbarItem
+ */
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid
@@ -552,9 +552,9 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorVariables {
     /**
      * @docid
@@ -572,6 +572,7 @@ export interface dxHtmlEditorVariables {
     escapeChar?: string | Array<string>;
 }
 
+/** @public */
 export type Options = dxHtmlEditorOptions;
 
 /** @deprecated use Options instead */

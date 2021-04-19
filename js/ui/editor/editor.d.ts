@@ -3,7 +3,7 @@ import {
 } from '../../core/element';
 
 import {
-    ComponentNativeEvent
+    NativeEventInfo
 } from '../../events/index';
 
 import Widget, {
@@ -37,7 +37,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: ComponentNativeEvent<T> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<T> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
