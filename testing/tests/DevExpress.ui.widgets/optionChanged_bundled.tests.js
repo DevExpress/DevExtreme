@@ -19,7 +19,8 @@ define(function(require) {
 
     QUnit.module('OptionChanged', {
         beforeEach: function() {
-            this.$element = $('<div />').appendTo('body');
+            const $container = $('<div />').appendTo('body');
+            this.$element = $('<div />').appendTo($container);
 
             this._originalOptionChanged = Component.prototype._optionChanged;
 
