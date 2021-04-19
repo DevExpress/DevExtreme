@@ -30,7 +30,7 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/vdom": "1.0.5",
-    "devexpress-diagram": "2.1.12",
+    "devexpress-diagram": "2.1.14",
     "devexpress-gantt": "2.1.23",
     "devextreme-quill": "~1.0.0",
     "inferno": "^7.4.6",
