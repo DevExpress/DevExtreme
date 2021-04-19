@@ -88,8 +88,8 @@ const Form = Widget.inherit({
             screenByWidth: defaultScreenFactorFunc,
 
             /**
-            * @pseudo ColCountResponsibleType
-            * @type object
+            * _pseudo ColCountResponsibleType
+            * _type object
             */
             colCountByScreen: undefined,
 
