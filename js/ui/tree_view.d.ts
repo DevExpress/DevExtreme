@@ -202,22 +202,24 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeViewNode
      * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field6 itemData:object
+     * @type_function_param1_field7 itemIndex:number
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, node?: dxTreeViewNode, itemElement?: dxElement }) => any);
+    onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, node?: dxTreeViewNode, itemElement?: dxElement, itemData?: object, itemIndex?: number }) => any);
     /**
      * @docid dxTreeViewOptions.onSelectAllValueChanged
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:boolean
+     * @type_function_param1_field4 value:boolean | undefined
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, value?: boolean }) => any);
+    onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, value?: boolean | undefined }) => any);
     /**
      * @docid dxTreeViewOptions.onSelectionChanged
      * @extends Action
