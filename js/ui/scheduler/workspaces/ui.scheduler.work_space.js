@@ -1093,24 +1093,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         const minWidth = this.getWorkSpaceMinWidth();
-        const $headerCells = this._$headerPanel
-            .find('tr')
-            .last()
-            .find('th');
-
-        const virtualState = this.virtualScrollingDispatcher?.getRenderState() || {};
 
         const groupCount = this._getGroupCount();
-        const {
-            startCellIndex = 0,
-            cellCount = this._getTotalCellCount(groupCount),
-        } = virtualState;
         const totalCellCount = this._getTotalCellCount(groupCount);
 
-        const leftVirtualCellCount = startCellIndex;
-        const rightVirtualCellCount = totalCellCount - cellCount - startCellIndex;
-
-        let width = cellWidth * ($headerCells.length + leftVirtualCellCount + rightVirtualCellCount);
+        let width = cellWidth * totalCellCount;
 
         if(width < minWidth) {
             width = minWidth;
