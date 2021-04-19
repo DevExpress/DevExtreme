@@ -84,7 +84,6 @@ define(function(require) {
                     const $element = this.$element;
                     const component = $element[componentName](getDefaultOptions(componentName))[componentName]('instance');
                     const options = component.option();
-                    let optionCount = 0;
 
                     component.QUnitAssert = assert;
 
@@ -122,15 +121,16 @@ define(function(require) {
                             return;
                         }
 
+                        const assertOkSpy = sinon.spy(assert, 'ok');
                         component.beginUpdate();
-
                         component._notifyOptionChanged(option, newValue, prevValue);
                         component.endUpdate();
 
-                        optionCount++;
+                        if(assertOkSpy.notCalled) {
+                            assert.ok(true, option);
+                        }
+                        assertOkSpy.restore();
                     });
-
-                    assert.ok(true, optionCount + ' options was checked');
                 });
             }
         });
