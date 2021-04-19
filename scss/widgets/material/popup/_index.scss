@@ -25,6 +25,11 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
   & > .dx-popup-fullscreen {
     border-radius: 0;
   }
+
+  .dx-scrollable-container {
+    margin-left: -10px;
+    padding-left: 10px;
+  }
 }
 
 .dx-popup-title {
