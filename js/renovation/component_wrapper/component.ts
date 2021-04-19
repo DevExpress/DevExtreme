@@ -42,6 +42,7 @@ export default class ComponentWrapper extends DOMComponent {
   };
   _viewRef!: RefObject<unknown>;
   _viewComponent!: any;
+  _onInitialized!: Function;
 
   get viewRef() {
     return this._viewRef?.current;
@@ -116,7 +117,7 @@ export default class ComponentWrapper extends DOMComponent {
     const parentNode = containerNode.parentNode;
     parentNode.$V = containerNode.$V;
     containerNode.$V = null;
-    render(null, parentNode);
+    render(createElement(containerNode.tagName, this.elementAttr), parentNode);
     delete parentNode.$V;
     super._dispose();
   }
