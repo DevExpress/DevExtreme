@@ -845,6 +845,8 @@ QUnit.module('Drawer behavior', () => {
         assert.equal(instance.calcTargetPosition(), 'left');
     });
 
+    /* TODO: cannot test in this way because each test requires additional time when tests are started in two 'iframe' (chrome): 700ms instead of 15ms.
+
     ['shrink', 'push', 'overlap'].forEach(openedStateMode => {
         ['left', 'top', 'right', 'bottom'].forEach(position => {
             ['slide', 'expand'].forEach(revealMode => {
@@ -852,7 +854,7 @@ QUnit.module('Drawer behavior', () => {
                     [undefined, 5].forEach(minSize => {
                         [true, false].forEach(animationEnabled => {
 
-                            QUnit.test(`dxResize event: {opened: false} -> {opened: true} for {${openedStateMode}, ${revealMode}, ${position}, shading: ${shading}, minSize: ${minSize}, animation: ${animationEnabled}}`, function(assert) {
+                            QUnit.__test(`dxResize event: {opened: false} -> {opened: true} for {${openedStateMode}, ${revealMode}, ${position}, shading: ${shading}, minSize: ${minSize}, animation: ${animationEnabled}}`, function(assert) {
                                 const done = assert.async();
                                 const triggerResizeEventInitial = visibilityChange.triggerResizeEvent;
                                 let resizeCallCount = 0;
@@ -896,7 +898,7 @@ QUnit.module('Drawer behavior', () => {
                 });
             });
         });
-    });
+    });*/
 });
 
 QUnit.module('Drawer view template', () => {
