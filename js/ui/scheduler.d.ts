@@ -17,7 +17,12 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    TEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    Cancelable
 } from '../events/index';
 
 import {
@@ -34,6 +39,156 @@ import dxSortable from './sortable';
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+interface AppointmentDraggingEvent {
+  readonly component: dxScheduler;
+  readonly event?: TEvent;
+  readonly itemData?: any;
+  readonly itemElement?: TElement;
+  readonly fromData?: any;
+}
+
+interface TargetedAppointmentInfo {
+  readonly appointmentData: any;
+  readonly targetedAppointmentData?: any;
+}
+
+/** @public */
+export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: any;
+  readonly error?: Error;
+}
+
+/** @public */
+export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: any;
+  cancel: boolean | TPromise<boolean>;
+}
+
+/** @public */
+export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
+  readonly appointmentElement: TElement;
+}
+
+/** @public */
+export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler> & TargetedAppointmentInfo &{
+  readonly appointmentElement: TElement;
+}
+
+/** @public */
+export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
+  readonly appointmentElement: TElement;
+}
+
+/** @public */
+export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: any;
+  readonly error?: Error;
+}
+
+/** @public */
+export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: any;
+  cancel: boolean | TPromise<boolean>;
+}
+
+/** @public */
+export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & {
+  readonly appointmentData?: any;
+  readonly form: dxForm;
+  readonly popup: dxPopup;
+}
+
+/** @public */
+export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointmentInfo & {
+  readonly appointmentElement: TElement;
+}
+
+/** @public */
+export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: any;
+  readonly error?: Error;
+}
+
+/** @public */
+export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
+  readonly oldData: any;
+  readonly newData: any;
+  cancel?: boolean | TPromise<boolean>;
+}
+
+/** @public */
+export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler> & {
+  readonly cellData: any;
+  readonly cellElement: TElement;
+}
+
+/** @public */
+export type CellContextMenuEvent = NativeEventInfo<dxScheduler> & {
+  readonly cellData: any;
+  readonly cellElement: TElement;
+}
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxScheduler>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxScheduler>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxScheduler>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
+
+/** @public */
+export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
+  readonly fromComponent?: dxSortable | dxDraggable;
+  readonly toComponent?: dxSortable | dxDraggable;
+  readonly toData?: any;
+}
+
+/** @public */
+export type AppointmentDraggingEndEvent = Cancelable & AppointmentDraggingEvent & {
+  readonly fromComponent?: dxSortable | dxDraggable;
+  readonly toComponent?: dxSortable | dxDraggable;
+  readonly toData?: any;
+}
+
+/** @public */
+export type AppointmentDraggingMoveEvent = Cancelable & AppointmentDraggingEvent & {
+  readonly fromComponent?: dxSortable | dxDraggable;
+  readonly toComponent?: dxSortable | dxDraggable;
+  readonly toData?: any;
+}
+
+/** @public */
+export type AppointmentDraggingStartEvent = Cancelable & AppointmentDraggingEvent;
+
+/** @public */
+export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
+  readonly fromComponent?: dxSortable | dxDraggable;
+  readonly toComponent?: dxSortable | dxDraggable;
+}
+
+/** @public */
+export type AppointmentTemplateData = TargetedAppointmentInfo;
+
+/** @public */
+export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
+
+/** @public */
+export type AppointmentCollectorTemplateData = {
+  readonly appointmentCount: number;
+  readonly isCompact: boolean;
+}
+
+/** @public */
+export type DateNavigatorTextInfo = {
+  readonly startDate: Date;
+  readonly endDate: Date;
+  readonly text: string;
+}
 
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
@@ -57,7 +212,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: TElement) => string | TElement);
+    appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: TElement) => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -95,7 +250,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field7 fromData:any
        * @type_function_param1_field8 toData:any
        */
-      onAdd?: ((e: { component?: dxScheduler, event?: TEvent, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void),
+      onAdd?: ((e: AppointmentDraggingAddEvent) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -110,7 +265,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field8 fromData:any
        * @type_function_param1_field9 toData:any
        */
-      onDragEnd?: ((e: { component?: dxScheduler, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void),
+      onDragEnd?: ((e: AppointmentDraggingEndEvent) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -125,7 +280,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field8 fromData:any
        * @type_function_param1_field9 toData:any
        */
-      onDragMove?: ((e: { component?: dxScheduler, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void),
+      onDragMove?: ((e: AppointmentDraggingMoveEvent) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -137,7 +292,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field5 itemElement:dxElement
        * @type_function_param1_field6 fromData:any
        */
-      onDragStart?: ((e: { component?: dxScheduler, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromData?: any }) => void),
+      onDragStart?: ((e: AppointmentDraggingStartEvent) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -150,7 +305,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 fromData:any
        */
-      onRemove?: ((e: { component?: dxScheduler, event?: TEvent, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => void),
+      onRemove?: ((e: AppointmentDraggingRemoveEvent) => void),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -170,14 +325,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | TElement);
+    appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @extends AppointmentTooltipTemplate
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | TElement);
+    appointmentTooltipTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @extends CellDuration
@@ -220,7 +375,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeDateNavigatorText?: ((info: { startDate?: Date, endDate?: Date, text?: string }) => string);
+    customizeDateNavigatorText?: ((info: DateNavigatorTextInfo) => string);
     /**
      * @docid
      * @extends DataCellTemplate
@@ -411,28 +566,37 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentAdded?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, error?: Error }) => void);
+    onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentAdding?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, cancel: boolean | TPromise<boolean> }) => void);
+    onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
      * @type_function_param1_field6 appointmentElement:dxElement
@@ -442,11 +606,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentClick?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: TElement, event?: TEvent, cancel: boolean }) => void) | string;
+    onAppointmentClick?: ((e: AppointmentClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
      * @type_function_param1_field6 appointmentElement:dxElement
@@ -455,11 +622,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentContextMenu?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: TElement, event?: TEvent }) => void) | string;
+    onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
      * @type_function_param1_field6 appointmentElement:dxElement
@@ -469,33 +639,42 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDblClick?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: TElement, event?: TEvent, cancel: boolean }) => void) | string;
+    onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDeleted?: ((e: { component: dxScheduler, element: TElement, model: any, appointmentData: any, error?: Error }) => void);
+    onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDeleting?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, cancel: boolean | TPromise<boolean> }) => void);
+    onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 form:dxForm
      * @type_function_param1_field6 popup:dxPopup
@@ -504,11 +683,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentFormOpening?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData?: any, form: dxForm, popup: dxPopup, cancel: boolean }) => void);
+    onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object|undefined
      * @type_function_param1_field6 appointmentElement:dxElement
@@ -516,22 +698,28 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentRendered?: ((e: { component: dxScheduler, element: TElement, model: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement?: TElement }) => void);
+    onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentUpdated?: ((e: { component: dxScheduler, element: TElement, model?: any, appointmentData: any, error?: Error }) => void);
+    onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 oldData:Object
      * @type_function_param1_field5 newData:Object
      * @type_function_param1_field6 cancel:Boolean|Promise<Boolean>
@@ -539,11 +727,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentUpdating?: ((e: { component: dxScheduler, element: TElement, model?: any, oldData?: any, newData?: any, cancel?: boolean | TPromise<boolean> }) => void);
+    onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellData:object
      * @type_function_param1_field5 cellElement:dxElement
      * @type_function_param1_field6 event:event
@@ -552,11 +743,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component: dxScheduler, element: TElement, model?: any, cellData: any, cellElement: TElement, event?: TEvent, cancel: boolean }) => void) | string;
+    onCellClick?: ((e: CellClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScheduler
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellData:object
      * @type_function_param1_field5 cellElement:dxElement
      * @type_function_param1_field6 event:event
@@ -564,7 +758,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellContextMenu?: ((e: { component: dxScheduler, element: TElement, model?: any, cellData: any, cellElement: TElement, event?: TEvent }) => void) | string;
+    onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
     /**
      * @docid
      * @type Enums.SchedulerRecurrenceEditMode
@@ -766,19 +960,19 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default "appointmentCollector"
        * @extends AppointmentCollectorTemplate
        */
-      appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: TElement) => string | TElement),
+      appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @extends AppointmentTemplate
        */
-      appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | TElement),
+      appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @extends AppointmentTooltipTemplate
        */
-      appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | TElement),
+      appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1094,6 +1288,7 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     visible?: boolean;
 }
 
+/** @public */
 export type Options = dxSchedulerOptions;
 
 /**

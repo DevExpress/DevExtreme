@@ -4,6 +4,8 @@ import {
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
 import { titleize } from '../../../core/utils/inflector';
 import { ensureDefined } from '../../../core/utils/common';
+import { getScrollLeftMax } from './utils/get_scroll_left_max';
+import { getScrollTopMax } from './utils/get_scroll_top_max';
 
 import {
   ScrollableLocation,
@@ -45,10 +47,6 @@ function getRelativeLocation(element: HTMLElement): ScrollableLocation {
   return result;
 }
 
-export function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): number {
-  return containerRef[`scroll${titleize(dimension)}`] - containerRef[`client${titleize(dimension)}`];
-}
-
 export function getBoundaryProps(
   direction: ScrollableDirection,
   scrollOffset: ScrollableLocation,
@@ -61,11 +59,11 @@ export function getBoundaryProps(
 
   if (isHorizontal) {
     boundaryProps.reachedLeft = left <= 0;
-    boundaryProps.reachedRight = Math.round(left) >= getMaxScrollOffset('width', element);
+    boundaryProps.reachedRight = Math.round(left) >= getScrollLeftMax(element);
   }
   if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element) - topPocketHeight;
+    boundaryProps.reachedBottom = (getScrollTopMax(element) - topPocketHeight) - top < 0.5;
   }
   return boundaryProps;
 }
@@ -150,22 +148,21 @@ function getElementLocationInternal(
   return containerLocation;
 }
 
-export function getElementLocation(
+export function getLocation(
   element: HTMLElement,
   offset: ScrollOffset,
   direction: ScrollableDirection,
-  containerRef: HTMLDivElement,
+  containerElement: HTMLDivElement,
   rtlEnabled?: boolean,
 ): number {
   const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
-  const maxScrollLeftOffset = getMaxScrollOffset('width', containerRef);
   const location = normalizeCoordinate(
     prop,
-    getElementLocationInternal(element, prop, offset, direction, containerRef, rtlEnabled),
+    getElementLocationInternal(element, prop, offset, direction, containerElement, rtlEnabled),
     rtlEnabled,
   );
 
-  return getPublicCoordinate(prop, location, maxScrollLeftOffset, rtlEnabled);
+  return getPublicCoordinate(prop, location, getScrollLeftMax(containerElement), rtlEnabled);
 }
 
 export function updateAllowedDirection(

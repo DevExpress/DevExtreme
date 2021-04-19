@@ -11,12 +11,19 @@ import DataSource, {
 } from '../../data/data_source';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    ItemInfo
 } from '../../events/index';
 
 import Widget, {
     WidgetOptions
 } from '../widget/ui.widget';
+
+export interface SelectionChangedInfo<T = any> {
+    readonly addedItems: Array<T>;
+    readonly removedItems: Array<T>;
+}
 
 export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
     /**
@@ -73,11 +80,14 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void) | string;
     /**
      * @docid
      * @default null
@@ -86,11 +96,14 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -99,11 +112,14 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
+    onItemHold?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -111,22 +127,28 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number }) => void);
+    onItemRendered?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => void);
+    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default -1
@@ -197,7 +219,7 @@ export interface CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | (() => string | TElement);
+    template?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

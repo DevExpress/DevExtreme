@@ -174,6 +174,7 @@ describe('CheckBox', () => {
                 rtlEnabled: false,
               },
               shouldShowValidationMessage: true,
+              targetCurrent: target?.current,
             } as any)}
           </div>
         );
@@ -560,6 +561,23 @@ describe('CheckBox', () => {
           const validationError = { message: 'error message' };
           expect(new CheckBox({ validationError }).validationErrors)
             .toEqual([validationError]);
+        });
+      });
+
+      describe('targetCurrent', () => {
+        it('should return "this.target.current" value when it is specified', () => {
+          const checkBox = new CheckBox({});
+          const expectedCurrent = {};
+          const ref = { current: expectedCurrent } as RefObject<HTMLDivElement>;
+          checkBox.target = ref;
+
+          expect(checkBox.targetCurrent).toEqual(expectedCurrent);
+        });
+
+        it('should return undefined when target is not specified', () => {
+          const checkBox = new CheckBox({});
+
+          expect(checkBox.targetCurrent).toEqual(undefined);
         });
       });
 

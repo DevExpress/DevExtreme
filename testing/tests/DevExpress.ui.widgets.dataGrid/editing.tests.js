@@ -13729,7 +13729,7 @@ QUnit.module('Editing with validation', {
         rowsView.render(testElement);
 
         this.applyOptions({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'form',
                 allowUpdating: true,
@@ -19677,7 +19677,7 @@ QUnit.module('Async validation', {
         rowsView.render(testElement);
 
         this.applyOptions({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'form',
                 allowUpdating: true,
@@ -19765,7 +19765,7 @@ QUnit.module('Async validation', {
         rowsView.render(testElement);
 
         this.applyOptions({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'form',
                 allowUpdating: true,
@@ -19825,7 +19825,7 @@ QUnit.module('Async validation', {
         rowsView.render(testElement);
 
         this.applyOptions({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'batch',
                 allowUpdating: true,

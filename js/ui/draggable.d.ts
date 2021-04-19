@@ -11,7 +11,11 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxSortable from './sortable';
@@ -110,6 +114,49 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
  */
 export interface DraggableBase { }
 
+/** @public */
+export type DisposingEvent = EventInfo<dxDraggable>;
+
+/** @public */
+export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+}
+
+/** @public */
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+}
+
+/** @public */
+export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+    itemData?: any;
+    readonly itemElement?: TElement;
+    readonly fromData?: any;
+}
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxDraggable>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxDraggable> & ChangedOptionInfo;
+
+
+/** @public */
+export type DragTemplateData = {
+    readonly itemData?: any;
+    readonly itemElement: TElement;
+}
+
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid
@@ -129,11 +176,14 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement }, containerElement: TElement) => string | TElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDraggable
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
@@ -146,11 +196,14 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragEnd?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
+    onDragEnd?: ((e: DragEndEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDraggable
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
@@ -163,11 +216,14 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragMove?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void);
+    onDragMove?: ((e: DragMoveEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDraggable
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
@@ -177,7 +233,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragStart?: ((e: { component?: dxDraggable, element?: TElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromData?: any }) => void);
+    onDragStart?: ((e: DragStartEvent) => void);
 }
 /**
  * @docid
@@ -192,6 +248,7 @@ export default class dxDraggable extends DOMComponent implements DraggableBase {
     constructor(element: TElement, options?: dxDraggableOptions)
 }
 
+/** @public */
 export type Options = dxDraggableOptions;
 
 /** @deprecated use Options instead */

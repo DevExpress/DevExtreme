@@ -9,5 +9,6 @@ export interface GridBaseInstance extends GridBase {
 export interface GridBaseView {
   name: string;
   _$element: any;
+  _$parent: any;
   render: () => any;
 }

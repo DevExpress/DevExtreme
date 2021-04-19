@@ -15,13 +15,45 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    TEvent
+    TEvent,
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxPopup, {
     dxPopupAnimation,
-    dxPopupOptions
+    dxPopupOptions,
+    TitleRenderedInfo
 } from './popup';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxPopover>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxPopover>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxPopover>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxPopover>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxPopover>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxPopover> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = EventInfo<dxPopover>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxPopover>;
+
+/** @public */
+export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
@@ -97,7 +129,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
        * @default undefined
        */
       delay?: number,
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default undefined
@@ -166,6 +198,7 @@ export default class dxPopover extends dxPopup {
     show(target: string | TElement): TPromise<boolean>;
 }
 
+/** @public */
 export type Options = dxPopoverOptions;
 
 /** @deprecated use Options instead */

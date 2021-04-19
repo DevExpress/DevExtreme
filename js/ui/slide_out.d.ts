@@ -14,10 +14,52 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxSlideOut>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSlideOut>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSlideOut>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+
+/** @public */
+export type MenuGroupRenderedEvent = EventInfo<dxSlideOut>;
+
+/** @public */
+export type MenuItemRenderedEvent = EventInfo<dxSlideOut>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSlideOut> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxSlideOut> & SelectionChangedInfo;
 
 export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     /**
@@ -96,20 +138,28 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     menuVisible?: boolean;
     /**
      * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSlideOut
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => void);
+    onMenuGroupRendered?: ((e: MenuGroupRenderedEvent) => void);
     /**
      * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSlideOut
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => void);
+    onMenuItemRendered?: ((e: MenuItemRenderedEvent) => void);
     /**
      * @docid
      * @default 0
@@ -177,6 +227,7 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
     menuTemplate?: template | (() => string | TElement);
 }
 
+/** @public */
 export type Options = dxSlideOutOptions;
 
 /** @deprecated use Options instead */

@@ -3,9 +3,9 @@ import {
 } from '../core/utils/deferred';
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface Query {
     /**
      * @docid
@@ -231,6 +231,5 @@ declare function query(array: Array<any>): Query;
  * @public
  */
 declare function query(url: string, queryOptions: any): Query;
-
 
 export default query;

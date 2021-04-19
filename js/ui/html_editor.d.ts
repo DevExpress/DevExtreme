@@ -11,10 +11,14 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import Editor, {
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
 
@@ -22,6 +26,33 @@ import {
     dxToolbarItem
 } from './toolbar';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxHtmlEditor>;
+
+/** @public */
+export type FocusInEvent = NativeEventInfo<dxHtmlEditor>;
+
+/** @public */
+export type FocusOutEvent = NativeEventInfo<dxHtmlEditor>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxHtmlEditor>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxHtmlEditor> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor> & ValueChangedInfo;
+
+/** @public */
+export interface MentionTemplateData {
+    readonly marker: string;
+    readonly id?: string | number;
+    readonly value?: any;
+}
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
@@ -63,21 +94,27 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field1 component:dxHtmlEditor
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => void);
+    onFocusIn?: ((e: FocusInEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field1 component:dxHtmlEditor
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: { component?: dxHtmlEditor, element?: TElement, model?: any, event?: TEvent }) => void);
+    onFocusOut?: ((e: FocusOutEvent) => void);
     /**
      * @docid
      * @default ""
@@ -356,9 +393,9 @@ export default class dxHtmlEditor extends Editor {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorMediaResizing {
     /**
      * @docid
@@ -377,9 +414,9 @@ export interface dxHtmlEditorMediaResizing {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorMention {
     /**
      * @docid
@@ -449,7 +486,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: TElement) => string | TElement);
+    template?: template | ((mentionData: MentionTemplateData, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default "this"
@@ -460,9 +497,9 @@ export interface dxHtmlEditorMention {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorToolbar {
     /**
      * @docid
@@ -487,9 +524,9 @@ export interface dxHtmlEditorToolbar {
 }
 
 /**
-* @docid
-* @inherits dxToolbarItem
-*/
+ * @docid
+ * @inherits dxToolbarItem
+ */
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid
@@ -515,9 +552,9 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxHtmlEditorVariables {
     /**
      * @docid
@@ -535,6 +572,7 @@ export interface dxHtmlEditorVariables {
     escapeChar?: string | Array<string>;
 }
 
+/** @public */
 export type Options = dxHtmlEditorOptions;
 
 /** @deprecated use Options instead */

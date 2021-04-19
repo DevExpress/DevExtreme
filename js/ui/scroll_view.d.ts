@@ -6,27 +6,63 @@ import {
     TPromise
 } from '../core/utils/deferred';
 
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import dxScrollable, {
-    dxScrollableOptions
+    dxScrollableOptions,
+    ScrollEventInfo
 } from './scroll_view/ui.scrollable';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxScrollView>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxScrollView>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxScrollView> & ChangedOptionInfo;
+
+/** @public */
+export type PullDownEvent = EventInfo<dxScrollView>;
+
+/** @public */
+export type ReachBottomEvent = EventInfo<dxScrollView>;
+
+/** @public */
+export type ScrollEvent = ScrollEventInfo<dxScrollView>;
+
+/** @public */
+export type UpdatedEvent = ScrollEventInfo<dxScrollView>;
 
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScrollView
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullDown?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => void);
+    onPullDown?: ((e: PullDownEvent) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxScrollView
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReachBottom?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => void);
+    onReachBottom?: ((e: ReachBottomEvent) => void);
     /**
      * @docid
      * @default "Release to refresh..."
@@ -89,6 +125,7 @@ export default class dxScrollView extends dxScrollable {
     release(preventScrollBottom: boolean): TPromise<void>;
 }
 
+/** @public */
 export type Options = dxScrollViewOptions;
 
 /** @deprecated use Options instead */

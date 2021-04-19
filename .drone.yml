@@ -67,5 +67,4 @@ matrix:
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.scheduler }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: viz }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: renovation }
-    - { TARGET: native_components }
     - { TARGET: test_styles }

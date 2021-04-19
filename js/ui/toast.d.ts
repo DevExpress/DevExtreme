@@ -11,13 +11,41 @@ import {
 } from '../core/element';
 
 import {
-    TEvent
+    TEvent,
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions
 } from './overlay';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxToast>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxToast>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxToast>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxToast>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxToast>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxToast> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = EventInfo<dxToast>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxToast>;
 
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
@@ -154,6 +182,7 @@ export default class dxToast extends dxOverlay {
     constructor(element: TElement, options?: dxToastOptions)
 }
 
+/** @public */
 export type Options = dxToastOptions;
 
 /** @deprecated use Options instead */

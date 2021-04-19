@@ -3,13 +3,58 @@ import {
 } from '../core/element';
 
 import {
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo
+} from './core/base_widget';
+
+import {
     BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
     BaseGaugeScale,
     BaseGaugeScaleLabel,
-    GaugeIndicator
+    GaugeIndicator,
+    TooltipInfo
 } from './gauges/base_gauge';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxLinearGauge>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxLinearGauge>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxLinearGauge>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxLinearGauge> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxLinearGauge>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxLinearGauge> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxLinearGauge>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxLinearGauge> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
+
 
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
@@ -18,7 +63,7 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
      * @public
      */
     geometry?: {
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.viz
        * @type Enums.Orientation
@@ -145,6 +190,7 @@ export default class dxLinearGauge extends BaseGauge {
     constructor(element: TElement, options?: dxLinearGaugeOptions)
 }
 
+/** @public */
 export type Options = dxLinearGaugeOptions;
 
 /** @deprecated use Options instead */

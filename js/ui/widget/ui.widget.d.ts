@@ -6,6 +6,10 @@ import {
     TElement
 } from '../../core/element';
 
+import {
+    EventInfo
+} from '../../events/index';
+
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**
      * @docid
@@ -52,11 +56,15 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onContentReady?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default 0
@@ -127,33 +135,33 @@ export var dxItem: any;
  */
 export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | {
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   */
   currency?: string,
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  * @type_function_param1 value:number|date
-  * @type_function_return string
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 value:number|date
+   * @type_function_return string
+   */
   formatter?: ((value: number | Date) => string),
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  * @type_function_param1 value:string
-  * @type_function_return number|date
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 value:string
+   * @type_function_return number|date
+   */
   parser?: ((value: string) => number | Date),
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   */
   precision?: number,
   /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  * @type Enums.Format
-  */
+   * @docid
+   * @prevFileNamespace DevExpress.ui
+   * @type Enums.Format
+   */
   type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime'
 };

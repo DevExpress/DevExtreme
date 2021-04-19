@@ -6,10 +6,42 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxTileView>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTileView>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTileView>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxTileView> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxTileView> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxTileView> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxTileView> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTileView> & ChangedOptionInfo;
 
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**
@@ -134,6 +166,7 @@ export interface dxTileViewItem extends CollectionWidgetItem {
     widthRatio?: number;
 }
 
+/** @public */
 export type Options = dxTileViewOptions;
 
 /** @deprecated use Options instead */

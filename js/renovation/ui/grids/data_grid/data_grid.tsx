@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  JSXComponent, Component, Method, Effect, Mutable,
+  JSXComponent, Component, Method, Effect, Mutable, RefObject, Ref, InternalState,
 } from '@devextreme-generator/declarations';
 import {
   DataGridProps,
@@ -20,8 +20,14 @@ import { DisposeEffectReturn } from '../../../utils/effect_return';
 
 const aria = { role: 'presentation' };
 
+const rowSelector = '.dx-row';
+
 export const viewFunction = ({
   instance,
+  widgetElementRef,
+  onHoverStart,
+  onHoverEnd,
+  onDimensionChanged,
   props: {
     accessKey,
     activeStateEnabled,
@@ -35,12 +41,15 @@ export const viewFunction = ({
     tabIndex,
     visible,
     width,
+    showBorders,
   },
   restAttributes,
 }: DataGrid): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
+    rootElementRef={widgetElementRef as any}
     accessKey={accessKey}
     activeStateEnabled={activeStateEnabled}
+    activeStateUnit={rowSelector}
     aria={aria}
     disabled={disabled}
     focusStateEnabled={focusStateEnabled}
@@ -52,10 +61,13 @@ export const viewFunction = ({
     tabIndex={tabIndex}
     visible={visible}
     width={width}
+    onHoverStart={onHoverStart}
+    onHoverEnd={onHoverEnd}
+    onDimensionChanged={onDimensionChanged}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
-    <DataGridViews instance={instance} />
+    <DataGridViews instance={instance} showBorders={showBorders} />
   </Widget>
 );
 
@@ -65,7 +77,9 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class DataGrid extends JSXComponent(DataGridProps) {
-  @Mutable() componentInstance!: GridInstance;
+  @Ref() widgetElementRef?: RefObject<HTMLDivElement>;
+
+  @InternalState() instance!: GridInstance;
 
   @Mutable() prevProps!: DataGridProps;
 
@@ -125,9 +139,18 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return this.instance?.columnCount();
   }
 
+  // TODO remove this after fix https://trello.com/c/I8ManehQ/2674-renovation-generated-jquery-methods-pass-all-aguments-even-it-is-optional
+  callMethod(funcName: string, args: unknown): void {
+    const normalizedArgs = [...args as unknown[]].filter((arg) => arg !== undefined);
+
+    return this.instance?.[funcName](...normalizedArgs);
+  }
+
   @Method()
-  columnOption(id: number | string, optionName: any, optionValue: any): void {
-    return this.instance?.columnOption(id, optionName, optionValue);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  columnOption(id: number | string, optionName: any, optionValue?: any): void {
+    // eslint-disable-next-line prefer-rest-params
+    return this.callMethod('columnOption', arguments);
   }
 
   @Method()
@@ -335,6 +358,11 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
+  resize(): void {
+    return this.instance?.resize();
+  }
+
+  @Method()
   addColumn(columnOptions: any | string): void {
     return this.instance?.addColumn(columnOptions);
   }
@@ -410,18 +438,15 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getController(name: string): any {
-    return this.instance?.getController(name);
+  isScrollbarVisible(): boolean {
+    return this.instance?.isScrollbarVisible();
+  }
+
+  @Method()
+  getTopVisibleRowData(): any {
+    return this.instance?.getTopVisibleRowData();
   }
   // #endregion
-
-  // It's impossible to define constructor use lazy creation instead
-  get instance(): GridInstance {
-    if (!this.componentInstance) {
-      this.componentInstance = this.createInstance();
-    }
-    return this.componentInstance;
-  }
 
   @Effect() updateOptions(): void {
     if (this.instance && this.prevProps) {
@@ -430,6 +455,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
       updatedOptions.forEach(({ path, value }) => this.instance.option(path, value));
       this.instance.endUpdate();
     }
+
     this.prevProps = this.props;
   }
 
@@ -438,7 +464,63 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return () => { this.instance.dispose(); };
   }
 
+  @Effect({ run: 'once' })
+  initInstanceElement(): void {
+    this.instance = this.createInstance();
+    this.instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+  }
+
+  instanceOptionChangedHandler(e: any): void {
+    const isValueCorrect = e.value === e.component.option(e.fullName); // T867777
+    if (e.value !== e.previousValue && isValueCorrect) {
+      if (e.name === 'editing' && this.props.editing) {
+        if (e.fullName === 'editing.changes') {
+          this.props.editing.changes = e.value;
+        }
+        if (e.fullName === 'editing.editRowKey') {
+          this.props.editing.editRowKey = e.value;
+        }
+        if (e.fullName === 'editing.editColumnName') {
+          this.props.editing.editColumnName = e.value;
+        }
+      }
+      if (e.fullName === 'focusedRowKey') {
+        this.props.focusedRowKey = e.value;
+      }
+      if (e.fullName === 'focusedRowIndex') {
+        this.props.focusedRowIndex = e.value;
+      }
+      if (e.fullName === 'focusedColumnIndex') {
+        this.props.focusedColumnIndex = e.value;
+      }
+      if (e.fullName === 'filterValue') {
+        this.props.filterValue = e.value;
+      }
+      if (e.fullName === 'selectedRowKeys') {
+        this.props.selectedRowKeys = e.value;
+      }
+      if (e.fullName === 'selectionFilter') {
+        this.props.selectionFilter = e.value;
+      }
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  onHoverStart(event: Event): void {
+    (event.currentTarget as HTMLElement).classList.add('dx-state-hover');
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  onHoverEnd(event: Event): void {
+    (event.currentTarget as HTMLElement).classList.remove('dx-state-hover');
+  }
+
+  onDimensionChanged(): void {
+    this.instance?.updateDimensions(true);
+  }
+
   // TODO without normalization all nested props defaults overwrite by undefined
+  // https://trello.com/c/36qTw0cH/2560-a-nested-prop-has-an-undefined-value-if-it-not-used-in-component
   // For example, instance.option('editing') return undefined instead of editing default values
   // Specifically for React
   // result[key] = {
@@ -449,6 +531,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   // }
   normalizeProps(): Record<string, unknown> {
     const result = {};
+
     Object.keys(this.props).forEach((key) => {
       if (this.props[key] !== undefined) {
         result[key] = this.props[key];
@@ -458,7 +541,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   createInstance(): GridInstance {
-    const instance: unknown = new DataGridComponent(this.normalizeProps());
+    const element = this.widgetElementRef?.current as HTMLElement;
+    const instance: GridInstance = new DataGridComponent(
+      element,
+      this.normalizeProps(),
+    ) as unknown as GridInstance;
+    instance.getController('resizing').updateSize(element);
 
     return instance as GridInstance;
   }

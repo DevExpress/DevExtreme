@@ -9,8 +9,14 @@ import {
 import DataSource from '../../data/data_source';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    ItemInfo
 } from '../../events/index';
+
+import {
+    ValueChangedInfo
+} from '../editor/editor';
 
 import {
     DataExpressionMixinOptions
@@ -19,6 +25,10 @@ import {
 import dxDropDownEditor, {
     dxDropDownEditorOptions
 } from './ui.drop_down_editor';
+
+import {
+    SelectionChangedInfo
+} from '../collection/ui.collection_widget.base';
 
 export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
     /**
@@ -70,21 +80,27 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @type_function_param1_field5 itemElement:object
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: TElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: TEvent }) => void);
+    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 selectedItem:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, selectedItem?: any }) => void);
+    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default null
@@ -92,11 +108,14 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => void);
+    onValueChanged?: ((e:  NativeEventInfo<T> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false

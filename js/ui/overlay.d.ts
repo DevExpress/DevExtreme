@@ -15,7 +15,9 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    TEvent
+    TEvent,
+    Cancelable,
+    EventInfo
 } from '../events/index';
 
 import Widget, {
@@ -108,37 +110,52 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onHidden?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: T, element?: TElement, model?: any, cancel?: boolean }) => void);
+    onHiding?: ((e: Cancelable & EventInfo<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onShowing?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onShown?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }

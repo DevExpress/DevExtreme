@@ -7,12 +7,38 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type ClickEvent = NativeEventInfo<dxButton> & {
+    validationGroup?: any;
+}
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxButton>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxButton>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxButton>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
+
+/** @public */
+export type TemplateData = {
+    readonly text?: string;
+    readonly icon?: string;
+}
 
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
@@ -49,11 +75,14 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 validationGroup:object
+     * @type_function_param1_field1 component:dxButton
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxButton, element?: TElement, model?: any, event?: TEvent, validationGroup?: any }) => void);
+    onClick?: ((e: ClickEvent) => void);
     /**
      * @docid
      * @type Enums.ButtonStylingMode
@@ -73,7 +102,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | TElement);
+    template?: template | ((data: TemplateData, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default ""
@@ -117,6 +146,7 @@ export default class dxButton extends Widget {
     constructor(element: TElement, options?: dxButtonOptions)
 }
 
+/** @public */
 export type Options = dxButtonOptions;
 
 /** @deprecated use Options instead */

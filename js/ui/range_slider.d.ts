@@ -3,10 +3,41 @@ import {
 } from '../core/element';
 
 import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
+    ValueChangedInfo
+} from './editor/editor';
+
+import {
     dxSliderBaseOptions
 } from './slider';
 
 import dxTrackBar from './track_bar';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxRangeSlider>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxRangeSlider>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxRangeSlider>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxRangeSlider> & ValueChangedInfo & {
+    readonly start?: number;
+    readonly end?: number;
+    readonly value?: Array<number>;
+}
+
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
      * @docid
@@ -24,6 +55,9 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     endName?: string;
     /**
      * @docid
+     * @type_function_param1_field1 component:dxRangeSlider
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @default null
      * @type_function_param1_field4 start:number
@@ -32,7 +66,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSlider, element?: TElement, model?: any, start?: number, end?: number, value?: Array<number> }) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @default 40
@@ -68,6 +102,7 @@ export default class dxRangeSlider extends dxTrackBar {
     constructor(element: TElement, options?: dxRangeSliderOptions)
 }
 
+/** @public */
 export type Options = dxRangeSliderOptions;
 
 /** @deprecated use Options instead */

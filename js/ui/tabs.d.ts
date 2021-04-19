@@ -6,10 +6,46 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxTabs>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTabs>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTabs>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxTabs> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxTabs> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxTabs> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxTabs> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTabs> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
 
 export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
@@ -117,6 +153,7 @@ export interface dxTabsItem extends CollectionWidgetItem {
     icon?: string;
 }
 
+/** @public */
 export type Options = dxTabsOptions;
 
 /** @deprecated use Options instead */

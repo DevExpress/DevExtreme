@@ -16,7 +16,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import BaseWidget, {
@@ -26,7 +30,65 @@ import BaseWidget, {
     Font,
     WordWrapType,
     VizTextOverflowType,
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
+
+export interface InteractionInfo {
+  readonly node: dxTreeMapNode;
+}
+
+/** @public */
+export type ClickEvent = NativeEventInfo<dxTreeMap> & {
+  readonly node: dxTreeMapNode
+}
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTreeMap>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxTreeMap>;
+
+/** @public */
+export type DrillEvent = EventInfo<dxTreeMap> & {
+  readonly node: dxTreeMapNode;
+}
+
+/** @public */
+export type ExportedEvent = EventInfo<dxTreeMap>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxTreeMap> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxTreeMap>;
+
+/** @public */
+export type HoverChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxTreeMap> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTreeMap>;
+
+/** @public */
+export type NodesInitializedEvent = EventInfo<dxTreeMap> & {
+    readonly root: dxTreeMapNode;
+}
+
+/** @public */
+export type NodesRenderingEvent = EventInfo<dxTreeMap> & {
+    readonly node: dxTreeMapNode;
+}
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTreeMap> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
+
 
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
@@ -49,44 +111,44 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @public
      */
     colorizer?: {
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       colorCodeField?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       colorizeGroups?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizPalette
-      * @type Array<string>|Enums.VizPalette
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @extends CommonVizPalette
+       * @type Array<string>|Enums.VizPalette
+       */
       palette?: Array<string> | PaletteType,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.VizPaletteExtensionMode
-      * @default 'blend'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.VizPaletteExtensionMode
+       * @default 'blend'
+       */
       paletteExtensionMode?: PaletteExtensionModeType,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       range?: Array<number>,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.TreeMapColorizerType
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.TreeMapColorizerType
+       * @default undefined
+       */
       type?: 'discrete' | 'gradient' | 'none' | 'range'
     };
     /**
@@ -102,132 +164,132 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @public
      */
     group?: {
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       border?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default "#d3d3d3"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default "#d3d3d3"
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
         width?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default "#eeeeee"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default "#eeeeee"
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 4
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 4
+       */
       padding?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-     * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       headerHeight?: number,
       /**
-      * @docid
-     * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       hoverEnabled?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       hoverStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           color?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           width?: number
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         color?: string
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       label?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#767676' [prop](color)
-        * @default 600 [prop](weight)
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default '#767676' [prop](color)
+         * @default 600 [prop](weight)
+         */
         font?: Font,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.VizTextOverflow
-        * @default "ellipsis"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.VizTextOverflow
+         * @default "ellipsis"
+         */
         textOverflow?: VizTextOverflowType,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default true
+         */
         visible?: boolean
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       selectionStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default "#232323"
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default "#232323"
+           */
           color?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           width?: number
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         color?: string
       }
     };
@@ -297,6 +359,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 node:dxTreeMapNode
      * @notUsedInTheme
@@ -304,62 +369,77 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, event?: TEvent, node?: dxTreeMapNode }) => void) | string;
+    onClick?: ((e: ClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrill?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onDrill?: ((e: DrillEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onHoverChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onHoverChanged?: ((e: HoverChangedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 root:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodesInitialized?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, root?: dxTreeMapNode }) => void);
+    onNodesInitialized?: ((e: NodesInitializedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodesRendering?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onNodesRendering?: ((e: NodesRenderingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxTreeMap, element?: TElement, model?: any, node?: dxTreeMapNode }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @default undefined
@@ -382,120 +462,120 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     tile?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       border?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default "#000000"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default "#000000"
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
         width?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default "#$5f8b95"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default "#$5f8b95"
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       hoverStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           color?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           width?: number
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         color?: string
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       label?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#FFFFFF' [prop](color)
-        * @default 300 [prop](weight)
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default '#FFFFFF' [prop](color)
+         * @default 300 [prop](weight)
+         */
         font?: Font,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.VizTextOverflow
-        * @default "ellipsis"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.VizTextOverflow
+         * @default "ellipsis"
+         */
         textOverflow?: VizTextOverflowType,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @defaultValue true
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @defaultValue true
+         */
         visible?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.VizWordWrap
-        * @default "normal"
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.VizWordWrap
+         * @default "normal"
+         */
         wordWrap?: WordWrapType
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       selectionStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default "#232323"
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default "#232323"
+           */
           color?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           width?: number
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         color?: string
       }
     };
@@ -599,9 +679,9 @@ export default class dxTreeMap extends BaseWidget {
 }
 
 /**
-* @docid
-* @publicName Node
-*/
+ * @docid
+ * @publicName Node
+ */
 export interface dxTreeMapNode {
     /**
      * @docid
@@ -757,6 +837,7 @@ export interface dxTreeMapNode {
     value(): number;
 }
 
+/** @public */
 export type Options = dxTreeMapOptions;
 
 /** @deprecated use Options instead */

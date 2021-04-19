@@ -30,7 +30,10 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
         },
 
         _needInsertItem: function(change, changeType, items, item) {
-            const parentKey = change.key.parentKey;
+            const dataController = this.getController('data');
+            const dataSourceAdapter = dataController.dataSource();
+            const parentKey = dataSourceAdapter?.parentKeyOf(change.data);
+
             if(parentKey !== undefined && parentKey !== this.option('rootValue')) {
                 const rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
                 if(rowIndex >= 0 && this._dataController.isRowExpanded(parentKey)) {

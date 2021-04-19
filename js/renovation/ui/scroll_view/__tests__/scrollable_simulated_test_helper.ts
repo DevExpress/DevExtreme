@@ -12,7 +12,6 @@ import {
 
 import {
   ScrollableDirection,
-  ScrollableBoundary,
 } from '../types.d';
 
 import {
@@ -56,8 +55,21 @@ class ScrollableTestHelper {
 
   scrollBarHandlers?: string[];
 
+  actionHandlers: { [key: string]: any };
+
   constructor(props: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
+    this.actionHandlers = this.getActionHandlers(props);
+
     this.viewModel = new Scrollable({
+      onStart: this.actionHandlers.onStart,
+      onScroll: this.actionHandlers.onScroll,
+      onUpdated: this.actionHandlers.onUpdated,
+      onStop: this.actionHandlers.onStop,
+      onEnd: this.actionHandlers.onEnd,
+      onPullDown: this.actionHandlers.onPullDown,
+      onReachBottom: this.actionHandlers.onReachBottom,
+      onBounce: this.actionHandlers.onBounce,
+      onRelease: this.actionHandlers.onRelease,
       ...props,
       contentTranslateOffset: { top: 0, left: 0 },
     }) as any;
@@ -86,23 +98,25 @@ class ScrollableTestHelper {
     const { contentSize = 200, containerSize = 100, overflow = 'hidden' } = props;
     let contentHeight = contentSize;
 
-    if (props.pullDownEnabled) {
-      contentHeight += TOP_POCKET_HEIGHT;
+    if (props.forceGeneratePockets) {
+      if (props.pullDownEnabled) {
+        contentHeight += TOP_POCKET_HEIGHT;
 
-      this.viewModel.topPocketRef.current = this.getTopPocketElement();
-      Object.defineProperties(this.viewModel.topPocketRef.current, {
-        clientWidth: { configurable: true, get() { return 100; } },
-        clientHeight: { configurable: true, get() { return TOP_POCKET_HEIGHT; } },
-      });
-    }
-    if (props.reachBottomEnabled) {
-      contentHeight += BOTTOM_POCKET_HEIGHT;
+        this.viewModel.topPocketRef.current = this.getTopPocketElement();
+        Object.defineProperties(this.viewModel.topPocketRef.current, {
+          clientWidth: { configurable: true, get() { return 100; } },
+          clientHeight: { configurable: true, get() { return TOP_POCKET_HEIGHT; } },
+        });
+      }
+      if (props.reachBottomEnabled) {
+        contentHeight += BOTTOM_POCKET_HEIGHT;
 
-      this.viewModel.bottomPocketRef.current = this.getBottomPocketElement();
-      Object.defineProperties(this.viewModel.bottomPocketRef.current, {
-        clientWidth: { configurable: true, get() { return 100; } },
-        clientHeight: { configurable: true, get() { return BOTTOM_POCKET_HEIGHT; } },
-      });
+        this.viewModel.bottomPocketRef.current = this.getBottomPocketElement();
+        Object.defineProperties(this.viewModel.bottomPocketRef.current, {
+          clientWidth: { configurable: true, get() { return 100; } },
+          clientHeight: { configurable: true, get() { return BOTTOM_POCKET_HEIGHT; } },
+        });
+      }
     }
 
     this.initStyles(this.viewModel.containerRef.current,
@@ -258,7 +272,6 @@ class ScrollableTestHelper {
       });
 
       scrollbar.updateMinOffset();
-      scrollbar.minLimit = scrollbar.minOffset;
 
       return scrollbar;
     };
@@ -285,17 +298,6 @@ class ScrollableTestHelper {
         this.viewModel.horizontalScrollbarRef.current[`${handler}Handler`] = this[`${handler}HandlerMock`];
       }
     });
-  }
-
-  changeScrollbarHandlerMock(handler: string, callback: (args: any) => any): void {
-    if (this.isBoth) {
-      this.viewModel.horizontalScrollbarRef.current[`${handler}Handler`] = (args) => callback(args);
-      this.viewModel.verticalScrollbarRef.current[`${handler}Handler`] = (args) => callback(args);
-    } else if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef.current[`${handler}Handler`] = (args) => callback(args);
-    } else if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef.current[`${handler}Handler`] = (args) => callback(args);
-    }
   }
 
   changeScrollbarProp(prop: string, value: number): void {
@@ -411,6 +413,46 @@ class ScrollableTestHelper {
     });
   }
 
+  checkActionHandlerCalls(jestExpect: (any) => any,
+    expectedHandlers: string[],
+    expectedArgs: ({ [key: string]: any })): void {
+    Object.keys(this.actionHandlers).forEach((key) => {
+      const indexOf = expectedHandlers.indexOf(key);
+      if (indexOf !== -1) {
+        jestExpect(this.actionHandlers[key]).toBeCalledTimes(1);
+        jestExpect(this.actionHandlers[key]).toHaveBeenCalledWith(expectedArgs[indexOf][0]);
+      } else if (this.actionHandlers[key]) {
+        jestExpect(this.actionHandlers[key]).toBeCalledTimes(0);
+      } else {
+        jestExpect(this.actionHandlers[key]).toEqual(undefined);
+      }
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getActionHandlers(props: any): { [key: string]: any } {
+    const actionHandlers = {
+      onStart: jest.fn(),
+      onScroll: jest.fn(),
+      onUpdated: jest.fn(),
+      onStop: jest.fn(),
+      onEnd: jest.fn(),
+      onPullDown: jest.fn(),
+      onReachBottom: jest.fn(),
+      onBounce: jest.fn(),
+      onRelease: jest.fn(),
+    };
+
+    Object.keys(actionHandlers).forEach((key) => {
+      // eslint-disable-next-line no-prototype-builtins
+      if (props.hasOwnProperty(key)) {
+        actionHandlers[key] = props[key];
+      }
+    });
+
+    return actionHandlers;
+  }
+
   checkValidDirection(jestExpect: (any) => any,
     expectedValidDirections: { vertical?: boolean; horizontal?: boolean } | undefined,
     options: { [key: string]: string | boolean }): void {
@@ -455,23 +497,6 @@ class ScrollableTestHelper {
         scrollHeight,
       },
     };
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  checkScrollParams(jestExpect: (any) => any,
-    actualParams: ScrollableBoundary,
-    expectedParams: Partial<ScrollableBoundary>): void {
-    const checkedParams = expectedParams;
-
-    if (this.direction === 'vertical') {
-      delete checkedParams.reachedLeft;
-      delete checkedParams.reachedRight;
-    } else if (this.direction === 'horizontal') {
-      delete checkedParams.reachedTop;
-      delete checkedParams.reachedBottom;
-    }
-
-    jestExpect(actualParams).toMatchObject(checkedParams);
   }
 }
 

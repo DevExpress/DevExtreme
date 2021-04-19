@@ -10,9 +10,33 @@ import {
     TPromise
 } from '../core/utils/deferred';
 
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxDeferRendering>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxDeferRendering>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxDeferRendering>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxDeferRendering> & ChangedOptionInfo;
+
+/** @public */
+export type RenderedEvent = EventInfo<dxDeferRendering>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxDeferRendering>;
 
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
@@ -73,6 +97,7 @@ export default class dxDeferRendering extends Widget {
     constructor(element: TElement, options?: dxDeferRenderingOptions)
 }
 
+/** @public */
 export type Options = dxDeferRenderingOptions;
 
 /** @deprecated use Options instead */

@@ -7,16 +7,39 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
 } from '../events/index';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxButtonGroup>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxButtonGroup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxButtonGroup>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxButtonGroup> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
 
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
@@ -60,6 +83,9 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxButtonGroup
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
@@ -68,18 +94,22 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
+    onItemClick?: ((e: ItemClickEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxButtonGroup
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 value:any
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
@@ -151,6 +181,7 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
+/** @public */
 export type Options = dxButtonGroupOptions;
 
 /** @deprecated use Options instead */

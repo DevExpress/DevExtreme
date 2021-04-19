@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, ForwardRef, JSXComponent, OneWay,
+  Component, ComponentBindings, JSXComponent, OneWay,
 } from '@devextreme-generator/declarations';
 import { WidgetProps } from './common/widget';
 import LegacyValidationMessage from '../../ui/validation_message';
@@ -27,11 +27,11 @@ export class ValidationMessageProps extends WidgetProps {
 
   @OneWay() positionRequest?: string;
 
-  @ForwardRef() boundary?: string | Element | null;
+  @OneWay() boundary?: string | Element | null;
 
-  @ForwardRef() container?: string | Element | null;
+  @OneWay() container?: string | Element | null;
 
-  @ForwardRef() target?: string | Element | null;
+  @OneWay() target?: string | Element | null;
 
   @OneWay() offset?: Record<string, number> = { h: 0, v: 0 };
 }

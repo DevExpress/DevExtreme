@@ -10,10 +10,46 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxGallery>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxGallery>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxGallery>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxGallery> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxGallery> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxGallery> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxGallery> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxGallery> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxGallery> & SelectionChangedInfo;
 
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     /**
@@ -188,6 +224,7 @@ export interface dxGalleryItem extends CollectionWidgetItem {
     imageSrc?: string;
 }
 
+/** @public */
 export type Options = dxGalleryOptions;
 
 /** @deprecated use Options instead */

@@ -12,6 +12,10 @@ import {
 } from '../../core/templates/template';
 
 import {
+    EventInfo
+} from '../../events/index';
+
+import {
     format
 } from '../../ui/widget/ui.widget';
 
@@ -21,6 +25,10 @@ import BaseWidget, {
     BaseWidgetTooltip,
     Font
 } from '../core/base_widget';
+
+export interface TooltipInfo {
+    target: any;
+}
 
 export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
     /**
@@ -48,24 +56,30 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
+    onTooltipHidden?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
+    onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
      * @type object
@@ -132,10 +146,10 @@ export interface BaseGaugeAnimation {
 }
 export interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     /**
-    * @docid BaseGaugeOptions.loadingIndicator.enabled
-    * @prevFileNamespace DevExpress.viz
-    * @hidden
-    */
+     * @docid BaseGaugeOptions.loadingIndicator.enabled
+     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
     enabled?: boolean;
 }
 export interface BaseGaugeRangeContainer {
@@ -246,7 +260,7 @@ export interface BaseGaugeScale {
        * @default '#FFFFFF'
        */
       color?: string,
-    /**
+      /**
        * @docid BaseGaugeOptions.scale.minorTick.length
        * @prevFileNamespace DevExpress.viz
        * @default 3
@@ -299,7 +313,7 @@ export interface BaseGaugeScale {
      * @public
      */
     tick?: {
-    /**
+      /**
        * @docid BaseGaugeOptions.scale.tick.color
        * @prevFileNamespace DevExpress.viz
        * @default '#FFFFFF'
@@ -463,11 +477,11 @@ export class BaseGauge extends BaseWidget {
 }
 
 /**
-* @docid
-* @section CommonIndicators
-* @type object
-* @hidden
-*/
+ * @docid
+ * @section CommonIndicators
+ * @type object
+ * @hidden
+ */
 export interface CommonIndicator {
     /**
      * @docid
@@ -596,37 +610,37 @@ export interface CommonIndicator {
      */
     text?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 indicatedValue:object
-      * @type_function_param1_field1 value:Number
-      * @type_function_param1_field2 valueText:string
-      * @type_function_return string
-      * @notUsedInTheme
-      * @default undefined
-      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 indicatedValue:object
+       * @type_function_param1_field1 value:Number
+       * @type_function_param1_field2 valueText:string
+       * @type_function_return string
+       * @notUsedInTheme
+       * @default undefined
+       * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
+       */
       customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-      * @default 14 [prop](size)
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
+       * @default 14 [prop](size)
+       */
       font?: Font,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizFormat
-      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @extends CommonVizFormat
+       * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
+       */
       format?: format,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      * @propertyOf circularRangeBar,linearRangeBar
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       * @propertyOf circularRangeBar,linearRangeBar
+       */
       indent?: number
     };
     /**

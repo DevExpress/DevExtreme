@@ -701,6 +701,23 @@ module('Virtual Scrolling', {
                 });
             });
 
+            test('State should be updated after change itemSize', function(assert) {
+                this.prepareInstance();
+
+                this.verticalVirtualScrolling.itemSize = 123;
+                this.scrollVertical(0);
+
+                const {
+                    itemCount,
+                    virtualItemCountAfter,
+                    virtualItemSizeAfter
+                } = this.verticalVirtualScrolling.state;
+
+                assert.equal(itemCount, 4, 'Item count is correct');
+                assert.equal(virtualItemCountAfter, 96, 'virtualItemCountAfter count is correct');
+                assert.equal(virtualItemSizeAfter, 11808, 'virtualItemSizeAfter count is correct');
+            });
+
             test('Scroll event position should be checked correctly before update state', function(assert) {
                 this.prepareInstance();
                 const spy = this.spy(this.verticalVirtualScrolling, 'needUpdateState');

@@ -11,12 +11,24 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
+    TEvent,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxDrawer>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxDrawer>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxDrawer> & ChangedOptionInfo;
 
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**
@@ -156,6 +168,7 @@ export default class dxDrawer extends Widget {
     toggle(): TPromise<void>;
 }
 
+/** @public */
 export type Options = dxDrawerOptions;
 
 /** @deprecated use Options instead */

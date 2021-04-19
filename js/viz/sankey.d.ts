@@ -16,16 +16,65 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 import { HatchingDirectionType } from './common';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSankey>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxSankey>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxSankey>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxSankey> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxSankey>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSankey>;
+
+/** @public */
+export type LinkClickEvent = NativeEventInfo<dxSankey> & {
+    readonly target: dxSankeyLink;
+}
+/** @public */
+export type LinkHoverEvent = EventInfo<dxSankey> & {
+    readonly target: dxSankeyLink;
+}
+/** @public */
+export type NodeClickEvent = NativeEventInfo<dxSankey> & {
+    readonly target: dxSankeyNode;
+}
+/** @public */
+export type NodeHoverEvent = EventInfo<dxSankey> & {
+    readonly target: dxSankeyNode;
+}
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
+
 
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
@@ -34,23 +83,23 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @public
      */
     adaptiveLayout?: {
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 80
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 80
+       */
       height?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       keepLabels?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 80
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 80
+       */
       width?: number
     };
     /**
@@ -82,109 +131,109 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      */
     label?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       border?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#000000'
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default '#000000'
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default false
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default false
+         */
         visible?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 2
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 2
+         */
         width?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 itemInfo: dxSankeyNode
-      * @type_function_return string
-      * @notUsedInTheme
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 itemInfo: dxSankeyNode
+       * @type_function_return string
+       * @notUsedInTheme
+       */
       customizeText?: ((itemInfo: dxSankeyNode) => string),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#FFFFFF' [prop](color)
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#FFFFFF' [prop](color)
+       */
       font?: Font,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 5
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 5
+       */
       horizontalOffset?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.SankeyLabelOverlappingBehavior
-      * @default 'ellipsis'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.SankeyLabelOverlappingBehavior
+       * @default 'ellipsis'
+       */
       overlappingBehavior?: 'ellipsis' | 'hide' | 'none',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       shadow?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
         blur?: number,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#000000'
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default '#000000'
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 0
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 0
+         */
         offsetX?: number,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
         offsetY?: number,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 0
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 0
+         */
         opacity?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
       useNodeColors?: boolean,
-    /**
-      * @docid
-     * @prevFileNamespace DevExpress.viz
-      * @default 0
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       */
       verticalOffset?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       visible?: boolean
     };
     /**
@@ -194,120 +243,120 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      */
     link?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       border?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#000000'
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default '#000000'
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default false
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default false
+         */
         visible?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 2
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 2
+         */
         width?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#000000'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#000000'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.SankeyColorMode
-      * @default 'none'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.SankeyColorMode
+       * @default 'none'
+       */
       colorMode?: 'none' | 'source' | 'target' | 'gradient',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       hoverStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           color?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           visible?: boolean,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           width?: number
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         hatching?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @type Enums.HatchingDirection
-          * @default 'right'
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @type Enums.HatchingDirection
+           * @default 'right'
+           */
           direction?: HatchingDirectionType,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 0.75
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 0.75
+           */
           opacity?: number,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 6
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 6
+           */
           step?: number,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 2
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 2
+           */
           width?: number
         },
-    /**
-        * @docid
-     * @prevFileNamespace DevExpress.viz
-        * @default 0.5
-        */
+        /**
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 0.5
+         */
         opacity?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.3
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0.3
+       */
       opacity?: number
     };
     /**
@@ -317,131 +366,134 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      */
     node?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       border?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#000000'
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default '#000000'
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default false
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default false
+         */
         visible?: boolean,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
         width?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       */
       hoverStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         border?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           color?: string,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           visible?: boolean,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default undefined
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default undefined
+           */
           width?: number
         },
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         color?: string,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         */
         hatching?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @type Enums.HatchingDirection
-          * @default 'right'
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @type Enums.HatchingDirection
+           * @default 'right'
+           */
           direction?: HatchingDirectionType,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 0.75
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 0.75
+           */
           opacity?: number,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 6
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 6
+           */
           step?: number,
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @default 2
-          */
+           * @docid
+           * @prevFileNamespace DevExpress.viz
+           * @default 2
+           */
           width?: number
         },
-    /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
+        /**
+         * @docid
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
         opacity?: number
       },
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       opacity?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 30
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 30
+       */
       padding?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 15
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 15
+       */
       width?: number
     };
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyLink
      * @notUsedInTheme
@@ -449,22 +501,28 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyLink }) => void) | string;
+    onLinkClick?: ((e: LinkClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyLink
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyLink }) => void);
+    onLinkHoverChanged?: ((e: LinkHoverEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyNode
      * @notUsedInTheme
@@ -472,18 +530,21 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeClick?: ((e: { component?: dxSankey, element?: TElement, model?: any, event?: TEvent, target?: dxSankeyNode }) => void) | string;
+    onNodeClick?: ((e: NodeClickEvent) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSankey
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyNode
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeHoverChanged?: ((e: { component?: dxSankey, element?: TElement, model?: any, target?: dxSankeyNode }) => void);
+    onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
     /**
      * @docid
      * @extends CommonVizPalette
@@ -633,10 +694,10 @@ export default class dxSankey extends BaseWidget {
 }
 
 /**
-* @docid
-* @publicName connection
-* @type object
-*/
+ * @docid
+ * @publicName connection
+ * @type object
+ */
 export interface dxSankeyConnectionInfoObject {
     /**
      * @docid
@@ -659,9 +720,9 @@ export interface dxSankeyConnectionInfoObject {
 }
 
 /**
-* @docid
-* @publicName Link
-*/
+ * @docid
+ * @publicName Link
+ */
 export interface dxSankeyLink {
     /**
      * @docid
@@ -702,9 +763,9 @@ export interface dxSankeyLink {
 }
 
 /**
-* @docid
-* @publicName Node
-*/
+ * @docid
+ * @publicName Node
+ */
 export interface dxSankeyNode {
     /**
      * @docid
@@ -763,6 +824,7 @@ export interface dxSankeyNode {
     title?: string;
 }
 
+/** @public */
 export type Options = dxSankeyOptions;
 
 /** @deprecated use Options instead */

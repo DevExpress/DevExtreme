@@ -950,6 +950,35 @@ QUnit.module('list integration', {}, () => {
         assert.deepEqual(dropDownButton.option('selectedItemKey'), 1, 'dropDownButton selected item key is correct');
         assert.deepEqual(list.option('selectedItemKeys'), [1], 'list selected item key is correct');
     });
+
+    QUnit.test('selected item with zero-equal key should be selected in the built-in List', function(assert) {
+        const instance = new DropDownButton('#dropDownButton', {
+            deferRendering: false,
+            items: [{ id: 0, text: 'text1' }, { id: 1, text: 'text2' }],
+            keyExpr: 'id',
+            displayExpr: 'text',
+            useSelectMode: true,
+            selectedItemKey: 0
+        });
+        const list = getList(instance);
+
+        assert.deepEqual(list.option('selectedItemKeys'), [0], 'List has correct selection');
+    });
+
+    QUnit.test('selected item with zero-equal key should be selected in the built-in List when select mode turning on', function(assert) {
+        const instance = new DropDownButton('#dropDownButton', {
+            deferRendering: false,
+            items: [{ id: 0, text: 'text1' }, { id: 1, text: 'text2' }],
+            keyExpr: 'id',
+            displayExpr: 'text',
+            useSelectMode: false,
+            selectedItemKey: 0
+        });
+        const list = getList(instance);
+        instance.option('useSelectMode', true);
+
+        assert.deepEqual(list.option('selectedItemKeys'), [0], 'List has correct selection');
+    });
 });
 
 QUnit.module('common use cases', {

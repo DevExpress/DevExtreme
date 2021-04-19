@@ -205,3 +205,109 @@ test('DataGrid should not reset its top scroll position after cell modification 
     },
   },
 }));
+
+test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await dataGrid.scrollTo({ top: 3300 });
+  await t
+    .wait(300)
+    .click(dataGrid.getDataRow(99).getCommandCell(0).element);
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+
+  const penultimateRow = visibleRows[visibleRows.length - 2];
+  const lastRow = visibleRows[visibleRows.length - 1];
+
+  // assert
+  await t
+    .expect(penultimateRow.rowType)
+    .eql('data')
+    .expect(penultimateRow.key)
+    .eql(100)
+    .expect(lastRow.rowType)
+    .eql('detail')
+    .expect(lastRow.key)
+    .eql(100);
+}).before(() => {
+  const getItems = function (): Record<string, unknown>[] {
+    const items: Record<string, unknown>[] = [];
+    for (let i = 0; i < 100; i += 1) {
+      items.push({
+        ID: i + 1,
+        Name: `Name ${i + 1}`,
+      });
+    }
+    return items;
+  };
+  return createWidget('dxDataGrid', {
+    height: 350,
+    dataSource: getItems(),
+    keyExpr: 'ID',
+    remoteOperations: true,
+    scrolling: {
+      mode: 'virtual',
+      rowRenderingMode: 'virtual',
+      newMode: true,
+    },
+    masterDetail: {
+      enabled: true,
+    },
+  });
+});
+
+test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await dataGrid.scrollTo({ top: 3300 });
+  await t
+    .wait(300)
+    .click(dataGrid.getDataRow(99).getCommandCell(3).element);
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+
+  const penultimateRow = visibleRows[visibleRows.length - 2];
+  const lastRow = visibleRows[visibleRows.length - 1];
+
+  // assert
+  await t
+    .expect(penultimateRow.rowType)
+    .eql('data')
+    .expect(penultimateRow.key)
+    .eql(100)
+    .expect(lastRow.rowType)
+    .eql('detailAdaptive')
+    .expect(lastRow.key)
+    .eql(100);
+}).before(() => {
+  const getItems = function (): Record<string, unknown>[] {
+    const items: Record<string, unknown>[] = [];
+    for (let i = 0; i < 100; i += 1) {
+      items.push({
+        ID: i + 1,
+        Name: `Name ${i + 1}`,
+        Description: `Description ${i + 1}`,
+      });
+    }
+    return items;
+  };
+  return createWidget('dxDataGrid', {
+    height: 350,
+    width: 300,
+    dataSource: getItems(),
+    keyExpr: 'ID',
+    remoteOperations: true,
+    scrolling: {
+      mode: 'virtual',
+      rowRenderingMode: 'virtual',
+      newMode: true,
+      useNative: false,
+    },
+    columnHidingEnabled: true,
+    customizeColumns(columns) {
+      columns[0].width = 250;
+    },
+  });
+});

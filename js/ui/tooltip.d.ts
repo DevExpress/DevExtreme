@@ -2,9 +2,40 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import dxPopover, {
     dxPopoverOptions
 } from './popover';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxTooltip>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTooltip>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxTooltip>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxTooltip>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTooltip>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTooltip> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = EventInfo<dxTooltip>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxTooltip>;
 
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
 }
@@ -21,6 +52,7 @@ export default class dxTooltip extends dxPopover {
     constructor(element: TElement, options?: dxTooltipOptions)
 }
 
+/** @public */
 export type Options = dxTooltipOptions;
 
 /** @deprecated use Options instead */

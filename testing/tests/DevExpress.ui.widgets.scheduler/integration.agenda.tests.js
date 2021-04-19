@@ -320,22 +320,6 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.ok($appointmentAllDayTitle.is(':visible'), 'AllDay title is visible');
     });
 
-    test('Appointment parts should have appointmentSettings field', function(assert) {
-        this.createInstance({
-            views: ['agenda'],
-            currentView: 'agenda',
-            currentDate: new Date(2016, 1, 24),
-            dataSource: [
-                { startDate: new Date(2016, 1, 22, 1), endDate: new Date(2016, 2, 4, 1, 30) }
-            ]
-        });
-
-        const $appointments = this.instance.$element().find('.dx-scheduler-appointment');
-
-        assert.ok(dataUtils.data($appointments.get(1), 'dxItemData').settings, 'Appointment part has special field for settings');
-        assert.equal(dataUtils.data($appointments.get(1), 'dxItemData').settings.startDate.getTime(), new Date(2016, 1, 25, 0).getTime(), 'Current date of appointment part is OK');
-        assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData').startDate, dataUtils.data($appointments.get(1), 'dxItemData').startDate, 'Appointments data is OK');
-    });
 
     test('Agenda should contain a right quantity of recurrence appointments', function(assert) {
         this.createInstance({
@@ -1229,11 +1213,6 @@ module('Integration: Agenda', moduleConfig, () => {
             currentDate: new Date(2016, 10, 5),
             firstDayOfWeek: 1,
             height: 300,
-            onAppointmentRendered: function(e) {
-                const targetedAppointmentData = e.targetedAppointmentData;
-                assert.equal(targetedAppointmentData.settings.startDate.getDate(), 10, 'Appointment start date is OK');
-                assert.equal(targetedAppointmentData.settings.endDate.getDate(), 10, 'Appointment end date is OK');
-            },
             dataSource: [{
                 text: 'test-rec',
                 startDate: new Date(2016, 10, 3, 9, 0),
@@ -1274,24 +1253,6 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.equal($appts.length, 1, 'Appt count is OK');
         assert.equal($timePanelDateEl.length, 1, 'Timepanel cell count is OK');
         assert.equal(timePanelDate, '6 Sun', 'Time panel date is OK');
-    });
-
-    test('dateCellTemplate should take cellElement with correct geometry (T453520)', function(assert) {
-        this.createInstance({
-            currentView: 'agenda',
-            views: ['agenda'],
-            height: 700,
-            width: 700,
-            currentDate: new Date(2016, 10, 28),
-            dataSource: [{
-                startDate: new Date(2016, 10, 28, 1),
-                endDate: new Date(2016, 10, 28, 2)
-            }],
-            dateCellTemplate: function(cellData, cellIndex, cellElement) {
-                assert.equal($(cellElement).outerWidth(), 70, 'Date cell width is OK');
-                assert.equal($(cellElement).outerHeight(), 80, 'Date cell height is OK');
-            }
-        });
     });
 
     test('resourceCellTemplate should take cellElement with correct geometry (T453520)', function(assert) {
@@ -1339,14 +1300,22 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.equal(dataUtils.data($appointments.get(3), 'dxItemData').text, 'a');
 
         assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData').Start, new Date(2016, 1, 24, 1)); // first part of long appointment has original startDate
-        assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData').settings.Start, new Date(2016, 1, 25, 8));
-        assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData').settings.Start, new Date(2016, 1, 26, 8));
-        assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData').settings.Start, new Date(2016, 1, 27, 8));
-
         assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData').endDate, new Date(2016, 1, 27, 11, 30)); // first part of long appointment has original endDate
-        assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData').settings.endDate, new Date(2016, 1, 25, 20));
-        assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData').settings.endDate, new Date(2016, 1, 26, 20));
-        assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData').settings.endDate, new Date(2016, 1, 27, 11, 30));
+
+        const expectedTimes = [
+            '8:00 AM - 8:00 PM',
+            '8:00 AM - 8:00 PM',
+            '8:00 AM - 8:00 PM',
+            '8:00 AM - 11:30 AM',
+        ];
+
+        const $appts = this.instance.$element().find('.dx-scheduler-appointment');
+
+        expectedTimes.forEach((expectedTime, index) => {
+            const time = $appts.eq(index)
+                .find('.dx-scheduler-appointment-content-date').first().text();
+            assert.equal(time, expectedTime, `${index} date is correct`);
+        });
     });
 
     test('Long appointment parts targetedAppointmentData should be correct', function(assert) {
@@ -1539,6 +1508,7 @@ module('Integration: Agenda', moduleConfig, () => {
 
         this.createInstance({
             currentView: 'agenda',
+            views: ['agenda'],
             currentDate: new Date(2020, 9, 1),
             startDayHour: 9,
             dataSource: data
@@ -1546,16 +1516,19 @@ module('Integration: Agenda', moduleConfig, () => {
 
         const items = this.instance._appointments.option('items');
 
-        let settings = items[0].itemData.settings;
-        assert.deepEqual(settings.startDate, data[0].startDate, 'Long item part 0 settings startDate is correct');
-        assert.deepEqual(settings.endDate, new Date(2020, 9, 2, 0, 0), 'Long item part 0 settings endDate is correct');
+        const expectedTimes = [
+            '9:15 PM - 12:00 AM',
+            '9:00 AM - 9:15 AM',
+            '9:16 PM - 10:00 PM',
+        ];
 
-        settings = items[1].itemData.settings;
-        assert.deepEqual(settings.startDate, new Date(2020, 9, 2, 9, 0), 'Long item part 1 settings startDate is correct');
-        assert.deepEqual(settings.endDate, new Date(2020, 9, 2, 9, 15), 'Long item part 1 settings endDate is correct');
+        const $appts = this.instance.$element().find('.dx-scheduler-appointment');
 
-        settings = items[2].itemData.settings;
-        assert.notOk(items[2].itemData.settings, 'Simple item settings are empty');
+        expectedTimes.forEach((expectedTime, index) => {
+            const time = $appts.eq(index)
+                .find('.dx-scheduler-appointment-content-date').first().text();
+            assert.equal(time, expectedTime, `${index} date is correct`);
+        });
 
         const { itemData } = items[2];
         assert.deepEqual(itemData.startDate, data[1].startDate, 'Simple item startDate is correct');
@@ -1603,6 +1576,93 @@ module('Integration: Agenda', moduleConfig, () => {
             assert.equal(itemPosition[0].sortedIndex, index, `Item ${index} sortIndex is correct`);
             assert.equal(itemPosition[0].groupIndex, 0, 'Item groupIndex is correct');
         });
+    });
+
+    test('Long recurrence appointment should have a correct time', function(assert) {
+        const data = [
+            {
+                startDate: new Date(2021, 1, 22, 9),
+                endDate: new Date(2021, 1, 24, 10, 30),
+                recurrenceRule: 'FREQ=DAILY;COUNT=3',
+                text: 'Long and recurrence'
+            }
+        ];
+
+        const scheduler = createWrapper({
+            views: ['agenda'],
+            currentView: 'agenda',
+            currentDate: new Date(2021, 1, 22),
+            startDayHour: 8,
+            endDayHour: 20,
+            dataSource: data
+        });
+
+        const expectedTimes = [
+            '9:00 AM - 8:00 PM',
+            '8:00 AM - 8:00 PM',
+            '9:00 AM - 8:00 PM',
+            '8:00 AM - 10:30 AM',
+            '8:00 AM - 8:00 PM',
+            '9:00 AM - 8:00 PM',
+            '8:00 AM - 10:30 AM',
+            '8:00 AM - 8:00 PM',
+            '8:00 AM - 10:30 AM'
+        ];
+
+        const appointments = scheduler.appointmentList;
+        expectedTimes.forEach((expectedTime, index) => {
+            const time = appointments[index].date;
+
+            assert.equal(time, expectedTime, `${index} date is correct`);
+        });
+
+        assert.notOk(data[0].settings, 'Agenda doesn\'t modify user data of long recurence appointment');
+    });
+
+    test('Appointment of diffent types should have a correct time', function(assert) {
+        const data = [
+            {
+                startDate: new Date(2021, 1, 24, 9),
+                endDate: new Date(2021, 1, 24, 11, 30),
+                text: 'One day'
+            },
+            {
+                startDate: new Date(2021, 1, 20, 1),
+                endDate: new Date(2021, 1, 20, 9, 30),
+                text: 'Invisible one'
+            },
+            {
+                startDate: new Date(2021, 1, 23, 1),
+                endDate: new Date(2021, 1, 25, 10, 30),
+                text: 'Long'
+            }
+        ];
+
+        const scheduler = createWrapper({
+            views: ['agenda'],
+            currentView: 'agenda',
+            currentDate: new Date(2021, 1, 22),
+            startDayHour: 8,
+            endDayHour: 20,
+            dataSource: data
+        });
+
+        const expectedTimes = [
+            '8:00 AM - 8:00 PM',
+            '8:00 AM - 8:00 PM',
+            '9:00 AM - 11:30 AM',
+            '8:00 AM - 10:30 AM',
+        ];
+
+        const appointments = scheduler.appointmentList;
+        expectedTimes.forEach((expectedTime, index) => {
+            const time = appointments[index].date;
+            assert.equal(time, expectedTime, `${index} date is correct`);
+        });
+
+        assert.notOk(data[0].settings, 'Agenda doesn\'t modify user data of short appointment');
+        assert.notOk(data[1].settings, 'Agenda doesn\'t modify user data of invisible appointment');
+        assert.notOk(data[2].settings, 'Agenda doesn\'t modify user data of long appointment');
     });
 
     module('Rows calculation', function() {
@@ -1842,103 +1902,6 @@ module('Integration: Agenda', moduleConfig, () => {
             this.instance.option('currentView', 'agenda');
 
             assert.ok(true, 'Agenda works');
-        });
-    });
-});
-
-QUnit.module('Cell Templates', () => {
-    const data = [{
-        startDate: new Date(2020, 10, 24, 10),
-        endDate: new Date(2020, 10, 24, 11),
-        priorityId: 1,
-    }, {
-        startDate: new Date(2020, 10, 25, 10),
-        endDate: new Date(2020, 10, 25, 11),
-        priorityId: 1,
-    }, {
-        startDate: new Date(2020, 10, 24, 10),
-        endDate: new Date(2020, 10, 24, 11),
-        priorityId: 2,
-    }, {
-        startDate: new Date(2020, 10, 25, 10),
-        endDate: new Date(2020, 10, 25, 11),
-        priorityId: 2,
-    }];
-    const basicOptions = {
-        dataSource: data,
-        views: ['agenda'],
-        currentView: 'agenda',
-        currentDate: new Date(2020, 10, 24),
-        resources: [{
-            fieldExpr: 'priorityId',
-            allowMultiple: false,
-            dataSource: [{
-                text: 'Low Priority',
-                id: 1
-            }, {
-                text: 'High Priority',
-                id: 2
-            }],
-            label: 'Priority',
-        }],
-    };
-
-    QUnit.test('Date cell template should have correct data without grouping', function(assert) {
-        let currentTemplateIndex = 0;
-        const rowsCount = 2;
-        const expectedData = [{
-            date: new Date(2020, 10, 24),
-            groups: {},
-            groupIndex: undefined,
-            text: '24 Tue',
-        }, {
-            date: new Date(2020, 10, 25),
-            groups: {},
-            groupIndex: undefined,
-            text: '25 Wed',
-        }];
-
-        createWrapper({
-            ...basicOptions,
-            dateCellTemplate: (data) => {
-                assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
-                currentTemplateIndex += 1;
-            },
-        });
-    });
-
-    QUnit.test('Date cell template should have correct data with grouping', function(assert) {
-        let currentTemplateIndex = 0;
-        const rowsCount = 4;
-        const expectedData = [{
-            date: new Date(2020, 10, 24),
-            groups: { priorityId: 1 },
-            groupIndex: 0,
-            text: '24 Tue',
-        }, {
-            date: new Date(2020, 10, 25),
-            groups: { priorityId: 1 },
-            groupIndex: 0,
-            text: '25 Wed',
-        }, {
-            date: new Date(2020, 10, 24),
-            groups: { priorityId: 2 },
-            groupIndex: 1,
-            text: '24 Tue',
-        }, {
-            date: new Date(2020, 10, 25),
-            groups: { priorityId: 2 },
-            groupIndex: 1,
-            text: '25 Wed',
-        }];
-
-        createWrapper({
-            ...basicOptions,
-            dateCellTemplate: (data) => {
-                assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
-                currentTemplateIndex += 1;
-            },
-            groups: ['priorityId'],
         });
     });
 });

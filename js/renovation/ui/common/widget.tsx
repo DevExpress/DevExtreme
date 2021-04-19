@@ -23,7 +23,7 @@ import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
 import { normalizeStyleProp } from '../../../core/utils/style';
-import { BaseWidgetProps } from '../../utils/base_props';
+import { BaseWidgetProps } from './base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';
@@ -120,9 +120,9 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onFocusOut?: (e: Event) => void;
 
-  @Event() onHoverStart?: () => void;
+  @Event() onHoverStart?: (e: Event) => void;
 
-  @Event() onHoverEnd?: () => void;
+  @Event() onHoverEnd?: (e: Event) => void;
 }
 
 @Component({
@@ -255,13 +255,13 @@ export class Widget extends JSXComponent(WidgetProps) {
     const isHoverable = hoverStateEnabled && !disabled;
     if (isHoverable) {
       hover.on(this.widgetRef.current,
-        () => {
+        ({ event }: { event: Event }) => {
           !this.active && (this.hovered = true);
-          onHoverStart?.();
+          onHoverStart?.(event);
         },
-        () => {
+        ({ event }: { event: Event }) => {
           this.hovered = false;
-          onHoverEnd?.();
+          onHoverEnd?.(event);
         },
         { selector, namespace });
       return (): void => hover.off(this.widgetRef.current, { selector, namespace });

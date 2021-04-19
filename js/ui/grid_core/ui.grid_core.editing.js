@@ -713,10 +713,8 @@ const EditingController = modules.ViewController.inherit((function() {
             }).length;
         },
 
-        _createInsertInfo: function(rowIndex, change) {
-            const insertInfo = {
-                parentKey: change.parentKey
-            };
+        _createInsertInfo: function() {
+            const insertInfo = {};
 
             insertInfo[INSERT_INDEX] = this._getInsertIndex();
 
@@ -736,8 +734,7 @@ const EditingController = modules.ViewController.inherit((function() {
             return rowIndex;
         },
 
-        _addInsertInfo: function(change) {
-
+        _addInsertInfo: function(change, parentKey) {
             let insertInfo;
             let rowIndex;
             let { key } = change;
@@ -749,8 +746,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
             insertInfo = this._getInternalData(key)?.insertInfo;
             if(!isDefined(insertInfo)) {
-                rowIndex = this._getCorrectedInsertRowIndex(change.parentKey);
-                insertInfo = this._createInsertInfo(rowIndex, change);
+                rowIndex = this._getCorrectedInsertRowIndex(parentKey);
+                insertInfo = this._createInsertInfo();
                 this._setIndexes(change, rowIndex);
             }
 
@@ -854,8 +851,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
             const oldEditRowIndex = this._getVisibleEditRowIndex();
-            const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE, parentKey };
-            const { key, rowIndex } = this._addInsertInfo(change);
+            const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
+            const { key, rowIndex } = this._addInsertInfo(change, parentKey);
 
             this._setEditRowKey(key, true);
 
@@ -1207,10 +1204,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._addChange({ key: key, oldData: item.data, type: DATA_EDIT_DATA_REMOVE_TYPE });
             }
 
-            this._afterDeleteRow(rowIndex, oldEditRowIndex);
+            return this._afterDeleteRow(rowIndex, oldEditRowIndex);
         },
         _afterDeleteRow: function(rowIndex, oldEditRowIndex) {
-            this.saveEditData();
+            return this.saveEditData();
         },
         undeleteRow: function(rowIndex) {
             const dataController = this._dataController;

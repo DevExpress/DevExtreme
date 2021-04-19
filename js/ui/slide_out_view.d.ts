@@ -10,9 +10,24 @@ import {
     template
 } from '../core/templates/template';
 
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSlideOutView>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSlideOutView>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSlideOutView> & ChangedOptionInfo;
 
 export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**
@@ -107,6 +122,7 @@ export default class dxSlideOutView extends Widget {
     toggleMenuVisibility(): TPromise<void>;
 }
 
+/** @public */
 export type Options = dxSlideOutViewOptions;
 
 /** @deprecated use Options instead */

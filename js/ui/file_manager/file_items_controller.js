@@ -100,9 +100,13 @@ export default class FileItemsController {
         return this._currentDirectoryInfo;
     }
 
-    setCurrentDirectory(directoryInfo) {
+    setCurrentDirectory(directoryInfo, checkActuality) {
         if(!directoryInfo) {
             return;
+        }
+
+        if(checkActuality) {
+            directoryInfo = this._getActualDirectoryInfo(directoryInfo);
         }
 
         if(this._currentDirectoryInfo && this._currentDirectoryInfo === directoryInfo) {
@@ -313,6 +317,7 @@ export default class FileItemsController {
         this._raiseEditActionResultAcquired(actionInfo);
         this._raiseEditActionError(actionInfo, {
             errorCode: errorInfo.errorCode,
+            errorText: errorInfo.errorText,
             fileItem: parentDirectoryInfo.fileItem,
             index: 0
         });

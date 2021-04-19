@@ -2,9 +2,32 @@ import {
     TElement
 } from '../core/element';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import Editor, {
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxSwitch>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSwitch>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSwitch>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxSwitch> & ValueChangedInfo;
 
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**
@@ -70,6 +93,7 @@ export default class dxSwitch extends Editor {
     constructor(element: TElement, options?: dxSwitchOptions)
 }
 
+/** @public */
 export type Options = dxSwitchOptions;
 
 /** @deprecated use Options instead */

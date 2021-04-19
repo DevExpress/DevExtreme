@@ -6,10 +6,42 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxBox>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxBox>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxBox>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxBox> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxBox> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxBox> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxBox> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxBox> & ChangedOptionInfo;
 
 export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     /**
@@ -64,10 +96,10 @@ export default class dxBox extends CollectionWidget {
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxBoxItem extends CollectionWidgetItem {
     /**
      * @docid
@@ -100,6 +132,7 @@ export interface dxBoxItem extends CollectionWidgetItem {
     shrink?: number;
 }
 
+/** @public */
 export type Options = dxBoxOptions;
 
 /** @deprecated use Options instead */

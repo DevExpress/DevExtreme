@@ -38,14 +38,16 @@ describe('Public methods', () => {
     { name: 'release', argsCount: 0 },
     { name: 'refresh', argsCount: 0 },
     { name: 'validate', argsCount: 1 },
+    { name: 'getScrollElementPosition', aliasName: 'getElementLocation', argsCount: 2 },
   ]).describe('Method: %o', (methodInfo) => {
     each([false, true]).describe('useNative: %o', (useNative) => {
       it(`${methodInfo.name}() method should call according method from scrollbar`, () => {
         const viewModel = new Scrollable({ useNative });
         const funcHandler = jest.fn();
+
         Object.defineProperties(viewModel, {
           scrollableRef: {
-            get() { return ({ [`${methodInfo.name}`]: funcHandler }); },
+            get() { return ({ [`${methodInfo.aliasName || methodInfo.name}`]: funcHandler }); },
           },
         });
 

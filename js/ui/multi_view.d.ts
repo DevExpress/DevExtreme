@@ -6,10 +6,46 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxMultiView>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxMultiView>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxMultiView>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxMultiView> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxMultiView> & SelectionChangedInfo;
 
 export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
     /**
@@ -82,13 +118,14 @@ export default class dxMultiView extends CollectionWidget {
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 
+/** @public */
 export type Options = dxMultiViewOptions;
 
 /** @deprecated use Options instead */

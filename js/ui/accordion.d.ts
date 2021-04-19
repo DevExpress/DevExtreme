@@ -15,13 +15,48 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxAccordion>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxAccordion>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxAccordion>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemTitleClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
 
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**
@@ -119,11 +154,14 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
+     * @type_function_param1_field1 component:dxAccordion
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemTitleClick?: ((e: { component?: dxAccordion, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void) | string;
+    onItemTitleClick?: ((e: ItemTitleClickEvent) => void) | string;
     /**
      * @docid
      * @default false
@@ -197,6 +235,7 @@ export interface dxAccordionItem extends CollectionWidgetItem {
     title?: string;
 }
 
+/** @public */
 export type Options = dxAccordionOptions;
 
 /** @deprecated use Options instead */

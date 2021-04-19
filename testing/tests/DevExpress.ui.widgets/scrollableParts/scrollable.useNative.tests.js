@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import translator from 'animation/translator';
 import animationFrame from 'animation/frame';
-import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import 'generic_light.css!';
@@ -208,17 +207,16 @@ QUnit.test('simulatedScrollbar visibility', function(assert) {
         useSimulatedScrollbar: true
     });
 
-    const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS);
-    const scrollbar = Scrollbar.getInstance($scrollbar);
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
     const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
-    assert.equal(scrollbar.option('visible'), false, 'on start thumb is hidden');
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'on start thumb is hidden');
 
     pointerMock($container)
         .start()
         .wheel(10);
 
-    assert.equal(scrollbar.option('visible'), true, 'after move thumb is visible');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'after move thumb is visible');
 });
 
 QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is true', function(assert) {
@@ -276,16 +274,16 @@ QUnit.test('scrollbar appears for simulated scrolling even when useSimulatedScro
         inertiaEnabled: false
     });
 
-    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
-    assert.equal(scrollbar.option('visible'), false, 'scrollbar is hidden before scrolling');
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden before scrolling');
 
     pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
         .start()
         .down()
         .move(0, -1);
 
-    assert.equal(scrollbar.option('visible'), true, 'scrollbar is shown during scrolling');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'scrollbar is shown during scrolling');
 });
 
 QUnit.test('scrollOffset', function(assert) {

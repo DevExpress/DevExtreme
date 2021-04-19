@@ -1052,8 +1052,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     _visibilityChanged(visible) {
         this.cache.clear();
 
-        if(visible && this._isVerticalGroupedWorkSpace()) {
-            this._setHorizontalGroupHeaderCellsHeight();
+        if(visible) {
+            this._updateGroupTableHeight();
         }
 
         if(visible && this._needCreateCrossScrolling()) {
@@ -1122,9 +1122,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._attachHeaderTableClasses();
 
-        if(this._isVerticalGroupedWorkSpace()) {
-            this._setHorizontalGroupHeaderCellsHeight();
-        }
+        this._updateGroupTableHeight();
     }
 
     getWorkSpaceMinWidth() {
@@ -1551,8 +1549,18 @@ class SchedulerWorkSpace extends WidgetObserver {
         }, 0);
     }
 
+    _getCalculatedFirstDayOfWeek() {
+        const firstDayOfWeekOption = this._firstDayOfWeek();
+
+        const firstDayOfWeek = isDefined(firstDayOfWeekOption)
+            ? firstDayOfWeekOption
+            : dateLocalization.firstDayOfWeekIndex();
+
+        return firstDayOfWeek;
+    }
+
     _setFirstViewDate() {
-        const firstDayOfWeek = isDefined(this._firstDayOfWeek()) ? this._firstDayOfWeek() : dateLocalization.firstDayOfWeekIndex();
+        const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
 
         this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), firstDayOfWeek);
         this._setStartDayHour(this._firstViewDate);

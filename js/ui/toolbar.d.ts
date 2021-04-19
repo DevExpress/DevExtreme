@@ -10,10 +10,42 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxToolbar>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxToolbar>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxToolbar>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxToolbar> & ChangedOptionInfo;
 
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**
@@ -63,12 +95,11 @@ export default class dxToolbar extends CollectionWidget {
     constructor(element: TElement, options?: dxToolbarOptions)
 }
 
-
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxToolbarItem extends CollectionWidgetItem {
     /**
      * @docid
@@ -123,6 +154,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 }
 
+/** @public */
 export type Options = dxToolbarOptions;
 
 /** @deprecated use Options instead */

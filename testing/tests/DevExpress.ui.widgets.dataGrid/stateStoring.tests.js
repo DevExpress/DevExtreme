@@ -1455,7 +1455,7 @@ QUnit.module('State Storing with real controllers', {
             };
 
             this.setupDataGridModules({
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 stateStoring: {
                     enabled: true,
                     type: 'custom',

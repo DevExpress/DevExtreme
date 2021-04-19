@@ -11,6 +11,12 @@ import {
 } from '../core/utils/deferred';
 
 import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
     AsyncRule,
     CompareRule,
     CustomRule,
@@ -21,6 +27,15 @@ import {
     RequiredRule,
     StringLengthRule
 } from './validation_rules';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxValidationGroup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxValidationGroup>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInfo;
 
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }
@@ -91,6 +106,7 @@ export interface dxValidationGroupResult {
     validators?: Array<any>;
 }
 
+/** @public */
 export type Options = dxValidationGroupOptions;
 
 /** @deprecated use Options instead */

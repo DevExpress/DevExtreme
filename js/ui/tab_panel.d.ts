@@ -11,13 +11,66 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
 } from '../events/index';
+
+import {
+    SelectionChangedInfo
+} from './collection/ui.collection_widget.base';
 
 import dxMultiView, {
     dxMultiViewItem,
     dxMultiViewOptions
 } from './multi_view';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxTabPanel>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTabPanel>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTabPanel>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTabPanel> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo;
+
+/** @public */
+export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+}
+
+/** @public */
+export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+}
+
+/** @public */
+export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
+    readonly itemData?: any;
+    readonly itemElement?: TElement;
+}
 
 export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
@@ -67,11 +120,14 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleClick?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, event?: TEvent }) => void) | string;
+    onTitleClick?: ((e: TitleClickEvent) => void) | string;
     /**
      * @docid
      * @default null
@@ -79,22 +135,28 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleHold?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, event?: TEvent }) => void);
+    onTitleHold?: ((e: TitleHoldEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field1 component:dxTabPanel
+     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: dxTabPanel, element?: TElement, model?: any, itemData?: any, itemElement?: TElement }) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
      * @default false
@@ -176,6 +238,7 @@ export interface dxTabPanelItem extends dxMultiViewItem {
     title?: string;
 }
 
+/** @public */
 export type Options = dxTabPanelOptions;
 
 /** @deprecated use Options instead */

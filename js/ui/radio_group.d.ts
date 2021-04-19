@@ -4,13 +4,36 @@ import {
 
 import DataSource from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import Editor, {
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
 
 import {
     DataExpressionMixinOptions
 } from './editor/ui.data_expression';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxRadioGroup>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxRadioGroup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxRadioGroup>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxRadioGroup> & ValueChangedInfo;
 
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
@@ -72,6 +95,7 @@ export default class dxRadioGroup extends Editor {
     getDataSource(): DataSource;
 }
 
+/** @public */
 export type Options = dxRadioGroupOptions;
 
 /** @deprecated use Options instead */
