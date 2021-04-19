@@ -8,6 +8,7 @@ import { FormProps } from './form_props';
 export const viewFunction = (): JSX.Element => <div />;
 
 @Component({
+  defaultOptionRules: null,
   jQuery: { register: true },
   view: viewFunction,
 })
