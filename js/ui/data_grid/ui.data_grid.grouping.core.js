@@ -4,11 +4,11 @@ import gridCore from './ui.data_grid.core';
 import { normalizeSortingInfo } from '../../data/utils';
 import { when } from '../../core/utils/deferred';
 
-exports.createOffsetFilter = function(path, storeLoadOptions) {
+exports.createOffsetFilter = function(path, storeLoadOptions, lastLevelOnly) {
     const groups = normalizeSortingInfo(storeLoadOptions.group);
     let filter = [];
 
-    for(let i = 0; i < path.length; i++) {
+    for(let i = lastLevelOnly ? path.length - 1 : 0; i < path.length; i++) {
         const filterElement = [];
         for(let j = 0; j <= i; j++) {
             const selector = groups[j].selector;
