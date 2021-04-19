@@ -170,6 +170,7 @@ const horizontalWorkSpaceMock = {
         startCellIndex: 0,
         rowCount: 2,
         cellCount: 4,
+        totalCellCount: 4,
         topVirtualRowHeight: undefined,
         bottomVirtualRowHeight: undefined,
         cellCountInGroupRow: undefined,
@@ -1433,12 +1434,23 @@ module('View Data Provider', {
                 assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
             });
 
-            test('dateHeaderMap shoul be generated correctly', function(assert) {
+            test('dateHeaderMap should be generated correctly', function(assert) {
                 const viewDataProvider = this.init('horizontal');
 
                 const dateHeaderMap = testHeaderDataMap.horizontalGrouping;
+                const dateHeaderData = {
+                    dataMap: dateHeaderMap,
+                    leftVirtualCellCount: 0,
+                    leftVirtualCellWidth: undefined,
+                    rightVirtualCellCount: 0,
+                    rightVirtualCellWidth: undefined,
+                    weekDayLeftVirtualCellCount: undefined,
+                    weekDayLeftVirtualCellWidth: undefined,
+                    weekDayRightVirtualCellCount: undefined,
+                    weekDayRightVirtualCellWidth: undefined,
+                };
 
-                assert.deepEqual(viewDataProvider.dateHeaderMap, dateHeaderMap, 'Correct dateHeaderMap');
+                assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
             });
 
             test('completeTimePanelMap should be generated correctly', function(assert) {
