@@ -453,10 +453,11 @@ export class DataGrid extends JSXComponent(DataGridProps) {
       const updatedOptions = getUpdatedOptions(this.prevProps, this.props);
       this.instance.beginUpdate();
       updatedOptions.forEach(({ path, value }) => this.instance.option(path, value));
+      this.prevProps = this.props;
       this.instance.endUpdate();
+    } else {
+      this.prevProps = this.props;
     }
-
-    this.prevProps = this.props;
   }
 
   @Effect({ run: 'once' })

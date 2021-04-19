@@ -20,6 +20,9 @@ function compare(resultPaths: ResultItem[], item1, item2, key: string): void {
     const diffPaths = objectDiffs(item1, item2);
     resultPaths.push(...diffPaths.map((item) => ({ path: `${key}.${item.path}`, value: item.value })));
   } else if (type1 === 'array') {
+    if (key === 'dataSource' && item1 !== item2) {
+      resultPaths.push(getDiffItem(key, item2));
+    }
     if ((item1 as []).length !== (item2 as []).length) {
       resultPaths.push(getDiffItem(key, item2));
     } else {
@@ -38,9 +41,6 @@ const objectDiffsFiltered = (propsEnumerator: (string) => string[]) => (
   props: Record<string, unknown>,
 ):
 ResultItem[] => {
-  if (!props) {
-    return [];
-  }
   const resultPaths: ResultItem[] = [];
   const processItem = !Array.isArray(oldProps)
     ? (propName): void => compare(resultPaths, oldProps[propName], props[propName], propName)
@@ -56,7 +56,9 @@ ResultItem[] => {
 };
 
 const objectDiffs = objectDiffsFiltered((oldProps) => Object.keys(oldProps));
-const reactProps = { key: true, ref: true, children: true };
+const reactProps = {
+  key: true, ref: true, children: true, style: true,
+};
 const objectDiffsWithoutReactProps = objectDiffsFiltered((prop) => Object.keys(prop)
   .filter((p) => !reactProps[p]));
 

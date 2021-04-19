@@ -26,8 +26,8 @@ describe('get_updated_options', () => {
   });
 
   it('eventcallback props changed', () => {
-    const callback1 = () => {};
-    const callback2 = () => {};
+    const callback1 = () => { };
+    const callback2 = () => { };
     expect(getUpdatedOptions(
       { visible: true, onCellClick: callback1 },
       { visible: true, onCellClick: callback2 },
@@ -106,5 +106,12 @@ describe('get_updated_options', () => {
       { dataSource },
     ))
       .toEqual([]);
+  });
+
+  it('use equal for compare array "dataSource"', () => {
+    const oldObj = { dataSource: [] };
+    const obj = { dataSource: [] };
+    expect(getUpdatedOptions(oldObj, obj))
+      .toEqual([{ path: 'dataSource', value: [] }]);
   });
 });

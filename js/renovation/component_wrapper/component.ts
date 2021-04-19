@@ -11,6 +11,7 @@ import { isDefined, isRenderer } from '../../core/utils/type';
 
 import { InfernoEffectHost } from "@devextreme/vdom";
 import { TemplateWrapper } from "./template_wrapper";
+import { updatePropsImmutable } from './utils';
 
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
@@ -30,6 +31,7 @@ export default class ComponentWrapper extends DOMComponent {
     [name: string]: unknown;
   };
   _isNodeReplaced!: boolean;
+  _props: any;
   _propsInfo!: {
     allowNull: string[],
     twoWay: any[],
@@ -109,7 +111,7 @@ export default class ComponentWrapper extends DOMComponent {
     }
   }
 
-  _render() {} // NOTE: Inherited from DOM_Component
+  _render() { } // NOTE: Inherited from DOM_Component
 
   _dispose() {
     const containerNode = this.$element()[0];
@@ -178,9 +180,9 @@ export default class ComponentWrapper extends DOMComponent {
     );
 
     elements.forEach((name: string) => {
-      if(name in options) {
+      if (name in options) {
         const value = options[name];
-        if(isRenderer(value)) {
+        if (isRenderer(value)) {
           options[name] = this._patchElementParam(value);
         }
       }
@@ -191,7 +193,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   getProps() {
     const options = this._patchOptionValues({
-      ...this.option(),
+      ...this._props,
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
     });
@@ -218,6 +220,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   _init() {
     super._init();
+    this._props = { ...this.option() }; //extend(true, {}, this.option());
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
@@ -236,7 +239,7 @@ export default class ComponentWrapper extends DOMComponent {
         this._getActionConfigs()[event]
       );
 
-      action = function (actArgs: { [name: string]: any }) {
+      action = function(actArgs: { [name: string]: any }) {
         Object.keys(actArgs).forEach((name) => {
           if (isDefined(actArgs[name]) && domAdapter.isNode(actArgs[name])) {
             actArgs[name] = getPublicElement($(actArgs[name]));
@@ -249,11 +252,11 @@ export default class ComponentWrapper extends DOMComponent {
   }
 
   _optionChanged(option) {
-    const { name } = option || {};
+    const { name, fullName } = option;
+    updatePropsImmutable(this._props, this.option(), name, fullName);
     if (name && this._getActionConfigs()[name]) {
       this._addAction(name);
     }
-
     super._optionChanged(option);
     this._invalidate();
   }
@@ -338,7 +341,7 @@ export default class ComponentWrapper extends DOMComponent {
 
     try {
       result = $(value);
-    } catch(error) {
+    } catch (error) {
       return value;
     }
     result = result?.get(0);

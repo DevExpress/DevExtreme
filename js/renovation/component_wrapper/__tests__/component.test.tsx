@@ -13,6 +13,7 @@ import {
   KEY,
 } from '../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../core/element';
+import * as Utils from '../utils';
 
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
@@ -363,6 +364,25 @@ describe('option', () => {
     const objectProp2 = $('#component2').dxOptionsCheckWidget('option').objectProp;
 
     expect(objectProp1).not.toBe(objectProp2);
+  });
+
+  it('nested option changed', () => {
+    const component = $('#component').dxOptionsCheckWidget({}).dxOptionsCheckWidget('instance');
+    expect(component.getLastReceivedProps().nestedObject.nestedProp).toBe('default value');
+    const { nestedObject } = component.getLastReceivedProps();
+    const spyUpdatePropsImmutable = jest.spyOn(Utils, 'updatePropsImmutable');
+
+    component.option('nestedObject.nestedProp', 'new value');
+    expect(spyUpdatePropsImmutable).toBeCalledWith(
+      // eslint-disable-next-line no-underscore-dangle
+      component._props,
+      component.option(),
+      'nestedObject',
+      'nestedObject.nestedProp',
+    );
+
+    expect(component.getLastReceivedProps().nestedObject).not.toBe(nestedObject);
+    expect(component.getLastReceivedProps().nestedObject.nestedProp).toBe('new value');
   });
 
   it('should return default value of TwoWay prop', () => {

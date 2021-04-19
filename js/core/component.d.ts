@@ -155,5 +155,6 @@ export default class Component {
   _dispose(): void;
   _getDefaultOptions(): object;
   _init(): void;
+  _optionChanging(name: string, value: unknown, prevValue: unknown): void;
   _optionChanged(args: { name: string; value: unknown }): void;
 }

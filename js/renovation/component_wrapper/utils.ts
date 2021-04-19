@@ -1,4 +1,5 @@
 import { each } from '../../core/utils/iterator';
+import { isObject, isPlainObject } from '../../core/utils/type';
 
 export const addAttributes = ($element, attributes): void => {
   each(attributes, (_, { name, value }) => {
@@ -29,3 +30,31 @@ export const removeDifferentElements = ($children, $newChildren): void => {
     }
   });
 };
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface UnknownObject { }
+export function updatePropsImmutable(
+  props: UnknownObject, option: UnknownObject, name: string, fullName: string,
+): void {
+  const currentPropsValue = option[name];
+  const result = props;
+  if (name !== fullName) {
+    if (Array.isArray(currentPropsValue)) {
+      const newArray = [...currentPropsValue];
+      result[name] = newArray;
+      const matchIndex = /\[\s*(\d+)\s*\]/g.exec(fullName);
+      if (matchIndex) {
+        const index = parseInt(matchIndex[1], 10);
+        if (isObject(newArray[index])) {
+          newArray[index] = { ...currentPropsValue[index] };
+        }
+      }
+      return;
+    }
+  }
+  if (isObject(currentPropsValue) && isPlainObject(currentPropsValue)) {
+    result[name] = { ...currentPropsValue };
+  } else {
+    result[name] = currentPropsValue;
+  }
+}
