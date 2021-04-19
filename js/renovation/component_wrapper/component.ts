@@ -42,7 +42,6 @@ export default class ComponentWrapper extends DOMComponent {
   };
   _viewRef!: RefObject<unknown>;
   _viewComponent!: any;
-  _onInitialized!: Function;
 
   get viewRef() {
     return this._viewRef?.current;
