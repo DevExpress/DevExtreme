@@ -148,13 +148,9 @@
     display: block;
     width: $icon-size;
     top: 50%;
-    margin-top: - round($icon-size / 2);
+    margin-top: -$icon-size / 2;
     margin-left: -$icon-size / 2;
     left: 50%;
-
-    @media (-webkit-min-device-pixel-ratio: 2) {
-      margin-top: -$icon-size / 2;
-    }
   }
 }
 
