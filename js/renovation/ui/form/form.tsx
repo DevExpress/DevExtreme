@@ -5,7 +5,19 @@ import {
 
 import { FormProps } from './form_props';
 
-export const viewFunction = (): JSX.Element => <div />;
+import { combineClasses } from '../../utils/combine_classes';
+import { Widget } from '../common/widget';
+
+export const viewFunction = (viewModel: Form): JSX.Element => {
+  const { aria, cssClasses, restAttributes } = viewModel;
+  return (
+    <Widget
+      aria={aria}
+      classes={cssClasses}
+      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+    />
+  );
+};
 
 @Component({
   defaultOptionRules: null,
@@ -14,5 +26,17 @@ export const viewFunction = (): JSX.Element => <div />;
 })
 
 export class Form extends JSXComponent<FormProps>() {
+  // eslint-disable-next-line class-methods-use-this
+  get aria(): Record<string, string> {
+    return {
+      role: 'form',
+    };
+  }
 
+  // eslint-disable-next-line class-methods-use-this
+  get cssClasses(): string {
+    return combineClasses({
+      'dx-form': true,
+    });
+  }
 }
