@@ -2,7 +2,7 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 
 import 'generic_light.css!';
 
@@ -272,7 +272,7 @@ if(devices.real().deviceType === 'desktop') {
         ['vertical', 'horizontal'].forEach((scrollbarDirection) => {
             function checkScrollLocation($scrollable, expectedLocation) {
                 const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
-                const scrollLocation = translator.locate($scroll);
+                const scrollLocation = getTranslateValues($scroll.get(0));
                 QUnit.assert.deepEqual(scrollLocation, expectedLocation, 'scroll location');
             }
 

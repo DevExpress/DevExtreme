@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -40,7 +40,7 @@ const moduleConfig = {
 const getScrollOffset = function($scrollable) {
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const location = translator.locate($content);
+    const location = getTranslateValues($content.get(0));
 
     return {
         top: location.top - $container.scrollTop(),
@@ -230,20 +230,24 @@ QUnit.test('showScrollbar: onHover, useNative: false, direction: vertical -> sca
     const $scrollable = $('#scrollable').height(100);
     $scrollable.wrapInner('<div>').children().height(200);
 
-    const scrollable = $scrollable.dxScrollable({
+    $scrollable.dxScrollable({
         showScrollbar: 'onHover',
         useNative: false,
-        direction: 'vertical'
-    }).dxScrollable('instance');
+        direction: 'vertical',
+    });
 
     const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
-    scrollable._strategy._scrollers['vertical']._scaleRatio = 0.5;
 
     const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+    assert.equal($scroll.get(0).getBoundingClientRect().height, 50, 'real thumb size');
+    assert.equal($scroll.height(), 46, 'thumb size');
     assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden');
+
+    $scrollable.css('transform', 'scale(0.50)');
     $container.trigger('mouseenter');
 
-    assert.equal(scrollable._strategy._scrollers['vertical']._scaleRatio, 1, 'scaleRatio recalculated');
+    assert.equal($scroll.get(0).getBoundingClientRect().height, 25, 'real thumb size');
+    assert.equal($scroll.height(), 46, 'thumb size');
     assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after mouseenter');
 });
 
@@ -261,7 +265,9 @@ QUnit.test('thumb hide after scroll when showScrollbar = onScroll', function(ass
     $scrollbar.trigger('mouseenter');
     pointerMock($content).start().wheel(1);
 
-    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is visible after scroll');
+    this.clock.tick(500);
+
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden');
 });
 
 QUnit.test('thumb stays visible after scroll when mouseEnter on scrollbar and scroll stopped', function(assert) {
