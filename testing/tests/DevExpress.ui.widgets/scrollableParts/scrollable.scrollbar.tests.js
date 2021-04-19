@@ -209,7 +209,7 @@ QUnit.test('scrollbar in scaled container has correct position after update', fu
     const contentHeight = 1000;
     const scaleRatio = 0.5;
     const distance = -100;
-    const scrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
+    const expectedScrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
 
     const $scrollable = $('#scaledScrollable').dxScrollable({
         useNative: false,

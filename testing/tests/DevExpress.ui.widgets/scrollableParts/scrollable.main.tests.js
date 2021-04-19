@@ -10,7 +10,6 @@ import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change'
 import $ from 'jquery';
 import initMobileViewport from 'mobile/init_mobile_viewport';
 import 'ui/scroll_view/ui.scrollable';
-import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import {
     calculateInertiaDistance,

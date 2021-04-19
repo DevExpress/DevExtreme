@@ -3,9 +3,6 @@ import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translat
 import animationFrame from 'animation/frame';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
-// eslint-disable-next-line spellcheck/spell-checker
-import { rerender as reRender } from 'inferno';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
