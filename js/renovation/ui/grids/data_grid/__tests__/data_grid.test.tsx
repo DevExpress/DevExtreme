@@ -206,6 +206,7 @@ describe('DataGrid', () => {
       ${'resize'}
       ${'isScrollbarVisible'}
       ${'getTopVisibleRowData'}
+      ${'getScrollbarWidth'}
     `
         .describe('Proxying the Grid methods', ({
           methodName,
@@ -320,7 +321,7 @@ describe('DataGrid', () => {
   });
 
   describe('Two way props synchronization', () => {
-    it('initInstanceElement effect subscribes to optionChanged event with instanceOptionChangedHandler handler', () => {
+    it('subscribeOptionChanged effect subscribes to optionChanged event with instanceOptionChangedHandler handler', () => {
       const initialProps = {
       } as DataGridProps;
       const component = new DataGrid(initialProps);
@@ -329,6 +330,7 @@ describe('DataGrid', () => {
       component.instanceOptionChangedHandler = jest.fn();
 
       component.initInstanceElement();
+      component.subscribeOptionChanged();
 
       expect(component.instance.on).toBeCalledWith('optionChanged', expect.any(Function));
 
@@ -336,6 +338,16 @@ describe('DataGrid', () => {
       calledOptionChangedHandler(e);
 
       expect(component.instanceOptionChangedHandler).toBeCalledWith(e);
+    });
+
+    it('subscribeOptionChanged should not fail if component instance is not created', () => {
+      const initialProps = {
+      } as DataGridProps;
+      const component = new DataGrid(initialProps);
+
+      component.subscribeOptionChanged();
+
+      expect(component.instance).toBeUndefined();
     });
 
     test.each`
@@ -366,28 +378,30 @@ describe('DataGrid', () => {
     });
 
     test.each`
-    propName
-    ${'changes'}
-    ${'editRowKey'}
-    ${'editColumnName'}
-    `('edting.$propName property should be assigned on optionChanged event call', ({ propName }) => {
+    fullName
+    ${'editing.changes'}
+    ${'editing.editRowKey'}
+    ${'editing.editColumnName'}
+    ${'searchPanel.text'}
+    `('$propName property should be assigned on optionChanged event call', ({ fullName }) => {
+      const name = fullName.split('.')[0];
+      const propName = fullName.split('.')[1];
       const prevValue = null;
       const newValue = {};
       const props = {
       } as DataGridProps;
-      props.editing = { [propName]: prevValue };
+      props[name] = { [propName]: prevValue };
       const component = new DataGrid(props);
-      const fullPropName = `editing.${propName}`;
 
       component.instanceOptionChangedHandler({
-        name: 'editing',
-        fullName: fullPropName,
+        name,
+        fullName,
         value: newValue,
         previousValue: null,
-        component: { option: (name) => name === fullPropName && newValue },
+        component: { option: (optionName) => optionName === fullName && newValue },
       });
 
-      expect((component.props.editing as any)[propName]).toBe(newValue);
+      expect(component.props[name][propName]).toBe(newValue);
     });
 
     test('property should not be assigned if compomnent value is changed during updating', () => {

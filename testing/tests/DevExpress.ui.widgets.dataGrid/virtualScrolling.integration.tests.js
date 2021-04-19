@@ -524,7 +524,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         this.clock.tick(300);
 
-        const rowsView = dataGrid._views.rowsView;
+        const rowsView = dataGrid.getView('rowsView');
         row = rowsView.element().find('.dx-data-row').eq(0);
 
         // assert
