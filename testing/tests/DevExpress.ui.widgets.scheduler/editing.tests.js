@@ -1,16 +1,16 @@
-const $ = require('jquery');
-const devices = require('core/devices');
-const tooltip = require('ui/tooltip/ui.tooltip');
-const fx = require('animation/fx');
-const keyboardMock = require('../../helpers/keyboardMock.js');
-const dataUtils = require('core/element_data');
+import $ from 'jquery';
+import devices from 'core/devices';
+import tooltip from 'ui/tooltip/ui.tooltip';
+import fx from 'animation/fx';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import dataUtils from 'core/element_data';
 
 import {
     initTestMarkup,
 } from '../../helpers/scheduler/helpers.js';
 
-require('generic_light.css!');
-require('ui/scheduler/ui.scheduler');
+import 'generic_light.css!';
+import 'ui/scheduler/ui.scheduler';
 
 initTestMarkup();
 
