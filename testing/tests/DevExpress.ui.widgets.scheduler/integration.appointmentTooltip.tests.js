@@ -19,9 +19,9 @@ import 'ui/scheduler/ui.scheduler';
 const dateFormat = 'monthandday';
 const timeFormat = 'shorttime';
 
-const { testStart, module, test } = QUnit;
+const { module, test } = QUnit;
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 const moduleConfig = {
     beforeEach() {

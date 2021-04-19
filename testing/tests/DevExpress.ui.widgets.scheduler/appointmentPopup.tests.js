@@ -104,7 +104,7 @@ const setWindowWidth = width => {
 
 const resetWindowWidth = () => delete document.documentElement.clientWidth;
 
-QUnit.testStart(() => initTestMarkup());
+initTestMarkup();
 
 const moduleConfig = {
     beforeEach() {

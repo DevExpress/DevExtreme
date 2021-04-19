@@ -4,13 +4,11 @@ import dxScheduler from 'ui/scheduler/ui.scheduler';
 import { DataSource } from 'data/data_source/data_source';
 import dateUtils from 'core/utils/date';
 import dxSchedulerAppointmentModel from 'ui/scheduler/appointment_model';
+import {
+    initTestMarkup,
+} from '../../helpers/scheduler/helpers.js';
 
-QUnit.testStart(() => {
-    const markup =
-        '<div id="scheduler"> </div>';
-
-    $('#qunit-fixture').html(markup);
-});
+initTestMarkup();
 
 const moduleConfig = {
     beforeEach: function() {

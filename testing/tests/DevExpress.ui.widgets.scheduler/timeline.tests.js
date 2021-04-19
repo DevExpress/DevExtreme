@@ -12,10 +12,10 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler-timeline"></div>\
-                                <div id="scheduler-timeline-rtl"></div>');
-});
+// QUnit.testStart(function() {
+$('#qunit-fixture').html('<div id="scheduler-timeline"></div>\
+                            <div id="scheduler-timeline-rtl"></div>');
+// });
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';

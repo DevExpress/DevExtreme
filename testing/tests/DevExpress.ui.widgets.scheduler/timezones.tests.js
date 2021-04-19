@@ -37,7 +37,7 @@ const timeZones = {
     Berlin: 'Europe/Berlin'
 };
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 const moduleConfig = {
     beforeEach() {

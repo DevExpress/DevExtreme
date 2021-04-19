@@ -24,9 +24,9 @@ const checkAppointmentUpdatedCallbackArgs = (assert, actual, expected) => {
     assert.deepEqual(actual.$appointment.get(0), expected.$appointment.get(0), 'Appointment element is OK');
 };
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler"></div>');
-});
+// QUnit.testStart(function() {
+$('#qunit-fixture').html('<div id="scheduler"></div>');
+// });
 
 const moduleOptions = {
     beforeEach: function() {

@@ -27,7 +27,7 @@ const {
     test
 } = QUnit;
 
-QUnit.testStart(() => initTestMarkup());
+initTestMarkup();
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';

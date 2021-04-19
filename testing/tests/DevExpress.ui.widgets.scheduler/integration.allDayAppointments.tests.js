@@ -18,12 +18,10 @@ import {
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+$('#qunit-fixture').html(
+    '<div id="scheduler">\
+        <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+        </div>');
 
 const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
 

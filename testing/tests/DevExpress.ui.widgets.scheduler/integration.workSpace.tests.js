@@ -5,12 +5,10 @@ import { SchedulerTestWrapper, createWrapper, CLASSES } from '../../helpers/sche
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+$('#qunit-fixture').html(
+    '<div id="scheduler">\
+        <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+        </div>');
 
 import 'generic_light.css!';
 

@@ -15,13 +15,12 @@ import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 const {
     module,
-    testStart,
     test
 } = QUnit;
 
-testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler"></div>');
-});
+// testStart(function() {
+$('#qunit-fixture').html('<div id="scheduler"></div>');
+// });
 
 module('Subscribes', {
     beforeEach: function() {

@@ -8,7 +8,7 @@ import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
 import devices from 'core/devices';
 
-QUnit.testStart(() => initTestMarkup());
+initTestMarkup();
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
         assert.ok(true, 'skip this test on mobile devices');

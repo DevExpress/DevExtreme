@@ -11,7 +11,7 @@ const {
     test,
 } = QUnit;
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 module('Renovated Views', () => {
     ['week', 'timelineWeek'].forEach((currentView) => {

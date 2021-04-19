@@ -16,7 +16,7 @@ const {
     test
 } = QUnit;
 
-QUnit.testStart(() => initTestMarkup());
+initTestMarkup();
 
 module('Integration: Appointment scroll', {
     beforeEach: function() {

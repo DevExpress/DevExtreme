@@ -27,7 +27,7 @@ const printOffset = offset => [
     offset.y >= 0 ? `offset.y: ${offset.y}` : ''
 ].join(',');
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 module('Virtual scrolling Month View', () => {
     module('Regular appointments', () => {

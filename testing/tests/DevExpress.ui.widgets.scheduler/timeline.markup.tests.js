@@ -11,12 +11,11 @@ import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.sch
 import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import 'ui/scheduler/ui.scheduler';
 
-QUnit.testStart(() => {
-    const markup =
-        '<div id="scheduler-timeline"></div>';
+// QUnit.testStart(() => {
+const markup = '<div id="scheduler-timeline"></div>';
 
-    $('#qunit-fixture').html(markup);
-});
+$('#qunit-fixture').html(markup);
+// });
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HEADER_PANEL_CELL_CLASS = 'dx-scheduler-header-panel-cell';

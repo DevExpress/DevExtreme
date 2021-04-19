@@ -11,14 +11,12 @@ import 'generic_light.css!';
 
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 
-QUnit.testStart(function() {
-    const markup = '\
-        <div id="scheduler-header"></div>\
-        <div id="scheduler"></div>\
-    ';
+const markup = '\
+    <div id="scheduler-header"></div>\
+    <div id="scheduler"></div>\
+';
 
-    $('#qunit-fixture').html(markup);
-});
+$('#qunit-fixture').html(markup);
 
 QUnit.module('Header', {
     beforeEach: function() {

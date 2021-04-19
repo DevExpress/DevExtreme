@@ -26,7 +26,7 @@ const printOffset = offset => [
     offset.y >= 0 ? `offset.y: ${offset.y}` : ''
 ].join(',');
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 module('Virtual scrolling timelines', () => {
     module('Appointments', () => {

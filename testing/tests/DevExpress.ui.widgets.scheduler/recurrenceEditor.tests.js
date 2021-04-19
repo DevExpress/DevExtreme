@@ -20,11 +20,11 @@ const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval';
 const LABEL_POSTFIX = '-label';
 
-const { testStart, test, module } = QUnit;
+const { test, module } = QUnit;
 
-testStart(() => {
-    $('#qunit-fixture').html('<div id="recurrence-editor"></div>');
-});
+// testStart(() => {
+$('#qunit-fixture').html('<div id="recurrence-editor"></div>');
+// });
 
 const moduleConfig = {
     beforeEach() {

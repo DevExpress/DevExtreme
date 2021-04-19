@@ -8,9 +8,9 @@ const keyboardMock = require('../../helpers/keyboardMock.js');
 require('ui/scheduler/header/navigator');
 require('generic_light.css!');
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler-navigator"></div>');
-});
+// QUnit.testStart(function() {
+$('#qunit-fixture').html('<div id="scheduler-navigator"></div>');
+// });
 
 QUnit.module('Navigator', {
     beforeEach: function() {

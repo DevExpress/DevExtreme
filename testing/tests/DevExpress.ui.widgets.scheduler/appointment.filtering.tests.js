@@ -20,7 +20,7 @@ const {
     test
 } = QUnit;
 
-QUnit.testStart(() => initTestMarkup());
+initTestMarkup();
 
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 

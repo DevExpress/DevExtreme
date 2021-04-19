@@ -8,9 +8,7 @@ import { DataSource } from 'data/data_source/data_source';
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
 
-const { testStart } = QUnit;
-
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 const mockWorkSpaceRendering = function(schedulerInst, cellSize, bounds) {
     const base = schedulerInst._renderWorkSpace;

@@ -3,9 +3,9 @@ import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpe
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
-const { testStart, module, test } = QUnit;
+const { module, test } = QUnit;
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 if(isDesktopEnvironment()) {
     module('Scrolling', () => {

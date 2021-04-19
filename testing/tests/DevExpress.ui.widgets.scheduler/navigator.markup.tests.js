@@ -5,12 +5,12 @@ import devices from 'core/devices';
 import noop from 'core/utils/common';
 import 'ui/scheduler/ui.scheduler';
 
-QUnit.testStart(() => {
-    const markup =
+// QUnit.testStart(() => {
+const markup =
         '<div id="navigator"> </div>';
 
-    $('#qunit-fixture').html(markup);
-});
+$('#qunit-fixture').html(markup);
+// });
 
 const moduleConfig = {
     beforeEach: function() {

@@ -7,7 +7,7 @@ import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
 
-const { testStart, module, test, skip } = QUnit;
+const { module, test, skip } = QUnit;
 
 const pacificTimezoneOffset = 480; // TODO: Value in ms. Offset (UTC-08:00) Pacific Time (US & Canada)
 const summerDSTDate = new Date(2020, 2, 8); // TODO Daylight saving time will happen on this day in 2 A.M.(UTC -7 Pacific time)
@@ -16,7 +16,7 @@ const winterDSTDate = new Date(2020, 10, 1); // TODO Daylight saving time will h
 // This tests run only in (UTC-08:00) Pacific Time (US & Canada)
 // For run test locally, change timezone on desktop on (UTC-08:00) Pacific Time (US & Canada)
 if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
-    testStart(() => initTestMarkup());
+    initTestMarkup();
     const moduleConfig = {
         beforeEach() {
             fx.off = true;

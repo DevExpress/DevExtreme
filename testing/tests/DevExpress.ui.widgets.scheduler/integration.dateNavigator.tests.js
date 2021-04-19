@@ -6,12 +6,10 @@ import 'generic_light.css!';
 import dxPopup from 'ui/popup';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+$('#qunit-fixture').html(
+    '<div id="scheduler">\
+        <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+        </div>');
 
 const moduleConfig = {
     beforeEach: function() {

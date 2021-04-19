@@ -13,7 +13,7 @@ import 'ui/scheduler/ui.scheduler';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
-QUnit.testStart(() => initTestMarkup());
+initTestMarkup();
 
 const moduleConfig = {
     beforeEach() {

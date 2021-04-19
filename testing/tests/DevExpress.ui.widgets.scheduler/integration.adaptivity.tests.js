@@ -14,9 +14,9 @@ import 'ui/switch';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
-const { testStart, test, module } = QUnit;
+const { test, module } = QUnit;
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 const createInstance = (options) => {
     const defaultOption = {

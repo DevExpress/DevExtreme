@@ -21,12 +21,10 @@ import themes from 'ui/themes';
 import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, SchedulerTestWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { Deferred } from 'core/utils/deferred';
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler"></div>');
-});
+initTestMarkup();
 
 QUnit.module('Initialization', {
     beforeEach: function() {

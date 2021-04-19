@@ -1,11 +1,9 @@
 const $ = require('jquery');
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+$('#qunit-fixture').html(
+    '<div id="scheduler">\
+        <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+        </div>');
 
 require('generic_light.css!');
 

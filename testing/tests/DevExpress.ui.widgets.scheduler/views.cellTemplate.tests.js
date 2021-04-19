@@ -11,7 +11,7 @@ const {
 } = QUnit;
 
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 const moduleConfig = {
     beforeEach: function() {

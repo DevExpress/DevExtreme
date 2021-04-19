@@ -6,7 +6,7 @@ const { test, module, testStart } = QUnit;
 
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 module('Cells Selection', {
     beforeEach: function() {

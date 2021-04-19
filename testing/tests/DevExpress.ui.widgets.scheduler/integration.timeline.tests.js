@@ -1,11 +1,9 @@
 import $ from 'jquery';
 
-QUnit.testStart(() => {
-    $('#qunit-fixture').html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+$('#qunit-fixture').html(
+    '<div id="scheduler">\
+        <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+        </div>');
 
 import 'generic_light.css!';
 

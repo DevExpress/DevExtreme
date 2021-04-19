@@ -4,11 +4,11 @@ import $ from 'jquery';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
-const { test, module, testStart } = QUnit;
+const { test, module } = QUnit;
 
-testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler"></div>');
-});
+// testStart(function() {
+$('#qunit-fixture').html('<div id="scheduler"></div>');
+// });
 
 module('ScrollTo', {
     beforeEach: function() {

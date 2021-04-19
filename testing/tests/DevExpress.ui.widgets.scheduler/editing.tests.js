@@ -5,12 +5,14 @@ const fx = require('animation/fx');
 const keyboardMock = require('../../helpers/keyboardMock.js');
 const dataUtils = require('core/element_data');
 
+import {
+    initTestMarkup,
+} from '../../helpers/scheduler/helpers.js';
+
 require('generic_light.css!');
 require('ui/scheduler/ui.scheduler');
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler"></div>');
-});
+initTestMarkup();
 
 QUnit.module('Editing option: boolean', {
     beforeEach: function() {

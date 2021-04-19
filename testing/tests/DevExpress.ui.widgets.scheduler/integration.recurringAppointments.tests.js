@@ -22,12 +22,10 @@ import 'ui/scheduler/ui.scheduler';
 const { module } = QUnit;
 const toMs = dateUtils.dateToMilliseconds;
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+$('#qunit-fixture').html(
+    '<div id="scheduler">\
+        <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+        </div>');
 
 supportedScrollingModes.forEach(scrollingMode => {
     module(`Integration: Recurring Appointments in the ${scrollingMode} scrolling mode`, {

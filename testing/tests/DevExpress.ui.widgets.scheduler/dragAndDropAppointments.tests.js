@@ -23,7 +23,6 @@ import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
 const {
-    testStart,
     test,
     module
 } = QUnit;
@@ -33,7 +32,7 @@ const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
 const realSetTimeout = window.setTimeout;
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 const priorityData = [{
     text: 'Low Priority',

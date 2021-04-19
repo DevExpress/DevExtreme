@@ -9,7 +9,7 @@ import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 import 'generic_light.css!';
 
-QUnit.testStart(() => initTestMarkup());
+initTestMarkup();
 
 const { module, test } = QUnit;
 

@@ -13,11 +13,9 @@ import AppointmentAdapter from 'ui/scheduler/appointmentAdapter';
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
 
-QUnit.testStart(() => {
-    $('#qunit-fixture').html(
-        '<div id="ddAppointments"></div>\
-        <div id="scheduler"></div>');
-});
+$('#qunit-fixture').html(
+    '<div id="ddAppointments"></div>\
+    <div id="scheduler"></div>');
 
 const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;

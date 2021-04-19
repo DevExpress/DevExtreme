@@ -28,7 +28,7 @@ const test = (description, callback) => {
     return testFunc(description, sinon.test(callback));
 };
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 module('Virtual scrolling integration', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {

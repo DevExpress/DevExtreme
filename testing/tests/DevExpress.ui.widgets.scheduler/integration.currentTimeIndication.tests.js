@@ -4,7 +4,7 @@ import { dateToMilliseconds as toMs } from 'core/utils/date';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
-const { testStart, module, test } = QUnit;
+const { module, test } = QUnit;
 
 const NOW = new Date(2020, 11, 9, 12, 15);
 const HOUR = 3600000;
@@ -12,7 +12,7 @@ const HOUR = 3600000;
 const CURRENT_TIME_CELL_CLASS = CLASSES.currentTimeCell.slice(1);
 const HEADER_PANEL_CURRENT_TIME_CELL_CLASS = CLASSES.headerPanelCurrentTimeCell.slice(1);
 
-testStart(() => initTestMarkup());
+initTestMarkup();
 
 module('Current Time Cell Indication Updating', {
     beforeEach: function() {
