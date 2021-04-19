@@ -10,22 +10,6 @@ describe('Form', () => {
 
     expect(form.props()).toEqual({});
   });
-
-  describe('Getters', () => {
-    describe('cssClasses', () => {
-      it('Check has dx-form class', () => {
-        const form = new Form({});
-        expect(form.cssClasses).toEqual(expect.stringMatching('dx-form'));
-      });
-    });
-
-    describe('aria', () => {
-      it('Check has form role', () => {
-        const form = new Form({});
-        expect(form.aria).toEqual({ role: 'form' });
-      });
-    });
-  });
 });
 
 describe('Form > Getters', () => {
