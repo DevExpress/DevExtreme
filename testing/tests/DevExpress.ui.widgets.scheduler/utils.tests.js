@@ -27,7 +27,7 @@ module('Time zone data utils', {}, () => {
         };
 
         try {
-            assert.equal(timeZoneDataUtils._tzCache.map.size, 0, '');
+            assert.equal(timeZoneDataUtils._tzCache.map.size, 0, 'Timezone cache should be empty');
 
             checkCache('America/Los_Angeles', new Date(2021, 3, 3), 1);
 
