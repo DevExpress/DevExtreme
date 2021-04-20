@@ -418,7 +418,7 @@ const Drawer = Widget.inherit({
             this._toggleShaderVisibility(isDrawerOpened);
         }
 
-        this._strategy.renderPosition(isDrawerOpened, animationEnabled, this.option('animationDuration'));
+        this._strategy.renderPosition(animationEnabled, this.option('animationDuration'));
     },
 
     _animationCompleteHandler() {
