@@ -1,4 +1,5 @@
 /* eslint-env node */
+const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
@@ -32,9 +33,12 @@ module.exports = {
             'process.env': {
                 'NODE_ENV': JSON.stringify('production')
             }
-        })
+        }),
+        new webpack.optimize.UglifyJsPlugin()
     ],
     resolve: {
-        mainFields: ['main'],
+        alias: {
+            '@devextreme/vdom': path.resolve('./node_modules/@devextreme/vdom/dist/cjs/index.js'),
+        }
     },
 };
