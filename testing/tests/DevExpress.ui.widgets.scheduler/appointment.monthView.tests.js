@@ -18,10 +18,11 @@ import 'ui/switch';
 
 const {
     module,
-    test
+    test,
+    testStart,
 } = QUnit;
 
-initTestMarkup();
+testStart(() => initTestMarkup());
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';

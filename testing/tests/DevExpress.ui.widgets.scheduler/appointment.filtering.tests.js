@@ -14,10 +14,11 @@ import 'ui/switch';
 
 const {
     module,
-    test
+    test,
+    testStart,
 } = QUnit;
 
-initTestMarkup();
+testStart(() => initTestMarkup());
 
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
