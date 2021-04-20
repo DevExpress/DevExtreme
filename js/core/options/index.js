@@ -126,6 +126,7 @@ export class Options {
         const options = this._getByRules(rules);
 
         this.silent(options);
+        this._patchedDefault = extend({}, options);
     }
 
     dispose() {
