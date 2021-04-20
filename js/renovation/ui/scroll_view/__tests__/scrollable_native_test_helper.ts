@@ -410,7 +410,6 @@ class ScrollableTestHelper {
       onPullDown: jest.fn(),
       onReachBottom: jest.fn(),
       onBounce: jest.fn(),
-      onRelease: jest.fn(),
     };
 
     Object.keys(actionHandlers).forEach((key) => {

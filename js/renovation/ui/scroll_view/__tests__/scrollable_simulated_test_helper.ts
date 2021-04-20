@@ -67,7 +67,6 @@ class ScrollableTestHelper {
       onPullDown: this.actionHandlers.onPullDown,
       onReachBottom: this.actionHandlers.onReachBottom,
       onBounce: this.actionHandlers.onBounce,
-      onRelease: this.actionHandlers.onRelease,
       ...this.options,
       contentTranslateOffset: { top: 0, left: 0 },
     }) as any;
@@ -429,7 +428,6 @@ class ScrollableTestHelper {
       onPullDown: jest.fn(),
       onReachBottom: jest.fn(),
       onBounce: jest.fn(),
-      onRelease: jest.fn(),
     };
 
     Object.keys(actionHandlers).forEach((key) => {
