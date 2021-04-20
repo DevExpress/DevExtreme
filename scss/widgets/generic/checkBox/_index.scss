@@ -60,13 +60,13 @@ $generic-checkbox-disable-opacity: 0.4;
 
     color: $checkbox-indeterminate-bg;
 
-    @include dx-icon-font-centered-sizing($generic-checkbox-intermidiate-icon-size);
+    @include dx-icon-font-centered-sizing($generic-checkbox-indeterminate-icon-size);
 
     &::before {
       content: '';
       background-color: $checkbox-checked-color;
       border-radius: 2px;
-      height: $generic-checkbox-intermidiate-icon-size;
+      height: $generic-checkbox-indeterminate-icon-size;
     }
   }
 }
