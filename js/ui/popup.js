@@ -18,7 +18,6 @@ import {
 } from '../core/utils/size';
 import { getBoundingRect } from '../core/utils/position';
 import { isDefined } from '../core/utils/type';
-import { compare as compareVersions } from '../core/utils/version';
 import { getWindow, hasWindow } from '../core/utils/window';
 import { triggerResizeEvent } from '../events/visibility_change';
 import messageLocalization from '../localization/message';
@@ -60,7 +59,6 @@ const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
 
 const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
-const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
 const getButtonPlace = name => {
@@ -541,7 +539,7 @@ const Popup = Overlay.inherit({
         let currentHeightStrategyClass = HEIGHT_STRATEGIES.static;
 
         if(this._isAutoHeight() && this.option('autoResizeEnabled')) {
-            if(isAutoWidth || IS_OLD_SAFARI) {
+            if(isAutoWidth) {
                 if(!IS_IE11) {
                     currentHeightStrategyClass = HEIGHT_STRATEGIES.inherit;
                 }
