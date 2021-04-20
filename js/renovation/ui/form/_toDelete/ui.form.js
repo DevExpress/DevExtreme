@@ -41,7 +41,6 @@ import '../validation_group';
 // STYLE form
 
 import {
-    FORM_CLASS,
     FIELD_ITEM_CLASS,
     FIELD_ITEM_LABEL_TEXT_CLASS,
     FORM_GROUP_CLASS,
@@ -308,11 +307,8 @@ const Form = Widget.inherit({
         ValidationEngine.addGroup(this._getValidationGroup());
         this._clearCachedInstances();
         this._prepareFormData();
-        this.$element().addClass(FORM_CLASS);
 
         this.callBase();
-
-        this.setAria('role', 'form', this.$element());
 
         if(this.option('scrollingEnabled')) {
             this._renderScrollable();
