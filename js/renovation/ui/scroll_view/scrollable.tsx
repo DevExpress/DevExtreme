@@ -21,6 +21,7 @@ import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
 import { nativeScrolling, touch } from '../../../core/utils/support';
+import { WidgetProps } from '../common/widget';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
@@ -67,7 +68,9 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   );
 };
 
-type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+type ScrollablePropsType = ScrollableProps
+& Pick<WidgetProps, 'aria'>
+& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
   device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
