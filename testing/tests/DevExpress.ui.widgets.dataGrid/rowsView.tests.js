@@ -5540,7 +5540,7 @@ QUnit.module('Virtual scrolling', {
             rowsView._dataController._setViewportPositionCore = x._setViewportPositionCore;
             rowsView._dataController.option = rowsView.option.bind(rowsView);
             rowsView._dataController.positionChanged = $.Callbacks();
-            rowsView._dataController._dataSource = {
+            rowsView._dataController._dataOptions = {
                 changingDuration: function() { return 50; },
                 totalItemsCount: function() {
                     const virtualItemsCount = dataController.virtualItemsCount();
@@ -5569,6 +5569,7 @@ QUnit.module('Virtual scrolling', {
                 end: 7
             }
         };
+
         const dataController = new MockDataController(options);
         const rowsView = this.createRowsView(options.items, dataController);
         const testElement = $('#container');
