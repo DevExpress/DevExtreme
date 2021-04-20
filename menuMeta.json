@@ -1297,7 +1297,6 @@
           {
             "Title": "Cell Editing",
             "Name": "CellEditing",
-            "DocUrl": "Guide/UI_Components/TreeList/Editing/#User_Interaction/Cell_Mode",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListTasksController.cs",
