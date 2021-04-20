@@ -122,8 +122,7 @@ export default class VirtualScrollingDispatcher {
 
         return {
             ...verticalRenderState,
-            ...horizontalRenderState,
-            cellWidth: this.cellWidth,
+            ...horizontalRenderState
         };
     }
 
@@ -585,7 +584,7 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
             rightVirtualCellWidth: this.state.virtualItemSizeAfter,
             startCellIndex: this.state.startIndex,
             cellCount: this.state.itemCount,
-            cellWidth: this.state.itemSize
+            cellWidth: this.itemSize
         };
     }
 
