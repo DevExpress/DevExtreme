@@ -514,7 +514,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const $footerView = $dataGrid.find('.dx-datagrid-total-footer .dx-datagrid-scroll-container').first();
 
         // assert
-        assert.equal(dataGrid._views.rowsView.getScrollable().scrollLeft(), 400, 'scroll left of rows view');
+        assert.equal(dataGrid.getView('rowsView').getScrollable().scrollLeft(), 400, 'scroll left of rows view');
         assert.equal($footerView.scrollLeft(), 400, 'scroll left of footer view');
     });
 
@@ -558,7 +558,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const $headersView = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();
 
         // assert
-        assert.equal(dataGrid._views.rowsView.getScrollable().scrollLeft(), 300, 'scroll left of rows view');
+        assert.equal(dataGrid.getView('rowsView').getScrollable().scrollLeft(), 300, 'scroll left of rows view');
         assert.equal($headersView.scrollLeft(), 300, 'scroll left of headers view');
     });
 
