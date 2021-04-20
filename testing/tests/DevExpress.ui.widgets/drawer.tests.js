@@ -199,7 +199,7 @@ QUnit.module('Drawer behavior', () => {
                 assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
 
                 const rect = $(drawer.viewContent())[0].getBoundingClientRect();
-                // TODO: "Result: 100" - assert.strictEqual(rect.width, 90, 'ViewContent element width');
+                assert.strictEqual(rect.width, 90, 'ViewContent element width');
                 assert.strictEqual(rect.height, 50, 'ViewContent element height');
             };
 
@@ -829,6 +829,61 @@ QUnit.module('Drawer behavior', () => {
 
         assert.equal(instance.calcTargetPosition(), 'left');
     });
+
+    /* TODO: cannot test in this way because each test requires additional time when tests are started in two 'iframe' (chrome): 700ms instead of 15ms.
+
+    ['shrink', 'push', 'overlap'].forEach(openedStateMode => {
+        ['left', 'top', 'right', 'bottom'].forEach(position => {
+            ['slide', 'expand'].forEach(revealMode => {
+                [true, false].forEach(shading => {
+                    [undefined, 5].forEach(minSize => {
+                        [true, false].forEach(animationEnabled => {
+
+                            QUnit.__test(`dxResize event: {opened: false} -> {opened: true} for {${openedStateMode}, ${revealMode}, ${position}, shading: ${shading}, minSize: ${minSize}, animation: ${animationEnabled}}`, function(assert) {
+                                const done = assert.async();
+                                const triggerResizeEventInitial = domUtils.triggerResizeEvent;
+                                let resizeCallCount = 0;
+
+                                const drawer = $('#drawer').dxDrawer({
+                                    animationDuration: 1,
+                                    width: 100,
+                                    height: 50,
+                                    template: () => $('<div style="width: 10px; height: 10px; background-color: red"></div>'),
+                                    opened: false,
+                                    animationEnabled: animationEnabled,
+                                    openedStateMode: openedStateMode,
+                                    position: position,
+                                    revealMode: revealMode,
+                                    shading: shading,
+                                    minSize: minSize
+                                }).dxDrawer('instance');
+
+                                domUtils.triggerResizeEvent = ($element) => {
+                                    resizeCallCount++;
+                                    assert.strictEqual(resizeCallCount, 1, 'resize event should be triggered once');
+                                    assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
+
+                                    const sizeChange = (['push', 'overlap'].indexOf(openedStateMode) > -1)
+                                        ? 0 : 10;
+                                    const expectedViewRect = (['top', 'bottom'].indexOf(position) > -1)
+                                        ? { width: 100, height: 50 - sizeChange } : { width: 100 - sizeChange, height: 50 };
+
+                                    const viewRect = $(drawer.viewContent())[0].getBoundingClientRect();
+                                    assert.strictEqual(viewRect.width, expectedViewRect.width, 'ViewContent width');
+                                    assert.strictEqual(viewRect.height, expectedViewRect.height, 'ViewContent height');
+
+                                    domUtils.triggerResizeEvent = triggerResizeEventInitial;
+                                    done();
+                                };
+
+                                drawer.toggle();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });*/
 });
 
 QUnit.module('Drawer view template', () => {
