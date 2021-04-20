@@ -17,7 +17,6 @@ import { each } from '../../core/utils/iterator';
 import { fitIntoRange } from '../../core/utils/math';
 import readyCallbacks from '../../core/utils/ready_callbacks';
 import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent } from '../../core/utils/type';
-import { compare as compareVersions } from '../../core/utils/version';
 import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -226,32 +225,6 @@ const Overlay = Widget.inherit({
 
     _defaultOptionsRules: function() {
         return this.callBase().concat([{
-            device: function() {
-                const realDevice = devices.real();
-                const realPlatform = realDevice.platform;
-                const realVersion = realDevice.version;
-
-                return realPlatform === 'android' && compareVersions(realVersion, [4, 2]) < 0;
-            },
-            options: {
-                animation: {
-                    show: {
-                        type: 'fade',
-                        duration: 400
-                    },
-                    hide: {
-                        type: 'fade',
-                        duration: 400,
-                        to: {
-                            opacity: 0
-                        },
-                        from: {
-                            opacity: 1
-                        }
-                    }
-                }
-            }
-        }, {
             device: function() {
                 return !hasWindow();
             },
