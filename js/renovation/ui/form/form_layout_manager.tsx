@@ -19,7 +19,7 @@ export const viewFunction = (viewModel: FormLayoutManager): JSX.Element => {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
+  jQuery: { register: false },
   view: viewFunction,
 })
 
