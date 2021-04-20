@@ -5,5 +5,5 @@ export class FormProps {
   @OneWay() scrollingEnabled = false;
 
   // TODO: seems is not used
-  @OneWay() useNativeScrolling? = undefined;
+  @OneWay() useNativeScrolling?: boolean;
 }
