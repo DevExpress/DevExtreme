@@ -27,7 +27,8 @@ const scrolling = { mode: 'virtual' };
 
 const resourcesData = [{
   fieldExpr: 'humanId',
-  dataSource: resources
+  dataSource: resources,
+  label: 'Employee'
 }];
 
 const groups = ['humanId'];
@@ -39,7 +40,7 @@ class App extends React.Component {
         dataSource={appointments}
         height={600}
         views={views}
-        defaultCurrentView="timelineWorkWeek"
+        defaultCurrentView="Timeline"
         defaultCurrentDate={currentDate}
         firstDayOfWeek={0}
         startDayHour={8}

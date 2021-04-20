@@ -45,14 +45,15 @@ export default {
           groupOrientation: 'horizontal'
         }
       ],
-      currentView: 'timelineWorkWeek',
+      currentView: 'Timeline',
       scrolling: {
         mode: 'virtual'
       },
       groups: ['humanId'],
       resources: [{
         fieldExpr: 'humanId',
-        dataSource: resources
+        dataSource: resources,
+        label: 'Employee'
       }]
     };
   },

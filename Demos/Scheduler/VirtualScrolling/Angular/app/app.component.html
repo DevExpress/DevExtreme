@@ -17,7 +17,7 @@
             groupOrientation: 'horizontal'
         }
     ]"
-    currentView="timelineWorkWeek"
+    currentView="Timeline"
     [firstDayOfWeek]="0"
     [startDayHour]="8"
     [endDayHour]="20"
@@ -29,7 +29,8 @@
     [groups]="['humanId']"
     [resources]="[{
         fieldExpr: 'humanId',
-        dataSource: resources
+        dataSource: resources,
+        label: 'Employee'
     }]"
 >
 </dx-scheduler>

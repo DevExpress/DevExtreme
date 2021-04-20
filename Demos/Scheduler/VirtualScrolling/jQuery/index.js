@@ -5,7 +5,7 @@ $(function () {
         height: 600,
         currentDate: new Date(2021, 1, 2),
         dataSource: appointments,
-        views: [    
+        views: [
             {
                 type: "timelineWorkWeek",
                 name: "Timeline",
@@ -20,7 +20,7 @@ $(function () {
                 groupOrientation: "horizontal"
             }
         ],
-        currentView: "timelineWorkWeek",
+        currentView: "Timeline",
         firstDayOfWeek: 0,
         startDayHour: 8,
         endDayHour: 20,
@@ -32,7 +32,8 @@ $(function () {
         groups: ["humanId"],
         resources: [{
             fieldExpr: "humanId",
-            dataSource: resources
+            dataSource: resources,
+            label: "Employee"
         }]
     });
 });
