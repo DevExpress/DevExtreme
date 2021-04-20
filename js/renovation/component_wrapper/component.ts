@@ -12,6 +12,15 @@ import { isDefined, isRenderer } from '../../core/utils/type';
 import { InfernoEffectHost } from "@devextreme/vdom";
 import { TemplateWrapper } from "./template_wrapper";
 
+function setDefaultOptionValue(options, defaultValueGetter) {
+  return (name) => {
+    if (options.hasOwnProperty(name) && options[name] === undefined) {
+      const defaultValue = defaultValueGetter(name); 
+      options[name] = defaultValue;
+    }
+  }
+}
+
 export default class ComponentWrapper extends DOMComponent {
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
@@ -151,15 +160,6 @@ export default class ComponentWrapper extends DOMComponent {
     return this._elementAttr;
   }
 
-  _setDefaultOptionValue(options, defaultValueGetter) {
-    return (name) => {
-      if (options.hasOwnProperty(name) && options[name] === undefined) {
-        const defaultValue = defaultValueGetter(name); 
-        options[name] = defaultValue;
-      }
-    }
-  }
-
   _silent(name, value) {
     (this as unknown as { _options })
       ._options.silent(name, value);
@@ -182,18 +182,18 @@ export default class ComponentWrapper extends DOMComponent {
     const defaultProps = this._viewComponent.defaultProps;
 
     allowNull.forEach(
-      this._setDefaultOptionValue(options, () => null)
+      setDefaultOptionValue(options, () => null)
     );
 
     Object.keys(defaultProps).forEach(
-      this._setDefaultOptionValue(
+      setDefaultOptionValue(
         options,
         (name: string) => this._getDefaultOptionValue(name, defaultProps[name])
       )
     );
 
     twoWay.forEach(([name, defaultValue]) => {
-        this._setDefaultOptionValue(
+        setDefaultOptionValue(
           options, 
           (name) => this._getDefaultOptionValue(name, defaultValue)
         )(name);
