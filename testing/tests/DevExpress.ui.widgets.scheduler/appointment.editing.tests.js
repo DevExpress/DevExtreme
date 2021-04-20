@@ -2,47 +2,39 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import Color from 'color';
 import tooltip from 'ui/tooltip/ui.tooltip';
 import { DataSource } from 'data/data_source/data_source';
 import { Deferred } from 'core/utils/deferred';
 import {
-    SchedulerTestWrapper,
     initTestMarkup,
     createWrapper
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
 
 const {
     module,
     test
 } = QUnit;
 
-QUnit.testStart(() => initTestMarkup());
+initTestMarkup();
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 
 module('Integration: Appointment editing', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options,
-                {
-                    height: options && options.height || 600
-                })
-            ).dxScheduler('instance');
+        this.createInstance = (options) => {
+            const scheduler = createWrapper({
+                height: 600,
+                ...options,
+            });
 
             this.clock.tick(300);
-            this.instance.focus();
+            scheduler.instance.focus();
 
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
-        this.getAppointmentColor = function($task, checkedProperty) {
-            checkedProperty = checkedProperty || 'backgroundColor';
-            return new Color($task.css(checkedProperty)).toHex();
+            return scheduler;
         };
         this.clock = sinon.useFakeTimers();
         this.tasks = [
@@ -82,17 +74,17 @@ module('Integration: Appointment editing', {
                         }
                     );
 
-                    createInstance(options);
+                    const scheduler = createInstance(options);
 
                     if(scrollingMode === 'virtual') {
-                        const virtualScrollingDispatcher = this.instance.getWorkSpace().virtualScrollingDispatcher;
+                        const virtualScrollingDispatcher = scheduler.instance.getWorkSpace().virtualScrollingDispatcher;
                         if(virtualScrollingDispatcher) {
                             virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
                         }
                     }
-                };
 
-                this.scrollTo = args => this.instance.getWorkSpace().getScrollable().scrollTo(args);
+                    return scheduler;
+                };
             }
         }, () => {
             test('Scheduler appointment popup should correctly update recurrence appointment', function(assert) {
@@ -103,7 +95,7 @@ module('Integration: Appointment editing', {
                     recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10'
                 }];
 
-                this.createInstance({
+                const scheduler = this.createInstance({
                     dataSource: tasks,
                     currentDate: new Date(2017, 2, 13),
                     currentView: 'month',
@@ -113,15 +105,15 @@ module('Integration: Appointment editing', {
                     endDateExpr: 'end'
                 });
 
-                this.scheduler.appointments.dblclick(0);
+                scheduler.appointments.dblclick(0);
 
-                const form = this.instance.getAppointmentDetailsForm();
+                const form = scheduler.instance.getAppointmentDetailsForm();
                 const repeatSwitch = form.getEditor('repeat');
                 repeatSwitch.option('value', false);
 
-                this.scheduler.appointmentPopup.clickDoneButton();
+                scheduler.appointmentPopup.clickDoneButton();
 
-                assert.deepEqual(this.instance.option('dataSource')[0], {
+                assert.deepEqual(scheduler.instance.option('dataSource')[0], {
                     text: 'Recurrence task',
                     start: new Date(2017, 2, 13),
                     end: new Date(2017, 2, 13, 0, 30),
@@ -136,7 +128,7 @@ module('Integration: Appointment editing', {
                     endDate: new Date(2015, 1, 2, 2)
                 }];
 
-                this.createInstance({
+                const scheduler = this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: data,
                     editing: true,
@@ -146,23 +138,23 @@ module('Integration: Appointment editing', {
 
                 this.clock.tick();
 
-                const updateAppointment = this.instance._updateAppointment;
+                const updateAppointment = scheduler.instance._updateAppointment;
                 const spy = sinon.spy(noop);
                 const oldItem = data[0];
 
-                this.instance._updateAppointment = spy;
+                scheduler.instance._updateAppointment = spy;
 
-                const cellWidth = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+                const cellWidth = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
 
                 try {
-                    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
+                    const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
                     pointer.dragStart().drag(cellWidth, 0).dragEnd();
 
                     assert.ok(spy.calledOnce, 'Update method is called');
                     assert.deepEqual(spy.getCall(0).args[0], oldItem, 'Target item is correct');
                     assert.deepEqual(spy.getCall(0).args[1], $.extend(true, oldItem, { endDate: new Date(2015, 1, 3, 2, 0) }), 'New data is correct');
                 } finally {
-                    this.instance._updateAppointment = updateAppointment;
+                    scheduler.instance._updateAppointment = updateAppointment;
                 }
             });
 
@@ -171,28 +163,28 @@ module('Integration: Appointment editing', {
                     store: this.tasks
                 });
 
-                this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
+                const scheduler = this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
 
                 this.clock.tick();
 
-                const updateAppointment = this.instance._updateAppointment;
+                const updateAppointment = scheduler.instance._updateAppointment;
                 const spy = sinon.spy(noop);
                 const oldItem = this.tasks[0];
 
-                this.instance._updateAppointment = spy;
+                scheduler.instance._updateAppointment = spy;
 
-                const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+                const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
                 const hourHeight = cellHeight * 2;
 
                 try {
-                    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+                    const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
                     pointer.dragStart().drag(0, hourHeight).dragEnd();
 
                     assert.ok(spy.calledOnce, 'Update method is called');
                     assert.deepEqual(spy.getCall(0).args[0], oldItem, 'Target item is correct');
                     assert.deepEqual(spy.getCall(0).args[1], $.extend(true, oldItem, { endDate: new Date(2015, 1, 9, 3, 0) }), 'New data is correct');
                 } finally {
-                    this.instance._updateAppointment = updateAppointment;
+                    scheduler.instance._updateAppointment = updateAppointment;
                 }
             });
 
@@ -201,20 +193,20 @@ module('Integration: Appointment editing', {
                     store: this.tasks
                 });
 
-                this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
-                const addAppointment = this.instance.addAppointment;
+                const scheduler = this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
+                const addAppointment = scheduler.instance.addAppointment;
                 const spy = sinon.spy(() => new Deferred());
                 const newItem = { startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' };
-                this.instance.addAppointment = spy;
+                scheduler.instance.addAppointment = spy;
                 try {
-                    this.instance.showAppointmentPopup(newItem, true);
+                    scheduler.instance.showAppointmentPopup(newItem, true);
 
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
                     assert.ok(spy.calledOnce, 'Add method is called');
                     assert.deepEqual(spy.getCall(0).args[0], newItem, 'New item is correct');
                 } finally {
-                    this.instance.addAppointment = addAppointment;
+                    scheduler.instance.addAppointment = addAppointment;
                 }
             });
 
@@ -246,9 +238,9 @@ module('Integration: Appointment editing', {
                     }
                 });
 
-                this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: dataSource });
+                const scheduler = this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: dataSource });
 
-                this.instance.showAppointmentPopup({
+                scheduler.instance.showAppointmentPopup({
                     startDate: new Date(2015, 1, 1, 1),
                     endDate: new Date(2015, 1, 1, 2),
                     text: 'caption'
@@ -256,7 +248,7 @@ module('Integration: Appointment editing', {
 
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                const popup = this.instance.getAppointmentPopup();
+                const popup = scheduler.instance.getAppointmentPopup();
             });
 
             test('Add new appointment with delay and an error(T381444)', function(assert) {
@@ -283,9 +275,9 @@ module('Integration: Appointment editing', {
                     }
                 });
 
-                this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: dataSource });
+                const scheduler = this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: dataSource });
 
-                this.instance.showAppointmentPopup({
+                scheduler.instance.showAppointmentPopup({
                     startDate: new Date(2015, 1, 1, 1),
                     endDate: new Date(2015, 1, 1, 2),
                     text: 'caption'
@@ -293,7 +285,7 @@ module('Integration: Appointment editing', {
 
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                const popup = this.instance.getAppointmentPopup();
+                const popup = scheduler.instance.getAppointmentPopup();
             });
 
             // TODO: update editors in popup
@@ -302,16 +294,16 @@ module('Integration: Appointment editing', {
                     store: this.tasks
                 });
 
-                this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
+                const scheduler = this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
                 this.clock.tick();
 
-                const updateAppointment = this.instance.updateAppointment;
+                const updateAppointment = scheduler.instance.updateAppointment;
                 const spy = sinon.spy(() => new Deferred());
                 const updatedItem = this.tasks[0];
-                this.instance.updateAppointment = spy;
+                scheduler.instance.updateAppointment = spy;
                 try {
-                    this.instance.showAppointmentPopup(updatedItem);
+                    scheduler.instance.showAppointmentPopup(updatedItem);
 
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
@@ -321,7 +313,7 @@ module('Integration: Appointment editing', {
                     assert.deepEqual(spy.getCall(0).args[0], updatedItem, 'Target item is correct');
                     assert.deepEqual(spy.getCall(0).args[1], updatedItem, 'New data is correct');
                 } finally {
-                    this.instance.updateAppointment = updateAppointment;
+                    scheduler.instance.updateAppointment = updateAppointment;
                 }
             });
 
@@ -355,28 +347,26 @@ module('Integration: Appointment editing', {
             });
         });
 
-        module(`Scroll after Editing if ${scrollingMode} scrolling mode`, {
-            beforeEach: function() {
-                this.createScheduler = (options = {}) => {
-                    return createWrapper({
-                        scrolling: { mode: scrollingMode },
-                        currentDate: new Date('2020-09-06T00:00:00'),
-                        height: 500,
-                        width: 500,
-                        crossScrollingEnabled: true,
-                        resources: [{
-                            fieldExpr: 'ownerId',
-                            dataSource: [{
-                                id: 1, text: 'A',
-                            }, {
-                                id: 2, text: 'B',
-                            }]
-                        }],
-                        ...options,
-                    });
-                };
-            },
-        }, () => {
+        module(`Scroll after Editing if ${scrollingMode} scrolling mode`, () => {
+            const createScheduler = (options = {}) => {
+                return createWrapper({
+                    scrolling: { mode: scrollingMode },
+                    currentDate: new Date('2020-09-06T00:00:00'),
+                    height: 500,
+                    width: 500,
+                    crossScrollingEnabled: true,
+                    resources: [{
+                        fieldExpr: 'ownerId',
+                        dataSource: [{
+                            id: 1, text: 'A',
+                        }, {
+                            id: 2, text: 'B',
+                        }]
+                    }],
+                    ...options,
+                });
+            };
+
             const checkThatScrollToWasCalled = (assert, scheduler, appointment) => {
                 const workSpace = scheduler.instance.getWorkSpace();
                 const scrollTo = sinon.spy(workSpace, 'scrollTo');
@@ -449,7 +439,7 @@ module('Integration: Appointment editing', {
                 test(
                     `Scroll position should not be updated if appointment is visible in ${view}, ${groupOrientation} grouping`,
                     function(assert) {
-                        const scheduler = this.createScheduler({
+                        const scheduler = createScheduler({
                             views: [{
                                 type: view,
                                 groupOrientation,
@@ -511,7 +501,7 @@ module('Integration: Appointment editing', {
                 groupOrientation: 'vertical',
             }].forEach(({ view, startDate, endDate, groupOrientation }) => {
                 test(`Scroll position should be updated if appoinment is not visible in ${view}, ${groupOrientation} grouping`, function(assert) {
-                    const scheduler = this.createScheduler({
+                    const scheduler = createScheduler({
                         views: [{
                             type: view,
                             groupOrientation,
@@ -554,7 +544,7 @@ module('Integration: Appointment editing', {
                 test(
                     `Scroll position should not be updated if appointment is visible in ${view}, grouping by date`,
                     function(assert) {
-                        const scheduler = this.createScheduler({
+                        const scheduler = createScheduler({
                             views: [{
                                 type: view,
                                 groupOrientation: 'horizontal',
@@ -595,7 +585,7 @@ module('Integration: Appointment editing', {
                 test(
                     `Scroll position should be updated if appointment is not visible in ${view}, grouping by date`,
                     function(assert) {
-                        const scheduler = this.createScheduler({
+                        const scheduler = createScheduler({
                             views: [{
                                 type: view,
                                 groupOrientation: 'horizontal',
@@ -618,7 +608,7 @@ module('Integration: Appointment editing', {
 
             test('Scroll position should not be updated if appointment is visible in all-day panel',
                 function(assert) {
-                    const scheduler = this.createScheduler({
+                    const scheduler = createScheduler({
                         views: [{
                             type: 'week',
                             groupOrientation: 'horizontal',
@@ -639,7 +629,7 @@ module('Integration: Appointment editing', {
                 });
 
             test('Scroll position should be updated if appointment is not visible in all-day panel', function(assert) {
-                const scheduler = this.createScheduler({
+                const scheduler = createScheduler({
                     views: [{
                         type: 'week',
                         groupOrientation: 'horizontal',
@@ -660,7 +650,7 @@ module('Integration: Appointment editing', {
             });
 
             test('Scroll position should not be updated if appointment is longer that one day and visible', function(assert) {
-                const scheduler = this.createScheduler({
+                const scheduler = createScheduler({
                     views: [{
                         type: 'week',
                         groupOrientation: 'horizontal',
@@ -680,7 +670,7 @@ module('Integration: Appointment editing', {
             });
 
             test('Scroll position should be updated if appointment is longer that one day and is not visible', function(assert) {
-                const scheduler = this.createScheduler({
+                const scheduler = createScheduler({
                     views: [{
                         type: 'week',
                         groupOrientation: 'horizontal',
@@ -725,7 +715,7 @@ module('Integration: Appointment editing', {
                 scrollTop: 0,
             }].forEach(({ position, startDate, endDate, scrollLeft, scrollTop }) => {
                 test(`Scroll position should be updated if an appointment starts in a partially visible cell, ${position} end`, function(assert) {
-                    const scheduler = this.createScheduler({
+                    const scheduler = createScheduler({
                         views: ['week'],
                         currentView: 'week',
                     });
