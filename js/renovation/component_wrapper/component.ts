@@ -12,14 +12,11 @@ import { isDefined, isRenderer } from '../../core/utils/type';
 import { InfernoEffectHost } from "@devextreme/vdom";
 import { TemplateWrapper } from "./template_wrapper";
 
-function setDefaultOptionValue(options, defaultValueGetter) {
-  return (name) => {
-    if (options.hasOwnProperty(name) && options[name] === undefined) {
-      const defaultValue = defaultValueGetter(name); 
-      options[name] = defaultValue;
-    }
+const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
+  if (options.hasOwnProperty(name) && options[name] === undefined) {
+    options[name] = defaultValueGetter(name);
   }
-}
+};
 
 export default class ComponentWrapper extends DOMComponent {
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
