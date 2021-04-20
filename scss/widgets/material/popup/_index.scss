@@ -26,9 +26,14 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
     border-radius: 0;
   }
 
-  .dx-scrollable-container {
-    margin-left: -10px;
-    padding-left: 10px;
+
+  .dx-scrollable {
+    &:not(.dx-form) {
+      .dx-scrollable-container {
+        margin-left: -10px;
+        padding-left: 10px;
+      }
+    }
   }
 }
 
