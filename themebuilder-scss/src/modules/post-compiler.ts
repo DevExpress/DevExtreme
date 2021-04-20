@@ -58,4 +58,9 @@ export default class PostCompiler {
 
     return result;
   }
+
+  static removeExternalResources(css: string): string {
+    const fontRegex = /^\s*@import\surl\(.*googleapis.*\);[\n\r]{1,2}/gmi;
+    return css.replace(fontRegex, '');
+  }
 }
