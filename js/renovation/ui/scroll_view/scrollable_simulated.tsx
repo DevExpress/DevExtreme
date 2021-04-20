@@ -15,6 +15,8 @@ import { ScrollViewLoadPanel } from './load_panel';
 import { AnimatedScrollbar } from './animated_scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
+import { getBoundaryProps } from './utils/get_boundary_props';
+
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import { isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed } from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
@@ -25,8 +27,8 @@ import '../../../events/gesture/emitter.gesture.scroll';
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
-  normalizeLocation,
-  getLocation, getBoundaryProps,
+  restoreLocation,
+  getLocation,
   updateAllowedDirection,
 } from './scrollable_utils';
 
@@ -295,8 +297,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   update(): void {
-    this.updateSizes();
-    this.onUpdated();
+    if (!this.props.updateManually) {
+      this.updateSizes();
+      this.onUpdated();
+    }
   }
 
   @Method()
@@ -327,7 +331,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   scrollBy(distance: number | Partial<ScrollableLocation>): void {
-    const location = normalizeLocation(distance, this.props.direction);
+    const location = restoreLocation(distance, this.props.direction);
+
+    this.update();
 
     if (this.direction.isVertical) {
       const scrollbar = this.verticalScrollbarRef.current;
@@ -354,40 +360,45 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
-    let location = normalizeLocation(targetLocation, this.props.direction);
+    this.update();
+
+    let location = restoreLocation(targetLocation, this.props.direction);
     let containerPosition = this.scrollOffset();
 
     location = this.applyScaleRatio(location);
     containerPosition = this.applyScaleRatio(containerPosition);
 
-    const distance = {
-      top: -containerPosition.top - ensureDefined(location.top, -containerPosition.top),
-      left: -containerPosition.left - ensureDefined(location.left, -containerPosition.left),
-    };
+    const top = -containerPosition.top - ensureDefined(location.top, -containerPosition.top);
+    const left = -containerPosition.left - ensureDefined(location.left, -containerPosition.left);
 
-    if (!distance.top && !distance.left) {
+    if (!top && !left) {
       return;
     }
 
-    this.scrollBy(distance);
+    this.scrollBy({ top, left });
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
+  // eslint-disable-next-line class-methods-use-this
+  scrollToElement(element: HTMLElement): void { // offset?: Partial<ScrollOffset>
+    /* istanbul ignore next */
     if (!isDefined(element)) {
       return;
     }
 
     /* istanbul ignore next */
-    if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
-      const top = this.getElementLocation(element, DIRECTION_VERTICAL, offset);
-      const left = this.getElementLocation(element, DIRECTION_HORIZONTAL, offset);
+    element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 
-      this.scrollTo({ top, left });
-    }
+    // if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
+    //   const top = this.getElementLocation(element, DIRECTION_VERTICAL, offset);
+    //   const left = this.getElementLocation(element, DIRECTION_HORIZONTAL, offset);
+
+    //   this.scrollTo({ top, left });
+    // }
   }
 
   @Method()
+  /* istanbul ignore next */
   getElementLocation(
     element: HTMLElement,
     direction: ScrollableDirection,
@@ -406,7 +417,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       scrollOffset,
       direction,
       this.containerRef.current!,
-      this.props.rtlEnabled,
     );
   }
 

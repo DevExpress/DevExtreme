@@ -42,6 +42,7 @@ describe('TopPocket', () => {
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
       pocketState: 0,
+      updateManually: false,
       pullDownEnabled: false,
       reachBottomEnabled: false,
       scaleRatio: 1,
