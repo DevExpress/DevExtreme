@@ -15,7 +15,7 @@ module('Time zone data utils', {}, () => {
             let lastCallIndex = spyGetUtcOffset.args.length - 1;
             const offsetByIdCallArgument = spyGetUtcOffset.args[lastCallIndex][0];
 
-            const cachedValue = timeZoneDataUtils._tzCache.get(timeZoneId);
+            const cachedValue = timeZoneDataUtils._tzCache.tryGet(timeZoneId);
 
             timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneId, dateTimeStamp);
             lastCallIndex = spyGetTimeZoneDeclarationTupleCore.args.length - 1;
