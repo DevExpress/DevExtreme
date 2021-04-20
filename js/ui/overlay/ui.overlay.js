@@ -19,7 +19,7 @@ import readyCallbacks from '../../core/utils/ready_callbacks';
 import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent } from '../../core/utils/type';
 import { compare as compareVersions } from '../../core/utils/version';
 import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
-import { getNavigator, getWindow, hasWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 import {
     start as dragEventStart,
@@ -37,7 +37,6 @@ import Widget from '../widget/ui.widget';
 import * as zIndexPool from './z_index';
 const ready = readyCallbacks.add;
 const window = getWindow();
-const navigator = getNavigator();
 const viewPortChanged = changeCallback;
 
 const OVERLAY_CLASS = 'dx-overlay';
@@ -75,31 +74,16 @@ const POSITION_ALIASES = {
 };
 
 const realDevice = devices.real();
-const realVersion = realDevice.version;
 const firefoxDesktop = browser.mozilla && realDevice.deviceType === 'desktop';
 const iOS = realDevice.platform === 'ios';
 const hasSafariAddressBar = browser.safari && realDevice.deviceType !== 'desktop';
-const android4_0nativeBrowser = realDevice.platform === 'android' && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf('Chrome') === -1;
 
 const forceRepaint = $element => {
     // NOTE: force layout recalculation on FF desktop (T581681)
     if(firefoxDesktop) {
         $element.width();
     }
-
-    // NOTE: force rendering on buggy android (T112083)
-    if(android4_0nativeBrowser) {
-        const $parents = $element.parents();
-        const inScrollView = $parents.is('.dx-scrollable-native');
-
-        if(!inScrollView) {
-            $parents.css('backfaceVisibility', 'hidden');
-            $parents.css('backfaceVisibility');
-            $parents.css('backfaceVisibility', 'visible');
-        }
-    }
 };
-
 
 const getElement = value => {
     if(isEvent(value)) {
