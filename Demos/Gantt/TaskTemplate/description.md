@@ -1,5 +1,3 @@
-This demo illustrates the DevExtreme JavaScript Gantt UI component's appearance settings:
+The DevExtreme JavaScript Gantt templates help customize the layout and appearance of individual task elements. Templates allow you to mix HTML code with any DevExtreme JavaScript component - and position desired elements within the container. In this demo, a template is used to display images within tasks and change their background color.
 
-* [taskContentTemplate](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/#taskContentTemplate) - Allows you to specify custom content for the task.
-
-Use the properties in the demo to see how they affect the Gantt's behavior and appearance.
+Implementation: Use the [taskContentTemplate](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/#taskContentTemplate) template to customize and align task information within the template container. For each task, use the item property to obtain task information (title, resource, progress, image) and wrap it into div elements. Then, apply CSS styles to these div elements and place them into the container.
