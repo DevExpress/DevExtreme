@@ -4905,6 +4905,87 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.deepEqual(change.changeTypes, ['remove', 'remove', 'insert', 'insert'], 'change types');
         assert.deepEqual(renderedItemIds, [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 'finally rendered item IDs');
     });
+
+    QUnit.test('New mode. DataSourceAdapter.viewportSize should not be called when viewPortSize is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const viewportSizeSpy = sinon.spy(this.dataController.dataSource(), 'viewportSize');
+
+        try {
+            this.dataController.viewportSize();
+
+            assert.notOk(viewportSizeSpy.called, 'not called');
+        } finally {
+            viewportSizeSpy.restore();
+        }
+    });
+
+    QUnit.test('New mode. DataSourceAdapter.viewportItemSize should not be called when viewportItemSize is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const viewportItemSizeSpy = sinon.spy(this.dataController.dataSource(), 'viewportItemSize');
+
+        try {
+            this.dataController.viewportItemSize();
+
+            assert.notOk(viewportItemSizeSpy.called, 'not called');
+        } finally {
+            viewportItemSizeSpy.restore();
+        }
+    });
+
+    QUnit.test('New mode. DataSourceAdapter.setContentItemSizes should not be called when setContentItemSizes is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const setContentItemSizesSpy = sinon.spy(this.dataController.dataSource(), 'setContentItemSizes');
+
+        try {
+            this.dataController.setContentItemSizes([30]);
+
+            assert.notOk(setContentItemSizesSpy.called, 'not called');
+        } finally {
+            setContentItemSizesSpy.restore();
+        }
+    });
 });
 
 QUnit.module('Infinite scrolling', {

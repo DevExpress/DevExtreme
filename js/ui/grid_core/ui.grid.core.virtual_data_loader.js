@@ -249,8 +249,13 @@ export class VirtualDataLoader {
         return beginPageIndex;
     }
 
-    endPageIndex() {
+    endPageIndex(pageIndex) {
+        if(pageIndex !== undefined) {
+            this._lastPageIndex = pageIndex;
+        }
+
         const endPageIndex = getEndPageIndex(this);
+
         return endPageIndex > 0 ? endPageIndex : this._lastPageIndex;
     }
 
