@@ -6,6 +6,7 @@ import renderer, { dxElementWrapper } from '../../../core/renderer';
 import './utils/test_components/empty_test_widget';
 import './utils/test_components/test_widget';
 import './utils/test_components/options_check_widget';
+import TestWidgetWrapper from './utils/test_components/base_test_widget';
 import './utils/test_components/templated_test_widget';
 import {
   defaultEvent,
@@ -429,6 +430,31 @@ describe('option', () => {
       oneWayNullWithValue: undefined,
       twoWayWithValue: undefined,
       twoWayNullWithValue: undefined,
+    });
+  });
+
+  it('convert undefined to null or default value including custom default option rules', () => {
+    TestWidgetWrapper.defaultOptions({
+      device: () => true,
+      options: {
+        oneWayWithValue: 5,
+        twoWayWithValue: '5',
+      },
+    });
+
+    $('#component').dxOptionsCheckWidget({
+      oneWayWithValue: 15,
+      twoWayWithValue: '15',
+    });
+
+    $('#component').dxOptionsCheckWidget({
+      oneWayWithValue: undefined,
+      twoWayWithValue: undefined,
+    });
+
+    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject({
+      oneWayWithValue: 5,
+      twoWayWithValue: '5',
     });
   });
 
