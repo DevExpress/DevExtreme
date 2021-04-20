@@ -665,7 +665,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             if(pdfCellRects[cellIndex] === null) {
                 pdfCell.skip = true; // TODO: pdfCell.isMerged?
             } else {
-                pdfCell.rect = pdfCellRects[cellIndex];
+                pdfCell._rect = pdfCellRects[cellIndex];
             }
             cellIndex++;
         };
@@ -1315,15 +1315,15 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
                 e.rowHeight = 24;
                 e.drawNewTableFromThisRow.startNewTable = true;
                 e.drawNewTableFromThisRow.addPage = true;
-                e.drawNewTableFromThisRow.tableRect = { x: 10, y: 56, w: 40, h: 54 };
+                e.drawNewTableFromThisRow.tableRect = { x: 12, y: 22, w: 40, h: 54 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 11, y: 21, w: 50, h: 54 }
+                    tableRect: { x: 13, y: 23, w: 50, h: 54 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 12, y: 22, w: 60, h: 54 }
+                    tableRect: { x: 14, y: 24, w: 60, h: 54 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
                 e.rowHeight = 30;
@@ -1345,14 +1345,14 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,F3,12,30,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
             'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
             'addPage,',
-            'text,v1_2,10,68,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
-            'text,v1_3,10,95,{baseline:middle}', 'setLineWidth,1', 'rect,10,80,40,30',
+            'text,v1_2,12,34,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,40,24',
+            'text,v1_3,12,61,{baseline:middle}', 'setLineWidth,1', 'rect,12,46,40,30',
             'addPage,',
-            'text,v2_2,11,33,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,24',
-            'text,v2_3,11,60,{baseline:middle}', 'setLineWidth,1', 'rect,11,45,50,30',
+            'text,v2_2,13,35,{baseline:middle}', 'setLineWidth,1', 'rect,13,23,50,24',
+            'text,v2_3,13,62,{baseline:middle}', 'setLineWidth,1', 'rect,13,47,50,30',
             'addPage,',
-            'text,v3_2,12,34,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,24',
-            'text,v3_3,12,61,{baseline:middle}', 'setLineWidth,1', 'rect,12,46,60,30',
+            'text,v3_2,14,36,{baseline:middle}', 'setLineWidth,1', 'rect,14,24,60,24',
+            'text,v3_3,14,63,{baseline:middle}', 'setLineWidth,1', 'rect,14,48,60,30',
         ];
 
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 36 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
@@ -1389,15 +1389,15 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
                 e.rowHeight = 24;
                 e.drawNewTableFromThisRow.startNewTable = true;
                 e.drawNewTableFromThisRow.addPage = true;
-                e.drawNewTableFromThisRow.tableRect = { x: 10, y: 56, w: 40, h: 54 };
+                e.drawNewTableFromThisRow.tableRect = { x: 12, y: 22, w: 40, h: 54 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 11, y: 21, w: 50, h: 54 }
+                    tableRect: { x: 13, y: 23, w: 50, h: 54 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 12, y: 22, w: 60, h: 54 }
+                    tableRect: { x: 14, y: 24, w: 60, h: 54 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
                 e.rowHeight = 30;
@@ -1419,14 +1419,14 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,F3,12,30,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
             'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
             'addPage,',
-            'text,v1_2,10,68,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
-            'text,v1_3,10,95,{baseline:middle}', 'setLineWidth,1', 'rect,10,80,40,30',
+            'text,v1_2,12,34,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,40,24',
+            'text,v1_3,12,61,{baseline:middle}', 'setLineWidth,1', 'rect,12,46,40,30',
             'addPage,',
-            'text,v2_2,11,33,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,24',
-            'text,v2_3,11,60,{baseline:middle}', 'setLineWidth,1', 'rect,11,45,50,30',
+            'text,v2_2,13,35,{baseline:middle}', 'setLineWidth,1', 'rect,13,23,50,24',
+            'text,v2_3,13,62,{baseline:middle}', 'setLineWidth,1', 'rect,13,47,50,30',
             'addPage,',
-            'text,v3_2,12,34,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,24',
-            'text,v3_3,12,61,{baseline:middle}', 'setLineWidth,1', 'rect,12,46,60,30',
+            'text,v3_2,14,36,{baseline:middle}', 'setLineWidth,1', 'rect,14,24,60,24',
+            'text,v3_3,14,63,{baseline:middle}', 'setLineWidth,1', 'rect,14,48,60,30',
         ];
 
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 36 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {

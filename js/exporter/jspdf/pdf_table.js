@@ -9,16 +9,16 @@ export class PdfTable {
         this.rows = [];
     }
 
-    tryGetXPos(cellIndex) {
+    getCellX(cellIndex) {
         return this.rect.x + this.columnWidths.slice(0, cellIndex).reduce((a, b) => a + b, 0);
     }
 
-    tryGetYPos(cellIndex) {
+    getCellY(cellIndex) {
         let currentYPos = this.rect.y;
         for(let index = 0; index < this.rows.length - 1; index++) {
             const cell = this.rows[index][cellIndex];
-            if(cell && cell.rect.h) {
-                currentYPos += cell.rect.h;
+            if(isDefined(cell?._rect?.h)) {
+                currentYPos += cell._rect.h;
             }
         }
         return currentYPos;
@@ -27,6 +27,9 @@ export class PdfTable {
     addRow(cells, rowHeight) {
         if(!isDefined(cells)) {
             throw 'cells is required';
+        }
+        if(cells.length !== this.columnWidths.length) {
+            throw 'the length of the cells must be equal to the length of the column';
         }
         if(!isDefined(rowHeight)) {
             throw 'rowHeight is required';
@@ -56,29 +59,29 @@ export class PdfTable {
 
 
             if(!cells[i].skip) {
-                if(!isDefined(cells[i].rect)) {
-                    cells[i].rect = {};
+                if(!isDefined(cells[i]._rect)) {
+                    cells[i]._rect = {};
                 }
 
-                if(!isDefined(cells[i].rect.x)) {
-                    cells[i].rect.x = this.tryGetXPos(i);
+                if(!isDefined(cells[i]._rect.x)) {
+                    cells[i]._rect.x = this.getCellX(i);
                 }
 
-                if(!isDefined(cells[i].rect.y)) {
-                    cells[i].rect.y = this.tryGetYPos(i);
+                if(!isDefined(cells[i]._rect.y)) {
+                    cells[i]._rect.y = this.getCellY(i);
                 }
 
                 const columnWidth = this.columnWidths[i];
                 if(isDefined(columnWidth)) {
-                    if(!isDefined(cells[i].rect.w)) {
-                        cells[i].rect.w = columnWidth;
+                    if(!isDefined(cells[i]._rect.w)) {
+                        cells[i]._rect.w = columnWidth;
                     }
                 } else {
                     // TODO
                 }
 
-                if(!isDefined(cells[i].rect.h)) {
-                    cells[i].rect.h = rowHeight;
+                if(!isDefined(cells[i]._rect.h)) {
+                    cells[i]._rect.h = rowHeight;
                 }
             }
         }
