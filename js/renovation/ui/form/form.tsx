@@ -7,15 +7,40 @@ import { FormProps } from './form_props';
 
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
+import { Scrollable } from '../scroll_view/scrollable';
 
 export const viewFunction = (viewModel: Form): JSX.Element => {
-  const { aria, cssClasses, restAttributes } = viewModel;
-  return (
-    <Widget
-      aria={aria}
-      classes={cssClasses}
-      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
-    />
+  const {
+    aria,
+    cssClasses,
+    props: {
+      scrollingEnabled,
+      useNativeScrolling,
+    },
+    restAttributes,
+  } = viewModel;
+  return (scrollingEnabled
+    ? (
+      <Scrollable
+        aria={aria}
+        classes={cssClasses}
+        useNative={!!useNativeScrolling}
+        useSimulatedScrollbar={!useNativeScrolling}
+        useKeyboard={false}
+        direction="both"
+        bounceEnabled={false}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...restAttributes}
+      />
+    )
+    : (
+      <Widget
+        aria={aria}
+        classes={cssClasses}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...restAttributes}
+      />
+    )
   );
 };
 
