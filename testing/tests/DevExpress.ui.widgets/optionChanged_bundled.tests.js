@@ -56,7 +56,7 @@ define(function(require) {
         },
         afterEach: function() {
             Component.prototype._optionChanged = this._originalOptionChanged;
-            this.$element.remove();
+            this.$element.parent().remove();
             executeAsyncMock.teardown();
         }
     }, function() {
