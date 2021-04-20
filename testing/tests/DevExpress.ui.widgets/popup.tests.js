@@ -6,7 +6,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import config from 'core/config';
 import { isRenderer } from 'core/utils/type';
 import browser from 'core/utils/browser';
-import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import windowUtils from 'core/utils/window';
 import themes from 'ui/themes';
@@ -19,7 +18,6 @@ import 'ui/tab_panel';
 
 const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 const IS_SAFARI = !!browser.safari;
-const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 
 themes.setDefaultTimeout(0);
 
@@ -762,14 +760,8 @@ QUnit.module('options changed callbacks', {
 
         const $popup = popup.$content().parent();
 
-        if(IS_OLD_SAFARI) {
-            assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), 'has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width for old safari');
-            assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width for old safari');
-        } else {
-            assert.ok($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), 'has POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width');
-            assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width');
-        }
-
+        assert.ok($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), 'has POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width');
+        assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width');
 
         popup.option('width', 'auto');
 
@@ -784,11 +776,6 @@ QUnit.module('options changed callbacks', {
 
 
     QUnit.test('popup height should support TreeView with Search if height = auto (T724029)', function(assert) {
-        if(IS_OLD_SAFARI) {
-            assert.expect(0);
-            return;
-        }
-
         const $content = $(
             '<div class="dx-treeview">\
             <div style="height: 30px;"></div>\
