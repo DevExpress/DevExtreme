@@ -24,6 +24,7 @@ exports.wrapRenovatedWidget = function wrapRenovatedWidget(renovatedWidget) {
     });
     result.getInstance = renovatedWidget.getInstance;
     result.defaultOptions = renovatedWidget.defaultOptions;
+    result.registerModule = renovatedWidget.registerModule;
     result.IS_RENOVATED_WIDGET = true;
     return result;
 };

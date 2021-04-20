@@ -155,5 +155,10 @@ export default class Component {
   _dispose(): void;
   _getDefaultOptions(): object;
   _init(): void;
+  _initializeComponent(): void;
   _optionChanged(args: { name: string; value: unknown }): void;
+  _setOptionsByReference(): void;
+  _optionsByReference: object;
+  _setDeprecatedOptions(): void;
+  _deprecatedOptions: object;
 }
