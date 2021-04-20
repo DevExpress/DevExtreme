@@ -25,7 +25,7 @@ class DrawerStrategy {
         }
     }
 
-    renderPosition(isDrawerOpened, changePositionUsingFxAnimation, animationDuration) {
+    renderPosition(changePositionUsingFxAnimation, animationDuration) {
         const whenPositionAnimationCompleted = new Deferred();
         const whenShaderAnimationCompleted = new Deferred();
 
@@ -35,11 +35,14 @@ class DrawerStrategy {
             when.apply($, [whenPositionAnimationCompleted, whenShaderAnimationCompleted]).done(() => {
                 drawer._animationCompleteHandler();
             });
-        } else {
-            drawer.resizeViewContent();
         }
 
         this._internalRenderPosition(changePositionUsingFxAnimation, whenPositionAnimationCompleted);
+
+        if(!changePositionUsingFxAnimation) {
+            drawer.resizeViewContent();
+        }
+
         this.renderShaderVisibility(changePositionUsingFxAnimation, animationDuration, whenShaderAnimationCompleted);
     }
 
