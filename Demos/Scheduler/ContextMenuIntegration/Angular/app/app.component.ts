@@ -141,11 +141,6 @@ export class AppComponent {
         this.dataSource = this.cellContextMenuItems;
         this.onContextMenuItemClick = this.onItemClick(e);
     }
-
-    onContextMenuHiding() {
-        this.disabled = true;
-        this.dataSource = [];
-    }
 }
 
 @NgModule({

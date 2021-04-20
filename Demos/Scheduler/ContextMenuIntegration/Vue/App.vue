@@ -24,7 +24,6 @@
       :disabled="disabled"
       :target="target"
       :on-item-click="onContextMenuItemClick"
-      :on-hiding="onContextMenuHiding"
       item-template="itemTemplateSlot"
     >
       <template #itemTemplateSlot="{ data: itemData }">
@@ -81,11 +80,6 @@ export default {
 
     onContextMenuItemClick(e) {
       e.itemData.onItemClick(this.contextMenuEvent, e);
-    },
-
-    onContextMenuHiding() {
-      this.disabled = true;
-      this.contextMenuItems = [];
     },
 
     getAllAppointmentContextMenuItems() {

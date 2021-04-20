@@ -26,9 +26,6 @@ $(function() {
         width: 200,
         dataSource: [],
         disabled: true,
-        onHiding: function() {
-            updateContextMenu(true, []);
-        }
     }).dxContextMenu("instance");
 
     var updateContextMenu = function (disable, dataSource, target, itemTemplate, onItemClick) {

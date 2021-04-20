@@ -28,7 +28,6 @@ class App extends React.Component {
     this.onAppointmentContextMenu = this.onAppointmentContextMenu.bind(this);
     this.onContextMenuItemClick = this.onContextMenuItemClick.bind(this);
     this.onCellContextMenu = this.onCellContextMenu.bind(this);
-    this.onContextMenuHiding = this.onContextMenuHiding.bind(this);
   }
 
   render() {
@@ -60,7 +59,6 @@ class App extends React.Component {
           disabled={disabled}
           onItemClick={this.onContextMenuItemClick}
           itemRender={AppointmentMenuTemplate}
-          onHiding={this.onContextMenuHiding}
         />
       </React.Fragment>
     );
@@ -86,13 +84,6 @@ class App extends React.Component {
       disabled: false,
       contextMenuItems: cellContextMenuItems,
       contextMenuEvent: e
-    });
-  }
-
-  onContextMenuHiding() {
-    this.setState({
-      disabled: true,
-      contextMenuItems: []
     });
   }
 }

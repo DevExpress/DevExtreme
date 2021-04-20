@@ -22,8 +22,7 @@
                  [disabled]="disabled"
                  [target]="target"
                  (onItemClick)="onContextMenuItemClick($event)"
-                 [width]="200"
-                 (onHiding)="onContextMenuHiding($event)">
+                 [width]="200">
     <div *dxTemplate="let e of 'item'">
         <div *ngIf="e.color">
             <div class="item-badge" [ngStyle]="{ backgroundColor: e.color}"></div>

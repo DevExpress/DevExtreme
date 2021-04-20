@@ -19,11 +19,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             target: "target",
             itemTemplate: "itemTemplate",
             onItemClick: "onItemClick",
-        },
-        onHiding: function() {
-            $scope.disabled = true;
-            $scope.dataSource = [];
-        },
+        }   
     };
 
     $scope.schedulerOptions = {
