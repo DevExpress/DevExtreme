@@ -446,6 +446,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   getTopVisibleRowData(): any {
     return this.instance?.getTopVisibleRowData();
   }
+
+  @Method()
+  getScrollbarWidth(isHorizontal: boolean): number {
+    return this.instance?.getScrollbarWidth(isHorizontal);
+  }
+
   // #endregion
 
   @Effect() updateOptions(): void {
@@ -468,7 +474,11 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Effect({ run: 'once' })
   initInstanceElement(): void {
     this.instance = this.createInstance();
-    this.instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+  }
+
+  @Effect()
+  subscribeOptionChanged(): void {
+    this.instance?.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
   }
 
   instanceOptionChangedHandler(e: any): void {
@@ -484,6 +494,9 @@ export class DataGrid extends JSXComponent(DataGridProps) {
         if (e.fullName === 'editing.editColumnName') {
           this.props.editing.editColumnName = e.value;
         }
+      }
+      if (e.fullName === 'searchPanel.text' && this.props.searchPanel) {
+        this.props.searchPanel.text = e.value;
       }
       if (e.fullName === 'focusedRowKey') {
         this.props.focusedRowKey = e.value;

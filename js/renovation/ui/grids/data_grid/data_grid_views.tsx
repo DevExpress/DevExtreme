@@ -6,6 +6,7 @@ import { GridBaseView } from '../grid_base/common/types';
 import { DataGridViewProps } from './common/data_grid_view_props';
 import { gridViewModule } from '../../../../ui/grid_core/ui.grid_core.grid_view';
 import { DataGridProps } from './common/data_grid_props';
+import { deferRender } from '../../../../core/utils/common';
 
 const { VIEW_NAMES } = gridViewModule;
 
@@ -57,9 +58,11 @@ export class DataGridViews extends JSXComponent<DataGridPropsType, 'instance'>()
     const dataController = gridInstance.getController('data');
     const resizingController = gridInstance.getController('resizing');
 
-    resizingController.resize();
-    if (dataController.isLoaded()) {
-      resizingController.fireContentReadyAction();
-    }
+    deferRender(() => {
+      resizingController.resize();
+      if (dataController.isLoaded()) {
+        resizingController.fireContentReadyAction();
+      }
+    });
   }
 }

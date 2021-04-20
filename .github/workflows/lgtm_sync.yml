@@ -1,0 +1,30 @@
+name: Sync LGTM.com alerts
+
+on:
+  schedule:
+    - cron: '30 1 * * *'
+
+jobs:
+  lgtm-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      # NOTE: The LGTM.com doesn't scan forks
+      # Consider another workflow for forked repository (for example CodeQL)
+      GITHUB_REPOSITORY: ${{ github.repository }}
+    steps:
+      - name: Get Project info
+        run: |
+          RESPONSE=$(curl -X GET "https://lgtm.com/api/v1.0/projects/g/${{ env.GITHUB_REPOSITORY }}" -H 'Content-Type: application/json')
+          echo "PROJECT=$RESPONSE" >> $GITHUB_ENV
+      - name: Get Latest Analysis info
+        run: |
+          RESPONSE=$(curl -X GET 'https://lgtm.com/api/v1.0/analyses/${{ fromJSON(env.PROJECT).id }}/commits/latest' -H 'Accept: application/json')
+          echo "ANALYSIS=$RESPONSE" >> $GITHUB_ENV
+      - name: Get SARIF
+        run: |
+          curl -X GET "https://lgtm.com/api/v1.0/analyses/${{ fromJSON(env.ANALYSIS).id }}/alerts" -H 'Accept: application/sarif+json' >> lgtm.sarif
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: lgtm.sarif
