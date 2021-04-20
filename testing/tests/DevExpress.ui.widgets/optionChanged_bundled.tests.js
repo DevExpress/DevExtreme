@@ -19,6 +19,8 @@ define(function(require) {
 
     QUnit.module('OptionChanged', {
         beforeEach: function() {
+            // NOTE: workaround for inferno
+            // component can not be rendered as body first-level child
             const $container = $('<div />').appendTo('body');
             this.$element = $('<div />').appendTo($container);
 
