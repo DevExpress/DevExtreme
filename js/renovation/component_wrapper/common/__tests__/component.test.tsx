@@ -8,6 +8,7 @@ import './utils/test_components/base';
 import './utils/test_components/options';
 import './utils/test_components/templated';
 import './utils/test_components/non_templated';
+import TestWidgetWrapper from './utils/test_components/component_wrapper/base';
 import {
   defaultEvent,
   emitKeyboard,
@@ -494,6 +495,31 @@ describe('option', () => {
       oneWayNullWithValue: undefined,
       twoWayWithValue: undefined,
       twoWayNullWithValue: undefined,
+    });
+  });
+
+  it('convert undefined to null or default value including custom default option rules', () => {
+    TestWidgetWrapper.defaultOptions({
+      device: () => true,
+      options: {
+        oneWayWithValue: 5,
+        twoWayWithValue: '5',
+      },
+    });
+
+    $('#component').dxOptionsTestWidget({
+      oneWayWithValue: 15,
+      twoWayWithValue: '15',
+    });
+
+    $('#component').dxOptionsTestWidget({
+      oneWayWithValue: undefined,
+      twoWayWithValue: undefined,
+    });
+
+    expect($('#component').dxOptionsTestWidget('getLastPassedProps')).toMatchObject({
+      oneWayWithValue: 5,
+      twoWayWithValue: '5',
     });
   });
 
