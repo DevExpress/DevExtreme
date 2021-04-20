@@ -9,6 +9,7 @@ import {
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
+import 'generic_light.css!';
 
 const {
     module,
