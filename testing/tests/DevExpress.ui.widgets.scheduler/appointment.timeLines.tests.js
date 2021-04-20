@@ -1,16 +1,14 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import Color from 'color';
 import {
-    SchedulerTestWrapper,
     initTestMarkup,
-    CLASSES
+    CLASSES,
+    createWrapper
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
 
 const {
     module,
@@ -25,38 +23,22 @@ const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
 const APPOINTMENT_DEFAULT_TOP_OFFSET = 26;
 
+const createInstanceBase = (options, clock) => {
+    const scheduler = createWrapper({
+        height: 600,
+        ...options,
+    });
+
+    clock.tick(300);
+    scheduler.instance.focus();
+
+    return scheduler;
+};
+
 module('Integration: Appointments in Timeline views', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options,
-                {
-                    height: options && options.height || 600
-                })
-            ).dxScheduler('instance');
-
-            this.clock.tick(300);
-            this.instance.focus();
-
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
-        this.getAppointmentColor = function($task, checkedProperty) {
-            checkedProperty = checkedProperty || 'backgroundColor';
-            return new Color($task.css(checkedProperty)).toHex();
-        };
         this.clock = sinon.useFakeTimers();
-        this.tasks = [
-            {
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 12, 0)
-            }
-        ];
     },
     afterEach: function() {
         fx.off = false;
@@ -67,52 +49,49 @@ module('Integration: Appointments in Timeline views', {
         'standard',
         'virtual'
     ].forEach(scrollingMode => {
-        module(`Scrolling mode ${scrollingMode}`, {
-            beforeEach: function() {
-                const createInstance = this.createInstance.bind(this);
-                this.createInstance = options => {
-                    options = options || {};
-                    $.extend(
-                        true,
-                        options,
-                        {
-                            scrolling: {
-                                mode: scrollingMode
-                            }
-                        }
-                    );
-
-                    createInstance(options);
-
-                    if(scrollingMode === 'virtual') {
-                        const virtualScrollingDispatcher = this.instance.getWorkSpace().virtualScrollingDispatcher;
-                        if(virtualScrollingDispatcher) {
-                            virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+        module(`Scrolling mode ${scrollingMode}`, () => {
+            const createInstance = (options, clock) => {
+                options = options || {};
+                $.extend(
+                    true,
+                    options,
+                    {
+                        scrolling: {
+                            mode: scrollingMode
                         }
                     }
-                };
+                );
 
-                this.scrollTo = args => this.instance.getWorkSpace().getScrollable().scrollTo(args);
-            }
-        }, () => {
+                const scheduler = createInstanceBase(options, clock);
+
+                if(scrollingMode === 'virtual') {
+                    const virtualScrollingDispatcher = scheduler.instance.getWorkSpace().virtualScrollingDispatcher;
+                    if(virtualScrollingDispatcher) {
+                        virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+                    }
+                }
+
+                return scheduler;
+            };
+
             test('Appointment should have right position on timelineMonth view', function(assert) {
                 const appointment = {
                     startDate: new Date(2016, 1, 3, 8, 15),
                     endDate: new Date(2016, 1, 3, 9, 0)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2016, 1, 1),
                     currentView: 'timelineMonth',
                     firstDayOfWeek: 0,
                     dataSource: [appointment],
                     maxAppointmentsPerCell: 'unlimited'
-                });
+                }, this.clock);
 
-                const targetCellPosition = this.scheduler.workSpace.getCellPosition(0, 2);
+                const targetCellPosition = scheduler.workSpace.getCellPosition(0, 2);
 
-                assert.roughEqual(this.scheduler.appointments.getAppointmentPosition().top, targetCellPosition.top, 1.001, 'appointment top is correct');
-                assert.roughEqual(this.scheduler.appointments.getAppointmentPosition().left, targetCellPosition.left, 1.001, 'appointment left is correct');
+                assert.roughEqual(scheduler.appointments.getAppointmentPosition().top, targetCellPosition.top, 1.001, 'appointment top is correct');
+                assert.roughEqual(scheduler.appointments.getAppointmentPosition().left, targetCellPosition.left, 1.001, 'appointment left is correct');
             });
 
             test('Rival appointments should have right position on timelineMonth view', function(assert) {
@@ -130,7 +109,7 @@ module('Integration: Appointments in Timeline views', {
                     'endDate': new Date(2018, 11, 4, 10, 29),
                 }];
 
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: data,
                     views: ['timelineMonth'],
                     currentView: 'timelineMonth',
@@ -139,9 +118,9 @@ module('Integration: Appointments in Timeline views', {
                     firstDayOfWeek: 0,
                     startDayHour: 8,
                     endDayHour: 20
-                });
+                }, this.clock);
 
-                this.instance.$element().find('.' + APPOINTMENT_CLASS).each(function(index, appointment) {
+                scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).each(function(index, appointment) {
                     assert.equal($(appointment).position().top, 0, 'Appointment top is ok');
                 });
             });
@@ -160,7 +139,7 @@ module('Integration: Appointments in Timeline views', {
                     'endDate': new Date(2018, 11, 4, 10, 29),
                 }];
 
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: data,
                     views: ['timelineMonth'],
                     currentView: 'timelineMonth',
@@ -170,10 +149,10 @@ module('Integration: Appointments in Timeline views', {
                     startDayHour: 8,
                     endDayHour: 20,
                     width: 600
-                });
+                }, this.clock);
 
-                assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, APPOINTMENT_DEFAULT_TOP_OFFSET, 'Long appointment top is ok');
-                assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(1).top, this.scheduler.appointments.getAppointmentHeight() + APPOINTMENT_DEFAULT_TOP_OFFSET, 1, 'Second appointment top is ok');
+                assert.equal(scheduler.appointments.getAppointmentPosition(0).top, APPOINTMENT_DEFAULT_TOP_OFFSET, 'Long appointment top is ok');
+                assert.roughEqual(scheduler.appointments.getAppointmentPosition(1).top, scheduler.appointments.getAppointmentHeight() + APPOINTMENT_DEFAULT_TOP_OFFSET, 1, 'Second appointment top is ok');
             });
 
             test('Long appointment part should not be rendered on timelineMonth view (T678380)', function(assert) {
@@ -183,7 +162,7 @@ module('Integration: Appointments in Timeline views', {
                     'endDate': new Date(2019, 3, 1, 7, 59)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2019, 3, 2),
                     currentView: 'timelineMonth',
                     views: ['timelineMonth'],
@@ -193,9 +172,9 @@ module('Integration: Appointments in Timeline views', {
                     endDayHour: 18,
                     cellDuration: 60,
                     dataSource: [appointment]
-                });
+                }, this.clock);
 
-                assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'appointment-part was not rendered');
+                assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'appointment-part was not rendered');
             });
 
             test('Long appointment part should not be rendered on timelineWorkWeek view (T678380)', function(assert) {
@@ -205,7 +184,7 @@ module('Integration: Appointments in Timeline views', {
                     'endDate': new Date(2019, 3, 1, 7, 59)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2019, 3, 2),
                     currentView: 'timelineWorkWeek',
                     views: ['timelineWorkWeek'],
@@ -215,9 +194,9 @@ module('Integration: Appointments in Timeline views', {
                     endDayHour: 18,
                     cellDuration: 60,
                     dataSource: [appointment]
-                });
+                }, this.clock);
 
-                assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'appointment-part was not rendered');
+                assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'appointment-part was not rendered');
             });
 
             test('Appointment should have right width on timelineWeek view', function(assert) {
@@ -226,17 +205,17 @@ module('Integration: Appointments in Timeline views', {
                     endDate: new Date(2015, 2, 3, 10, 30)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: 1425416400000,
                     currentView: 'timelineWeek',
                     dataSource: [appointment],
                     startDayHour: 8,
                     endDayHour: 10,
                     width: 1600
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $cell = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, 'Task has a right width');
             });
@@ -247,7 +226,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: new Date(2016, 1, 2, 1, 0)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2016, 1, 1),
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
@@ -258,10 +237,10 @@ module('Integration: Appointments in Timeline views', {
                     endDayHour: 20,
                     height: 200,
                     width: 1600
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $cell = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
                 const cellsInAppointment = 9;
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
@@ -274,17 +253,17 @@ module('Integration: Appointments in Timeline views', {
                     recurrenceRule: 'FREQ=DAILY;INTERVAL=2'
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 4, 26),
                     currentView: 'timelineWeek',
                     dataSource: [appointment],
                     startDayHour: 1,
                     endDayHour: 22,
                     width: 35000
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(1);
-                const $cell = $(this.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(1);
+                const $cell = $(scheduler.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 4, 1.001, 'Task width is correct');
             });
@@ -295,7 +274,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: new Date(2015, 2, 3, 13)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 3),
                     currentView: 'timelineWeek',
                     cellDuration: 60,
@@ -303,10 +282,10 @@ module('Integration: Appointments in Timeline views', {
                     startDayHour: 10,
                     endDayHour: 20,
                     width: 4000
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
-                const $cell = $(this.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
+                const $cell = $(scheduler.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
                 const cellsInAppointment = 4;
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
@@ -319,7 +298,7 @@ module('Integration: Appointments in Timeline views', {
                     allDay: true
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 11, 14),
                     currentView: 'timelineWeek',
                     cellDuration: 60,
@@ -327,10 +306,10 @@ module('Integration: Appointments in Timeline views', {
                     startDayHour: 10,
                     endDayHour: 22,
                     width: 8000
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
-                const $cell = $(this.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
+                const $cell = $(scheduler.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
                 const cellsInAppointment = 48;
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
@@ -342,7 +321,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: new Date(2015, 11, 14, 24, 0)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 11, 14),
                     currentView: 'timelineDay',
                     cellDuration: 60,
@@ -350,10 +329,10 @@ module('Integration: Appointments in Timeline views', {
                     startDayHour: 10,
                     endDayHour: 22,
                     width: 1500
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $cell = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
                 const cellsInAppointment = 12;
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
@@ -365,7 +344,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: new Date(2015, 2, 4, 18)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 3),
                     currentView: 'timelineWorkWeek',
                     cellDuration: 60,
@@ -373,10 +352,10 @@ module('Integration: Appointments in Timeline views', {
                     startDayHour: 10,
                     endDayHour: 20,
                     width: 4000
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
-                const $cell = $(this.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
+                const $cell = $(scheduler.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
                 const cellsInAppointment = 28;
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
@@ -388,7 +367,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: new Date(2016, 1, 4, 1, 0)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2016, 1, 1),
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
@@ -399,10 +378,10 @@ module('Integration: Appointments in Timeline views', {
                     endDayHour: 20,
                     height: 200,
                     width: 9000
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $cell = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
                 const cellsInAppointment = 33;
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
@@ -414,7 +393,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: new Date(2015, 2, 5, 18)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 3),
                     currentView: 'timelineWeek',
                     cellDuration: 60,
@@ -422,10 +401,10 @@ module('Integration: Appointments in Timeline views', {
                     startDayHour: 10,
                     endDayHour: 20,
                     width: 15400
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $cell = $(scheduler.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(0);
                 const cellsToAppointment = 10;
 
                 assert.roughEqual($appointment.position().left, $cell.outerWidth() * cellsToAppointment, 1.001, 'Task has a right width');
@@ -482,7 +461,7 @@ module('Integration: Appointments in Timeline views', {
                 text: 'in case drag right handle to summer DST'
             }].forEach(testCase => {
                 test(`Appointment should have correct dates after resizing ${testCase.text} (T835544)`, function(assert) {
-                    this.createInstance({
+                    const scheduler = createInstance({
                         editing: {
                             allowResizing: true
                         },
@@ -497,13 +476,13 @@ module('Integration: Appointments in Timeline views', {
                         height: 300,
                         startDayHour: 0,
                         width: 1500
-                    });
+                    }, this.clock);
 
-                    this.scheduler.instance.scrollToTime(0, 0, new Date(testCase.scrollDate));
+                    scheduler.instance.scrollToTime(0, 0, new Date(testCase.scrollDate));
 
-                    const { getAppointment, getDateText } = this.scheduler.appointments;
+                    const { getAppointment, getDateText } = scheduler.appointments;
 
-                    const cellWidth = this.scheduler.workSpace.getCellWidth();
+                    const cellWidth = scheduler.workSpace.getCellWidth();
                     let pointer = pointerMock($(getAppointment()).find(testCase.handle).eq(0)).start();
 
                     pointer.dragStart().drag(testCase.direction * cellWidth, 0);
@@ -511,8 +490,8 @@ module('Integration: Appointments in Timeline views', {
 
                     assert.equal(getDateText(), testCase.expectedValue, 'Dates should correct after resizing');
 
-                    this.scheduler.appointments.click();
-                    assert.equal(this.scheduler.tooltip.getDateText(), testCase.expectedTooltipValue, 'Dates in tooltip should correct');
+                    scheduler.appointments.click();
+                    assert.equal(scheduler.tooltip.getDateText(), testCase.expectedTooltipValue, 'Dates in tooltip should correct');
 
                     pointer = pointerMock($(getAppointment()).find(testCase.handle).eq(0)).start();
 
@@ -524,7 +503,7 @@ module('Integration: Appointments in Timeline views', {
             });
 
             test('Appointment should be rendered without compact ones if only one per cell (even with zoom) (T723354)', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: [{
                         text: 'Recruiting students',
                         startDate: new Date(2018, 2, 26, 10, 0),
@@ -535,9 +514,9 @@ module('Integration: Appointments in Timeline views', {
                     currentView: 'timelineMonth',
                     currentDate: new Date(2018, 3, 27),
                     width: 4000
-                });
+                }, this.clock);
 
-                assert.equal(this.scheduler.appointments.getAppointmentCount(), 30, 'Scheduler appointments are rendered without compact ones');
+                assert.equal(scheduler.appointments.getAppointmentCount(), 30, 'Scheduler appointments are rendered without compact ones');
             });
 
             skip('Appointments are rendered with custom cell width less than default (T816873)', function(assert) {
@@ -562,7 +541,7 @@ module('Integration: Appointments in Timeline views', {
                         endDate: '2019-09-20T10:00:00.000Z'
                     }];
 
-                    this.createInstance({
+                    const scheduler = createInstance({
                         dataSource: data,
                         elementAttr: {
                             id: 'dxLineSchedule'
@@ -574,9 +553,9 @@ module('Integration: Appointments in Timeline views', {
                         }],
                         currentView: 'timelineWeek',
                         currentDate: new Date(2019, 8, 22)
-                    });
+                    }, this.clock);
 
-                    assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, 'Appointments are rendered');
+                    assert.ok(scheduler.appointments.getAppointmentCount() > 0, 'Appointments are rendered');
                 } finally {
                     $style.remove();
                 }
@@ -602,7 +581,7 @@ module('Integration: Appointments in Timeline views', {
                         endDate: new Date('2019-10-03T19:00:00.000'),
                     }];
 
-                    this.createInstance({
+                    const scheduler = createInstance({
                         dataSource: data,
                         views: ['timelineWeek'],
                         currentView: 'timelineWeek',
@@ -613,12 +592,12 @@ module('Integration: Appointments in Timeline views', {
                         height: 580,
                         renovateRender: scrollingMode === 'virtual' || isRenovatedRender,
                         width: 800
-                    });
+                    }, this.clock);
 
-                    assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 4, 'Appointments are rendered');
-                    assert.strictEqual($(this.scheduler.appointments.getAppointment(0)).position().left, $(this.scheduler.appointments.getAppointment(3)).position().left, 'Appointments have same left coordinate');
-                    assert.strictEqual($(this.scheduler.appointments.getAppointment(0)).innerWidth(), $(this.scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with equal coords have same width');
-                    assert.strictEqual($(this.scheduler.appointments.getAppointment(1)).innerWidth(), $(this.scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
+                    assert.strictEqual(scheduler.appointments.getAppointmentCount(), 4, 'Appointments are rendered');
+                    assert.strictEqual($(scheduler.appointments.getAppointment(0)).position().left, $(scheduler.appointments.getAppointment(3)).position().left, 'Appointments have same left coordinate');
+                    assert.strictEqual($(scheduler.appointments.getAppointment(0)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with equal coords have same width');
+                    assert.strictEqual($(scheduler.appointments.getAppointment(1)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
                 });
             });
         });
