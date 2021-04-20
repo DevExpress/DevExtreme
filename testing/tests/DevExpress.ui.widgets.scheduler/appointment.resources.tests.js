@@ -58,6 +58,9 @@ module('Integration: Appointment resources', {
                     scrolling: { mode: scrollingMode },
                 });
 
+                this.clock.tick(300);
+                scheduler.instance.focus();
+
                 const tasks = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.ok(tasks.eq(0).attr('data-ownerid-2'));
@@ -91,6 +94,9 @@ module('Integration: Appointment resources', {
                     height: 600,
                     scrolling: { mode: scrollingMode },
                 });
+
+                this.clock.tick(300);
+                scheduler.instance.focus();
 
                 const tasks = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
