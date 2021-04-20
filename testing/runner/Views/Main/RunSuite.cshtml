@@ -215,7 +215,7 @@
                 },
                 packages: {
                     '@@devextreme/vdom': {
-                        main: './dist/index.js',
+                        main: './dist/cjs/index.js',
                         defaultExtension: 'js',
                         format: 'cjs'
                     },
@@ -239,6 +239,9 @@
                         main: 'index'
                     },
                 },
+                packageConfigPaths: [
+                    "@@devextreme/*/package.json",
+                ],
                 meta: {
                     '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")': {
                         format: 'global',
