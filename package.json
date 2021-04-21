@@ -33,7 +33,7 @@
     "jszip": "^2.0.0 || ^3.0.0",
     "devextreme-quill": "~0.10.3",
     "rrule": "2.6.6",
-    "showdown": "^1.8.6",
+    "showdown": "^1.9.1",
     "turndown": "^7.0.0",
     "preact": "^10.4.5"
   },
