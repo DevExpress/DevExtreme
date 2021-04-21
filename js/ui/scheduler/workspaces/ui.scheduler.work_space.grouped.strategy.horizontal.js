@@ -142,26 +142,21 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return this._workSpace.getTimePanelWidth();
     }
 
-    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        let startOffset;
-        let endOffset;
+    getEdgeCells($cells) {
+        const firstColumnIndex = 0;
+        const lastColumnIndex = $cells.length - 1;
 
+        const startCell = $cells.eq(firstColumnIndex);
+        const endCell = $cells.eq(lastColumnIndex);
+
+        return { startCell, endCell };
+    }
+
+    _createGroupBoundOffset(startCell, endCell, cellWidth) {
         const extraOffset = cellWidth / 2;
 
-        if(this._workSpace.isGroupedByDate()) {
-            const firstColumnIndex = 0;
-            const lastColumnIndex = cellCount * this._workSpace._getGroupCount() - 1;
-
-            startOffset = $cells.eq(firstColumnIndex).offset().left - extraOffset;
-            endOffset = $cells.eq(lastColumnIndex).offset().left + cellWidth + extraOffset;
-        } else {
-            const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
-            const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
-            const startCellIndex = groupIndex * cellCount;
-
-            startOffset = $cells.eq(startCellIndex).offset().left - extraOffset;
-            endOffset = $cells.eq(startCellIndex + cellCount - 1).offset().left + cellWidth + extraOffset;
-        }
+        const startOffset = startCell.offset().left - extraOffset;
+        const endOffset = endCell.offset().left + cellWidth + extraOffset;
 
         return {
             left: startOffset,
@@ -171,18 +166,36 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         };
     }
 
-    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        let startOffset = 0;
-        let endOffset = 0;
-
-        const extraOffset = cellWidth / 2;
+    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
+        let startCell;
+        let endCell;
 
         if(this._workSpace.isGroupedByDate()) {
-            const firstColumnIndex = 0;
-            const lastColumnIndex = $cells.length - 1;
+            const boundCells = this.getEdgeCells($cells);
 
-            startOffset = $cells.eq(firstColumnIndex).offset().left - extraOffset;
-            endOffset = $cells.eq(lastColumnIndex).offset().left + cellWidth + extraOffset;
+            startCell = boundCells.startCell;
+            endCell = boundCells.endCell;
+        } else {
+            const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
+            const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
+            const startCellIndex = groupIndex * cellCount;
+
+            startCell = $cells.eq(startCellIndex);
+            endCell = $cells.eq(startCellIndex + cellCount - 1);
+        }
+
+        return this._createGroupBoundOffset(startCell, endCell, cellWidth);
+    }
+
+    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
+        let startCell;
+        let endCell;
+
+        if(this._workSpace.isGroupedByDate()) {
+            const boundCells = this.getEdgeCells($cells);
+
+            startCell = boundCells.startCell;
+            endCell = boundCells.endCell;
         } else {
             const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
             const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
@@ -197,20 +210,12 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
                 const groupStartPosition = cellsGroupToView[0][0].position;
                 const groupEndPosition = cellsGroupToView[0][groupRowLength - 1].position;
 
-                const startCell = this._workSpace._dom_getDateCell(groupStartPosition);
-                const endCell = this._workSpace._dom_getDateCell(groupEndPosition);
-
-                startOffset = startCell.offset().left - extraOffset;
-                endOffset = endCell.offset().left + cellWidth + extraOffset;
+                startCell = this._workSpace._dom_getDateCell(groupStartPosition);
+                endCell = this._workSpace._dom_getDateCell(groupEndPosition);
             }
         }
 
-        return {
-            left: startOffset,
-            right: endOffset,
-            top: 0,
-            bottom: 0
-        };
+        return this._createGroupBoundOffset(startCell, endCell, cellWidth);
     }
 
     shiftIndicator($indicator, height, rtlOffset, groupIndex) {

@@ -166,6 +166,10 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         });
     }
 
+    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
+        return this.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+    }
+
     shiftIndicator($indicator, height, rtlOffset, i) {
         const offset = this._workSpace.getIndicatorOffset(0);
         const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
