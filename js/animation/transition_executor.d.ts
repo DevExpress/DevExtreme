@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -51,7 +51,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    start(): TPromise<void>;
+    start(): DxPromise<void>;
     /**
      * @docid
      * @publicName stop()

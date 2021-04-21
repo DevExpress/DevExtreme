@@ -8,7 +8,7 @@ export interface EventType { }
  * @docid
  * @prevFileNamespace DevExpress.events
  */
-export type TEvent = {} extends EventType ? dxEvent : EventType;
+export type DxEvent = {} extends EventType ? dxEvent : EventType;
 
 /** @public */
 export interface InitializedEventInfo<T> {
@@ -28,7 +28,7 @@ export interface NativeEventInfo<T> {
     readonly component: T;
     readonly element: DxElement;
     readonly model?: any;
-    readonly event?: TEvent;
+    readonly event?: DxEvent;
 }
 
 /** @public */
@@ -133,9 +133,9 @@ export class dxEvent {
  * @type dxEvent|jQuery.Event
  * @hidden
  * @prevFileNamespace DevExpress.events
- * @deprecated TEvent
+ * @deprecated DxEvent
  */
-export type event = TEvent;
+export type event = DxEvent;
 
 /**
  * @docid
@@ -347,7 +347,7 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @prevFileNamespace DevExpress.events
  * @public
  */
-export function trigger(element: Element | Array<Element>, event: string | TEvent): void;
+export function trigger(element: Element | Array<Element>, event: string | DxEvent): void;
 
 /**
  * @docid eventsMethods.trigger
@@ -361,7 +361,7 @@ export function trigger(element: Element | Array<Element>, event: string | TEven
  * @prevFileNamespace DevExpress.events
  * @public
  */
-export function trigger(element: Element | Array<Element>, event: string | TEvent, extraParameters: any): void;
+export function trigger(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;
 
 /**
  * @docid eventsMethods.triggerHandler
@@ -374,7 +374,7 @@ export function trigger(element: Element | Array<Element>, event: string | TEven
  * @hidden
  * @prevFileNamespace DevExpress.events
  */
-export function triggerHandler(element: Element | Array<Element>, event: string | TEvent): void;
+export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent): void;
 
 /**
  * @docid eventsMethods.triggerHandler
@@ -388,4 +388,4 @@ export function triggerHandler(element: Element | Array<Element>, event: string 
  * @hidden
  * @prevFileNamespace DevExpress.events
  */
-export function triggerHandler(element: Element | Array<Element>, event: string | TEvent, extraParameters: any): void;
+export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;

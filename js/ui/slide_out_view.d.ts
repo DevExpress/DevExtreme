@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -96,7 +96,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hideMenu(): TPromise<void>;
+    hideMenu(): DxPromise<void>;
     /**
      * @docid
      * @publicName menuContent()
@@ -112,7 +112,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showMenu(): TPromise<void>;
+    showMenu(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggleMenuVisibility()
@@ -120,7 +120,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(): TPromise<void>;
+    toggleMenuVisibility(): DxPromise<void>;
 }
 
 /** @public */

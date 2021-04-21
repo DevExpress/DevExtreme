@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -468,7 +468,7 @@ export default class dxFileManager extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(): TPromise<any>;
+    refresh(): DxPromise<any>;
 }
 
 /**

@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -122,7 +122,7 @@ export default class dxScrollView extends dxScrollable {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    release(preventScrollBottom: boolean): TPromise<void>;
+    release(preventScrollBottom: boolean): DxPromise<void>;
 }
 
 /** @public */

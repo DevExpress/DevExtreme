@@ -16,7 +16,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -156,7 +156,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default null

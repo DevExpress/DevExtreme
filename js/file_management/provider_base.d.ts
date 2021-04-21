@@ -2,7 +2,7 @@ import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
@@ -61,7 +61,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItems(parentDirectory: FileSystemItem): TPromise<Array<FileSystemItem>>;
+    getItems(parentDirectory: FileSystemItem): DxPromise<Array<FileSystemItem>>;
 
     /**
      * @docid
@@ -72,7 +72,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    renameItem(item: FileSystemItem, newName: string): TPromise<any>;
+    renameItem(item: FileSystemItem, newName: string): DxPromise<any>;
 
     /**
      * @docid
@@ -83,7 +83,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    createDirectory(parentDirectory: FileSystemItem, name: string): TPromise<any>;
+    createDirectory(parentDirectory: FileSystemItem, name: string): DxPromise<any>;
 
     /**
      * @docid
@@ -93,7 +93,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    deleteItems(items: Array<FileSystemItem>): Array<TPromise<any>>;
+    deleteItems(items: Array<FileSystemItem>): Array<DxPromise<any>>;
 
     /**
      * @docid
@@ -104,7 +104,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<TPromise<any>>;
+    moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<DxPromise<any>>;
 
     /**
      * @docid
@@ -115,7 +115,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<TPromise<any>>;
+    copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<DxPromise<any>>;
 
     /**
      * @docid
@@ -127,7 +127,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): TPromise<any>;
+    uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): DxPromise<any>;
 
     /**
      * @docid
@@ -139,7 +139,7 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): TPromise<any>;
+    abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): DxPromise<any>;
 
     /**
      * @docid
@@ -158,5 +158,5 @@ export default class FileSystemProviderBase {
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItemsContent(items: Array<FileSystemItem>): TPromise<any>;
+    getItemsContent(items: Array<FileSystemItem>): DxPromise<any>;
 }

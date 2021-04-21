@@ -8,7 +8,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -16,7 +16,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -87,7 +87,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -235,7 +235,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<void>;
+    hide(): DxPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -243,7 +243,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<void>;
+    show(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -252,7 +252,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): TPromise<void>;
+    toggle(showing: boolean): DxPromise<void>;
 }
 
 /**

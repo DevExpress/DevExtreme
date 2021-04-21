@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -348,7 +348,7 @@ export default class dxForm extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): TPromise<void>;
+    updateDimensions(): DxPromise<void>;
     /**
      * @docid
      * @publicName validate()

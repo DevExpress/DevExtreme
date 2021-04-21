@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -37,7 +37,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 /** @public */
@@ -47,7 +47,7 @@ export type ContentReadyEvent = EventInfo<dxGantt>;
 export type ContextMenuPreparingEvent = Cancelable & {
     readonly component?: dxGantt;
     readonly element?: DxElement;
-    readonly event?: TEvent;
+    readonly event?: DxEvent;
     readonly targetKey?: any;
     readonly targetType?: string;
     readonly data?: any;
@@ -1164,7 +1164,7 @@ export default class dxGantt extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    exportToPdf(options: any): TPromise<any>;
+    exportToPdf(options: any): DxPromise<any>;
 }
 
 /**

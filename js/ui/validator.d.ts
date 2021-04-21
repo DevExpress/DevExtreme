@@ -7,7 +7,7 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -175,7 +175,7 @@ export interface dxValidatorResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: TPromise<dxValidatorResult>;
+    complete?: DxPromise<dxValidatorResult>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

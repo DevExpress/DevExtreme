@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -304,7 +304,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: DxElement, model?: any, event?: TEvent, argument?: Date | number | string }) => void) | string;
+    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: DxElement, model?: any, event?: DxEvent, argument?: Date | number | string }) => void) | string;
     /**
      * @docid
      * @default null

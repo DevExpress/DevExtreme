@@ -9,7 +9,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource from '../data/data_source';
@@ -994,7 +994,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): TPromise<void>;
+    addRow(): DxPromise<void>;
     /**
      * @docid
      * @publicName addRow(parentId)
@@ -1003,7 +1003,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(parentId: any): TPromise<void>;
+    addRow(parentId: any): DxPromise<void>;
     /**
      * @docid
      * @publicName collapseRow(key)
@@ -1012,7 +1012,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseRow(key: any): TPromise<void>;
+    collapseRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandRow(key)
@@ -1021,7 +1021,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandRow(key: any): TPromise<void>;
+    expandRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName forEachNode(callback)
@@ -1131,7 +1131,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(): TPromise<void>;
+    loadDescendants(): DxPromise<void>;
     /**
      * @docid
      * @publicName loadDescendants(keys)
@@ -1140,7 +1140,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(keys: Array<any>): TPromise<void>;
+    loadDescendants(keys: Array<any>): DxPromise<void>;
     /**
      * @docid
      * @publicName loadDescendants(keys, childrenOnly)
@@ -1150,10 +1150,10 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(keys: Array<any>, childrenOnly: boolean): TPromise<void>;
+    loadDescendants(keys: Array<any>, childrenOnly: boolean): DxPromise<void>;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -1172,8 +1172,8 @@ export default class dxTreeList extends Widget implements GridBase {
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
-    deselectAll(): TPromise<void>;
-    deselectRows(keys: Array<any>): TPromise<any>;
+    deselectAll(): DxPromise<void>;
+    deselectRows(keys: Array<any>): DxPromise<any>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
@@ -1202,17 +1202,17 @@ export default class dxTreeList extends Widget implements GridBase {
     navigateToRow(key: any): void;
     pageCount(): number;
     pageIndex(): number;
-    pageIndex(newIndex: number): TPromise<void>;
+    pageIndex(newIndex: number): DxPromise<void>;
     pageSize(): number;
     pageSize(value: number): void;
-    refresh(): TPromise<void>;
-    refresh(changesOnly: boolean): TPromise<void>;
+    refresh(): DxPromise<void>;
+    refresh(changesOnly: boolean): DxPromise<void>;
     repaintRows(rowIndexes: Array<number>): void;
-    saveEditData(): TPromise<void>;
+    saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
-    selectAll(): TPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
+    selectAll(): DxPromise<void>;
+    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;

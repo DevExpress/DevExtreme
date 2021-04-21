@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -16,7 +16,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -291,7 +291,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    close(): TPromise<void>;
+    close(): DxPromise<void>;
     getDataSource(): DataSource;
     /**
      * @docid
@@ -300,7 +300,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    open(): TPromise<void>;
+    open(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle()
@@ -308,7 +308,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): TPromise<void>;
+    toggle(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle(visibility)
@@ -317,7 +317,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(visibility: boolean): TPromise<void>;
+    toggle(visibility: boolean): DxPromise<void>;
 }
 
 /**
@@ -337,7 +337,7 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: DxElement, model?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: { component?: dxDropDownButton, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
 }
 
 /** @public */

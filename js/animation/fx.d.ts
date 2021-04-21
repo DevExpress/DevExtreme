@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 /**
@@ -106,7 +106,7 @@ declare const fx: {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    animate(element: Element, config: animationConfig): TPromise<void>;
+    animate(element: Element, config: animationConfig): DxPromise<void>;
 
     /**
      * @docid

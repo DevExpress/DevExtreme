@@ -5,7 +5,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -19,7 +19,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -89,7 +89,7 @@ export interface DataChangeInfo {
 
 export interface NewRowInfo {
   data: any;
-  promise?: TPromise<void>;
+  promise?: DxPromise<void>;
 }
 
 export interface KeyDownInfo {
@@ -108,7 +108,7 @@ export interface RowInsertedInfo {
 
 export interface RowInsertingInfo {
   data: any;
-  cancel: boolean | TPromise<void>;
+  cancel: boolean | DxPromise<void>;
 }
 
 export interface RowRemovedInfo {
@@ -120,7 +120,7 @@ export interface RowRemovedInfo {
 export interface RowRemovingInfo {
   readonly data: any;
   readonly key: any;
-  cancel: boolean | TPromise<void>;
+  cancel: boolean | DxPromise<void>;
 }
 
 export interface RowUpdatedInfo {
@@ -133,7 +133,7 @@ export interface RowUpdatingInfo {
   readonly oldData: any;
   newData: any;
   readonly key: any;
-  cancel: boolean | TPromise<void>;
+  cancel: boolean | DxPromise<void>;
 }
 
 export interface RowValidatingInfo {
@@ -143,12 +143,12 @@ export interface RowValidatingInfo {
   readonly newData: any;
   readonly oldData: any;
   errorText: string;
-  promise?: TPromise<void>;
+  promise?: DxPromise<void>;
 }
 
 export interface SavingInfo {
   changes: Array<DataChange>;
-  promise?: TPromise<void>;
+  promise?: DxPromise<void>;
   cancel: boolean;
 }
 
@@ -165,7 +165,7 @@ export interface ToolbarPreparingInfo {
 
 export interface RowDraggingEventInfo<T extends GridBase> {
   readonly component: T;
-  readonly event: TEvent;
+  readonly event: DxEvent;
   readonly itemData?: any;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -178,7 +178,7 @@ export interface RowDraggingEventInfo<T extends GridBase> {
 
 export interface DragStartEventInfo<T extends GridBase> {
   readonly component: T;
-  readonly event: TEvent;
+  readonly event: DxEvent;
   itemData?: any;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -191,7 +191,7 @@ export interface DragDropInfo {
 
 export interface DragReorderInfo {
   readonly dropInsideItem: boolean;
-  promise?: TPromise<void>;
+  promise?: DxPromise<void>;
 }
 
 export interface RowDraggingTemplateDataModel {
@@ -1660,7 +1660,7 @@ export interface StateStoring {
      * @prevFileNamespace DevExpress.ui
      * @type_function_return Promise<Object>
      */
-    customLoad?: (() => TPromise<any>),
+    customLoad?: (() => DxPromise<any>),
     /**
      * @docid GridBaseOptions.stateStoring.customSave
      * @prevFileNamespace DevExpress.ui
@@ -2022,7 +2022,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     /**
      * @docid
      * @publicName cancelEditData()
@@ -2182,7 +2182,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deselectAll(): TPromise<void>;
+    deselectAll(): DxPromise<void>;
     /**
      * @docid
      * @publicName deselectRows(keys)
@@ -2191,7 +2191,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deselectRows(keys: Array<any>): TPromise<any>;
+    deselectRows(keys: Array<any>): DxPromise<any>;
     /**
      * @docid
      * @publicName editCell(rowIndex, dataField)
@@ -2423,7 +2423,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    pageIndex(newIndex: number): TPromise<void>;
+    pageIndex(newIndex: number): DxPromise<void>;
     /**
      * @docid
      * @publicName pageSize()
@@ -2447,7 +2447,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(): TPromise<void>;
+    refresh(): DxPromise<void>;
     /**
      * @docid
      * @publicName refresh(changesOnly)
@@ -2456,7 +2456,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(changesOnly: boolean): TPromise<void>;
+    refresh(changesOnly: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName repaintRows(rowIndexes)
@@ -2472,7 +2472,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    saveEditData(): TPromise<void>;
+    saveEditData(): DxPromise<void>;
     /**
      * @docid
      * @publicName searchByText(text)
@@ -2488,7 +2488,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectAll(): TPromise<void>;
+    selectAll(): DxPromise<void>;
     /**
      * @docid
      * @publicName selectRows(keys, preserve)
@@ -2498,7 +2498,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
+    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
     /**
      * @docid
      * @publicName selectRowsByIndexes(indexes)
@@ -2507,7 +2507,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     /**
      * @docid
      * @publicName showColumnChooser()
@@ -2864,7 +2864,7 @@ export interface ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | TPromise<void>);
+    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | DxPromise<void>);
     /**
      * @docid GridBaseColumn.showEditorAlways
      * @default false
@@ -4608,7 +4608,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): TPromise<void>;
+    addRow(): DxPromise<void>;
     /**
      * @docid
      * @publicName clearGrouping()
@@ -4632,7 +4632,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseRow(key: any): TPromise<void>;
+    collapseRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandAll(groupIndex)
@@ -4649,7 +4649,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandRow(key: any): TPromise<void>;
+    expandRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName exportToExcel(selectionOnly)
@@ -4666,7 +4666,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowKeys(): Array<any> & TPromise<any>;
+    getSelectedRowKeys(): Array<any> & DxPromise<any>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
@@ -4674,7 +4674,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowsData(): Array<any> & TPromise<any>;
+    getSelectedRowsData(): Array<any> & DxPromise<any>;
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
@@ -4738,7 +4738,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     totalCount(): number;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -4757,8 +4757,8 @@ declare class dxDataGrid extends Widget implements GridBase {
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
-    deselectAll(): TPromise<void>;
-    deselectRows(keys: Array<any>): TPromise<any>;
+    deselectAll(): DxPromise<void>;
+    deselectRows(keys: Array<any>): DxPromise<any>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
@@ -4787,17 +4787,17 @@ declare class dxDataGrid extends Widget implements GridBase {
     navigateToRow(key: any): void;
     pageCount(): number;
     pageIndex(): number;
-    pageIndex(newIndex: number): TPromise<void>;
+    pageIndex(newIndex: number): DxPromise<void>;
     pageSize(): number;
     pageSize(value: number): void;
-    refresh(): TPromise<void>;
-    refresh(changesOnly: boolean): TPromise<void>;
+    refresh(): DxPromise<void>;
+    refresh(changesOnly: boolean): DxPromise<void>;
     repaintRows(rowIndexes: Array<number>): void;
-    saveEditData(): TPromise<void>;
+    saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
-    selectAll(): TPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
+    selectAll(): DxPromise<void>;
+    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;

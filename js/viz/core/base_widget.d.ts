@@ -12,7 +12,7 @@ import {
 } from '../../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../../core/utils/deferred';
 
 import {
@@ -275,7 +275,7 @@ export interface BaseWidgetExport {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => TPromise<void>);
+    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => DxPromise<void>);
 }
 export interface BaseWidgetLoadingIndicator {
     /**

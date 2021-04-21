@@ -8,7 +8,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -78,7 +78,7 @@ export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
 
 /** @public */
 export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
-    cancel?: boolean | TPromise<void>;
+    cancel?: boolean | DxPromise<void>;
 }
 
 /** @public */
@@ -593,7 +593,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseGroup(groupIndex: number): TPromise<void>;
+    collapseGroup(groupIndex: number): DxPromise<void>;
     /**
      * @docid
      * @publicName deleteItem(itemElement)
@@ -602,7 +602,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deleteItem(itemElement: Element): TPromise<void>;
+    deleteItem(itemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName deleteItem(itemIndex)
@@ -611,7 +611,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deleteItem(itemIndex: number | any): TPromise<void>;
+    deleteItem(itemIndex: number | any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandGroup(groupIndex)
@@ -620,7 +620,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandGroup(groupIndex: number): TPromise<void>;
+    expandGroup(groupIndex: number): DxPromise<void>;
     /**
      * @docid
      * @publicName isItemSelected(itemElement)
@@ -655,7 +655,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reorderItem(itemElement: Element, toItemElement: Element): TPromise<void>;
+    reorderItem(itemElement: Element, toItemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName reorderItem(itemIndex, toItemIndex)
@@ -665,7 +665,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reorderItem(itemIndex: number | any, toItemIndex: number | any): TPromise<void>;
+    reorderItem(itemIndex: number | any, toItemIndex: number | any): DxPromise<void>;
     /**
      * @docid
      * @publicName scrollBy(distance)
@@ -767,7 +767,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): TPromise<void>;
+    updateDimensions(): DxPromise<void>;
 }
 
 /**

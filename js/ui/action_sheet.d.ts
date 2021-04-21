@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -12,7 +12,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -149,7 +149,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<void>;
+    hide(): DxPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -157,7 +157,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<void>;
+    show(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -166,7 +166,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): TPromise<void>;
+    toggle(showing: boolean): DxPromise<void>;
 }
 
 /**
@@ -192,7 +192,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: DxElement, model?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: { component?: dxActionSheet, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType

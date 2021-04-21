@@ -71,7 +71,7 @@ import type {
 import { BaseWidgetProps } from '../../../common/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../../ui/filter_builder';
-import { TPromise } from '../../../../../core/utils/deferred'; // eslint-disable-line import/named
+import { DxPromise } from '../../../../../core/utils/deferred'; // eslint-disable-line import/named
 import type { UserDefinedElement, DxElement } from '../../../../../core/element'; // eslint-disable-line import/named
 import type { template } from '../../../../../core/templates/template';
 import DataSource from '../../../../../data/data_source';
@@ -317,7 +317,7 @@ export class DataGridColumn {
     newData: any,
     value: any,
     currentRowData: any,
-  ) => void | TPromise;
+  ) => void | DxPromise;
 
   @OneWay()
   showEditorAlways?: boolean;
@@ -937,7 +937,7 @@ export class DataGridSorting {
 @ComponentBindings()
 export class DataGridStateStoring {
   @Event()
-  customLoad?: () => TPromise<any>;
+  customLoad?: () => DxPromise<any>;
 
   @Event()
   customSave?: (gridState: any) => any;

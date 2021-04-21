@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -12,7 +12,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -54,7 +54,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -150,7 +150,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<void>;
+    hide(): DxPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -158,7 +158,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<void>;
+    show(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle()
@@ -166,7 +166,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): TPromise<void>;
+    toggle(): DxPromise<void>;
 }
 
 /** @public */

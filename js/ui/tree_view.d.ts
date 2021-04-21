@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -121,7 +121,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    createChildren?: ((parentNode: dxTreeViewNode) => TPromise<any> | Array<any>);
+    createChildren?: ((parentNode: dxTreeViewNode) => DxPromise<any> | Array<any>);
     /**
      * @docid
      * @default null
@@ -416,7 +416,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemData: any): TPromise<void>;
+    collapseItem(itemData: any): DxPromise<void>;
     /**
      * @docid
      * @publicName collapseItem(itemElement)
@@ -425,7 +425,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemElement: Element): TPromise<void>;
+    collapseItem(itemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName collapseItem(key)
@@ -434,7 +434,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(key: any): TPromise<void>;
+    collapseItem(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandAll()
@@ -450,7 +450,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemData: any): TPromise<void>;
+    expandItem(itemData: any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandItem(itemElement)
@@ -459,7 +459,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemElement: Element): TPromise<void>;
+    expandItem(itemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName expandItem(key)
@@ -468,7 +468,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(key: any): TPromise<void>;
+    expandItem(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName getNodes()
@@ -568,7 +568,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): TPromise<void>;
+    updateDimensions(): DxPromise<void>;
     /**
      * @docid
      * @publicName scrollToItem(itemData)
@@ -577,7 +577,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(itemData: any): TPromise<void>;
+    scrollToItem(itemData: any): DxPromise<void>;
     /**
      * @docid
      * @publicName scrollToItem(itemElement)
@@ -586,7 +586,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(itemElement: Element): TPromise<void>;
+    scrollToItem(itemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName scrollToItem(key)
@@ -595,7 +595,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(key: any): TPromise<void>;
+    scrollToItem(key: any): DxPromise<void>;
 }
 
 /**

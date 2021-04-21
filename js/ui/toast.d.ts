@@ -11,7 +11,7 @@ import {
 } from '../core/element';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -72,7 +72,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default true

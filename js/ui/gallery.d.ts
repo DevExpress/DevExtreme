@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -183,7 +183,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    goToItem(itemIndex: number, animation: boolean): TPromise<void>;
+    goToItem(itemIndex: number, animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName nextItem(animation)
@@ -192,7 +192,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    nextItem(animation: boolean): TPromise<void>;
+    nextItem(animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName prevItem(animation)
@@ -201,7 +201,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    prevItem(animation: boolean): TPromise<void>;
+    prevItem(animation: boolean): DxPromise<void>;
 }
 
 /**

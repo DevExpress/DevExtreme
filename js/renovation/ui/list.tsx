@@ -6,7 +6,7 @@ import DataSource, { DataSourceOptions } from '../../data/data_source';
 import { WidgetProps } from './common/widget';
 import LegacyList, { dxListItem } from '../../ui/list';
 import { DxElement } from '../../core/element';
-import { EventExtension, TEvent } from '../../events/index';
+import { EventExtension, DxEvent } from '../../events/index';
 
 // import renderTemplate from '../utils/render_template';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
@@ -78,7 +78,7 @@ export class ListProps extends WidgetProps {
     itemData: any;
     itemElement?: DxElement;
     itemIndex?: number | any;
-    event?: TEvent;
+    event?: DxEvent;
   } & EventExtension) => any) | string;
 
   // @Event() onItemContextMenu?: ((e: {
@@ -95,7 +95,7 @@ export class ListProps extends WidgetProps {
   // @Event()onItemDeleting?: ((e: {
   //   component?: dxList, element?: DxElement, model?: any, itemData?: any,
   //   itemElement?: DxElement, itemIndex?: number | any,
-  //   cancel?: boolean | TPromise
+  //   cancel?: boolean | DxPromise
   // }) => any);
 
   // @Event()onItemHold?: ((e: {

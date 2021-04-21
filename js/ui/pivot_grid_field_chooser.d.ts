@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -24,7 +24,7 @@ export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
 export type ContextMenuPreparingEvent = EventInfo<dxPivotGridFieldChooser> & {
     readonly area?: string;
     readonly field?: PivotGridDataSourceField;
-    readonly event?: TEvent;
+    readonly event?: DxEvent;
     items?: Array<any>;
 }
 

@@ -8,7 +8,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -65,12 +65,12 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
     onShown?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
     /**
      * @docid
-     * @type TPromise|bool
+     * @type DxPromise|bool
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    renderWhen?: TPromise<void> | boolean;
+    renderWhen?: DxPromise<void> | boolean;
     /**
      * @docid
      * @default false

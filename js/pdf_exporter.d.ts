@@ -1,4 +1,4 @@
-import { TPromise } from './core/utils/deferred';
+import { DxPromise } from './core/utils/deferred';
 import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
@@ -118,4 +118,4 @@ export interface PdfExportDataGridProps {
  * @prevFileNamespace DevExpress
  * @public
  */
-export function exportDataGrid(options: PdfExportDataGridProps): TPromise<void>;
+export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>;

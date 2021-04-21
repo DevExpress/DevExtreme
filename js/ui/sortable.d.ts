@@ -10,11 +10,11 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -32,7 +32,7 @@ export interface AddEvent {
     readonly component: dxSortable;
     readonly element: DxElement;
     readonly model?: any;
-    readonly event: TEvent;
+    readonly event: DxEvent;
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -123,7 +123,7 @@ export type ReorderEvent = NativeEventInfo<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem: boolean;
-    promise?: TPromise<void>;
+    promise?: DxPromise<void>;
 }
 
 /** @public */

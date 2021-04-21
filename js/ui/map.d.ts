@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -389,7 +389,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addMarker(markerOptions: any | Array<any>): TPromise<any>;
+    addMarker(markerOptions: any | Array<any>): DxPromise<any>;
     /**
      * @docid
      * @publicName addRoute(routeOptions)
@@ -398,7 +398,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRoute(options: any | Array<any>): TPromise<any>;
+    addRoute(options: any | Array<any>): DxPromise<any>;
     /**
      * @docid
      * @publicName removeMarker(marker)
@@ -407,7 +407,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    removeMarker(marker: any | number | Array<any>): TPromise<void>;
+    removeMarker(marker: any | number | Array<any>): DxPromise<void>;
     /**
      * @docid
      * @publicName removeRoute(route)
@@ -416,7 +416,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    removeRoute(route: any | number | Array<any>): TPromise<void>;
+    removeRoute(route: any | number | Array<any>): DxPromise<void>;
 }
 
 /** @public */

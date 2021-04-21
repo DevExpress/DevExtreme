@@ -10,7 +10,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -18,7 +18,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -43,7 +43,7 @@ import Widget, {
 
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;
-  readonly event?: TEvent;
+  readonly event?: DxEvent;
   readonly itemData?: any;
   readonly itemElement?: DxElement;
   readonly fromData?: any;
@@ -63,7 +63,7 @@ export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
 /** @public */
 export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
-  cancel: boolean | TPromise<boolean>;
+  cancel: boolean | DxPromise<boolean>;
 }
 
 /** @public */
@@ -90,7 +90,7 @@ export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
 /** @public */
 export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
-  cancel: boolean | TPromise<boolean>;
+  cancel: boolean | DxPromise<boolean>;
 }
 
 /** @public */
@@ -115,7 +115,7 @@ export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
 export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
   readonly oldData: any;
   readonly newData: any;
-  cancel?: boolean | TPromise<boolean>;
+  cancel?: boolean | DxPromise<boolean>;
 }
 
 /** @public */

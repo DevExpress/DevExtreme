@@ -12,11 +12,11 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo
 } from '../events/index';
@@ -44,7 +44,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default "content"
@@ -237,7 +237,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<boolean>;
+    hide(): DxPromise<boolean>;
     /**
      * @docid
      * @publicName repaint()
@@ -252,7 +252,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<boolean>;
+    show(): DxPromise<boolean>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -261,7 +261,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): TPromise<boolean>;
+    toggle(showing: boolean): DxPromise<boolean>;
 }
 
 /**

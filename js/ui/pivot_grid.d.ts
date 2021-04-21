@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -657,7 +657,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @prevFileNamespace DevExpress.ui
        * @type_function_return Promise<Object>
        */
-      customLoad?: (() => TPromise<any>),
+      customLoad?: (() => DxPromise<any>),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui

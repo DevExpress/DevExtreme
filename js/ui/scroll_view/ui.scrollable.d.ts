@@ -8,7 +8,7 @@ import {
 } from '../../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../../core/utils/deferred';
 
 import {
@@ -222,5 +222,5 @@ export default class dxScrollable extends DOMComponent {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    update(): TPromise<void>;
+    update(): DxPromise<void>;
 }

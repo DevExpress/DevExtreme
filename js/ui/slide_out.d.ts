@@ -8,7 +8,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -193,7 +193,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hideMenu(): TPromise<void>;
+    hideMenu(): DxPromise<void>;
     /**
      * @docid
      * @publicName showMenu()
@@ -201,7 +201,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showMenu(): TPromise<void>;
+    showMenu(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggleMenuVisibility(showing)
@@ -210,7 +210,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(showing: boolean): TPromise<void>;
+    toggleMenuVisibility(showing: boolean): DxPromise<void>;
 }
 
 /**

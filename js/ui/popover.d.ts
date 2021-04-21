@@ -12,11 +12,11 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -73,7 +73,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default "auto"
@@ -187,7 +187,7 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
  */
 export default class dxPopover extends dxPopup {
     constructor(element: UserDefinedElement, options?: dxPopoverOptions)
-    show(): TPromise<boolean>;
+    show(): DxPromise<boolean>;
     /**
      * @docid
      * @publicName show(target)
@@ -196,7 +196,7 @@ export default class dxPopover extends dxPopup {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(target: string | UserDefinedElement): TPromise<boolean>;
+    show(target: string | UserDefinedElement): DxPromise<boolean>;
 }
 
 /** @public */

@@ -8,7 +8,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -196,7 +196,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(index: number): TPromise<void>;
+    collapseItem(index: number): DxPromise<void>;
     /**
      * @docid
      * @publicName expandItem(index)
@@ -205,7 +205,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(index: number): TPromise<void>;
+    expandItem(index: number): DxPromise<void>;
     /**
      * @docid
      * @publicName updateDimensions()
@@ -213,7 +213,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): TPromise<void>;
+    updateDimensions(): DxPromise<void>;
 }
 
 /**

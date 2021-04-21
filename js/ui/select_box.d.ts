@@ -4,7 +4,7 @@ import {
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -37,7 +37,7 @@ import {
 
 export interface CustomItemCreatingInfo {
     readonly text?: string;
-    customItem?: string | any | TPromise<any>;
+    customItem?: string | any | DxPromise<any>;
 }
 
 /** @public */
