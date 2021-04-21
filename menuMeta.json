@@ -1403,7 +1403,6 @@
           {
             "Title": "Multiple Row Selection",
             "Name": "MultipleRowSelection",
-            "DocUrl": "Guide/UI_Components/TreeList/Selection/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListEmployeesController.cs",
