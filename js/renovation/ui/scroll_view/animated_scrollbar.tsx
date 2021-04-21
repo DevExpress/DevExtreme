@@ -58,7 +58,7 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 }
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled'>;
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'contentPositionChange' | 'contentTranslateOffset' | 'contentTranslateOffsetChange'>;
 
 @Component({
   defaultOptionRules: null,
