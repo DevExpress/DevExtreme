@@ -102,7 +102,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     border: none;
 
     @include dx-font-icon("\f074");
-    @include dx-icon-font-centered-sizing($material-checkbox-intermidiate-icon-size);
+    @include dx-icon-font-centered-sizing($material-checkbox-indeterminate-icon-size);
   }
 }
 
