@@ -25,7 +25,7 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
         aria={aria}
         classes={cssClasses}
         useNative={!!useNativeScrolling}
-        // useSimulatedScrollbar={!useNativeScrolling} waits for the scrollable props
+        useSimulatedScrollbar={!useNativeScrolling}
         useKeyboard={false}
         direction="both"
         bounceEnabled={false}

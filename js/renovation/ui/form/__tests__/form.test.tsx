@@ -39,6 +39,7 @@ describe('Form > Markup', () => {
       const scrollable = form.find(Scrollable);
       expect(scrollable.props()).toEqual({
         useNative: !!useNativeScrolling,
+        useSimulatedScrollbar: !useNativeScrolling,
         useKeyboard: false,
         direction: 'both',
         bounceEnabled: false,
