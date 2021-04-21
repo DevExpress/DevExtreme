@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import translator from 'animation/translator';
 import fx from 'animation/fx';
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from 'ui/scheduler/compactAppointmentsHelper';
 import Widget from 'ui/widget/ui.widget';
@@ -15,7 +15,11 @@ import 'generic_light.css!';
 
 const { test, module, testStart } = QUnit;
 
-testStart(() => initTestMarkup());
+testStart(() => {
+    $('#qunit-fixture').html(
+        '<div id="ddAppointments"></div>\
+        <div id="scheduler"></div>');
+});
 
 const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;
@@ -98,13 +102,14 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
         const helper = new CompactAppointmentsHelper(widgetMock);
         items = items || { data: [{ text: 'a', startDate: new Date(2015, 1, 1) }], colors: [], settings: [] };
 
-        return helper.render($.extend(options, {
+        return helper.render({
+            ...options,
             $container: $('#ddAppointments'),
             coordinates: { top: 0, left: 0 },
-            items: items,
+            items,
             buttonWidth: 200,
             buttonColor: $.Deferred().resolve(color)
-        }));
+        });
     };
 
     test('Appointment collector should be rendered with right class', function(assert) {
