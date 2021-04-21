@@ -64,7 +64,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 };
 
 export type ScrollbarPropsType = ScrollbarProps
-& Pick<ScrollableSimulatedProps, 'contentPositionChange' | 'contentTranslateOffset' | 'contentTranslateOffsetChange' | 'forceGeneratePockets'>
+& Pick<ScrollableSimulatedProps, 'contentPositionChange' | 'contentTranslateOffsetChange' | 'forceGeneratePockets'>
 & Pick<ScrollableProps, 'pullDownEnabled' | 'reachBottomEnabled'>;
 @Component({
   defaultOptionRules: null,

@@ -8,7 +8,6 @@ import {
   ComponentBindings,
   Mutable,
   InternalState,
-  OneWay,
   ForwardRef,
 } from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
@@ -181,7 +180,6 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
 };
 @ComponentBindings()
 export class ScrollableNativeProps extends ScrollableProps {
-  @OneWay() useSimulatedScrollbar?: boolean;
 }
 
 export type ScrollableNativePropsType = ScrollableNativeProps
@@ -543,10 +541,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   getEventArgs(): ScrollEventArgs {
+    const scrollOffset = this.scrollOffset();
+
     return {
       event: this.eventForUserAction,
-      scrollOffset: this.scrollOffset(),
-      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef.current!, 0),
+      scrollOffset,
+      ...getBoundaryProps(this.props.direction, scrollOffset, this.containerRef.current!, 0),
     };
   }
 

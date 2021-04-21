@@ -68,7 +68,6 @@ class ScrollableTestHelper {
       onReachBottom: this.actionHandlers.onReachBottom,
       onBounce: this.actionHandlers.onBounce,
       ...this.options,
-      contentTranslateOffset: { top: 0, left: 0 },
     }) as any;
     this.viewModel.scrollableRef = React.createRef();
     this.viewModel.containerRef = React.createRef();
