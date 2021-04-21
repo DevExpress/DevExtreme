@@ -13,6 +13,7 @@ import eventsEngine from 'events/core/events_engine';
 import visibilityChange, { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
+import errors from 'core/errors';
 import Overlay from 'ui/overlay';
 import * as zIndex from 'ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
@@ -472,6 +473,46 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeStartFired.callCount, 1, 'onResizeStart fired');
         assert.strictEqual(onResizeFired.callCount, 1, 'onResize fired');
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
+    });
+
+    testModule('wrapperAttr option', {
+        beforeEach: function() {
+            this.overlay = $('#overlay').dxOverlay({
+                wrapperAttr: { class: 'someClass' },
+                visible: true
+            }).dxOverlay('instance');
+            this.$content = $(this.overlay.$content());
+            this.$wrapper = this.$content.parent();
+        }
+    }, () => {
+        test('adds attribute on wrapper on init', function(assert) {
+            assert.ok(this.$wrapper.hasClass('someClass'));
+        });
+
+        test('adds attribute on wrapper on runtime', function(assert) {
+            this.overlay.option('wrapperAttr', { someAttr: 'someValue' });
+
+            assert.strictEqual(this.$wrapper.attr('someAttr'), 'someValue');
+        });
+    });
+
+    test('show warning if deprecated "elementAttr" option is used', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            $('#overlay').dxOverlay({
+                elementAttr: { class: 'someClass' },
+            });
+            assert.deepEqual(errors.log.lastCall.args, [
+                'W0001',
+                'dxOverlay',
+                'elementAttr',
+                '21.2',
+                'Use the \'wrapperAttr\' option instead'
+            ], 'args of the log method');
+        } finally {
+            errors.log.restore();
+        }
     });
 });
 
@@ -2263,18 +2304,6 @@ testModule('container', moduleConfig, () => {
         overlay.show();
         assert.strictEqual($('#overlay').children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
         assert.strictEqual($(toSelector(VIEWPORT_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0);
-    });
-
-    test('css classes from overlay should be duplicated to wrapper', function(assert) {
-        const instance = $('#overlayWithClass').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
-
-        assert.ok($wrapper.hasClass('something'), 'class added to wrapper');
-        assert.ok($wrapper.hasClass('another'), 'another class added to wrapper');
-        assert.ok($wrapper.hasClass(OVERLAY_WRAPPER_CLASS), 'classes does not removed from wrapper');
-        assert.ok(!$wrapper.hasClass(OVERLAY_CLASS), 'only user-defined classes added to wrapper');
     });
 
     test('defaultTargetContainer should be .dx-viewport by default', function(assert) {
