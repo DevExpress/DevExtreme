@@ -25,11 +25,12 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
         aria={aria}
         classes={cssClasses}
         useNative={!!useNativeScrolling}
+        // useSimulatedScrollbar={!useNativeScrolling} waits for the scrollable props
         useKeyboard={false}
         direction="both"
         bounceEnabled={false}
         // eslint-disable-next-line react/jsx-props-no-spreading
-        {...restAttributes}
+        // {...restAttributes} waits for the https://trello.com/c/er8aTcsZ/2711-renovation-react-some-events-from-restattributes-may-have-the-same-type-as-react-exists-events
       />
     )
     : (
