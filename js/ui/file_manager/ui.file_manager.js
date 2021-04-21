@@ -555,9 +555,11 @@ class FileManager extends Widget {
                 this.repaint();
                 break;
             case 'fileSystemProvider':
+                this._controller.resetCurrentDirectory();
                 this._controller.setProvider(args.value);
                 this._controller.refresh();
-                this.repaint();
+                this._controller.setCurrentPath(this.option('currentPath'))
+                    .then(() => this.repaint());
                 break;
             case 'allowedFileExtensions':
                 this._controller.setAllowedFileExtensions(args.value);

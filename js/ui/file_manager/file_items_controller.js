@@ -91,7 +91,7 @@ export default class FileItemsController {
         const pathParts = getPathParts(path);
         const rawPath = pathCombine(...pathParts);
         if(this.getCurrentDirectory().fileItem.relativeName === rawPath) {
-            return;
+            return new Deferred().resolve().promise();
         }
 
         return this._setCurrentDirectoryByPathParts(pathParts);
@@ -138,6 +138,10 @@ export default class FileItemsController {
             }
             this._raiseSelectedDirectoryChanged(directoryInfo);
         }
+    }
+
+    resetCurrentDirectory() {
+        this._currentDirectoryInfo = this._rootDirectoryInfo;
     }
 
     getCurrentItems(onlyFiles) {
@@ -475,6 +479,9 @@ export default class FileItemsController {
     }
 
     _executeDataLoad(action, operation) {
+        if(this._dataLoadingDeferred) {
+            return this._dataLoadingDeferred.then(() => this._executeDataLoad(action, operation));
+        }
         this._dataLoading = true;
         this._dataLoadingDeferred = new Deferred();
 
@@ -483,9 +490,10 @@ export default class FileItemsController {
         }
 
         return action().always(() => {
-            this._dataLoadingDeferred.resolve();
+            const tempDeferred = this._dataLoadingDeferred;
             this._dataLoadingDeferred = null;
             this._dataLoading = false;
+            tempDeferred.resolve();
         });
     }
 
