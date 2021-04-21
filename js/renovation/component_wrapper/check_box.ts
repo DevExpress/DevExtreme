@@ -27,9 +27,6 @@ export default class CheckBox extends Editor {
           excludeValidators: ['disabled', 'readOnly'],
         });
         break;
-      case 'text':
-      case 'useInkRipple':
-        break;
       default:
         super._optionChanged(option);
     }

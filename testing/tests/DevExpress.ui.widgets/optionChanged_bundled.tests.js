@@ -42,11 +42,7 @@ define(function(require) {
                     name === 'validationMessageOffset' ||
                     name === 'templatesRenderAsynchronously' ||
                     name === 'ignoreChildEvents' ||
-                    name === '_checkParentVisibility' ||
-                    // NOTE: for renovated components
-                    name === 'defaultValue' ||
-                    name === 'valueChange'
-                ) {
+                    name === '_checkParentVisibility') {
                     return;
                 }
                 this.QUnitAssert.ok(false, 'Option \'' + name + '\' is not processed after runtime change');
@@ -76,7 +72,8 @@ define(function(require) {
         };
 
         $.each(DevExpress.ui, function(componentName, componentConstructor) {
-            if($.inArray(componentName, excludedComponents) !== -1) {
+            if($.inArray(componentName, excludedComponents) !== -1
+                || componentConstructor.IS_RENOVATED_WIDGET) {
                 return;
             }
 

@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import Widget from './widget';
 import Component from './component';
 import ValidationEngine from '../../ui/validation_engine';
 import { extend } from '../../core/utils/extend';
@@ -11,7 +10,7 @@ import OldEditor from '../../ui/editor/editor';
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
 
-export default class Editor extends Widget {
+export default class Editor extends Component {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   showValidationMessageTimeout: any;
 
@@ -101,10 +100,6 @@ export default class Editor extends Widget {
       case 'validationStatus':
         this.option((ValidationEngine as unknown as ({ synchronizeValidationOptions }))
           .synchronizeValidationOptions(option, this.option()));
-        break;
-      case 'validationMessageMode':
-      case 'name':
-      case 'readOnly':
         break;
       default:
         super._optionChanged(option);
