@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import translator from 'animation/translator';
 import fx from 'animation/fx';
-import { SchedulerTestWrapper, createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from 'ui/scheduler/compactAppointmentsHelper';
 import Widget from 'ui/widget/ui.widget';
@@ -13,24 +13,28 @@ import AppointmentAdapter from 'ui/scheduler/appointmentAdapter';
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
 
-QUnit.testStart(() => initTestMarkup());
+const { test, module, testStart } = QUnit;
+
+testStart(() => initTestMarkup());
 
 const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;
 const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 5;
 const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
 
-const integrationCollectorConfig = {
+const baseConfig = {
     beforeEach: function() {
         fx.off = true;
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 };
 
-QUnit.module('Integration: collector', integrationCollectorConfig, () => {
-    QUnit.test('Start date should be equal targetedAppointmentData.startDate in appointment popup form in case recurrent appointment(T882652)', function(assert) {
+module('Integration: collector', baseConfig, () => {
+    test('Start date should be equal targetedAppointmentData.startDate in appointment popup form in case recurrent appointment(T882652)', function(assert) {
         const data = [{
             text: '1',
             startDate: new Date(2017, 4, 16, 9, 30),
@@ -69,16 +73,7 @@ QUnit.module('Integration: collector', integrationCollectorConfig, () => {
     });
 });
 
-const baseConfig = {
-    beforeEach: function() {
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-};
-
-QUnit.module('Integration: Appointments Collector Base Tests', baseConfig, () => {
+module('Integration: Appointments Collector Base Tests', baseConfig, () => {
     const createWidget = () => {
         return new (Widget.inherit({
             option(options) {
@@ -112,7 +107,7 @@ QUnit.module('Integration: Appointments Collector Base Tests', baseConfig, () =>
         }));
     };
 
-    QUnit.test('Appointment collector should be rendered with right class', function(assert) {
+    test('Appointment collector should be rendered with right class', function(assert) {
         const widgetMock = createWidget();
 
         const $collector = renderAppointmentsCollectorContainer({ widgetMock });
@@ -120,7 +115,7 @@ QUnit.module('Integration: Appointments Collector Base Tests', baseConfig, () =>
         assert.ok($collector.dxButton('instance'), 'Container is button');
     });
 
-    QUnit.test('Appointment collector should be painted', function(assert) {
+    test('Appointment collector should be painted', function(assert) {
         const widgetMock = createWidget();
         const color = '#0000ff';
 
@@ -129,7 +124,7 @@ QUnit.module('Integration: Appointments Collector Base Tests', baseConfig, () =>
         assert.equal(new Color($collector.css('backgroundColor')).toHex(), color, 'Color is OK');
     });
 
-    QUnit.test('Appointment collector should not be painted if items have different colors', function(assert) {
+    test('Appointment collector should not be painted if items have different colors', function(assert) {
         const widgetMock = createWidget();
         const color = '#0000ff';
 
@@ -149,7 +144,7 @@ QUnit.module('Integration: Appointments Collector Base Tests', baseConfig, () =>
         assert.notEqual(new Color($collector.css('backgroundColor')).toHex(), color, 'Color is OK');
     });
 
-    QUnit.test('Appointment collector should have a correct markup', function(assert) {
+    test('Appointment collector should have a correct markup', function(assert) {
         const widgetMock = createWidget();
         const $button = renderAppointmentsCollectorContainer({ widgetMock });
         const $collectorContent = $button.find('.dx-scheduler-appointment-collector-content');
@@ -159,103 +154,95 @@ QUnit.module('Integration: Appointments Collector Base Tests', baseConfig, () =>
     });
 });
 
-QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
-    beforeEach: function() {
-        fx.off = true;
-        this.clock = sinon.useFakeTimers();
-        this.tasks = [
-            { startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'c', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'd', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'e', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'f', endDate: new Date(2019, 2, 4, 0, 30) }
-        ];
-        this.getAppointmentColor = ($task, checkedProperty) => {
-            checkedProperty = checkedProperty || 'backgroundColor';
-            return new Color($task.css(checkedProperty)).toHex();
-        };
+module('Integration: Appointments Collector, adaptivityEnabled = false', baseConfig, () => {
+    const tasks = [
+        { startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'c', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'd', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'e', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'f', endDate: new Date(2019, 2, 4, 0, 30) }
+    ];
 
-        this.checkItemDataInDropDownTemplate = function(assert, dataSource, currentDate) {
-            this.createInstance({
-                dataSource: dataSource,
-                height: 600,
-                maxAppointmentsPerCell: 1,
-                currentDate: currentDate,
-                currentView: 'month',
-                views: ['month'],
-                dropDownAppointmentTemplate(itemData) {
-                    assert.ok(dataSource.indexOf(itemData) > -1, 'appointment data contains in the data source');
-                }
-            });
-            this.scheduler.appointments.compact.click();
-        };
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend({
-                dataSource: this.tasks,
-                views: ['month', 'week'],
-                width: 840,
-                currentView: 'month',
-                height: 1000,
-                currentDate: new Date(2019, 2, 4),
-                onContentReady: function(e) {
-                    this.scheduler = new SchedulerTestWrapper(e.component);
-                }.bind(this)
-            }, options)).dxScheduler('instance');
-        };
-    },
-    afterEach: function() {
-        fx.off = false;
-        this.clock.restore();
-    }
-}, () => {
-    QUnit.test('Appointment collector should have correct coordinates on month view', function(assert) {
-        this.createInstance();
+    const createInstance = options => {
+        return createWrapper({
+            dataSource: tasks,
+            views: ['month', 'week'],
+            width: 840,
+            currentView: 'month',
+            height: 1000,
+            currentDate: new Date(2019, 2, 4),
+            ...options
+        });
+    };
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, 'Collector wasn\'t rendered');
-        assert.equal(this.scheduler.appointments.getAppointmentCount(), 6, 'Six appointments were rendered');
+    const getAppointmentColor = ($task, checkedProperty) => {
+        checkedProperty = checkedProperty || 'backgroundColor';
+        return new Color($task.css(checkedProperty)).toHex();
+    };
 
-        this.instance.addAppointment({ startDate: new Date(2019, 2, 4), text: 'd', endDate: new Date(2019, 2, 4, 0, 30) });
+    const checkItemDataInDropDownTemplate = (assert, dataSource, currentDate) => {
+        const scheduler = createInstance({
+            dataSource: dataSource,
+            height: 600,
+            maxAppointmentsPerCell: 1,
+            currentDate: currentDate,
+            currentView: 'month',
+            views: ['month'],
+            dropDownAppointmentTemplate(itemData) {
+                assert.ok(dataSource.indexOf(itemData) > -1, 'appointment data contains in the data source');
+            }
+        });
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Collector was rendered');
-        assert.equal(this.scheduler.appointments.getAppointmentCount(), 6, 'Five appointments were rendered');
+        scheduler.appointments.compact.click();
+    };
 
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+    test('Appointment collector should have correct coordinates on month view', function(assert) {
+        const scheduler = createInstance();
+
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 0, 'Collector wasn\'t rendered');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 6, 'Six appointments were rendered');
+
+        scheduler.instance.addAppointment({ startDate: new Date(2019, 2, 4), text: 'd', endDate: new Date(2019, 2, 4, 0, 30) });
+
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector was rendered');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 6, 'Five appointments were rendered');
+
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         const collectorCoordinates = translator.locate($collector);
-        const expectedCoordinates = this.scheduler.workSpace.getCell(8).position();
+        const expectedCoordinates = scheduler.workSpace.getCell(8).position();
 
         assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left, 1.001, 'Left coordinate is OK');
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    QUnit.test('Appointment collector should have correct size in material theme', function(assert) {
+    test('Appointment collector should have correct size in material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
 
         try {
             themes.isMaterial = () => true;
 
-            this.createInstance({
+            const scheduler = createInstance({
                 currentDate: new Date(2019, 2, 4),
                 views: ['month'],
                 width: 840,
                 height: 500,
-                dataSource: this.tasks,
                 currentView: 'month',
                 firstDayOfWeek: 1
             });
 
-            assert.roughEqual(this.scheduler.appointments.compact.getButtonWidth(), 63, 1, 'Collector width is ok');
-            assert.roughEqual(this.scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
+            assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), 63, 1, 'Collector width is ok');
+            assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
         } finally {
             themes.isMaterial = origIsMaterial;
         }
     });
 
-    QUnit.test('DropDown appointment button should have correct coordinates on weekView, not in allDay panel', function(assert) {
+    test('DropDown appointment button should have correct coordinates on weekView, not in allDay panel', function(assert) {
         const WEEK_VIEW_BUTTON_OFFSET = 5;
 
-        this.createInstance({
+        const scheduler = createInstance({
             currentDate: new Date(2019, 2, 4),
             views: ['week'],
             width: 840,
@@ -268,19 +255,19 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             ]
         });
 
-        const $collector = this.scheduler.appointments.compact.getButton(0);
-        const collectorWidth = this.scheduler.appointments.compact.getButtonWidth(0);
+        const $collector = scheduler.appointments.compact.getButton(0);
+        const collectorWidth = scheduler.appointments.compact.getButtonWidth(0);
         const collectorCoordinates = translator.locate($collector);
-        const expectedCoordinates = this.scheduler.workSpace.getCell(2).position();
-        const cellWidth = this.scheduler.workSpace.getCell(2).outerWidth();
+        const expectedCoordinates = scheduler.workSpace.getCell(2).position();
+        const cellWidth = scheduler.workSpace.getCell(2).outerWidth();
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Collector was rendered');
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector was rendered');
         assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + cellWidth - collectorWidth - WEEK_VIEW_BUTTON_OFFSET, 1.001, 'Left coordinate is OK');
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    QUnit.test('Appointment collector should have correct size when intervalCount is set', function(assert) {
-        this.createInstance({
+    test('Appointment collector should have correct size when intervalCount is set', function(assert) {
+        const scheduler = createInstance({
             views: [{ type: 'month', intervalCount: 2 }],
             width: 850,
             maxAppointmentsPerCell: 2,
@@ -288,7 +275,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             firstDayOfWeek: 1
         });
 
-        this.instance.option('dataSource', [
+        scheduler.instance.option('dataSource', [
             { startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) },
             { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) },
             { startDate: new Date(2019, 2, 4), text: 'c', endDate: new Date(2019, 2, 4, 0, 30) },
@@ -297,18 +284,18 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { startDate: new Date(2019, 2, 4), text: 'f', endDate: new Date(2019, 2, 4, 0, 30) }
         ]);
 
-        const cellWidth = this.scheduler.workSpace.getCell(0).outerWidth();
+        const cellWidth = scheduler.workSpace.getCell(0).outerWidth();
 
-        assert.roughEqual(this.scheduler.appointments.compact.getButtonWidth(), cellWidth - 60, 1.5, 'Collector width is ok');
+        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 60, 1.5, 'Collector width is ok');
 
-        this.instance.option('views', ['month']);
+        scheduler.instance.option('views', ['month']);
 
-        assert.roughEqual(this.scheduler.appointments.compact.getButtonWidth(), cellWidth - 36, 1, 'Collector width is ok');
-        assert.roughEqual(this.scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
+        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 36, 1, 'Collector width is ok');
+        assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
     });
 
-    QUnit.test('Appointment collector count should be ok when there are multiday appointments', function(assert) {
-        this.createInstance({
+    test('Appointment collector count should be ok when there are multiday appointments', function(assert) {
+        const scheduler = createInstance({
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2019, 8, 20),
@@ -316,7 +303,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             height: 650
         });
 
-        this.instance.option('dataSource', [
+        scheduler.instance.option('dataSource', [
             { text: 'a', startDate: new Date(2019, 8, 14), endDate: new Date(2019, 8, 15) },
             { text: 'b', startDate: new Date(2019, 8, 14), endDate: new Date(2019, 8, 15) },
             { text: 'c', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) },
@@ -325,11 +312,11 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { text: 'f', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) }
         ]);
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 3, 'Collectors count is ok');
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 3, 'Collectors count is ok');
     });
 
-    QUnit.test('Many dropDown appts with one multi day task should be grouped correctly', function(assert) {
-        this.createInstance({
+    test('Many dropDown appts with one multi day task should be grouped correctly', function(assert) {
+        const scheduler = createInstance({
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2019, 4, 29),
@@ -337,9 +324,9 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             height: 490
         });
         this.clock.tick(300);
-        this.instance.focus();
+        scheduler.instance.focus();
 
-        this.instance.option('dataSource', [
+        scheduler.instance.option('dataSource', [
             { text: '1', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
             { text: '2', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
             { text: '3', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
@@ -351,13 +338,13 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { text: 'long appt', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 31, 1) }
         ]);
 
-        this.scheduler.appointments.compact.click(0);
+        scheduler.appointments.compact.click(0);
         this.clock.tick(300);
-        assert.equal(this.scheduler.tooltip.getItemCount(), 8, 'There are 8 collapsed appts');
+        assert.equal(scheduler.tooltip.getItemCount(), 8, 'There are 8 collapsed appts');
     });
 
-    QUnit.test('Many collapsed appts should be grouped correctly with one multi day task which started before collector (T525443)', function(assert) {
-        this.createInstance({
+    test('Many collapsed appts should be grouped correctly with one multi day task which started before collector (T525443)', function(assert) {
+        const scheduler = createInstance({
             views: ['month'],
             currentView: 'month',
             maxAppointmentsPerCell: 1,
@@ -366,9 +353,9 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             height: 950
         });
         this.clock.tick(300);
-        this.instance.focus();
+        scheduler.instance.focus();
 
-        this.instance.option('dataSource', [
+        scheduler.instance.option('dataSource', [
             { text: 'long appt', startDate: new Date(2019, 5, 8, 9, 0), endDate: new Date(2019, 5, 20, 9, 15) },
             { text: '1', startDate: new Date(2019, 5, 11, 9, 30), endDate: new Date(2019, 5, 11, 11, 30) },
             { text: '2', startDate: new Date(2019, 5, 11, 12, 0), endDate: new Date(2019, 5, 11, 13, 0) },
@@ -385,13 +372,13 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { text: '13', startDate: new Date(2019, 5, 11, 14, 30), endDate: new Date(2019, 5, 11, 16, 0) }
         ]);
 
-        this.scheduler.appointments.compact.click(0);
+        scheduler.appointments.compact.click(0);
         this.clock.tick(300);
-        assert.equal(this.scheduler.tooltip.getItemCount(), 13, 'There are 13 drop down appts');
+        assert.equal(scheduler.tooltip.getItemCount(), 13, 'There are 13 drop down appts');
     });
 
-    QUnit.test('Appointment collector should have correct coordinates: rtl mode', function(assert) {
-        this.createInstance({
+    test('Appointment collector should have correct coordinates: rtl mode', function(assert) {
+        const scheduler = createInstance({
             currentDate: new Date(2019, 2, 4),
             views: ['month'],
             width: 840,
@@ -400,17 +387,17 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             firstDayOfWeek: 1,
             rtlEnabled: true
         });
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         const collectorCoordinates = translator.locate($collector);
-        const expectedCoordinates = this.scheduler.workSpace.getCell(7).position();
-        const rtlOffset = this.scheduler.workSpace.getCell(7).outerWidth() - 36;
+        const expectedCoordinates = scheduler.workSpace.getCell(7).position();
+        const rtlOffset = scheduler.workSpace.getCell(7).outerWidth() - 36;
 
         assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, 'Left coordinate is OK');
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    QUnit.test('Collapsed appointment should raise the onAppointmentClick event', function(assert) {
+    test('Collapsed appointment should raise the onAppointmentClick event', function(assert) {
         let tooltipItemElement = null;
         let instance;
         const spy = sinon.spy();
@@ -423,7 +410,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30) },
             { startDate: new Date(2015, 2, 4), text: 'g', endDate: new Date(2015, 2, 4, 0, 30) }
         ];
-        this.createInstance({
+        const scheduler = createInstance({
             currentDate: new Date(2015, 2, 4),
             views: ['month'],
             width: 840,
@@ -445,22 +432,22 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             }
         });
 
-        const showAppointmentPopup = this.instance.showAppointmentPopup;
-        this.instance.showAppointmentPopup = spy;
+        const showAppointmentPopup = scheduler.instance.showAppointmentPopup;
+        scheduler.instance.showAppointmentPopup = spy;
         try {
-            instance = this.instance;
+            instance = scheduler.instance;
 
             instance.option('dataSource', appointments);
-            this.scheduler.appointments.compact.click();
-            tooltipItemElement = this.scheduler.tooltip.getItemElement(2).get(0);
-            this.scheduler.tooltip.clickOnItem(2);
+            scheduler.appointments.compact.click();
+            tooltipItemElement = scheduler.tooltip.getItemElement(2).get(0);
+            scheduler.tooltip.clickOnItem(2);
 
         } finally {
-            this.instance.showAppointmentPopup = showAppointmentPopup;
+            scheduler.instance.showAppointmentPopup = showAppointmentPopup;
         }
     });
 
-    QUnit.test('Appointment collector should be painted depend on resource color', function(assert) {
+    test('Appointment collector should be painted depend on resource color', function(assert) {
         const colors = [
             '#ff0000',
             '#ff0000',
@@ -481,7 +468,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { startDate: new Date(2015, 2, 4), text: 'g', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
         ];
 
-        this.createInstance({
+        const scheduler = createInstance({
             currentDate: new Date(2015, 2, 4),
             views: ['month'],
             width: 840,
@@ -499,15 +486,15 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             ]
         });
 
-        this.instance.option('dataSource', appointments);
+        scheduler.instance.option('dataSource', appointments);
 
-        this.scheduler.appointments.compact.click();
-        this.scheduler.tooltip.getMarkers().each((index, element) => {
-            assert.equal(this.getAppointmentColor($(element)), colors[index], 'Appointment color is OK');
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.getMarkers().each((index, element) => {
+            assert.equal(getAppointmentColor($(element)), colors[index], 'Appointment color is OK');
         });
     });
 
-    QUnit.test('Appointment collector should be painted depend on resource color when resourses store is asynchronous', function(assert) {
+    test('Appointment collector should be painted depend on resource color when resourses store is asynchronous', function(assert) {
         const colors = [
             '#ff0000',
             '#ff0000',
@@ -527,7 +514,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
             { startDate: new Date(2015, 2, 4), text: 'g', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
         ];
-        this.createInstance({
+        const scheduler = createInstance({
             currentDate: new Date(2015, 2, 4),
             views: ['month'],
             width: 840,
@@ -557,17 +544,17 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             ]
         });
 
-        this.instance.option('dataSource', appointments);
+        scheduler.instance.option('dataSource', appointments);
         this.clock.tick(300);
 
-        this.scheduler.appointments.compact.click();
-        this.scheduler.tooltip.getMarkers().each((index, element) => {
-            assert.equal(this.getAppointmentColor($(element)), colors[index], 'Appointment color is OK');
+        scheduler.appointments.compact.click();
+        scheduler.tooltip.getMarkers().each((index, element) => {
+            assert.equal(getAppointmentColor($(element)), colors[index], 'Appointment color is OK');
         });
     });
 
-    QUnit.test('Collapsed appointments should not be duplicated when items option change (T503748)', function(assert) {
-        this.createInstance({
+    test('Collapsed appointments should not be duplicated when items option change (T503748)', function(assert) {
+        const scheduler = createInstance({
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2016, 8, 20),
@@ -583,17 +570,17 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             height: 650
         });
 
-        this.instance.addAppointment({
+        scheduler.instance.addAppointment({
             text: 'g',
             startDate: new Date(2016, 8, 12),
             endDate: new Date(2016, 8, 12, 1)
         });
 
-        this.scheduler.appointments.compact.click();
-        assert.equal(this.scheduler.tooltip.getItemCount(), 2, 'There are 3 drop down appts');
+        scheduler.appointments.compact.click();
+        assert.equal(scheduler.tooltip.getItemCount(), 2, 'There are 3 drop down appts');
     });
 
-    QUnit.test('Collapsed appointment should be rendered correctly with expressions on custom template', function(assert) {
+    test('Collapsed appointment should be rendered correctly with expressions on custom template', function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -610,7 +597,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             Text: 'Item 3'
         }];
 
-        this.createInstance({
+        const scheduler = createInstance({
             currentDate: new Date(2015, 1, 4),
             views: ['month'],
             currentView: 'month',
@@ -626,12 +613,12 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             }
         });
 
-        this.scheduler.appointments.compact.click();
-        assert.equal(this.scheduler.tooltip.getItemElement().find('.custom-title').text(), 'Item 2', 'Text is correct on init');
+        scheduler.appointments.compact.click();
+        assert.equal(scheduler.tooltip.getItemElement().find('.custom-title').text(), 'Item 2', 'Text is correct on init');
     });
 
 
-    QUnit.test('Appointment collector should be rendered correctly when appointmentCollectorTemplate is used', function(assert) {
+    test('Appointment collector should be rendered correctly when appointmentCollectorTemplate is used', function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -648,7 +635,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             Text: 'Item 3'
         }];
 
-        this.createInstance({
+        const scheduler = createInstance({
             currentDate: new Date(2015, 1, 4),
             views: ['month'],
             currentView: 'month',
@@ -664,12 +651,12 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             }
         });
 
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         assert.equal($collector.find('.button-title').text(), 'Appointment count is 2', 'Template is applied correctly');
     });
 
-    QUnit.test('dxScheduler should render dropDownAppointment appointment template with render function that returns dom node', function(assert) {
+    test('dxScheduler should render dropDownAppointment appointment template with render function that returns dom node', function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -686,7 +673,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             Text: 'Item 3'
         }];
 
-        this.createInstance({
+        const scheduler = createInstance({
             currentDate: new Date(2015, 1, 4),
             views: ['month'],
             currentView: 'month',
@@ -713,12 +700,12 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             }
         });
 
-        this.scheduler.appointments.compact.click();
-        assert.equal(this.scheduler.tooltip.getItemElement().text(), 'text', 'Text is correct on init');
+        scheduler.appointments.compact.click();
+        assert.equal(scheduler.tooltip.getItemElement().text(), 'text', 'Text is correct on init');
     });
 
-    QUnit.test('Appointment collector should have correct width on timeline view', function(assert) {
-        this.createInstance({
+    test('Appointment collector should have correct width on timeline view', function(assert) {
+        const scheduler = createInstance({
             currentDate: new Date(2015, 2, 4),
             views: [{ type: 'timelineDay', name: 'timelineDay' }],
             width: 850,
@@ -726,7 +713,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             currentView: 'timelineDay'
         });
 
-        this.instance.option('dataSource', [
+        scheduler.instance.option('dataSource', [
             { startDate: new Date(2015, 2, 4), text: 'a', endDate: new Date(2015, 2, 4, 0, 30) },
             { startDate: new Date(2015, 2, 4), text: 'b', endDate: new Date(2015, 2, 4, 0, 30) },
             { startDate: new Date(2015, 2, 4), text: 'c', endDate: new Date(2015, 2, 4, 0, 30) },
@@ -735,13 +722,13 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30) }
         ]);
 
-        const collectorWidth = this.scheduler.appointments.compact.getButtonWidth(0);
-        const cellWidth = this.scheduler.workSpace.getCell(0).outerWidth();
+        const collectorWidth = scheduler.appointments.compact.getButtonWidth(0);
+        const cellWidth = scheduler.workSpace.getCell(0).outerWidth();
 
         assert.roughEqual(collectorWidth, cellWidth - 4, 1.5, 'DropDown button has correct width');
     });
 
-    QUnit.test('The itemData argument of the drop down appointment template is should be instance of the data source', function(assert) {
+    test('The itemData argument of the drop down appointment template is should be instance of the data source', function(assert) {
         const dataSource = [{
             startDate: new Date(2015, 4, 24, 9),
             endDate: new Date(2015, 4, 24, 11),
@@ -758,10 +745,10 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             allDay: true,
             text: 'Task 3'
         }];
-        this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+        checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
-    QUnit.test('The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule', function(assert) {
+    test('The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule', function(assert) {
         const dataSource = [{
             startDate: new Date(2015, 4, 24, 9),
             endDate: new Date(2015, 4, 24, 11),
@@ -781,7 +768,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             recurrenceRule: 'FREQ=DAILY;COUNT=4',
             text: 'Task 3'
         }];
-        this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+        checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
     [{
@@ -872,7 +859,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
         collectorIndex,
         description,
     }) => {
-        QUnit.test(description, function(assert) {
+        test(description, function(assert) {
             const scheduler = createWrapper({
                 dataSource,
                 views: [{
@@ -893,85 +880,78 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
     });
 });
 
-QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
-    beforeEach: function() {
-        fx.off = true;
-        this.clock = sinon.useFakeTimers();
-        this.tasks = [
-            { startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'c', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'd', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'e', endDate: new Date(2019, 2, 4, 0, 30) },
-            { startDate: new Date(2019, 2, 4), text: 'f', endDate: new Date(2019, 2, 4, 0, 30) }
-        ];
-        this.createInstance = (options) => {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, {
-                height: 800,
-                dataSource: this.tasks,
-                adaptivityEnabled: true,
-                views: ['month', 'week'],
-                width: 840,
-                currentView: 'month',
-                currentDate: new Date(2019, 2, 4)
-            })).dxScheduler('instance');
-        };
-        this.scheduler = new SchedulerTestWrapper(this.instance);
-    },
-    afterEach: function() {
-        fx.off = false;
-        this.clock.restore();
-    }
-}, () => {
-    QUnit.test('There are no ordinary appointments on adaptive month view', function(assert) {
-        this.createInstance();
+module('Integration: Appointments Collector, adaptivityEnabled = true', baseConfig, () => {
+    const tasks = [
+        { startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'c', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'd', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'e', endDate: new Date(2019, 2, 4, 0, 30) },
+        { startDate: new Date(2019, 2, 4), text: 'f', endDate: new Date(2019, 2, 4, 0, 30) }
+    ];
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
-        assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
+    const createInstance = options => {
+        return createWrapper({
+            ...options,
+            height: 800,
+            dataSource: tasks,
+            adaptivityEnabled: true,
+            views: ['month', 'week'],
+            width: 840,
+            currentView: 'month',
+            currentDate: new Date(2019, 2, 4)
+        });
+    };
 
-        this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }]);
+    test('There are no ordinary appointments on adaptive month view', function(assert) {
+        const scheduler = createInstance();
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
-        assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
+
+        scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }]);
+
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
     });
 
-    QUnit.test('There are no ordinary appointments on adaptive week view allDay panel', function(assert) {
-        this.createInstance();
+    test('There are no ordinary appointments on adaptive week view allDay panel', function(assert) {
+        const scheduler = createInstance();
 
-        this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
-        this.instance.option('currentView', 'week');
+        scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
+        scheduler.instance.option('currentView', 'week');
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
-        assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
     });
 
-    QUnit.test('Adaptive collector should have correct coordinates', function(assert) {
-        this.createInstance();
+    test('Adaptive collector should have correct coordinates', function(assert) {
+        const scheduler = createInstance();
 
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         const buttonCoordinates = translator.locate($collector);
-        const expectedCoordinates = this.scheduler.workSpace.getCell(8).position();
+        const expectedCoordinates = scheduler.workSpace.getCell(8).position();
 
-        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + this.scheduler.workSpace.getCellHeight() - ADAPTIVE_COLLECTOR_BOTTOM_OFFSET, 1.001, 'Top coordinate is OK');
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + scheduler.workSpace.getCellHeight() - ADAPTIVE_COLLECTOR_BOTTOM_OFFSET, 1.001, 'Top coordinate is OK');
     });
 
-    QUnit.test('Adaptive collector should have correct sizes', function(assert) {
-        this.createInstance();
+    test('Adaptive collector should have correct sizes', function(assert) {
+        const scheduler = createInstance();
 
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         assert.roughEqual($collector.outerWidth(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Width is OK');
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
     });
 
-    QUnit.test('Adaptive collector should have correct size in material theme', function(assert) {
+    test('Adaptive collector should have correct size in material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = () => true;
 
-        this.createInstance();
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const scheduler = createInstance();
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         assert.roughEqual($collector.outerWidth(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Width is OK');
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
@@ -979,72 +959,72 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
         themes.isMaterial = origIsMaterial;
     });
 
-    QUnit.test('Adaptive collector should have correct coordinates on allDay panel', function(assert) {
-        this.createInstance();
+    test('Adaptive collector should have correct coordinates on allDay panel', function(assert) {
+        const scheduler = createInstance();
 
-        this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
-        this.instance.option('currentView', 'week');
+        scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
+        scheduler.instance.option('currentView', 'week');
 
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         const buttonCoordinates = translator.locate($collector);
-        const expectedCoordinates = this.scheduler.workSpace.getAllDayCell(1).position();
+        const expectedCoordinates = scheduler.workSpace.getAllDayCell(1).position();
 
-        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (this.scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(buttonCoordinates.top, (this.scheduler.workSpace.getAllDayCellHeight() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Top coordinate is OK');
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(buttonCoordinates.top, (scheduler.workSpace.getAllDayCellHeight() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Top coordinate is OK');
     });
 
-    QUnit.test('Adaptive collector should have correct sizes on allDayPanel', function(assert) {
-        this.createInstance();
+    test('Adaptive collector should have correct sizes on allDayPanel', function(assert) {
+        const scheduler = createInstance();
 
-        this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
-        this.instance.option('currentView', 'week');
+        scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
+        scheduler.instance.option('currentView', 'week');
 
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         assert.roughEqual($collector.outerWidth(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Width is OK');
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
     });
 
-    QUnit.test('Ordinary appointment count depends on scheduler width on week view', function(assert) {
-        this.createInstance();
+    test('Ordinary appointment count depends on scheduler width on week view', function(assert) {
+        const scheduler = createInstance();
 
-        this.instance.option('width', 600);
+        scheduler.instance.option('width', 600);
 
-        this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
-        this.instance.option('currentView', 'week');
+        scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
+        scheduler.instance.option('currentView', 'week');
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
-        assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
 
-        this.instance.option('width', 200);
+        scheduler.instance.option('width', 200);
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
-        assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'Appointment isn\'t rendered');
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointment isn\'t rendered');
 
-        this.instance.option('width', 1000);
+        scheduler.instance.option('width', 1000);
 
-        assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, 'Collector isn\'t rendered');
-        assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
+        assert.equal(scheduler.appointments.compact.getButtonCount(), 0, 'Collector isn\'t rendered');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
     });
 
-    QUnit.test('Ordinary appointments should have correct sizes on week view', function(assert) {
-        this.createInstance();
+    test('Ordinary appointments should have correct sizes on week view', function(assert) {
+        const scheduler = createInstance();
 
-        this.instance.option('width', 700);
+        scheduler.instance.option('width', 700);
 
-        this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
-        this.instance.option('currentView', 'week');
+        scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
+        scheduler.instance.option('currentView', 'week');
 
-        const $appointment = this.scheduler.appointments.getAppointment(0);
+        const $appointment = scheduler.appointments.getAppointment(0);
 
         assert.roughEqual($appointment.outerWidth(), 50, 1.001, 'Width is OK');
         assert.roughEqual($appointment.outerHeight(), 50, 1.001, 'Height is OK');
 
-        this.instance.option('width', 1000);
+        scheduler.instance.option('width', 1000);
 
-        const $firstAppointment = this.scheduler.appointments.getAppointment(0);
-        const $secondAppointment = this.scheduler.appointments.getAppointment(1);
+        const $firstAppointment = scheduler.appointments.getAppointment(0);
+        const $secondAppointment = scheduler.appointments.getAppointment(1);
 
         assert.roughEqual($firstAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
         assert.roughEqual($firstAppointment.outerHeight(), 50, 1.001, 'Height is OK');
@@ -1053,50 +1033,50 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
         assert.roughEqual($secondAppointment.outerHeight(), 50, 1.001, 'Height is OK');
     });
 
-    QUnit.test('Adaptive collector should have correct coordinates on week view', function(assert) {
-        this.createInstance();
+    test('Adaptive collector should have correct coordinates on week view', function(assert) {
+        const scheduler = createInstance();
 
-        this.instance.option('width', 700);
+        scheduler.instance.option('width', 700);
 
-        this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
-        this.instance.option('currentView', 'week');
+        scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
+        scheduler.instance.option('currentView', 'week');
 
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         const collectorCoordinates = translator.locate($collector);
-        const expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
+        const expectedCoordinates = scheduler.workSpace.getCell(1).position();
 
-        assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, 'Left coordinate is OK');
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    QUnit.test('Adaptive collector should have correct coordinates coordinates on week view in compact theme', function(assert) {
+    test('Adaptive collector should have correct coordinates coordinates on week view in compact theme', function(assert) {
         try {
             this.themeMock = sinon.stub(themes, 'current').returns('generic.light.compact');
-            this.createInstance();
-            this.instance.option('currentView', 'week');
+            const scheduler = createInstance();
+            scheduler.instance.option('currentView', 'week');
 
-            const $collector = this.scheduler.appointments.compact.getButton(0);
+            const $collector = scheduler.appointments.compact.getButton(0);
 
             const collectorCoordinates = translator.locate($collector);
-            const expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
+            const expectedCoordinates = scheduler.workSpace.getCell(1).position();
 
-            assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, 'Left coordinate is OK');
+            assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, 'Left coordinate is OK');
             assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
         } finally {
             this.themeMock.restore();
         }
     });
 
-    QUnit.test('Adaptive collector should have correct sizes on week view', function(assert) {
-        this.createInstance();
+    test('Adaptive collector should have correct sizes on week view', function(assert) {
+        const scheduler = createInstance();
 
-        this.instance.option('width', 700);
+        scheduler.instance.option('width', 700);
 
-        this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
-        this.instance.option('currentView', 'week');
+        scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
+        scheduler.instance.option('currentView', 'week');
 
-        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = scheduler.appointments.compact.getButton(0);
 
         assert.roughEqual($collector.outerWidth(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Width is OK');
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
