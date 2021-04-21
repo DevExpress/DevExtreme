@@ -8205,7 +8205,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttToolbar.items]
          */
-        items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
+        items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
     }
     /**
      * [descr:dxGanttToolbarItem]
@@ -8218,7 +8218,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttToolbarItem.name]
          */
-        name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | string;
+        name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | string;
     }
     /**
      * [descr:dxHtmlEditorOptions]
