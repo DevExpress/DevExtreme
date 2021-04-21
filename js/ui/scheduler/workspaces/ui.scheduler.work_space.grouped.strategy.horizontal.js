@@ -143,24 +143,66 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 
     getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        let groupIndex;
-        let cellIndex;
-        let startCellIndex;
         let startOffset;
         let endOffset;
 
+        const extraOffset = cellWidth / 2;
+
         if(this._workSpace.isGroupedByDate()) {
-            startCellIndex = 0;
+            const firstColumnIndex = 0;
+            const lastColumnIndex = cellCount * this._workSpace._getGroupCount() - 1;
 
-            startOffset = $cells.eq(startCellIndex).offset().left - cellWidth / 2;
-            endOffset = $cells.eq(cellCount * this._workSpace._getGroupCount() - 1).offset().left + cellWidth + cellWidth / 2;
+            startOffset = $cells.eq(firstColumnIndex).offset().left - extraOffset;
+            endOffset = $cells.eq(lastColumnIndex).offset().left + cellWidth + extraOffset;
         } else {
-            cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
-            groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
-            startCellIndex = groupIndex * cellCount;
+            const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
+            const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
+            const startCellIndex = groupIndex * cellCount;
 
-            startOffset = $cells.eq(startCellIndex).offset().left - cellWidth / 2;
-            endOffset = $cells.eq(startCellIndex + cellCount - 1).offset().left + cellWidth + cellWidth / 2;
+            startOffset = $cells.eq(startCellIndex).offset().left - extraOffset;
+            endOffset = $cells.eq(startCellIndex + cellCount - 1).offset().left + cellWidth + extraOffset;
+        }
+
+        return {
+            left: startOffset,
+            right: endOffset,
+            top: 0,
+            bottom: 0
+        };
+    }
+
+    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
+        let startOffset = 0;
+        let endOffset = 0;
+
+        const extraOffset = cellWidth / 2;
+
+        if(this._workSpace.isGroupedByDate()) {
+            const firstColumnIndex = 0;
+            const lastColumnIndex = $cells.length - 1;
+
+            startOffset = $cells.eq(firstColumnIndex).offset().left - extraOffset;
+            endOffset = $cells.eq(lastColumnIndex).offset().left + cellWidth + extraOffset;
+        } else {
+            const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
+            const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
+
+            const cellsGroupToView = this._workSpace
+                ._viewDataProvider._groupedDataMapProvider
+                .groupedDataMap.dateTableGroupedMap[groupIndex];
+
+            if(cellsGroupToView) {
+                const groupRowLength = cellsGroupToView[0].length;
+
+                const groupStartPosition = cellsGroupToView[0][0].position;
+                const groupEndPosition = cellsGroupToView[0][groupRowLength - 1].position;
+
+                const startCell = this._workSpace._dom_getDateCell(groupStartPosition);
+                const endCell = this._workSpace._dom_getDateCell(groupEndPosition);
+
+                startOffset = startCell.offset().left - extraOffset;
+                endOffset = endCell.offset().left + cellWidth + extraOffset;
+            }
         }
 
         return {
