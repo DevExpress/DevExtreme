@@ -9,7 +9,12 @@ export interface ElementsArrayWrapper<T extends Element> { }
  */
 export type DxElement<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>;
 
+/**
+ * @docid
+ * @prevFileNamespace DevExpress.core
+ */
 export type UserDefinedElement<T extends Element = Element> = {} extends ElementWrapper<T> ? T : ElementWrapper<T> | T;
+
 export type UserDefinedElementsArray = {} extends ElementsArrayWrapper<Element> ? Array<Element> : ElementsArrayWrapper<Element>;
 
 export interface InternalElementWrapper<T extends Element> { }

@@ -47,7 +47,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @default "content"
      * @type_function_param1 buttonData:object
-     * @type_function_param2 buttonContent:dxElement
+     * @type_function_param2 buttonContent:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -88,7 +88,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @action

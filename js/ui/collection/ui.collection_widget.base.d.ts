@@ -46,7 +46,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -78,7 +78,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
@@ -94,7 +94,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
@@ -110,7 +110,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
@@ -126,7 +126,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement

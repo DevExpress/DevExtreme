@@ -637,7 +637,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field1 source:string
      * @type_function_param1_field2 target:string
      * @type_function_param1_field3 weight:Number
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -650,7 +650,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field1 label:string
      * @type_function_param1_field2 weightIn:Number
      * @type_function_param1_field3 weightOut:Number
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz

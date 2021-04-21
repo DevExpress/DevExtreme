@@ -245,7 +245,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
+       * @type_function_param1_field4 itemElement:DxElement
        * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 fromData:any
@@ -260,7 +260,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 cancel:boolean
        * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field5 itemElement:DxElement
        * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field8 fromData:any
@@ -275,7 +275,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 cancel:boolean
        * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field5 itemElement:DxElement
        * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field8 fromData:any
@@ -290,7 +290,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 cancel:boolean
        * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field5 itemElement:DxElement
        * @type_function_param1_field6 fromData:any
        */
       onDragStart?: ((e: AppointmentDraggingStartEvent) => void),
@@ -301,7 +301,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
+       * @type_function_param1_field4 itemElement:DxElement
        * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 fromData:any
@@ -417,7 +417,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default "dropDownAppointment"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 contentElement:dxElement
+     * @type_function_param3 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
      * @prevFileNamespace DevExpress.ui
@@ -600,7 +600,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
-     * @type_function_param1_field6 appointmentElement:dxElement
+     * @type_function_param1_field6 appointmentElement:DxElement
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 cancel:Boolean
      * @action
@@ -617,7 +617,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
-     * @type_function_param1_field6 appointmentElement:dxElement
+     * @type_function_param1_field6 appointmentElement:DxElement
      * @type_function_param1_field7 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -633,7 +633,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
-     * @type_function_param1_field6 appointmentElement:dxElement
+     * @type_function_param1_field6 appointmentElement:DxElement
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 cancel:Boolean
      * @action
@@ -694,7 +694,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object|undefined
-     * @type_function_param1_field6 appointmentElement:dxElement
+     * @type_function_param1_field6 appointmentElement:DxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -737,7 +737,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellData:object
-     * @type_function_param1_field5 cellElement:dxElement
+     * @type_function_param1_field5 cellElement:DxElement
      * @type_function_param1_field6 event:event
      * @type_function_param1_field7 cancel:Boolean
      * @action
@@ -753,7 +753,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellData:object
-     * @type_function_param1_field5 cellElement:dxElement
+     * @type_function_param1_field5 cellElement:DxElement
      * @type_function_param1_field6 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -998,7 +998,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default "dropDownAppointment"
        * @type_function_param1 itemData:object
        * @type_function_param2 itemIndex:number
-       * @type_function_param3 contentElement:dxElement
+       * @type_function_param3 contentElement:DxElement
        * @type_function_return string|Element|jQuery
        * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
        */

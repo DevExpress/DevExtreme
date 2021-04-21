@@ -47,7 +47,7 @@ const Drawer = Widget.inherit({
 
             /**
             * @name dxDrawerOptions.contentTemplate
-            * @type_function_param1 contentElement:dxElement
+            * @type_function_param1 contentElement:DxElement
             * @type template|function
             * @hidden
             * @default "content"
@@ -564,7 +564,7 @@ const Drawer = Widget.inherit({
     /**
     * @name dxDrawer.viewContent
     * @publicName viewContent()
-    * @return dxElement
+    * @return DxElement
     * @hidden
     */
     viewContent() {

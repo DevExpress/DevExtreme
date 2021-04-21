@@ -14,7 +14,7 @@ import {
 export interface animationConfig {
     /**
      * @docid
-     * @type_function_param1 $element:dxElement
+     * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
      * @prevFileNamespace DevExpress.animation
      * @public
@@ -65,7 +65,7 @@ export interface animationConfig {
     staggerDelay?: number;
     /**
      * @docid
-     * @type_function_param1 $element:dxElement
+     * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
      * @prevFileNamespace DevExpress.animation
      * @public

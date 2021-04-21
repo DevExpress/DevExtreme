@@ -474,7 +474,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @docid
      * @type_function_param1 e:Object
      * @type_function_param1_field4 area:string
-     * @type_function_param1_field5 cellElement:dxElement
+     * @type_function_param1_field5 cellElement:DxElement
      * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
      * @type_function_param1_field7 rowIndex:number
      * @type_function_param1_field8 columnIndex:number
@@ -496,7 +496,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 area:string
-     * @type_function_param1_field5 cellElement:dxElement
+     * @type_function_param1_field5 cellElement:DxElement
      * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
      * @type_function_param1_field7 rowIndex:number
      * @type_function_param1_field8 columnIndex:number
@@ -515,7 +515,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @type_function_param1_field4 items:Array<Object>
      * @type_function_param1_field5 area:string
      * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
-     * @type_function_param1_field7 cellElement:dxElement
+     * @type_function_param1_field7 cellElement:DxElement
      * @type_function_param1_field8 columnIndex:number
      * @type_function_param1_field9 rowIndex:number
      * @type_function_param1_field10 dataFields:Array<PivotGridDataSourceOptions.fields>

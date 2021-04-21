@@ -158,7 +158,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 titleElement:dxElement
+     * @type_function_param1_field4 titleElement:DxElement
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
@@ -206,7 +206,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:dxElement
+     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

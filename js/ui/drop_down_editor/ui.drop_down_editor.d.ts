@@ -80,7 +80,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
      * @type_function_param1_field2 icon:string
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -161,7 +161,7 @@ export default class dxDropDownEditor extends dxTextBox {
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -169,7 +169,7 @@ export default class dxDropDownEditor extends dxTextBox {
     /**
      * @docid
      * @publicName field()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -170,8 +170,8 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @docid
      * @type_function_param1 dragInfo:object
      * @type_function_param1_field1 itemData:any
-     * @type_function_param1_field2 itemElement:dxElement
-     * @type_function_param2 containerElement:dxElement
+     * @type_function_param1_field2 itemElement:DxElement
+     * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -188,7 +188,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field10 fromData:any
@@ -208,7 +208,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field10 fromData:any
@@ -228,7 +228,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromData:any
      * @action
      * @prevFileNamespace DevExpress.ui

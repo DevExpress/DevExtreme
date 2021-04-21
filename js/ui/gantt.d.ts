@@ -926,7 +926,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     stripLines?: Array<dxGanttStripLine>;
     /**
      * @docid
-     * @type_function_param1 container:dxElement
+     * @type_function_param1 container:DxElement
      * @type_function_param2 task:any
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
@@ -935,7 +935,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskTooltipContentTemplate?: template | ((container: DxElement, task: any) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:dxElement
+     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 start:Date
      * @type_function_param2_field2 end:Date
@@ -946,7 +946,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskTimeTooltipContentTemplate?: template | ((container: DxElement, item: TimeTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:dxElement
+     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 progress:number
      * @type_function_return string|Element|jQuery
@@ -956,7 +956,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskProgressTooltipContentTemplate?: template | ((container: DxElement, item: ProgressTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:dxElement
+     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 cellSize:object
      * @type_function_param2_field2 isMilestone:boolean

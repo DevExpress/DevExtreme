@@ -103,7 +103,7 @@ export default class DOMComponent extends Component {
     /**
      * @docid
      * @publicName element()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.core
      * @public
      */

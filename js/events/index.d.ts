@@ -8,7 +8,7 @@ export interface EventType { }
  * @docid
  * @prevFileNamespace DevExpress.events
  */
-export type DxEvent = {} extends EventType ? dxEvent : EventType;
+export type DxEvent = {} extends EventType ? EventObject : EventType;
 
 /** @public */
 export interface InitializedEventInfo<T> {
@@ -50,13 +50,16 @@ export interface Cancelable {
     cancel?: boolean;
 }
 
+/** @deprecated EventObject */
+export type dxEvent = EventObject;
+
 /**
  * @docid
  * @section commonObjectStructures
  * @prevFileNamespace DevExpress.events
  * @public
  */
-export class dxEvent {
+export class EventObject {
     /**
      * @docid
      * @prevFileNamespace DevExpress.events
@@ -130,7 +133,7 @@ export class dxEvent {
 
 /**
  * @docid
- * @type dxEvent|jQuery.Event
+ * @type EventObject|jQuery.Event
  * @hidden
  * @prevFileNamespace DevExpress.events
  * @deprecated DxEvent
@@ -140,13 +143,13 @@ export type event = DxEvent;
 /**
  * @docid
  * @publicName handler(event, extraParameters)
- * @param1 event:dxEvent
+ * @param1 event:DxEvent
  * @param2 extraParameters:object
  * @return boolean
  * @hidden
  * @prevFileNamespace DevExpress.events
  */
-export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
+export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
 
 /**
  * @docid eventsMethods.off

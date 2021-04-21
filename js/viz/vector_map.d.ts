@@ -779,7 +779,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     /**
      * @docid
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -889,7 +889,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
      * @type_function_param1 info:MapLayerElement
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz

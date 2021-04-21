@@ -85,7 +85,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseSparklineOptions.tooltip.contentTemplate
      * @type_function_param1 pointsInfo:object
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz

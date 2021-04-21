@@ -33,7 +33,7 @@ export type OptionChangedEvent = EventInfo<dxSlideOutView> & ChangedOptionInfo;
 export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**
      * @docid
-     * @type_function_param1 contentElement:dxElement
+     * @type_function_param1 contentElement:DxElement
      * @default "content"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -49,7 +49,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     menuPosition?: 'inverted' | 'normal';
     /**
      * @docid
-     * @type_function_param1 menuElement:dxElement
+     * @type_function_param1 menuElement:DxElement
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -84,7 +84,7 @@ export default class dxSlideOutView extends Widget {
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -100,7 +100,7 @@ export default class dxSlideOutView extends Widget {
     /**
      * @docid
      * @publicName menuContent()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */

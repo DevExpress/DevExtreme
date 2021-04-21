@@ -408,7 +408,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz

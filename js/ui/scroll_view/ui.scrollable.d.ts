@@ -146,7 +146,7 @@ export default class dxScrollable extends DOMComponent {
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */

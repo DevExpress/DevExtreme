@@ -218,7 +218,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 fileSystemItem:FileSystemItem
@@ -236,7 +236,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 fileSystemItem:FileSystemItem
-     * @type_function_param1_field5 targetElement:dxElement
+     * @type_function_param1_field5 targetElement:DxElement
      * @type_function_param1_field6 cancel:boolean
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 viewArea:Enums.FileManagerViewArea
@@ -294,7 +294,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @action
@@ -309,7 +309,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:FileSystemItem
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui

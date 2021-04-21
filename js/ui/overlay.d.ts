@@ -48,7 +48,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
      * @docid
      * @default "content"
-     * @type_function_param1 contentElement:dxElement
+     * @type_function_param1 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -225,7 +225,7 @@ export default class dxOverlay extends Widget {
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */

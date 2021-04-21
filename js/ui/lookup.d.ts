@@ -161,7 +161,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 selectedItem:object
-     * @type_function_param2 fieldElement:dxElement
+     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -189,7 +189,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default "group"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -255,7 +255,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 titleElement:dxElement
+     * @type_function_param1_field4 titleElement:DxElement
      * @type_function_param1_field1 component:dxLookup
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
@@ -421,7 +421,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:dxElement
+     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

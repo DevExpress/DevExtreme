@@ -117,7 +117,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     target?: string | UserDefinedElement;
     /**
      * @docid
-     * @type_function_param1 Element:dxElement
+     * @type_function_param1 Element:DxElement
      * @default 'panel'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -138,7 +138,7 @@ export default class dxDrawer extends Widget {
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */

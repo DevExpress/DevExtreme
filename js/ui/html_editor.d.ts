@@ -440,7 +440,7 @@ export interface dxHtmlEditorMention {
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -482,7 +482,7 @@ export interface dxHtmlEditorMention {
      * @type_function_param1_field1 marker:string
      * @type_function_param1_field2 id:string|number
      * @type_function_param1_field3 value:any
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

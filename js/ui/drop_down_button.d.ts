@@ -92,7 +92,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @docid
      * @default "content"
      * @type_function_param1 data:Array<string,number,Object>|DataSource
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -131,7 +131,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -178,7 +178,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:dxElement
+     * @type_function_param1_field6 itemElement:DxElement
      * @type_function_param1_field1 component:dxDropDownButton
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
@@ -331,7 +331,7 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDropDownButton
-     * @type_function_param1_field2 element:dxElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @prevFileNamespace DevExpress.ui

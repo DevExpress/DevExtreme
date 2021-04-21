@@ -136,7 +136,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 multiTagElement:dxElement
+     * @type_function_param1_field4 multiTagElement:DxElement
      * @type_function_param1_field5 selectedItems:Array<string,number,Object>
      * @type_function_param1_field6 text:string
      * @type_function_param1_field7 cancel:boolean
@@ -215,7 +215,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @docid
      * @default "tag"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemElement:dxElement
+     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

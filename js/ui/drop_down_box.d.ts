@@ -105,7 +105,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @type_function_param1 templateData:object
      * @type_function_param1_field1 component:dxDropDownBox
      * @type_function_param1_field2 value:any
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -130,7 +130,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @docid
      * @default null
      * @type_function_param1 value:object
-     * @type_function_param2 fieldElement:dxElement
+     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

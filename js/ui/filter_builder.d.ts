@@ -250,7 +250,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:any
      * @type_function_param1_field5 setValue(newValue):any
-     * @type_function_param1_field6 editorElement:dxElement
+     * @type_function_param1_field6 editorElement:DxElement
      * @type_function_param1_field7 editorName:string
      * @type_function_param1_field8 dataField:string
      * @type_function_param1_field9 filterOperation:string
@@ -274,7 +274,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @type_function_param1_field4 value:any
      * @type_function_param1_field5 setValue(newValue):any
      * @type_function_param1_field6 cancel:boolean
-     * @type_function_param1_field7 editorElement:dxElement
+     * @type_function_param1_field7 editorElement:DxElement
      * @type_function_param1_field8 editorName:string
      * @type_function_param1_field9 editorOptions:object
      * @type_function_param1_field10 dataField:string
@@ -380,7 +380,7 @@ export interface dxFilterBuilderCustomOperation {
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 field:dxFilterBuilderField
      * @type_function_param1_field3 setValue:function
-     * @type_function_param2 container:dxElement
+     * @type_function_param2 container:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -468,7 +468,7 @@ export interface dxFilterBuilderField {
      * @type_function_param1_field2 filterOperation:string
      * @type_function_param1_field3 field:dxFilterBuilderField
      * @type_function_param1_field4 setValue:function
-     * @type_function_param2 container:dxElement
+     * @type_function_param2 container:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

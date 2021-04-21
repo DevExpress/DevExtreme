@@ -1285,7 +1285,7 @@ export interface Column extends ColumnBase {
     editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.headerCellTemplate
-     * @type_function_param1 columnHeader:dxElement
+     * @type_function_param1 columnHeader:DxElement
      * @type_function_param2 headerInfo:object
      * @type_function_param2_field1 component:dxTreeList
      * @type_function_param2_field2 columnIndex:number

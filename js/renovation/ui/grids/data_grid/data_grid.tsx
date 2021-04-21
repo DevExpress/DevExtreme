@@ -206,7 +206,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
-  ): any/* dxElement | undefined */ {
+  ): any/* DxElement | undefined */ {
     return this.instance?.getCellElement(rowIndex, dataField as string);
   }
 
