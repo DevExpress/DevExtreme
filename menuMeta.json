@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "Name": "Data Grid",
     "Equivalents": "dxDataGrid, dx-data-grid",
@@ -64,6 +64,10 @@
               "/Controllers/ApiControllers/DataGridWebApiController.cs",
               "/Models/Northwind/InMemoryNorthwindContext.cs"
             ],
+            "BackendFiles": [
+              "DataGridWebApiController.cs",
+              "InMemoryNorthwindContext.cs"
+            ],
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
             "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
             "DemoType": "Web"
@@ -78,6 +82,11 @@
               "/Hubs/LiveUpdateSignalRHub.cs",
               "/Models/SignalR/StockTicker.cs",
               "/Models/SignalR/Stock.cs"
+            ],
+            "BackendFiles": [
+              "LiveUpdateSignalRHub.cs",
+              "Stock.cs",
+              "StockTicker.cs"
             ],
             "DemoType": "Web"
           },
@@ -283,6 +292,10 @@
               "/Controllers/ApiControllers/DataGridCollaborativeEditingController.cs",
               "/Hubs/DataGridCollaborativeEditingHub.cs",
               "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "BackendFiles": [
+              "DataGridCollaborativeEditingController.cs",
+              "DataGridCollaborativeEditingHub.cs"
             ]
           },
           {
@@ -296,6 +309,10 @@
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridWebApiController.cs",
               "/Models/Northwind/InMemoryNorthwindContext.cs"
+            ],
+            "BackendFiles": [
+              "DataGridWebApiController.cs",
+              "InMemoryNorthwindContext.cs"
             ]
           },
           {
@@ -326,6 +343,10 @@
               "/Controllers/ApiControllers/DataGridBatchUpdateWebApiController.cs",
               "/Models/Northwind/InMemoryNorthwindContext.cs",
               "/Models/DataGrid/DataChange.cs"
+            ],
+            "BackendFiles": [
+              "DataGridBatchUpdateWebApiController.cs",
+              "InMemoryNorthwindContext.cs"
             ]
           },
           {
@@ -456,7 +477,11 @@
               "/Models/RowReorderingTask.cs",
               "/Models/SampleData/RowReorderingTasks.cs",
               "/Models/DataGrid/InMemoryRowReorderingTasksDataContext.cs"
-            ]
+            ],
+            "BackendFiles": [
+              "DataGridRowReorderingController.cs",
+              "InMemoryRowReorderingTasksDataContext.cs"
+            ]  
           },
           {
             "Title": "Drag & Drop Between Two Grids",
@@ -1236,6 +1261,11 @@
               "/Models/TreeList/EmployeeTask.cs",
               "/Models/SampleData/EmployeeTasks.cs"
             ],
+            "BackendFiles": [
+              "TreeListTasksController.cs",
+              "InMemoryTasksDataContext.cs",
+              "EmployeeTask.cs"
+            ],
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
             "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
             "DemoType": "Web"
@@ -1619,6 +1649,10 @@
               "/Models/InMemoryAppointmentsDataContext.cs",
               "/Controllers/ApiControllers/SchedulerDataController.cs"
             ],
+            "BackendFiles": [
+              "SchedulerDataController.cs",
+              "InMemoryAppointmentsDataContext"
+            ],
             "DemoType": "Web"
           },
           {
@@ -1633,6 +1667,10 @@
               "/Hubs/SchedulerSignalRHub.cs",
               "/Models/Appointment.cs",
               "/Models/SampleData/Appointments.cs"
+            ],
+            "BackendFiles": [
+              "SchedulerSignalRController.cs",
+              "SchedulerSignalRHub.cs"
             ]
           },
           {
@@ -2060,6 +2098,10 @@
               "/Models/Diagram/Employee.cs",
               "/Models/Diagram/InMemoryEmployeesDataContext.cs",
               "/Controllers/ApiControllers/DiagramEmployeesController.cs"
+            ],
+            "BackendFiles": [
+              "DiagramEmployeesController.cs",
+              "InMemoryEmployeesDataContext.cs"
             ]
           }
         ]
@@ -2297,6 +2339,10 @@
               "/Hubs/StockTickDataHub.cs",
               "/Models/SignalRTickData/TickDataService.cs",
               "/Models/SignalRTickData/TickItem.cs"
+            ],
+            "BackendFiles": [
+              "TickDataService.cs",
+              "StockTickDataHub.cs"
             ],
             "DemoType": "Viz"
           },
@@ -4764,6 +4810,9 @@
                 "DemoType": "Web",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/FileManagerImagesApiController.cs"
+                ],
+                "BackendFiles": [
+                  "FileManagerImagesApiController.cs"
                 ]
               }
             ]
@@ -4780,6 +4829,9 @@
                 "DemoType": "Web",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/FileManagerScriptsApiController.cs"
+                ],
+                "BackendFiles": [
+                  "FileManagerScriptsApiController.cs"
                 ]
               },
               {
@@ -4792,6 +4844,10 @@
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/FileManagerDbProviderApiController.cs",
                   "/Models/FileManagement/DbFileProvider.cs"
+                ],
+                "BackendFiles": [
+                  "FileManagerDbProviderApiController.cs",
+                  "DbFileProvider.cs"
                 ]
               },
               {
@@ -4803,6 +4859,10 @@
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/FileManagerAzureProviderApiController.cs",
                   "/Models/FileManagement/AzureBlobFileProvider.cs"
+                ],
+                "BackendFiles": [
+                  "FileManagerAzureProviderApiController.cs",
+                  "AzureBlobFileProvider.cs"
                 ]
               },
               {
@@ -4813,6 +4873,9 @@
                 "DemoType": "Web",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/FileManagerAzureAccessApiController.cs"
+                ],
+                "BackendFiles": [
+                  "FileManagerAzureAccessApiController.cs"
                 ]
               },
               {
@@ -4865,25 +4928,37 @@
             "Widget": "FileUploader",
             "MvcAdditionalFiles": [
               "/Views/FileUploader/SubmissionResult.cshtml"
+            ],
+            "BackendFiles": [
+              "FileUploaderController.cs"
             ]
           },
           {
             "Title": "Async Upload",
             "Name": "FileUploading",
             "DocUrl": "Guide/UI_Components/FileUploader/Upload_Files/Client-Side_Settings/",
-            "Widget": "FileUploader"
+            "Widget": "FileUploader",
+            "BackendFiles": [
+              "FileUploaderController.cs"
+            ]
           },
           {
             "Title": "Validation",
             "Name": "Validation",
             "DocUrl": "",
-            "Widget": "FileUploader"
+            "Widget": "FileUploader",
+            "BackendFiles": [
+              "FileUploaderController.cs"
+            ]
           },
           {
             "Title": "Chunk Uploading",
             "Name": "ChunkUploading",
             "DocUrl": "",
-            "Widget": "FileUploader"
+            "Widget": "FileUploader",
+            "BackendFiles": [
+              "FileUploaderController.cs"
+            ]
           },
           {
             "Title": "Direct Upload to Azure",
@@ -4892,6 +4967,9 @@
             "Widget": "FileUploader",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/FileUploaderAzureAccessApiController.cs"
+            ],
+            "BackendFiles": [
+              "FileUploaderAzureAccessApiController.cs"
             ]
           },
           {
@@ -5141,6 +5219,9 @@
             "Modules": "devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/ListDataController.cs"
+            ],
+            "BackendFiles": [
+              "ListDataController.cs"
             ],
             "DemoType": "Web"
           }
