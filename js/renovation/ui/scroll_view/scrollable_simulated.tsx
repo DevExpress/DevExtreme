@@ -379,14 +379,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Method()
+  /* istanbul ignore next */
   // eslint-disable-next-line class-methods-use-this
   scrollToElement(element: HTMLElement): void { // offset?: Partial<ScrollOffset>
-    /* istanbul ignore next */
     if (!isDefined(element)) {
       return;
     }
 
-    /* istanbul ignore next */
     element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 
     // if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {

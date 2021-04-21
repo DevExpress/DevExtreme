@@ -338,8 +338,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const location = restoreLocation(targetLocation, this.props.direction);
     const containerPosition = this.scrollOffset();
 
-    const top = -ensureDefined(location.top, -containerPosition.top) - containerPosition.top;
-    const left = -ensureDefined(location.left, -containerPosition.left) - containerPosition.left;
+    const top = -containerPosition.top - ensureDefined(location.top, -containerPosition.top);
+    const left = -containerPosition.left - ensureDefined(location.left, -containerPosition.left);
 
     return { top, left };
   }
