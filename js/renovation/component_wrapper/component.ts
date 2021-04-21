@@ -18,6 +18,10 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
   }
 };
 
+function convertToDefaultName(name) {
+  return `default${name[0].toUpperCase()}${name.slice(1)}`;
+}
+
 export default class ComponentWrapper extends DOMComponent {
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
@@ -56,7 +60,7 @@ export default class ComponentWrapper extends DOMComponent {
           [name, defaultValue, eventName]
         ) => ({
           ...options,
-          [name]: defaultValue,
+          [name]: this._viewComponent.defaultProps[convertToDefaultName(name)],
           [eventName]: (value) => this.option(name, value),
         }),
         {}
@@ -162,18 +166,6 @@ export default class ComponentWrapper extends DOMComponent {
       ._options.silent(name, value);
   }
 
-  _patchedOldDefaultOptions() {
-    return  (this as unknown as { _options })
-      ._options._patchedDefault; 
-  }
-
-  _getDefaultOptionValue(name, possibleValue) {
-    const patchedOldDefaultOptions = this._patchedOldDefaultOptions();
-    return patchedOldDefaultOptions.hasOwnProperty(name)
-     ? patchedOldDefaultOptions[name]
-     : possibleValue;
-  }
-
   _patchOptionValues(options) {
     const { allowNull, twoWay, elements } = this._propsInfo;
     const defaultProps = this._viewComponent.defaultProps;
@@ -185,16 +177,12 @@ export default class ComponentWrapper extends DOMComponent {
     Object.keys(defaultProps).forEach(
       setDefaultOptionValue(
         options,
-        (name: string) => this._getDefaultOptionValue(name, defaultProps[name])
+        (name: string) => defaultProps[name]
       )
     );
 
-    twoWay.forEach(([name, defaultValue]) => {
-        setDefaultOptionValue(
-          options, 
-          (name) => this._getDefaultOptionValue(name, defaultValue)
-        )(name);
-      }
+    twoWay.forEach(([name, defaultValue]) =>
+      setDefaultOptionValue(options, () => defaultProps[convertToDefaultName(name)])(name)
     );
 
     elements.forEach((name: string) => {
