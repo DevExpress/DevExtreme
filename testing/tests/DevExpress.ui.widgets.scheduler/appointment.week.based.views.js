@@ -11,7 +11,6 @@ import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import dateSerialization from 'core/utils/date_serialization';
 import {
-    SchedulerTestWrapper,
     initTestMarkup,
     asyncAssert,
     createWrapper,
@@ -34,38 +33,27 @@ const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
 const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
 
+const createInstanceBase = (options, clock) => {
+    const scheduler = createWrapper({
+        height: 600,
+        ...options,
+    });
+
+    clock.tick(300);
+    scheduler.instance.focus();
+
+    return scheduler;
+};
+
+const getAppointmentColor = ($task, checkedProperty) => {
+    checkedProperty = checkedProperty || 'backgroundColor';
+    return new Color($task.css(checkedProperty)).toHex();
+};
+
 module('Integration: Appointment Day, Week views', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options,
-                {
-                    height: options && options.height || 600
-                })
-            ).dxScheduler('instance');
-
-            this.clock.tick(300);
-            this.instance.focus();
-
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
-        this.getAppointmentColor = function($task, checkedProperty) {
-            checkedProperty = checkedProperty || 'backgroundColor';
-            return new Color($task.css(checkedProperty)).toHex();
-        };
         this.clock = sinon.useFakeTimers();
-        this.tasks = [
-            {
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 12, 0)
-            }
-        ];
     },
     afterEach: function() {
         fx.off = false;
@@ -89,15 +77,15 @@ module('Integration: Appointment Day, Week views', {
                 ]
             });
 
-            this.createInstance({
+            const scheduler = createInstanceBase({
                 views: ['day', 'week'],
                 currentView: 'day',
                 dataSource: data,
                 currentDate: new Date(2015, 1, 9)
-            });
+            }, this.clock);
 
-            const dataSourceItems = this.instance.option('dataSource').items();
-            const appointmentsItems = this.instance.getAppointmentsInstance().option('items');
+            const dataSourceItems = scheduler.instance.option('dataSource').items();
+            const appointmentsItems = scheduler.instance.getAppointmentsInstance().option('items');
 
             $.each(dataSourceItems, function(index, item) {
                 assert.equal(appointmentsItems[index].itemData, item, 'Item is correct');
@@ -105,7 +93,7 @@ module('Integration: Appointment Day, Week views', {
         });
 
         test('Short tasks should have a right height (T725948)', function(assert) {
-            this.createInstance({
+            const scheduler = createInstanceBase({
                 dataSource: [
                     {
                         endDate: '2019-03-20T12:06:41.000Z',
@@ -118,18 +106,18 @@ module('Integration: Appointment Day, Week views', {
                 currentDate: new Date(2019, 2, 20),
                 firstDayOfWeek: 1,
                 cellDuration: 15
-            });
+            }, this.clock);
 
             this.clock.tick();
 
-            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+            const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
             assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
         });
 
         [true, false].forEach((renovateRender) => {
             test(`DblClick on appointment should not affect the related cell start date (T395620) when renovateRender is ${renovateRender}`, function(assert) {
-                this.createInstance({
+                const scheduler = createInstanceBase({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: [
                         {
@@ -145,74 +133,84 @@ module('Integration: Appointment Day, Week views', {
                     ],
                     height: 600,
                     renovateRender,
-                });
+                }, this.clock);
 
-                sinon.stub(this.instance, 'showAppointmentPopup');
+                sinon.stub(scheduler.instance, 'showAppointmentPopup');
 
                 try {
-                    const appointment = this.scheduler.appointmentList[0];
+                    const appointment = scheduler.appointmentList[0];
                     const apptData = appointment.data;
 
                     apptData.startDate = new Date(2015, 1, 9, 2);
 
                     appointment.dbClick();
 
-                    const cell = this.scheduler.workSpace.getCell(2, 0).get(0);
+                    const cell = scheduler.workSpace.getCell(2, 0).get(0);
 
-                    const relatedCellData = !this.instance.option('renovateRender')
+                    const relatedCellData = !scheduler.instance.option('renovateRender')
                         ? dataUtils.data(cell, 'dxCellData').startDate
-                        : this.instance.getWorkSpace().getCellData($(cell)).startDate;
+                        : scheduler.instance.getWorkSpace().getCellData($(cell)).startDate;
 
                     assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), 'Cell start date is OK');
                 } finally {
-                    this.instance.showAppointmentPopup.restore();
+                    scheduler.instance.showAppointmentPopup.restore();
                 }
             });
         });
     });
 
     supportedScrollingModes.forEach(scrollingMode => {
-        module(`Scrolling mode ${scrollingMode}`, {
-            beforeEach: function() {
-                const createInstance = this.createInstance.bind(this);
-                this.createInstance = options => {
-                    options = options || {};
-                    $.extend(
-                        true,
-                        options,
-                        {
-                            scrolling: {
-                                mode: scrollingMode
-                            }
-                        }
-                    );
-
-                    createInstance(options);
-
-                    if(scrollingMode === 'virtual') {
-                        const virtualScrollingDispatcher = this.instance.getWorkSpace().virtualScrollingDispatcher;
-                        if(virtualScrollingDispatcher) {
-                            virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-                        }
+        const createInstance = (options, clock) => {
+            options = options || {};
+            $.extend(
+                true,
+                options,
+                {
+                    scrolling: {
+                        mode: scrollingMode
                     }
-                };
+                }
+            );
 
-                this.scrollTo = args => this.instance.getWorkSpace().getScrollable().scrollTo(args);
+            const scheduler = createInstanceBase(options, clock);
+
+            if(scrollingMode === 'virtual') {
+                const virtualScrollingDispatcher = scheduler.instance.getWorkSpace().virtualScrollingDispatcher;
+                if(virtualScrollingDispatcher) {
+                    virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+                }
             }
-        }, () => {
-            test('Scheduler tasks should have a right parent', function(assert) {
-                this.createInstance();
 
-                assert.equal(this.instance.$element().find('.dx-scheduler-work-space .dx-scrollable-content>.dx-scheduler-scrollable-appointments').length, 1, 'scrollable is parent of dxSchedulerAppointments');
+            return scheduler;
+        };
+
+        module(`Scrolling mode ${scrollingMode}`, () => {
+            test('Scheduler tasks should have a right parent', function(assert) {
+                const scheduler = createInstance({}, this.clock);
+
+                assert.equal(scheduler.instance.$element().find('.dx-scheduler-work-space .dx-scrollable-content>.dx-scheduler-scrollable-appointments').length, 1, 'scrollable is parent of dxSchedulerAppointments');
             });
 
             test('Scheduler tasks should have a right height', function(assert) {
-                this.createInstance({ dataSource: this.tasks, currentDate: new Date(2015, 1, 9) });
+                const appointments = [
+                    {
+                        text: 'Task 1',
+                        startDate: new Date(2015, 1, 9, 1, 0),
+                        endDate: new Date(2015, 1, 9, 2, 0)
+                    },
+                    {
+                        text: 'Task 2',
+                        startDate: new Date(2015, 1, 9, 11, 0),
+                        endDate: new Date(2015, 1, 9, 12, 0)
+                    }
+                ];
+
+                const scheduler = createInstance({ dataSource: appointments, currentDate: new Date(2015, 1, 9) }, this.clock);
                 this.clock.tick();
-                const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
+                const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
                 const resultHeight = cellHeight * 2;
 
-                assert.equal(this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).outerHeight(), resultHeight, 'Task has a right height');
+                assert.equal(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).outerHeight(), resultHeight, 'Task has a right height');
             });
 
             test('Appointment dates should not be normalized before sending to the details view', function(assert) {
@@ -225,21 +223,21 @@ module('Integration: Appointment Day, Week views', {
                     endDate: endDate
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: new DataSource({
                         store: [task]
                     }),
                     currentDate: new Date(2015, 3, 23),
                     height: 1500
-                });
+                }, this.clock);
 
                 this.clock.tick();
 
-                const spy = sinon.spy(this.instance._appointmentPopup, 'show');
+                const spy = sinon.spy(scheduler.instance._appointmentPopup, 'show');
 
-                this.scheduler.appointments.click();
+                scheduler.appointments.click();
                 this.clock.tick(300);
-                this.scheduler.tooltip.clickOnItem();
+                scheduler.tooltip.clickOnItem();
 
                 try {
                     const args = spy.getCall(0).args[0];
@@ -248,7 +246,7 @@ module('Integration: Appointment Day, Week views', {
 
                     tooltip.hide();
                 } finally {
-                    this.instance._appointmentPopup.show.restore();
+                    scheduler.instance._appointmentPopup.show.restore();
                 }
             });
 
@@ -259,25 +257,25 @@ module('Integration: Appointment Day, Week views', {
                     endDate: 1429794000000
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: new DataSource({
                         store: [task]
                     }),
                     currentDate: new Date(2015, 3, 23)
-                });
+                }, this.clock);
 
                 this.clock.tick();
 
-                this.instance.showAppointmentPopup(task);
+                scheduler.instance.showAppointmentPopup(task);
 
-                const detailsForm = this.instance.getAppointmentDetailsForm();
+                const detailsForm = scheduler.instance.getAppointmentDetailsForm();
                 const formData = detailsForm.option('formData');
 
                 assert.notEqual(formData, task, 'Appointment data is copied');
             });
 
             test('Non-grid-aligned appointments should be resized correctly', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
                     dataSource: [{
@@ -285,18 +283,18 @@ module('Integration: Appointment Day, Week views', {
                         startDate: new Date(2015, 1, 9, 1),
                         endDate: new Date(2015, 1, 9, 1, 20)
                     }]
-                });
+                }, this.clock);
 
-                const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+                const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
 
-                const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+                const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
                 pointer.dragStart().drag(0, cellHeight).dragEnd();
 
-                assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 2), 'End date is OK');
+                assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 2), 'End date is OK');
             });
 
             test('Non-grid-aligned appointments should be resized correctly, when startDayHour is set', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
                     startDayHour: 9,
@@ -305,20 +303,20 @@ module('Integration: Appointment Day, Week views', {
                         startDate: new Date(2015, 1, 9, 10, 25),
                         endDate: new Date(2015, 1, 9, 11)
                     }]
-                });
+                }, this.clock);
 
-                const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+                const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
 
-                const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-top').eq(0)).start();
+                const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-top').eq(0)).start();
                 pointer.dragStart().drag(0, -3 * cellHeight).dragEnd();
 
-                assert.deepEqual(this.instance.option('dataSource')[0].startDate, new Date(2015, 1, 9, 9), 'Start date is OK');
+                assert.deepEqual(scheduler.instance.option('dataSource')[0].startDate, new Date(2015, 1, 9, 9), 'Start date is OK');
             });
 
             test('Non-grid-aligned appointments should be resized correctly, when endDayHour is set', function(assert) {
                 this.clock.restore();
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
                     endDayHour: 15,
@@ -327,17 +325,17 @@ module('Integration: Appointment Day, Week views', {
                         startDate: new Date(2015, 1, 9, 13),
                         endDate: new Date(2015, 1, 9, 14, 25)
                     }]
-                });
+                }, this.clock);
 
-                this.scrollTo({ y: 1000 });
+                scheduler.instance.getWorkSpace().getScrollable().scrollTo({ y: 1000 });
 
                 return asyncAssert(assert, () => {
-                    const cellHeight = this.instance.$element().find(`.${DATE_TABLE_CELL_CLASS}`).eq(0).outerHeight();
+                    const cellHeight = scheduler.instance.$element().find(`.${DATE_TABLE_CELL_CLASS}`).eq(0).outerHeight();
 
-                    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+                    const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
                     pointer.dragStart().drag(0, cellHeight).dragEnd();
 
-                    assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 15), 'End date is OK');
+                    assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 15), 'End date is OK');
 
                 }, 10);
             });
@@ -347,7 +345,7 @@ module('Integration: Appointment Day, Week views', {
                     store: [{ text: 'Item 1', ownerId: 2, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30) }]
                 });
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 1, 9),
                     groups: ['ownerId'],
                     resources: [{
@@ -356,12 +354,12 @@ module('Integration: Appointment Day, Week views', {
                     }],
                     crossScrollingEnabled: true,
                     width: 1700
-                });
+                }, this.clock);
 
-                const workSpace = this.instance.getWorkSpace();
+                const workSpace = scheduler.instance.getWorkSpace();
                 const spy = sinon.spy(workSpace, 'getCoordinatesByDateInGroup');
 
-                this.instance.option('dataSource', data);
+                scheduler.instance.option('dataSource', data);
 
                 const itemShift = ($('.dx-scheduler-date-table').outerWidth()) * 0.5;
 
@@ -375,7 +373,7 @@ module('Integration: Appointment Day, Week views', {
             });
 
             test('Tasks should have a right color', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 18),
                     dataSource: [
                         {
@@ -424,15 +422,15 @@ module('Integration: Appointment Day, Week views', {
                         }
                     ],
                     width: 800
-                });
+                }, this.clock);
 
-                const tasks = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                const tasks = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
-                assert.equal(this.getAppointmentColor(tasks.eq(0)), '#cb2824', 'Color is OK');
-                assert.equal(this.getAppointmentColor(tasks.eq(1)), '#cb7d7b', 'Color is OK');
-                assert.equal(this.getAppointmentColor(tasks.eq(2)), '#cb2824', 'Color is OK');
-                assert.equal(this.getAppointmentColor(tasks.eq(3)), '#cb7d7b', 'Color is OK');
-                assert.equal(this.getAppointmentColor(tasks.eq(4)), '#cb7d7b', 'Color is OK');
+                assert.equal(getAppointmentColor(tasks.eq(0)), '#cb2824', 'Color is OK');
+                assert.equal(getAppointmentColor(tasks.eq(1)), '#cb7d7b', 'Color is OK');
+                assert.equal(getAppointmentColor(tasks.eq(2)), '#cb2824', 'Color is OK');
+                assert.equal(getAppointmentColor(tasks.eq(3)), '#cb7d7b', 'Color is OK');
+                assert.equal(getAppointmentColor(tasks.eq(4)), '#cb7d7b', 'Color is OK');
             });
 
             test('Ungrouped tasks should have a right color (via the "useColorAsDefault" field)', function(assert) {
@@ -444,7 +442,7 @@ module('Integration: Appointment Day, Week views', {
                         ]
                     });
 
-                    this.createInstance({
+                    const scheduler = createInstance({
                         currentDate: new Date(2015, 1, 9),
                         resources: [{
                             field: 'ownerId',
@@ -453,23 +451,23 @@ module('Integration: Appointment Day, Week views', {
                         }],
                         dataSource: data,
                         width: 700
-                    });
+                    }, this.clock);
 
-                    const tasks = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-                    assert.equal(this.getAppointmentColor(tasks.eq(0)), '#0000ff', 'Color is OK');
-                    assert.equal($.inArray(this.getAppointmentColor(tasks.eq(1)), ['#ff0000', '#0000ff']), -1, 'Color is OK');
+                    const tasks = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
+                    assert.equal(getAppointmentColor(tasks.eq(0)), '#0000ff', 'Color is OK');
+                    assert.equal($.inArray(getAppointmentColor(tasks.eq(1)), ['#ff0000', '#0000ff']), -1, 'Color is OK');
                 } finally {
                     $('.dynamic-styles').remove();
                 }
             });
 
             test('Appointment width should depend on cell width', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 18),
                     maxAppointmentsPerCell: 'auto'
-                });
+                }, this.clock);
 
-                const workSpace = this.instance.getWorkSpace();
+                const workSpace = scheduler.instance.getWorkSpace();
                 const defaultGetCellWidthMethod = workSpace.getCellWidth;
                 const CELL_WIDTH = 777;
 
@@ -477,11 +475,11 @@ module('Integration: Appointment Day, Week views', {
                     return CELL_WIDTH;
                 };
                 try {
-                    this.instance.option('dataSource', [
+                    scheduler.instance.option('dataSource', [
                         { id: 1, text: 'Item 1', startDate: new Date(2015, 2, 18), endDate: new Date(2015, 2, 18, 0, 30) }
                     ]);
 
-                    assert.equal(this.scheduler.appointments.getAppointmentWidth(), CELL_WIDTH - APPOINTMENT_DEFAULT_LEFT_OFFSET, 'Appointment width is OK');
+                    assert.equal(scheduler.appointments.getAppointmentWidth(), CELL_WIDTH - APPOINTMENT_DEFAULT_LEFT_OFFSET, 'Appointment width is OK');
 
                 } finally {
                     workSpace.getCellWidth = defaultGetCellWidthMethod;
@@ -489,7 +487,7 @@ module('Integration: Appointment Day, Week views', {
             });
 
             test('Multi-day appointments with startDate less than startDayHour should be rendered ', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 11, 14),
                     currentView: 'week',
                     endDayHour: 10,
@@ -503,14 +501,14 @@ module('Integration: Appointment Day, Week views', {
                             Status: { StatusId: 0 }
                         }
                     ]
-                });
+                }, this.clock);
 
-                const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
                 assert.equal($appointments.length, 1, 'Appointment was rendered');
             });
 
             test('Appointments should be cleared when currentDate option is changed', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
                     currentView: 'week',
@@ -530,23 +528,23 @@ module('Integration: Appointment Day, Week views', {
                             }
                         })
                     })
-                });
+                }, this.clock);
                 this.clock.tick(300);
-                assert.strictEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
+                assert.strictEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
 
-                this.instance.option('currentDate', new Date(2015, 4, 6));
-                this.clock.tick(300);
-
-                assert.strictEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 0);
-
-                this.instance.option('currentDate', new Date(2015, 3, 16));
+                scheduler.instance.option('currentDate', new Date(2015, 4, 6));
                 this.clock.tick(300);
 
-                assert.equal(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
+                assert.strictEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 0);
+
+                scheduler.instance.option('currentDate', new Date(2015, 3, 16));
+                this.clock.tick(300);
+
+                assert.equal(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
             });
 
             test('Appointments should be cleared when startDayHour option is changed', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
                     currentView: 'day',
@@ -566,23 +564,23 @@ module('Integration: Appointment Day, Week views', {
                             }
                         })
                     })
-                });
+                }, this.clock);
                 this.clock.tick(300);
-                assert.strictEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
+                assert.strictEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
 
-                this.instance.option('startDayHour', 2);
-                this.clock.tick(300);
-
-                assert.strictEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 1);
-
-                this.instance.option('startDayHour', 0);
+                scheduler.instance.option('startDayHour', 2);
                 this.clock.tick(300);
 
-                assert.equal(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
+                assert.strictEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 1);
+
+                scheduler.instance.option('startDayHour', 0);
+                this.clock.tick(300);
+
+                assert.equal(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
             });
 
             test('Appointments should be cleared when endDayHour option is changed', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
                     currentView: 'day',
@@ -602,19 +600,19 @@ module('Integration: Appointment Day, Week views', {
                             }
                         })
                     })
-                });
+                }, this.clock);
                 this.clock.tick(300);
-                assert.strictEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
+                assert.strictEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
 
-                this.instance.option('endDayHour', 2);
-                this.clock.tick(300);
-
-                assert.strictEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 1);
-
-                this.instance.option('endDayHour', 10);
+                scheduler.instance.option('endDayHour', 2);
                 this.clock.tick(300);
 
-                assert.equal(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
+                assert.strictEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 1);
+
+                scheduler.instance.option('endDayHour', 10);
+                this.clock.tick(300);
+
+                assert.equal(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
             });
 
             test('Appointment should be rendered correctly with expressions on init', function(assert) {
@@ -631,7 +629,7 @@ module('Integration: Appointment Day, Week views', {
                     RecRule: 'FREQ=DAILY'
                 }];
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 1, 4),
                     views: ['day'],
                     currentView: 'day',
@@ -641,10 +639,10 @@ module('Integration: Appointment Day, Week views', {
                     endDateExpr: 'End',
                     textExpr: 'Text',
                     recurrenceRuleExpr: 'RecRule'
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(1);
+                const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $recAppointment = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(1);
                 const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
                 assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
@@ -664,16 +662,16 @@ module('Integration: Appointment Day, Week views', {
                 }
                 ];
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 1, 4),
                     views: ['day'],
                     currentView: 'day',
                     firstDayOfWeek: 1,
                     dataSource: appointments,
                     recurrenceRuleExpr: 'RecRule'
-                });
+                }, this.clock);
 
-                const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+                const $recAppointment = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
                 const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
                 assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'def', 'Text is correct on init');
@@ -696,7 +694,7 @@ module('Integration: Appointment Day, Week views', {
                     AppointmentText: 'xyz'
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 1, 4),
                     views: ['day'],
                     currentView: 'day',
@@ -705,15 +703,15 @@ module('Integration: Appointment Day, Week views', {
                     startDateExpr: 'Start',
                     endDateExpr: 'End',
                     textExpr: 'Text',
-                });
+                }, this.clock);
 
-                this.instance.option({
+                scheduler.instance.option({
                     startDateExpr: 'AppointmentStart',
                     endDateExpr: 'AppointmentEnd',
                     textExpr: 'AppointmentText'
                 });
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
                 const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
                 assert.equal($appointment.find('.dx-scheduler-appointment-content .dx-scheduler-appointment-title').eq(0).text(), 'xyz', 'Text is correct on init');
@@ -729,7 +727,7 @@ module('Integration: Appointment Day, Week views', {
                     Text: 'abc'
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 1, 4),
                     views: ['day'],
                     currentView: 'day',
@@ -741,9 +739,9 @@ module('Integration: Appointment Day, Week views', {
                     appointmentTemplate: function(model) {
                         return '<div class=\'custom-title\'>' + model.appointmentData.Text + '</div>';
                     }
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
                 assert.equal($appointment.find('.custom-title').text(), 'abc', 'Text is correct on init');
             });
@@ -754,23 +752,23 @@ module('Integration: Appointment Day, Week views', {
                     endDate: new Date(2016, 2, 1, 5)
                 };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2016, 2, 1),
                     currentView: 'week',
                     firstDayOfWeek: 1,
                     dataSource: [appointment],
                     startDayHour: 3
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $targetCell = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(1);
+                const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $targetCell = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(1);
 
                 assert.roughEqual($appointment.position().top, $targetCell.position().top, 1.001, 'appointment top is correct');
                 assert.roughEqual($appointment.position().left, $targetCell.position().left, 1.001, 'appointment left is correct');
             });
 
             test('Appointment with zero-duration should be rendered correctly (T443143)', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: [{
                         text: 'Website Re-Design Plan',
                         startDate: new Date(2016, 8, 16),
@@ -780,9 +778,9 @@ module('Integration: Appointment Day, Week views', {
                     currentView: 'agenda',
                     views: ['agenda'],
                     height: 600
-                });
+                }, this.clock);
 
-                const $element = this.instance.$element();
+                const $element = scheduler.instance.$element();
                 const $appointments = $element.find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 1, 'Appt is rendered');
@@ -790,7 +788,7 @@ module('Integration: Appointment Day, Week views', {
             });
 
             test('Small appointment should have hidden content information but visible content element(T469453)', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: [{
                         text: 'Meeting',
                         startDate: new Date(2016, 8, 16),
@@ -801,9 +799,9 @@ module('Integration: Appointment Day, Week views', {
                     currentView: 'day',
                     views: ['day'],
                     height: 600
-                });
+                }, this.clock);
 
-                const $appointment = $(this.instance.$element()).find('.dx-scheduler-appointment-empty');
+                const $appointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment-empty');
                 const $appointmentContent = $appointment.find('.dx-scheduler-appointment-content');
                 const $appointmentTitle = $appointmentContent.find('.dx-scheduler-appointment-title');
                 const $appointmentDetails = $appointmentContent.find('.dx-scheduler-appointment-content-details');
@@ -827,7 +825,7 @@ module('Integration: Appointment Day, Week views', {
                     end: new Date(2017, 2, 13, 0, 30)
                 }];
 
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: tasks,
                     currentDate: new Date(2017, 2, 13),
                     currentView: 'week',
@@ -835,12 +833,12 @@ module('Integration: Appointment Day, Week views', {
                     startDateExpr: 'start',
                     endDateExpr: 'end',
                     allDayExpr: 'AllDay'
-                });
-                this.instance.showAppointmentPopup(tasks[0]);
-                this.instance.hideAppointmentPopup();
-                this.instance.showAppointmentPopup(tasks[1]);
+                }, this.clock);
+                scheduler.instance.showAppointmentPopup(tasks[0]);
+                scheduler.instance.hideAppointmentPopup();
+                scheduler.instance.showAppointmentPopup(tasks[1]);
 
-                const detailsForm = this.instance.getAppointmentDetailsForm();
+                const detailsForm = scheduler.instance.getAppointmentDetailsForm();
                 const startDateEditor = detailsForm.getEditor('start');
                 const endDateEditor = detailsForm.getEditor('end');
 
@@ -851,7 +849,7 @@ module('Integration: Appointment Day, Week views', {
             test('Scheduler should not throw error at deferred appointment loading (T518327)', function(assert) {
                 const data = [{ text: 'Task 1', startDate: new Date(2017, 4, 22, 16), endDate: new Date(2017, 4, 24, 1) }];
 
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: new DataSource({
                         store: new CustomStore({
                             load: function() {
@@ -864,10 +862,10 @@ module('Integration: Appointment Day, Week views', {
                     currentDate: new Date(2017, 4, 20),
                     views: ['week', 'day'],
                     currentView: 'week'
-                });
+                }, this.clock);
 
                 const errorLogStub = sinon.stub(errors, 'log');
-                this.instance.option('currentView', 'day');
+                scheduler.instance.option('currentView', 'day');
 
                 assert.notOk(errorLogStub.called, 'Error was not thrown');
                 errorLogStub.restore();
@@ -876,7 +874,7 @@ module('Integration: Appointment Day, Week views', {
             test('Exception should not be thrown on second details view opening if form items was not found', function(assert) {
                 const task = { text: 'Task', startDate: new Date(2017, 2, 13), endDate: new Date(2017, 2, 13, 0, 30) };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: [task],
                     currentDate: new Date(2017, 2, 13),
                     currentView: 'week',
@@ -884,13 +882,13 @@ module('Integration: Appointment Day, Week views', {
                     onAppointmentFormOpening: function(e) {
                         e.form.option('items', []);
                     }
-                });
+                }, this.clock);
 
                 try {
-                    this.instance.showAppointmentPopup(task);
-                    this.instance.hideAppointmentPopup();
+                    scheduler.instance.showAppointmentPopup(task);
+                    scheduler.instance.hideAppointmentPopup();
 
-                    this.instance.showAppointmentPopup(task);
+                    scheduler.instance.showAppointmentPopup(task);
                     assert.ok(true, 'exception is not expected');
                 } catch(e) {
                     assert.ok(false, 'Exception: ' + e);
@@ -901,7 +899,7 @@ module('Integration: Appointment Day, Week views', {
                 const task = { text: 'Task', StartDate: '2016-05-25T09:40:00',
                     EndDate: '2016-05-25T10:40:00' };
 
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: [task],
                     currentDate: new Date(2016, 4, 25),
                     currentView: 'week',
@@ -939,18 +937,18 @@ module('Integration: Appointment Day, Week views', {
                         ]);
                     },
                     height: 800
-                });
+                }, this.clock);
 
-                this.instance.showAppointmentPopup(task, true);
+                scheduler.instance.showAppointmentPopup(task, true);
 
-                const detailsForm = this.instance.getAppointmentDetailsForm();
+                const detailsForm = scheduler.instance.getAppointmentDetailsForm();
                 const startDateEditor = detailsForm.getEditor('StartDate');
 
                 startDateEditor.option('value', '2016-05-25T10:40:00');
 
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick').trigger('dxclick');
 
-                const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 const endDateFormat = dateSerialization.getDateSerializationFormat(dataUtils.data($appointments[1], 'dxItemData').EndDate);
                 assert.deepEqual(endDateFormat, 'yyyy-MM-ddTHH:mm:ss', 'Appointment EndDate format is OK');
@@ -958,7 +956,7 @@ module('Integration: Appointment Day, Week views', {
 
             test('A long appointment should not change start date if resized from the bottom', function(assert) {
                 const expectedStartDate = new Date(2018, 4, 21, 0, 30);
-                this.createInstance({
+                const scheduler = createInstance({
                     views: ['day'],
                     currentView: 'day',
                     currentDate: new Date(2018, 4, 21),
@@ -967,11 +965,11 @@ module('Integration: Appointment Day, Week views', {
                         startDate: expectedStartDate,
                         endDate: new Date(2018, 4, 21, 23, 30),
                     }]
-                });
+                }, this.clock);
 
-                const $element = $(this.instance.element());
+                const $element = $(scheduler.instance.element());
 
-                const workspace = this.instance.getWorkSpace();
+                const workspace = scheduler.instance.getWorkSpace();
                 workspace.getScrollable().scrollTo({ y: 3000 });
 
                 const cellWidth = $element.find(`.${DATE_TABLE_CELL_CLASS}`).eq(0).outerHeight();
@@ -980,13 +978,13 @@ module('Integration: Appointment Day, Week views', {
                 pointer.dragStart().drag(0, -cellWidth);
                 pointer.dragEnd();
 
-                const { startDate } = this.instance.option('dataSource')[0];
+                const { startDate } = scheduler.instance.option('dataSource')[0];
 
                 assert.deepEqual(startDate, expectedStartDate);
             });
 
             test('Tail of long appointment should have a right position, groupByDate = true', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: [
                         { text: 'Task 1', startDate: new Date(2015, 8, 22, 22, 0), endDate: new Date(2015, 8, 23, 21, 0), ownerId: 2 }
                     ],
@@ -1015,16 +1013,16 @@ module('Integration: Appointment Day, Week views', {
                     currentView: 'week',
                     firstDayOfWeek: 1,
                     width: 1600
-                });
+                }, this.clock);
 
-                const $appointmentTail = $(this.instance.$element()).find('.dx-scheduler-work-space .dx-scheduler-appointment').eq(1);
-                const $cell = $(this.instance.$element()).find('.dx-scheduler-work-space .dx-scheduler-date-table-cell').eq(5);
+                const $appointmentTail = $(scheduler.instance.$element()).find('.dx-scheduler-work-space .dx-scheduler-appointment').eq(1);
+                const $cell = $(scheduler.instance.$element()).find('.dx-scheduler-work-space .dx-scheduler-date-table-cell').eq(5);
 
                 assert.roughEqual($appointmentTail.position().left, $cell.position().left, 1.001, 'Tail has a right position');
             });
 
             test('Appointment with equal startDate and endDate should render with 1 minute duration (T817857)', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: [{
                         text: 'Zero minute appointment',
                         startDate: new Date(2019, 8, 1, 10, 0),
@@ -1040,10 +1038,10 @@ module('Integration: Appointment Day, Week views', {
                     startDayHour: 7,
                     endDayHour: 18,
                     height: 580,
-                });
+                }, this.clock);
 
-                assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
-                assert.equal(this.scheduler.appointments.getAppointmentHeight(0), this.scheduler.appointments.getAppointmentHeight(1), 'Appointment heights are equal');
+                assert.strictEqual(scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
+                assert.equal(scheduler.appointments.getAppointmentHeight(0), scheduler.appointments.getAppointmentHeight(1), 'Appointment heights are equal');
             });
 
             [
@@ -1051,7 +1049,7 @@ module('Integration: Appointment Day, Week views', {
                 'timelineMonth'
             ].forEach(viewName => {
                 test(`Appointment with equal startDate and endDate should render in whole cell on ${viewName} view (T858496)`, function(assert) {
-                    this.createInstance({
+                    const scheduler = createInstance({
                         dataSource: [{
                             text: 'Zero-minute appointment',
                             startDate: new Date(2017, 4, 22, 0),
@@ -1066,15 +1064,15 @@ module('Integration: Appointment Day, Week views', {
                         currentDate: new Date(2017, 4, 25),
                         height: 600,
                         width: 3000
-                    });
+                    }, this.clock);
 
-                    assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
-                    assert.equal(this.scheduler.appointments.getAppointmentWidth(0), this.scheduler.appointments.getAppointmentWidth(1), 'Appointment widths are equal');
+                    assert.strictEqual(scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
+                    assert.equal(scheduler.appointments.getAppointmentWidth(0), scheduler.appointments.getAppointmentWidth(1), 'Appointment widths are equal');
                 });
             });
 
             test('Multi-day appointment is hidden in compact collectors according to head and tail coordinates (T835541)', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     dataSource: [{
                         text: 'Appointment 1',
                         startDate: new Date(2017, 4, 22, 10, 45),
@@ -1092,11 +1090,11 @@ module('Integration: Appointment Day, Week views', {
                     width: 500,
                     crossScrollingEnabled: true,
                     maxAppointmentsPerCell: 1,
-                });
+                }, this.clock);
 
-                assert.strictEqual(this.scheduler.appointments.compact.getButtonCount(), 2, 'Appointments are rendered');
+                assert.strictEqual(scheduler.appointments.compact.getButtonCount(), 2, 'Appointments are rendered');
 
-                const tailCoords = translator.locate(this.scheduler.appointments.compact.getButton(1));
+                const tailCoords = translator.locate(scheduler.appointments.compact.getButton(1));
 
                 assert.strictEqual(tailCoords.top, 0, 'Appointment top is correct');
                 assert.roughEqual(tailCoords.left, 196, 2, 'Appointment left is correct');
