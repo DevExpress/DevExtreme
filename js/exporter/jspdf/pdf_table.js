@@ -3,9 +3,14 @@ import { drawPdfTable } from './draw_pdf_table';
 
 export class PdfTable {
     constructor(drawTableBorder, rect, columnWidths) {
+        if(!isDefined(columnWidths)) {
+            throw 'columnWidths is required';
+        }
+
         this.drawTableBorder = drawTableBorder;
         this.rect = rect;
-        this.columnWidths = columnWidths ?? [];
+        this.columnWidths = columnWidths; // TODO
+        this.rowHeights = [];
         this.rows = [];
     }
 
@@ -13,15 +18,8 @@ export class PdfTable {
         return this.rect.x + this.columnWidths.slice(0, cellIndex).reduce((a, b) => a + b, 0);
     }
 
-    getCellY(cellIndex) {
-        let currentYPos = this.rect.y;
-        for(let index = 0; index < this.rows.length - 1; index++) {
-            const cell = this.rows[index][cellIndex];
-            if(isDefined(cell?._rect?.h)) {
-                currentYPos += cell._rect.h;
-            }
-        }
-        return currentYPos;
+    getCellY(rowIndex) {
+        return this.rect.y + this.rowHeights.slice(0, rowIndex).reduce((a, b) => a + b, 0);
     }
 
     addRow(cells, rowHeight) {
@@ -35,6 +33,7 @@ export class PdfTable {
             throw 'rowHeight is required';
         }
         this.rows.push(cells);
+        this.rowHeights.push(rowHeight);
         for(let i = 0; i < cells.length; i++) {
             const currentCell = cells[i];
             if(currentCell.drawLeftBorder === false) {
@@ -57,32 +56,20 @@ export class PdfTable {
                 }
             }
 
-
-            if(!cells[i].skip) {
-                if(!isDefined(cells[i]._rect)) {
-                    cells[i]._rect = {};
-                }
-
-                if(!isDefined(cells[i]._rect.x)) {
-                    cells[i]._rect.x = this.getCellX(i);
-                }
-
-                if(!isDefined(cells[i]._rect.y)) {
-                    cells[i]._rect.y = this.getCellY(i);
-                }
-
+            if(!isDefined(cells[i]._rect)) {
                 const columnWidth = this.columnWidths[i];
-                if(isDefined(columnWidth)) {
-                    if(!isDefined(cells[i]._rect.w)) {
-                        cells[i]._rect.w = columnWidth;
-                    }
-                } else {
-                    // TODO
+                if(!isDefined(columnWidth)) {
+                    throw 'column width is required'; // TODO
                 }
 
-                if(!isDefined(cells[i]._rect.h)) {
-                    cells[i]._rect.h = rowHeight;
-                }
+                cells[i]._rect = {
+                    x: this.getCellX(i),
+                    y: this.getCellY(this.rows.length - 1),
+                    w: columnWidth,
+                    h: rowHeight
+                };
+            } else {
+                // TODO: Will be removed. Keep for BAND tests
             }
         }
     }

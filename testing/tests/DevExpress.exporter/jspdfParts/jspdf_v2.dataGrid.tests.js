@@ -657,9 +657,9 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
 
         let cellIndex = 0;
         const pdfCellRects = [
-            { x: 10, y: 15, h: 36 }, { x: 100, y: 15, w: 110 }, null, // TODO: remove "h: 36" and "w: 110"
-            null, { x: 100, y: 31 }, { x: 150, y: 31 },
-            { x: 10, y: 51 }, { x: 100, y: 51 }, { x: 150, y: 51 },
+            { x: 10, y: 15, w: 90, h: 36 }, { x: 100, y: 15, w: 110, h: 16 }, null, // TODO: remove pdfCellRects
+            null, { x: 100, y: 31, w: 50, h: 20 }, { x: 150, y: 31, w: 60, h: 20 },
+            { x: 10, y: 51, w: 90, h: 24 }, { x: 100, y: 51, w: 50, h: 24 }, { x: 150, y: 51, w: 60, h: 24 },
         ];
         const onCellExporting = ({ pdfCell }) => {
             if(pdfCellRects[cellIndex] === null) {
