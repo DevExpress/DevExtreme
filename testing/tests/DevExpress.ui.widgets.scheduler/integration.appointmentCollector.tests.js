@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import translator from 'animation/translator';
 import fx from 'animation/fx';
-import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { SchedulerTestWrapper, createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from 'ui/scheduler/compactAppointmentsHelper';
 import Widget from 'ui/widget/ui.widget';
@@ -13,11 +13,7 @@ import AppointmentAdapter from 'ui/scheduler/appointmentAdapter';
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
 
-QUnit.testStart(() => {
-    $('#qunit-fixture').html(
-        '<div id="ddAppointments"></div>\
-        <div id="scheduler"></div>');
-});
+QUnit.testStart(() => initTestMarkup());
 
 const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;
@@ -73,16 +69,18 @@ QUnit.module('Integration: collector', integrationCollectorConfig, () => {
     });
 });
 
-QUnit.module('Integration: Appointments Collector Base Tests', {
+const baseConfig = {
     beforeEach: function() {
         fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+};
 
-        this.editing = true;
-        this.rtlEnabled = false;
-        this.buttonWidth = 200;
-        this.color;
-
-        this.widgetMock = new (Widget.inherit({
+QUnit.module('Integration: Appointments Collector Base Tests', baseConfig, () => {
+    const createWidget = () => {
+        return new (Widget.inherit({
             option(options) {
                 if(options === 'appointmentCollectorTemplate') {
                     return 'appointmentCollector';
@@ -94,59 +92,66 @@ QUnit.module('Integration: Appointments Collector Base Tests', {
             },
             createAppointmentAdapter(date) {
                 const schedulerMock = {
-                    fire: (methodName, fieldName, appointment) => {
-                        return appointment[fieldName];
-                    }
+                    fire: (methodName, fieldName, appointment) => appointment[fieldName]
                 };
                 return new AppointmentAdapter(schedulerMock, date);
             }
         }))($('<div>'));
+    };
 
-        this.renderAppointmentsCollectorContainer = (items, options) => {
-            const helper = new CompactAppointmentsHelper(this.widgetMock);
-            items = items || { data: [{ text: 'a', startDate: new Date(2015, 1, 1) }], colors: [], settings: [] };
-            return helper.render($.extend(options, {
-                $container: $('#ddAppointments'),
-                coordinates: { top: 0, left: 0 },
-                items: items,
-                buttonWidth: this.buttonWidth,
-                buttonColor: $.Deferred().resolve(this.color)
-            }));
-        };
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-}, () => {
+    const renderAppointmentsCollectorContainer = ({ widgetMock, items, options, color }) => {
+        const helper = new CompactAppointmentsHelper(widgetMock);
+        items = items || { data: [{ text: 'a', startDate: new Date(2015, 1, 1) }], colors: [], settings: [] };
+
+        return helper.render($.extend(options, {
+            $container: $('#ddAppointments'),
+            coordinates: { top: 0, left: 0 },
+            items: items,
+            buttonWidth: 200,
+            buttonColor: $.Deferred().resolve(color)
+        }));
+    };
+
     QUnit.test('Appointment collector should be rendered with right class', function(assert) {
-        const $collector = this.renderAppointmentsCollectorContainer();
+        const widgetMock = createWidget();
+
+        const $collector = renderAppointmentsCollectorContainer({ widgetMock });
         assert.ok($collector.hasClass('dx-scheduler-appointment-collector'), 'Container is rendered');
         assert.ok($collector.dxButton('instance'), 'Container is button');
     });
 
     QUnit.test('Appointment collector should be painted', function(assert) {
-        this.color = '#0000ff';
-        const $collector = this.renderAppointmentsCollectorContainer();
+        const widgetMock = createWidget();
+        const color = '#0000ff';
 
-        assert.equal(new Color($collector.css('backgroundColor')).toHex(), this.color, 'Color is OK');
+        const $collector = renderAppointmentsCollectorContainer({ widgetMock, color });
+
+        assert.equal(new Color($collector.css('backgroundColor')).toHex(), color, 'Color is OK');
     });
 
     QUnit.test('Appointment collector should not be painted if items have different colors', function(assert) {
-        this.color = '#0000ff';
-        const $collector = this.renderAppointmentsCollectorContainer({
-            data: [
-                { text: 'a', startDate: new Date(2015, 1, 1) },
-                { text: 'b', startDate: new Date(2015, 1, 1) }
-            ],
-            colors: ['#fff000', '#000fff'],
-            settings: []
+        const widgetMock = createWidget();
+        const color = '#0000ff';
+
+        const $collector = renderAppointmentsCollectorContainer({
+            widgetMock,
+            items: {
+                data: [
+                    { text: 'a', startDate: new Date(2015, 1, 1) },
+                    { text: 'b', startDate: new Date(2015, 1, 1) }
+                ],
+                colors: ['#fff000', '#000fff'],
+                settings: []
+            },
+            color
         });
 
-        assert.notEqual(new Color($collector.css('backgroundColor')).toHex(), this.color, 'Color is OK');
+        assert.notEqual(new Color($collector.css('backgroundColor')).toHex(), color, 'Color is OK');
     });
 
     QUnit.test('Appointment collector should have a correct markup', function(assert) {
-        const $button = this.renderAppointmentsCollectorContainer();
+        const widgetMock = createWidget();
+        const $button = renderAppointmentsCollectorContainer({ widgetMock });
         const $collectorContent = $button.find('.dx-scheduler-appointment-collector-content');
 
         assert.equal($collectorContent.length, 1, 'Content is OK');
