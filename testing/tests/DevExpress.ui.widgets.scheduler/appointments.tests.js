@@ -119,11 +119,11 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     appendSingleAppointmentData: (data) => data,
 });
 
-const createInstance = (options, additionalOptions) => {
+const createInstance = (options, subscribesConfig) => {
     const subscribes = createSubscribes(
-        additionalOptions.coordinates,
-        additionalOptions.cellWidth,
-        additionalOptions.cellHeight,
+        subscribesConfig.coordinates,
+        subscribesConfig.cellWidth,
+        subscribesConfig.cellHeight,
     );
 
     const observer = {
