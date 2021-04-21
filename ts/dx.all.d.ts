@@ -7936,6 +7936,10 @@ declare module DevExpress.ui {
          */
         onResourceInserting?: ((e: { component?: dxGantt, element?: DevExpress.core.TElement, model?: any, cancel?: boolean, values?: any }) => any);
         /**
+         * [descr:dxGanttOptions.onResourceManagerDialogShowing]
+         */
+        onResourceManagerDialogShowing?: ((e: { component?: dxGantt, element?: DevExpress.core.TElement, cancel?: boolean, values?: Array<any>, key?: any }) => any);
+        /**
          * [descr:dxGanttOptions.onResourceUnassigned]
          */
         onResourceUnassigned?: ((e: { component?: dxGantt, element?: DevExpress.core.TElement, model?: any, values?: any, key?: any }) => any);
@@ -8135,6 +8139,10 @@ declare module DevExpress.ui {
          */
         scrollToDate(date: Date | number | string): void;
         /**
+         * [descr:dxGantt.showResourceManagerDialog()]
+         */
+        showResourceManagerDialog(): void;
+        /**
          * [descr:dxGantt.unassignResourceFromTask(resourceKey, taskKey)]
          */
         unassignResourceFromTask(resourceKey: any, taskKey: any): void;
@@ -8197,7 +8205,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttToolbar.items]
          */
-        items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
+        items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
     }
     /**
      * [descr:dxGanttToolbarItem]
@@ -8210,7 +8218,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttToolbarItem.name]
          */
-        name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | string;
+        name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | string;
     }
     /**
      * [descr:dxHtmlEditorOptions]
