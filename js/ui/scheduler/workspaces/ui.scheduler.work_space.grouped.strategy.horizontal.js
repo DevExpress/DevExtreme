@@ -155,8 +155,8 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     _createGroupBoundOffset(startCell, endCell, cellWidth) {
         const extraOffset = cellWidth / 2;
 
-        const startOffset = startCell.offset().left - extraOffset;
-        const endOffset = endCell.offset().left + cellWidth + extraOffset;
+        const startOffset = startCell ? startCell.offset().left - extraOffset : 0;
+        const endOffset = endCell ? endCell.offset().left + cellWidth + extraOffset : 0;
 
         return {
             left: startOffset,
