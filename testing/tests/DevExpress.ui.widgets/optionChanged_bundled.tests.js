@@ -19,7 +19,10 @@ define(function(require) {
 
     QUnit.module('OptionChanged', {
         beforeEach: function() {
-            this.$element = $('<div />').appendTo('body');
+            // NOTE: workaround for inferno
+            // component can not be rendered as body first-level child
+            const $container = $('<div />').appendTo('body');
+            this.$element = $('<div />').appendTo($container);
 
             this._originalOptionChanged = Component.prototype._optionChanged;
 
@@ -49,7 +52,7 @@ define(function(require) {
         },
         afterEach: function() {
             Component.prototype._optionChanged = this._originalOptionChanged;
-            this.$element.remove();
+            this.$element.parent().remove();
             executeAsyncMock.teardown();
         }
     }, function() {
@@ -69,7 +72,8 @@ define(function(require) {
         };
 
         $.each(DevExpress.ui, function(componentName, componentConstructor) {
-            if($.inArray(componentName, excludedComponents) !== -1) {
+            if($.inArray(componentName, excludedComponents) !== -1
+                || componentConstructor.IS_RENOVATED_WIDGET) {
                 return;
             }
 
@@ -84,7 +88,6 @@ define(function(require) {
                     const $element = this.$element;
                     const component = $element[componentName](getDefaultOptions(componentName))[componentName]('instance');
                     const options = component.option();
-                    let optionCount = 0;
 
                     component.QUnitAssert = assert;
 
@@ -122,15 +125,16 @@ define(function(require) {
                             return;
                         }
 
+                        const assertOkSpy = sinon.spy(assert, 'ok');
                         component.beginUpdate();
-
                         component._notifyOptionChanged(option, newValue, prevValue);
                         component.endUpdate();
 
-                        optionCount++;
+                        if(assertOkSpy.notCalled) {
+                            assert.ok(true, option);
+                        }
+                        assertOkSpy.restore();
                     });
-
-                    assert.ok(true, optionCount + ' options was checked');
                 });
             }
         });
