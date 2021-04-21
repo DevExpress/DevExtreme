@@ -474,36 +474,26 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
     });
 
-    test('wrapperAttr on init works correctly', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            wrapperAttr: { class: 'someClass' }
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $content = $(overlay.content());
-        const $wrapper = $content.parent();
-
-        assert.ok($wrapper.hasClass('someClass'), 'wrapper attribute set correct');
-    });
-
-    testModule('wrapperAttr option runtime change', {
-        beforeEach: () => {
+    testModule('wrapperAttr option', {
+        beforeEach: function() {
             this.overlay = $('#overlay').dxOverlay({
                 wrapperAttr: { class: 'someClass' }
-            });
+            }).dxOverlay('instance');
             this.$content = $(this.overlay.content());
             this.$wrapper = this.$content.parent();
-        } }, () => {
-        test('wrapperAttr set wrapper class correctly', function(assert) {
+        }
+    }, () => {
+        test('add attribute on wrapper on init', function(assert) {
             assert.ok(this.$wrapper.hasClass('someClass'));
         });
 
-        test('wrapperAttr set new wrapper attribute correctly', function(assert) {
+        test('add attribute on wrapper on runtime', function(assert) {
             this.overlay.option('wrapperAttr', { someAttr: 'someValue' });
 
             assert.strictEqual(this.$wrapper.attr('someAttr'), 'someValue');
         });
 
-        test('setting new wrapperAttr removes old attributes from wrapper', function(assert) {
+        test('removes old attributes from wrapper element on runtime change', function(assert) {
             this.overlay.option('wrapperAttr', { someAttr: 'someValue' });
 
             assert.notOk(this.$wrapper.hasClass('someClass'));
