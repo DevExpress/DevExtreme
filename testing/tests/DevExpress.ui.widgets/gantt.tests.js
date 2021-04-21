@@ -851,6 +851,9 @@ QUnit.module('Toolbar', moduleConfig, () => {
             'separator',
             'zoomIn',
             'zoomOut',
+            'fullScreen',
+            'taskDetails',
+            'resourceManager',
             'separator',
             {
                 widget: 'dxButton',
@@ -1587,6 +1590,28 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         getGanttViewCore(this.instance).commandManager.deassignResourceCommand.execute(toDelete.id.toString());
         this.clock.tick();
         assert.equal(resourceAssignments.length, count, 'resource was not deassigned');
+    });
+    test('resource manager showing', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+        this.instance.showResourceManagerDialog();
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+        const expectedResourceTitleText = messageLocalization.format('dxGantt-dialogResourceManagerTitle');
+        const popupTitleText = $dialog.find('.dx-popup-title').text();
+        assert.equal(expectedResourceTitleText, popupTitleText, 'ResourceManager dialog is shown');
+    });
+    test('resource manager showing - cancel', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceManagerDialogShowing', (e) => { e.cancel = true; });
+        this.clock.tick();
+        this.instance.showResourceManagerDialog();
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 0, 'dialog is not shown');
     });
 });
 

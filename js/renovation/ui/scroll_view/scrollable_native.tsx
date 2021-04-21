@@ -8,7 +8,6 @@ import {
   ComponentBindings,
   Mutable,
   InternalState,
-  OneWay,
   ForwardRef,
 } from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
@@ -17,17 +16,20 @@ import { ScrollViewLoadPanel } from './load_panel';
 
 import { combineClasses } from '../../utils/combine_classes';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
-import { getScrollTopMax } from './utils/get_scroll_top_max';
+import { getAugmentedLocation } from './utils/get_augmented_location';
+import { getBoundaryProps, isReachedBottom } from './utils/get_boundary_props';
+
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
+import browser from '../../../core/utils/browser';
 import { isDefined } from '../../../core/utils/type';
+import { ensureDefined } from '../../../core/utils/common';
 import { BaseWidgetProps } from '../common/base_props';
 import {
   ScrollableProps,
 } from './scrollable_props';
 import { TopPocketProps, TopPocket } from './top_pocket';
 import { BottomPocketProps, BottomPocket } from './bottom_pocket';
-import browser from '../../../core/utils/browser';
 import { nativeScrolling } from '../../../core/utils/support';
 import '../../../events/gesture/emitter.gesture.scroll';
 
@@ -39,8 +41,10 @@ import {
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
 
 import {
-  ensureLocation, normalizeCoordinate,
-  getLocation, getPublicCoordinate, getBoundaryProps,
+  getScrollSign,
+  getLocation,
+  normalizeOffsetLeft,
+  restoreLocation,
 } from './scrollable_utils';
 
 import {
@@ -176,10 +180,9 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
 };
 @ComponentBindings()
 export class ScrollableNativeProps extends ScrollableProps {
-  @OneWay() useSimulatedScrollbar?: boolean;
 }
 
-type ScrollableNativePropsType = ScrollableNativeProps
+export type ScrollableNativePropsType = ScrollableNativeProps
 & Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible'>
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
@@ -263,8 +266,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   update(): void {
-    this.updateSizes();
-    this.onUpdated();
+    if (!this.props.updateManually) {
+      this.updateSizes();
+      this.onUpdated();
+    }
   }
 
   @Method()
@@ -327,44 +332,70 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.unlock();
   }
 
-  @Method()
-  scrollBy(distance: number | Partial<ScrollableLocation>): void {
-    const location = ensureLocation(distance);
+  getOffsetDistance(targetLocation: number | Partial<ScrollableLocation>):
+  { left: number; top: number } {
+    const location = restoreLocation(targetLocation, this.props.direction);
+    const containerPosition = this.scrollOffset();
 
-    if (this.direction.isVertical) {
-      this.containerRef.current!.scrollTop += Math.round(location.top);
-    }
-    if (this.direction.isHorizontal) {
-      this.containerRef.current!.scrollLeft += normalizeCoordinate('left', Math.round(location.left), this.props.rtlEnabled);
-    }
+    const top = -containerPosition.top - ensureDefined(location.top, -containerPosition.top);
+    const left = -containerPosition.left - ensureDefined(location.left, -containerPosition.left);
+
+    return { top, left };
   }
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
-    const location = ensureLocation(targetLocation);
-    const containerPosition = this.scrollOffset();
-
-    const top = location.top - containerPosition.top;
-    const left = location.left - containerPosition.left;
-
-    this.scrollBy({ top, left });
+    this.scrollBy(this.getOffsetDistance(targetLocation));
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
+  scrollBy(distance: number | Partial<ScrollableLocation>): void {
+    const location = getAugmentedLocation(distance);
+
+    if (!location.top && !location.left) {
+      return;
+    }
+
+    const containerEl = this.containerRef.current!;
+    if (this.direction.isVertical) {
+      containerEl.scrollTop += location.top;
+    }
+    if (this.direction.isHorizontal) {
+      containerEl.scrollLeft += getScrollSign(!!this.props.rtlEnabled) * location.left;
+    }
+  }
+
+  @Method()
+  /* istanbul ignore next */
+  // eslint-disable-next-line class-methods-use-this
+  scrollToElement(element: HTMLElement): void { // offset?: Partial<ScrollOffset>
     if (!isDefined(element)) {
       return;
     }
 
-    if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
-      const top = this.getElementLocation(element, DIRECTION_VERTICAL, offset);
-      const left = this.getElementLocation(element, DIRECTION_HORIZONTAL, offset);
+    const { top, left } = this.scrollOffset();
+    element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 
-      this.scrollTo({ top, left });
+    const distance = this.getOffsetDistance({ top, left });
+
+    const containerEl = this.containerRef.current!;
+    if (!this.direction.isHorizontal) {
+      containerEl.scrollLeft += getScrollSign(!!this.props.rtlEnabled) * distance.left;
     }
+
+    if (!this.direction.isVertical) {
+      containerEl.scrollTop += distance.top;
+    }
+    // if (getClosestElement(element, `.${SCROLLABLE_CONTENT_CLASS}`)) {
+    //   const top = this.getElementLocation(element, DIRECTION_VERTICAL, offset);
+    //   const left = this.getElementLocation(element, DIRECTION_HORIZONTAL, offset);
+
+    //   this.scrollTo({ top, left });
+    // }
   }
 
   @Method()
+  /* istanbul ignore next */
   getElementLocation(
     element: HTMLElement,
     direction: ScrollableDirection,
@@ -383,7 +414,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       scrollOffset,
       direction,
       this.containerRef.current!,
-      this.props.rtlEnabled,
     );
   }
 
@@ -399,9 +429,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   scrollOffset(): ScrollableLocation {
+    const { left, top } = this.scrollLocation();
+    const scrollLeftMax = getScrollLeftMax(this.containerRef.current!);
+
     return {
-      left: getPublicCoordinate('left', this.scrollLocation().left, getScrollLeftMax(this.containerRef.current!), this.props.rtlEnabled),
-      top: this.scrollLocation().top,
+      left: normalizeOffsetLeft(left, scrollLeftMax, !!this.props.rtlEnabled),
+      top,
     };
   }
 
@@ -447,6 +480,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.props.onScroll?.(this.getEventArgs());
     this.lastLocation = this.scrollLocation();
 
+    this.handlePocketState();
+  }
+
+  handlePocketState(): void {
     if (this.props.forceGeneratePockets) {
       if (this.topPocketState === TopPocketState.STATE_REFRESHING) {
         return;
@@ -505,10 +542,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   getEventArgs(): ScrollEventArgs {
+    const scrollOffset = this.scrollOffset();
+
     return {
       event: this.eventForUserAction,
-      scrollOffset: this.scrollOffset(),
-      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef.current!, 0),
+      scrollOffset,
+      ...getBoundaryProps(this.props.direction, scrollOffset, this.containerRef.current!, 0),
     };
   }
 
@@ -577,7 +616,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   moveScrollbars(): void {
-    const { top, left } = this.scrollLocation();
+    const { top, left } = this.scrollOffset();
 
     if (this.direction.isHorizontal) {
       const scrollbarEl = this.horizontalScrollbarRef.current;
@@ -841,7 +880,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const { top } = this.scrollLocation();
 
     return this.props.reachBottomEnabled
-      && top - getScrollTopMax(this.containerRef.current!) + this.bottomPocketHeight >= 0.5;
+      && isReachedBottom(this.containerRef.current!, top, this.bottomPocketHeight);
   }
 
   get bottomPocketHeight(): number {

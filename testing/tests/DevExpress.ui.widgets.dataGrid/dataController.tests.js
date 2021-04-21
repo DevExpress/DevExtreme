@@ -125,9 +125,9 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     });
 
     QUnit.test('Initialize array with keyExpr option', function(assert) {
-    // act
-        this.applyOptions({ keyExpr: 'id', dataSource: [] });
-        this.dataController.optionChanged({ name: 'keyExpr' });
+        // act
+        this.option('dataSource', []);
+        this.option('keyExpr', 'id');
 
         // assert
         assert.equal(this.getDataSource().store().key(), 'id', 'keyExpr is assigned to store');
@@ -235,19 +235,12 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     QUnit.test('events rising on second initialize shared dataSource', function(assert) {
         let changedCount = 0;
         const dataSource = createDataSource([]);
-
-        this.applyOptions({
-            dataSource: dataSource
-        });
-
-        this.dataController.optionChanged({ name: 'dataSource' });
-
         this.dataController.changed.add(function(args) {
             changedCount++;
         });
 
         // act
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', dataSource);
 
         // assert
         assert.strictEqual(changedCount, 1, 'changed called');
@@ -257,11 +250,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     QUnit.test('events rising on second initialize not shared dataSource', function(assert) {
         let changedCount = 0;
 
-        this.applyOptions({
-            dataSource: []
-        });
-
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', []);
 
         const dataSource = this.dataController.dataSource()._dataSource;
 
@@ -270,7 +259,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', []);
 
         // assert
         assert.ok(dataSource, 'dataSource created');
@@ -2632,13 +2621,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         dataSource.load();
 
-        this.applyOptions({ dataSource: dataSource });
-
         // act
-        this.dataController.optionChanged({
-            name: 'dataSource',
-            value: dataSource
-        });
+        this.option('dataSource', dataSource);
 
         // assert
         assert.equal(this.dataController.items().length, 3);
@@ -2661,13 +2645,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         dataSource.load();
 
-        this.applyOptions({ dataSource: dataSource });
-
         // act
-        this.dataController.optionChanged({
-            name: 'dataSource',
-            value: dataSource
-        });
+        this.option('dataSource', dataSource);
 
         this.clock.tick();
 
@@ -3884,9 +3863,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     QUnit.test('disabled row render virtualization', function(assert) {
-        this.options.scrolling.rowRenderingMode = 'standard';
-
-        this.dataController.optionChanged({ name: 'scrolling', fullName: 'scrolling.rowRenderingMode' });
+        this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
         this.dataController.viewportSize(9);
         this.clock.tick(0);
@@ -3935,8 +3912,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     QUnit.test('scroll to to the next page after expand', function(assert) {
-        this.options.scrolling.rowRenderingMode = 'standard';
-        this.dataController.optionChanged({ name: 'scrolling' });
+        this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
         this.dataController.viewportSize(9);
         this.clock.tick();
@@ -3967,8 +3943,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     // T641290
     QUnit.test('Search should work correctly when rowRenderingMode is set to \'virtual\'', function(assert) {
     // arrange, act
-        this.options.searchPanel = { text: 'test' };
-        this.dataController.optionChanged({ fullName: 'searchPanel.text', value: 'test' });
+        this.option('searchPanel.text', 'test');
         this.clock.tick();
 
         // assert
@@ -3976,8 +3951,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.pageCount(), 1, 'page count');
 
         // act
-        this.options.searchPanel = { text: '' };
-        this.dataController.optionChanged({ fullName: 'searchPanel.text', value: '' });
+        this.option('searchPanel.text', '');
         this.clock.tick();
 
         // assert
@@ -5321,18 +5295,6 @@ QUnit.module('Filtering', {
                 text: ''
             }
         });
-
-        const originalOption = this.option;
-
-        this.option = function(options, value) {
-            const result = originalOption.apply(this, arguments);
-
-            if(options === 'searchPanel.text' && typeUtils.isDefined(value)) {
-                this.dataController.optionChanged({ fullName: options });
-            }
-
-            return result;
-        };
 
         this.setupFilterableData = function() {
             this.dataSource = createDataSource([
@@ -10463,11 +10425,7 @@ QUnit.module('Summary', {
         this.clock.tick();
 
         // act
-        this.options.sortByGroupSummaryInfo = [{
-            summaryItem: 'count'
-        }];
-
-        this.dataController.optionChanged({ name: 'sortByGroupSummaryInfo' });
+        this.option('sortByGroupSummaryInfo', [{ summaryItem: 'count' }]);
         this.clock.tick();
 
 
@@ -12009,8 +11967,7 @@ QUnit.module('Master Detail', {
         // act
         this.dataController.changeRowExpand(1);
 
-        this.options.masterDetail.enabled = false;
-        this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail.enabled' });
+        this.option('masterDetail.enabled', false);
 
         // assert
         const items = this.dataController.items();
@@ -12028,11 +11985,7 @@ QUnit.module('Master Detail', {
         // act
         this.dataController.changeRowExpand(1);
 
-        const oldMasterDetail = this.options.masterDetail;
-
-        this.options.masterDetail = { enabled: true, autoExpandAll: false };
-
-        this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail', previousValue: oldMasterDetail, value: this.options.masterDetail });
+        this.option('masterDetail', { enabled: true, autoExpandAll: false });
 
         // assert
         assert.ok(this.dataController.isRowExpanded(1), 'row 1 is expanded');
@@ -12044,11 +11997,7 @@ QUnit.module('Master Detail', {
         // act
         this.dataController.changeRowExpand(1);
 
-        const oldMasterDetail = this.options.masterDetail;
-
-        this.options.masterDetail = { enabled: true, autoExpandAll: true };
-
-        this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail', previousValue: oldMasterDetail, value: this.options.masterDetail });
+        this.option('masterDetail', { enabled: true, autoExpandAll: true });
 
         // assert
         assert.ok(this.dataController.isRowExpanded(1), 'row 1 is not expanded');
@@ -12854,7 +12803,6 @@ QUnit.module('Refresh changesOnly', {
 
         // act
         this.option('searchPanel.text', 'Bob');
-        this.dataController.optionChanged({ name: 'searchPanel', fullName: 'searchPanel.text' });
 
         // assert
         const items = this.dataController.items();
@@ -13164,9 +13112,8 @@ QUnit.module('Refresh changesOnly', {
         this.options.repaintChangesOnly = true;
 
         // act
-        this.options.dataSource = createDataSource(this.array.slice(1), { key: 'id' });
 
-        this.dataController.optionChanged({ name: 'dataSource', fullName: 'dataSource', previousValue: this.array, value: this.options.dataSource });
+        this.option('dataSource', createDataSource(this.array.slice(1), { key: 'id' }));
 
         // assert
         const items = this.dataController.items();
@@ -13609,7 +13556,6 @@ QUnit.module('Using DataSource instance', {
 
         // act
         this.option('grouping.autoExpandAll', false);
-        this.dataController.optionChanged({ name: 'grouping' });
 
         this.clock.tick();
 

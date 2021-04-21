@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, OneWay, Event, TwoWay,
+  ComponentBindings, OneWay, Event,
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../common/event_callback.d';
 import {
@@ -23,9 +23,6 @@ export class ScrollableSimulatedProps extends ScrollableProps {
   @Event() onBounce?: EventCallback<ScrollEventArgs>;
 
   @Event() onStop?: EventCallback<ScrollEventArgs>;
-
-  @TwoWay()
-  contentTranslateOffset: { left: number; top: number } = { left: 0, top: 0 };
 
   @Event()
   contentTranslateOffsetChange?: EventCallback<{ left?: number; top?: number }>;

@@ -499,7 +499,7 @@ export class DataGridEditing {
   editRowKey?: any;
 
   @TwoWay()
-  editColumnName?: string;
+  editColumnName?: string; // TODO null
 }
 
 @ComponentBindings()
@@ -527,6 +527,35 @@ export class DataGridScrolling {
 
   @OneWay()
   useNative?: boolean | 'auto';
+
+  // private
+
+  @OneWay()
+  timeout?: number;
+
+  @OneWay()
+  updateTimeout?: number;
+
+  @OneWay()
+  minTimeout?: number;
+
+  @OneWay()
+  renderingThreshold?: number;
+
+  @OneWay()
+  removeInvisiblePages?: boolean;
+
+  @OneWay()
+  loadTwoPagesOnStart?: boolean;
+
+  @OneWay()
+  rowPageSize?: number;
+
+  @OneWay()
+  columnPageSize?: number;
+
+  @OneWay()
+  columnRenderingThreshold?: number;
 }
 
 @ComponentBindings()
@@ -1114,13 +1143,44 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() export?: DataGridExport;
 
-  @Nested() groupPanel?: DataGridGroupPanel;
+  @Nested() groupPanel?: DataGridGroupPanel /* = {
+    visible: false,
+    emptyPanelText: messageLocalization.format('dxDataGrid-groupPanelEmptyText'),
+    allowColumnDragging: true,
+  } */;
 
-  @Nested() grouping?: DataGridGrouping;
+  @Nested() grouping?: DataGridGrouping /* = {
+    autoExpandAll: true,
+    allowCollapsing: true,
+    contextMenuEnabled: false,
+    expandMode: 'buttonClick',
+    texts: {
+      groupContinuesMessage: messageLocalization.format('dxDataGrid-groupContinuesMessage'),
+      groupContinuedMessage: messageLocalization.format('dxDataGrid-groupContinuedMessage'),
+      groupByThisColumn: messageLocalization.format('dxDataGrid-groupHeaderText'),
+      ungroup: messageLocalization.format('dxDataGrid-ungroupHeaderText'),
+      ungroupAll: messageLocalization.format('dxDataGrid-ungroupAllText'),
+    },
+  } */;
 
   @Nested() masterDetail?: DataGridMasterDetail;
 
-  @Nested() scrolling?: DataGridScrolling;
+  @Nested() scrolling?: DataGridScrolling /* = {
+    timeout: 300,
+    updateTimeout: 300,
+    minTimeout: 0,
+    renderingThreshold: 100,
+    removeInvisiblePages: true,
+    rowPageSize: 5,
+    mode: 'standard',
+    preloadEnabled: false,
+    rowRenderingMode: 'standard',
+    loadTwoPagesOnStart: false,
+    columnRenderingMode: 'standard',
+    columnPageSize: 5,
+    columnRenderingThreshold: 300,
+    useNative: 'auto',
+  } */;
 
   @Nested() selection?: DataGridSelection;
 
@@ -1138,7 +1198,14 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @Nested() headerFilter?: DataGridHeaderFilter;
 
-  @Nested() keyboardNavigation?: DataGridKeyboardNavigation;
+  @OneWay() useKeyboard?: boolean; // TODO remove
+
+  @Nested() keyboardNavigation?: DataGridKeyboardNavigation /* = {
+    enabled: true,
+    enterKeyAction: 'startEdit',
+    enterKeyDirection: 'none',
+    editOnKeyPress: false,
+  } */;
 
   @Nested() loadPanel?: DataGridLoadPanel;
 
@@ -1148,16 +1215,23 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @Nested() rowDragging?: DataGridRowDragging;
 
-  @Nested() searchPanel?: DataGridSearchPanel;
+  @Nested() searchPanel?: DataGridSearchPanel /*= {
+    visible: false,
+    width: 160,
+    placeholder: messageLocalization.format('dxDataGrid-searchPanelPlaceholder'),
+    highlightSearchText: true,
+    highlightCaseSensitive: false,
+    text: '',
+    searchVisibleColumnsOnly: false,
+  } */;
 
-  @Nested() sorting?: DataGridSorting;
-  /* {
+  @Nested() sorting?: DataGridSorting /*= {
     mode: 'single',
     ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
     descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
     clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
     showSortIndexes: true,
-  }; */
+  } */;
 
   @Nested() stateStoring?: DataGridStateStoring;
 
@@ -1214,7 +1288,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() filterBuilderPopup?: dxPopupOptions;
 
-  @OneWay() filterSyncEnabled?: boolean | 'auto';
+  @OneWay() filterSyncEnabled?: boolean | 'auto' = 'auto';
 
   @OneWay() focusedRowEnabled?: boolean;
 
