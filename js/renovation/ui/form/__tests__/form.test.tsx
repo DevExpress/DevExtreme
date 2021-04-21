@@ -44,7 +44,6 @@ describe('Form > Markup', () => {
         bounceEnabled: false,
         aria: { role: 'form' },
         classes: 'dx-form',
-        'rest-attributes': 'restAttributes',
       });
     });
   });
