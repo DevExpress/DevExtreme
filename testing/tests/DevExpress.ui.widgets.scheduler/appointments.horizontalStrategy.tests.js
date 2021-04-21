@@ -9,6 +9,8 @@ const { testStart, module, test } = QUnit;
 const compileGetter = dataCoreUtils.compileGetter;
 const compileSetter = dataCoreUtils.compileSetter;
 
+const BASE_WIDTH = 20;
+
 testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointments"></div>\
         <div id="allDayContainer"></div>\
@@ -32,53 +34,55 @@ const dataAccessors = {
     }
 };
 
+const createObserver = (renderingStrategy) => ({
+    fire: (command, field, obj, value) => {
+        switch(command) {
+            case 'getField':
+                if(!typeUtils.isDefined(dataAccessors.getter[field])) {
+                    return;
+                }
+                return dataAccessors.getter[field](obj);
+            case 'setField':
+                return dataAccessors.setter[field](obj, value);
+            case 'getAppointmentColor':
+                return $.Deferred().resolve('red').promise();
+            case 'getEndDayHour':
+                if(renderingStrategy === 'horizontalMonthLine') {
+                    return 24;
+                } else {
+                    return 20;
+                }
+            case 'getStartDayHour':
+                if(renderingStrategy === 'horizontalMonthLine') {
+                    return 0;
+                } else {
+                    return 8;
+                }
+            case 'getAppointmentGeometry':
+                return {
+                    width: field.width || 0,
+                    height: field.height || 0,
+                    left: field.left || 0,
+                    top: field.top || 0,
+                    empty: field.empty || false
+                };
+            default:
+                break;
+        }
+    }
+});
+
+const createInstance = (options = {}) => {
+    return $('#scheduler-appointments').dxSchedulerAppointments({
+        observer: createObserver(options.renderingStrategy),
+        ...options,
+    }).dxSchedulerAppointments('instance');
+};
+
 const moduleOptions = {
     beforeEach: function() {
         fx.off = true;
-
-        const observer = {
-            fire: (command, field, obj, value) => {
-                switch(command) {
-                    case 'getField':
-                        if(!typeUtils.isDefined(dataAccessors.getter[field])) {
-                            return;
-                        }
-                        return dataAccessors.getter[field](obj);
-                    case 'setField':
-                        return dataAccessors.setter[field](obj, value);
-                    case 'getAppointmentColor':
-                        return $.Deferred().resolve('red').promise();
-                    case 'getEndDayHour':
-                        if(this.instance.option('renderingStrategy') === 'horizontalMonthLine') {
-                            return 24;
-                        } else {
-                            return 20;
-                        }
-                    case 'getStartDayHour':
-                        if(this.instance.option('renderingStrategy') === 'horizontalMonthLine') {
-                            return 0;
-                        } else {
-                            return 8;
-                        }
-                    case 'getAppointmentGeometry':
-                        return {
-                            width: field.width || 0,
-                            height: field.height || 0,
-                            left: field.left || 0,
-                            top: field.top || 0,
-                            empty: field.empty || false
-                        };
-                    default:
-                        break;
-                }
-            }
-        };
-
-
         this.clock = sinon.useFakeTimers();
-        this.width = 20;
-        this.height = 20;
-        this.instance = $('#scheduler-appointments').dxSchedulerAppointments({ observer }).dxSchedulerAppointments('instance');
     },
     afterEach: function() {
         this.clock.restore();
@@ -98,11 +102,12 @@ module('Horizontal Month Strategy', moduleOptions, () => {
             settings: [{ top: 0, left: 0, count: 1, index: 0, width: 40, allDay: true }]
         }];
 
-        this.items = items;
-        this.instance.option('items', items);
+        const instance = createInstance({
+            items,
+        });
 
-        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
-        const allDayAppointmentWidth = this.width * 2;
+        const $appointment = instance.$element().find('.dx-scheduler-appointment');
+        const allDayAppointmentWidth = BASE_WIDTH * 2;
         assert.equal($appointment.eq(0).outerWidth(), allDayAppointmentWidth, 'appointment has right width');
     });
 
@@ -116,15 +121,12 @@ module('Horizontal Month Strategy', moduleOptions, () => {
             settings: [{ top: 0, left: 0, max: 135 }]
         }];
 
-        this.fullWeekAppointmentWidth = 140;
-        this.maxAppointmentWidth = 500;
-
-        this.instance.option({
-            items: items,
-            renderingStrategy: 'horizontalMonth'
+        const instance = createInstance({
+            items,
+            renderingStrategy: 'horizontalMonth',
         });
 
-        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
         assert.equal($appointment.length, 1, 'appointment is not multiline');
     });
@@ -139,13 +141,12 @@ module('Horizontal Month Strategy', moduleOptions, () => {
             settings: [{ top: 0, left: 0, empty: true }]
         }];
 
-        this.width = 150;
-        this.height = 200;
-        this.instance.option('renderingStrategy', 'horizontalMonth');
-        this.items = items;
-        this.instance.option('items', items);
+        const instance = createInstance({
+            items,
+            renderingStrategy: 'horizontalMonth',
+        });
 
-        const $appointment = this.instance.$element().find('.dx-scheduler-appointment').eq(0);
+        const $appointment = instance.$element().find('.dx-scheduler-appointment').eq(0);
         assert.ok($appointment.hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
@@ -159,11 +160,12 @@ module('Horizontal Month Strategy', moduleOptions, () => {
             settings: [{ top: 0, left: 0, height: 50, width: 39.5, empty: true }]
         }];
 
-        this.items = items;
-        this.instance.option('renderingStrategy', 'horizontalMonth');
-        this.instance.option('items', items);
+        const instance = createInstance({
+            items,
+            renderingStrategy: 'horizontalMonth',
+        });
 
-        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const $appointment = instance.$element().find('.dx-scheduler-appointment');
         assert.ok($appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
@@ -177,11 +179,12 @@ module('Horizontal Month Strategy', moduleOptions, () => {
             settings: [{ top: 0, left: 0, height: 18.5, width: 10, empty: true }]
         }];
 
-        this.items = items;
-        this.instance.option('renderingStrategy', 'horizontalMonth');
-        this.instance.option('items', items);
+        const instance = createInstance({
+            items,
+            renderingStrategy: 'horizontalMonth',
+        });
 
-        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const $appointment = instance.$element().find('.dx-scheduler-appointment');
         assert.ok($appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 });
@@ -198,14 +201,12 @@ module('Horizontal Strategy', moduleOptions, () => {
             settings: [{ top: 0, left: 0, count: 1, index: 0, width: 40, allDay: true }]
         }];
 
-        this.height = 200;
-        this.width = 50;
-        this.items = items;
+        const instance = createInstance({
+            items,
+            renderingStrategy: 'horizontal',
+        });
 
-        this.instance.option('renderingStrategy', 'horizontal');
-        this.instance.option('items', items);
-
-        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
         assert.ok($appointment.eq(0).hasClass('dx-scheduler-all-day-appointment'), 'Appointment has a right css class');
     });
@@ -220,10 +221,13 @@ module('Horizontal Strategy', moduleOptions, () => {
             },
             settings: [{ width: 2 }]
         }];
-        this.instance.option('renderingStrategy', 'horizontal');
-        this.instance.option('items', items);
 
-        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const instance = createInstance({
+            items,
+            renderingStrategy: 'horizontal',
+        });
+
+        const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
         assert.equal($appointment.outerWidth(), 2, 'Min width is OK');
     });

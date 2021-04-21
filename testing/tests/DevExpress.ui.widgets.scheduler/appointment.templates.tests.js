@@ -1,16 +1,13 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import Color from 'color';
 import { DataSource } from 'data/data_source/data_source';
 import {
-    SchedulerTestWrapper,
     initTestMarkup,
     createWrapper
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
 
 const {
     module,
@@ -21,38 +18,22 @@ QUnit.testStart(() => initTestMarkup());
 
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
+const createInstance = (options, clock) => {
+    const scheduler = createWrapper({
+        height: 600,
+        ...options,
+    });
+
+    clock.tick(300);
+    scheduler.instance.focus();
+
+    return scheduler;
+};
+
 module('Integration: Appointment templates', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options,
-                {
-                    height: options && options.height || 600
-                })
-            ).dxScheduler('instance');
-
-            this.clock.tick(300);
-            this.instance.focus();
-
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
-        this.getAppointmentColor = function($task, checkedProperty) {
-            checkedProperty = checkedProperty || 'backgroundColor';
-            return new Color($task.css(checkedProperty)).toHex();
-        };
         this.clock = sinon.useFakeTimers();
-        this.tasks = [
-            {
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 12, 0)
-            }
-        ];
     },
     afterEach: function() {
         fx.off = false;
@@ -248,15 +229,15 @@ module('Integration: Appointment templates', {
                     }
                 ]
             });
-            this.createInstance({
+            const scheduler = createInstance({
                 views: ['day', 'week'],
                 currentView: 'day',
                 currentDate: new Date(2015, 1, 9),
                 appointmentTemplate: 'template',
                 dataSource: data
-            });
+            }, this.clock);
 
-            assert.deepEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).text(), 'Task Template', 'Tasks itemTemplate option is correct');
+            assert.deepEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).text(), 'Task Template', 'Tasks itemTemplate option is correct');
         });
 
         test('DOM element should be rendered by render function', function(assert) {
@@ -268,7 +249,7 @@ module('Integration: Appointment templates', {
                 Text: 'abc'
             };
 
-            this.createInstance({
+            const scheduler = createInstance({
                 currentDate: new Date(2015, 1, 4),
                 dataSource: [appointment],
                 startDateExpr: 'Start',
@@ -288,9 +269,9 @@ module('Integration: Appointment templates', {
                         }
                     }
                 }
-            });
+            }, this.clock);
 
-            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+            const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
             assert.equal($appointment.text(), 'text', 'container is correct');
         });
