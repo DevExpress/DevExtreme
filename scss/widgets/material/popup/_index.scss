@@ -25,16 +25,6 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
   & > .dx-popup-fullscreen {
     border-radius: 0;
   }
-
-
-  .dx-scrollable {
-    &:not(.dx-form) {
-      .dx-scrollable-container {
-        margin-left: -10px;
-        padding-left: 10px;
-      }
-    }
-  }
 }
 
 .dx-popup-title {
@@ -58,6 +48,13 @@ $material-popup-toolbar-label-font-size: $material-m-font-size;
 
 .dx-popup-content {
   padding: $material-popup-content-padding;
+
+  &:not(.dx-dropdownmenu-list) {
+    .dx-scrollable-container {
+      margin-left: -10px;
+      padding-left: 10px;
+    }
+  }
 
   & > .dx-button {
     margin: $material-popup-button-margin;
