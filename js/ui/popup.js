@@ -541,8 +541,8 @@ const Popup = Overlay.inherit({
         let currentHeightStrategyClass = HEIGHT_STRATEGIES.static;
 
         if(this._isAutoHeight() && this.option('autoResizeEnabled')) {
-            if(isAutoWidth) {
-                if(!IS_IE11 || IS_OLD_SAFARI) {
+            if(isAutoWidth || IS_OLD_SAFARI) {
+                if(!IS_IE11) {
                     currentHeightStrategyClass = HEIGHT_STRATEGIES.inherit;
                 }
             } else {
