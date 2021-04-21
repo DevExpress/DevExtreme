@@ -177,6 +177,12 @@ export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
 }
 
 /** @public */
+export type ResourceManagerDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
+    readonly values: Array<any>;
+    readonly key: any;
+}
+
+/** @public */
 export type TaskInsertedEvent = EventInfo<dxGantt> & {
     readonly value?: any;
     readonly key: any;
@@ -536,6 +542,20 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
      * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 values:Array<any>
+     * @type_function_param1_field5 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceManagerDialogShowing?: ((e: ResourceManagerDialogShowingEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxGantt
+     * @type_function_param1_field2 element:TElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -1165,6 +1185,13 @@ export default class dxGantt extends Widget {
      * @public
      */
     exportToPdf(options: any): DxPromise<any>;
+    /**
+     * @docid
+     * @publicName showResourceManagerDialog()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    showResourceManagerDialog(): void;
 }
 
 /**
@@ -1178,7 +1205,7 @@ export interface dxGanttToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
+    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
 }
 
 /**
@@ -1213,7 +1240,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | string;
+    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | string;
     /**
      * @docid
      * @default "before"
