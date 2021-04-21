@@ -39,7 +39,7 @@
     "inferno-hydrate": "^7.4.6",
     "jszip": "^2.0.0 || ^3.0.0",
     "rrule": "2.6.6",
-    "showdown": "^1.8.6",
+    "showdown": "^1.9.1",
     "turndown": "^7.0.0"
   },
   "devDependencies": {
