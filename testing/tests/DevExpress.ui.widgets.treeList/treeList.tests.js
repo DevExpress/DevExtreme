@@ -1751,10 +1751,10 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
                     setTimeout(() => {
                         const items = [];
 
-                        if(options.parentIds.length) {
+                        if(options.filter[2] === 2) {
                             items.push({ id: 201, parentId: 2 });
 
-                        } else {
+                        } else if(options.filter[2] === -1) {
                             for(let i = 1; i <= 6; i++) {
                                 items.push({ id: i, parentId: -1 });
                             }
