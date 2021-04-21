@@ -4,13 +4,14 @@ export interface ElementWrapper<T extends Element> { }
 export interface ElementsArrayWrapper<T extends Element> { }
 /**
  * @docid
- * @type dxElement|dxSVGElement
+ * @type HTMLElement|SVGElement|JQuery
  * @prevFileNamespace DevExpress.core
  */
 export type DxElement<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>;
 
 /**
  * @docid
+ * @type HTMLElement|SVGElement|JQuery
  * @prevFileNamespace DevExpress.core
  */
 export type UserDefinedElement<T extends Element = Element> = {} extends ElementWrapper<T> ? T : ElementWrapper<T> | T;

@@ -6,6 +6,7 @@ export interface EventExtension { }
 export interface EventType { }
 /**
  * @docid
+ * @type EventObject|jQuery.Event
  * @prevFileNamespace DevExpress.events
  */
 export type DxEvent = {} extends EventType ? EventObject : EventType;

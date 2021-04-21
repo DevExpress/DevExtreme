@@ -1248,7 +1248,11 @@ declare module DevExpress.core {
     /**
      * [descr:DxElement]
      */
-    export type DxElement = dxElement | dxSVGElement;
+    export type DxElement = HTMLElement | SVGElement | JQuery;
+    /**
+     * [descr:UserDefinedElement]
+     */
+    export type UserDefinedElement = HTMLElement | SVGElement | JQuery;
     /**
      * [descr:dxSVGElement]
      * @deprecated [depNote:dxSVGElement]
@@ -2445,45 +2449,49 @@ declare module DevExpress.events {
     /**
      * [descr:DxEvent]
      */
-    export class DxEvent {
+    export type DxEvent = EventObject | JQueryEventObject;
+    /**
+     * [descr:EventObject]
+     */
+    export class EventObject {
         /**
-         * [descr:DxEvent.currentTarget]
+         * [descr:EventObject.currentTarget]
          */
         currentTarget: Element;
         /**
-         * [descr:DxEvent.data]
+         * [descr:EventObject.data]
          */
         data: any;
         /**
-         * [descr:DxEvent.delegateTarget]
+         * [descr:EventObject.delegateTarget]
          */
         delegateTarget: Element;
         /**
-         * [descr:DxEvent.target]
+         * [descr:EventObject.target]
          */
         target: Element;
         /**
-         * [descr:DxEvent.isDefaultPrevented()]
+         * [descr:EventObject.isDefaultPrevented()]
          */
         isDefaultPrevented(): boolean;
         /**
-         * [descr:DxEvent.isImmediatePropagationStopped()]
+         * [descr:EventObject.isImmediatePropagationStopped()]
          */
         isImmediatePropagationStopped(): boolean;
         /**
-         * [descr:DxEvent.isPropagationStopped()]
+         * [descr:EventObject.isPropagationStopped()]
          */
         isPropagationStopped(): boolean;
         /**
-         * [descr:DxEvent.preventDefault()]
+         * [descr:EventObject.preventDefault()]
          */
         preventDefault(): void;
         /**
-         * [descr:DxEvent.stopImmediatePropagation()]
+         * [descr:EventObject.stopImmediatePropagation()]
          */
         stopImmediatePropagation(): void;
         /**
-         * [descr:DxEvent.stopPropagation()]
+         * [descr:EventObject.stopPropagation()]
          */
         stopPropagation(): void;
     }
@@ -2491,11 +2499,11 @@ declare module DevExpress.events {
      * [descr:event]
      * @deprecated [depNote:event]
      */
-    export type event = dxEvent | JQueryEventObject;
+    export type event = EventObject | JQueryEventObject;
     /**
      * [descr:eventsHandler]
      */
-    export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
+    export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
     /**
      * [descr:events.off(element)]
      */
