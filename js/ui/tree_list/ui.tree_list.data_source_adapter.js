@@ -301,6 +301,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                         options.cachedPagingData = undefined;
                         options.data = undefined;
                         options.mergeStoreLoadData = true;
+                        options.delay = 0; // T991320
                     }
 
                     options.storeLoadOptions.parentIds = parentIdsToLoad;
