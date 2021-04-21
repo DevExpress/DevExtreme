@@ -3241,6 +3241,96 @@ module('Virtual scrolling integration', () => {
                 )
             );
         });
+
+        [
+            {
+                appointment: {
+                    text: 'a',
+                    startDate: new Date(2021, 1, 1, 9),
+                    endDate: new Date(2021, 1, 1, 10),
+                    humanId: 18
+                },
+                groupByDate: false,
+                scrollCoordinates: { x: 9500 }
+            },
+            {
+                appointment: {
+                    text: 'b',
+                    startDate: new Date(2021, 1, 1, 9),
+                    endDate: new Date(2021, 1, 1, 10),
+                    humanId: 0
+                },
+                groupByDate: false,
+                scrollCoordinates: { x: 9500 }
+            },
+            {
+                appointment: {
+                    text: 'c',
+                    startDate: new Date(2021, 1, 1, 9),
+                    endDate: new Date(2021, 1, 1, 10),
+                    humanId: 18
+                },
+                groupByDate: true,
+                scrollCoordinates: { x: 3000 }
+            }
+        ].forEach(({ appointment, groupByDate, scrollCoordinates }) => {
+            test(`After scrolling appointment bounds for resizing should be calculated
+            without errors when groupByDate is ${groupByDate}`, function(assert) {
+                const resources = [
+                    { id: 0 }, { id: 1 },
+                    { id: 2 }, { id: 3 },
+                    { id: 4 }, { id: 5 },
+                    { id: 6 }, { id: 7 },
+                    { id: 8 }, { id: 9 },
+                    { id: 10 }, { id: 11 },
+                    { id: 12 }, { id: 13 },
+                    { id: 14 }, { id: 15 },
+                    { id: 16 }, { id: 17 },
+                    { id: 18 }, { id: 19 }
+                ];
+
+                const scheduler = createWrapper({
+                    height: 600,
+                    width: 600,
+                    currentDate: new Date(2021, 1, 2),
+                    dataSource: [appointment],
+                    views: [
+                        {
+                            type: 'month',
+                            groupOrientation: 'horizontal'
+                        }
+                    ],
+                    currentView: 'month',
+                    scrolling: {
+                        mode: 'virtual'
+                    },
+                    groups: ['humanId'],
+                    resources: [{
+                        fieldExpr: 'humanId',
+                        dataSource: resources
+                    }],
+                    groupByDate
+                });
+
+                const workspace = scheduler.instance.getWorkSpace();
+                const scrollable = workspace.getScrollable();
+
+                workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                return asyncWrapper(assert, promise => {
+                    promise = asyncScrollTest(
+                        assert,
+                        promise,
+                        () => {
+                            assert.ok(true, 'Error doesn\'t happen');
+                        },
+                        scrollable,
+                        scrollCoordinates);
+
+                    return promise;
+                });
+            });
+        });
     });
 
     module('Customization', () => {
