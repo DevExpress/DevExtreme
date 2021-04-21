@@ -52,10 +52,6 @@ describe('Simulated > View', () => {
 
     expect(scrollable.props()).toEqual({
       bounceEnabled: true,
-      contentTranslateOffset: {
-        left: 0,
-        top: 0,
-      },
       direction: 'vertical',
       forceGeneratePockets: false,
       inertiaEnabled: true,
