@@ -3251,7 +3251,8 @@ module('Virtual scrolling integration', () => {
                     humanId: 18
                 },
                 groupByDate: false,
-                scrollCoordinates: { x: 9500 }
+                scrollCoordinates: { x: 9500 },
+                expectedAppointmentCount: 1
             },
             {
                 appointment: {
@@ -3261,7 +3262,8 @@ module('Virtual scrolling integration', () => {
                     humanId: 0
                 },
                 groupByDate: false,
-                scrollCoordinates: { x: 9500 }
+                scrollCoordinates: { x: 9500 },
+                expectedAppointmentCount: 0
             },
             {
                 appointment: {
@@ -3271,11 +3273,12 @@ module('Virtual scrolling integration', () => {
                     humanId: 18
                 },
                 groupByDate: true,
-                scrollCoordinates: { x: 3000 }
+                scrollCoordinates: { x: 3000 },
+                expectedAppointmentCount: 1
             }
-        ].forEach(({ appointment, groupByDate, scrollCoordinates }) => {
-            test(`After scrolling appointment bounds for resizing should be calculated
-            without errors when groupByDate is ${groupByDate}`, function(assert) {
+        ].forEach(({ appointment, groupByDate, scrollCoordinates, expectedAppointmentCount }) => {
+            test(`After scrolling appointment count in DOM should be ${expectedAppointmentCount}
+            when groupByDate is ${groupByDate}`, function(assert) {
                 const resources = [
                     { id: 0 }, { id: 1 },
                     { id: 2 }, { id: 3 },
@@ -3322,7 +3325,8 @@ module('Virtual scrolling integration', () => {
                         assert,
                         promise,
                         () => {
-                            assert.ok(true, 'Error doesn\'t happen');
+                            const appointmentCount = scheduler.appointmentList.length;
+                            assert.equal(appointmentCount, expectedAppointmentCount, 'DOM contain right count of appoinments');
                         },
                         scrollable,
                         scrollCoordinates);
