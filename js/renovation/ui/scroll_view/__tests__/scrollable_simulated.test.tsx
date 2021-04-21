@@ -37,10 +37,6 @@ import {
   getPermutations,
 } from './utils';
 
-import {
-  ScrollableProps,
-} from '../scrollable_props';
-
 import { ScrollableTestHelper } from './scrollable_simulated_test_helper';
 
 jest.mock('../../../../core/devices', () => {
@@ -1307,16 +1303,6 @@ describe('Simulated > Behavior', () => {
             });
           });
         });
-      });
-    });
-
-    each([undefined, null]).describe('scrollbarSize: %o', (fakeElement) => {
-      it('should not be exepted when element is not exist', () => {
-        const scrollable = new Scrollable({ direction: 'vertical' } as ScrollableProps);
-
-        scrollable.scrollToElement(fakeElement, {});
-
-        expect(true).toEqual(true);
       });
     });
 
