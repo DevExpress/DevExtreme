@@ -1,8 +1,8 @@
 import DOMComponent from '../core/dom_component';
 
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -30,11 +30,11 @@ import dxDraggable, {
 /** @public */
 export interface AddEvent {
     readonly component: dxSortable;
-    readonly element: THTMLElement;
+    readonly element: DxElement;
     readonly model?: any;
     readonly event: TEvent;
     readonly itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -50,7 +50,7 @@ export type DisposingEvent = EventInfo<dxSortable>;
 /** @public */
 export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
     readonly fromIndex?: number;
     readonly toIndex?: number;
     readonly fromComponent?: dxSortable | dxDraggable;
@@ -63,7 +63,7 @@ export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
 /** @public */
 export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -76,7 +76,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
 /** @public */
 export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -89,7 +89,7 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
 /** @public */
 export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable> & {
     itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly fromData?: any;
 }
@@ -103,7 +103,7 @@ export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
 /** @public */
 export type RemoveEvent = NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -115,7 +115,7 @@ export type RemoveEvent = NativeEventInfo<dxSortable> & {
 /** @public */
 export type ReorderEvent = NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -129,7 +129,7 @@ export type ReorderEvent = NativeEventInfo<dxSortable> & {
 /** @public */
 export interface DragTemplateData {
     readonly itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
 }
 
@@ -160,7 +160,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: THTMLElement) => string | ElementIntake);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type Enums.DropFeedbackMode
@@ -355,7 +355,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
  * @public
  */
 export default class dxSortable extends DOMComponent implements DraggableBase {
-    constructor(element: ElementIntake, options?: dxSortableOptions)
+    constructor(element: UserDefinedElement, options?: dxSortableOptions)
     /**
      * @docid
      * @publicName update()

@@ -1,7 +1,6 @@
 import {
-    ElementIntake,
-    TElement,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -641,7 +640,7 @@ export interface dxFunnelLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | ElementIntake<SVGElement>);
+    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxFunnelOptions.legend.visible
      * @default false
@@ -665,7 +664,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: THTMLElement) => string | ElementIntake);
+    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
@@ -690,7 +689,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxFunnel extends BaseWidget {
-    constructor(element: ElementIntake, options?: dxFunnelOptions)
+    constructor(element: UserDefinedElement, options?: dxFunnelOptions)
     /**
      * @docid
      * @publicName clearSelection()

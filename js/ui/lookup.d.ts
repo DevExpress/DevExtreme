@@ -7,8 +7,8 @@ import {
 } from '../animation/position';
 
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -166,7 +166,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: THTMLElement) => string | ElementIntake);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
@@ -194,7 +194,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
+    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
@@ -427,7 +427,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    titleTemplate?: template | ((titleElement: THTMLElement) => string | ElementIntake);
+    titleTemplate?: template | ((titleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -470,7 +470,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
  * @public
  */
 export default class dxLookup extends dxDropDownList {
-    constructor(element: ElementIntake, options?: dxLookupOptions)
+    constructor(element: UserDefinedElement, options?: dxLookupOptions)
 }
 
 /** @public */

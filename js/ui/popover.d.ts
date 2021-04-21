@@ -7,8 +7,8 @@ import {
 } from '../animation/position';
 
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -150,7 +150,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | ElementIntake;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default "auto"
@@ -186,7 +186,7 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
  * @public
  */
 export default class dxPopover extends dxPopup {
-    constructor(element: ElementIntake, options?: dxPopoverOptions)
+    constructor(element: UserDefinedElement, options?: dxPopoverOptions)
     show(): TPromise<boolean>;
     /**
      * @docid
@@ -196,7 +196,7 @@ export default class dxPopover extends dxPopup {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(target: string | ElementIntake): TPromise<boolean>;
+    show(target: string | UserDefinedElement): TPromise<boolean>;
 }
 
 /** @public */

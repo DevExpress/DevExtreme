@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../../core/element';
 
 import {
@@ -102,7 +102,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class Editor extends Widget {
-    constructor(element: ElementIntake, options?: EditorOptions)
+    constructor(element: UserDefinedElement, options?: EditorOptions)
     /**
      * @docid
      * @publicName reset()

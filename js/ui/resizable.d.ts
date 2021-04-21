@@ -3,7 +3,7 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -151,7 +151,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @public
  */
 export default class dxResizable extends DOMComponent {
-    constructor(element: ElementIntake, options?: dxResizableOptions)
+    constructor(element: UserDefinedElement, options?: dxResizableOptions)
 }
 
 /** @public */

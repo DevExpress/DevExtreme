@@ -14,7 +14,7 @@ import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
 import { TPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
-import { ElementIntake, TElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
+import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
 
@@ -199,7 +199,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  focus(element?: ElementIntake): void {
+  focus(element?: UserDefinedElement): void {
     return this.instance?.focus(element as HTMLElement);
   }
 
@@ -226,7 +226,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getRowElement(rowIndex: number): TElementsArray<Element> | undefined {
+  getRowElement(rowIndex: number): UserDefinedElementsArray | undefined {
     return this.instance?.getRowElement(rowIndex);
   }
 

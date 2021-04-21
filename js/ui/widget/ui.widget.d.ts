@@ -3,7 +3,7 @@ import DOMComponent, {
 } from '../../core/dom_component';
 
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../../core/element';
 
 import {
@@ -89,7 +89,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class Widget extends DOMComponent {
-    constructor(element: ElementIntake, options?: WidgetOptions)
+    constructor(element: UserDefinedElement, options?: WidgetOptions)
     /**
      * @docid
      * @publicName focus()

@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -58,19 +58,19 @@ export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo
 /** @public */
 export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
-    readonly itemElement?: THTMLElement;
+    readonly itemElement?: DxElement;
 }
 
 /** @public */
 export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
-    readonly itemElement?: THTMLElement;
+    readonly itemElement?: DxElement;
 }
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemData?: any;
-    readonly itemElement?: THTMLElement;
+    readonly itemElement?: DxElement;
 }
 
 export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
@@ -106,7 +106,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires dxTabPanelOptions.onOptionChanged
@@ -203,7 +203,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @public
  */
 export default class dxTabPanel extends dxMultiView {
-    constructor(element: ElementIntake, options?: dxTabPanelOptions)
+    constructor(element: UserDefinedElement, options?: dxTabPanelOptions)
 }
 
 /**
@@ -230,7 +230,7 @@ export interface dxTabPanelItem extends dxMultiViewItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tabTemplate?: template | (() => string | ElementIntake);
+    tabTemplate?: template | (() => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

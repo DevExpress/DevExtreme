@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -106,7 +106,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @public
  */
 export default class dxScrollView extends dxScrollable {
-    constructor(element: ElementIntake, options?: dxScrollViewOptions)
+    constructor(element: UserDefinedElement, options?: dxScrollViewOptions)
     /**
      * @docid
      * @publicName refresh()

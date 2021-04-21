@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -187,7 +187,7 @@ export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @public
  */
 export default class dxLinearGauge extends BaseGauge {
-    constructor(element: ElementIntake, options?: dxLinearGaugeOptions)
+    constructor(element: UserDefinedElement, options?: dxLinearGaugeOptions)
 }
 
 /** @public */

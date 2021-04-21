@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import DataSource, {
@@ -130,7 +130,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
  * @public
  */
 export default class dxTabs extends CollectionWidget {
-    constructor(element: ElementIntake, options?: dxTabsOptions)
+    constructor(element: UserDefinedElement, options?: dxTabsOptions)
 }
 
 /**

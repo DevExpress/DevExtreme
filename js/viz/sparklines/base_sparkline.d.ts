@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
@@ -91,7 +91,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointsInfo: any, element: THTMLElement) => string | ElementIntake);
+    contentTemplate?: template | ((pointsInfo: any, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseSparklineOptions.tooltip.customizeTooltip
      * @type_function_param1 pointsInfo:object
@@ -124,7 +124,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseSparkline extends BaseWidget {
-    constructor(element: ElementIntake, options?: BaseSparklineOptions)
+    constructor(element: UserDefinedElement, options?: BaseSparklineOptions)
 
     /**
      * @docid

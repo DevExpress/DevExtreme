@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -63,7 +63,7 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @public
  */
 export default class dxNavBar extends dxTabs {
-    constructor(element: ElementIntake, options?: dxNavBarOptions)
+    constructor(element: UserDefinedElement, options?: dxNavBarOptions)
 }
 
 /**

@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../../core/element';
 
 import {
@@ -297,7 +297,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxTextEditor extends Editor {
-    constructor(element: ElementIntake, options?: dxTextEditorOptions)
+    constructor(element: UserDefinedElement, options?: dxTextEditorOptions)
     /**
      * @docid
      * @publicName blur()

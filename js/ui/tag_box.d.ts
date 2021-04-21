@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -77,7 +77,7 @@ export type KeyUpEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
 export type MultiTagPreparingEvent = Cancelable & EventInfo<dxTagBox> & {
-    readonly multiTagElement: THTMLElement;
+    readonly multiTagElement: DxElement;
     readonly selectedItems?: Array<string | number | any>;
     text?: string;
 }
@@ -220,7 +220,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tagTemplate?: template | ((itemData: any, itemElement: THTMLElement) => string | ElementIntake);
+    tagTemplate?: template | ((itemData: any, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default []
@@ -239,7 +239,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
  * @public
  */
 export default class dxTagBox extends dxSelectBox {
-    constructor(element: ElementIntake, options?: dxTagBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxTagBoxOptions)
 }
 
 /** @public */

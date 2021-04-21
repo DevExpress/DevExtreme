@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import DataSource, {
@@ -51,22 +51,22 @@ export type SelectionChangedEvent = EventInfo<dxMenu> & SelectionChangedInfo;
 
 /** @public */
 export type SubmenuHiddenEvent = EventInfo<dxMenu> & {
-    readonly rootItem?: THTMLElement;
+    readonly rootItem?: DxElement;
 }
 
 /** @public */
 export type SubmenuHidingEvent = Cancelable & EventInfo<dxMenu> & {
-    readonly rootItem?: THTMLElement;
+    readonly rootItem?: DxElement;
 }
 
 /** @public */
 export type SubmenuShowingEvent = EventInfo<dxMenu> & {
-    readonly rootItem?: THTMLElement;
+    readonly rootItem?: DxElement;
 }
 
 /** @public */
 export type SubmenuShownEvent = EventInfo<dxMenu> & {
-    readonly rootItem?: THTMLElement;
+    readonly rootItem?: DxElement;
 }
 
 export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
@@ -211,7 +211,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  * @public
  */
 export default class dxMenu extends dxMenuBase {
-    constructor(element: ElementIntake, options?: dxMenuOptions)
+    constructor(element: UserDefinedElement, options?: dxMenuOptions)
 }
 
 /**

@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -39,7 +39,7 @@ import {
 
 interface ListItemInfo {
     readonly itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
     readonly itemIndex: number | { group: number; item: number; };
 }
 
@@ -60,7 +60,7 @@ export type DisposingEvent = EventInfo<dxList>;
 /** @public */
 export type GroupRenderedEvent = EventInfo<dxList> & {
     readonly groupData?: any;
-    readonly groupElement?: THTMLElement;
+    readonly groupElement?: DxElement;
     readonly groupIndex?: number;
 }
 
@@ -181,7 +181,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: THTMLElement) => string | ElementIntake);
+    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
@@ -239,7 +239,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @type_function_param1 itemElement:dxElement
        * @type_function_param2 itemData:object
        */
-      action?: ((itemElement: THTMLElement, itemData: any) => any),
+      action?: ((itemElement: DxElement, itemData: any) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -576,7 +576,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
  * @public
  */
 export default class dxList extends CollectionWidget {
-    constructor(element: ElementIntake, options?: dxListOptions)
+    constructor(element: UserDefinedElement, options?: dxListOptions)
     /**
      * @docid
      * @publicName clientHeight()

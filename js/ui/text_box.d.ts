@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -99,7 +99,7 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
  * @public
  */
 export default class dxTextBox extends dxTextEditor {
-    constructor(element: ElementIntake, options?: dxTextBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxTextBoxOptions)
 }
 
 /** @public */

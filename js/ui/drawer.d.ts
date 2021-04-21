@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -114,7 +114,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @deprecated
      * @public
      */
-    target?: string | ElementIntake;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @type_function_param1 Element:dxElement
@@ -122,7 +122,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((Element: THTMLElement) => any);
+    template?: template | ((Element: DxElement) => any);
 }
 /**
  * @docid
@@ -134,7 +134,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
  * @public
  */
 export default class dxDrawer extends Widget {
-    constructor(element: ElementIntake, options?: dxDrawerOptions)
+    constructor(element: UserDefinedElement, options?: dxDrawerOptions)
     /**
      * @docid
      * @publicName content()
@@ -142,7 +142,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): THTMLElement;
+    content(): DxElement;
     /**
      * @docid
      * @publicName hide()

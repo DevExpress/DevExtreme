@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -90,7 +90,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @public
  */
 export default class dxSwitch extends Editor {
-    constructor(element: ElementIntake, options?: dxSwitchOptions)
+    constructor(element: UserDefinedElement, options?: dxSwitchOptions)
 }
 
 /** @public */

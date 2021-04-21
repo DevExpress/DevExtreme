@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -887,7 +887,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
  * @public
  */
 export default class dxRangeSelector extends BaseWidget {
-    constructor(element: ElementIntake, options?: dxRangeSelectorOptions)
+    constructor(element: UserDefinedElement, options?: dxRangeSelectorOptions)
     getDataSource(): DataSource;
     /**
      * @docid

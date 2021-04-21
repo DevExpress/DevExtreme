@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -35,12 +35,12 @@ export type DisposingEvent = EventInfo<dxFileUploader>;
 
 /** @public */
 export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader> & {
-    readonly dropZoneElement: THTMLElement;
+    readonly dropZoneElement: DxElement;
 }
 
 /** @public */
 export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader> & {
-    readonly dropZoneElement: THTMLElement;
+    readonly dropZoneElement: DxElement;
 }
 
 /** @public */
@@ -390,14 +390,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dialogTrigger?: string | ElementIntake;
+    dialogTrigger?: string | UserDefinedElement;
     /**
      * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropZone?: string | ElementIntake;
+    dropZone?: string | UserDefinedElement;
     /**
      * @docid
      * @default "Upload"
@@ -498,7 +498,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
  * @public
  */
 export default class dxFileUploader extends Editor {
-    constructor(element: ElementIntake, options?: dxFileUploaderOptions)
+    constructor(element: UserDefinedElement, options?: dxFileUploaderOptions)
     /**
      * @docid
      * @publicName upload()

@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -47,7 +47,7 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
  * @public
  */
 export default class dxValidationSummary extends CollectionWidget {
-    constructor(element: ElementIntake, options?: dxValidationSummaryOptions)
+    constructor(element: UserDefinedElement, options?: dxValidationSummaryOptions)
 }
 
 /** @public */

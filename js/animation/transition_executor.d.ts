@@ -1,5 +1,5 @@
 import {
-    TElementsArray
+    UserDefinedElementsArray
 } from '../core/element';
 
 import {
@@ -27,7 +27,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    enter(elements: TElementsArray<Element>, animation: animationConfig | string): void;
+    enter(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName leave(elements, animation)
@@ -36,7 +36,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    leave(elements: TElementsArray<Element>, animation: animationConfig | string): void;
+    leave(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName reset()

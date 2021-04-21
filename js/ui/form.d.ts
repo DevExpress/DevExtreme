@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -270,7 +270,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
  * @public
  */
 export default class dxForm extends Widget {
-    constructor(element: ElementIntake, options?: dxFormOptions)
+    constructor(element: UserDefinedElement, options?: dxFormOptions)
     /**
      * @docid
      * @publicName getButton(name)
@@ -569,7 +569,7 @@ export interface dxFormGroupItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: GroupItemTemplateData, itemElement: THTMLElement) => string | ElementIntake);
+    template?: template | ((data: GroupItemTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -710,7 +710,7 @@ export interface dxFormSimpleItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: SimpleItemTemplateData, itemElement: THTMLElement) => string | ElementIntake);
+    template?: template | ((data: SimpleItemTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default undefined
@@ -836,7 +836,7 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:dxElement
        * @default undefined
        */
-      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: THTMLElement) => any),
+      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -845,7 +845,7 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:dxElement
        * @default undefined
        */
-      template?: template | ((tabData: any, tabIndex: number, tabElement: THTMLElement) => any),
+      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui

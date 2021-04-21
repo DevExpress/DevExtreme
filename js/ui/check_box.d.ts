@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -83,7 +83,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @public
  */
 export default class dxCheckBox extends Editor {
-    constructor(element: ElementIntake, options?: dxCheckBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxCheckBoxOptions)
 }
 
 /** @public */

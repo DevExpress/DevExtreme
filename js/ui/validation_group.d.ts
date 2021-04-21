@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import DOMComponent, {
@@ -49,7 +49,7 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @public
  */
 export default class dxValidationGroup extends DOMComponent {
-    constructor(element: ElementIntake, options?: dxValidationGroupOptions)
+    constructor(element: UserDefinedElement, options?: dxValidationGroupOptions)
     /**
      * @docid
      * @publicName reset()

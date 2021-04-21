@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -16,12 +16,12 @@ import Widget, {
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxSpeedDialAction> & {
-    actionElement?: THTMLElement
+    actionElement?: DxElement
 }
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSpeedDialAction> & {
-    actionElement?: THTMLElement
+    actionElement?: DxElement
 };
 
 /** @public */
@@ -96,7 +96,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @public
  */
 export default class dxSpeedDialAction extends Widget {
-    constructor(element: ElementIntake, options?: dxSpeedDialActionOptions)
+    constructor(element: UserDefinedElement, options?: dxSpeedDialActionOptions)
 }
 
 /** @public */

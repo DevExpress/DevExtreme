@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -107,7 +107,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | ElementIntake;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default ""
@@ -141,7 +141,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @public
  */
 export default class dxActionSheet extends CollectionWidget {
-    constructor(element: ElementIntake, options?: dxActionSheetOptions)
+    constructor(element: UserDefinedElement, options?: dxActionSheetOptions)
     /**
      * @docid
      * @publicName hide()
@@ -192,7 +192,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: THTMLElement, model?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: { component?: dxActionSheet, element?: DxElement, model?: any, event?: TEvent }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType

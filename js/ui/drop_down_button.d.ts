@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -52,7 +52,7 @@ export type InitializedEvent = InitializedEventInfo<dxDropDownButton>;
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxDropDownButton> & {
     readonly itemData?: any;
-    readonly itemElement: THTMLElement;
+    readonly itemElement: DxElement;
 };
 
 /** @public */
@@ -97,7 +97,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: THTMLElement) => string | ElementIntake);
+    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default {}
@@ -136,7 +136,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: THTMLElement) => string | ElementIntake);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default null
@@ -283,7 +283,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
  * @public
  */
 export default class dxDropDownButton extends Widget {
-    constructor(element: ElementIntake, options?: dxDropDownButtonOptions)
+    constructor(element: UserDefinedElement, options?: dxDropDownButtonOptions)
     /**
      * @docid
      * @publicName close()
@@ -337,7 +337,7 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: THTMLElement, model?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: { component?: dxDropDownButton, element?: DxElement, model?: any, event?: TEvent }) => void) | string;
 }
 
 /** @public */

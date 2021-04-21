@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -380,7 +380,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
  * @public
  */
 export default class dxMap extends Widget {
-    constructor(element: ElementIntake, options?: dxMapOptions)
+    constructor(element: UserDefinedElement, options?: dxMapOptions)
     /**
      * @docid
      * @publicName addMarker(markerOptions)

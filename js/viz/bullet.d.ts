@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -128,7 +128,7 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
  * @public
  */
 export default class dxBullet extends BaseSparkline {
-    constructor(element: ElementIntake, options?: dxBulletOptions)
+    constructor(element: UserDefinedElement, options?: dxBulletOptions)
 }
 
 /** @public */

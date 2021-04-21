@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -129,7 +129,7 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @public
  */
 export default class dxAutocomplete extends dxDropDownList {
-    constructor(element: ElementIntake, options?: dxAutocompleteOptions)
+    constructor(element: UserDefinedElement, options?: dxAutocompleteOptions)
 }
 
 /** @public */

@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -222,7 +222,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
  * @public
  */
 export default class dxSparkline extends BaseSparkline {
-    constructor(element: ElementIntake, options?: dxSparklineOptions)
+    constructor(element: UserDefinedElement, options?: dxSparklineOptions)
     getDataSource(): DataSource;
 }
 

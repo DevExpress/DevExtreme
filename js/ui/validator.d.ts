@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import DOMComponent, {
@@ -125,7 +125,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @public
  */
 export default class dxValidator extends DOMComponent {
-    constructor(element: ElementIntake, options?: dxValidatorOptions)
+    constructor(element: UserDefinedElement, options?: dxValidatorOptions)
     /**
      * @docid
      * @publicName focus()

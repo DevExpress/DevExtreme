@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -38,7 +38,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: THTMLElement) => any);
+    contentTemplate?: template | ((contentElement: DxElement) => any);
     /**
      * @docid
      * @type Enums.SlideOutMenuPosition
@@ -54,7 +54,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuTemplate?: template | ((menuElement: THTMLElement) => any);
+    menuTemplate?: template | ((menuElement: DxElement) => any);
     /**
      * @docid
      * @default false
@@ -80,7 +80,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
  * @public
  */
 export default class dxSlideOutView extends Widget {
-    constructor(element: ElementIntake, options?: dxSlideOutViewOptions)
+    constructor(element: UserDefinedElement, options?: dxSlideOutViewOptions)
     /**
      * @docid
      * @publicName content()
@@ -88,7 +88,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): THTMLElement;
+    content(): DxElement;
     /**
      * @docid
      * @publicName hideMenu()
@@ -104,7 +104,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuContent(): THTMLElement;
+    menuContent(): DxElement;
     /**
      * @docid
      * @publicName showMenu()

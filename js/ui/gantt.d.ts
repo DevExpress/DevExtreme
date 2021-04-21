@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -46,7 +46,7 @@ export type ContentReadyEvent = EventInfo<dxGantt>;
 /** @public */
 export type ContextMenuPreparingEvent = Cancelable & {
     readonly component?: dxGantt;
-    readonly element?: THTMLElement;
+    readonly element?: DxElement;
     readonly event?: TEvent;
     readonly targetKey?: any;
     readonly targetType?: string;
@@ -57,7 +57,7 @@ export type ContextMenuPreparingEvent = Cancelable & {
 /** @public */
 export type CustomCommandEvent = {
     readonly component?: dxGantt;
-    readonly element?: THTMLElement;
+    readonly element?: DxElement;
     readonly name: string;
 }
 
@@ -932,7 +932,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskTooltipContentTemplate?: template | ((container: THTMLElement, task: any) => string | ElementIntake);
+    taskTooltipContentTemplate?: template | ((container: DxElement, task: any) => string | UserDefinedElement);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -943,7 +943,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskTimeTooltipContentTemplate?: template | ((container: THTMLElement, item: TimeTooltipTemplateData) => string | ElementIntake);
+    taskTimeTooltipContentTemplate?: template | ((container: DxElement, item: TimeTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -953,7 +953,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskProgressTooltipContentTemplate?: template | ((container: THTMLElement, item: ProgressTooltipTemplateData) => string | ElementIntake);
+    taskProgressTooltipContentTemplate?: template | ((container: DxElement, item: ProgressTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -969,7 +969,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskContentTemplate?: template | ((container: THTMLElement, item: TaskContentTemplateData) => string | ElementIntake);
+    taskContentTemplate?: template | ((container: DxElement, item: TaskContentTemplateData) => string | UserDefinedElement);
     /**
      * @docid
      * @default 0
@@ -987,7 +987,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
  * @public
  */
 export default class dxGantt extends Widget {
-    constructor(element: ElementIntake, options?: dxGanttOptions)
+    constructor(element: UserDefinedElement, options?: dxGanttOptions)
     /**
      * @docid
      * @publicName getTaskData(key)

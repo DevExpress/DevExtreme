@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import Editor, {
@@ -29,5 +29,5 @@ export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxTrackBar extends Editor {
-    constructor(element: ElementIntake, options?: dxTrackBarOptions)
+    constructor(element: UserDefinedElement, options?: dxTrackBarOptions)
 }

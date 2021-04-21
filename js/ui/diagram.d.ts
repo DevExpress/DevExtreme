@@ -1,7 +1,6 @@
 import {
-    ElementIntake,
-    TElement,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -30,7 +29,7 @@ export type ContentReadyEvent = EventInfo<dxDiagram>;
 /** @public */
 export type CustomCommandEvent = {
     readonly component: dxDiagram;
-    readonly element: THTMLElement;
+    readonly element: DxElement;
     readonly name: string;
 }
 
@@ -175,7 +174,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customShapeTemplate?: template | ((container: TElement<SVGElement>, data: CustomShapeTemplateData) => any);
+    customShapeTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any);
     /**
      * @docid
      * @type_function_param1 container:dxSVGElement
@@ -184,7 +183,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customShapeToolboxTemplate?: template | ((container: TElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
+    customShapeToolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
     /**
      * @docid
      * @default []
@@ -336,7 +335,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param2 data:object
        * @type_function_param2_field1 item:dxDiagramShape
        */
-      template?: template | ((container: TElement<SVGElement>, data: CustomShapeTemplateData) => any),
+      template?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -389,7 +388,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param2 data:object
        * @type_function_param2_field1 item:dxDiagramShape
        */
-      toolboxTemplate?: template | ((container: TElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any),
+      toolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1233,7 +1232,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
  * @public
  */
 export default class dxDiagram extends Widget {
-    constructor(element: ElementIntake, options?: dxDiagramOptions)
+    constructor(element: UserDefinedElement, options?: dxDiagramOptions)
     /**
      * @docid
      * @publicName getNodeDataSource()

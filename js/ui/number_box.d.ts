@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -156,7 +156,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
  * @public
  */
 export default class dxNumberBox extends dxTextEditor {
-    constructor(element: ElementIntake, options?: dxNumberBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxNumberBoxOptions)
 }
 
 /** @public */

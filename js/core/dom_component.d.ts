@@ -7,8 +7,8 @@ import {
 } from './devices';
 
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from './element';
 
 import { TemplateManager } from './template_manager';
@@ -44,7 +44,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: THTMLElement, model?: any }) => void);
+    onDisposing?: ((e: { component?: T, element?: DxElement, model?: any }) => void);
     /**
      * @docid
      * @action
@@ -52,7 +52,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: THTMLElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
+    onOptionChanged?: ((e: { component?: T, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
     /**
      * @docid
      * @default false
@@ -80,7 +80,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @prevFileNamespace DevExpress.core
  */
 export default class DOMComponent extends Component {
-    constructor(element: ElementIntake, options?: DOMComponentOptions);
+    constructor(element: UserDefinedElement, options?: DOMComponentOptions);
     /**
      * @docid
      * @static
@@ -107,7 +107,7 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    element(): THTMLElement;
+    element(): DxElement;
     /**
      * @docid
      * @static
@@ -118,9 +118,9 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    static getInstance(element: ElementIntake): DOMComponent;
+    static getInstance(element: UserDefinedElement): DOMComponent;
 
-    $element(): ElementIntake;
+    $element(): UserDefinedElement;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;

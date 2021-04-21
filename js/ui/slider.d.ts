@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -55,7 +55,7 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
  * @public
  */
 export default class dxSlider extends dxTrackBar {
-    constructor(element: ElementIntake, options?: dxSliderOptions)
+    constructor(element: UserDefinedElement, options?: dxSliderOptions)
 }
 
 /**

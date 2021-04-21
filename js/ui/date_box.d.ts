@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -236,7 +236,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
  * @public
  */
 export default class dxDateBox extends dxDropDownEditor {
-    constructor(element: ElementIntake, options?: dxDateBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxDateBoxOptions)
     /**
      * @docid
      * @publicName close()

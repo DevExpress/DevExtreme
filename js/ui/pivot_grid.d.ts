@@ -1,6 +1,6 @@
 import {
-    ElementIntake,
-    THTMLElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -29,7 +29,7 @@ import Widget, {
 /** @public */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid> & {
     readonly area?: string;
-    readonly cellElement?: THTMLElement;
+    readonly cellElement?: DxElement;
     readonly cell?: dxPivotGridPivotGridCell;
     readonly rowIndex?: number;
     readonly columnIndex?: number;
@@ -41,7 +41,7 @@ export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid> & {
 /** @public */
 export type CellPreparedEvent = EventInfo<dxPivotGrid> & {
     readonly area?: string;
-    readonly cellElement?: THTMLElement;
+    readonly cellElement?: DxElement;
     readonly cell?: dxPivotGridPivotGridCell;
     readonly rowIndex?: number;
     readonly columnIndex?: number
@@ -54,7 +54,7 @@ export type ContentReadyEvent = EventInfo<dxPivotGrid>;
 export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
     readonly area?: string;
     readonly cell?: dxPivotGridPivotGridCell;
-    readonly cellElement?: THTMLElement;
+    readonly cellElement?: DxElement;
     readonly columnIndex?: number;
     readonly rowIndex?: number;
     readonly dataFields?: Array<PivotGridDataSourceField>;
@@ -78,7 +78,7 @@ export type ExportingEvent = Cancelable & EventInfo<dxPivotGrid> & {
 /** @public */
 export type FileSavingEvent = Cancelable & {
     readonly component: dxPivotGrid;
-    readonly element: THTMLElement;
+    readonly element: DxElement;
     readonly data?: Blob;
     readonly format?: string;
     fileName?: string;
@@ -780,7 +780,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
  * @public
  */
 export default class dxPivotGrid extends Widget {
-    constructor(element: ElementIntake, options?: dxPivotGridOptions)
+    constructor(element: UserDefinedElement, options?: dxPivotGridOptions)
     /**
      * @docid
      * @publicName bindChart(chart, integrationOptions)
@@ -797,7 +797,7 @@ export default class dxPivotGrid extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    bindChart(chart: string | THTMLElement | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
+    bindChart(chart: string | DxElement | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
     /**
      * @docid
      * @publicName exportToExcel()

@@ -1,5 +1,5 @@
 import {
-    ElementIntake
+    UserDefinedElement
 } from '../core/element';
 
 /**
@@ -33,7 +33,7 @@ export interface positionConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    boundary?: string | ElementIntake | Window;
+    boundary?: string | UserDefinedElement | Window;
     /**
      * @docid
      * @prevFileNamespace DevExpress.animation
@@ -100,7 +100,7 @@ export interface positionConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    of?: string | ElementIntake | Window;
+    of?: string | UserDefinedElement | Window;
     /**
      * @docid
      * @prevFileNamespace DevExpress.animation
