@@ -474,19 +474,6 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
     });
 
-    test('wrapperAttr defaultOption', function(assert) {
-        Overlay.defaultOptions({
-            options: {
-                wrapperAttr: { id: 'deafultId' }
-            }
-        });
-
-        const overlay = new Overlay('#overlay');
-        const $content = $(overlay.content());
-        const $wrapper = $content.parent();
-        assert.strictEqual($wrapper.attr('id'), 'deafultId', 'defaultOption for wrapperAttr works properly');
-    });
-
     test('wrapperAttr on init works correctly', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             wrapperAttr: { class: 'someClass' }
