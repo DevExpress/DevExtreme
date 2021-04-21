@@ -161,7 +161,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @type_function_param1_field1 component:dxForm
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -175,7 +175,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @type_function_param1_field4 dataField:string
      * @type_function_param1_field5 value:object
      * @type_function_param1_field1 component:dxForm
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui

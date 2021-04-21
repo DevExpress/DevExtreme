@@ -58,7 +58,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @type_function_param1_field8 reachedTop:boolean
      * @type_function_param1_field9 reachedBottom:boolean
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -76,7 +76,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @type_function_param1_field8 reachedTop:boolean
      * @type_function_param1_field9 reachedBottom:boolean
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui

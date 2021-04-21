@@ -141,7 +141,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSlideOut
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @default null
      * @action
@@ -153,7 +153,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSlideOut
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @default null
      * @action

@@ -196,7 +196,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:any
@@ -218,7 +218,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
@@ -241,7 +241,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
@@ -264,7 +264,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
@@ -286,7 +286,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @default null
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -305,7 +305,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:any
@@ -326,7 +326,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:any

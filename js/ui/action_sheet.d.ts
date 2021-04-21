@@ -81,7 +81,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxActionSheet
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui

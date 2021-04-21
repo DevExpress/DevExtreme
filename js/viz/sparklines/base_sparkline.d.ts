@@ -39,7 +39,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
@@ -52,7 +52,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action

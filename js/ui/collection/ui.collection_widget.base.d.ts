@@ -82,7 +82,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -98,7 +98,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -114,7 +114,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -129,7 +129,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field5 itemElement:dxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -143,7 +143,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui

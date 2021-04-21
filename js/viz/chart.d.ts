@@ -1026,7 +1026,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 argument:Date|Number|string
@@ -1041,7 +1041,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
@@ -1056,7 +1056,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
@@ -1071,7 +1071,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
@@ -1085,7 +1085,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
@@ -1099,7 +1099,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
@@ -1122,7 +1122,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject

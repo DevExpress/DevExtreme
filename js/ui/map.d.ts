@@ -222,7 +222,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1_field4 location:object
      * @type_function_param1_field5 event:event
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -236,7 +236,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalMarker:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -249,7 +249,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -262,7 +262,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 originalMap:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -276,7 +276,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalRoute:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -289,7 +289,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui

@@ -568,7 +568,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -582,7 +582,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
@@ -596,7 +596,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
@@ -613,7 +613,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
@@ -629,7 +629,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
@@ -646,7 +646,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -660,7 +660,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
@@ -674,7 +674,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 form:dxForm
@@ -690,7 +690,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object|undefined
@@ -705,7 +705,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -719,7 +719,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 oldData:Object
      * @type_function_param1_field5 newData:Object
@@ -734,7 +734,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellData:object
      * @type_function_param1_field5 cellElement:dxElement
@@ -750,7 +750,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellData:object
      * @type_function_param1_field5 cellElement:dxElement

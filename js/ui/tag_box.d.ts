@@ -141,7 +141,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1_field6 text:string
      * @type_function_param1_field7 cancel:boolean
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -154,7 +154,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -168,7 +168,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1_field4 addedItems:Array<string,number,Object>
      * @type_function_param1_field5 removedItems:Array<string,number,Object>
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui

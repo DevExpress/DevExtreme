@@ -859,7 +859,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
@@ -872,7 +872,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
@@ -885,7 +885,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 items:Array<dxDiagramItem>
      * @action
@@ -898,7 +898,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 operation:Enums.DiagramModelOperation
      * @type_function_param1_field5 args:dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs
@@ -914,7 +914,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<any>
      * @type_function_param1_field5 allowed:boolean
