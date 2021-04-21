@@ -487,20 +487,40 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual($wrapper.attr('id'), 'deafultId', 'defaultOption for wrapperAttr works properly');
     });
 
-    test('wrapperAttr', function(assert) {
+    test('wrapperAttr on init works correctly', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
-            wrapperAttr: { class: 'class', id: 'id', anotherAttr: 'someValue' }
+            wrapperAttr: { class: 'someClass' }
         });
         const overlay = $overlay.dxOverlay('instance');
         const $content = $(overlay.content());
         const $wrapper = $content.parent();
 
-        assert.ok($wrapper.hasClass('class'), 'wrapper class set correct');
-        assert.strictEqual($wrapper.attr('id'), 'id', 'wrapper id set correct');
-        assert.strictEqual($wrapper.attr('anotherAttr'), 'someValue', 'wrapper attribute set correct');
+        assert.ok($wrapper.hasClass('someClass'), 'wrapper attribute set correct');
+    });
 
-        overlay.option('wrapperAttr', { id: 'newId' });
-        assert.strictEqual($wrapper.attr('id'), 'newId', 'wrapper id chenge correct');
+    testModule('wrapperAttr option runtime change', {
+        beforeEach: () => {
+            this.overlay = $('#overlay').dxOverlay({
+                wrapperAttr: { class: 'someClass' }
+            });
+            this.$content = $(this.overlay.content());
+            this.$wrapper = this.$content.parent();
+        } }, () => {
+        test('wrapperAttr set wrapper class correctly', function(assert) {
+            assert.ok(this.$wrapper.hasClass('someClass'));
+        });
+
+        test('wrapperAttr set new wrapper attribute correctly', function(assert) {
+            this.overlay.option('wrapperAttr', { someAttr: 'someValue' });
+
+            assert.strictEqual(this.$wrapper.attr('someAttr'), 'someValue');
+        });
+
+        test('setting new wrapperAttr removes old attributes from wrapper', function(assert) {
+            this.overlay.option('wrapperAttr', { someAttr: 'someValue' });
+
+            assert.notOk(this.$wrapper.hasClass('someClass'));
+        });
     });
 });
 
