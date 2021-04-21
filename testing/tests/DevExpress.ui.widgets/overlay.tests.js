@@ -473,6 +473,35 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeFired.callCount, 1, 'onResize fired');
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
     });
+
+    test('wrapperAttr defaultOption', function(assert) {
+        Overlay.defaultOptions({
+            options: {
+                wrapperAttr: { id: 'deafultId' }
+            }
+        });
+
+        const overlay = new Overlay('#overlay');
+        const $content = $(overlay.content());
+        const $wrapper = $content.parent();
+        assert.strictEqual($wrapper.attr('id'), 'deafultId', 'defaultOption for wrapperAttr works properly');
+    });
+
+    test('wrapperAttr', function(assert) {
+        const $overlay = $('#overlay').dxOverlay({
+            wrapperAttr: { class: 'class', id: 'id', anotherAttr: 'someValue' }
+        });
+        const overlay = $overlay.dxOverlay('instance');
+        const $content = $(overlay.content());
+        const $wrapper = $content.parent();
+
+        assert.ok($wrapper.hasClass('class'), 'wrapper class set correct');
+        assert.strictEqual($wrapper.attr('id'), 'id', 'wrapper id set correct');
+        assert.strictEqual($wrapper.attr('anotherAttr'), 'someValue', 'wrapper attribute set correct');
+
+        overlay.option('wrapperAttr', { id: 'newId' });
+        assert.strictEqual($wrapper.attr('id'), 'newId', 'wrapper id chenge correct');
+    });
 });
 
 
