@@ -7262,4 +7262,32 @@ QUnit.module('New virtual scrolling mode', {
             resetSpy.restore();
         }
     });
+
+    QUnit.test('loadingChanged should not fire when loading is failed', function(assert) {
+        // arrange
+        const dataSource = createDataSource({
+            store: new CustomStore({
+                key: 'id',
+                load: function() {
+                    return $.Deferred().reject().promise();
+                }
+            }),
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+        });
+        const fireSpy = sinon.spy(dataSource.loadingChanged, 'fire');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.equal(fireSpy.callCount, 2, 'called twice');
+        } finally {
+            fireSpy.restore();
+        }
+    });
 });

@@ -164,15 +164,15 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             }
         },
         _handleLoadError: function() {
-            this._isLoading = false;
-            this.loadingChanged.fire(false);
+            if(!this.option(NEW_SCROLLING_MODE)) {
+                this._isLoading = false;
+                this.loadingChanged.fire(false);
+            }
 
             this.callBase.apply(this, arguments);
         },
         _handleDataChanged: function(e) {
             if(this.option(NEW_SCROLLING_MODE)) {
-                this._items = this._dataSource.items();
-                this.endPageIndex(this._dataSource.pageIndex());
                 this.callBase.apply(this, arguments);
                 return;
             }
@@ -303,14 +303,28 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
     };
 
     [
+        'beginPageIndex',
+        'endPageIndex'
+    ].forEach(function(name) {
+        result[name] = function() {
+            if(this.option(NEW_SCROLLING_MODE)) {
+                const dataSource = this._dataSource;
+                return dataSource.pageIndex.apply(dataSource, arguments);
+            }
+
+            const virtualScrollController = this._virtualScrollController;
+            return virtualScrollController[name].apply(virtualScrollController, arguments);
+        };
+    });
+
+    [
         'virtualItemsCount',
         'getContentOffset',
         'getVirtualContentSize',
         'setContentItemSizes', 'setViewportPosition',
         'getViewportItemIndex', 'setViewportItemIndex', 'getItemIndexByPosition',
         'viewportSize', 'viewportItemSize', 'getItemSize', 'getItemSizes',
-        'pageIndex', 'beginPageIndex', 'endPageIndex',
-        'loadIfNeed'
+        'pageIndex', 'loadIfNeed'
     ].forEach(function(name) {
         result[name] = function() {
             const virtualScrollController = this._virtualScrollController;
@@ -687,17 +701,8 @@ const VirtualScrollingRowsViewExtender = (function() {
             const hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!this._findBottomLoadPanel();
             const operationTypes = dataController.dataSource()?.operationTypes?.();
             const hasEnabledOperationType = function(types) {
-                let result = false;
-                if(types) {
-                    for(const t in types) {
-                        if(types[t]) {
-                            result = true;
-                            break;
-                        }
-                    }
-                }
-
-                return result;
+                types = types || {};
+                return Object.keys(types).some(name => types[name]);
             };
 
             if(this.option(NEW_SCROLLING_MODE) && isLoading && operationTypes) {
