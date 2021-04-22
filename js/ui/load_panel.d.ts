@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -61,7 +62,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | TElement;
+    container?: string | UserDefinedElement;
     /**
      * @docid
      * @default 0
@@ -180,7 +181,7 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxLoadPanel extends dxOverlay {
-    constructor(element: TElement, options?: dxLoadPanelOptions)
+    constructor(element: UserDefinedElement, options?: dxLoadPanelOptions)
 }
 
 /** @public */

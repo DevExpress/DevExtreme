@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
@@ -36,12 +37,12 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
