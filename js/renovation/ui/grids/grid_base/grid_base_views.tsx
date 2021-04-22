@@ -24,7 +24,7 @@ export const viewFunction = ({
 type GridBaseViewPropsType = Pick<DataGridProps, 'showBorders'> & GridBaseViewProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class GridBaseViews extends JSXComponent<GridBaseViewPropsType, 'views' | 'className'>() {
+export class GridBaseViews extends JSXComponent<GridBaseViewPropsType, 'views' | 'className' | 'role'>() {
   get className(): string | undefined {
     const { showBorders } = this.props;
 
