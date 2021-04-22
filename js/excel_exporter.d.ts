@@ -1,4 +1,4 @@
-import { TPromise } from './core/utils/deferred';
+import { DxPromise } from './core/utils/deferred';
 import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
 import dxPivotGrid, { dxPivotGridPivotGridCell } from './ui/pivot_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
@@ -229,7 +229,7 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
  * @prevFileNamespace DevExpress
  * @public
  */
-export function exportDataGrid(options: ExcelExportDataGridProps): TPromise<CellRange>;
+export function exportDataGrid(options: ExcelExportDataGridProps): DxPromise<CellRange>;
 
 /**
  * @docid excelExporter.exportPivotGrid
@@ -242,4 +242,4 @@ export function exportDataGrid(options: ExcelExportDataGridProps): TPromise<Cell
  * @prevFileNamespace DevExpress
  * @public
  */
-export function exportPivotGrid(options: ExcelExportPivotGridProps): TPromise<CellRange>;
+export function exportPivotGrid(options: ExcelExportPivotGridProps): DxPromise<CellRange>;

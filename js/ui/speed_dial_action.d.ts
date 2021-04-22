@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -15,12 +16,12 @@ import Widget, {
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxSpeedDialAction> & {
-    actionElement?: TElement
+    actionElement?: DxElement
 }
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSpeedDialAction> & {
-    actionElement?: TElement
+    actionElement?: DxElement
 };
 
 /** @public */
@@ -59,8 +60,8 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @type_function_param1 e:object
      * @type_function_param1_field1 event:event
      * @type_function_param1_field2 component:this
-     * @type_function_param1_field3 element:dxElement
-     * @type_function_param1_field4 actionElement:dxElement
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 actionElement:DxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -71,9 +72,9 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSpeedDialAction
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 actionElement:dxElement
+     * @type_function_param1_field4 actionElement:DxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -95,7 +96,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @public
  */
 export default class dxSpeedDialAction extends Widget {
-    constructor(element: TElement, options?: dxSpeedDialActionOptions)
+    constructor(element: UserDefinedElement, options?: dxSpeedDialActionOptions)
 }
 
 /** @public */

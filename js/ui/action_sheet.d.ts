@@ -1,9 +1,10 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -11,7 +12,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -80,7 +81,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxActionSheet
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -106,7 +107,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | TElement;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default ""
@@ -140,7 +141,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @public
  */
 export default class dxActionSheet extends CollectionWidget {
-    constructor(element: TElement, options?: dxActionSheetOptions)
+    constructor(element: UserDefinedElement, options?: dxActionSheetOptions)
     /**
      * @docid
      * @publicName hide()
@@ -148,7 +149,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<void>;
+    hide(): DxPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -156,7 +157,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<void>;
+    show(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -165,7 +166,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): TPromise<void>;
+    toggle(showing: boolean): DxPromise<void>;
 }
 
 /**
@@ -185,13 +186,13 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxActionSheet
-     * @type_function_param1_field2 element:dxElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: { component?: dxActionSheet, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType

@@ -7,11 +7,11 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -72,7 +72,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default true
@@ -179,7 +179,7 @@ export interface dxToastAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxToast extends dxOverlay {
-    constructor(element: TElement, options?: dxToastOptions)
+    constructor(element: UserDefinedElement, options?: dxToastOptions)
 }
 
 /** @public */

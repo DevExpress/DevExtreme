@@ -1,9 +1,9 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -24,7 +24,7 @@ export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
 export type ContextMenuPreparingEvent = EventInfo<dxPivotGridFieldChooser> & {
     readonly area?: string;
     readonly field?: PivotGridDataSourceField;
-    readonly event?: TEvent;
+    readonly event?: DxEvent;
     items?: Array<any>;
 }
 
@@ -147,7 +147,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @type_function_param1_field7 event:event
      * @default null
      * @type_function_param1_field1 component:dxPivotGridFieldChooser
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -215,7 +215,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
  * @public
  */
 export default class dxPivotGridFieldChooser extends Widget {
-    constructor(element: TElement, options?: dxPivotGridFieldChooserOptions)
+    constructor(element: UserDefinedElement, options?: dxPivotGridFieldChooserOptions)
     /**
      * @docid
      * @publicName applyChanges()

@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
@@ -45,12 +46,12 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @default "group"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
@@ -81,7 +82,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -94,7 +95,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @type_function_param1 e:object
      * @type_function_param1_field4 selectedItem:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -109,7 +110,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @type_function_param1_field5 previousValue:object
      * @type_function_param1_field6 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -200,6 +201,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxDropDownList extends dxDropDownEditor {
-    constructor(element: TElement, options?: dxDropDownListOptions)
+    constructor(element: UserDefinedElement, options?: dxDropDownListOptions)
     getDataSource(): DataSource;
 }

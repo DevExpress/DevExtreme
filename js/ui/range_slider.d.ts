@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -56,7 +56,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     /**
      * @docid
      * @type_function_param1_field1 component:dxRangeSlider
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @default null
@@ -99,7 +99,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @public
  */
 export default class dxRangeSlider extends dxTrackBar {
-    constructor(element: TElement, options?: dxRangeSliderOptions)
+    constructor(element: UserDefinedElement, options?: dxRangeSliderOptions)
 }
 
 /** @public */

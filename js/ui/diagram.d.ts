@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -28,7 +29,7 @@ export type ContentReadyEvent = EventInfo<dxDiagram>;
 /** @public */
 export type CustomCommandEvent = {
     readonly component: dxDiagram;
-    readonly element: TElement;
+    readonly element: DxElement;
     readonly name: string;
 }
 
@@ -158,7 +159,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:dxElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 name:String
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -173,7 +174,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customShapeTemplate?: template | ((container: TElement<SVGElement>, data: CustomShapeTemplateData) => any);
+    customShapeTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any);
     /**
      * @docid
      * @type_function_param1 container:dxSVGElement
@@ -182,7 +183,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customShapeToolboxTemplate?: template | ((container: TElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
+    customShapeToolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
     /**
      * @docid
      * @default []
@@ -334,7 +335,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param2 data:object
        * @type_function_param2_field1 item:dxDiagramShape
        */
-      template?: template | ((container: TElement<SVGElement>, data: CustomShapeTemplateData) => any),
+      template?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -387,7 +388,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param2 data:object
        * @type_function_param2_field1 item:dxDiagramShape
        */
-      toolboxTemplate?: template | ((container: TElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any),
+      toolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -858,7 +859,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
@@ -871,7 +872,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
@@ -884,7 +885,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 items:Array<dxDiagramItem>
      * @action
@@ -897,7 +898,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 operation:Enums.DiagramModelOperation
      * @type_function_param1_field5 args:dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs
@@ -913,7 +914,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDiagram
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<any>
      * @type_function_param1_field5 allowed:boolean
@@ -1231,7 +1232,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
  * @public
  */
 export default class dxDiagram extends Widget {
-    constructor(element: TElement, options?: dxDiagramOptions)
+    constructor(element: UserDefinedElement, options?: dxDiagramOptions)
     /**
      * @docid
      * @publicName getNodeDataSource()

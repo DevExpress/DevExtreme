@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -493,7 +494,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
@@ -507,7 +508,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
@@ -522,7 +523,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
@@ -537,7 +538,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
@@ -639,7 +640,7 @@ export interface dxFunnelLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxFunnelOptions.legend.visible
      * @default false
@@ -657,13 +658,13 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field3 valueText:string
      * @type_function_param1_field4 percent:Number
      * @type_function_param1_field5 percentText:string
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: TElement) => string | TElement);
+    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
@@ -688,7 +689,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxFunnel extends BaseWidget {
-    constructor(element: TElement, options?: dxFunnelOptions)
+    constructor(element: UserDefinedElement, options?: dxFunnelOptions)
     /**
      * @docid
      * @publicName clearSelection()
