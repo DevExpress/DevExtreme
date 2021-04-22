@@ -458,6 +458,22 @@ describe('option', () => {
 
     expect(widget.option('contentTemplate')).toBe(null);
   });
+
+  it('should not pass excessive options to props', () => {
+    const mockFunction = () => {};
+    const options = {
+      text: 'some text',
+      twoWayProp: 15,
+      twoWayPropChange: mockFunction,
+      excessiveOption: { isExcessive: true },
+    };
+    const { excessiveOption, ...props } = options;
+
+    $('#component').dxOptionsCheckWidget(options);
+
+    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject(props);
+    expect($('#component').dxOptionsCheckWidget('option')).toMatchObject(options);
+  });
 });
 
 describe('templates and slots', () => {
