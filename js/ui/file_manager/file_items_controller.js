@@ -41,7 +41,7 @@ export default class FileItemsController {
             allowedFileExtensions: this._options.allowedFileExtensions,
             maxFileSize: this._options.uploadMaxFileSize
         });
-        this._resetState();
+        this.resetState();
     }
 
     setAllowedFileExtensions(allowedFileExtensions) {
@@ -61,7 +61,7 @@ export default class FileItemsController {
 
     setProvider(fileProvider) {
         this._fileProvider = this._createFileProvider(fileProvider);
-        this._resetState();
+        this.resetState();
     }
 
     _createFileProvider(fileProvider) {
@@ -683,9 +683,10 @@ export default class FileItemsController {
         }
     }
 
-    _resetState() {
+    resetState() {
         this._selectedDirectory = null;
         this._rootDirectoryInfo.items = [ ];
+        delete this._rootDirectoryInfo.fileItem.hasSubDirectories;
         this._loadedItems = { };
     }
 
