@@ -484,7 +484,7 @@ testModule('option', moduleConfig, () => {
             this.$wrapper = this.$content.parent();
         }
     }, () => {
-        test('add attribute on wrapper on init', function(assert) {
+        test('adds attribute on wrapper on init', function(assert) {
             assert.ok(this.$wrapper.hasClass('someClass'));
         });
 
