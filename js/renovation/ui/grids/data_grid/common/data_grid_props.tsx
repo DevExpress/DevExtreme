@@ -1122,7 +1122,7 @@ export class DataGridCommonColumnSettings {
 export class DataGridProps extends BaseWidgetProps implements Options {
   @Nested() columns?: (DataGridColumn | string)[];
 
-  @Nested() editing?: DataGridEditing /* = {
+  @Nested() editing?: DataGridEditing = {
     mode: 'row',
     refreshMode: 'full',
     allowAdding: false,
@@ -1139,17 +1139,17 @@ export class DataGridProps extends BaseWidgetProps implements Options {
     editRowKey: null,
     editColumnName: undefined,
     changes: [],
-  } */;
+  };
 
   @OneWay() export?: DataGridExport;
 
-  @Nested() groupPanel?: DataGridGroupPanel /* = {
+  @Nested() groupPanel?: DataGridGroupPanel = {
     visible: false,
     emptyPanelText: messageLocalization.format('dxDataGrid-groupPanelEmptyText'),
     allowColumnDragging: true,
-  } */;
+  };
 
-  @Nested() grouping?: DataGridGrouping /* = {
+  @Nested() grouping?: DataGridGrouping = {
     autoExpandAll: true,
     allowCollapsing: true,
     contextMenuEnabled: false,
@@ -1161,11 +1161,11 @@ export class DataGridProps extends BaseWidgetProps implements Options {
       ungroup: messageLocalization.format('dxDataGrid-ungroupHeaderText'),
       ungroupAll: messageLocalization.format('dxDataGrid-ungroupAllText'),
     },
-  } */;
+  };
 
   @Nested() masterDetail?: DataGridMasterDetail;
 
-  @Nested() scrolling?: DataGridScrolling /* = {
+  @Nested() scrolling?: DataGridScrolling = {
     timeout: 300,
     updateTimeout: 300,
     minTimeout: 0,
@@ -1180,7 +1180,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
     columnPageSize: 5,
     columnRenderingThreshold: 300,
     useNative: 'auto',
-  } */;
+  };
 
   @Nested() selection?: DataGridSelection;
 
@@ -1200,12 +1200,12 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() useKeyboard?: boolean; // TODO remove
 
-  @Nested() keyboardNavigation?: DataGridKeyboardNavigation /* = {
+  @Nested() keyboardNavigation?: DataGridKeyboardNavigation = {
     enabled: true,
     enterKeyAction: 'startEdit',
     enterKeyDirection: 'none',
     editOnKeyPress: false,
-  } */;
+  };
 
   @Nested() loadPanel?: DataGridLoadPanel;
 
@@ -1215,7 +1215,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @Nested() rowDragging?: DataGridRowDragging;
 
-  @Nested() searchPanel?: DataGridSearchPanel /*= {
+  @Nested() searchPanel?: DataGridSearchPanel = {
     visible: false,
     width: 160,
     placeholder: messageLocalization.format('dxDataGrid-searchPanelPlaceholder'),
@@ -1223,15 +1223,15 @@ export class DataGridProps extends BaseWidgetProps implements Options {
     highlightCaseSensitive: false,
     text: '',
     searchVisibleColumnsOnly: false,
-  } */;
+  };
 
-  @Nested() sorting?: DataGridSorting /*= {
+  @Nested() sorting?: DataGridSorting = {
     mode: 'single',
     ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
     descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
     clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
     showSortIndexes: true,
-  } */;
+  };
 
   @Nested() stateStoring?: DataGridStateStoring;
 
