@@ -1,8 +1,5 @@
-import $ from 'jquery';
 import fx from 'animation/fx';
-import Color from 'color';
 import {
-    SchedulerTestWrapper,
     initTestMarkup,
     createWrapper
 } from '../../helpers/scheduler/helpers.js';
@@ -21,35 +18,7 @@ QUnit.testStart(() => initTestMarkup());
 module('Integration: Appointment tooltip', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options,
-                {
-                    height: options && options.height || 600
-                })
-            ).dxScheduler('instance');
-
-            this.clock.tick(300);
-            this.instance.focus();
-
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
-        this.getAppointmentColor = function($task, checkedProperty) {
-            checkedProperty = checkedProperty || 'backgroundColor';
-            return new Color($task.css(checkedProperty)).toHex();
-        };
         this.clock = sinon.useFakeTimers();
-        this.tasks = [
-            {
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 12, 0)
-            }
-        ];
     },
     afterEach: function() {
         fx.off = false;

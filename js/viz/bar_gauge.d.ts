@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -240,7 +241,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxBarGauge
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -254,7 +255,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxBarGauge
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -365,7 +366,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxBarGaugeOptions.legend.visible
      * @default false
@@ -389,13 +390,13 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
      * @type_function_param1_field3 index:number
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: TElement) => string | TElement);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -425,7 +426,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxBarGauge extends BaseWidget {
-    constructor(element: TElement, options?: dxBarGaugeOptions)
+    constructor(element: UserDefinedElement, options?: dxBarGaugeOptions)
     /**
      * @docid
      * @publicName values()

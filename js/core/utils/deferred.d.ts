@@ -27,4 +27,4 @@ export interface PromiseType<T> { }
  * @type Promise<void>
  * @prevFileNamespace DevExpress.core.utils
  */
-export type TPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>
+export type DxPromise<T = void> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>

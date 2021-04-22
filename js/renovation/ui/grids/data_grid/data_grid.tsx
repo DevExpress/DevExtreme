@@ -13,8 +13,8 @@ import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
-import { TPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
-import { TElement, TElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
+import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
+import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
 import type { OptionChangedEvent } from '../../../../ui/data_grid';
@@ -100,7 +100,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  byKey(key: any | string | number): TPromise<any> {
+  byKey(key: any | string | number): DxPromise<any> {
     return this.instance?.byKey(key);
   }
 
@@ -169,12 +169,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  deselectAll(): TPromise {
+  deselectAll(): DxPromise {
     return this.instance?.deselectAll();
   }
 
   @Method()
-  deselectRows(keys: any[]): TPromise<any> {
+  deselectRows(keys: any[]): DxPromise<any> {
     return this.instance?.deselectRows(keys);
   }
 
@@ -204,14 +204,14 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  focus(element?: TElement): void {
+  focus(element?: UserDefinedElement): void {
     return this.instance?.focus(element as HTMLElement);
   }
 
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
-  ): any/* dxElement | undefined */ {
+  ): any/* DxElement | undefined */ {
     return this.instance?.getCellElement(rowIndex, dataField as string);
   }
 
@@ -231,7 +231,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getRowElement(rowIndex: number): TElementsArray | undefined {
+  getRowElement(rowIndex: number): UserDefinedElementsArray | undefined {
     return this.instance?.getRowElement(rowIndex);
   }
 
@@ -293,7 +293,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   pageIndex(
     newIndex?: number,
-  ): TPromise | number {
+  ): DxPromise | number {
     return this.instance?.pageIndex(newIndex as number);
   }
 
@@ -305,7 +305,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   refresh(
     changesOnly?: boolean,
-  ): TPromise {
+  ): DxPromise {
     return this.instance?.refresh(changesOnly as boolean);
   }
 
@@ -315,7 +315,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  saveEditData(): TPromise {
+  saveEditData(): DxPromise {
     return this.instance?.saveEditData();
   }
 
@@ -325,19 +325,19 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  selectAll(): TPromise {
+  selectAll(): DxPromise {
     return this.instance?.selectAll();
   }
 
   @Method()
   selectRows(
     keys: any[], preserve: boolean,
-  ): TPromise<any> {
+  ): DxPromise<any> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
-  selectRowsByIndexes(indexes: number[]): TPromise<any> {
+  selectRowsByIndexes(indexes: number[]): DxPromise<any> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
 
@@ -373,7 +373,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  addRow(): TPromise {
+  addRow(): DxPromise {
     return this.instance?.addRow();
   }
 
@@ -388,7 +388,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  collapseRow(key: any): TPromise {
+  collapseRow(key: any): DxPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -398,7 +398,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  expandRow(key: any): TPromise {
+  expandRow(key: any): DxPromise {
     return this.instance?.expandRow(key);
   }
 
@@ -408,12 +408,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getSelectedRowKeys(): any[] & TPromise<any> {
+  getSelectedRowKeys(): any[] & DxPromise<any> {
     return this.instance?.getSelectedRowKeys();
   }
 
   @Method()
-  getSelectedRowsData(): any[] & TPromise<any> {
+  getSelectedRowsData(): any[] & DxPromise<any> {
     return this.instance?.getSelectedRowsData();
   }
 

@@ -571,13 +571,9 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         this.selectionController.selectRows([{ name: 'Kate', age: 20 }]);
 
-        this.selectionController.optionChanged({
-            name: 'selectedRowKeys',
-            value: [
-                { name: 'Dan', age: 16 },
-                { name: 'Dmitry', age: 18 }
-            ]
-        });
+        this.option('selectedRowKeys', [
+            { name: 'Dan', age: 16 },
+            { name: 'Dmitry', age: 18 }]);
 
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
@@ -680,12 +676,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         const keys = [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }];
 
-        this.options.selectedRowKeys = keys;
-
-        this.selectionController.optionChanged({
-            name: 'selectedRowKeys',
-            value: keys
-        });
+        this.option('selectedRowKeys', keys);
 
         assert.deepEqual(this.selectionController.option('selectedRowKeys'), keys, 'selectedRowKeys instance is not changed');
         assert.deepEqual(this.selectionController.getSelectedRowsData(), keys, 'selectRowsData equal keys by deep equal');
@@ -1096,8 +1087,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(selectionChangedCount, 1);
 
         // act
-        this.options.dataSource = [{ name: 'Dan', age: 16 }];
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', [{ name: 'Dan', age: 16 }]);
 
         // assert
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
@@ -3721,11 +3711,6 @@ QUnit.module('Selection with views', {
         this.selectionController.selectAll();
 
         this.option('selection.selectAllMode', 'page');
-        this.selectionController.optionChanged({
-            name: 'selection',
-            fullName: 'selectAllMode',
-            value: 'page'
-        });
 
         const $checkbox = testElement.find('.dx-checkbox');
 
@@ -3761,11 +3746,6 @@ QUnit.module('Selection with views', {
         this.dataController.pageIndex(1);
 
         this.option('selection.selectAllMode', 'allPages');
-        this.selectionController.optionChanged({
-            name: 'selection',
-            fullName: 'selectAllMode',
-            value: 'allPages'
-        });
 
         const $checkbox = testElement.find('.dx-checkbox');
 
@@ -4082,10 +4062,8 @@ QUnit.module('Deferred selection', {
         // act
         selectionChangedStub.reset();
 
-        this.selectionController.optionChanged({
-            name: 'selectionFilter',
-            value: ['id', '>', 5]
-        });
+        this.option('selectionFilter', ['id', '>', 5]);
+
         // assert
         let selectedKeys = [];
 

@@ -169,7 +169,7 @@ class Scheduler extends Widget {
                 * @type_function_param1_field1 appointmentData:object
                 * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 contentElement:dxElement
+                * @type_function_param3 contentElement:DxElement
                 * @type_function_return string|Element|jQuery
                 */
 
@@ -181,7 +181,7 @@ class Scheduler extends Widget {
                 * @type_function_param1_field1 appointmentData:object
                 * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 contentElement:dxElement
+                * @type_function_param3 contentElement:DxElement
                 * @type_function_return string|Element|jQuery
                 */
 
@@ -191,7 +191,7 @@ class Scheduler extends Widget {
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:dxElement
+                * @type_function_param3 itemElement:DxElement
                 * @type_function_return string|Element|jQuery
                 */
 
@@ -201,7 +201,7 @@ class Scheduler extends Widget {
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:dxElement
+                * @type_function_param3 itemElement:DxElement
                 * @type_function_return string|Element|jQuery
                 */
 
@@ -211,7 +211,7 @@ class Scheduler extends Widget {
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:dxElement
+                * @type_function_param3 itemElement:DxElement
                 * @type_function_return string|Element|jQuery
                 */
 
@@ -221,7 +221,7 @@ class Scheduler extends Widget {
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:dxElement
+                * @type_function_param3 itemElement:DxElement
                 * @type_function_return string|Element|jQuery
                 */
 
@@ -232,7 +232,7 @@ class Scheduler extends Widget {
                 * @type_function_param1 data:object
                 * @type_function_param1_field1 appointmentCount:number
                 * @type_function_param1_field2 isCompact:boolean
-                * @type_function_param2 collectorElement:dxElement
+                * @type_function_param2 collectorElement:DxElement
                 * @type_function_return string|Element|jQuery
                 */
 
@@ -340,7 +340,7 @@ class Scheduler extends Widget {
                 * @type template|function
                 * @default "appointmentPopup"
                 * @type_function_param1 appointmentData:object
-                * @type_function_param2 contentElement:dxElement
+                * @type_function_param2 contentElement:DxElement
                 * @type_function_return string|Element|jQuery
                 */
             appointmentPopupTemplate: 'appointmentPopup',

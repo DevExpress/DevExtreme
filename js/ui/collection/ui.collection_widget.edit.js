@@ -77,7 +77,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 fromIndex:number
             * @type_function_param1_field8 toIndex:number
@@ -92,7 +92,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 cancel:boolean | Promise<void>
             * @action
@@ -106,7 +106,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field5 itemElement:DxElement
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             * @hidden

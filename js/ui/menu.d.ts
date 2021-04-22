@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import DataSource, {
@@ -50,22 +51,22 @@ export type SelectionChangedEvent = EventInfo<dxMenu> & SelectionChangedInfo;
 
 /** @public */
 export type SubmenuHiddenEvent = EventInfo<dxMenu> & {
-    readonly rootItem?: TElement;
+    readonly rootItem?: DxElement;
 }
 
 /** @public */
 export type SubmenuHidingEvent = Cancelable & EventInfo<dxMenu> & {
-    readonly rootItem?: TElement;
+    readonly rootItem?: DxElement;
 }
 
 /** @public */
 export type SubmenuShowingEvent = EventInfo<dxMenu> & {
-    readonly rootItem?: TElement;
+    readonly rootItem?: DxElement;
 }
 
 /** @public */
 export type SubmenuShownEvent = EventInfo<dxMenu> & {
-    readonly rootItem?: TElement;
+    readonly rootItem?: DxElement;
 }
 
 export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
@@ -100,9 +101,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field1 component:dxMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -113,10 +114,10 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field1 component:dxMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -127,9 +128,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field1 component:dxMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -140,9 +141,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field1 component:dxMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -210,7 +211,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  * @public
  */
 export default class dxMenu extends dxMenuBase {
-    constructor(element: TElement, options?: dxMenuOptions)
+    constructor(element: UserDefinedElement, options?: dxMenuOptions)
 }
 
 /**
