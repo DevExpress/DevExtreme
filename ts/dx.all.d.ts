@@ -7936,6 +7936,10 @@ declare module DevExpress.ui {
          */
         onResourceInserting?: ((e: { component?: dxGantt, element?: DevExpress.core.TElement, model?: any, cancel?: boolean, values?: any }) => any);
         /**
+         * [descr:dxGanttOptions.onResourceManagerDialogShowing]
+         */
+        onResourceManagerDialogShowing?: ((e: { component?: dxGantt, element?: DevExpress.core.TElement, cancel?: boolean, values?: Array<any>, key?: any }) => any);
+        /**
          * [descr:dxGanttOptions.onResourceUnassigned]
          */
         onResourceUnassigned?: ((e: { component?: dxGantt, element?: DevExpress.core.TElement, model?: any, values?: any, key?: any }) => any);
@@ -8134,6 +8138,10 @@ declare module DevExpress.ui {
          * [descr:dxGantt.scrollToDate(date)]
          */
         scrollToDate(date: Date | number | string): void;
+        /**
+         * [descr:dxGantt.showResourceManagerDialog()]
+         */
+        showResourceManagerDialog(): void;
         /**
          * [descr:dxGantt.unassignResourceFromTask(resourceKey, taskKey)]
          */

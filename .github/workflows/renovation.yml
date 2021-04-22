@@ -19,9 +19,9 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ./node_modules
-        key: ${{ runner.os }}-node-modules-v2-${{ hashFiles('**/package.json') }}
+        key: ${{ runner.os }}-node-modules-v3-${{ hashFiles('**/package.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-modules-v2
+          ${{ runner.os }}-node-modules-v3
 
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
@@ -48,7 +48,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+        key: ${{ runner.os }}-node-modules-v3-${{ hashFiles('**/package.json') }}
         restore-keys: |
           ${{ runner.os }}-node-modules
 
@@ -75,7 +75,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+        key: ${{ runner.os }}-node-modules-v3-${{ hashFiles('**/package.json') }}
         restore-keys: |
           ${{ runner.os }}-node-modules
 

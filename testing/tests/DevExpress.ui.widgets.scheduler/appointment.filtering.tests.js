@@ -1,10 +1,8 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import Color from 'color';
 import { DataSource } from 'data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import {
-    SchedulerTestWrapper,
     initTestMarkup,
     createWrapper,
     asyncAssert,
@@ -13,36 +11,33 @@ import {
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
 
 const {
     module,
-    test
+    test,
+    testStart,
 } = QUnit;
 
-QUnit.testStart(() => initTestMarkup());
+testStart(() => initTestMarkup());
 
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
+
+const createInstanceBase = (options, clock) => {
+    const scheduler = createWrapper({
+        height: 600,
+        ...options,
+    });
+
+    clock.tick(300);
+    scheduler.instance.focus();
+
+    return scheduler;
+};
 
 module('Integration: Appointment filtering', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options,
-                {
-                    height: options && options.height || 600
-                })
-            ).dxScheduler('instance');
 
-            this.clock.tick(300);
-            this.instance.focus();
-
-            this.scheduler = new SchedulerTestWrapper(this.instance);
-        };
-        this.getAppointmentColor = function($task, checkedProperty) {
-            checkedProperty = checkedProperty || 'backgroundColor';
-            return new Color($task.css(checkedProperty)).toHex();
-        };
         this.clock = sinon.useFakeTimers();
         this.tasks = [
             {
@@ -63,34 +58,31 @@ module('Integration: Appointment filtering', {
     }
 }, () => {
     supportedScrollingModes.forEach(scrollingMode => {
-        module(`Scrolling mode ${scrollingMode}`, {
-            beforeEach: function() {
-                const createInstance = this.createInstance.bind(this);
-                this.createInstance = options => {
-                    options = options || {};
-                    $.extend(
-                        true,
-                        options,
-                        {
-                            scrolling: {
-                                mode: scrollingMode
-                            }
-                        }
-                    );
-
-                    createInstance(options);
-
-                    if(scrollingMode === 'virtual') {
-                        const virtualScrollingDispatcher = this.instance.getWorkSpace().virtualScrollingDispatcher;
-                        if(virtualScrollingDispatcher) {
-                            virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-                        }
+        const createInstance = (options, clock) => {
+            options = options || {};
+            $.extend(
+                true,
+                options,
+                {
+                    scrolling: {
+                        mode: scrollingMode
                     }
-                };
+                }
+            );
 
-                this.scrollTo = args => this.instance.getWorkSpace().getScrollable().scrollTo(args);
+            const scheduler = createInstanceBase(options, clock);
+
+            if(scrollingMode === 'virtual') {
+                const virtualScrollingDispatcher = scheduler.instance.getWorkSpace().virtualScrollingDispatcher;
+                if(virtualScrollingDispatcher) {
+                    virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+                }
             }
-        }, () => {
+
+            return scheduler;
+        };
+
+        module(`Scrolling mode ${scrollingMode}`, () => {
             test('Removed appointments should render, if appointment appeared after filtering (T903973)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual scrolling not support month view');
@@ -247,19 +239,19 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     currentView: 'day',
                     remoteFiltering: true
-                });
+                }, this.clock);
 
                 assert.deepEqual(dataSource.items(), [tasks[0]], 'Items are OK');
 
-                this.instance.option('currentDate', new Date(2015, 2, 17));
+                scheduler.instance.option('currentDate', new Date(2015, 2, 17));
                 assert.deepEqual(dataSource.items(), [tasks[1]], 'Items are OK');
 
-                this.instance.option('currentView', 'week');
+                scheduler.instance.option('currentView', 'week');
                 assert.deepEqual(dataSource.items(), tasks, 'Items are OK');
             });
 
@@ -273,20 +265,20 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     startDayHour: 4,
                     currentView: 'week'
-                });
+                }, this.clock);
 
-                let $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                let $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 1, 'There is only one appointment');
                 assert.deepEqual(dataUtils.data($appointments[0], 'dxItemData'), tasks[0], 'Appointment data is OK');
 
-                this.instance.option('startDayHour', 1);
-                $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                scheduler.instance.option('startDayHour', 1);
+                $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 3, 'There are three appointments');
                 assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[0], 'Appointment data is OK');
@@ -302,25 +294,25 @@ module('Integration: Appointment filtering', {
                     { text: 'Five', startDate: new Date(2015, 2, 10, 15), endDate: new Date(2015, 2, 10, 15, 30) }
                 ];
 
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: tasks,
                     endDayHour: 10,
                     currentView: 'week',
                     height: 600
-                });
+                }, this.clock);
 
-                let $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                let $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 1, 'There is only one appointment');
                 assert.deepEqual(dataUtils.data($appointments[0], 'dxItemData'), tasks[0], 'Appointment data is OK');
 
-                this.instance.option('endDayHour', 14);
+                scheduler.instance.option('endDayHour', 14);
 
                 return asyncAssert(
                     assert,
                     () => {
-                        $appointments = this.instance.$element().find(`.${APPOINTMENT_CLASS}`);
+                        $appointments = scheduler.instance.$element().find(`.${APPOINTMENT_CLASS}`);
 
                         assert.equal($appointments.length, 3, 'There are three appointments');
 
@@ -340,7 +332,7 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     groups: ['ownerId', 'roomId'],
@@ -361,9 +353,9 @@ module('Integration: Appointment filtering', {
                             dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                         }
                     ]
-                });
+                }, this.clock);
 
-                const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 4, 'There are four appointment');
                 assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[1], 'The first appointment data is OK');
@@ -382,7 +374,7 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 16),
                     groups: ['ownerId', 'roomId'],
                     resources: [
@@ -402,11 +394,11 @@ module('Integration: Appointment filtering', {
                             dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                         }
                     ]
-                });
+                }, this.clock);
 
-                this.instance.option('dataSource', dataSource);
+                scheduler.instance.option('dataSource', dataSource);
 
-                const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 4, 'There are four appointment');
                 assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[1], 'The first appointment data is OK');
@@ -425,13 +417,13 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     groups: ['ownerId', 'roomId']
-                });
+                }, this.clock);
 
-                this.instance.option('resources', [
+                scheduler.instance.option('resources', [
                     {
                         field: 'ownerId',
                         allowMultiple: true,
@@ -449,7 +441,7 @@ module('Integration: Appointment filtering', {
                     }
                 ]);
 
-                const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 4, 'There are four appointment');
                 assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[1], 'The first appointment data is OK');
@@ -468,7 +460,7 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     groups: ['ownerId', 'roomId'],
@@ -489,9 +481,9 @@ module('Integration: Appointment filtering', {
                             dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                         }
                     ]
-                });
-                this.instance.option('groups', ['ownerId', 'roomId', 'managerId']);
-                const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                }, this.clock);
+                scheduler.instance.option('groups', ['ownerId', 'roomId', 'managerId']);
+                const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 2, 'There are two appointment');
                 assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[1], 'The first appointment data is OK');
@@ -499,7 +491,7 @@ module('Integration: Appointment filtering', {
             });
 
             test('Appointments should be filtered correctly by end day hour when current date was changed', function(assert) {
-                this.createInstance({
+                const scheduler = createInstance({
                     currentDate: new Date(2015, 4, 6),
                     currentView: 'week',
                     endDayHour: 10,
@@ -509,14 +501,14 @@ module('Integration: Appointment filtering', {
                             startDate: new Date(2015, 4, 7, 11)
                         }
                     ]
-                });
+                }, this.clock);
 
-                let $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                let $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
                 assert.equal($appointments.length, 0, 'There are not appointments');
 
-                this.instance.option('currentDate', new Date(2015, 4, 7));
+                scheduler.instance.option('currentDate', new Date(2015, 4, 7));
 
-                $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+                $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
                 assert.equal($appointments.length, 0, 'There is one appointment');
             });
         });
