@@ -7941,7 +7941,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGanttOptions.onResourceManagerDialogShowing]
          */
-        onResourceManagerDialogShowing?: ((e: { component?: dxGantt, element?: DevExpress.core.TElement, cancel?: boolean, values?: Array<any>, key?: any }) => any);
+        onResourceManagerDialogShowing?: ((e: { component?: dxGantt, element?: DevExpress.core.DxElement, cancel?: boolean, values?: Array<any>, key?: any }) => any);
         /**
          * [descr:dxGanttOptions.onResourceUnassigned]
          */
