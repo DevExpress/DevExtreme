@@ -1,12 +1,13 @@
-import { type } from '../../../../../core/utils/type';
+import { isPlainObject, type } from '../../../../../core/utils/type';
 
 interface ResultItem {
   path: string;
   value: unknown;
+  previousValue: unknown;
 }
 
-function getDiffItem(key, value): ResultItem {
-  return { path: key, value };
+function getDiffItem(key, value, previousValue): ResultItem {
+  return { path: key, value, previousValue };
 }
 
 function compare(resultPaths: ResultItem[], item1, item2, key: string): void {
@@ -14,25 +15,28 @@ function compare(resultPaths: ResultItem[], item1, item2, key: string): void {
   const type2 = type(item2);
   if (item1 === item2) return;
   if (type1 !== type2) {
-    resultPaths.push(getDiffItem(key, item2));
+    resultPaths.push(getDiffItem(key, item2, item1));
   } else if (type1 === 'object') {
+    if (!isPlainObject(item2)) {
+      resultPaths.push(getDiffItem(key, item2, item1));
+    } else {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const diffPaths = objectDiffs(item1, item2);
-    resultPaths.push(...diffPaths.map((item) => ({ path: `${key}.${item.path}`, value: item.value })));
-  } else if (type1 === 'array') {
-    if (key === 'dataSource' && item1 !== item2) {
-      resultPaths.push(getDiffItem(key, item2));
+      const diffPaths = objectDiffs(item1, item2);
+      resultPaths.push(...diffPaths.map((item) => ({ ...item, path: `${key}.${item.path}` })));
     }
-    if ((item1 as []).length !== (item2 as []).length) {
-      resultPaths.push(getDiffItem(key, item2));
+  } else if (type1 === 'array') {
+    if (key !== 'columns' && item1 !== item2) {
+      resultPaths.push(getDiffItem(key, item2, item1));
+    } else if ((item1 as []).length !== (item2 as []).length) {
+      resultPaths.push(getDiffItem(key, item2, item1));
     } else {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       const diffPaths = objectDiffs(item1, item2);
       ([] as ResultItem[]).push.apply(resultPaths,
-        diffPaths.map((item) => ({ path: `${key}${item.path}`, value: item.value })));
+        diffPaths.map((item) => ({ ...item, path: `${key}${item.path}` })));
     }
   } else {
-    resultPaths.push(getDiffItem(key, item2));
+    resultPaths.push(getDiffItem(key, item2, item1));
   }
 }
 
@@ -48,9 +52,15 @@ ResultItem[] => {
 
   propsEnumerator(oldProps).forEach(processItem);
   Object.keys(props)
-    .filter((propName) => !oldProps[propName] && oldProps[propName] !== props[propName])
+    .filter((propName) => (
+      !Object.prototype.hasOwnProperty.call(oldProps, propName)
+      && oldProps[propName] !== props[propName]))
     .forEach((propName) => {
-      resultPaths.push({ path: propName, value: props[propName] });
+      resultPaths.push({
+        path: propName,
+        value: props[propName],
+        previousValue: oldProps[propName],
+      });
     });
   return resultPaths;
 };

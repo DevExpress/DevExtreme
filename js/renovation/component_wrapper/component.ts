@@ -250,7 +250,7 @@ export default class ComponentWrapper extends DOMComponent {
     }
     this._actionsMap[event] = action;
   }
-
+  
   _optionChanged(option) {
     const { name, fullName } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);

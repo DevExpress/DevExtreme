@@ -1,10 +1,12 @@
 import { getUpdatedOptions } from '../get_updated_options';
 
 describe('get_updated_options', () => {
+  class DummyDataSource {}
+
   it('simple props changed', () => {
     expect(getUpdatedOptions({ visible: true }, { visible: false }))
       .toEqual([
-        { path: 'visible', value: false },
+        { path: 'visible', value: false, previousValue: true },
       ]);
   });
 
@@ -16,7 +18,7 @@ describe('get_updated_options', () => {
   it('new props', () => {
     expect(getUpdatedOptions({ visible: true }, { visible: true, enabled: false } as any))
       .toEqual([
-        { path: 'enabled', value: false },
+        { path: 'enabled', value: false, previousValue: undefined },
       ]);
   });
 
@@ -33,7 +35,7 @@ describe('get_updated_options', () => {
       { visible: true, onCellClick: callback2 },
     ))
       .toEqual([
-        { path: 'onCellClick', value: callback2 },
+        { path: 'onCellClick', value: callback2, previousValue: callback1 },
       ]);
   });
 
@@ -43,14 +45,14 @@ describe('get_updated_options', () => {
       { editing: { allowAdding: false } },
     ))
       .toEqual([
-        { path: 'editing.allowAdding', value: false },
+        { path: 'editing.allowAdding', value: false, previousValue: true },
       ]);
   });
 
   it('nested props changed to empty', () => {
     expect(getUpdatedOptions({ visible: true, editing: { allowAdding: true } }, { visible: true }))
       .toEqual([
-        { path: 'editing', value: undefined },
+        { path: 'editing', value: undefined, previousValue: { allowAdding: true } },
       ]);
   });
 
@@ -60,7 +62,7 @@ describe('get_updated_options', () => {
       { visible: true, filterValue: '1' },
     ))
       .toEqual([
-        { path: 'filterValue', value: '1' },
+        { path: 'filterValue', value: '1', previousValue: [] },
       ]);
   });
 
@@ -72,7 +74,7 @@ describe('get_updated_options', () => {
       { columns },
     ))
       .toEqual([
-        { path: 'columns[1].visible', value: false },
+        { path: 'columns[1].visible', value: false, previousValue: true },
       ]);
   });
 
@@ -84,7 +86,7 @@ describe('get_updated_options', () => {
       { columns },
     ))
       .toEqual([
-        { path: 'columns', value: columns },
+        { path: 'columns', value: columns, previousValue: oldColumns },
       ]);
   });
 
@@ -112,6 +114,20 @@ describe('get_updated_options', () => {
     const oldObj = { dataSource: [] };
     const obj = { dataSource: [] };
     expect(getUpdatedOptions(oldObj, obj))
-      .toEqual([{ path: 'dataSource', value: [] }]);
+      .toEqual([{ path: 'dataSource', value: [], previousValue: [] }]);
+  });
+
+  it('prevProps is undefined', () => {
+    const oldObj = { focusedRowKey: null };
+    const obj = { focusedRowKey: 0 };
+    expect(getUpdatedOptions(oldObj, obj))
+      .toEqual([{ path: 'focusedRowKey', value: 0, previousValue: null }]);
+  });
+
+  it('deep diff only for plain object', () => {
+    const oldObj = { dataSource: new DummyDataSource() };
+    const obj = { dataSource: new DummyDataSource() };
+    expect(getUpdatedOptions(oldObj, obj))
+      .toEqual([{ path: 'dataSource', value: obj.dataSource, previousValue: oldObj.dataSource }]);
   });
 });

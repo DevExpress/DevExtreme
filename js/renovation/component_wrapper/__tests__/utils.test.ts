@@ -19,7 +19,7 @@ it('object value', () => {
   const option = { nestedObject: newNestedObject };
   const props = { nestedObject };
   updatePropsImmutable(props, option, 'nestedObject', 'nestedObject');
-  expect(props.nestedObject).toBe(props.nestedObject);
+  expect(props.nestedObject).not.toBe(newNestedObject);
 });
 
 it('change nested object option to plain object value', () => {
