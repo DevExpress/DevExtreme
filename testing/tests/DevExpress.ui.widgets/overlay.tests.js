@@ -488,7 +488,7 @@ testModule('option', moduleConfig, () => {
             assert.ok(this.$wrapper.hasClass('someClass'));
         });
 
-        test('add attribute on wrapper on runtime', function(assert) {
+        test('adds attribute on wrapper on runtime', function(assert) {
             this.overlay.option('wrapperAttr', { someAttr: 'someValue' });
 
             assert.strictEqual(this.$wrapper.attr('someAttr'), 'someValue');
