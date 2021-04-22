@@ -3,12 +3,12 @@ import {
 } from '../../../../core/utils/type';
 
 import {
-  ScrollableLocation,
+  ScrollOffset,
 } from '../types';
 
 export function getAugmentedLocation(
-  location: number | Partial<ScrollableLocation>,
-): ScrollableLocation {
+  location: number | Partial<ScrollOffset>,
+): ScrollOffset {
   if (isNumeric(location)) {
     return {
       left: location,

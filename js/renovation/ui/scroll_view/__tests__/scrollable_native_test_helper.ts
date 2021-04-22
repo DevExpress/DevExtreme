@@ -206,13 +206,6 @@ class ScrollableTestHelper {
     return this.getHorizontalScroll().getElement();
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  extendProperties(ref, additionalProps: { [key: string]: any }): void {
-    const extendedProps = { ...ref.props, ...additionalProps };
-
-    Object.assign(ref, { props: extendedProps });
-  }
-
   initScrollbarSettings(additionalProps:
   { [key: string]: any } = { translateOffset: 0, props: {} }): any {
     const scrollbars = this.getScrollbars();
@@ -225,18 +218,17 @@ class ScrollableTestHelper {
       scrollbar.scrollRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
 
       scrollbar.translateOffset = additionalProps.translateOffset;
-      scrollbar.scrollLocation = -50;
 
       Object.assign(scrollbar, {
         props: {
           ...scrollbar.props,
           ...{
-            scaleRatio: 1,
             contentSize: 200,
             containerSize: 100,
             baseContentSize: additionalProps.props.contentSize || 200,
             baseContainerSize: additionalProps.props.containerSize || 100,
             scrollableOffset: 0,
+            scrollLocation: -50,
             ...additionalProps.props,
           },
         },
@@ -328,11 +320,11 @@ class ScrollableTestHelper {
     this.viewModel.containerRef.current!.scrollLeft = left;
 
     if (this.isVertical && this.options.useSimulatedScrollbar) {
-      this.viewModel.verticalScrollbarRef.current.scrollLocation = -top;
+      this.viewModel.verticalScrollbarRef.current.props.scrollLocation = -top;
     }
 
     if (this.isHorizontal && this.options.useSimulatedScrollbar) {
-      this.viewModel.horizontalScrollbarRef.current.scrollLocation = -left;
+      this.viewModel.horizontalScrollbarRef.current.props.scrollLocation = -left;
     }
   }
 
