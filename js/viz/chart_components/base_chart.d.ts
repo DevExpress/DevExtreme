@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
@@ -128,7 +129,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
@@ -141,7 +142,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:basePointObject
@@ -180,7 +181,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
@@ -194,7 +195,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
@@ -285,7 +286,7 @@ export interface BaseChartLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
 }
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
@@ -298,13 +299,13 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.contentTemplate
      * @type_function_param1 pointInfo:object
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointInfo: any, element: TElement) => string | TElement);
+    contentTemplate?: template | ((pointInfo: any, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
      * @type_function_param1 pointInfo:object
@@ -337,7 +338,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export class BaseChart extends BaseWidget {
-    constructor(element: TElement, options?: BaseChartOptions)
+    constructor(element: UserDefinedElement, options?: BaseChartOptions)
     /**
      * @docid
      * @publicName clearSelection()

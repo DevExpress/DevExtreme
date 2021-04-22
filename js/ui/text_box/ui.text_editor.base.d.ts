@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../../core/element';
 
 import {
@@ -85,7 +85,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -98,7 +98,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -111,7 +111,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -124,7 +124,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -137,7 +137,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -150,7 +150,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -163,7 +163,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -176,7 +176,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1_field4 event:event
      * @default null
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -190,7 +190,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1_field4 event:event
      * @deprecated
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -203,7 +203,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -216,7 +216,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -297,7 +297,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxTextEditor extends Editor {
-    constructor(element: TElement, options?: dxTextEditorOptions)
+    constructor(element: UserDefinedElement, options?: dxTextEditorOptions)
     /**
      * @docid
      * @publicName blur()

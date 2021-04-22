@@ -1,5 +1,5 @@
 import {
-  TElement
+  DxElement
 } from './element';
 
 export interface ComponentOptions<T = Component> {
@@ -17,12 +17,12 @@ export interface ComponentOptions<T = Component> {
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
-   * @type_function_param1_field2 element:TElement
+   * @type_function_param1_field2 element:DxElement
    * @default null
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onInitialized?: ((e: { component?: T, element?: TElement }) => void);
+  onInitialized?: ((e: { component?: T, element?: DxElement }) => void);
   /**
    * @docid
    * @type_function_param1 e:object

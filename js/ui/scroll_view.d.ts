@@ -1,9 +1,9 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -44,7 +44,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScrollView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -56,7 +56,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScrollView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -106,7 +106,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @public
  */
 export default class dxScrollView extends dxScrollable {
-    constructor(element: TElement, options?: dxScrollViewOptions)
+    constructor(element: UserDefinedElement, options?: dxScrollViewOptions)
     /**
      * @docid
      * @publicName refresh()
@@ -122,7 +122,7 @@ export default class dxScrollView extends dxScrollable {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    release(preventScrollBottom: boolean): TPromise<void>;
+    release(preventScrollBottom: boolean): DxPromise<void>;
 }
 
 /** @public */

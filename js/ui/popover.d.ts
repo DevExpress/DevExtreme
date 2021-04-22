@@ -7,15 +7,16 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -72,7 +73,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default "auto"
@@ -149,7 +150,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | TElement;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default "auto"
@@ -185,8 +186,8 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
  * @public
  */
 export default class dxPopover extends dxPopup {
-    constructor(element: TElement, options?: dxPopoverOptions)
-    show(): TPromise<boolean>;
+    constructor(element: UserDefinedElement, options?: dxPopoverOptions)
+    show(): DxPromise<boolean>;
     /**
      * @docid
      * @publicName show(target)
@@ -195,7 +196,7 @@ export default class dxPopover extends dxPopup {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(target: string | TElement): TPromise<boolean>;
+    show(target: string | UserDefinedElement): DxPromise<boolean>;
 }
 
 /** @public */
