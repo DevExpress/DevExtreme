@@ -718,11 +718,6 @@ class FileManager extends Widget {
         return this.executeCommand('refresh');
     }
 
-    _refresh() {
-        this._controller?.resetState();
-        super._refresh();
-    }
-
     getCurrentDirectory() {
         const directoryInfo = this._getCurrentDirectory();
         return directoryInfo && directoryInfo.fileItem || null;
