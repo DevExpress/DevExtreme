@@ -1872,11 +1872,9 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
         let rowClickArgs;
 
-        this.options.onRowClick = function(data) {
+        rowsView.option('onRowClick', function(data) {
             rowClickArgs = data;
-        };
-
-        rowsView.optionChanged({ name: 'onRowClick' });
+        });
         rowsView.render(testElement);
         const rows = testElement.find('tbody > tr');
 
@@ -1901,11 +1899,9 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
         let cellClickArgs;
 
-        this.options.onCellClick = function(options) {
+        rowsView.option('onCellClick', function(options) {
             cellClickArgs = options;
-        };
-
-        rowsView.optionChanged({ name: 'onCellClick' });
+        });
         rowsView.render(testElement);
         const cells = testElement.find('td');
 
@@ -1930,11 +1926,9 @@ QUnit.module('Rows view', {
         const $testElement = $('#container');
         let rowDoubleClickArgs;
 
-        this.options.onRowDblClick = function(data) {
+        rowsView.option('onRowDblClick', function(data) {
             rowDoubleClickArgs = data;
-        };
-
-        rowsView.optionChanged({ name: 'onRowDblClick' });
+        });
         rowsView.render($testElement);
         const $rowElement = $(rowsView.getRowElement(1));
 
@@ -1959,11 +1953,9 @@ QUnit.module('Rows view', {
         const $testElement = $('#container');
         let cellDoubleClickArgs;
 
-        this.options.onCellDblClick = function(options) {
+        rowsView.option('onCellDblClick', function(options) {
             cellDoubleClickArgs = options;
-        };
-
-        rowsView.optionChanged({ name: 'onCellDblClick' });
+        });
         rowsView.render($testElement);
         const $cellElement = $(rowsView.getCellElement(0, 0));
 
@@ -2897,11 +2889,9 @@ QUnit.module('Rows view', {
         this.options.masterDetail = {
             enabled: true
         };
-        this.options.onRowClick = function(options) {
+        rowsView.option('onRowClick', function(options) {
             rowClickIndexes.push(options.rowIndex);
-        };
-
-        rowsView.optionChanged({ name: 'onRowClick' });
+        });
 
         rowsView.render(testElement);
 
@@ -2957,11 +2947,9 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
         let rowClickArgs;
 
-        this.options.onRowClick = function(e) {
+        rowsView.option('onRowClick', function(e) {
             rowClickArgs = e;
-        };
-
-        rowsView.optionChanged({ name: 'onRowClick' });
+        });
 
         this.options.masterDetail = {
             enabled: true,

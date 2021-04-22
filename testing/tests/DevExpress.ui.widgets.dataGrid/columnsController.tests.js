@@ -3568,7 +3568,6 @@ QUnit.module('Update columns on initialization', { beforeEach: setupModule, afte
         this.columnsController.applyDataSource(createMockDataSource([{ number: 55, string: 'str', date: new Date(), boolean: true }]));
 
         this.option('rtlEnabled', true);
-        this.columnsController.optionChanged({ name: 'rtlEnabled' });
 
         assert.strictEqual(this.columnsController.getColumns().length, 4);
 
@@ -3617,8 +3616,7 @@ QUnit.module('Update columns on initialization', { beforeEach: setupModule, afte
         assert.ok(!this.columnsController.getColumns()[0].allowCollapsing);
 
         // act
-        this.options.grouping = { autoExpandAll: true, allowCollapsing: true };
-        this.columnsController.optionChanged({ name: 'grouping' });
+        this.option('grouping', { autoExpandAll: true, allowCollapsing: true });
 
         // assert
         assert.strictEqual(this.columnsController.getVisibleColumns().length, 3);
@@ -3638,8 +3636,7 @@ QUnit.module('Update columns on initialization', { beforeEach: setupModule, afte
         assert.ok(!this.columnsController.getColumns()[0].allowGrouping);
 
         // act
-        this.options.groupPanel = { allowColumnDragging: true, visible: true };
-        this.columnsController.optionChanged({ name: 'groupPanel' });
+        this.option('groupPanel', { allowColumnDragging: true, visible: true });
 
         // assert
         assert.strictEqual(this.columnsController.getVisibleColumns().length, 3);
@@ -3657,8 +3654,7 @@ QUnit.module('Update columns on initialization', { beforeEach: setupModule, afte
         this.columnsController.columnOption('field1', 'visible', false);
 
         // act
-        this.options.columns[0].allowSorting = false;
-        this.columnsController.optionChanged({ name: 'columns', fullName: 'columns[0].allowSorting' });
+        this.option('columns[0].allowSorting', false);
 
         // assert
         assert.strictEqual(this.columnsController.getVisibleColumns().length, 1, 'columns state is not reset');
@@ -6789,8 +6785,7 @@ QUnit.module('Edit Column', { beforeEach: setupModule, afterEach: teardownModule
         // act
         that.columnsController.addColumn({ dataField: 'AddedColumn', caption: 'My Column' });
         that.columnOption('AddedColumn', 'filterValue', 'Test');
-        that.options.editing.mode = 'batch';
-        that.columnsController.optionChanged({ name: 'editing' });
+        this.option('editing.mode', 'batch');
 
         // assert
         const columns = that.columnsController.getVisibleColumns();
