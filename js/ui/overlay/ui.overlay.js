@@ -165,6 +165,8 @@ const Overlay = Widget.inherit({
 
             shadingColor: '',
 
+            wrapperAttr: {},
+
             position: {
                 my: 'center',
                 at: 'center'
@@ -315,6 +317,7 @@ const Overlay = Widget.inherit({
         this._$wrapper.addClass($element.attr('class'));
         $element.addClass(OVERLAY_CLASS);
 
+        this._customClass = null;
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
 
         // NOTE: hack to fix B251087
@@ -401,6 +404,11 @@ const Overlay = Widget.inherit({
         };
     },
 
+    _initMarkup() {
+        this._renderWrapperAttributes();
+        this.callBase();
+    },
+
     _documentDownHandler: function(e) {
         if(this._showAnimationProcessing) {
             this._stopAnimation();
@@ -477,6 +485,21 @@ const Overlay = Widget.inherit({
     _viewPortChangeHandler: function() {
         this._initContainer(this.option('container'));
         this._refresh();
+    },
+
+    _renderWrapperAttributes() {
+        const { wrapperAttr } = this.option() || {};
+        const attributes = extend({}, wrapperAttr);
+        const classNames = attributes.class;
+
+        delete attributes.class;
+
+        this._wrapper()
+            .attr(attributes)
+            .removeClass(this._customClass)
+            .addClass(classNames);
+
+        this._customClass = classNames;
     },
 
     _renderVisibilityAnimate: function(visible) {
@@ -1448,6 +1471,9 @@ const Overlay = Widget.inherit({
                 break;
             case '_fixedPosition':
                 this._fixWrapperPosition();
+                break;
+            case 'wrapperAttr':
+                this._renderWrapperAttributes();
                 break;
             default:
                 this.callBase(args);
