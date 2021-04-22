@@ -6,9 +6,10 @@ import {
 } from '../utils/scroll_direction';
 
 import {
-  ScrollableSimulated as Scrollable,
+  ScrollableNative as Scrollable,
   viewFunction,
-} from '../scrollable_simulated';
+  ScrollableNativePropsType,
+} from '../scrollable_native';
 
 import {
   SCROLLABLE_CONTAINER_CLASS,
@@ -19,9 +20,7 @@ import {
 } from '../common/consts';
 
 import { Scrollbar, ScrollbarPropsType } from '../scrollbar';
-import { ScrollableSimulatedPropsType } from '../scrollable_simulated_props';
 
-const TOP_POCKET_HEIGHT = 80;
 const BOTTOM_POCKET_HEIGHT = 55;
 
 class ScrollableTestHelper {
@@ -53,20 +52,17 @@ class ScrollableTestHelper {
 
   actionHandlers: { [key: string]: any };
 
-  constructor(props: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
+  constructor(props: Partial<ScrollableNativePropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.options = props;
     this.options.direction = this.options.direction || 'vertical';
+
     this.actionHandlers = this.getActionHandlers(this.options);
 
     this.viewModel = new Scrollable({
-      onStart: this.actionHandlers.onStart,
       onScroll: this.actionHandlers.onScroll,
       onUpdated: this.actionHandlers.onUpdated,
-      onStop: this.actionHandlers.onStop,
-      onEnd: this.actionHandlers.onEnd,
       onPullDown: this.actionHandlers.onPullDown,
       onReachBottom: this.actionHandlers.onReachBottom,
-      onBounce: this.actionHandlers.onBounce,
       ...this.options,
     }) as any;
     this.viewModel.scrollableRef = React.createRef();
@@ -93,15 +89,6 @@ class ScrollableTestHelper {
     let contentHeight = contentSize;
 
     if (this.options.forceGeneratePockets) {
-      if (this.options.pullDownEnabled) {
-        contentHeight += TOP_POCKET_HEIGHT;
-
-        this.viewModel.topPocketRef.current = this.getTopPocketElement();
-        Object.defineProperties(this.viewModel.topPocketRef.current, {
-          clientWidth: { configurable: true, get() { return 100; } },
-          clientHeight: { configurable: true, get() { return TOP_POCKET_HEIGHT; } },
-        });
-      }
       if (this.options.reachBottomEnabled) {
         contentHeight += BOTTOM_POCKET_HEIGHT;
 
@@ -250,10 +237,6 @@ class ScrollableTestHelper {
             baseContentSize: additionalProps.props.contentSize || 200,
             baseContainerSize: additionalProps.props.containerSize || 100,
             scrollableOffset: 0,
-            contentTranslateOffsetChange:
-              scrollbar.props.contentTranslateOffsetChange.bind(this.viewModel),
-            contentPositionChange:
-              scrollbar.props.contentPositionChange.bind(this.viewModel),
             ...additionalProps.props,
           },
         },
@@ -344,11 +327,11 @@ class ScrollableTestHelper {
     this.viewModel.containerRef.current!.scrollTop = top;
     this.viewModel.containerRef.current!.scrollLeft = left;
 
-    if (this.isVertical) {
+    if (this.isVertical && this.options.useSimulatedScrollbar) {
       this.viewModel.verticalScrollbarRef.current.scrollLocation = -top;
     }
 
-    if (this.isHorizontal) {
+    if (this.isHorizontal && this.options.useSimulatedScrollbar) {
       this.viewModel.horizontalScrollbarRef.current.scrollLocation = -left;
     }
   }

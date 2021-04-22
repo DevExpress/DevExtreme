@@ -31,7 +31,7 @@
     "@babel/runtime": "^7.12.1",
     "@devextreme/vdom": "1.1.1",
     "devexpress-diagram": "2.1.14",
-    "devexpress-gantt": "2.1.24",
+    "devexpress-gantt": "2.1.26",
     "devextreme-quill": "~1.0.0",
     "inferno": "^7.4.6",
     "inferno-compat": "^7.4.6",
@@ -39,7 +39,7 @@
     "inferno-hydrate": "^7.4.6",
     "jszip": "^2.0.0 || ^3.0.0",
     "rrule": "2.6.6",
-    "showdown": "^1.8.6",
+    "showdown": "^1.9.1",
     "turndown": "^7.0.0"
   },
   "devDependencies": {

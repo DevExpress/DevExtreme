@@ -107,6 +107,7 @@ const HtmlEditor = Editor.inherit({
         this._$htmlContainer = $('<div>').addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
+            .attr('role', 'application')
             .addClass(HTML_EDITOR_CLASS)
             .wrapInner(this._$htmlContainer);
 
