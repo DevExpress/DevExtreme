@@ -477,9 +477,10 @@ testModule('option', moduleConfig, () => {
     testModule('wrapperAttr option', {
         beforeEach: function() {
             this.overlay = $('#overlay').dxOverlay({
-                wrapperAttr: { class: 'someClass' }
+                wrapperAttr: { class: 'someClass' },
+                visible: true
             }).dxOverlay('instance');
-            this.$content = $(this.overlay.content());
+            this.$content = $(this.overlay.$content());
             this.$wrapper = this.$content.parent();
         }
     }, () => {
@@ -494,8 +495,7 @@ testModule('option', moduleConfig, () => {
         });
 
         test('removes old attributes from wrapper element on runtime change', function(assert) {
-            this.overlay.option('wrapperAttr', { someAttr: 'someValue' });
-
+            this.overlay.option('wrapperAttr', { someAnotherAttr: 'someAnotherValue' });
             assert.notOk(this.$wrapper.hasClass('someClass'));
         });
     });

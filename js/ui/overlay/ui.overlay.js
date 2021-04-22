@@ -304,7 +304,6 @@ const Overlay = Widget.inherit({
 
     _init: function() {
         this.callBase();
-
         this._initActions();
         this._initCloseOnOutsideClickHandler();
         this._initTabTerminatorHandler();
@@ -317,7 +316,6 @@ const Overlay = Widget.inherit({
         this._$wrapper.addClass($element.attr('class'));
         $element.addClass(OVERLAY_CLASS);
 
-        this._customClass = null;
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
 
         // NOTE: hack to fix B251087
@@ -487,19 +485,20 @@ const Overlay = Widget.inherit({
         this._refresh();
     },
 
-    _renderWrapperAttributes() {
-        const { wrapperAttr } = this.option() || {};
+    _renderWrapperAttributes(wrapperAttr = this.option('wrapperAttr') || {}) {
         const attributes = extend({}, wrapperAttr);
         const classNames = attributes.class;
-
         delete attributes.class;
-
+        if(this._oldAttributes) {
+            this._wrapper().removeAttr(Object.keys(this._oldAttributes).join(' '));
+        }
         this._wrapper()
             .attr(attributes)
-            .removeClass(this._customClass)
+            .removeClass(this._oldClasses)
             .addClass(classNames);
 
-        this._customClass = classNames;
+        this._oldAttributes = attributes;
+        this._oldClasses = classNames;
     },
 
     _renderVisibilityAnimate: function(visible) {
@@ -1473,7 +1472,7 @@ const Overlay = Widget.inherit({
                 this._fixWrapperPosition();
                 break;
             case 'wrapperAttr':
-                this._renderWrapperAttributes();
+                this._renderWrapperAttributes(args.value);
                 break;
             default:
                 this.callBase(args);
