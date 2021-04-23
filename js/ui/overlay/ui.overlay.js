@@ -486,8 +486,7 @@ const Overlay = Widget.inherit({
 
     _renderWrapperAttributes() {
         const { wrapperAttr } = this.option() || {};
-        const attributes = extend({}, wrapperAttr);
-        this._wrapper().attr(attributes);
+        this._wrapper().attr(wrapperAttr ?? {});
     },
 
     _renderVisibilityAnimate: function(visible) {
