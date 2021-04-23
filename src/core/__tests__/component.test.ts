@@ -412,6 +412,38 @@ describe("component rendering", () => {
             expect(component.$.subTree.children).toHaveLength(3);
         });
 
+        it("should find nested options if they wrapped to some kind of fragment elements", () => {
+            const NestedCollectionItem: IConfigurationComponent = buildTestConfigCtor();
+            NestedCollectionItem.$_optionName = "nestedOption";
+            NestedCollectionItem.$_isCollectionItem = true;
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">
+                        <template v-if="hasNested">
+                            <template v-for="(item, index) in items">
+                                <nested-collection-item :prop1="item.value" />
+                            </template>
+                        </template>
+                    </test-component>`,
+                data() {
+                    return {
+                        hasNested: true,
+                        items: [{ value: 123 }, { value: 321 }, { value: 432 }]
+                    };
+                },
+                components: {
+                    TestComponent,
+                    NestedCollectionItem
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const component = wrapper.getComponent("#component").vm;
+            expect(component.$.subTree.children).toHaveLength(3);
+        });
+
         it("initializes nested config predefined prop", () => {
             const predefinedValue = {};
             const NestedWithPredefined = buildTestConfigCtor();

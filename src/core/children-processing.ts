@@ -11,7 +11,10 @@ function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: 
 }
 
 export function isFragment(node: any): boolean {
-    return node.patchFlag === PatchFlags.KEYED_FRAGMENT;
+    const patchFlag = node.patchFlag;
+    return patchFlag === PatchFlags.KEYED_FRAGMENT
+    || patchFlag === PatchFlags.UNKEYED_FRAGMENT
+    || patchFlag === PatchFlags.STABLE_FRAGMENT;
 }
 
 function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
