@@ -1,9 +1,10 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -36,7 +37,7 @@ import {
 
 export interface CustomItemCreatingInfo {
     readonly text?: string;
-    customItem?: string | any | TPromise<any>;
+    customItem?: string | any | DxPromise<any>;
 }
 
 /** @public */
@@ -116,12 +117,12 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @docid
      * @default null
      * @type_function_param1 selectedItem:object
-     * @type_function_param2 fieldElement:dxElement
+     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: TElement) => string | TElement);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @extends Action
@@ -129,7 +130,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @type_function_param1_field4 text:string
      * @type_function_param1_field5 customItem:string|object|Promise<any>
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
@@ -182,7 +183,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
  * @public
  */
 export default class dxSelectBox extends dxDropDownList {
-    constructor(element: TElement, options?: dxSelectBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxSelectBoxOptions)
 }
 
 /** @public */

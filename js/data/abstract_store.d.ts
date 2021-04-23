@@ -1,5 +1,5 @@
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -126,7 +126,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     /**
      * @docid
      * @publicName insert(values)
@@ -135,7 +135,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert(values: any): TPromise<any>;
+    insert(values: any): DxPromise<any>;
     /**
      * @docid
      * @publicName key()
@@ -160,7 +160,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(): TPromise<any>;
+    load(): DxPromise<any>;
     /**
      * @docid
      * @publicName load(options)
@@ -169,7 +169,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(options: LoadOptions): TPromise<any>;
+    load(options: LoadOptions): DxPromise<any>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -224,7 +224,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    remove(key: any | string | number): TPromise<void>;
+    remove(key: any | string | number): DxPromise<void>;
     /**
      * @docid
      * @publicName totalCount(options)
@@ -235,7 +235,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    totalCount(obj: { filter?: any, group?: any }): TPromise<number>;
+    totalCount(obj: { filter?: any, group?: any }): DxPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)
@@ -245,5 +245,5 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    update(key: any | string | number, values: any): TPromise<any>;
+    update(key: any | string | number, values: any): DxPromise<any>;
 }

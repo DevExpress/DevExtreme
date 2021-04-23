@@ -46,6 +46,10 @@ export class GanttExportHelper {
         const styleForExport = {
             color: style.color,
             padding: style.padding,
+            paddingLeft: style.paddingLeft,
+            paddingTop: style.paddingTop,
+            paddingRight: style.paddingRight,
+            paddingBottom: style.paddingBottom,
             verticalAlign: style.verticalAlign,
             width: this._getColumnWidth(colIndex)
         };
@@ -62,6 +66,10 @@ export class GanttExportHelper {
         const styleForExport = {
             color: style.color,
             padding: style.padding,
+            paddingLeft: style.paddingLeft,
+            paddingTop: style.paddingTop,
+            paddingRight: style.paddingRight,
+            paddingBottom: style.paddingBottom,
             width: this._getColumnWidth(colIndex)
         };
         if(colIndex === 0) {

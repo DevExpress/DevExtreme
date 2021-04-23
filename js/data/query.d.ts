@@ -1,5 +1,5 @@
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 /**
@@ -17,7 +17,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    aggregate(seed: any, step: Function, finalize: Function): TPromise<any>;
+    aggregate(seed: any, step: Function, finalize: Function): DxPromise<any>;
     /**
      * @docid
      * @publicName aggregate(step)
@@ -26,7 +26,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    aggregate(step: Function): TPromise<any>;
+    aggregate(step: Function): DxPromise<any>;
     /**
      * @docid
      * @publicName avg()
@@ -34,7 +34,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    avg(): TPromise<number>;
+    avg(): DxPromise<number>;
     /**
      * @docid
      * @publicName avg(getter)
@@ -43,7 +43,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    avg(getter: any): TPromise<number>;
+    avg(getter: any): DxPromise<number>;
     /**
      * @docid
      * @publicName count()
@@ -51,7 +51,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    count(): TPromise<number>;
+    count(): DxPromise<number>;
     /**
      * @docid
      * @publicName enumerate()
@@ -59,7 +59,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    enumerate(): TPromise<any>;
+    enumerate(): DxPromise<any>;
     /**
      * @docid
      * @publicName filter(criteria)
@@ -94,7 +94,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    max(): TPromise<number | Date>;
+    max(): DxPromise<number | Date>;
     /**
      * @docid
      * @publicName max(getter)
@@ -103,7 +103,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    max(getter: any): TPromise<number | Date>;
+    max(getter: any): DxPromise<number | Date>;
     /**
      * @docid
      * @publicName min()
@@ -111,7 +111,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    min(): TPromise<number | Date>;
+    min(): DxPromise<number | Date>;
     /**
      * @docid
      * @publicName min(getter)
@@ -120,7 +120,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    min(getter: any): TPromise<number | Date>;
+    min(getter: any): DxPromise<number | Date>;
     /**
      * @docid
      * @publicName select(getter)
@@ -166,7 +166,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    sum(): TPromise<number>;
+    sum(): DxPromise<number>;
     /**
      * @docid
      * @publicName sum(getter)
@@ -175,7 +175,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    sum(getter: any): TPromise<number>;
+    sum(getter: any): DxPromise<number>;
     /**
      * @docid
      * @publicName thenBy(getter)

@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -379,7 +379,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxRangeSelector
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:Array<number,string,Date>
      * @type_function_param1_field5 previousValue:Array<number,string,Date>
@@ -887,7 +887,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
  * @public
  */
 export default class dxRangeSelector extends BaseWidget {
-    constructor(element: TElement, options?: dxRangeSelectorOptions)
+    constructor(element: UserDefinedElement, options?: dxRangeSelectorOptions)
     getDataSource(): DataSource;
     /**
      * @docid

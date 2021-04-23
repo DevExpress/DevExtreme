@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
@@ -57,7 +58,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -71,7 +72,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -407,13 +408,13 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: TElement) => string | TElement);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -441,7 +442,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export class BaseGauge extends BaseWidget {
-    constructor(element: TElement, options?: BaseGaugeOptions)
+    constructor(element: UserDefinedElement, options?: BaseGaugeOptions)
     /**
      * @docid
      * @publicName subvalues()

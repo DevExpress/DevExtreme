@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import DataSource, {
@@ -92,7 +92,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
  * @public
  */
 export default class dxBox extends CollectionWidget {
-    constructor(element: TElement, options?: dxBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxBoxOptions)
 }
 
 /**

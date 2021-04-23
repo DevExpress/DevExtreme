@@ -3,7 +3,8 @@ import {
 } from '../animation/fx';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -11,11 +12,11 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo
 } from '../events/index';
@@ -43,16 +44,16 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default "content"
-     * @type_function_param1 contentElement:dxElement
+     * @type_function_param1 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: TElement) => string | TElement);
+    contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -112,7 +113,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -125,7 +126,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -137,7 +138,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -149,7 +150,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -220,15 +221,15 @@ export interface dxOverlayAnimation {
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxOverlay extends Widget {
-    constructor(element: TElement, options?: dxOverlayOptions)
+    constructor(element: UserDefinedElement, options?: dxOverlayOptions)
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): TElement;
+    content(): DxElement;
     /**
      * @docid
      * @publicName hide()
@@ -236,7 +237,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<boolean>;
+    hide(): DxPromise<boolean>;
     /**
      * @docid
      * @publicName repaint()
@@ -251,7 +252,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<boolean>;
+    show(): DxPromise<boolean>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -260,7 +261,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): TPromise<boolean>;
+    toggle(showing: boolean): DxPromise<boolean>;
 }
 
 /**

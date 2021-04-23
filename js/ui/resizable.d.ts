@@ -3,7 +3,7 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -95,7 +95,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field5 width:number
      * @type_function_param1_field6 height:number
      * @type_function_param1_field1 component:dxResizable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -110,7 +110,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field5 width:number
      * @type_function_param1_field6 height:number
      * @type_function_param1_field1 component:dxResizable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -125,7 +125,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field5 width:number
      * @type_function_param1_field6 height:number
      * @type_function_param1_field1 component:dxResizable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -151,7 +151,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @public
  */
 export default class dxResizable extends DOMComponent {
-    constructor(element: TElement, options?: dxResizableOptions)
+    constructor(element: UserDefinedElement, options?: dxResizableOptions)
 }
 
 /** @public */

@@ -1,7 +1,8 @@
 import './scheduler/utils';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -9,7 +10,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -17,7 +18,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -42,9 +43,9 @@ import Widget, {
 
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;
-  readonly event?: TEvent;
+  readonly event?: DxEvent;
   readonly itemData?: any;
-  readonly itemElement?: TElement;
+  readonly itemElement?: DxElement;
   readonly fromData?: any;
 }
 
@@ -62,22 +63,22 @@ export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
 /** @public */
 export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
-  cancel: boolean | TPromise<boolean>;
+  cancel: boolean | DxPromise<boolean>;
 }
 
 /** @public */
 export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
-  readonly appointmentElement: TElement;
+  readonly appointmentElement: DxElement;
 }
 
 /** @public */
 export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler> & TargetedAppointmentInfo &{
-  readonly appointmentElement: TElement;
+  readonly appointmentElement: DxElement;
 }
 
 /** @public */
 export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
-  readonly appointmentElement: TElement;
+  readonly appointmentElement: DxElement;
 }
 
 /** @public */
@@ -89,7 +90,7 @@ export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
 /** @public */
 export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
-  cancel: boolean | TPromise<boolean>;
+  cancel: boolean | DxPromise<boolean>;
 }
 
 /** @public */
@@ -101,7 +102,7 @@ export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & 
 
 /** @public */
 export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointmentInfo & {
-  readonly appointmentElement: TElement;
+  readonly appointmentElement: DxElement;
 }
 
 /** @public */
@@ -114,19 +115,19 @@ export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
 export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
   readonly oldData: any;
   readonly newData: any;
-  cancel?: boolean | TPromise<boolean>;
+  cancel?: boolean | DxPromise<boolean>;
 }
 
 /** @public */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler> & {
   readonly cellData: any;
-  readonly cellElement: TElement;
+  readonly cellElement: DxElement;
 }
 
 /** @public */
 export type CellContextMenuEvent = NativeEventInfo<dxScheduler> & {
   readonly cellData: any;
-  readonly cellElement: TElement;
+  readonly cellElement: DxElement;
 }
 
 /** @public */
@@ -212,7 +213,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: TElement) => string | TElement);
+    appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -244,7 +245,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
+       * @type_function_param1_field4 itemElement:DxElement
        * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 fromData:any
@@ -259,7 +260,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 cancel:boolean
        * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field5 itemElement:DxElement
        * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field8 fromData:any
@@ -274,7 +275,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 cancel:boolean
        * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field5 itemElement:DxElement
        * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field8 fromData:any
@@ -289,7 +290,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 cancel:boolean
        * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field5 itemElement:DxElement
        * @type_function_param1_field6 fromData:any
        */
       onDragStart?: ((e: AppointmentDraggingStartEvent) => void),
@@ -300,7 +301,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field1 component:dxScheduler
        * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
+       * @type_function_param1_field4 itemElement:DxElement
        * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 fromData:any
@@ -325,14 +326,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: TElement) => string | TElement);
+    appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @extends AppointmentTooltipTemplate
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentTooltipTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: TElement) => string | TElement);
+    appointmentTooltipTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @extends CellDuration
@@ -382,7 +383,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default null
@@ -396,7 +397,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default undefined
@@ -416,13 +417,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default "dropDownAppointment"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 contentElement:dxElement
+     * @type_function_param3 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: TElement) => string | TElement);
+    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -567,7 +568,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -581,7 +582,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
@@ -595,11 +596,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
-     * @type_function_param1_field6 appointmentElement:dxElement
+     * @type_function_param1_field6 appointmentElement:DxElement
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 cancel:Boolean
      * @action
@@ -612,11 +613,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
-     * @type_function_param1_field6 appointmentElement:dxElement
+     * @type_function_param1_field6 appointmentElement:DxElement
      * @type_function_param1_field7 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -628,11 +629,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object
-     * @type_function_param1_field6 appointmentElement:dxElement
+     * @type_function_param1_field6 appointmentElement:DxElement
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 cancel:Boolean
      * @action
@@ -645,7 +646,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -659,7 +660,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
@@ -673,7 +674,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 form:dxForm
@@ -689,11 +690,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object|undefined
-     * @type_function_param1_field6 appointmentElement:dxElement
+     * @type_function_param1_field6 appointmentElement:DxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -704,7 +705,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -718,7 +719,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 oldData:Object
      * @type_function_param1_field5 newData:Object
@@ -733,10 +734,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellData:object
-     * @type_function_param1_field5 cellElement:dxElement
+     * @type_function_param1_field5 cellElement:DxElement
      * @type_function_param1_field6 event:event
      * @type_function_param1_field7 cancel:Boolean
      * @action
@@ -749,10 +750,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScheduler
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cellData:object
-     * @type_function_param1_field5 cellElement:dxElement
+     * @type_function_param1_field5 cellElement:DxElement
      * @type_function_param1_field6 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -794,7 +795,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default []
@@ -922,7 +923,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default ""
@@ -960,19 +961,19 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default "appointmentCollector"
        * @extends AppointmentCollectorTemplate
        */
-      appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: TElement) => string | TElement),
+      appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @extends AppointmentTemplate
        */
-      appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: TElement) => string | TElement),
+      appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @extends AppointmentTooltipTemplate
        */
-      appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: TElement) => string | TElement),
+      appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -984,24 +985,24 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @prevFileNamespace DevExpress.ui
        * @extends DataCellTemplate
        */
-      dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement),
+      dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @extends DateCellTemplate
        */
-      dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement),
+      dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default "dropDownAppointment"
        * @type_function_param1 itemData:object
        * @type_function_param2 itemIndex:number
-       * @type_function_param3 contentElement:dxElement
+       * @type_function_param3 contentElement:DxElement
        * @type_function_return string|Element|jQuery
        * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
        */
-      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: TElement) => string | TElement),
+      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1057,7 +1058,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @prevFileNamespace DevExpress.ui
        * @extends ResourceCellTemplate
        */
-      resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement),
+      resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1075,7 +1076,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @prevFileNamespace DevExpress.ui
        * @extends TimeCellTemplate
        */
-      timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement),
+      timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1099,7 +1100,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
  * @public
  */
 export default class dxScheduler extends Widget {
-    constructor(element: TElement, options?: dxSchedulerOptions)
+    constructor(element: UserDefinedElement, options?: dxSchedulerOptions)
     /**
      * @docid
      * @publicName addAppointment(appointment)
@@ -1188,7 +1189,7 @@ export default class dxScheduler extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showAppointmentTooltip(appointmentData: any, target: string | TElement, currentAppointmentData?: any): void;
+    showAppointmentTooltip(appointmentData: any, target: string | UserDefinedElement, currentAppointmentData?: any): void;
     /**
      * @docid
      * @publicName updateAppointment(target, appointment)
