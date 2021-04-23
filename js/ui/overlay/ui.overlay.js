@@ -302,6 +302,14 @@ const Overlay = Widget.inherit({
         return this._$content;
     },
 
+    _setDeprecatedOptions() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            'elementAttr': { since: '21.2', message: 'Functionality associated with this option is not intended for the Overlay widget.' }
+        });
+    },
+
     _init: function() {
         this.callBase();
         this._initActions();

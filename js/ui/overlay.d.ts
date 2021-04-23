@@ -69,6 +69,14 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     dragEnabled?: boolean;
     /**
      * @docid
+     * @deprecated
+     * @default {}
+     * @prevFileNamespace DevExpress.core
+     * @public
+     */
+     elementAttr?: any;
+    /**
+     * @docid
      * @default function() { return $(window).height() * 0.8 }
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
