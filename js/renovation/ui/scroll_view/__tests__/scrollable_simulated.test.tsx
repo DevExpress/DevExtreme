@@ -731,54 +731,10 @@ describe('Simulated > Behavior', () => {
         [100, 200],
         [0, 100, 200],
         ['hidden', 'visible'],
-      ]))('UpdateScrollbarSize(), scrollSize default, ContainerSize: %o, ContentSize: %o, OverflowStyle: %o',
-        (containerSize, contentSize, overflow) => {
-          const helper = new ScrollableTestHelper({
-            direction, overflow, contentSize, containerSize,
-          });
-          helper.initScrollbarSettings();
-
-          if (helper.isVertical) {
-            const styles = helper.getVerticalScrollElement().props.style;
-
-            expect(styles).toEqual({ height: 15, transform: 'translate(0px, 0px)' });
-          }
-          if (helper.isHorizontal) {
-            const styles = helper.getHorizontalScrollElement().props.style;
-
-            expect(styles).toEqual({ width: 15, transform: 'translate(0px, 0px)' });
-          }
-
-          Object.defineProperties(helper.viewModel, {
-            scrollableOffset: { get() { return { left: 10, top: 10 }; } },
-          });
-
-          helper.viewModel.updateScrollbarSize();
-
-          if (helper.isVertical) {
-            expect(helper.viewModel.scrollableOffsetLeft).toEqual(10);
-            expect(helper.viewModel.containerClientWidth).toEqual(containerSize);
-            expect(helper.viewModel.contentWidth).toEqual(contentSize);
-            expect(helper.viewModel.baseContainerWidth).toEqual(containerSize);
-            expect(helper.viewModel.baseContentWidth).toEqual(contentSize);
-          }
-          if (helper.isHorizontal) {
-            expect(helper.viewModel.scrollableOffsetTop).toEqual(10);
-            expect(helper.viewModel.containerClientHeight).toEqual(containerSize);
-            expect(helper.viewModel.contentHeight).toEqual(contentSize);
-            expect(helper.viewModel.baseContainerHeight).toEqual(containerSize);
-            expect(helper.viewModel.baseContentHeight).toEqual(contentSize);
-          }
-        });
-
-      test.each(getPermutations([
-        [100, 200],
-        [0, 100, 200],
-        ['hidden', 'visible'],
         optionValues.bounceEnabled,
         optionValues.isDxWheelEvent,
         [true, false],
-      ]))('UpdateScrollbarSize(), scrollSize default, ContainerSize: %o, ContentSize: %o, OverflowStyle: %o, BounceEnabled: %o, IsDxWheelEvent: %o, IsShiftKeyPressed: %o',
+      ]))('getDirection(e), scrollSize default, ContainerSize: %o, ContentSize: %o, OverflowStyle: %o, BounceEnabled: %o, IsDxWheelEvent: %o, IsShiftKeyPressed: %o',
         (containerSize, contentSize, overflow, bounceEnabled, isDxWheelEvent, shiftKey) => {
           const helper = new ScrollableTestHelper({
             direction, overflow, bounceEnabled, contentSize, containerSize,
