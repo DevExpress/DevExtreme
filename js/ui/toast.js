@@ -184,6 +184,13 @@ const Toast = Overlay.inherit({
         ]);
     },
 
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'elementAttr': { since: '21.1', message: 'This property is deprecated in favor of the wrapperAttr property.' }
+        });
+    },
+
     _init: function() {
         this.callBase();
 

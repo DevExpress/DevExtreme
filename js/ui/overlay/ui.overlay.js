@@ -302,13 +302,6 @@ const Overlay = Widget.inherit({
         return this._$content;
     },
 
-    _setDeprecatedOptions() {
-        this.callBase();
-        extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.1', alias: 'overlayOptions.wrapperAttr' },
-        });
-    },
-
     _init: function() {
         this.callBase();
         this._initActions();

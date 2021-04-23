@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import errors from 'core/errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
 
@@ -125,6 +126,25 @@ QUnit.module('init', {
             visible: true,
             position: { of: '#non-exist' }
         }).dxLoadPanel('instance');
+    });
+
+    QUnit.test('show warning if deprecated \'elementAttr\' option is used', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            $('#loadPanel').dxLoadPanel({
+                elementAttr: { class: 'someClass' },
+            });
+            assert.deepEqual(errors.log.lastCall.args, [
+                'W0001',
+                'dxLoadPanel',
+                'elementAttr',
+                '21.1',
+                'This property is deprecated in favor of the wrapperAttr property.'
+            ], 'args of the log method');
+        } finally {
+            errors.log.restore();
+        }
     });
 });
 

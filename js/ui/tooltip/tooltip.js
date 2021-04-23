@@ -53,6 +53,13 @@ const Tooltip = Popover.inherit({
         });
     },
 
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'elementAttr': { since: '21.1', message: 'This property is deprecated in favor of the wrapperAttr property.' }
+        });
+    },
+
     _render: function() {
         this.$element().addClass(TOOLTIP_CLASS);
         this._wrapper().addClass(TOOLTIP_WRAPPER_CLASS);

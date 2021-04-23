@@ -13,7 +13,6 @@ import eventsEngine from 'events/core/events_engine';
 import visibilityChange, { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
-import errors from 'core/errors';
 import Overlay from 'ui/overlay';
 import * as zIndex from 'ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
@@ -473,25 +472,6 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeStartFired.callCount, 1, 'onResizeStart fired');
         assert.strictEqual(onResizeFired.callCount, 1, 'onResize fired');
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
-    });
-
-    test('show warning if deprecated \'elementAttr\' option is used', function(assert) {
-        sinon.spy(errors, 'log');
-
-        try {
-            $('#overlay').dxOverlay({
-                elementAttr: { class: 'someClass' },
-            });
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxOverlay',
-                'elementAttr',
-                '21.1',
-                'Use the \'overlayOptions.wrapperAttr\' option instead'
-            ], 'args of the log method');
-        } finally {
-            errors.log.restore();
-        }
     });
 
     testModule('wrapperAttr option', {
