@@ -11,7 +11,7 @@ import {
   ForwardRef, OneWay,
 } from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
-import { Widget } from '../common/widget';
+import { Widget, WidgetProps } from '../common/widget';
 import { ScrollViewLoadPanel } from './load_panel';
 
 import { combineClasses } from '../../utils/combine_classes';
@@ -23,7 +23,6 @@ import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
 import browser from '../../../core/utils/browser';
 import { isDefined } from '../../../core/utils/type';
-import { ensureDefined } from '../../../core/utils/common';
 import { BaseWidgetProps } from '../common/base_props';
 import {
   ScrollableProps,
@@ -35,7 +34,7 @@ import '../../../events/gesture/emitter.gesture.scroll';
 
 import {
   ScrollEventArgs,
-  ScrollableLocation, ScrollOffset, ScrollableDirection, RefreshStrategy,
+  ScrollOffset, ScrollableDirection, RefreshStrategy,
 } from './types.d';
 
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
@@ -44,7 +43,6 @@ import {
   getScrollSign,
   getLocation,
   normalizeOffsetLeft,
-  restoreLocation,
 } from './scrollable_utils';
 
 import {
@@ -73,6 +71,7 @@ import {
   dxScrollEnd,
   dxScrollStop,
 } from '../../../events/short';
+import { getOffsetDistance } from './utils/get_offset_distance';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
 
@@ -85,8 +84,9 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     scrollableRef, isLoadPanelVisible, topPocketState, refreshStrategy,
     pullDownTranslateTop, pullDownIconAngle, pullDownOpacity,
     topPocketTop, contentStyles, scrollViewContentRef, contentTranslateTop,
+    hScrollLocation, vScrollLocation,
     props: {
-      disabled, height, width, rtlEnabled, children, visible,
+      aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText,
@@ -99,6 +99,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   return (
     <Widget
       rootElementRef={scrollableRef}
+      aria={aria}
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
@@ -162,6 +163,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           scrollByThumb={scrollByThumb}
           contentSize={contentClientWidth}
           containerSize={containerClientWidth}
+          scrollLocation={hScrollLocation}
           forceVisibility={needForceScrollbarsVisibility}
         />
       )}
@@ -172,6 +174,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           scrollByThumb={scrollByThumb}
           contentSize={contentClientHeight}
           containerSize={containerClientHeight}
+          scrollLocation={vScrollLocation}
           forceVisibility={needForceScrollbarsVisibility}
         />
       )}
@@ -184,6 +187,7 @@ export class ScrollableNativeProps extends ScrollableProps {
 }
 
 export type ScrollableNativePropsType = ScrollableNativeProps
+& Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;
@@ -254,6 +258,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @InternalState() topPocketTop = -80; // TODO: set default as topPocketClientHeight
 
   @InternalState() contentTranslateTop = 0;
+
+  @InternalState() vScrollLocation = 0;
+
+  @InternalState() hScrollLocation = 0;
 
   @Method()
   content(): HTMLDivElement {
@@ -332,24 +340,16 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.unlock();
   }
 
-  getOffsetDistance(targetLocation: number | Partial<ScrollableLocation>):
-  { left: number; top: number } {
-    const location = restoreLocation(targetLocation, this.props.direction);
-    const containerPosition = this.scrollOffset();
+  @Method()
+  scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
+    const { direction } = this.props;
+    const distance = getOffsetDistance(targetLocation, direction, this.scrollOffset());
 
-    const top = -containerPosition.top - ensureDefined(location.top, -containerPosition.top);
-    const left = -containerPosition.left - ensureDefined(location.left, -containerPosition.left);
-
-    return { top, left };
+    this.scrollBy(distance);
   }
 
   @Method()
-  scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
-    this.scrollBy(this.getOffsetDistance(targetLocation));
-  }
-
-  @Method()
-  scrollBy(distance: number | Partial<ScrollableLocation>): void {
+  scrollBy(distance: number | Partial<ScrollOffset>): void {
     const location = getAugmentedLocation(distance);
 
     if (!location.top && !location.left) {
@@ -367,8 +367,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   /* istanbul ignore next */
-  // eslint-disable-next-line class-methods-use-this
-  scrollToElement(element: HTMLElement): void { // offset?: Partial<ScrollOffset>
+  scrollToElement(element: HTMLElement): void {
     if (!isDefined(element)) {
       return;
     }
@@ -376,7 +375,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const { top, left } = this.scrollOffset();
     element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 
-    const distance = this.getOffsetDistance({ top, left });
+    const distance = getOffsetDistance({ top, left }, this.props.direction, this.scrollOffset());
 
     const containerEl = this.containerRef.current!;
     if (!this.direction.isHorizontal) {
@@ -399,14 +398,14 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   getElementLocation(
     element: HTMLElement,
     direction: ScrollableDirection,
-    offset?: Partial<ScrollOffset>,
+    offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
   ): number {
     const scrollOffset = {
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      ...(offset as Partial<ScrollOffset>),
+      ...offset,
     };
 
     return getLocation(
@@ -428,13 +427,13 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Method()
-  scrollOffset(): ScrollableLocation {
-    const { left, top } = this.scrollLocation();
+  scrollOffset(): ScrollOffset {
+    const { top, left } = this.scrollLocation();
     const scrollLeftMax = getScrollLeftMax(this.containerRef.current!);
 
     return {
-      left: normalizeOffsetLeft(left, scrollLeftMax, !!this.props.rtlEnabled),
       top,
+      left: normalizeOffsetLeft(left, scrollLeftMax, !!this.props.rtlEnabled),
     };
   }
 
@@ -618,19 +617,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   moveScrollbars(): void {
     const { top, left } = this.scrollOffset();
 
-    if (this.direction.isHorizontal) {
-      const scrollbarEl = this.horizontalScrollbarRef.current;
-      if (isDefined(scrollbarEl)) {
-        this.horizontalScrollbarRef.current!.moveScrollbar(-left);
-      }
-    }
-
-    if (this.direction.isVertical) {
-      const scrollbarEl = this.verticalScrollbarRef.current;
-      if (isDefined(scrollbarEl)) {
-        this.verticalScrollbarRef.current!.moveScrollbar(-top);
-      }
-    }
+    this.hScrollLocation = -left;
+    this.vScrollLocation = -top;
 
     this.needForceScrollbarsVisibility = true;
 

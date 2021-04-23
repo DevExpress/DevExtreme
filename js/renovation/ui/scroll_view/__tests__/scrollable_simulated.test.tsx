@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable jest/expect-expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -25,7 +24,6 @@ import {
 
 import {
   ScrollableSimulated as Scrollable,
-  viewFunction as ScrollableComponent,
 } from '../scrollable_simulated';
 
 import {
@@ -71,6 +69,37 @@ describe('Simulated > View', () => {
 
 describe('Simulated > Render', () => {
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
+    each([{ top: 120, left: -200 }, { top: -60, left: 40 }]).describe('contentTranslateOffset: %o', (contentTranslateOffset) => {
+      it('contentStyles()', () => {
+        const helper = new ScrollableTestHelper({ direction });
+
+        helper.viewModel.contentTranslateOffset = contentTranslateOffset;
+
+        expect(helper.viewModel.contentStyles).toEqual({ transform: `translate(${contentTranslateOffset.left}px, ${contentTranslateOffset.top}px)` });
+      });
+
+      each([30, 40, -20]).describe('contentTranslateOffset: %o', (translateOffsetValue) => {
+        it('contentStyles() after contentTranslateOffsetChange()', () => {
+          const helper = new ScrollableTestHelper({ direction });
+
+          helper.viewModel.contentTranslateOffset = contentTranslateOffset;
+
+          const expectedTranslateOffset = contentTranslateOffset;
+          if (helper.isVertical) {
+            helper.viewModel.contentTranslateOffsetChange({ top: translateOffsetValue });
+            expectedTranslateOffset.top = translateOffsetValue;
+          }
+
+          if (helper.isHorizontal) {
+            helper.viewModel.contentTranslateOffsetChange({ left: translateOffsetValue });
+            expectedTranslateOffset.left = translateOffsetValue;
+          }
+
+          expect(helper.viewModel.contentStyles).toEqual({ transform: `translate(${contentTranslateOffset.left}px, ${contentTranslateOffset.top}px)` });
+        });
+      });
+    });
+
     each([true, false]).describe('AllowVertical: %o', (allowVertical) => {
       each([true, false]).describe('AllowHorizontal: %o', (allowHorizontal) => {
         it('containerStyles()', () => {
@@ -82,18 +111,18 @@ describe('Simulated > Render', () => {
             },
           });
 
-          let touchAction = '';
+          let expectedTouchAction = '';
           if (allowVertical) {
-            touchAction = 'pan-x';
+            expectedTouchAction = 'pan-x';
           }
           if (allowHorizontal) {
-            touchAction = 'pan-y';
+            expectedTouchAction = 'pan-y';
           }
           if (allowVertical && allowHorizontal) {
-            touchAction = 'none';
+            expectedTouchAction = 'none';
           }
 
-          expect(helper.viewModel.containerStyles).toEqual({ touchAction });
+          expect(helper.viewModel.containerStyles).toEqual({ touchAction: expectedTouchAction });
         });
       });
     });
@@ -575,7 +604,6 @@ describe('Simulated > Behavior', () => {
           helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
 
           helper.viewModel.scrollBy(scrollByValues.actual);
-          helper.callScrollbarMethod('updateContent');
 
           helper.checkValidDirection(expect, {
             horizontal: true,
@@ -584,7 +612,11 @@ describe('Simulated > Behavior', () => {
 
           helper.checkActionHandlerCalls(expect,
             ['onStart', 'onUpdated', 'onEnd'],
-            [[{ fakeEventArg: { value: 5 } }], [{ fakeEventArg: { value: 5 } }], [{ fakeEventArg: { value: 5 } }]]);
+            [
+              [{ fakeEventArg: { value: 5 } }],
+              [{ fakeEventArg: { value: 5 } }],
+              [{ fakeEventArg: { value: 5 } }],
+            ]);
           helper.checkScrollbarEventHandlerCalls(expect, ['scrollBy'], [[scrollByValues.expected]]);
         });
 
@@ -597,7 +629,8 @@ describe('Simulated > Behavior', () => {
         [true, false],
         [true, false],
       ]))('emit "dxscrollinit" -> "dxscroll" events, isDxWheelEvent: %o, scrollByThumb: %o, scrollByContent: %o, targetClass: %o, pixelRatio: %o, hasWindow: %o, locked: %o,',
-        (isDxWheelEvent, scrollByThumb, scrollByContent, targetClass, pixelRatio, hasWindow, locked) => {
+        (isDxWheelEvent, scrollByThumb, scrollByContent, targetClass,
+          pixelRatio, hasWindow, locked) => {
           const initialDeltaX = 50;
           const initialDeltaY = 40;
 
@@ -698,7 +731,7 @@ describe('Simulated > Behavior', () => {
         [100, 200],
         [0, 100, 200],
         ['hidden', 'visible'],
-      ]))('UpdateScrollbarSize(), thumbSize default, ContainerSize: %o, ContentSize: %o, OverflowStyle: %o',
+      ]))('UpdateScrollbarSize(), scrollSize default, ContainerSize: %o, ContentSize: %o, OverflowStyle: %o',
         (containerSize, contentSize, overflow) => {
           const helper = new ScrollableTestHelper({
             direction, overflow, contentSize, containerSize,
@@ -708,12 +741,12 @@ describe('Simulated > Behavior', () => {
           if (helper.isVertical) {
             const styles = helper.getVerticalScrollElement().props.style;
 
-            expect(styles).toEqual({ height: '15px', transform: 'translate(0px, 0px)' });
+            expect(styles).toEqual({ height: 15, transform: 'translate(0px, 0px)' });
           }
           if (helper.isHorizontal) {
             const styles = helper.getHorizontalScrollElement().props.style;
 
-            expect(styles).toEqual({ width: '15px', transform: 'translate(0px, 0px)' });
+            expect(styles).toEqual({ width: 15, transform: 'translate(0px, 0px)' });
           }
 
           Object.defineProperties(helper.viewModel, {
@@ -745,7 +778,7 @@ describe('Simulated > Behavior', () => {
         optionValues.bounceEnabled,
         optionValues.isDxWheelEvent,
         [true, false],
-      ]))('UpdateScrollbarSize(), thumbSize default, ContainerSize: %o, ContentSize: %o, OverflowStyle: %o, BounceEnabled: %o, IsDxWheelEvent: %o, IsShiftKeyPressed: %o',
+      ]))('UpdateScrollbarSize(), scrollSize default, ContainerSize: %o, ContentSize: %o, OverflowStyle: %o, BounceEnabled: %o, IsDxWheelEvent: %o, IsShiftKeyPressed: %o',
         (containerSize, contentSize, overflow, bounceEnabled, isDxWheelEvent, shiftKey) => {
           const helper = new ScrollableTestHelper({
             direction, overflow, bounceEnabled, contentSize, containerSize,
@@ -778,17 +811,20 @@ describe('Simulated > Behavior', () => {
         });
 
       each([-1, 1]).describe('Wheel delta: %o', (delta) => {
-        each([-100, -50, 0]).describe('Scrollbar position: %o', (scrollbarPosition) => {
+        each([-100, -50, 0]).describe('scrollLocation: %o', (scrollLocation) => {
           it('validateWheel(e)', () => {
             const helper = new ScrollableTestHelper({ direction });
 
-            helper.initScrollbarSettings();
-            helper.initContainerPosition({ top: -scrollbarPosition, left: -scrollbarPosition });
+            helper.initScrollbarSettings({
+              props:
+              { vScrollLocation: scrollLocation, hScrollLocation: scrollLocation },
+            });
+            helper.initContainerPosition({ top: -scrollLocation, left: -scrollLocation });
 
             const e = { ...defaultEvent, delta };
 
-            const expectedValidationResult = (scrollbarPosition < 0 && delta > 0)
-                || (scrollbarPosition >= 0 && delta < 0) || scrollbarPosition === -50;
+            const expectedValidationResult = (scrollLocation < 0 && delta > 0)
+                || (scrollLocation >= 0 && delta < 0) || scrollLocation === -50;
 
             expect(helper.viewModel.validateWheelTimer).toBe(undefined);
 
@@ -1195,33 +1231,15 @@ describe('Simulated > Behavior', () => {
       each(optionValues.direction).describe('Direction: %o', (direction) => {
         each([false]).describe('rtlEnabled: %o', (rtlEnabled) => { // TODO: rtl = true
           each([
-            [{ top: 50, left: 50 }, 20, {
-              top: 20, left: 20, translateTop: 10, translateLeft: 10,
-            }],
-            [{ top: 50, left: 50 }, { top: 20, left: 15 }, {
-              top: 20, left: 15, translateTop: 10, translateLeft: 7.5,
-            }],
-            [{ top: 50, left: 50 }, -50, {
-              top: -0, left: -0, translateTop: 0, translateLeft: 0,
-            }],
-            [{ top: 50, left: 50 }, { top: 20, left: -15 }, {
-              top: 20, left: -0, translateTop: 10, translateLeft: 0,
-            }],
-            [{ top: 50, left: 50 }, 1000, {
-              top: 100, left: 100, translateTop: 50, translateLeft: 50,
-            }],
-            [{ top: 50, left: 50 }, { top: 30 }, {
-              top: 30, left: 50, translateTop: 15, translateLeft: 25,
-            }],
-            [{ top: 50, left: 50 }, { left: 30 }, {
-              top: 50, left: 30, translateTop: 25, translateLeft: 15,
-            }],
-            [{ top: 50, left: 50 }, undefined, {
-              top: 50, left: 50, translateTop: 25, translateLeft: 25,
-            }],
-            [{ top: 50, left: 50 }, {}, {
-              top: 50, left: 50, translateTop: 25, translateLeft: 25,
-            }],
+            [{ top: 50, left: 50 }, 20, { top: 20, left: 20 }],
+            [{ top: 50, left: 50 }, { top: 20, left: 15 }, { top: 20, left: 15 }],
+            [{ top: 50, left: 50 }, -50, { top: -0, left: -0 }],
+            [{ top: 50, left: 50 }, { top: 20, left: -15 }, { top: 20, left: -0 }],
+            [{ top: 50, left: 50 }, 1000, { top: 100, left: 100 }],
+            [{ top: 50, left: 50 }, { top: 30 }, { top: 30, left: 50 }],
+            [{ top: 50, left: 50 }, { left: 30 }, { top: 50, left: 30 }],
+            [{ top: 50, left: 50 }, undefined, { top: 50, left: 50 }],
+            [{ top: 50, left: 50 }, {}, { top: 50, left: 50 }],
           ]).describe('initScrollPosition: %o,', (initialScrollPosition, scrollToValue, expected) => {
             it(`ScrollTo(${JSON.stringify(scrollToValue)})`, () => {
               const helper = new ScrollableTestHelper({
@@ -1232,47 +1250,39 @@ describe('Simulated > Behavior', () => {
               });
               helper.viewModel.triggerScrollEvent = jest.fn();
 
-              helper.initScrollbarSettings();
+              helper.initScrollbarSettings({
+                props: {
+                  vScrollLocation: -initialScrollPosition.top,
+                  hScrollLocation: -initialScrollPosition.left,
+                },
+              });
+              helper.changeScrollbarMethod('scrollComplete', jest.fn());
               helper.initContainerPosition(initialScrollPosition);
 
               helper.viewModel.scrollTo(scrollToValue);
-              helper.callScrollbarMethod('updateContent');
 
-              const { translateLeft, translateTop, ...expectedScrollOffset } = expected;
-              expectedScrollOffset.top = helper.isVertical ? expected.top : initialScrollPosition.top;
-              expectedScrollOffset.left = helper.isHorizontal ? expected.left : initialScrollPosition.left;
+              const { ...expectedScrollOffset } = expected;
+              expectedScrollOffset.top = helper.isVertical
+                ? expected.top : initialScrollPosition.top;
+              expectedScrollOffset.left = helper.isHorizontal
+                ? expected.left : initialScrollPosition.left;
 
               expect(helper.viewModel.scrollOffset()).toEqual(expectedScrollOffset);
+              expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollOffset.top);
+              expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
               helper.checkContainerPosition(expect, expectedScrollOffset);
-              helper.checkScrollTransform(expect, { vertical: `translate(0px, ${translateTop}px)`, horizontal: `translate(${translateLeft}px, 0px)` });
             });
           });
 
           each([
-            [{ top: 50, left: 40 }, 20, {
-              top: 70, left: 60, translateTop: 35, translateLeft: 30,
-            }],
-            [{ top: 50, left: 40 }, { top: 20, left: 15 }, {
-              top: 70, left: 55, translateTop: 35, translateLeft: 27.5,
-            }],
-            [{ top: 50, left: 40 }, -15, {
-              top: 35, left: 25, translateTop: 17.5, translateLeft: 12.5,
-            }],
-            [{ top: 50, left: 40 }, { top: -20, left: 15 }, {
-              top: 30, left: 55, translateTop: 15, translateLeft: 27.5,
-            }],
-            [{ top: 50, left: 40 }, -1000, {
-              top: -0, left: -0, translateTop: 0, translateLeft: 0,
-            }],
-            [{ top: 50, left: 40 }, 1000, {
-              top: 100, left: 100, translateTop: 50, translateLeft: 50,
-            }],
-            [{ top: 50, left: 40 }, undefined, {
-              top: 50, left: 40, translateTop: 25, translateLeft: 20,
-            }],
-            [{ top: 40, left: 50 }, {}, {
-              top: 40, left: 50, translateTop: 20, translateLeft: 25,
-            }],
+            [{ top: 50, left: 40 }, 20, { top: 70, left: 60 }],
+            [{ top: 50, left: 40 }, { top: 20, left: 15 }, { top: 70, left: 55 }],
+            [{ top: 50, left: 40 }, -15, { top: 35, left: 25 }],
+            [{ top: 50, left: 40 }, { top: -20, left: 15 }, { top: 30, left: 55 }],
+            [{ top: 50, left: 40 }, -1000, { top: -0, left: -0 }],
+            [{ top: 50, left: 40 }, 1000, { top: 100, left: 100 }],
+            [{ top: 50, left: 40 }, undefined, { top: 50, left: 40 }],
+            [{ top: 40, left: 50 }, {}, { top: 40, left: 50 }],
           ]).describe('initScrollPosition: %o,', (initialScrollPosition, scrollByValue, expected) => {
             it(`scrollBy(${JSON.stringify(scrollByValue)})`, () => {
               const helper = new ScrollableTestHelper({
@@ -1283,19 +1293,27 @@ describe('Simulated > Behavior', () => {
               });
               helper.viewModel.triggerScrollEvent = jest.fn();
 
-              helper.initScrollbarSettings();
+              helper.initScrollbarSettings({
+                props: {
+                  vScrollLocation: -initialScrollPosition.top,
+                  hScrollLocation: -initialScrollPosition.left,
+                },
+              });
+              helper.changeScrollbarMethod('scrollComplete', jest.fn());
+
               helper.initContainerPosition(initialScrollPosition);
-
               helper.viewModel.scrollBy(scrollByValue);
-              helper.callScrollbarMethod('updateContent');
 
-              const { translateLeft, translateTop, ...expectedScrollOffset } = expected;
-              expectedScrollOffset.top = helper.isVertical ? expected.top : initialScrollPosition.top;
-              expectedScrollOffset.left = helper.isHorizontal ? expected.left : initialScrollPosition.left;
+              const { ...expectedScrollOffset } = expected;
+              expectedScrollOffset.top = helper.isVertical
+                ? expected.top : initialScrollPosition.top;
+              expectedScrollOffset.left = helper.isHorizontal
+                ? expected.left : initialScrollPosition.left;
 
               expect(helper.viewModel.scrollOffset()).toEqual(expectedScrollOffset);
+              expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollOffset.top);
+              expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
               helper.checkContainerPosition(expect, expectedScrollOffset);
-              helper.checkScrollTransform(expect, { vertical: `translate(0px, ${translateTop}px)`, horizontal: `translate(${translateLeft}px, 0px)` });
             });
           });
         });
@@ -1358,43 +1376,20 @@ describe('Simulated > Behavior', () => {
 
     describe('isContent', () => {
       it('element is scrollable container', () => {
-        const viewModel = new Scrollable({ direction: 'vertical' });
-        (viewModel as any).contentRef = React.createRef();
-        (viewModel as any).containerRef = React.createRef();
-        (viewModel as any).scrollableRef = React.createRef();
-        (viewModel as any).horizontalScrollbarRef = React.createRef();
-        (viewModel as any).verticalScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({ direction: 'vertical' });
 
-        const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
-        viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
-
-        expect(viewModel.isContent(scrollable.find('.dx-scrollable-container').getDOMNode())).toBe(true);
+        expect(helper.viewModel.isContent(helper.getScrollable().find('.dx-scrollable-container').getDOMNode())).toBe(true);
       });
 
       it('element is scrollbar', () => {
-        const viewModel = new Scrollable({ direction: 'vertical' });
-        (viewModel as any).contentRef = React.createRef();
-        (viewModel as any).containerRef = React.createRef();
-        (viewModel as any).scrollableRef = React.createRef();
-        (viewModel as any).horizontalScrollbarRef = React.createRef();
-        (viewModel as any).verticalScrollbarRef = React.createRef();
+        const helper = new ScrollableTestHelper({ direction: 'vertical' });
 
-        const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
-        viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
-
-        expect(viewModel.isContent(scrollable.find('.dx-scrollable-scrollbar').getDOMNode())).toBe(true);
+        expect(helper.viewModel.isContent(helper.getScrollable().find('.dx-scrollable-scrollbar').getDOMNode())).toBe(true);
       });
 
       it('element is not inside scrollable', () => {
-        const viewModel = new Scrollable({ direction: 'vertical' });
-        (viewModel as any).contentRef = React.createRef();
-        (viewModel as any).containerRef = React.createRef();
-        (viewModel as any).scrollableRef = React.createRef();
-        (viewModel as any).horizontalScrollbarRef = React.createRef();
-        (viewModel as any).verticalScrollbarRef = React.createRef();
-
-        mount(ScrollableComponent(viewModel as any) as JSX.Element);
-        expect(viewModel.isContent(mount(<div />).getDOMNode())).toBe(false);
+        const helper = new ScrollableTestHelper({ direction: 'vertical' });
+        expect(helper.viewModel.isContent(mount(<div />).getDOMNode())).toBe(false);
       });
     });
   });
@@ -1433,38 +1428,6 @@ describe('Simulated > Logic', () => {
 
             expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
           });
-        });
-      });
-
-      each([true, false]).describe('hasWindow: %o', (hasWindow) => {
-        it('scaleRatioHeight()', () => {
-          const viewModel = new Scrollable({});
-
-          setWindow({ devicePixelRatio: 1 }, hasWindow);
-
-          viewModel.containerRef = {
-            current: {
-              clientHeight: 100,
-              offsetHeight: 100,
-            },
-          } as RefObject<HTMLDivElement>;
-
-          expect(viewModel.scaleRatioHeight).toEqual(1);
-        });
-
-        it('scaleRatioWidth()', () => {
-          const viewModel = new Scrollable({});
-
-          setWindow({ devicePixelRatio: 1 }, hasWindow);
-
-          viewModel.containerRef = {
-            current: {
-              clientWidth: 100,
-              offsetWidth: 100,
-            },
-          } as RefObject<HTMLDivElement>;
-
-          expect(viewModel.scaleRatioWidth).toEqual(1);
         });
       });
     });

@@ -1,7 +1,7 @@
 import { getScrollLeftMax } from './get_scroll_left_max';
 import { getScrollTopMax } from './get_scroll_top_max';
 import {
-  ScrollableLocation,
+  ScrollOffset,
   ScrollableBoundary,
   ScrollableDirection,
 } from '../types.d';
@@ -27,7 +27,7 @@ export function isReachedBottom(
 
 export function getBoundaryProps(
   direction: ScrollableDirection,
-  scrollOffset: ScrollableLocation,
+  scrollOffset: ScrollOffset,
   element: HTMLDivElement,
   pocketHeight: number,
 ): Partial<ScrollableBoundary> {

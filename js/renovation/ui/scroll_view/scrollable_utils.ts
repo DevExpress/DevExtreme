@@ -1,14 +1,7 @@
-import {
-  isDefined,
-  isPlainObject,
-} from '../../../core/utils/type';
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
 import { titleize } from '../../../core/utils/inflector';
-import { ensureDefined } from '../../../core/utils/common';
 
 import {
-  ScrollableLocation,
-  ScrollOffset,
   ScrollableDirection,
   AllowedDirection,
 } from './types.d';
@@ -36,30 +29,10 @@ export function getScrollSign(rtlEnabled: boolean): number {
   return isScrollInverted(rtlEnabled) && getScrollRtlBehavior().positive ? -1 : 1;
 }
 
-export function restoreLocation(
-  location: number | Partial<{ x: number; y: number; top: number; left: number }>,
-  direction?: ScrollableDirection,
-): Partial<ScrollableLocation> {
-  if (isPlainObject(location)) {
-    const left = ensureDefined(location.left, location.x);
-    const top = ensureDefined(location.top, location.y);
-    return {
-      left: isDefined(left) ? -left : undefined,
-      top: isDefined(top) ? -top : undefined,
-    };
-  }
-
-  const { isVertical, isHorizontal } = new ScrollDirection(direction);
-  return {
-    left: isHorizontal ? -location : undefined,
-    top: isVertical ? -location : undefined,
-  };
-}
-
 /* istanbul ignore next */
 function getElementLocationInternal(
   element: HTMLElement,
-  offset: ScrollOffset,
+  offset: Omit<ClientRect, 'width' | 'height'>,
   direction: ScrollableDirection,
   containerElement: HTMLDivElement,
 ): number {
@@ -109,7 +82,7 @@ export function normalizeOffsetLeft(
 /* istanbul ignore next */
 export function getLocation(
   element: HTMLElement,
-  offset: ScrollOffset,
+  offset: Omit<ClientRect, 'width' | 'height'>,
   direction: ScrollableDirection,
   containerElement: HTMLDivElement,
 ): number {

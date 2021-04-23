@@ -941,30 +941,14 @@ describe('Methods', () => {
             };
 
             each([
-              [{ top: 150, left: 50 }, 0, {
-                top: 0, left: 0, translateTop: 0, translateLeft: 0,
-              }],
-              [{ top: 150, left: 0 }, 200, {
-                top: 200, left: 200, translateTop: 100, translateLeft: 100,
-              }],
-              [{ top: 150, left: 0 }, { top: 100, left: 70 }, {
-                top: 100, left: 70, translateTop: 50, translateLeft: 35,
-              }],
-              [{ top: 150, left: 0 }, { top: 70, left: 100 }, {
-                top: 70, left: 100, translateTop: 35, translateLeft: 50,
-              }],
-              [{ top: 150, left: 50 }, { top: 100 }, {
-                top: 100, left: 50, translateTop: 50, translateLeft: 25,
-              }],
-              [{ top: 100, left: 50 }, { left: 100 }, {
-                top: 100, left: 100, translateTop: 50, translateLeft: 50,
-              }],
-              [{ top: 150, left: 150 }, undefined, {
-                top: 150, left: 150, translateTop: 75, translateLeft: 75,
-              }],
-              [{ top: 150, left: 150 }, {}, {
-                top: 150, left: 150, translateTop: 75, translateLeft: 75,
-              }],
+              [{ top: 150, left: 50 }, 0, { top: 0, left: 0 }],
+              [{ top: 150, left: 0 }, 200, { top: 200, left: 200 }],
+              [{ top: 150, left: 0 }, { top: 100, left: 70 }, { top: 100, left: 70 }],
+              [{ top: 150, left: 0 }, { top: 70, left: 100 }, { top: 70, left: 100 }],
+              [{ top: 150, left: 50 }, { top: 100 }, { top: 100, left: 50 }],
+              [{ top: 100, left: 50 }, { left: 100 }, { top: 100, left: 100 }],
+              [{ top: 150, left: 150 }, undefined, { top: 150, left: 150 }],
+              [{ top: 150, left: 150 }, {}, { top: 150, left: 150 }],
             ]).describe('initScrollPosition: %o,', (initialScrollPosition, scrollToValue, expected) => {
               it(`ScrollTo(${JSON.stringify(scrollToValue)})`, () => {
                 (getScrollRtlBehavior as jest.Mock).mockReturnValue(rtlBehavior);
@@ -985,7 +969,6 @@ describe('Methods', () => {
                 if (useSimulatedScrollbar) {
                   helper.initScrollbarSettings();
                 }
-
                 helper.initContainerPosition(initialPosition);
                 helper.viewModel.handlePocketState = jest.fn();
 
@@ -993,10 +976,9 @@ describe('Methods', () => {
                 if (useSimulatedScrollbar) {
                   helper.viewModel.scrollEffect();
                   emit('scroll');
-                  helper.callScrollbarMethod('updateContent');
                 }
 
-                const { translateLeft, translateTop, ...expectedScrollOffset } = expected;
+                const { ...expectedScrollOffset } = expected;
 
                 expectedScrollOffset.top = helper.isVertical
                   ? expected.top : initialScrollPosition.top;
@@ -1005,39 +987,22 @@ describe('Methods', () => {
 
                 expect(helper.viewModel.scrollOffset()).toEqual(expectedScrollOffset);
                 if (useSimulatedScrollbar) {
-                  helper.checkScrollTransform(expect, { vertical: `translate(0px, ${translateTop}px)`, horizontal: `translate(${translateLeft}px, 0px)` });
+                  expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollOffset.top);
+                  expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
                 }
               });
             });
 
             each([
-              [{ top: 150, left: 0 }, 100, {
-                top: 250, left: 100, translateTop: 125, translateLeft: 50,
-              }],
-              [{ top: 150, left: 0 }, { top: 100 }, {
-                top: 250, left: 0, translateTop: 125, translateLeft: 0,
-              }],
-              [{ top: 150, left: 0 }, { left: 100 }, {
-                top: 150, left: 100, translateTop: 75, translateLeft: 50,
-              }],
-              [{ top: 0, left: 0 }, -50, {
-                top: -50, left: -50, translateTop: -25, translateLeft: -25,
-              }],
-              [{ top: 100, left: 150 }, -50, {
-                top: 50, left: 100, translateTop: 25, translateLeft: 50,
-              }],
-              [{ top: 150, left: 0 }, { top: -50, left: 70 }, {
-                top: 100, left: 70, translateTop: 50, translateLeft: 35,
-              }],
-              [{ top: 150, left: 150 }, 300, {
-                top: 450, left: 450, translateTop: 225, translateLeft: 225,
-              }],
-              [{ top: 150, left: 150 }, undefined, {
-                top: 150, left: 150, translateTop: 75, translateLeft: 75,
-              }],
-              [{ top: 150, left: 150 }, {}, {
-                top: 150, left: 150, translateTop: 75, translateLeft: 75,
-              }],
+              [{ top: 150, left: 0 }, 100, { top: 250, left: 100 }],
+              [{ top: 150, left: 0 }, { top: 100 }, { top: 250, left: 0 }],
+              [{ top: 150, left: 0 }, { left: 100 }, { top: 150, left: 100 }],
+              [{ top: 0, left: 0 }, -50, { top: -50, left: -50 }],
+              [{ top: 100, left: 150 }, -50, { top: 50, left: 100 }],
+              [{ top: 150, left: 0 }, { top: -50, left: 70 }, { top: 100, left: 70 }],
+              [{ top: 150, left: 150 }, 300, { top: 450, left: 450 }],
+              [{ top: 150, left: 150 }, undefined, { top: 150, left: 150 }],
+              [{ top: 150, left: 150 }, {}, { top: 150, left: 150 }],
             ]).describe('initScrollPosition: %o,', (initialScrollPosition, scrollByValue, expected) => {
               it(`ScrollBy(${JSON.stringify(scrollByValue)})`, () => {
                 (getScrollRtlBehavior as jest.Mock).mockReturnValue(rtlBehavior);
@@ -1058,7 +1023,6 @@ describe('Methods', () => {
                 if (useSimulatedScrollbar) {
                   helper.initScrollbarSettings();
                 }
-
                 helper.initContainerPosition(initialPosition);
                 helper.viewModel.handlePocketState = jest.fn();
 
@@ -1066,10 +1030,9 @@ describe('Methods', () => {
                 if (useSimulatedScrollbar) {
                   helper.viewModel.scrollEffect();
                   emit('scroll');
-                  helper.callScrollbarMethod('updateContent');
                 }
 
-                const { translateLeft, translateTop, ...expectedScrollOffset } = expected;
+                const { ...expectedScrollOffset } = expected;
 
                 expectedScrollOffset.top = helper.isVertical
                   ? expected.top : initialScrollPosition.top;
@@ -1078,7 +1041,8 @@ describe('Methods', () => {
 
                 expect(helper.viewModel.scrollOffset()).toEqual(expectedScrollOffset);
                 if (useSimulatedScrollbar) {
-                  helper.checkScrollTransform(expect, { vertical: `translate(0px, ${translateTop}px)`, horizontal: `translate(${translateLeft}px, 0px)` });
+                  expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollOffset.top);
+                  expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
                 }
               });
             });
@@ -1322,38 +1286,24 @@ describe('Methods', () => {
 
   describe('moveScrollbars', () => {
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
-      it('should call according method in scrollbar', () => {
+      it('should move scrollbar', () => {
         jest.clearAllTimers();
         jest.useFakeTimers();
 
-        const horizontalScrollbarRef = {
-          current: { moveScrollbar: jest.fn() },
-        };
+        const viewModel = new Scrollable({
+          direction,
+        });
 
-        const verticalScrollbarRef = {
-          current: { moveScrollbar: jest.fn() },
-        };
-
-        const viewModel = new Scrollable({ direction });
-
-        (viewModel as any).horizontalScrollbarRef = horizontalScrollbarRef;
-        (viewModel as any).verticalScrollbarRef = verticalScrollbarRef;
         viewModel.scrollOffset = () => ({ top: 2, left: 4 });
-
         viewModel.moveScrollbars();
 
         const { isVertical, isHorizontal } = new ScrollDirection(direction);
 
-        const verticalScrollbar = viewModel.verticalScrollbarRef.current;
-        const horizontalScrollbar = viewModel.horizontalScrollbarRef.current;
-
         if (isVertical) {
-          expect(verticalScrollbar!.moveScrollbar).toHaveBeenCalledTimes(1);
-          expect(verticalScrollbar!.moveScrollbar).toHaveBeenCalledWith(-2);
+          expect(viewModel.vScrollLocation).toEqual(-2);
         }
         if (isHorizontal) {
-          expect(horizontalScrollbar!.moveScrollbar).toHaveBeenCalledTimes(1);
-          expect(horizontalScrollbar!.moveScrollbar).toHaveBeenCalledWith(-4);
+          expect(viewModel.hScrollLocation).toEqual(-4);
         }
 
         expect(viewModel.needForceScrollbarsVisibility).toEqual(true);
@@ -1371,22 +1321,6 @@ describe('Methods', () => {
 
         viewModel.disposeHideScrollbarTimeout()();
         expect(viewModel.hideScrollbarTimeout).toBe(undefined);
-      });
-
-      it('should call according method in scrollbar, scrollbarRef is undefined', () => {
-        const viewModel = new Scrollable({ direction });
-
-        (viewModel as any).horizontalScrollbarRef = {
-          current: undefined,
-        };
-
-        (viewModel as any).verticalScrollbarRef = {
-          current: undefined,
-        };
-        viewModel.scrollOffset = () => ({ top: 2, left: 4 });
-
-        viewModel.moveScrollbars();
-        expect(viewModel.needForceScrollbarsVisibility).toEqual(true);
       });
     });
   });
@@ -1408,8 +1342,6 @@ describe('Scrollbar integration', () => {
       });
       (viewModel as any).contentRef = React.createRef();
       (viewModel as any).containerRef = React.createRef();
-      (viewModel as any).horizontalScrollbarRef = React.createRef();
-      (viewModel as any).verticalScrollbarRef = React.createRef();
 
       const scrollable = mount(viewFunction(viewModel) as JSX.Element);
       const scrollBar = scrollable.find(Scrollbar);
