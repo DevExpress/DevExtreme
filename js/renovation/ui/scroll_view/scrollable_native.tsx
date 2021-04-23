@@ -11,7 +11,7 @@ import {
   ForwardRef,
 } from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
-import { Widget } from '../common/widget';
+import { Widget, WidgetProps } from '../common/widget';
 import { ScrollViewLoadPanel } from './load_panel';
 
 import { combineClasses } from '../../utils/combine_classes';
@@ -86,7 +86,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     topPocketTop, contentStyles, scrollViewContentRef, contentTranslateTop,
     hScrollLocation, vScrollLocation,
     props: {
-      disabled, height, width, rtlEnabled, children, visible,
+      aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText,
@@ -99,6 +99,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   return (
     <Widget
       rootElementRef={scrollableRef}
+      aria={aria}
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
@@ -185,6 +186,7 @@ export class ScrollableNativeProps extends ScrollableProps {
 }
 
 export type ScrollableNativePropsType = ScrollableNativeProps
+& Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;
@@ -425,12 +427,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   scrollOffset(): ScrollOffset {
-    const { left, top } = this.scrollLocation();
+    const { top, left } = this.scrollLocation();
     const scrollLeftMax = getScrollLeftMax(this.containerRef.current!);
 
     return {
-      left: normalizeOffsetLeft(left, scrollLeftMax, !!this.props.rtlEnabled),
       top,
+      left: normalizeOffsetLeft(left, scrollLeftMax, !!this.props.rtlEnabled),
     };
   }
 
