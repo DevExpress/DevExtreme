@@ -74,7 +74,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 type ScrollablePropsType = ScrollableProps
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<WidgetProps, 'aria'>
-& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
   device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
