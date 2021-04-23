@@ -1489,7 +1489,7 @@ $scheduler-appointment-form-label-padding: 20px;
       @include dx-scheduler-group-mixin($header-scroll-bar-top-offset);
 
       &.dx-scheduler-work-space-day {
-        @include dx-scheduler-header-scrollable-mixin($header-scroll-bar-top-offset - $scheduler-header-panel-table-cell-height);
+        @include dx-scheduler-header-scrollable-mixin(10px);
         @include dx-scheduler-group-mixin($header-scroll-bar-top-offset - $scheduler-header-panel-table-cell-height);
       }
 
