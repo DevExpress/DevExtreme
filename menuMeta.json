@@ -1969,7 +1969,6 @@
           {
             "Title": "Output Formats",
             "Name": "OutputFormats",
-            "DocUrl": "ApiReference/UI_Components/dxHtmlEditor/Configuration/#valueType",
             "Widget": "HtmlEditor",
             "DemoType": "Web",
             "Modules": "showdown&turndown"

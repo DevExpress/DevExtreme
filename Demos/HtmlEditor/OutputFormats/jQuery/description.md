@@ -1,0 +1,3 @@
+Our HtmlEditor outputs the markup in HTML and Markdown formats. To specify the format, use the [valueType](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/#valueType) property. If you use Markdown, link the <a href="https://www.npmjs.com/package/turndown" target="_blank" rel="noopener">turndown</a> and <a href="https://www.npmjs.com/package/showdown" target="_blank" rel="noopener">showdown</a> libraries before the DevExtreme scripts.
+
+The HtmlEditor stores the markup in the [value](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/#value) property. In this demo, the value is displayed under the HtmlEditor. You can click the Html and Markdown buttons to switch between output formats.
