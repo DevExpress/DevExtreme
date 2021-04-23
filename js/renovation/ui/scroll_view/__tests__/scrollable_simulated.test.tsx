@@ -368,17 +368,17 @@ describe('Simulated > Behavior', () => {
 
           if (direction === DIRECTION_VERTICAL) {
             expectedVerticalThumbScrolling = scrollByThumb
-                      && helper.viewModel.verticalScrollbarRef.current!.isThumb(
+                      && helper.viewModel.vScrollbarRef.current!.isThumb(
                         target,
                       );
           } else if (direction === DIRECTION_HORIZONTAL) {
             expectedHorizontalThumbScrolling = scrollByThumb
-                      && helper.viewModel.horizontalScrollbarRef.current!.isThumb(
+                      && helper.viewModel.hScrollbarRef.current!.isThumb(
                         target,
                       );
           } else {
             expectedHorizontalThumbScrolling = scrollByThumb
-                      && helper.viewModel.horizontalScrollbarRef.current!.isThumb(
+                      && helper.viewModel.hScrollbarRef.current!.isThumb(
                         target,
                       );
             expectedVerticalThumbScrolling = false;
@@ -816,8 +816,10 @@ describe('Simulated > Behavior', () => {
             const helper = new ScrollableTestHelper({ direction });
 
             helper.initScrollbarSettings({
-              props:
-              { vScrollLocation: scrollLocation, hScrollLocation: scrollLocation },
+              props: {
+                vScrollLocation: scrollLocation,
+                hScrollLocation: scrollLocation,
+              },
             });
             helper.initContainerPosition({ top: -scrollLocation, left: -scrollLocation });
 
