@@ -164,7 +164,7 @@ QUnit.test('show warning if deprecated \'elementAttr\' option is used', function
             'dxTooltip',
             'elementAttr',
             '21.2',
-            'Use the \'tooltipOptions.wrapperAttr\' option instead'
+            'Use the \'wrapperAttr\' option instead'
         ], 'args of the log method');
     } finally {
         errors.log.restore();

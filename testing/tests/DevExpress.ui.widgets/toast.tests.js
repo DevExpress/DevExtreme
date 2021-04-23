@@ -160,7 +160,7 @@ QUnit.module('general', moduleConfig, () => {
                 'dxToast',
                 'elementAttr',
                 '21.2',
-                'Use the \'toastOptions.wrapperAttr\' option instead'
+                'Use the \'wrapperAttr\' option instead'
             ], 'args of the log method');
         } finally {
             errors.log.restore();

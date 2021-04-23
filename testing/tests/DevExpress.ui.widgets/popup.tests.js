@@ -423,7 +423,7 @@ QUnit.module('basic', () => {
                 'dxPopup',
                 'elementAttr',
                 '21.2',
-                'Use the \'popupOptions.wrapperAttr\' option instead'
+                'Use the \'wrapperAttr\' option instead'
             ], 'args of the log method');
         } finally {
             errors.log.restore();

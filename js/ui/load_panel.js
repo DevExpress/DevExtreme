@@ -113,7 +113,7 @@ const LoadPanel = Overlay.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', alias: 'loadPanel.wrapperAttr' }
+            'elementAttr': { since: '21.2', alias: 'wrapperAttr' }
         });
     },
 

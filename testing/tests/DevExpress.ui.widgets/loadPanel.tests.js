@@ -140,7 +140,7 @@ QUnit.module('init', {
                 'dxLoadPanel',
                 'elementAttr',
                 '21.2',
-                'Use the \'loadPanel.wrapperAttr\' option instead'
+                'Use the \'wrapperAttr\' option instead'
             ], 'args of the log method');
         } finally {
             errors.log.restore();
