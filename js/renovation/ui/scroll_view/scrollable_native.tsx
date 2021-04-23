@@ -8,7 +8,7 @@ import {
   ComponentBindings,
   Mutable,
   InternalState,
-  ForwardRef,
+  ForwardRef, OneWay,
 } from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
@@ -180,6 +180,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
 };
 @ComponentBindings()
 export class ScrollableNativeProps extends ScrollableProps {
+  @OneWay() useSimulatedScrollbar?: boolean;
 }
 
 export type ScrollableNativePropsType = ScrollableNativeProps
