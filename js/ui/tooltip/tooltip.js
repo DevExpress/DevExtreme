@@ -56,7 +56,7 @@ const Tooltip = Popover.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', message: 'This property is deprecated in favor of the wrapperAttr property.' }
+            'elementAttr': { since: '21.2', alias: 'tooltipOptions.wrapperAttr' }
         });
     },
 

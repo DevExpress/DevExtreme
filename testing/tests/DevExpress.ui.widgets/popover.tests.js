@@ -352,7 +352,7 @@ QUnit.module('options change', () => {
                 'dxPopover',
                 'elementAttr',
                 '21.2',
-                'This property is deprecated in favor of the wrapperAttr property.'
+                'Use the \'popoverOptions.wrapperAttr\' option instead'
             ], 'args of the log method');
         } finally {
             errors.log.restore();
