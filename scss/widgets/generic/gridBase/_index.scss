@@ -292,6 +292,7 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
           width: $generic-grid-base-checkbox-indeterminate-icon-size;
           margin-top: -$generic-grid-base-checkbox-indeterminate-icon-size / 2;
           margin-left: -$generic-grid-base-checkbox-indeterminate-icon-size / 2;
+          border-radius: 0;
         }
       }
     }
