@@ -403,8 +403,8 @@ const Overlay = Widget.inherit({
     },
 
     _initMarkup() {
-        this._renderWrapperAttributes();
         this.callBase();
+        this._renderWrapperAttributes();
     },
 
     _documentDownHandler: function(e) {
@@ -489,9 +489,7 @@ const Overlay = Widget.inherit({
         const attributes = extend({}, wrapperAttr);
         const classNames = attributes.class;
         delete attributes.class;
-        if(this._oldAttributes) {
-            this._wrapper().removeAttr(Object.keys(this._oldAttributes).join(' '));
-        }
+        this._oldAttributes && this._wrapper().removeAttr(Object.keys(this._oldAttributes).join(' '));
         this._wrapper()
             .attr(attributes)
             .removeClass(this._oldClasses)
@@ -1472,7 +1470,7 @@ const Overlay = Widget.inherit({
                 this._fixWrapperPosition();
                 break;
             case 'wrapperAttr':
-                this._renderWrapperAttributes(args.value);
+                this._renderWrapperAttributes(args.value, args.previousValue);
                 break;
             default:
                 this.callBase(args);
