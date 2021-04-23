@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
-import { isFunction } from '../../core/utils/type';
+import { isDefined, isFunction } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
 import { equalByValue } from '../../core/utils/common';
 
@@ -45,15 +45,8 @@ class FileManager extends Widget {
     _initTemplates() {
     }
 
-    _initMarkup() {
-        super._initMarkup();
-
-        this._initActions();
-
-        this._firstItemViewLoad = true;
-        this._lockSelectionProcessing = false;
-        this._lockFocusedItemProcessing = false;
-        this._itemKeyToFocus = undefined;
+    _init() {
+        super._init();
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
@@ -67,6 +60,18 @@ class FileManager extends Widget {
             onDataLoading: this._onDataLoading.bind(this),
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
+    }
+
+    _initMarkup() {
+        super._initMarkup();
+
+        this._initActions();
+
+        this._firstItemViewLoad = true;
+        this._lockSelectionProcessing = false;
+        this._lockFocusedItemProcessing = false;
+        this._itemKeyToFocus = undefined;
+
         this._commandManager = new FileManagerCommandManager(this.option('permissions'));
 
         this.$element().addClass(FILE_MANAGER_CLASS);
@@ -623,14 +628,35 @@ class FileManager extends Widget {
                     this._itemView.option('focusedItemKey', args.value);
                 }
                 break;
+            case 'rootFolderName':
+                this._controller.setRootText(args.value);
+                this.repaint();
+                break;
             case 'fileSystemProvider':
+                this._controller.resetCurrentDirectory();
+                this._controller.setProvider(args.value);
+                this._controller.refresh();
+                this._controller.setCurrentPath(this.option('currentPath'))
+                    .then(() => this.repaint());
+                break;
+            case 'allowedFileExtensions':
+                this._controller.setAllowedFileExtensions(args.value);
+                this._controller.setSecurityController();
+                this._controller.refresh();
+                this.repaint();
+                break;
+            case 'upload':
+                this._controller.setUploadOptions(this.option('upload'));
+                if(args.fullName === 'upload.maxFileSize' || args.fullName === 'upload' && isDefined(args.value.maxFileSize)) {
+                    this._controller.setSecurityController();
+                    this._controller.refresh();
+                }
+                this.repaint();
+                break;
+            case 'permissions':
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':
-            case 'rootFolderName':
-            case 'allowedFileExtensions':
-            case 'permissions':
-            case 'upload':
                 this.repaint();
                 break;
             case 'itemView':
