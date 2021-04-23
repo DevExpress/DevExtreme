@@ -14,6 +14,7 @@ import { getGroupsRenderData } from './utils';
 export const viewFunction = ({
   layout: Layout,
   groupsRenderData,
+  restAttributes,
   props: {
     groups,
     groupByDate,
@@ -31,6 +32,8 @@ export const viewFunction = ({
     className={className}
     groupsRenderData={groupsRenderData}
     baseColSpan={baseColSpan}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...restAttributes}
   />
 );
 

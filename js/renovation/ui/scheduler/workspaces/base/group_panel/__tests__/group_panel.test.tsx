@@ -41,6 +41,19 @@ describe('GroupPanel Vertical Layout', () => {
       },
     }));
 
+    it('should spread restAttributes correctly', () => {
+      const groupPanel = render({
+        restAttributes: {
+          'custom-attribute': 'customAttribute', style: { height: 500 },
+        },
+      });
+
+      expect(groupPanel.prop('custom-attribute'))
+        .toBe('customAttribute');
+      expect(groupPanel.prop('style'))
+        .toEqual({ height: 500 });
+    });
+
     it('should pass correct props to the root component', () => {
       const resourceCellTemplate = () => null;
       const groupPanel = render({
