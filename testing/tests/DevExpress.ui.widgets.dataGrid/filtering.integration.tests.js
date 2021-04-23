@@ -123,7 +123,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('There are no exceptions when changing a filterValue to an array and selectedFilterOperation to \'between\' for date column', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field: new Date(1992, 7, 6) }, { field: new Date(1992, 7, 9) }],
             filterRow: { visible: true },
             columns: [{ dataField: 'field', dataType: 'date' }]
@@ -255,7 +255,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 width: 200,
                 allowColumnResizing: true,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 filterRow: {
                     visible: true
                 },
@@ -357,7 +357,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         try {
             createDataGrid({
                 height: 1000,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 scrolling: {
                     mode: 'virtual'
                 },
@@ -391,7 +391,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }
         let calculateFilterExpressionCallCount = 0;
         const grid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: data,
             filterPanel: { visible: true },
             columns: [{
@@ -462,7 +462,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             remoteOperations: { groupPaging: true },
             height: 400,
             filterSyncEnabled: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual'
             },
@@ -539,7 +539,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         createDataGrid({
             dataSource: [{ id: 1, boolean: true }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             renderAsync: true,
             filterRow: {
                 visible: true
@@ -1000,7 +1000,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             return result;
         };
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             height: 50,
             dataSource: generateDataSource(10),
             scrolling: {
@@ -1071,7 +1071,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid({
             dataSource: dataSource,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual'
             },
@@ -1091,7 +1091,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     // T820316
     QUnit.test('Error should not be thrown when searching text in calculated column with lookup', function(assert) {
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
             searchPanel: {
                 visible: true
@@ -1125,7 +1125,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('search editor have not been recreated when search text is changed', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             remoteOperations: { filtering: true, sorting: true, paging: true },
             searchPanel: {
                 visible: true,
@@ -1148,13 +1148,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('search editor value should be changed when search text is changed if grid is rendered in toolbar', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             onToolbarPreparing: function(e) {
                 e.toolbarOptions.items.unshift({
                     location: 'before',
                     template: function() {
                         return $('<div>').dxDataGrid({
-                            loadingTimeout: undefined,
+                            loadingTimeout: null,
                             searchPanel: {
                                 visible: true
                             }
@@ -1180,7 +1180,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('search editor have not been recreated on typing', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             remoteOperations: { filtering: true, sorting: true, paging: true },
             searchPanel: {
                 visible: true,
@@ -1309,7 +1309,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             remoteOperations: {
                 paging: true, filtering: true
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual'
             },

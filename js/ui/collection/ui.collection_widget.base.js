@@ -132,7 +132,7 @@ const CollectionWidget = Widget.inherit({
             focusOnSelectedItem: true,
             /**
             * @name CollectionWidgetOptions.focusedElement
-            * @type dxElement
+            * @type DxElement
             * @default null
             * @hidden
             */

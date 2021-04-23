@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -11,9 +12,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -24,28 +25,28 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxToolbar>;
+export type ContentReadyEvent = EventInfo<dxToolbar>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxToolbar>;
+export type DisposingEvent = EventInfo<dxToolbar>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxToolbar>;
+export type InitializedEvent = InitializedEventInfo<dxToolbar>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxToolbar> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxToolbar> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxToolbar> & ChangedOptionInfo;
 
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**
@@ -67,12 +68,12 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @default "menuItem"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @deprecated
@@ -92,15 +93,14 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @public
  */
 export default class dxToolbar extends CollectionWidget {
-    constructor(element: TElement, options?: dxToolbarOptions)
+    constructor(element: UserDefinedElement, options?: dxToolbarOptions)
 }
 
-
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxToolbarItem extends CollectionWidgetItem {
     /**
      * @docid
@@ -131,7 +131,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | (() => string | TElement);
+    menuItemTemplate?: template | (() => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -155,6 +155,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 }
 
+/** @public */
 export type Options = dxToolbarOptions;
 
 /** @deprecated use Options instead */

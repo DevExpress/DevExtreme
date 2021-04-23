@@ -6,19 +6,19 @@ import $ from '../../../../../core/renderer';
 describe('DataGridViews', () => {
   describe('View', () => {
     it('default render', () => {
-      const widgetRef = createRef();
+      const viewRef = createRef();
       const props = {
-        widgetRef,
+        viewRef,
       } as any;
       const tree = mount(viewFunction(props));
 
-      expect(tree.find('div').instance()).toBe(widgetRef.current);
+      expect(tree.find('div').instance()).toBe(viewRef.current);
     });
   });
 
   describe('Logic', () => {
     it('Render view', () => {
-      const widgetRef = createRef() as any;
+      const viewRef = createRef() as any;
       const view = {
         render: jest.fn(),
       };
@@ -26,12 +26,12 @@ describe('DataGridViews', () => {
         view,
       } as any;
       const component = new GridBaseViewWrapper(props);
-      component.widgetRef = widgetRef;
+      component.viewRef = viewRef;
 
       component.renderView();
 
       expect(component.props.view).toMatchObject({
-        _$element: $(widgetRef.current),
+        _$element: $(viewRef.current),
       });
       expect((component.props.view.render)).toHaveBeenCalledTimes(1);
     });

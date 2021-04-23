@@ -7,14 +7,14 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -24,28 +24,28 @@ import dxOverlay, {
 } from './overlay';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxToast>;
+export type ContentReadyEvent = EventInfo<dxToast>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxToast>;
+export type DisposingEvent = EventInfo<dxToast>;
 
 /** @public */
-export type HidingEvent = ComponentEvent<dxToast> & Cancelable;
+export type HidingEvent = Cancelable & EventInfo<dxToast>;
 
 /** @public */
-export type HiddenEvent = ComponentEvent<dxToast>;
+export type HiddenEvent = EventInfo<dxToast>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxToast>;
+export type InitializedEvent = InitializedEventInfo<dxToast>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxToast> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxToast> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = ComponentEvent<dxToast>;
+export type ShowingEvent = EventInfo<dxToast>;
 
 /** @public */
-export type ShownEvent = ComponentEvent<dxToast>;
+export type ShownEvent = EventInfo<dxToast>;
 
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
@@ -72,7 +72,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default true
@@ -179,9 +179,10 @@ export interface dxToastAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxToast extends dxOverlay {
-    constructor(element: TElement, options?: dxToastOptions)
+    constructor(element: UserDefinedElement, options?: dxToastOptions)
 }
 
+/** @public */
 export type Options = dxToastOptions;
 
 /** @deprecated use Options instead */

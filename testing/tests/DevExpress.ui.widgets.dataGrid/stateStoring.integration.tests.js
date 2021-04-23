@@ -322,7 +322,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
                 }
             },
             keyExpr: 'id',
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             dataSource: [
                 { id: 1, field1: 'test1', detail: 'detail1' },

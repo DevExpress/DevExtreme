@@ -1,16 +1,16 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
 import {
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -26,34 +26,34 @@ import {
 } from './gauges/base_gauge';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxCircularGauge>;
+export type DisposingEvent = EventInfo<dxCircularGauge>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxCircularGauge>;
+export type DrawnEvent = EventInfo<dxCircularGauge>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxCircularGauge>;
+export type ExportedEvent = EventInfo<dxCircularGauge>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxCircularGauge> & ExportInfo;
+export type ExportingEvent = EventInfo<dxCircularGauge> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxCircularGauge>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxCircularGauge>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxCircularGauge> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxCircularGauge> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxCircularGauge>;
+export type InitializedEvent = InitializedEventInfo<dxCircularGauge>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxCircularGauge> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxCircularGauge> & ChangedOptionInfo;
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxCircularGauge> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxCircularGauge> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
@@ -164,9 +164,10 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @public
  */
 export default class dxCircularGauge extends BaseGauge {
-    constructor(element: TElement, options?: dxCircularGaugeOptions)
+    constructor(element: UserDefinedElement, options?: dxCircularGaugeOptions)
 }
 
+/** @public */
 export type Options = dxCircularGaugeOptions;
 
 /** @deprecated use Options instead */

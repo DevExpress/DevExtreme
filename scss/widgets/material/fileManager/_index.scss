@@ -187,8 +187,8 @@
         }
 
         .dx-filemanager-details-item-is-directory {
-          padding-right: 0;
-          padding-left: 0;
+          padding-right: 0 !important; // stylelint-disable-line declaration-no-important
+          padding-left: 0 !important; // stylelint-disable-line declaration-no-important
         }
       }
 

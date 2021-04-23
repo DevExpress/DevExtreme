@@ -165,15 +165,11 @@ module('Work Space Week', () => {
         });
 
         test('Each cell should contain jQuery dxCellData depend on start day hour', function(assert) {
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
-
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
-                startDayHour: 5
+                startDayHour: 5,
+                renovateRender: false,
             });
 
             const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(8);
@@ -187,15 +183,11 @@ module('Work Space Week', () => {
         });
 
         test('Each cell should contain jQuery dxCellData depend on end day hour', function(assert) {
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
-
             this.instance.option({
                 currentDate: new Date(2015, 2, 4),
                 firstDayOfWeek: 1,
-                endDayHour: 10
+                endDayHour: 10,
+                renovateRender: false,
             });
 
             const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(8);
@@ -261,16 +253,12 @@ module('Work Space Week', () => {
         });
 
         test('Cell data should be correct if DST makes sense (T442904)', function(assert) {
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
-
             // can be reproduced in PST timezone
             this.instance.option({
                 currentDate: new Date(2016, 10, 6),
                 firstDayOfWeek: 0,
-                startDayHour: 1
+                startDayHour: 1,
+                renovateRender: false,
             });
 
             const cellData = this.instance.$element().find('.dx-scheduler-date-table-row').eq(1).find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
@@ -399,11 +387,6 @@ module('Work Space Week', () => {
         });
 
         test('Cells have right cellData in horizontal grouped WorkSpace Week view', function(assert) {
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
-
             this.instance.option({
                 currentDate: new Date(2018, 2, 16),
                 groupOrientation: 'vertical',
@@ -411,7 +394,8 @@ module('Work Space Week', () => {
                 groups: [{
                     name: 'one',
                     items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                }]
+                }],
+                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(25).data('dxCellData');
@@ -524,13 +508,9 @@ module('Work Space Week', () => {
         test('WorkSpace Week view cells have right cellData with view option intervalCount', function(assert) {
             this.createInstance({
                 intervalCount: 2,
-                currentDate: new Date(2017, 5, 25)
+                currentDate: new Date(2017, 5, 25),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(6).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(671).data('dxCellData');
@@ -548,13 +528,9 @@ module('Work Space Week', () => {
                 hoursInterval: 1,
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 26),
-                startDate: new Date(2017, 6, 4)
+                startDate: new Date(2017, 6, 4),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(240).data('dxCellData');
@@ -576,13 +552,9 @@ module('Work Space Week', () => {
                 hoursInterval: 1,
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 4),
-                startDate: new Date(2017, 6, 26)
+                startDate: new Date(2017, 6, 26),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(160).data('dxCellData');
@@ -714,13 +686,9 @@ module('Work Space Work Week', () => {
         test('WorkSpace WorkWeek view cells have right cellData with view option intervalCount', function(assert) {
             this.createInstance({
                 intervalCount: 2,
-                currentDate: new Date(2017, 5, 25)
+                currentDate: new Date(2017, 5, 25),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(4).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(5).data('dxCellData');
@@ -742,13 +710,9 @@ module('Work Space Work Week', () => {
                 hoursInterval: 1,
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 26),
-                startDate: new Date(2017, 6, 4)
+                startDate: new Date(2017, 6, 4),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(82).data('dxCellData');
@@ -770,13 +734,9 @@ module('Work Space Work Week', () => {
                 hoursInterval: 1,
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 4),
-                startDate: new Date(2017, 6, 26)
+                startDate: new Date(2017, 6, 26),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(36).data('dxCellData');
@@ -809,13 +769,9 @@ module('Work Space Work Week', () => {
                 intervalCount: 2,
                 hoursInterval: 1,
                 firstDayOfWeek: 1,
-                currentDate: new Date(2017, 6, 4)
+                currentDate: new Date(2017, 6, 4),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 

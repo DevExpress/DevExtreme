@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -7,9 +8,9 @@ import {
 } from '../core/templates/template';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -24,34 +25,34 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxButtonGroup>;
+export type ContentReadyEvent = EventInfo<dxButtonGroup>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxButtonGroup>;
+export type DisposingEvent = EventInfo<dxButtonGroup>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxButtonGroup>;
+export type InitializedEvent = InitializedEventInfo<dxButtonGroup>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxButtonGroup> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxButtonGroup> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxButtonGroup> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxButtonGroup> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
 
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid
      * @default "content"
      * @type_function_param1 buttonData:object
-     * @type_function_param2 buttonContent:dxElement
+     * @type_function_param2 buttonContent:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    buttonTemplate?: template | ((buttonData: any, buttonContent: TElement) => string | TElement);
+    buttonTemplate?: template | ((buttonData: any, buttonContent: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -84,10 +85,10 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxButtonGroup
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @action
@@ -100,7 +101,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxButtonGroup
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:any
      * @type_function_param1_field4 addedItems:array<any>
@@ -150,7 +151,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
  * @public
  */
 export default class dxButtonGroup extends Widget {
-    constructor(element: TElement, options?: dxButtonGroupOptions)
+    constructor(element: UserDefinedElement, options?: dxButtonGroupOptions)
 }
 
 /**
@@ -181,6 +182,7 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
+/** @public */
 export type Options = dxButtonGroupOptions;
 
 /** @deprecated use Options instead */

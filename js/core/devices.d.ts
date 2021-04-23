@@ -1,11 +1,11 @@
 /**
-* @docid
-* @section commonObjectStructures
-* @type object
-* @namespace DevExpress
-* @module core/devices
-* @export default
-*/
+ * @docid
+ * @section commonObjectStructures
+ * @type object
+ * @namespace DevExpress
+ * @module core/devices
+ * @export default
+ */
 export interface Device {
     /**
      * @docid

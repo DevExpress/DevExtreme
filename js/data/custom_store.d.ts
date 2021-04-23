@@ -1,5 +1,5 @@
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import Store, {
@@ -18,7 +18,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey?: ((key: any | string | number) => TPromise<any>);
+    byKey?: ((key: any | string | number) => DxPromise<any>);
     /**
      * @docid
      * @default true
@@ -33,7 +33,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert?: ((values: any) => TPromise<any>);
+    insert?: ((values: any) => DxPromise<any>);
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
@@ -41,7 +41,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load?: ((options: LoadOptions) => TPromise<any> | Array<any>);
+    load?: ((options: LoadOptions) => DxPromise<any> | Array<any>);
     /**
      * @docid
      * @type string
@@ -58,7 +58,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    remove?: ((key: any | string | number) => TPromise<void>);
+    remove?: ((key: any | string | number) => DxPromise<void>);
     /**
      * @docid
      * @type_function_param1 loadOptions:object
@@ -68,7 +68,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    totalCount?: ((loadOptions: { filter?: any, group?: any }) => TPromise<number>);
+    totalCount?: ((loadOptions: { filter?: any, group?: any }) => DxPromise<number>);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -77,7 +77,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    update?: ((key: any | string | number, values: any) => TPromise<any>);
+    update?: ((key: any | string | number, values: any) => DxPromise<any>);
     /**
      * @docid
      * @default undefined

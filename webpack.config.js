@@ -1,4 +1,5 @@
 /* eslint-env node */
+const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
@@ -33,5 +34,10 @@ module.exports = {
                 'NODE_ENV': JSON.stringify('production')
             }
         })
-    ]
+    ],
+    resolve: {
+        alias: {
+            '@devextreme/vdom': path.resolve('./node_modules/@devextreme/vdom/dist/cjs/index.js'),
+        }
+    },
 };

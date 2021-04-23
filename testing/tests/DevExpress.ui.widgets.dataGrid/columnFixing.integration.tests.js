@@ -24,7 +24,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         const filterRowWrapper = dataGridWrapper.filterRow;
 
         $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [
                     { id: 1, value: 'value 1' },
@@ -70,7 +70,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
     QUnit.test('Rows with \'dx-row-alt\' should not have \'dx-col-fixed\' class on cells (T852898)', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             rowAlternationEnabled: true,
             dataSource: {
                 store: [
@@ -96,7 +96,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         $('#container').width(150);
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy', age: 40 }],
             columns: [{ dataField: 'firstName', fixed: true, fixedPosition: 'left' }, 'lastName', 'age']
@@ -135,7 +135,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 400,
             height: 150,
             dataSource: [
@@ -172,7 +172,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [
                 { dataField: 'field1', width: 100 },
@@ -204,7 +204,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             dataSource: [{}],
             columns: [
@@ -231,7 +231,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
     QUnit.test('fixed column should have correct width if all columns with disabled allowResizing and with width', function(assert) {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [
                 { dataField: 'field1', width: 50, fixed: true },
@@ -250,7 +250,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
     QUnit.test('getRowElement when there is fixed column', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['field1', 'field2', 'field3', { dataField: 'fixedField', fixed: true, fixedPosition: 'right' }],
             dataSource: {
                 group: 'field3',
@@ -298,7 +298,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         QUnit.test(`keyboardNavigation "isValidCell" works well with handling of fixed "edit" command column if useLegacyKeyboardNavigation: ${useLegacyKeyboardNavigation}`, function(assert) {
             // arrange, act
             const dataGrid = createDataGrid({
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 width: 300,
                 columns: [
                     { dataField: 'field1', width: 200 },
@@ -340,7 +340,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: [
                 { dataField: 'field1', fixed: true },
@@ -371,7 +371,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 400,
             height: 150,
             dataSource: [
@@ -448,7 +448,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
     QUnit.test('getCellElement', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['field1', 'field2', 'field3', { dataField: 'fixedField', fixed: true, fixedPosition: 'right' }],
             dataSource: {
                 group: 'field3',

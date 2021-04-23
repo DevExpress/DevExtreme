@@ -5,7 +5,7 @@ import { WidgetProps } from './common/widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable import/named */
 import LegacyOverlay from '../../ui/overlay';
-import { TElement } from '../../core/element';
+import { UserDefinedElement, DxElement } from '../../core/element';
 import { template } from '../../core/templates/template';
 import { animationConfig } from '../../animation/fx';
 /* eslint-enable import/named */
@@ -57,7 +57,7 @@ export class OverlayProps extends WidgetProps {
 
   @OneWay() rtlEnabled? = false;
 
-  @OneWay() contentTemplate?: template | ((contentElement: TElement) => string | TElement) = 'content';
+  @OneWay() contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement) = 'content';
 
   @OneWay() maxWidth?: number | string | (() => number | string) | null = null;
 }

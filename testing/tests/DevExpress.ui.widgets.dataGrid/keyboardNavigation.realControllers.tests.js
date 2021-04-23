@@ -664,12 +664,6 @@ QUnit.module('Real DataController and ColumnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        this.optionCalled.add((name, value) => {
-            if(name === 'focusedRowKey' && value) {
-                this.focusController.optionChanged({ name: name, value: value });
-            }
-        });
-
         // act
         this.addRow();
         this.cellValue(0, 0, 'Test0');
@@ -1505,7 +1499,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
                 this.data = [{ name: 'Alex', lastName: 'John' }],
                 this.options = {
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     selection: {
                         mode: 'multiple',
                         showCheckBoxesMode: 'always'

@@ -1,8 +1,7 @@
 import $ from 'jquery';
-import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import animationFrame from 'animation/frame';
-import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -44,7 +43,7 @@ const moduleConfig = {
 const getScrollOffset = function($scrollable) {
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const location = translator.locate($content);
+    const location = getTranslateValues($content.get(0));
 
     return {
         top: location.top - $container.scrollTop(),
@@ -278,7 +277,7 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
         onEnd: function() {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
-                assert.roughEqual(location.top, -50, 1, 'scroll to correctly vertical position');
+                assert.roughEqual(location.top, -50, 1.01, 'scroll to correctly vertical position');
             }
             wasFirstMove = true;
         }
@@ -299,18 +298,25 @@ QUnit.test('scrollOffset', function(assert) {
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
 
-    translator.move($content, { top: -10 });
+    pointerMock($content)
+        .start()
+        .down()
+        .move(0, -10);
 
     assert.deepEqual($scrollable.dxScrollable('scrollOffset'), { top: 10, left: 0 }, 'scrollOffset is correct');
 });
 
 QUnit.test('scrollLeft', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
-        useNative: false
+        useNative: false,
+        direction: 'horizontal'
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
 
-    translator.move($content, { left: -10 });
+    pointerMock($content)
+        .start()
+        .down()
+        .move(-10, 0);
 
     assert.equal($scrollable.dxScrollable('scrollLeft'), 10, 'scrollLeft is correct');
 });
@@ -321,7 +327,10 @@ QUnit.test('scrollTop', function(assert) {
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
 
-    translator.move($content, { top: -10 });
+    pointerMock($content)
+        .start()
+        .down()
+        .move(0, -10);
 
     assert.equal($scrollable.dxScrollable('scrollTop'), 10, 'scrollTop is correct');
 });
@@ -402,12 +411,12 @@ QUnit.test('simulated strategy should subscribe to the poiner events after disab
 
     scrollableInstance.option('disabled', false);
 
-    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS));
+    const $scroll = $scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS} .dx-scrollable-scroll`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     $container.trigger('mouseenter');
 
-    assert.equal(scrollbar.option('visible'), true, 'thumb is visible after mouse enter');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after mouse enter');
 });
 
 QUnit.test('disabled option add class to root element', function(assert) {
@@ -612,7 +621,7 @@ QUnit.test('scrollToElement does not scroll when element is placed in visible ar
     assert.equal(scrollable.scrollTop(), 0);
 });
 
-QUnit.test('scrollToElements scrolls in both directions', function(assert) {
+QUnit.test('scrollToElement scrolls in both directions', function(assert) {
     const topPosition = 30;
     const leftPosition = 50;
     const itemSize = 30;

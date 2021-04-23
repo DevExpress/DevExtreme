@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -8,9 +9,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -33,70 +34,70 @@ import dxSelectBox, {
 } from './select_box';
 
 /** @public */
-export type ChangeEvent = ComponentNativeEvent<dxTagBox>;
+export type ChangeEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type ClosedEvent = ComponentEvent<dxTagBox>;
+export type ClosedEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTagBox>;
+export type ContentReadyEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type CustomItemCreatingEvent = ComponentEvent<dxTagBox> & CustomItemCreatingInfo;
+export type CustomItemCreatingEvent = EventInfo<dxTagBox> & CustomItemCreatingInfo;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTagBox>;
+export type DisposingEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type EnterKeyEvent = ComponentNativeEvent<dxTagBox>;
+export type EnterKeyEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type FocusInEvent = ComponentNativeEvent<dxTagBox>;
+export type FocusInEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type FocusOutEvent = ComponentNativeEvent<dxTagBox>;
+export type FocusOutEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTagBox>;
+export type InitializedEvent = InitializedEventInfo<dxTagBox>;
 
 /** @public */
-export type InputEvent = ComponentNativeEvent<dxTagBox>;
+export type InputEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxTagBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxTagBox> & ItemInfo;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxTagBox>;
+export type KeyDownEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type KeyPressEvent = ComponentNativeEvent<dxTagBox>;
+export type KeyPressEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type KeyUpEvent = ComponentNativeEvent<dxTagBox>;
+export type KeyUpEvent = NativeEventInfo<dxTagBox>;
 
 /** @public */
-export type MultiTagPreparingEvent = ComponentEvent<dxTagBox> & Cancelable & {
-    readonly multiTagElement: TElement;
+export type MultiTagPreparingEvent = Cancelable & EventInfo<dxTagBox> & {
+    readonly multiTagElement: DxElement;
     readonly selectedItems?: Array<string | number | any>;
     text?: string;
 }
 
 /** @public */
-export type OpenedEvent = ComponentEvent<dxTagBox>;
+export type OpenedEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTagBox> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTagBox> & ChangedOptionInfo;
 
 /** @public */
-export type SelectAllValueChangedEvent = ComponentEvent<dxTagBox> & {
+export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
     readonly value: boolean;
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTagBox> & SelectionChangedInfo<string | number | any>;
+export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangedInfo<string | number | any>;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxTagBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxTagBox> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
@@ -135,12 +136,12 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 multiTagElement:dxElement
+     * @type_function_param1_field4 multiTagElement:DxElement
      * @type_function_param1_field5 selectedItems:Array<string,number,Object>
      * @type_function_param1_field6 text:string
      * @type_function_param1_field7 cancel:boolean
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -153,7 +154,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -167,7 +168,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1_field4 addedItems:Array<string,number,Object>
      * @type_function_param1_field5 removedItems:Array<string,number,Object>
      * @type_function_param1_field1 component:dxTagBox
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -214,12 +215,12 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @docid
      * @default "tag"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemElement:dxElement
+     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tagTemplate?: template | ((itemData: any, itemElement: TElement) => string | TElement);
+    tagTemplate?: template | ((itemData: any, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default []
@@ -238,9 +239,10 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
  * @public
  */
 export default class dxTagBox extends dxSelectBox {
-    constructor(element: TElement, options?: dxTagBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxTagBoxOptions)
 }
 
+/** @public */
 export type Options = dxTagBoxOptions;
 
 /** @deprecated use Options instead */

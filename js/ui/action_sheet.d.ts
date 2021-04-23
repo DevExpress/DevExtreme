@@ -1,9 +1,10 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -11,11 +12,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -26,31 +27,31 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type CancelClickEvent = ComponentEvent<dxActionSheet> & Cancelable;
+export type CancelClickEvent = Cancelable & EventInfo<dxActionSheet>;
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxActionSheet>;
+export type ContentReadyEvent = EventInfo<dxActionSheet>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxActionSheet>;
+export type DisposingEvent = EventInfo<dxActionSheet>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxActionSheet>;
+export type InitializedEvent = InitializedEventInfo<dxActionSheet>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxActionSheet> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxActionSheet> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxActionSheet> & ChangedOptionInfo;
 
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**
@@ -80,7 +81,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxActionSheet
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -106,7 +107,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | TElement;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default ""
@@ -140,7 +141,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @public
  */
 export default class dxActionSheet extends CollectionWidget {
-    constructor(element: TElement, options?: dxActionSheetOptions)
+    constructor(element: UserDefinedElement, options?: dxActionSheetOptions)
     /**
      * @docid
      * @publicName hide()
@@ -148,7 +149,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<void>;
+    hide(): DxPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -156,7 +157,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<void>;
+    show(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -165,7 +166,7 @@ export default class dxActionSheet extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): TPromise<void>;
+    toggle(showing: boolean): DxPromise<void>;
 }
 
 /**
@@ -185,13 +186,13 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxActionSheet
-     * @type_function_param1_field2 element:dxElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: TElement, model?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: { component?: dxActionSheet, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType
@@ -202,6 +203,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
+/** @public */
 export type Options = dxActionSheetOptions;
 
 /** @deprecated use Options instead */

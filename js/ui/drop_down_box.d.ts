@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -11,9 +12,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -31,55 +32,55 @@ import {
 } from './editor/ui.data_expression';
 
 /** @public */
-export type ChangeEvent = ComponentNativeEvent<dxDropDownBox>;
+export type ChangeEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type ClosedEvent = ComponentEvent<dxDropDownBox>;
+export type ClosedEvent = EventInfo<dxDropDownBox>;
 
 /** @public */
-export type CopyEvent = ComponentNativeEvent<dxDropDownBox>;
+export type CopyEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type CutEvent = ComponentNativeEvent<dxDropDownBox>;
+export type CutEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDropDownBox>;
+export type DisposingEvent = EventInfo<dxDropDownBox>;
 
 /** @public */
-export type EnterKeyEvent = ComponentNativeEvent<dxDropDownBox>;
+export type EnterKeyEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type FocusInEvent = ComponentNativeEvent<dxDropDownBox>;
+export type FocusInEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type FocusOutEvent = ComponentNativeEvent<dxDropDownBox>;
+export type FocusOutEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDropDownBox>;
+export type InitializedEvent = InitializedEventInfo<dxDropDownBox>;
 
 /** @public */
-export type InputEvent = ComponentNativeEvent<dxDropDownBox>;
+export type InputEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxDropDownBox>;
+export type KeyDownEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type KeyPressEvent = ComponentNativeEvent<dxDropDownBox>;
+export type KeyPressEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type KeyUpEvent = ComponentNativeEvent<dxDropDownBox>;
+export type KeyUpEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type OpenedEvent = ComponentEvent<dxDropDownBox>;
+export type OpenedEvent = EventInfo<dxDropDownBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDropDownBox> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDropDownBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = ComponentNativeEvent<dxDropDownBox>;
+export type PasteEvent = NativeEventInfo<dxDropDownBox>;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxDropDownBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxDropDownBox> & ValueChangedInfo;
 
 /** @public */
 export type ContentTemplateData = {
@@ -104,12 +105,12 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @type_function_param1 templateData:object
      * @type_function_param1_field1 component:dxDropDownBox
      * @type_function_param1_field2 value:any
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((templateData: ContentTemplateData, contentElement: TElement) => string | TElement);
+    contentTemplate?: template | ((templateData: ContentTemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default null
@@ -129,12 +130,12 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @docid
      * @default null
      * @type_function_param1 value:object
-     * @type_function_param2 fieldElement:dxElement
+     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: any, fieldElement: TElement) => string | TElement);
+    fieldTemplate?: template | ((value: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -167,10 +168,11 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
  * @public
  */
 export default class dxDropDownBox extends dxDropDownEditor {
-    constructor(element: TElement, options?: dxDropDownBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxDropDownBoxOptions)
     getDataSource(): DataSource;
 }
 
+/** @public */
 export type Options = dxDropDownBoxOptions;
 
 /** @deprecated use Options instead */

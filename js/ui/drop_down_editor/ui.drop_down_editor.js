@@ -269,17 +269,10 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _wrapInput: function() {
-        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
-        const $element = this.$element();
-
-        useHiddenSubmitElement && this._$submitElement?.detach();
-
-        this._$container = $element
+        this._$container = this.$element()
             .wrapInner($('<div>').addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER))
             .children()
             .eq(0);
-
-        useHiddenSubmitElement && this._$submitElement?.appendTo($element);
     },
 
     _setDefaultAria: function() {
@@ -343,13 +336,7 @@ const DropDownEditor = TextBox.inherit({
 
         this._detachKeyboardEvents();
         this._refreshButtonsContainer();
-
-        // NOTE: to prevent buttons disposition
-        const beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;
-        const afterButtonsContainerParent = this._$afterButtonsContainer && this._$afterButtonsContainer[0].parentNode;
-        beforeButtonsContainerParent && beforeButtonsContainerParent.removeChild(this._$beforeButtonsContainer[0]);
-        afterButtonsContainerParent && afterButtonsContainerParent.removeChild(this._$afterButtonsContainer[0]);
-
+        this._detachWrapperContent();
         this._detachFocusEvents();
         $container.empty();
 
@@ -370,7 +357,26 @@ const DropDownEditor = TextBox.inherit({
             }
         });
 
+        this._attachWrapperContent($container);
+    },
+
+    _detachWrapperContent() {
+        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
+
+        useHiddenSubmitElement && this._$submitElement?.detach();
+
+        // NOTE: to prevent buttons disposition
+        const beforeButtonsContainerParent = this._$beforeButtonsContainer?.[0].parentNode;
+        const afterButtonsContainerParent = this._$afterButtonsContainer?.[0].parentNode;
+        beforeButtonsContainerParent?.removeChild(this._$beforeButtonsContainer[0]);
+        afterButtonsContainerParent?.removeChild(this._$afterButtonsContainer[0]);
+    },
+
+    _attachWrapperContent($container) {
+        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
+
         $container.prepend(this._$beforeButtonsContainer);
+        useHiddenSubmitElement && this._$submitElement?.appendTo($container);
         $container.append(this._$afterButtonsContainer);
     },
 

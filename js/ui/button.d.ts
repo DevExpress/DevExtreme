@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -7,9 +8,9 @@ import {
 } from '../core/templates/template';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -18,21 +19,21 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ClickEvent = ComponentNativeEvent<dxButton> & {
+export type ClickEvent = NativeEventInfo<dxButton> & {
     validationGroup?: any;
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxButton>;
+export type ContentReadyEvent = EventInfo<dxButton>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxButton>;
+export type DisposingEvent = EventInfo<dxButton>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxButton>;
+export type InitializedEvent = InitializedEventInfo<dxButton>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxButton> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
 
 /** @public */
 export type TemplateData = {
@@ -76,7 +77,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 validationGroup:object
      * @type_function_param1_field1 component:dxButton
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -97,12 +98,12 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
      * @type_function_param1_field2 icon:string
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: TemplateData, contentElement: TElement) => string | TElement);
+    template?: template | ((data: TemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default ""
@@ -143,9 +144,10 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
  * @public
  */
 export default class dxButton extends Widget {
-    constructor(element: TElement, options?: dxButtonOptions)
+    constructor(element: UserDefinedElement, options?: dxButtonOptions)
 }
 
+/** @public */
 export type Options = dxButtonOptions;
 
 /** @deprecated use Options instead */

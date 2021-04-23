@@ -113,7 +113,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                 enabled: true,
                 template: function(container, e) {
                     $('<div>').addClass('detail-grid').appendTo(container).dxDataGrid({
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         columns: ['field3', 'field4'],
                         dataSource: [{ field1: '3', field2: '4' }]
                     });
@@ -139,7 +139,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // arrange
         const cellClickArgs = [];
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1, text: 'Text 1' }],
             keyExpr: 'id',
             onCellClick: function(e) {
@@ -148,7 +148,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             masterDetail: {
                 template: function(container, e) {
                     $('<div>').addClass('detail-grid').appendTo(container).dxDataGrid({
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         keyExpr: 'id',
                         dataSource: [
                             { id: 2, text: 'Text 2' },
@@ -287,13 +287,13 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1 }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             masterDetail: {
                 autoExpandAll: true,
                 template: function(detailElement) {
                     $('<div>').appendTo(detailElement).dxDataGrid({
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         columns: ['field1']
                     });
                 }
@@ -347,7 +347,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = createDataGrid({
             height: 300,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1 }],
             keyExpr: 'id',
             masterDetail: {
@@ -372,7 +372,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = createDataGrid({
             rtlEnabled: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ field1: '1', field2: '2' }]
             },
@@ -411,7 +411,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     QUnit.test('Click on detail cell with cellIndex more than number of parent grid columns', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1' }],
             dataSource: {
                 store: [
@@ -429,7 +429,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                                 { id: 2, col1: 3 }
                             ]
                         },
-                        loadingTimeout: undefined,
+                        loadingTimeout: null,
                         columns: [
                             { dataField: 'id' },
                             { dataField: 'col1' },
@@ -644,7 +644,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         const watchCallbacks = [];
         const dataSource = [{ id: 1, value: 1 }, { id: 2, value: 2 }];
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             keyExpr: 'id',
             integrationOptions: {
@@ -679,7 +679,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             { id: 4, field1: 'test4' }
         ];
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             highlightChanges: true,
             repaintChangesOnly: true,
@@ -741,7 +741,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     QUnit.test('rowTemplate via dxTemplate should works with masterDetail template', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { name: 'First Grid Item' },
                 { name: 'Second Grid Item' },
@@ -772,7 +772,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     QUnit.testInActiveWindow('DataGrid with inside grid in masterDetail - the invalid message of the datebox should not be removed when focusing cell', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: {
                     type: 'array',
@@ -819,7 +819,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     QUnit.test('Rows should be synchronized after expand if column fixing is enabled and deferUpdate is used in masterDetail template', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             dataSource: [{ id: 1 }],
             columnFixing: {
@@ -852,7 +852,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         ];
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             keyExpr: 'id',
             columnAutoWidth: true,

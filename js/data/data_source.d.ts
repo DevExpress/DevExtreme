@@ -1,5 +1,5 @@
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import Store, {
@@ -261,7 +261,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(): TPromise<any>;
+    load(): DxPromise<any>;
     /**
      * @docid
      * @publicName loadOptions()
@@ -363,7 +363,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    reload(): TPromise<any>;
+    reload(): DxPromise<any>;
     /**
      * @docid
      * @publicName requireTotalCount()

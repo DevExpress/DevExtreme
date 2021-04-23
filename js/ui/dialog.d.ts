@@ -1,5 +1,5 @@
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -8,7 +8,7 @@ import {
 
 /**
  * @public
-*/
+ */
 export interface CustomDialogOptions {
     title?: string,
     messageHtml?: string,
@@ -30,7 +30,7 @@ export interface CustomDialogOptions {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function alert(messageHtml: string, title: string): TPromise<void>;
+export function alert(messageHtml: string, title: string): DxPromise<void>;
 
 /**
  * @docid ui.dialog.confirm
@@ -45,7 +45,7 @@ export function alert(messageHtml: string, title: string): TPromise<void>;
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function confirm(messageHtml: string, title: string): TPromise<boolean>;
+export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
 
 /**
  * @docid ui.dialog.custom

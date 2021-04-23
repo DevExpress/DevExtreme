@@ -1,7 +1,8 @@
 import DOMComponent from '../core/dom_component';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -9,15 +10,15 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -29,11 +30,11 @@ import dxDraggable, {
 /** @public */
 export interface AddEvent {
     readonly component: dxSortable;
-    readonly element: TElement;
+    readonly element: DxElement;
     readonly model?: any;
-    readonly event: TEvent;
+    readonly event: DxEvent;
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -44,12 +45,12 @@ export interface AddEvent {
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSortable>;
+export type DisposingEvent = EventInfo<dxSortable>;
 
 /** @public */
-export type DragChangeEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
+export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly fromIndex?: number;
     readonly toIndex?: number;
     readonly fromComponent?: dxSortable | dxDraggable;
@@ -60,9 +61,9 @@ export type DragChangeEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
 }
 
 /** @public */
-export type DragEndEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -73,9 +74,9 @@ export type DragEndEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
 }
 
 /** @public */
-export type DragMoveEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -86,23 +87,23 @@ export type DragMoveEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
 }
 
 /** @public */
-export type DragStartEvent = Cancelable & ComponentNativeEvent<dxSortable> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable> & {
     itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly fromData?: any;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSortable>;
+export type InitializedEvent = InitializedEventInfo<dxSortable>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSortable> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
 
 /** @public */
-export type RemoveEvent = ComponentNativeEvent<dxSortable> & {
+export type RemoveEvent = NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -112,9 +113,9 @@ export type RemoveEvent = ComponentNativeEvent<dxSortable> & {
 }
 
 /** @public */
-export type ReorderEvent = ComponentNativeEvent<dxSortable> & {
+export type ReorderEvent = NativeEventInfo<dxSortable> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -122,13 +123,13 @@ export type ReorderEvent = ComponentNativeEvent<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem: boolean;
-    promise?: TPromise<void>;
+    promise?: DxPromise<void>;
 }
 
 /** @public */
 export interface DragTemplateData {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly fromIndex: number;
 }
 
@@ -151,15 +152,15 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @type_function_param1 dragInfo:object
      * @type_function_param1_field1 itemData:any
-     * @type_function_param1_field2 itemElement:dxElement
+     * @type_function_param1_field2 itemElement:DxElement
      * @type_function_param1_field3 fromIndex:number
-     * @type_function_param2 containerElement:dxElement
+     * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: TElement) => string | TElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type Enums.DropFeedbackMode
@@ -195,11 +196,11 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:any
-     * @type_function_param1_field6 itemElement:dxElement
+     * @type_function_param1_field6 itemElement:DxElement
      * @type_function_param1_field7 fromIndex:number
      * @type_function_param1_field8 toIndex:number
      * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
@@ -217,12 +218,12 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromIndex:number
      * @type_function_param1_field9 toIndex:number
      * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
@@ -240,12 +241,12 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromIndex:number
      * @type_function_param1_field9 toIndex:number
      * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
@@ -263,12 +264,12 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromIndex:number
      * @type_function_param1_field9 toIndex:number
      * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
@@ -285,13 +286,13 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @default null
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromIndex:number
      * @type_function_param1_field9 fromData:any
      * @action
@@ -304,11 +305,11 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:any
-     * @type_function_param1_field6 itemElement:dxElement
+     * @type_function_param1_field6 itemElement:DxElement
      * @type_function_param1_field7 fromIndex:number
      * @type_function_param1_field8 toIndex:number
      * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
@@ -325,11 +326,11 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSortable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:any
-     * @type_function_param1_field6 itemElement:dxElement
+     * @type_function_param1_field6 itemElement:DxElement
      * @type_function_param1_field7 fromIndex:number
      * @type_function_param1_field8 toIndex:number
      * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
@@ -354,7 +355,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
  * @public
  */
 export default class dxSortable extends DOMComponent implements DraggableBase {
-    constructor(element: TElement, options?: dxSortableOptions)
+    constructor(element: UserDefinedElement, options?: dxSortableOptions)
     /**
      * @docid
      * @publicName update()
@@ -364,6 +365,7 @@ export default class dxSortable extends DOMComponent implements DraggableBase {
     update(): void;
 }
 
+/** @public */
 export type Options = dxSortableOptions;
 
 /** @deprecated use Options instead */

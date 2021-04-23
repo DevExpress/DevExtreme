@@ -1,9 +1,9 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -11,9 +11,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -25,31 +25,31 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxGallery>;
+export type ContentReadyEvent = EventInfo<dxGallery>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxGallery>;
+export type DisposingEvent = EventInfo<dxGallery>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxGallery>;
+export type InitializedEvent = InitializedEventInfo<dxGallery>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxGallery> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxGallery> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxGallery> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxGallery> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxGallery> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxGallery> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxGallery> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxGallery> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxGallery> & SelectionChangedInfo;
 
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     /**
@@ -173,7 +173,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
  * @public
  */
 export default class dxGallery extends CollectionWidget {
-    constructor(element: TElement, options?: dxGalleryOptions)
+    constructor(element: UserDefinedElement, options?: dxGalleryOptions)
     /**
      * @docid
      * @publicName goToItem(itemIndex, animation)
@@ -183,7 +183,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    goToItem(itemIndex: number, animation: boolean): TPromise<void>;
+    goToItem(itemIndex: number, animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName nextItem(animation)
@@ -192,7 +192,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    nextItem(animation: boolean): TPromise<void>;
+    nextItem(animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName prevItem(animation)
@@ -201,7 +201,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    prevItem(animation: boolean): TPromise<void>;
+    prevItem(animation: boolean): DxPromise<void>;
 }
 
 /**
@@ -224,6 +224,7 @@ export interface dxGalleryItem extends CollectionWidgetItem {
     imageSrc?: string;
 }
 
+/** @public */
 export type Options = dxGalleryOptions;
 
 /** @deprecated use Options instead */

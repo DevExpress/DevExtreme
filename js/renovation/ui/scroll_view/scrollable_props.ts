@@ -20,6 +20,8 @@ export class ScrollableInternalProps {
 
   @OneWay() useKeyboard = true;
 
+  @OneWay() updateManually = false;
+
   @OneWay() classes?: string;
 
   @OneWay() pullDownEnabled = false;
@@ -44,6 +46,8 @@ export class ScrollableInternalProps {
 @ComponentBindings()
 export class ScrollableProps extends ScrollableInternalProps {
   @OneWay() useNative = true;
+
+  @OneWay() useSimulatedScrollbar?: boolean;
 
   @OneWay() pullingDownText?: string;
 

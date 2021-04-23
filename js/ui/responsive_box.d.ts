@@ -1,5 +1,5 @@
 import {
-  TElement
+    UserDefinedElement
 } from '../core/element';
 
 import DataSource, {
@@ -7,9 +7,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-  ComponentEvent,
-  ComponentNativeEvent,
-  ComponentInitializedEvent,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
   ChangedOptionInfo,
   ItemInfo
 } from '../events/index';
@@ -20,28 +20,28 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxResponsiveBox>;
+export type ContentReadyEvent = EventInfo<dxResponsiveBox>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxResponsiveBox>;
+export type DisposingEvent = EventInfo<dxResponsiveBox>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxResponsiveBox>;
+export type InitializedEvent = InitializedEventInfo<dxResponsiveBox>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxResponsiveBox> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxResponsiveBox> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxResponsiveBox> & ChangedOptionInfo;
 
 export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
     /**
@@ -51,29 +51,29 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      */
     cols?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type number | Enums.Mode
-      * @default 0
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type number | Enums.Mode
+       * @default 0
+       */
       baseSize?: number | 'auto',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 1
+       */
       ratio?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       screen?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 1
+       */
       shrink?: number
     }>;
     /**
@@ -105,29 +105,29 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      */
     rows?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type number | Enums.Mode
-      * @default 0
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type number | Enums.Mode
+       * @default 0
+       */
       baseSize?: number | 'auto',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 1
+       */
       ratio?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       screen?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 1
+       */
       shrink?: number
     }>;
     /**
@@ -162,14 +162,14 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
  * @public
  */
 export default class dxResponsiveBox extends CollectionWidget {
-    constructor(element: TElement, options?: dxResponsiveBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxResponsiveBoxOptions)
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxResponsiveBoxItem extends CollectionWidgetItem {
     /**
      * @docid
@@ -178,36 +178,37 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
      */
     location?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       col?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       colspan?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       row?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       rowspan?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
       screen?: string
     } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
 }
 
+/** @public */
 export type Options = dxResponsiveBoxOptions;
 
 /** @deprecated use Options instead */

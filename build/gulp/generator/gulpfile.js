@@ -50,6 +50,11 @@ const knownErrors = [
     'js/renovation/component_wrapper/',
     'js\\renovation\\component_wrapper\\',
     'Cannot find module \'../../inferno/src\'',
+    // #region TODO remove it after fix https://trello.com/c/2LOaxO9F/2704-renovation-some-types-is-missing-on-new-type-defining
+    'Cannot find name \'GridBaseView\'',
+    'Property \'views\' of exported interface has or is using private name \'GridBaseView\'',
+    'Public property \'views\' of exported class has or is using private name \'GridBaseView\''
+    // #endregion
 ];
 
 function deleteJQueryComponents(cb) {
@@ -282,7 +287,7 @@ function addGenerationTask(
 }
 
 addGenerationTask('react',
-    ['Cannot find module \'csstype\'.'],
+    ['Cannot find module \'csstype\'.'].concat(knownErrors),
     true,
     true,
     false

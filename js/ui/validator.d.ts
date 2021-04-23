@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import DOMComponent, {
@@ -7,12 +7,12 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -22,13 +22,13 @@ import {
 } from './validation_rules';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxValidator>;
+export type DisposingEvent = EventInfo<dxValidator>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxValidator>;
+export type InitializedEvent = InitializedEventInfo<dxValidator>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxValidator> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxValidator> & ChangedOptionInfo;
 
 /** @public */
 export type ValidatedEvent = {
@@ -125,7 +125,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @public
  */
 export default class dxValidator extends DOMComponent {
-    constructor(element: TElement, options?: dxValidatorOptions)
+    constructor(element: UserDefinedElement, options?: dxValidatorOptions)
     /**
      * @docid
      * @publicName focus()
@@ -175,7 +175,7 @@ export interface dxValidatorResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: TPromise<dxValidatorResult>;
+    complete?: DxPromise<dxValidatorResult>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -210,6 +210,7 @@ export interface dxValidatorResult {
     value?: any;
 }
 
+/** @public */
 export type Options = dxValidatorOptions;
 
 /** @deprecated use Options instead */

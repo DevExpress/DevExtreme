@@ -219,10 +219,7 @@ module('Work Space Day', {
     });
 
     test('Each cell should contain jQuery dxCellData', function(assert) {
-        if(this.instance.option('renovateRender')) {
-            assert.ok(true, 'This test is not for renovated render');
-            return;
-        }
+        this.instance.option('renovateRender', false);
 
         this.instance.option('currentDate', new Date(2015, 2, 16));
 
@@ -237,10 +234,7 @@ module('Work Space Day', {
     });
 
     test('dxCellData should be \'immutable\'', function(assert) {
-        if(this.instance.option('renovateRender')) {
-            assert.ok(true, 'This test is not for renovated render');
-            return;
-        }
+        this.instance.option('renovateRender', false);
 
         const $element = this.instance.$element();
         const $cell = $element.find('.' + CELL_CLASS).first();
@@ -251,10 +245,7 @@ module('Work Space Day', {
     });
 
     test('Cells have right cellData in vertical grouped WorkSpace Day view', function(assert) {
-        if(this.instance.option('renovateRender')) {
-            assert.ok(true, 'This test is not for renovated render');
-            return;
-        }
+        this.instance.option('renovateRender', false);
 
         this.instance.option({
             currentDate: new Date(2018, 2, 16),
@@ -317,10 +308,7 @@ module('Work Space Day with grouping by date', () => {
         });
 
         test('Date table cells shoud have right cellData, groupByDate = true', function(assert) {
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
+            this.instance.option('renovateRender', false);
 
             this.instance.option('intervalCount', 3);
             const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
@@ -387,10 +375,7 @@ module('Work Space Day with grouping by date', () => {
         });
 
         test('Date table cells should have right cellData, groupByDate = true without groups', function(assert) {
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
+            this.instance.option('renovateRender', false);
 
             this.instance.option('groups', []);
             const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
@@ -478,13 +463,9 @@ module('Work Space Day with grouping by date', () => {
         test('WorkSpace Day view cells have right cellData with view option intervalCount=2', function(assert) {
             this.createInstance({
                 intervalCount: 2,
-                currentDate: new Date(2017, 5, 29)
+                currentDate: new Date(2017, 5, 29),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(1).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(95).data('dxCellData');
@@ -500,13 +481,9 @@ module('Work Space Day with grouping by date', () => {
             this.createInstance({
                 intervalCount: 3,
                 currentDate: new Date(2017, 5, 28),
-                startDate: new Date(2017, 5, 21)
+                startDate: new Date(2017, 5, 21),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(143).data('dxCellData');
@@ -522,13 +499,9 @@ module('Work Space Day with grouping by date', () => {
             this.createInstance({
                 intervalCount: 3,
                 currentDate: new Date(2017, 5, 25),
-                startDate: new Date(2017, 5, 30)
+                startDate: new Date(2017, 5, 30),
+                renovateRender: false,
             });
-
-            if(this.instance.option('renovateRender')) {
-                assert.ok(true, 'This test is not for renovated render');
-                return;
-            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(143).data('dxCellData');
