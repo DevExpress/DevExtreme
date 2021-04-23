@@ -2286,18 +2286,6 @@ testModule('container', moduleConfig, () => {
         assert.strictEqual($(toSelector(VIEWPORT_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0);
     });
 
-    test('css classes from overlay should be duplicated to wrapper', function(assert) {
-        const instance = $('#overlayWithClass').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
-
-        assert.ok($wrapper.hasClass('something'), 'class added to wrapper');
-        assert.ok($wrapper.hasClass('another'), 'another class added to wrapper');
-        assert.ok($wrapper.hasClass(OVERLAY_WRAPPER_CLASS), 'classes does not removed from wrapper');
-        assert.ok(!$wrapper.hasClass(OVERLAY_CLASS), 'only user-defined classes added to wrapper');
-    });
-
     test('defaultTargetContainer should be .dx-viewport by default', function(assert) {
         const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
         overlay.show();
