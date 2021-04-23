@@ -241,7 +241,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   _init() {
     super._init();
-    this._props = { ...this.option() }; //extend(true, {}, this.option());
+    this._props = { ...this.option() };
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 

@@ -1,5 +1,5 @@
 import { each } from '../../core/utils/iterator';
-import { isObject, isPlainObject } from '../../core/utils/type';
+import { isPlainObject } from '../../core/utils/type';
 
 export const addAttributes = ($element, attributes): void => {
   each(attributes, (_, { name, value }) => {
@@ -45,14 +45,14 @@ export function updatePropsImmutable(
       const matchIndex = /\[\s*(\d+)\s*\]/g.exec(fullName);
       if (matchIndex) {
         const index = parseInt(matchIndex[1], 10);
-        if (isObject(newArray[index])) {
+        if (isPlainObject(newArray[index])) {
           newArray[index] = { ...currentPropsValue[index] };
         }
       }
       return;
     }
   }
-  if (isObject(currentPropsValue) && isPlainObject(currentPropsValue)) {
+  if (isPlainObject(currentPropsValue)) {
     result[name] = { ...currentPropsValue };
   } else {
     result[name] = currentPropsValue;

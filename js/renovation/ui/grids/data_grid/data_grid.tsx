@@ -82,9 +82,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   @InternalState() instance!: GridInstance;
 
-  @Mutable() isUpdate = false;
-
-  @Mutable() changedOptions: string[] = [];
+  @Mutable() isTwoWayPropUpdating = false;
 
   @Mutable() prevProps!: DataGridProps;
 
@@ -460,9 +458,8 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   // #endregion
 
   @Effect() updateOptions(): void {
-    if (this.instance && this.prevProps && !this.isUpdate) {
+    if (this.instance && this.prevProps && !this.isTwoWayPropUpdating) {
       const updatedOptions = getUpdatedOptions(this.prevProps, this.props);
-      updatedOptions.forEach(({ path }) => { this.changedOptions.push(path); });
       this.instance.beginUpdate();
       updatedOptions.forEach(({ path, value, previousValue }) => {
         // eslint-disable-next-line no-underscore-dangle
@@ -493,10 +490,10 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   instanceOptionChangedHandler(e: OptionChangedEvent): void {
     try {
-      this.isUpdate = true;
+      this.isTwoWayPropUpdating = true;
       this.updateTwoWayValue(e);
     } finally {
-      this.isUpdate = false;
+      this.isTwoWayPropUpdating = false;
     }
   }
 

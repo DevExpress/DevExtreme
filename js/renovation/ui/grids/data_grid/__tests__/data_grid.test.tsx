@@ -116,6 +116,7 @@ describe('DataGrid', () => {
       expect(instance.element()).toBe(component.widgetElementRef.current);
     });
 
+    // Related to
     // QUnit.test('The onOptionChanged event should be called once when changing column option'
     it('internal component shouldnt raise optionChanged', () => {
       const component = new DataGrid({ onOptionChanged: jest.fn() } as any);
