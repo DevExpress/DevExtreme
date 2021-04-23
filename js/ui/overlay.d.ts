@@ -195,6 +195,14 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @public
      */
     width?: number | string | (() => number | string);
+    /**
+     * @docid
+     * @default {}
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    wrapperAttr?: any;
+
 }
 export interface dxOverlayAnimation {
     /**
