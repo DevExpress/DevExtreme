@@ -30,7 +30,6 @@ export class ScrollableSimulatedProps extends ScrollableProps {
   contentPositionChange?: (scrollProp: 'scrollLeft' | 'scrollTop', location: number, ratio: number) => void;
 }
 
-export type ScrollableSimulatedPropsType = ScrollableSimulatedProps
-& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
+export type ScrollableSimulatedPropsType = ScrollableSimulatedProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;

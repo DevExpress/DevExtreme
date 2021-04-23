@@ -183,7 +183,7 @@ export class ScrollableNativeProps extends ScrollableProps {
 }
 
 export type ScrollableNativePropsType = ScrollableNativeProps
-& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible'>
+& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;
 

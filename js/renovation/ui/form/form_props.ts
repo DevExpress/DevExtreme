@@ -4,6 +4,5 @@ import { ComponentBindings, OneWay } from '@devextreme-generator/declarations';
 export class FormProps {
   @OneWay() scrollingEnabled = false;
 
-  // TODO: seems is not used
   @OneWay() useNativeScrolling?: boolean;
 }
