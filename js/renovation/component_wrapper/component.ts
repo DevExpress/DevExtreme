@@ -173,7 +173,9 @@ export default class ComponentWrapper extends DOMComponent {
     const defaultProps = this._viewComponent.defaultProps;
 
     const widgetProps = props.reduce((acc, propName) => {
-      acc[propName] = options[propName];
+      if (options.hasOwnProperty(propName)) {
+        acc[propName] = options[propName];
+      }
       return acc;
     }, {
       ref: options.ref,
