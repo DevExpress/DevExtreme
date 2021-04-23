@@ -10,7 +10,6 @@ import { ScrollEventArgs } from './types.d';
 import { BaseWidgetProps } from '../common/base_props';
 import { TopPocketProps } from './top_pocket';
 import { BottomPocketProps } from './bottom_pocket';
-import { WidgetProps } from '../common/widget';
 
 @ComponentBindings()
 export class ScrollableSimulatedProps extends ScrollableProps {
@@ -32,7 +31,6 @@ export class ScrollableSimulatedProps extends ScrollableProps {
 }
 
 export type ScrollableSimulatedPropsType = ScrollableSimulatedProps
-& Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;

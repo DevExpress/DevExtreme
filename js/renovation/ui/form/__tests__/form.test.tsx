@@ -38,31 +38,31 @@ describe('Form > Markup', () => {
 
       const scrollable = form.find(Scrollable);
       expect(scrollable.props()).toEqual({
-        useNative: !!useNativeScrolling,
-        useSimulatedScrollbar: !useNativeScrolling,
-        useKeyboard: false,
-        direction: 'both',
-        bounceEnabled: false,
         aria: { role: 'form' },
+        bounceEnabled: false,
         classes: 'dx-form',
+        direction: 'both',
+        useKeyboard: false,
+        useNative: false,
+        useSimulatedScrollbar: true,
       });
     });
   });
 });
 
-describe('Form > Getters', () => {
+describe('Form > Attrs', () => {
   each([false, true]).describe('scrollingEnabled: %o', (scrollingEnabled) => {
     describe('cssClasses', () => {
       it('Check has dx-form class', () => {
-        const form = new Form({ scrollingEnabled });
-        expect(form.cssClasses).toEqual(expect.stringMatching('dx-form'));
+        const form = mount<Form>(<Form {...scrollingEnabled} />);
+        expect(form.getDOMNode().classList.contains('dx-form')).toEqual(true);
       });
     });
 
     describe('aria', () => {
       it('Check has form role', () => {
-        const form = new Form({});
-        expect(form.aria).toEqual({ role: 'form' });
+        const form = mount<Form>(<Form {...scrollingEnabled} />);
+        expect(form.getDOMNode().getAttribute('role')).toEqual('form');
       });
     });
   });

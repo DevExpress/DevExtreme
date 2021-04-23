@@ -10,9 +10,9 @@ import { Widget } from '../common/widget';
 import { Scrollable } from '../scroll_view/scrollable';
 
 export const viewFunction = (viewModel: Form): JSX.Element => {
+  const aria = { role: 'form' };
+  const cssClasses = combineClasses({ 'dx-form': true });
   const {
-    aria,
-    cssClasses,
     props: {
       scrollingEnabled,
       useNativeScrolling,
@@ -51,17 +51,5 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
 })
 
 export class Form extends JSXComponent<FormProps>() {
-  // eslint-disable-next-line class-methods-use-this
-  get aria(): Record<string, string> {
-    return {
-      role: 'form',
-    };
-  }
 
-  // eslint-disable-next-line class-methods-use-this
-  get cssClasses(): string {
-    return combineClasses({
-      'dx-form': true,
-    });
-  }
 }
