@@ -43,8 +43,8 @@ describe('Form > Markup', () => {
         classes: 'dx-form',
         direction: 'both',
         useKeyboard: false,
-        useNative: false,
-        useSimulatedScrollbar: true,
+        useNative: !!useNativeScrolling,
+        useSimulatedScrollbar: !useNativeScrolling,
       });
     });
   });
