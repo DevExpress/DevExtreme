@@ -1107,6 +1107,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     const isOverflowHidden = getElementStyle('overflowX', this.contentRef.current) === 'hidden';
 
+    /* istanbul ignore next */
     if (!isOverflowHidden) {
       const containerScrollSize = this.contentScrollWidth;
       return Math.max(containerScrollSize, this.contentClientWidth);
@@ -1122,6 +1123,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     const isOverflowHidden = getElementStyle('overflowY', this.contentRef.current) === 'hidden';
 
+    /* istanbul ignore next */
     if (!isOverflowHidden) {
       const containerScrollSize = this.contentScrollHeight;
       return Math.max(containerScrollSize, this.contentClientHeight);
