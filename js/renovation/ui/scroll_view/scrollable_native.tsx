@@ -78,7 +78,7 @@ const HIDE_SCROLLBAR_TIMEOUT = 500;
 export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, topPocketRef, bottomPocketRef, direction,
-    horizontalScrollbarRef, verticalScrollbarRef,
+    hScrollbarRef, vScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
     windowResizeHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
     scrollableRef, isLoadPanelVisible, topPocketState, refreshStrategy,
@@ -159,7 +159,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       { showScrollbar && useSimulatedScrollbar && direction.isHorizontal && (
         <Scrollbar
           direction="horizontal"
-          ref={horizontalScrollbarRef}
+          ref={hScrollbarRef}
           scrollByThumb={scrollByThumb}
           contentSize={contentClientWidth}
           containerSize={containerClientWidth}
@@ -170,7 +170,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       { showScrollbar && useSimulatedScrollbar && direction.isVertical && (
         <Scrollbar
           direction="vertical"
-          ref={verticalScrollbarRef}
+          ref={vScrollbarRef}
           scrollByThumb={scrollByThumb}
           contentSize={contentClientHeight}
           containerSize={containerClientHeight}
@@ -206,9 +206,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
-  @Ref() verticalScrollbarRef!: RefObject<Scrollbar>;
+  @Ref() vScrollbarRef!: RefObject<Scrollbar>;
 
-  @Ref() horizontalScrollbarRef!: RefObject<Scrollbar>;
+  @Ref() hScrollbarRef!: RefObject<Scrollbar>;
 
   @ForwardRef() topPocketRef!: RefObject<HTMLDivElement>;
 

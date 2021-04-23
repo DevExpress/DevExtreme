@@ -22,10 +22,6 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() contentSize = 0;
 
-  @OneWay() baseContainerSize = 0;
-
-  @OneWay() baseContentSize = 0;
-
   @OneWay() topPocketSize = 0;
 
   @OneWay() bottomPocketSize = 0;
