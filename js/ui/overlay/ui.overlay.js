@@ -485,18 +485,10 @@ const Overlay = Widget.inherit({
         this._refresh();
     },
 
-    _renderWrapperAttributes(wrapperAttr = this.option('wrapperAttr') || {}) {
+    _renderWrapperAttributes() {
+        const { wrapperAttr } = this.option() || {};
         const attributes = extend({}, wrapperAttr);
-        const classNames = attributes.class;
-        delete attributes.class;
-        this._oldAttributes && this._wrapper().removeAttr(Object.keys(this._oldAttributes).join(' '));
-        this._wrapper()
-            .attr(attributes)
-            .removeClass(this._oldClasses)
-            .addClass(classNames);
-
-        this._oldAttributes = attributes;
-        this._oldClasses = classNames;
+        this._wrapper().attr(attributes);
     },
 
     _renderVisibilityAnimate: function(visible) {
@@ -1470,7 +1462,7 @@ const Overlay = Widget.inherit({
                 this._fixWrapperPosition();
                 break;
             case 'wrapperAttr':
-                this._renderWrapperAttributes(args.value, args.previousValue);
+                this._renderWrapperAttributes();
                 break;
             default:
                 this.callBase(args);

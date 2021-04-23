@@ -493,11 +493,6 @@ testModule('option', moduleConfig, () => {
 
             assert.strictEqual(this.$wrapper.attr('someAttr'), 'someValue');
         });
-
-        test('removes old attributes from wrapper element on runtime change', function(assert) {
-            this.overlay.option('wrapperAttr', { someAnotherAttr: 'someAnotherValue' });
-            assert.notOk(this.$wrapper.hasClass('someClass'));
-        });
     });
 });
 
