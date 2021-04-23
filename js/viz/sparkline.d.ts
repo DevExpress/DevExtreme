@@ -1,11 +1,11 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -15,7 +15,7 @@ import DataSource, {
 
 
 import {
-    ComponentFileSavingEvent,
+    FileSavingEventInfo,
     ExportInfo,
     IncidentInfo
 } from './core/base_widget';
@@ -25,34 +25,34 @@ import BaseSparkline, {
 } from './sparklines/base_sparkline';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxSparkline>;
+export type DisposingEvent = EventInfo<dxSparkline>;
 
 /** @public */
-export type DrawnEvent = ComponentEvent<dxSparkline>;
+export type DrawnEvent = EventInfo<dxSparkline>;
 
 /** @public */
-export type ExportedEvent = ComponentEvent<dxSparkline>;
+export type ExportedEvent = EventInfo<dxSparkline>;
 
 /** @public */
-export type ExportingEvent = ComponentEvent<dxSparkline> & ExportInfo;
+export type ExportingEvent = EventInfo<dxSparkline> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & ComponentFileSavingEvent<dxSparkline>;
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxSparkline>;
 
 /** @public */
-export type IncidentOccurredEvent = ComponentEvent<dxSparkline> & IncidentInfo;
+export type IncidentOccurredEvent = EventInfo<dxSparkline> & IncidentInfo;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxSparkline>;
+export type InitializedEvent = InitializedEventInfo<dxSparkline>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxSparkline> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxSparkline> & ChangedOptionInfo;
 
 /** @public */
-export type TooltipHiddenEvent = ComponentEvent<dxSparkline>;
+export type TooltipHiddenEvent = EventInfo<dxSparkline>;
 
 /** @public */
-export type TooltipShownEvent = ComponentEvent<dxSparkline>;
+export type TooltipShownEvent = EventInfo<dxSparkline>;
 
 
 export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
@@ -222,10 +222,11 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
  * @public
  */
 export default class dxSparkline extends BaseSparkline {
-    constructor(element: TElement, options?: dxSparklineOptions)
+    constructor(element: UserDefinedElement, options?: dxSparklineOptions)
     getDataSource(): DataSource;
 }
 
+/** @public */
 export type Options = dxSparklineOptions;
 
 /** @deprecated use Options instead */

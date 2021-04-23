@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -7,7 +8,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -15,9 +16,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -38,7 +39,7 @@ import {
 
 interface ListItemInfo {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly itemIndex: number | { group: number; item: number; };
 }
 
@@ -51,71 +52,71 @@ export interface ScrollInfo {
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxList>;
+export type ContentReadyEvent = EventInfo<dxList>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxList>;
+export type DisposingEvent = EventInfo<dxList>;
 
 /** @public */
-export type GroupRenderedEvent = ComponentEvent<dxList> & {
+export type GroupRenderedEvent = EventInfo<dxList> & {
     readonly groupData?: any;
-    readonly groupElement?: TElement;
+    readonly groupElement?: DxElement;
     readonly groupIndex?: number;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxList>;
+export type InitializedEvent = InitializedEventInfo<dxList>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxList> & ListItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxList> & ListItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxList> & ListItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxList> & ListItemInfo;
 
 /** @public */
-export type ItemDeletedEvent = ComponentEvent<dxList> & ListItemInfo;
+export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
 
 /** @public */
-export type ItemDeletingEvent = ComponentEvent<dxList> & ListItemInfo & {
-    cancel?: boolean | TPromise<void>;
+export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
+    cancel?: boolean | DxPromise<void>;
 }
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxList> & ListItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxList> & ListItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxList> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxList> & ItemInfo;
 
 /** @public */
-export type ItemReorderedEvent = ComponentEvent<dxList> & ListItemInfo & {
+export type ItemReorderedEvent = EventInfo<dxList> & ListItemInfo & {
     readonly fromIndex: number;
     readonly toIndex: number;
 }
 
 /** @public */
-export type ItemSwipeEvent = ComponentNativeEvent<dxList> & ListItemInfo & {
+export type ItemSwipeEvent = NativeEventInfo<dxList> & ListItemInfo & {
     readonly direction: string;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxList> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxList> & ChangedOptionInfo;
 
 /** @public */
-export type PageLoadingEvent = ComponentEvent<dxList>;
+export type PageLoadingEvent = EventInfo<dxList>;
 
 /** @public */
-export type PullRefreshEvent = ComponentEvent<dxList>;
+export type PullRefreshEvent = EventInfo<dxList>;
 
 /** @public */
-export type ScrollEvent = ComponentNativeEvent<dxList> & ScrollInfo;
+export type ScrollEvent = NativeEventInfo<dxList> & ScrollInfo;
 
 /** @public */
-export type SelectAllValueChangedEvent = ComponentEvent<dxList> & {
+export type SelectAllValueChangedEvent = EventInfo<dxList> & {
     readonly value: boolean;
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxList> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxList> & SelectionChangedInfo;
 
 export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
     /**
@@ -175,12 +176,12 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default "group"
      * @type_function_param1 groupData:object
      * @type_function_param2 groupIndex:number
-     * @type_function_param3 groupElement:dxElement
+     * @type_function_param3 groupElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: TElement) => string | TElement);
+    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
@@ -233,16 +234,16 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     menuItems?: Array<{
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type_function_param1 itemElement:dxElement
-      * @type_function_param2 itemData:object
-      */
-      action?: ((itemElement: TElement, itemData: any) => any),
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 itemElement:DxElement
+       * @type_function_param2 itemData:object
+       */
+      action?: ((itemElement: DxElement, itemData: any) => any),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
       text?: string
     }>;
     /**
@@ -266,10 +267,10 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 groupData:object
-     * @type_function_param1_field5 groupElement:dxElement
+     * @type_function_param1_field5 groupElement:DxElement
      * @type_function_param1_field6 groupIndex:number
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -281,11 +282,11 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -297,11 +298,11 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -313,10 +314,10 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @hidden false
@@ -329,11 +330,11 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 cancel:boolean | Promise<void>
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @hidden false
@@ -346,11 +347,11 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -362,12 +363,12 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 fromIndex:number
      * @type_function_param1_field8 toIndex:number
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @hidden false
@@ -381,11 +382,11 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:dxElement
+     * @type_function_param1_field6 itemElement:DxElement
      * @type_function_param1_field7 itemIndex:number | object
      * @type_function_param1_field8 direction:string
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -397,7 +398,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -409,7 +410,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -427,7 +428,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_param1_field8 reachedTop:boolean
      * @type_function_param1_field9 reachedBottom:boolean
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -440,7 +441,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
      * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -575,7 +576,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
  * @public
  */
 export default class dxList extends CollectionWidget {
-    constructor(element: TElement, options?: dxListOptions)
+    constructor(element: UserDefinedElement, options?: dxListOptions)
     /**
      * @docid
      * @publicName clientHeight()
@@ -592,7 +593,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseGroup(groupIndex: number): TPromise<void>;
+    collapseGroup(groupIndex: number): DxPromise<void>;
     /**
      * @docid
      * @publicName deleteItem(itemElement)
@@ -601,7 +602,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deleteItem(itemElement: Element): TPromise<void>;
+    deleteItem(itemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName deleteItem(itemIndex)
@@ -610,7 +611,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deleteItem(itemIndex: number | any): TPromise<void>;
+    deleteItem(itemIndex: number | any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandGroup(groupIndex)
@@ -619,7 +620,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandGroup(groupIndex: number): TPromise<void>;
+    expandGroup(groupIndex: number): DxPromise<void>;
     /**
      * @docid
      * @publicName isItemSelected(itemElement)
@@ -654,7 +655,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reorderItem(itemElement: Element, toItemElement: Element): TPromise<void>;
+    reorderItem(itemElement: Element, toItemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName reorderItem(itemIndex, toItemIndex)
@@ -664,7 +665,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reorderItem(itemIndex: number | any, toItemIndex: number | any): TPromise<void>;
+    reorderItem(itemIndex: number | any, toItemIndex: number | any): DxPromise<void>;
     /**
      * @docid
      * @publicName scrollBy(distance)
@@ -766,14 +767,14 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): TPromise<void>;
+    updateDimensions(): DxPromise<void>;
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxListItem extends CollectionWidgetItem {
     /**
      * @docid
@@ -801,6 +802,7 @@ export interface dxListItem extends CollectionWidgetItem {
     showChevron?: boolean;
 }
 
+/** @public */
 export type Options = dxListOptions;
 
 /** @deprecated use Options instead */

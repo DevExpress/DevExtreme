@@ -1,7 +1,7 @@
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface VectorMapProjectionConfig {
     /**
      * @docid

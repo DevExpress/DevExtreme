@@ -1,33 +1,38 @@
 import {
-    TElement
+    DxElement
 } from '../core/element';
 
 export interface EventExtension { }
 export interface EventType { }
 /**
  * @docid
+ * @type EventObject|jQuery.Event
  * @prevFileNamespace DevExpress.events
  */
-export type TEvent = {} extends EventType ? dxEvent : EventType;
+export type DxEvent = {} extends EventType ? EventObject : EventType;
 
-export interface ComponentInitializedEvent<T> {
+/** @public */
+export interface InitializedEventInfo<T> {
     readonly component?: T;
-    readonly element?: TElement;
+    readonly element?: DxElement;
 }
 
-export interface ComponentEvent<T> {
+/** @public */
+export interface EventInfo<T> {
     readonly component: T;
-    readonly element: TElement;
+    readonly element: DxElement;
     readonly model?: any;
 }
 
-export interface ComponentNativeEvent<T> {
+/** @public */
+export interface NativeEventInfo<T> {
     readonly component: T;
-    readonly element: TElement;
+    readonly element: DxElement;
     readonly model?: any;
-    readonly event?: TEvent;
+    readonly event?: DxEvent;
 }
 
+/** @public */
 export interface ChangedOptionInfo {
     readonly name: string;
     readonly fullName: string;
@@ -37,13 +42,17 @@ export interface ChangedOptionInfo {
 
 export interface ItemInfo {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly itemIndex: number;
 }
 
+/** @public */
 export interface Cancelable {
     cancel?: boolean;
 }
+
+/** @deprecated EventObject */
+export type dxEvent = EventObject;
 
 /**
  * @docid
@@ -51,7 +60,7 @@ export interface Cancelable {
  * @prevFileNamespace DevExpress.events
  * @public
  */
-export class dxEvent {
+export class EventObject {
     /**
      * @docid
      * @prevFileNamespace DevExpress.events
@@ -125,23 +134,23 @@ export class dxEvent {
 
 /**
  * @docid
- * @type dxEvent|jQuery.Event
+ * @type EventObject|jQuery.Event
  * @hidden
  * @prevFileNamespace DevExpress.events
- * @deprecated TEvent
+ * @deprecated DxEvent
  */
-export type event = TEvent;
+export type event = DxEvent;
 
 /**
  * @docid
  * @publicName handler(event, extraParameters)
- * @param1 event:dxEvent
+ * @param1 event:DxEvent
  * @param2 extraParameters:object
  * @return boolean
  * @hidden
  * @prevFileNamespace DevExpress.events
  */
-export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
+export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
 
 /**
  * @docid eventsMethods.off
@@ -342,7 +351,7 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @prevFileNamespace DevExpress.events
  * @public
  */
-export function trigger(element: Element | Array<Element>, event: string | TEvent): void;
+export function trigger(element: Element | Array<Element>, event: string | DxEvent): void;
 
 /**
  * @docid eventsMethods.trigger
@@ -356,7 +365,7 @@ export function trigger(element: Element | Array<Element>, event: string | TEven
  * @prevFileNamespace DevExpress.events
  * @public
  */
-export function trigger(element: Element | Array<Element>, event: string | TEvent, extraParameters: any): void;
+export function trigger(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;
 
 /**
  * @docid eventsMethods.triggerHandler
@@ -369,7 +378,7 @@ export function trigger(element: Element | Array<Element>, event: string | TEven
  * @hidden
  * @prevFileNamespace DevExpress.events
  */
-export function triggerHandler(element: Element | Array<Element>, event: string | TEvent): void;
+export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent): void;
 
 /**
  * @docid eventsMethods.triggerHandler
@@ -383,4 +392,4 @@ export function triggerHandler(element: Element | Array<Element>, event: string 
  * @hidden
  * @prevFileNamespace DevExpress.events
  */
-export function triggerHandler(element: Element | Array<Element>, event: string | TEvent, extraParameters: any): void;
+export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;

@@ -3,7 +3,8 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -12,9 +13,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -34,14 +35,14 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    boundary?: string | TElement;
+    boundary?: string | UserDefinedElement;
     /**
      * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | TElement;
+    container?: string | UserDefinedElement;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -115,12 +116,12 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
 export interface DraggableBase { }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDraggable>;
+export type DisposingEvent = EventInfo<dxDraggable>;
 
 /** @public */
-export type DragEndEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
@@ -128,9 +129,9 @@ export type DragEndEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
 }
 
 /** @public */
-export type DragMoveEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
@@ -138,23 +139,23 @@ export type DragMoveEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
 }
 
 /** @public */
-export type DragStartEvent = Cancelable & ComponentNativeEvent<dxDraggable> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable> & {
     itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly fromData?: any;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDraggable>;
+export type InitializedEvent = InitializedEventInfo<dxDraggable>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDraggable> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDraggable> & ChangedOptionInfo;
 
 
 /** @public */
 export type DragTemplateData = {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
 }
 
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
@@ -169,25 +170,25 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @docid
      * @type_function_param1 dragInfo:object
      * @type_function_param1_field1 itemData:any
-     * @type_function_param1_field2 itemElement:dxElement
-     * @type_function_param2 containerElement:dxElement
+     * @type_function_param1_field2 itemElement:DxElement
+     * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: TElement) => string | TElement);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDraggable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field10 fromData:any
@@ -202,12 +203,12 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDraggable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
      * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
      * @type_function_param1_field10 fromData:any
@@ -222,12 +223,12 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDraggable
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
+     * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromData:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -245,9 +246,10 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
  * @public
  */
 export default class dxDraggable extends DOMComponent implements DraggableBase {
-    constructor(element: TElement, options?: dxDraggableOptions)
+    constructor(element: UserDefinedElement, options?: dxDraggableOptions)
 }
 
+/** @public */
 export type Options = dxDraggableOptions;
 
 /** @deprecated use Options instead */

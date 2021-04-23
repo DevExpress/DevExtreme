@@ -23,7 +23,7 @@ export const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 export const SCROLLVIEW_TOP_POCKET_CLASS = 'dx-scrollview-top-pocket';
 export const SCROLLVIEW_PULLDOWN = 'dx-scrollview-pull-down';
-export const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
+export const SCROLLVIEW_PULLDOWN_LOADING_CLASS = 'dx-scrollview-pull-down-loading';
 export const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
 export const SCROLLVIEW_PULLDOWN_IMAGE_CLASS = 'dx-scrollview-pull-down-image';
 export const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
@@ -41,6 +41,8 @@ export const TopPocketState = {
   STATE_READY: 1,
   STATE_REFRESHING: 2,
   STATE_LOADING: 3,
+  STATE_TOUCHED: 4,
+  STATE_PULLED: 5,
 };
 
 export const KEY_CODES = {

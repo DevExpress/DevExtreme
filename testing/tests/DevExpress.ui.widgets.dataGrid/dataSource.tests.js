@@ -3477,6 +3477,44 @@ QUnit.module('Remote group paging', {
         assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, 'take for second level');
     });
 
+    // T990766
+    QUnit.test('Reload dataSource when two expanded group and two group levels exist', function(assert) {
+        const dataSource = this.createDataSource({
+            group: ['field1', 'field2'],
+            pageSize: 3
+        });
+        const loadingChanged = sinon.stub();
+
+        dataSource.load();
+
+        dataSource.changeRowExpand([2]);
+        dataSource.load();
+        dataSource.changeRowExpand([2, 4]);
+        dataSource.load();
+
+        dataSource.store().on('loading', loadingChanged);
+
+        // act
+        dataSource.reload(true);
+
+        assert.deepEqual(dataSource.items(), [
+            {
+                key: 1,
+                items: null
+            },
+            {
+                key: 2,
+                items: [{
+                    isContinuationOnNextPage: true,
+                    key: 4,
+                    items: []
+                }]
+            }], 'items');
+
+        assert.equal(dataSource.totalItemsCount(), 9, 'total items count');
+        assert.strictEqual(loadingChanged.callCount, 6, 'loading count');
+    });
+
     QUnit.test('Error on change grouping when one expanded group and two group levels exist', function(assert) {
         const brokeOptions = {};
         const dataSource = this.createDataSource({
@@ -6459,6 +6497,56 @@ QUnit.module('Cache', {
         // assert
         assert.equal(this.loadingCount, 3, 'third load');
         assert.deepEqual(dataSource.items(), [1, 2], 'new loaded items for the first page');
+    });
+
+    QUnit.test('New mode. Data should be loaded without the cache', function(assert) {
+        const dataSource = this.createDataSource({
+            remoteOperations: {
+                paging: true,
+                sorting: true
+            },
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+            cacheEnabled: false,
+        });
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 1, 'first load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 2, 'second load');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items on the second load');
+
+        // act
+        dataSource.pageIndex(2);
+        dataSource.loadPageCount(1);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 3, 'third load');
+        assert.deepEqual(dataSource.items(), [7, 8, 9], 'items on the third load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 4, 'fourth load');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items on the fourth load');
     });
 });
 

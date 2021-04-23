@@ -1,42 +1,42 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
 import dxScrollable, {
     dxScrollableOptions,
-    ComponentScrollEvent
+    ScrollEventInfo
 } from './scroll_view/ui.scrollable';
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxScrollView>;
+export type DisposingEvent = EventInfo<dxScrollView>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxScrollView>;
+export type InitializedEvent = InitializedEventInfo<dxScrollView>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxScrollView> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxScrollView> & ChangedOptionInfo;
 
 /** @public */
-export type PullDownEvent = ComponentEvent<dxScrollView>;
+export type PullDownEvent = EventInfo<dxScrollView>;
 
 /** @public */
-export type ReachBottomEvent = ComponentEvent<dxScrollView>;
+export type ReachBottomEvent = EventInfo<dxScrollView>;
 
 /** @public */
-export type ScrollEvent = ComponentScrollEvent<dxScrollView>;
+export type ScrollEvent = ScrollEventInfo<dxScrollView>;
 
 /** @public */
-export type UpdatedEvent = ComponentScrollEvent<dxScrollView>;
+export type UpdatedEvent = ScrollEventInfo<dxScrollView>;
 
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
@@ -44,7 +44,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScrollView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -56,7 +56,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxScrollView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -106,7 +106,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @public
  */
 export default class dxScrollView extends dxScrollable {
-    constructor(element: TElement, options?: dxScrollViewOptions)
+    constructor(element: UserDefinedElement, options?: dxScrollViewOptions)
     /**
      * @docid
      * @publicName refresh()
@@ -122,9 +122,10 @@ export default class dxScrollView extends dxScrollable {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    release(preventScrollBottom: boolean): TPromise<void>;
+    release(preventScrollBottom: boolean): DxPromise<void>;
 }
 
+/** @public */
 export type Options = dxScrollViewOptions;
 
 /** @deprecated use Options instead */

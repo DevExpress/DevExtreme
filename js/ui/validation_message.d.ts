@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import dxOverlay, {
@@ -13,13 +14,13 @@ export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxO
 
     positionRequest?: string;
 
-    boundary?: String | TElement;
+    boundary?: String | UserDefinedElement;
 
     offset?: object;
 }
 
 export default class dxValidationMessage extends dxOverlay {
-    constructor(element: TElement, options?: dxValidationMessageOptions)
+    constructor(element: UserDefinedElement, options?: dxValidationMessageOptions)
 }
 
 export type Options = dxValidationMessageOptions;

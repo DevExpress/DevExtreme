@@ -391,7 +391,7 @@ QUnit.module('Grid view', {
 
         // act
         gridView.render(testElement, {});
-        gridView.optionChanged({ name: 'showBorders', value: true });
+        gridView.option('showBorders', true);
 
         // assert
         assert.equal(testElement.find('.dx-datagrid-borders').length, 1, 'borders class');
@@ -2009,7 +2009,7 @@ QUnit.module('Synchronize columns', {
         // arrange
         const $testElement = $('<div />').appendTo($('#container'));
         const gridView = this.createGridView({}, {
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
             columns: [
                 { dataField: 'field1' },
@@ -2035,7 +2035,6 @@ QUnit.module('Synchronize columns', {
         this.columnsController.beginUpdate();
 
         this.option('summary', []);
-        this.dataController.optionChanged({ name: 'summary', fullName: 'summary', value: [] });
         this.columnOption('field1', 'groupIndex', 0);
 
         this.columnsController.endUpdate();
@@ -2051,7 +2050,7 @@ QUnit.module('Synchronize columns', {
         // arrange
         const $testElement = $('<div />').appendTo($('#container'));
         const gridView = this.createGridView({}, {
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
             columnFixing: { enabled: true },
             selection: { mode: 'multiple', showCheckBoxesMode: 'always' },
@@ -2282,7 +2281,7 @@ QUnit.module('Fixed columns', {
         const $testElement = $('<div />').width(400).appendTo($('#container'));
         const gridView = this.createGridView({}, {
             columnAutoWidth: false,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
             columnFixing: { enabled: true },
             editing: {
@@ -2318,7 +2317,7 @@ QUnit.module('Fixed columns', {
         const $testElement = $('<div />').width(400).appendTo($('#container'));
         const gridView = this.createGridView({}, {
             columnAutoWidth: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2' }],
             columns: [
                 {

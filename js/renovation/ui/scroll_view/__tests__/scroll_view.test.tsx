@@ -4,6 +4,7 @@ import each from 'jest-each';
 import {
   ScrollView,
   viewFunction,
+  ScrollViewProps,
 } from '../scroll_view';
 
 import {
@@ -14,7 +15,6 @@ import devices from '../../../../core/devices';
 import { touch } from '../../../../core/utils/support';
 import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
-import { ScrollViewProps } from '../scroll_view_props';
 
 import { isDefined } from '../../../../core/utils/type';
 
@@ -48,7 +48,7 @@ describe('ScrollView', () => {
       { name: 'scrollOffset', argsCount: 0 },
       { name: 'scrollWidth', argsCount: 0 },
       { name: 'scrollHeight', argsCount: 0 },
-      { name: 'scrollToElement', argsCount: 2 },
+      { name: 'scrollToElement', argsCount: 1 },
       { name: 'scrollTo', argsCount: 1 },
       { name: 'scrollBy', argsCount: 1 },
       { name: 'content', argsCount: 0 },

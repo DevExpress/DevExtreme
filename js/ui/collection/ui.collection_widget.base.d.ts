@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
@@ -11,8 +12,8 @@ import DataSource, {
 } from '../../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
+    EventInfo,
+    NativeEventInfo,
     ItemInfo
 } from '../../events/index';
 
@@ -45,12 +46,12 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires CollectionWidgetOptions.onOptionChanged
@@ -77,64 +78,64 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: ComponentNativeEvent<T> & ItemInfo) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
+    onItemHold?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: ComponentNativeEvent<T> & ItemInfo) => void);
+    onItemRendered?: ((e: NativeEventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -142,13 +143,13 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: ComponentEvent<T> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default -1
@@ -190,7 +191,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
  * @prevFileNamespace DevExpress.ui
  */
 export default class CollectionWidget extends Widget {
-    constructor(element: TElement, options?: CollectionWidgetOptions)
+    constructor(element: UserDefinedElement, options?: CollectionWidgetOptions)
     getDataSource(): DataSource;
 }
 
@@ -219,7 +220,7 @@ export interface CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    template?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

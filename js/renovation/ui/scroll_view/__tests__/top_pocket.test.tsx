@@ -1,7 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
-import devices from '../../../../core/devices';
 
 import {
   TopPocket,
@@ -27,12 +26,18 @@ describe('TopPocket', () => {
 
       expect(topPocket.props()).toEqual({
         pocketState: 0,
+        pocketTop: 0,
+        pullDownIconAngle: 0,
+        pullDownOpacity: 0,
+        pullDownTop: 0,
+        pullDownTranslateTop: 0,
+        topPocketTranslateTop: 0,
       });
     });
   });
 
   describe('Structure', () => {
-    each(['pullDown', 'swipeDown', 'simulated', undefined]).describe('RefreshStrategy: %o', (refreshStrategy) => {
+    each(['pullDown', 'swipeDown', 'simulated']).describe('RefreshStrategy: %o', (refreshStrategy) => {
       it('PullDown text elements', () => {
         const topPocket = mount(viewFunction(new TopPocket({
           refreshStrategy,
@@ -46,56 +51,45 @@ describe('TopPocket', () => {
         expect(textElementChildren.length).toBe(expectedCountOfChild);
       });
 
-      each([true, false]).describe('useNative: %o', (useNative) => {
-        it('render pulldown icon element', () => {
-          const topPocket = mount(viewFunction(new TopPocket({
+      it('render pulldown icon element', () => {
+        const topPocket = mount(viewFunction(new TopPocket({
+          refreshStrategy,
+        })) as JSX.Element);
+
+        const iconElement = topPocket.find('.dx-icon-pulldown');
+
+        expect(iconElement.exists()).toBe(refreshStrategy === 'swipeDown');
+      });
+
+      each([
+        { pocketState: TopPocketState.STATE_RELEASED, expectedText: 'pullingText' },
+        { pocketState: TopPocketState.STATE_READY, expectedText: 'pulledText' },
+        { pocketState: TopPocketState.STATE_REFRESHING, expectedText: 'refreshingText' },
+        { pocketState: TopPocketState.STATE_LOADING },
+        { pocketState: TopPocketState.STATE_PULLED },
+        { pocketState: TopPocketState.STATE_TOUCHED },
+      ]).describe('PocketState: %o', (config) => {
+        it('Text visibility for corresponding pocketState', () => {
+          const { pocketState, expectedText } = config;
+
+          const viewModel = new TopPocket({
             refreshStrategy,
-            useNative,
-          })) as JSX.Element);
+            pullingDownText: 'pullingText',
+            pulledDownText: 'pulledText',
+            refreshingText: 'refreshingText',
+            pocketState,
+          });
 
-          const iconElement = topPocket.find('.dx-icon-pulldown');
+          const topPocket = mount(viewFunction(viewModel) as JSX.Element);
+          const textElement = topPocket.find('.dx-scrollview-pull-down-text-visible');
 
-          expect(iconElement.exists()).toBe(refreshStrategy === 'swipeDown' && useNative);
+          if (expectedText && refreshStrategy !== 'swipeDown') {
+            expect(textElement.length).toBe(1);
+            expect(textElement.text()).toBe(expectedText);
+          } else {
+            expect(textElement.length).toBe(0);
+          }
         });
-      });
-    });
-
-    each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
-      it('Should assign simulated strategy', () => {
-        devices.real = () => ({ platform });
-
-        const topPocket = new TopPocket({ refreshStrategy: 'simulated' });
-        expect((topPocket as any).refreshStrategy).toEqual('simulated');
-      });
-
-      it('Should assign swipeDown, pullDown strategy', () => {
-        devices.real = () => ({ platform });
-
-        const topPocket = new TopPocket({ });
-        expect((topPocket as any).refreshStrategy).toEqual(platform === 'android' ? 'swipeDown' : 'pullDown');
-      });
-    });
-  });
-
-  describe('Behavior', () => {
-    each([
-      { state: TopPocketState.STATE_RELEASED, expectedText: 'pullingText' },
-      { state: TopPocketState.STATE_READY, expectedText: 'pulledText' },
-      { state: TopPocketState.STATE_REFRESHING, expectedText: 'refreshingText' },
-    ]).describe('State: %o', (testConfig) => {
-      it('Correct text is visible depending of state', () => {
-        const viewModel = new TopPocket({
-          refreshStrategy: 'simulated',
-          pullingDownText: 'pullingText',
-          pulledDownText: 'pulledText',
-          refreshingText: 'refreshingText',
-          pocketState: testConfig.state,
-        });
-
-        const topPocket = mount(viewFunction(viewModel) as JSX.Element);
-        const textElement = topPocket.find('.dx-scrollview-pull-down-text-visible');
-        expect(textElement.length).toBe(1);
-        expect(textElement.text()).toBe(testConfig.expectedText);
       });
     });
   });

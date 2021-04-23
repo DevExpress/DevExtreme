@@ -4,6 +4,7 @@ import {
   Ref,
   Method,
   RefObject,
+  ComponentBindings,
 } from '@devextreme-generator/declarations';
 
 import { current, isMaterial } from '../../../ui/themes';
@@ -15,11 +16,14 @@ import {
 } from './scrollable';
 
 import {
-  ScrollableLocation, ScrollOffset,
+  ScrollOffset,
 } from './types.d';
 
 import { combineClasses } from '../../utils/combine_classes';
-import { ScrollViewPropsType } from './scroll_view_props';
+import { BaseWidgetProps } from '../common/base_props';
+import {
+  ScrollableProps,
+} from './scrollable_props';
 import { ScrollableSimulated } from './scrollable_simulated';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
@@ -72,6 +76,14 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     )
   );
 };
+
+@ComponentBindings()
+export class ScrollViewProps extends ScrollableProps {
+
+}
+
+export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+
 @Component({
   defaultOptionRules,
   jQuery: { register: true },
@@ -106,18 +118,18 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  scrollBy(distance: number | Partial<ScrollableLocation>): void {
+  scrollBy(distance: number | Partial<ScrollOffset>): void {
     this.scrollableRef.scrollBy(distance);
   }
 
   @Method()
-  scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
+  scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
     this.scrollableRef.scrollTo(targetLocation);
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-    this.scrollableRef.scrollToElement(element, offset);
+  scrollToElement(element: HTMLElement): void {
+    this.scrollableRef.scrollToElement(element);
   }
 
   @Method()
@@ -131,7 +143,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  scrollOffset(): ScrollableLocation {
+  scrollOffset(): ScrollOffset {
     return this.scrollableRef.scrollOffset();
   }
 

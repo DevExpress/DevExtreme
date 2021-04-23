@@ -213,6 +213,136 @@ QUnit.test('T195986', function(assert) {
     assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), true);
 });
 
+const clickByItemCheckbox = (wrapper, item) => wrapper.getElement()
+    .find(`[aria-label="${item}"] .dx-checkbox`)
+    .eq(0).trigger('dxclick');
+
+['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
+    ['multiple', 'single'].forEach((selectionMode) => {
+        [false, true].forEach((selectNodesRecursive) => {
+            QUnit.test(`All deselected -> select middle level item. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
+                const wrapper = new TreeViewTestWrapper({
+                    showCheckBoxesMode, selectNodesRecursive, selectionMode,
+                    items: [ { text: 'item1', expanded: true, items: [
+                        { text: 'item1_1', expanded: true, items: [ { text: 'item1_1_1' } ] },
+                        { text: 'item1_2', expanded: true, items: [ { text: 'item1_2_1' } ] } ]
+                    } ],
+                });
+
+                clickByItemCheckbox(wrapper, 'item1_1');
+
+                let expectedLog;
+                if(showCheckBoxesMode === 'none') {
+                    expectedLog = [];
+                } else if(showCheckBoxesMode === 'normal' || selectionMode === 'single') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged'];
+                } else if(showCheckBoxesMode === 'selectAll') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged', 'selectAllValueChanged'];
+                }
+
+                wrapper.checkEventLog(expectedLog, 'after click by item1_1 checkbox');
+            });
+
+            QUnit.test(`All selected -> deselect middle level item. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
+                const wrapper = new TreeViewTestWrapper({
+                    showCheckBoxesMode, selectNodesRecursive, selectionMode,
+                    items: [ { text: 'item1', selected: true, expanded: true, items: [
+                        { text: 'item1_1', selected: true, expanded: true, items: [ { text: 'item1_1_1' } ] },
+                        { text: 'item1_2', selected: true, expanded: true, items: [ { text: 'item1_2_1' } ] } ]
+                    } ],
+                });
+
+                clickByItemCheckbox(wrapper, 'item1_1');
+
+                let expectedLog;
+                if(showCheckBoxesMode === 'none') {
+                    expectedLog = [];
+                } else if(selectionMode === 'single') {
+                    expectedLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                } else if(showCheckBoxesMode === 'normal') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged'];
+                } else if(showCheckBoxesMode === 'selectAll') {
+                    expectedLog = selectNodesRecursive === false
+                        ? ['itemSelectionChanged', 'selectionChanged']
+                        : ['itemSelectionChanged', 'selectionChanged', 'selectAllValueChanged'];
+                }
+
+                wrapper.checkEventLog(expectedLog, 'after click by item1_1 checkbox');
+            });
+        });
+    });
+});
+
+QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
+    const selectAllValueChangedLog = [];
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { text: 'item1', expanded: true, items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
+        onSelectAllValueChanged: (args) => { selectAllValueChangedLog.push(args.value); }
+    });
+
+    clickByItemCheckbox(wrapper, 'item1_1');
+    assert.deepEqual(selectAllValueChangedLog, [undefined], 'after click by item1_1');
+
+    clickByItemCheckbox(wrapper, 'item1_2');
+    assert.deepEqual(selectAllValueChangedLog, [undefined, true], 'after click by item1_2');
+
+    clickByItemCheckbox(wrapper, 'item1');
+    assert.deepEqual(selectAllValueChangedLog, [undefined, true, false], 'after click by item1');
+});
+
+QUnit.module('T988756', () => {
+    QUnit.test('showCheckBoxesMode=none -> showCheckBoxesMode=selectAll and click -> showCheckBoxesMode=none and click -> showCheckBoxesMode=selectAll and click (T988756)', function(assert) {
+        const selectAllStub = sinon.stub();
+        const wrapper = new TreeViewTestWrapper({
+            showCheckBoxesMode: 'none',
+            items: [ { text: 'item1' } ],
+            onSelectAllValueChanged: selectAllStub
+        });
+
+        wrapper.instance.option('showCheckBoxesMode', 'selectAll');
+        clickByItemCheckbox(wrapper, 'item1');
+        assert.ok('no error is thrown');
+        assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
+
+        selectAllStub.reset();
+        wrapper.instance.option('showCheckBoxesMode', 'none');
+        clickByItemCheckbox(wrapper, 'item1');
+        assert.ok('no error is thrown');
+        assert.equal(selectAllStub.callCount, 0, 'onSelectAllValueChanged is not fired');
+
+        wrapper.instance.option('showCheckBoxesMode', 'selectAll');
+        clickByItemCheckbox(wrapper, 'item1');
+        assert.ok('no error is thrown');
+        assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
+    });
+
+    QUnit.test('showCheckBoxesMode=normal -> showCheckBoxesMode=selectAll and click -> showCheckBoxesMode=normal and click -> showCheckBoxesMode=selectAll and click', function(assert) {
+        const selectAllStub = sinon.stub();
+        const wrapper = new TreeViewTestWrapper({
+            showCheckBoxesMode: 'normal',
+            items: [ { text: 'item1' } ],
+            onSelectAllValueChanged: selectAllStub
+        });
+
+        wrapper.instance.option('showCheckBoxesMode', 'selectAll');
+        clickByItemCheckbox(wrapper, 'item1');
+        assert.ok('no error is thrown');
+        assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
+
+        selectAllStub.reset();
+        wrapper.instance.option('showCheckBoxesMode', 'normal');
+        clickByItemCheckbox(wrapper, 'item1');
+        assert.ok('no error is thrown');
+        assert.equal(selectAllStub.callCount, 0, 'onSelectAllValueChanged is not fired');
+
+        wrapper.instance.option('showCheckBoxesMode', 'selectAll');
+        clickByItemCheckbox(wrapper, 'item1');
+        assert.ok('no error is thrown');
+        assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
+    });
+});
+
 QUnit.test('Selection works correct with custom rootValue', function(assert) {
     const data = [
         { id: 0, parentId: 'none', text: 'Animals' },
@@ -608,7 +738,7 @@ configs.forEach(config => {
             if(config.selectionMode === 'single') {
                 expectedKeys = [0];
                 expectedNodes = [0];
-                expectedEventLog = ['itemSelectionChanged', 'selectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
             }
             if(!config.expanded) {
                 // unexpected result
@@ -1038,7 +1168,7 @@ QUnit.test('3 one-level items.selected: true. Selection mode: single -> selectIt
 
     wrapper.instance.selectItem(0);
     wrapper.checkSelection([0], [0]);
-    wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged', 'itemSelectionChanged', 'selectionChanged']);
+    wrapper.checkEventLog(['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged']);
 });
 
 QUnit.module('Delayed datasource', () => {

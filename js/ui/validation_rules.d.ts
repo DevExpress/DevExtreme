@@ -1,10 +1,10 @@
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 /**
  * @public
-*/
+ */
 export interface ValidationCallbackData {
     value?: string | number,
     rule: any,
@@ -61,7 +61,7 @@ export interface AsyncRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationCallback?: ((options: ValidationCallbackData) => TPromise<any>);
+    validationCallback?: ((options: ValidationCallbackData) => DxPromise<any>);
 }
 
 /**

@@ -30,13 +30,6 @@ export default class ComponentWrapper extends DOMComponent {
     [name: string]: unknown;
   };
   _isNodeReplaced!: boolean;
-  _propsInfo!: {
-    allowNull: string[],
-    twoWay: any[],
-    elements: string[],
-    templates: string[]
-  };
-  _shouldRefresh!: boolean;
   _storedClasses?: string;
   _supportedKeys!: () => {
     [name: string]: Function,
@@ -44,8 +37,24 @@ export default class ComponentWrapper extends DOMComponent {
   _viewRef!: RefObject<unknown>;
   _viewComponent!: any;
 
+  get _propsInfo(): {
+    allowNull: string[];
+    twoWay: any[];
+    elements: string[];
+    templates: string[];
+    props: string[];
+  } {
+    return {
+      allowNull: [],
+      twoWay: [],
+      elements: [],
+      templates: [],
+      props: [],
+    };
+  }
+
   get viewRef() {
-    return this._viewRef.current;
+    return this._viewRef?.current;
   }
   _getDefaultOptions() {
     return extend(
@@ -78,18 +87,6 @@ export default class ComponentWrapper extends DOMComponent {
 
   _initMarkup() {
     const props = this.getProps();
-    if (this._shouldRefresh) {
-      this._shouldRefresh = false;
-
-      this._renderWrapper({
-        ...props,
-        width: null,
-        height: null,
-        style: '',
-        className: '',
-        children: null,
-      });
-    }
     this._renderWrapper(props);
   }
 
@@ -129,7 +126,7 @@ export default class ComponentWrapper extends DOMComponent {
     const parentNode = containerNode.parentNode;
     parentNode.$V = containerNode.$V;
     containerNode.$V = null;
-    render(null, parentNode);
+    render(createElement(containerNode.tagName, this.elementAttr), parentNode);
     delete parentNode.$V;
     super._dispose();
   }
@@ -171,38 +168,49 @@ export default class ComponentWrapper extends DOMComponent {
     return this._elementAttr;
   }
 
-  _patchOptionValues(options) {
-    const { allowNull, twoWay, elements } = this._propsInfo;
+  _patchOptionValues(options: Record<string, unknown>) {
+    const { allowNull, twoWay, elements, props } = this._propsInfo;
     const defaultProps = this._viewComponent.defaultProps;
 
+    const widgetProps = props.reduce((acc, propName) => {
+      if (options.hasOwnProperty(propName)) {
+        acc[propName] = options[propName];
+      }
+      return acc;
+    }, {
+      ref: options.ref,
+      children: options.children,
+    });
+
     allowNull.forEach(
-      setDefaultOptionValue(options, () => null)
+      setDefaultOptionValue(widgetProps, () => null)
     );
 
     Object.keys(defaultProps).forEach(
       setDefaultOptionValue(
-        options,
+        widgetProps,
         (name: string) => defaultProps[name]
       )
     );
 
     twoWay.forEach(([name, defaultValue]) =>
-      setDefaultOptionValue(options, () => defaultValue)(name)
+      setDefaultOptionValue(widgetProps, () => defaultValue)(name)
     );
 
     elements.forEach((name: string) => {
-      if(name in options) {
-        const value = options[name];
-        if(isRenderer(value)) {
-          options[name] = this._patchElementParam(value);
+      if (name in widgetProps) {
+        const value = widgetProps[name];
+        if (isRenderer(value)) {
+          widgetProps[name] = this._patchElementParam(value);
         }
       }
     });
 
-    return options;
+    return widgetProps;
   }
 
   getProps() {
+    const { elementAttr } = this.option();
     const options = this._patchOptionValues({
       ...this.option(),
       ref: this._viewRef,
@@ -212,10 +220,10 @@ export default class ComponentWrapper extends DOMComponent {
     return {
       ...options,
       ...this.elementAttr,
-      ...options.elementAttr,
+      ...elementAttr,
       className: [
         ...(this.elementAttr.class || '').split(' '),
-        ...(options.elementAttr.class || '').split(' '),
+        ...(elementAttr.class || '').split(' '),
       ]
         .filter((c, i, a) => c && a.indexOf(c) === i)
         .join(' ')
@@ -360,7 +368,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   // Public API
   repaint() {
-    this._shouldRefresh = true;
+    this._isNodeReplaced = false;
     this._refresh();
   }
 

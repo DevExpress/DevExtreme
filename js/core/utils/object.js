@@ -56,7 +56,7 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
         prevValue = target[name];
         newValue = changes[name];
 
-        if(name === '__proto__' || target === newValue) {
+        if(name === '__proto__' || name === 'constructor' || target === newValue) {
             continue;
         }
 

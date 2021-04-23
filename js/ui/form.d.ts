@@ -1,9 +1,10 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -11,8 +12,8 @@ import {
 } from '../core/templates/template';
 
 import {
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -47,27 +48,27 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxForm>;
+export type ContentReadyEvent = EventInfo<dxForm>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxForm>;
+export type DisposingEvent = EventInfo<dxForm>;
 
 /** @public */
-export type EditorEnterKeyEvent = ComponentEvent<dxForm> & {
+export type EditorEnterKeyEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
 }
 
 /** @public */
-export type FieldDataChangedEvent = ComponentEvent<dxForm> & {
+export type FieldDataChangedEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
     readonly value?: any;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxForm>;
+export type InitializedEvent = InitializedEventInfo<dxForm>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxForm> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 
 /** @public */
 export type GroupItemTemplateData = {
@@ -160,7 +161,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @type_function_param1_field1 component:dxForm
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -174,7 +175,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @type_function_param1_field4 dataField:string
      * @type_function_param1_field5 value:object
      * @type_function_param1_field1 component:dxForm
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -269,7 +270,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
  * @public
  */
 export default class dxForm extends Widget {
-    constructor(element: TElement, options?: dxFormOptions)
+    constructor(element: UserDefinedElement, options?: dxFormOptions)
     /**
      * @docid
      * @publicName getButton(name)
@@ -347,7 +348,7 @@ export default class dxForm extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): TPromise<void>;
+    updateDimensions(): DxPromise<void>;
     /**
      * @docid
      * @publicName validate()
@@ -563,12 +564,12 @@ export interface dxFormGroupItem {
      * @type_function_param1 data:object
      * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field2 formData:object
-     * @type_function_param2 itemElement:dxElement
+     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: GroupItemTemplateData, itemElement: TElement) => string | TElement);
+    template?: template | ((data: GroupItemTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -704,12 +705,12 @@ export interface dxFormSimpleItem {
      * @type_function_param1_field3 editorOptions:object
      * @type_function_param1_field4 editorType:string
      * @type_function_param1_field5 name:string
-     * @type_function_param2 itemElement:dxElement
+     * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: SimpleItemTemplateData, itemElement: TElement) => string | TElement);
+    template?: template | ((data: SimpleItemTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default undefined
@@ -807,7 +808,7 @@ export interface dxFormTabbedItem {
        * @extends ColCountResponsibleType
        * @inherits ColCountResponsible
        * @default undefined
-      */
+       */
       colCountByScreen?: any,
       /**
        * @docid
@@ -832,19 +833,19 @@ export interface dxFormTabbedItem {
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 tabData:object
        * @type_function_param2 tabIndex:number
-       * @type_function_param3 tabElement:dxElement
+       * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
-      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: TElement) => any),
+      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 tabData:object
        * @type_function_param2 tabIndex:number
-       * @type_function_param3 tabElement:dxElement
+       * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
-      template?: template | ((tabData: any, tabIndex: number, tabElement: TElement) => any),
+      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -868,6 +869,7 @@ export interface dxFormTabbedItem {
     visibleIndex?: number;
 }
 
+/** @public */
 export type Options = dxFormOptions;
 
 /** @deprecated use Options instead */

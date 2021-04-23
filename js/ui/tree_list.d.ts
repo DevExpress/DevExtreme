@@ -1,6 +1,7 @@
 import {
-    TElement,
-    TElementsArray
+    UserDefinedElement,
+    DxElement,
+    UserDefinedElementsArray
 } from '../core/element';
 
 import {
@@ -8,16 +9,16 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource from '../data/data_source';
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -34,8 +35,8 @@ import {
     AdaptiveDetailRowPreparingInfo,
     DataErrorOccurredInfo,
     DataChangeInfo,
-    ComponentDragStartEvent,
-    ComponentRowDraggingEvent,
+    DragStartEventInfo,
+    RowDraggingEventInfo,
     DragDropInfo,
     DragReorderInfo,
     KeyDownInfo,
@@ -68,26 +69,26 @@ interface CellInfo {
     readonly column: Column;
     readonly rowIndex: number;
     readonly rowType: string;
-    readonly cellElement: TElement;
+    readonly cellElement: DxElement;
     readonly row: RowObject;
 }
 
 /** @public */
-export type AdaptiveDetailRowPreparingEvent = ComponentEvent<dxTreeList> & AdaptiveDetailRowPreparingInfo;
+export type AdaptiveDetailRowPreparingEvent = EventInfo<dxTreeList> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent = ComponentNativeEvent<dxTreeList> & CellInfo;
+export type CellClickEvent = NativeEventInfo<dxTreeList> & CellInfo;
 
 /** @public */
-export type CellDblClickEvent = ComponentNativeEvent<dxTreeList> & CellInfo;
+export type CellDblClickEvent = NativeEventInfo<dxTreeList> & CellInfo;
 
 /** @public */
-export type CellHoverChangedEvent = ComponentEvent<dxTreeList> & CellInfo & {
+export type CellHoverChangedEvent = EventInfo<dxTreeList> & CellInfo & {
     readonly eventType: string;
 }
 
 /** @public */
-export type CellPreparedEvent = ComponentEvent<dxTreeList> & CellInfo & {
+export type CellPreparedEvent = EventInfo<dxTreeList> & CellInfo & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
@@ -96,13 +97,13 @@ export type CellPreparedEvent = ComponentEvent<dxTreeList> & CellInfo & {
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTreeList>;
+export type ContentReadyEvent = EventInfo<dxTreeList>;
 
 /** @public */
-export type ContextMenuPreparingEvent = ComponentEvent<dxTreeList> & {
+export type ContextMenuPreparingEvent = EventInfo<dxTreeList> & {
     items?: Array<any>;
     readonly target: string;
-    readonly targetElement: TElement;
+    readonly targetElement: DxElement;
     readonly columnIndex: number;
     readonly column?: Column;
     readonly rowIndex: number;
@@ -110,26 +111,26 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxTreeList> & {
 }
 
 /** @public */
-export type DataErrorOccurredEvent = ComponentEvent<dxTreeList> & DataErrorOccurredInfo;
+export type DataErrorOccurredEvent = EventInfo<dxTreeList> & DataErrorOccurredInfo;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTreeList>;
+export type DisposingEvent = EventInfo<dxTreeList>;
 
 /** @public */
-export type EditCanceledEvent = ComponentEvent<dxTreeList> & DataChangeInfo;
+export type EditCanceledEvent = EventInfo<dxTreeList> & DataChangeInfo;
 
 /** @public */
-export type EditCancelingEvent = Cancelable & ComponentEvent<dxTreeList> & DataChangeInfo;
+export type EditCancelingEvent = Cancelable & EventInfo<dxTreeList> & DataChangeInfo;
 
 /** @public */
-export type EditingStartEvent = Cancelable & ComponentEvent<dxTreeList> & {
+export type EditingStartEvent = Cancelable & EventInfo<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly column: any;
 }
 
 /** @public */
-export type EditorPreparedEvent = ComponentEvent<dxTreeList> & {
+export type EditorPreparedEvent = EventInfo<dxTreeList> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -137,14 +138,14 @@ export type EditorPreparedEvent = ComponentEvent<dxTreeList> & {
     readonly width?: number;
     readonly disabled: boolean;
     readonly rtlEnabled: boolean;
-    readonly editorElement: TElement;
+    readonly editorElement: DxElement;
     readonly readOnly: boolean;
     readonly dataField?: string;
     readonly row?: RowObject;
 }
 
 /** @public */
-export type EditorPreparingEvent = Cancelable & ComponentEvent<dxTreeList> & {
+export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -152,7 +153,7 @@ export type EditorPreparingEvent = Cancelable & ComponentEvent<dxTreeList> & {
     readonly width?: number;
     readonly disabled: boolean;
     readonly rtlEnabled: boolean;
-    readonly editorElement: TElement;
+    readonly editorElement: DxElement;
     readonly readOnly: boolean;
     editorName: string;
     editorOptions: any;
@@ -161,8 +162,8 @@ export type EditorPreparingEvent = Cancelable & ComponentEvent<dxTreeList> & {
 }
 
 /** @public */
-export type FocusedCellChangedEvent = ComponentEvent<dxTreeList> & {
-    readonly cellElement: TElement;
+export type FocusedCellChangedEvent = EventInfo<dxTreeList> & {
+    readonly cellElement: DxElement;
     readonly columnIndex: number;
     readonly rowIndex: number;
     readonly row: RowObject;
@@ -170,8 +171,8 @@ export type FocusedCellChangedEvent = ComponentEvent<dxTreeList> & {
 }
 
 /** @public */
-export type FocusedCellChangingEvent = Cancelable & ComponentNativeEvent<dxTreeList> & {
-    readonly cellElement: TElement;
+export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> & {
+    readonly cellElement: DxElement;
     readonly prevColumnIndex: number;
     readonly prevRowIndex: number;
     newColumnIndex: number;
@@ -182,39 +183,39 @@ export type FocusedCellChangingEvent = Cancelable & ComponentNativeEvent<dxTreeL
 }
 
 /** @public */
-export type FocusedRowChangedEvent = ComponentEvent<dxTreeList> & {
-    readonly rowElement: TElement;
+export type FocusedRowChangedEvent = EventInfo<dxTreeList> & {
+    readonly rowElement: DxElement;
     readonly rowIndex: number;
     readonly row: RowObject;
 }
 
 /** @public */
-export type FocusedRowChangingEvent = ComponentNativeEvent<dxTreeList> & {
-    readonly rowElement: TElement;
+export type FocusedRowChangingEvent = NativeEventInfo<dxTreeList> & {
+    readonly rowElement: DxElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
     readonly rows: Array<RowObject>;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTreeList>;
+export type InitializedEvent = InitializedEventInfo<dxTreeList>;
 
 /** @public */
-export type InitNewRowEvent = ComponentEvent<dxTreeList> & NewRowInfo;
+export type InitNewRowEvent = EventInfo<dxTreeList> & NewRowInfo;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxTreeList> & KeyDownInfo;
+export type KeyDownEvent = NativeEventInfo<dxTreeList> & KeyDownInfo;
 
 /** @public */
-export type NodesInitializedEvent = ComponentEvent<dxTreeList> & {
+export type NodesInitializedEvent = EventInfo<dxTreeList> & {
     readonly root: Node;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTreeList> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTreeList> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent = ComponentNativeEvent<dxTreeList> & {
+export type RowClickEvent = NativeEventInfo<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -224,20 +225,20 @@ export type RowClickEvent = ComponentNativeEvent<dxTreeList> & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
-    readonly rowElement: TElement;
+    readonly rowElement: DxElement;
     readonly handled: boolean;
     readonly node: Node;
     readonly level: number;
 }
 
 /** @public */
-export type RowCollapsedEvent = ComponentEvent<dxTreeList> & RowKeyInfo;
+export type RowCollapsedEvent = EventInfo<dxTreeList> & RowKeyInfo;
 
 /** @public */
-export type RowCollapsingEvent = Cancelable & ComponentEvent<dxTreeList> & RowKeyInfo;
+export type RowCollapsingEvent = Cancelable & EventInfo<dxTreeList> & RowKeyInfo;
 
 /** @public */
-export type RowDblClickEvent = ComponentNativeEvent<dxTreeList> & {
+export type RowDblClickEvent = NativeEventInfo<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -247,23 +248,23 @@ export type RowDblClickEvent = ComponentNativeEvent<dxTreeList> & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
-    readonly rowElement: TElement;
+    readonly rowElement: DxElement;
 }
 
 /** @public */
-export type RowExpandedEvent = ComponentEvent<dxTreeList> & RowKeyInfo;
+export type RowExpandedEvent = EventInfo<dxTreeList> & RowKeyInfo;
 
 /** @public */
-export type RowExpandingEvent = Cancelable & ComponentEvent<dxTreeList> & RowKeyInfo;
+export type RowExpandingEvent = Cancelable & EventInfo<dxTreeList> & RowKeyInfo;
 
 /** @public */
-export type RowInsertedEvent = ComponentEvent<dxTreeList> & RowInsertedInfo;
+export type RowInsertedEvent = EventInfo<dxTreeList> & RowInsertedInfo;
 
 /** @public */
-export type RowInsertingEvent = ComponentEvent<dxTreeList> & RowInsertingInfo;
+export type RowInsertingEvent = EventInfo<dxTreeList> & RowInsertingInfo;
 
 /** @public */
-export type RowPreparedEvent = ComponentEvent<dxTreeList> & {
+export type RowPreparedEvent = EventInfo<dxTreeList> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -273,63 +274,63 @@ export type RowPreparedEvent = ComponentEvent<dxTreeList> & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
-    readonly rowElement: TElement;
+    readonly rowElement: DxElement;
     readonly node: Node;
     readonly level: number;
 }
 
 /** @public */
-export type RowRemovedEvent = ComponentEvent<dxTreeList> & RowRemovedInfo;
+export type RowRemovedEvent = EventInfo<dxTreeList> & RowRemovedInfo;
 
 /** @public */
-export type RowRemovingEvent = ComponentEvent<dxTreeList> & RowRemovingInfo;
+export type RowRemovingEvent = EventInfo<dxTreeList> & RowRemovingInfo;
 
 /** @public */
-export type RowUpdatedEvent = ComponentEvent<dxTreeList> & RowUpdatedInfo;
+export type RowUpdatedEvent = EventInfo<dxTreeList> & RowUpdatedInfo;
 
 /** @public */
-export type RowUpdatingEvent = ComponentEvent<dxTreeList> & RowUpdatingInfo;
+export type RowUpdatingEvent = EventInfo<dxTreeList> & RowUpdatingInfo;
 
 /** @public */
-export type RowValidatingEvent = ComponentEvent<dxTreeList> & RowValidatingInfo;
+export type RowValidatingEvent = EventInfo<dxTreeList> & RowValidatingInfo;
 
 /** @public */
-export type SavedEvent = ComponentEvent<dxTreeList> & DataChangeInfo;
+export type SavedEvent = EventInfo<dxTreeList> & DataChangeInfo;
 
 /** @public */
-export type SavingEvent = ComponentEvent<dxTreeList> & SavingInfo;
+export type SavingEvent = EventInfo<dxTreeList> & SavingInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTreeList> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxTreeList> & SelectionChangedInfo;
 
 /** @public */
-export type ToolbarPreparingEvent = ComponentEvent<dxTreeList> & ToolbarPreparingInfo;
+export type ToolbarPreparingEvent = EventInfo<dxTreeList> & ToolbarPreparingInfo;
 
 
 /** @public */
-export type RowDraggingAddEvent = ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
+export type RowDraggingAddEvent = RowDraggingEventInfo<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type RowDraggingChangeEvent = Cancelable & ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
+export type RowDraggingChangeEvent = Cancelable & RowDraggingEventInfo<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type RowDraggingEndEvent = Cancelable & ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
+export type RowDraggingEndEvent = Cancelable & RowDraggingEventInfo<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type RowDraggingMoveEvent = Cancelable & ComponentRowDraggingEvent<dxTreeList> & DragDropInfo;
+export type RowDraggingMoveEvent = Cancelable & RowDraggingEventInfo<dxTreeList> & DragDropInfo;
 
 /** @public */
-export type RowDraggingStartEvent = Cancelable & ComponentDragStartEvent<dxTreeList>;
+export type RowDraggingStartEvent = Cancelable & DragStartEventInfo<dxTreeList>;
 
 /** @public */
-export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxTreeList>;
+export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxTreeList>;
 
 /** @public */
-export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxTreeList> & DragReorderInfo;
+export type RowDraggingReorderEvent = RowDraggingEventInfo<dxTreeList> & DragReorderInfo;
 
 
-/** @public */ 
-export type ColumnButtonClickEvent = ComponentNativeEvent<dxTreeList> & {
+/** @public */
+export type ColumnButtonClickEvent = NativeEventInfo<dxTreeList> & {
     row?: RowObject;
     column?: Column;
 }
@@ -473,7 +474,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -485,7 +486,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field11 column:object
      * @type_function_param1_field12 rowIndex:number
      * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:TElement
+     * @type_function_param1_field14 cellElement:DxElement
      * @type_function_param1_field15 row:dxTreeListRowObject
      * @default null
      * @action
@@ -497,7 +498,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -509,7 +510,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field11 column:dxTreeListColumn
      * @type_function_param1_field12 rowIndex:number
      * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:TElement
+     * @type_function_param1_field14 cellElement:DxElement
      * @type_function_param1_field15 row:dxTreeListRowObject
      * @default null
      * @action
@@ -521,7 +522,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 eventType:string
      * @type_function_param1_field5 data:object
@@ -533,7 +534,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field11 rowIndex:number
      * @type_function_param1_field12 column:dxTreeListColumn
      * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:TElement
+     * @type_function_param1_field14 cellElement:DxElement
      * @type_function_param1_field15 row:dxTreeListRowObject
      * @default null
      * @action
@@ -545,7 +546,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -560,7 +561,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field14 isSelected:boolean
      * @type_function_param1_field15 isExpanded:boolean
      * @type_function_param1_field16 isNewRow:boolean
-     * @type_function_param1_field17 cellElement:TElement
+     * @type_function_param1_field17 cellElement:DxElement
      * @type_function_param1_field18 watch:function
      * @type_function_param1_field19 oldValue:any
      * @default null
@@ -573,11 +574,11 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:Object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 items:Array<Object>
      * @type_function_param1_field5 target:string
-     * @type_function_param1_field6 targetElement:TElement
+     * @type_function_param1_field6 targetElement:DxElement
      * @type_function_param1_field7 columnIndex:number
      * @type_function_param1_field8 column:dxTreeListColumn
      * @type_function_param1_field9 rowIndex:number
@@ -592,7 +593,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -608,7 +609,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 options:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 parentType:string
      * @type_function_param1_field5 value:any
@@ -617,7 +618,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field8 width:number
      * @type_function_param1_field9 disabled:boolean
      * @type_function_param1_field10 rtlEnabled:boolean
-     * @type_function_param1_field11 editorElement:TElement
+     * @type_function_param1_field11 editorElement:DxElement
      * @type_function_param1_field12 readOnly:boolean
      * @type_function_param1_field13 dataField:string
      * @type_function_param1_field14 row:dxTreeListRowObject
@@ -631,7 +632,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 parentType:string
      * @type_function_param1_field5 value:any
@@ -641,7 +642,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field9 disabled:boolean
      * @type_function_param1_field10 rtlEnabled:boolean
      * @type_function_param1_field11 cancel:boolean
-     * @type_function_param1_field12 editorElement:TElement
+     * @type_function_param1_field12 editorElement:DxElement
      * @type_function_param1_field13 readOnly:boolean
      * @type_function_param1_field14 editorName:string
      * @type_function_param1_field15 editorOptions:object
@@ -657,9 +658,9 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cellElement:TElement
+     * @type_function_param1_field4 cellElement:DxElement
      * @type_function_param1_field5 columnIndex:number
      * @type_function_param1_field6 rowIndex:number
      * @type_function_param1_field7 row:dxTreeListRowObject
@@ -674,9 +675,9 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cellElement:TElement
+     * @type_function_param1_field4 cellElement:DxElement
      * @type_function_param1_field5 prevColumnIndex:number
      * @type_function_param1_field6 prevRowIndex:number
      * @type_function_param1_field7 newColumnIndex:number
@@ -696,9 +697,9 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 rowElement:TElement
+     * @type_function_param1_field4 rowElement:DxElement
      * @type_function_param1_field5 rowIndex:number
      * @type_function_param1_field6 row:dxTreeListRowObject
      * @default null
@@ -711,9 +712,9 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 rowElement:TElement
+     * @type_function_param1_field4 rowElement:DxElement
      * @type_function_param1_field5 prevRowIndex:number
      * @type_function_param1_field6 newRowIndex:number
      * @type_function_param1_field7 event:event
@@ -729,7 +730,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 root:dxTreeListNode
      * @default null
@@ -742,7 +743,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -754,7 +755,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field11 isSelected:boolean
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
-     * @type_function_param1_field14 rowElement:TElement
+     * @type_function_param1_field14 rowElement:DxElement
      * @type_function_param1_field15 handled:boolean
      * @type_function_param1_field16 node:dxTreeListNode
      * @type_function_param1_field17 level:number
@@ -768,7 +769,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -780,7 +781,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field11 isSelected:boolean
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
-     * @type_function_param1_field14 rowElement:TElement
+     * @type_function_param1_field14 rowElement:DxElement
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -791,7 +792,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -802,7 +803,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field10 isSelected:boolean
      * @type_function_param1_field11 isExpanded:boolean
      * @type_function_param1_field12 isNewRow:boolean
-     * @type_function_param1_field13 rowElement:TElement
+     * @type_function_param1_field13 rowElement:DxElement
      * @type_function_param1_field14 node:dxTreeListNode
      * @type_function_param1_field15 level:number
      * @default null
@@ -833,7 +834,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @public
      */
     remoteOperations?: {
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default false
@@ -977,7 +978,7 @@ export interface Selection extends SelectionBase {
  * @public
  */
 export default class dxTreeList extends Widget implements GridBase {
-    constructor(element: TElement, options?: dxTreeListOptions)
+    constructor(element: UserDefinedElement, options?: dxTreeListOptions)
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -993,7 +994,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): TPromise<void>;
+    addRow(): DxPromise<void>;
     /**
      * @docid
      * @publicName addRow(parentId)
@@ -1002,7 +1003,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(parentId: any): TPromise<void>;
+    addRow(parentId: any): DxPromise<void>;
     /**
      * @docid
      * @publicName collapseRow(key)
@@ -1011,7 +1012,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseRow(key: any): TPromise<void>;
+    collapseRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandRow(key)
@@ -1020,7 +1021,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandRow(key: any): TPromise<void>;
+    expandRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName forEachNode(callback)
@@ -1130,7 +1131,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(): TPromise<void>;
+    loadDescendants(): DxPromise<void>;
     /**
      * @docid
      * @publicName loadDescendants(keys)
@@ -1139,7 +1140,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(keys: Array<any>): TPromise<void>;
+    loadDescendants(keys: Array<any>): DxPromise<void>;
     /**
      * @docid
      * @publicName loadDescendants(keys, childrenOnly)
@@ -1149,10 +1150,10 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(keys: Array<any>, childrenOnly: boolean): TPromise<void>;
+    loadDescendants(keys: Array<any>, childrenOnly: boolean): DxPromise<void>;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -1171,8 +1172,8 @@ export default class dxTreeList extends Widget implements GridBase {
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
-    deselectAll(): TPromise<void>;
-    deselectRows(keys: Array<any>): TPromise<any>;
+    deselectAll(): DxPromise<void>;
+    deselectRows(keys: Array<any>): DxPromise<any>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
@@ -1181,14 +1182,14 @@ export default class dxTreeList extends Widget implements GridBase {
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: TElement): void;
-    getCellElement(rowIndex: number, dataField: string): TElement | undefined;
-    getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
+    focus(element: UserDefinedElement): void;
+    getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
+    getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
     getKeyByRowIndex(rowIndex: number): any;
-    getRowElement(rowIndex: number): TElementsArray | undefined;
+    getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
@@ -1201,17 +1202,17 @@ export default class dxTreeList extends Widget implements GridBase {
     navigateToRow(key: any): void;
     pageCount(): number;
     pageIndex(): number;
-    pageIndex(newIndex: number): TPromise<void>;
+    pageIndex(newIndex: number): DxPromise<void>;
     pageSize(): number;
     pageSize(value: number): void;
-    refresh(): TPromise<void>;
-    refresh(changesOnly: boolean): TPromise<void>;
+    refresh(): DxPromise<void>;
+    refresh(changesOnly: boolean): DxPromise<void>;
     repaintRows(rowIndexes: Array<number>): void;
-    saveEditData(): TPromise<void>;
+    saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
-    selectAll(): TPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
+    selectAll(): DxPromise<void>;
+    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;
@@ -1236,7 +1237,7 @@ export interface Column extends ColumnBase {
     buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton>;
     /**
      * @docid dxTreeListColumn.cellTemplate
-     * @type_function_param1 cellElement:TElement
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 data:object
      * @type_function_param2_field2 component:dxTreeList
@@ -1253,7 +1254,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnCellTemplateData) => any);
+    cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.columns
      * @type Array<dxTreeListColumn|string>
@@ -1264,7 +1265,7 @@ export interface Column extends ColumnBase {
     columns?: Array<Column | string>;
     /**
      * @docid dxTreeListColumn.editCellTemplate
-     * @type_function_param1 cellElement:TElement
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 setValue(newValue, newText):any
      * @type_function_param2_field2 data:object
@@ -1281,10 +1282,10 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editCellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnEditCellTemplateData) => any);
+    editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.headerCellTemplate
-     * @type_function_param1 columnHeader:dxElement
+     * @type_function_param1 columnHeader:DxElement
      * @type_function_param2 headerInfo:object
      * @type_function_param2_field1 component:dxTreeList
      * @type_function_param2_field2 columnIndex:number
@@ -1292,7 +1293,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: ColumnHeaderCellTemplateData) => any);
+    headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.type
      * @publicName type
@@ -1323,7 +1324,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @docid dxTreeListColumnButton.onClick
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 row:dxTreeListRowObject
@@ -1334,7 +1335,7 @@ export interface ColumnButton extends ColumnButtonBase {
     onClick?: ((e: ColumnButtonClickEvent) => void);
     /**
      * @docid dxTreeListColumnButton.template
-     * @type_function_param1 cellElement:TElement
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 component:dxTreeList
      * @type_function_param2_field2 data:object
@@ -1348,7 +1349,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplateData) => string | TElement);
+    template?: template | ((cellElement: DxElement, cellInfo: ColumnButtonTemplateData) => string | UserDefinedElement);
     /**
      * @docid dxTreeListColumnButton.visible
      * @default true
@@ -1428,19 +1429,19 @@ export interface RowObject {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isEditing?: boolean;
+    readonly isEditing?: boolean;
     /**
      * @docid dxTreeListRowObject.isExpanded
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isExpanded?: boolean;
+    readonly isExpanded?: boolean;
     /**
      * @docid dxTreeListRowObject.isNewRow
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isNewRow?: boolean;
+    readonly isNewRow?: boolean;
     /**
      * @docid dxTreeListRowObject.isSelected
      * @prevFileNamespace DevExpress.ui
@@ -1483,9 +1484,10 @@ export interface RowObject {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly values: Array<any>;
+    readonly values: Array<any>;
 }
 
+/** @public */
 export type Options = dxTreeListOptions;
 
 export type IOptions = dxTreeListOptions;

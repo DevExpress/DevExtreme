@@ -1,13 +1,17 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import Editor, {
@@ -15,6 +19,81 @@ import Editor, {
 } from './editor/editor';
 
 import UploadInfo from '../file_management/upload_info';
+
+/** @public */
+export type BeforeSendEvent = EventInfo<dxFileUploader> & {
+    readonly request: XMLHttpRequest;
+    readonly file: File;
+    readonly uploadInfo?: UploadInfo;
+}
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxFileUploader>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxFileUploader>;
+
+/** @public */
+export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader> & {
+    readonly dropZoneElement: DxElement;
+}
+
+/** @public */
+export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader> & {
+    readonly dropZoneElement: DxElement;
+}
+
+/** @public */
+export type FilesUploadedEvent = EventInfo<dxFileUploader>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxFileUploader>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxFileUploader> & ChangedOptionInfo;
+
+/** @public */
+export type ProgressEvent = NativeEventInfo<dxFileUploader> & {
+    readonly file: File;
+    readonly segmentSize: number;
+    readonly bytesLoaded: number;
+    readonly bytesTotal: number;
+    readonly request: XMLHttpRequest;
+}
+
+/** @public */
+export type UploadAbortedEvent = NativeEventInfo<dxFileUploader> & {
+    readonly file: File;
+    readonly request: XMLHttpRequest;
+    message: string
+}
+
+/** @public */
+export type UploadedEvent = NativeEventInfo<dxFileUploader> & {
+    readonly file: File;
+    readonly request: XMLHttpRequest;
+    message: string;
+}
+
+/** @public */
+export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
+    readonly file: File;
+    readonly request: XMLHttpRequest;
+    readonly error: any;
+    message: string;
+}
+
+/** @public */
+export type UploadStartedEvent = NativeEventInfo<dxFileUploader> & {
+    readonly file: File;
+    readonly request: XMLHttpRequest 
+}
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
+    readonly value?: Array<File>;
+    readonly previousValue?: Array<File>;
+}
 
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
@@ -25,7 +104,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    abortUpload?: ((file: File, uploadInfo?: UploadInfo) => TPromise<any> | any);
+    abortUpload?: ((file: File, uploadInfo?: UploadInfo) => DxPromise<any> | any);
     /**
      * @docid
      * @default ""
@@ -129,6 +208,9 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 request: XMLHttpRequest
      * @type_function_param1_field5 file:File
      * @type_function_param1_field6 uploadInfo:UploadInfo
@@ -136,42 +218,54 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onBeforeSend?: ((e: { component?: dxFileUploader, element?: TElement, model?: any, request?: XMLHttpRequest, file?: File, uploadInfo?: UploadInfo }) => void);
+    onBeforeSend?: ((e: BeforeSendEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 dropZoneElement:dxElement
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 dropZoneElement:DxElement
      * @type_function_param1_field5 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDropZoneEnter?: ((e: { component?: dxFileUploader, element?: TElement, model?: any, dropZoneElement?: TElement, event?: TEvent }) => void);
+    onDropZoneEnter?: ((e: DropZoneEnterEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 dropZoneElement:dxElement
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 dropZoneElement:DxElement
      * @type_function_param1_field5 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDropZoneLeave?: ((e: { component?: dxFileUploader, element?: TElement, model?: any, dropZoneElement?: TElement, event?: TEvent }) => void);
+    onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFilesUploaded?: ((e: { component?: dxFileUploader, element?: TElement, model?: any }) => void);
+    onFilesUploaded?: ((e: FilesUploadedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 segmentSize:Number
      * @type_function_param1_field6 bytesLoaded:Number
@@ -182,11 +276,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onProgress?: ((e: { component?: dxFileUploader, element?: TElement, model?: any, file?: File, segmentSize?: number, bytesLoaded?: number, bytesTotal?: number, event?: TEvent, request?: XMLHttpRequest }) => void);
+    onProgress?: ((e: ProgressEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @type_function_param1_field6 request:XMLHttpRequest
@@ -195,11 +292,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploadAborted?: ((e: { component?: dxFileUploader, element?: TElement, model?: any, file?: File, event?: TEvent, request?: XMLHttpRequest, message?: string }) => void);
+    onUploadAborted?: ((e: UploadAbortedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @type_function_param1_field6 request:XMLHttpRequest
@@ -209,11 +309,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploadError?: ((e: { component?: dxFileUploader, element?: TElement, model?: any, file?: File, event?: TEvent, request?: XMLHttpRequest, error?: any, message?: string }) => void);
+    onUploadError?: ((e: UploadErrorEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @type_function_param1_field6 request:XMLHttpRequest
@@ -221,11 +324,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploadStarted?: ((e: { component?: dxFileUploader, element?: TElement, model?: any, file?: File, event?: TEvent, request?: XMLHttpRequest }) => void);
+    onUploadStarted?: ((e: UploadStartedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @type_function_param1_field6 request:XMLHttpRequest
@@ -234,11 +340,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploaded?: ((e: { component?: dxFileUploader, element?: TElement, model?: any, file?: File, event?: TEvent, request?: XMLHttpRequest, message?: string }) => void);
+    onUploaded?: ((e: UploadedEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFileUploader
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:Array<File>
      * @type_function_param1_field5 previousValue:Array<File>
      * @type_function_param1_field6 event:event
@@ -246,7 +355,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxFileUploader, element?: TElement, model?: any, value?: Array<File>, previousValue?: Array<File>, event?: TEvent }) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @default 0
@@ -281,14 +390,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dialogTrigger?: string | TElement;
+    dialogTrigger?: string | UserDefinedElement;
     /**
      * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropZone?: string | TElement;
+    dropZone?: string | UserDefinedElement;
     /**
      * @docid
      * @default "Upload"
@@ -304,7 +413,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    uploadChunk?: ((file: File, uploadInfo: UploadInfo) => TPromise<any> | any);
+    uploadChunk?: ((file: File, uploadInfo: UploadInfo) => DxPromise<any> | any);
     /**
      * @docid
      * @default "Upload failed"
@@ -327,7 +436,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    uploadFile?: ((file: File, progressCallback: Function) => TPromise<any> | any);
+    uploadFile?: ((file: File, progressCallback: Function) => DxPromise<any> | any);
     /**
      * @docid
      * @default {}
@@ -389,7 +498,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
  * @public
  */
 export default class dxFileUploader extends Editor {
-    constructor(element: TElement, options?: dxFileUploaderOptions)
+    constructor(element: UserDefinedElement, options?: dxFileUploaderOptions)
     /**
      * @docid
      * @publicName upload()
@@ -454,6 +563,7 @@ export default class dxFileUploader extends Editor {
     removeFile(file: File): void;
 }
 
+/** @public */
 export type Options = dxFileUploaderOptions;
 
 /** @deprecated use Options instead */

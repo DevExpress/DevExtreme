@@ -1,9 +1,9 @@
-import { TElement } from "../element";
+import { DxElement } from "../element";
 
 export class FunctionTemplate {
   render(template: {
     container: unknown,
     model?: object,
     transclude?: boolean
-  }): TElement;
+  }): DxElement;
 }

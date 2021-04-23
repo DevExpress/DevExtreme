@@ -3,16 +3,17 @@ import {
 } from '../animation/fx';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    ComponentEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -21,22 +22,22 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxDeferRendering>;
+export type ContentReadyEvent = EventInfo<dxDeferRendering>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDeferRendering>;
+export type DisposingEvent = EventInfo<dxDeferRendering>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDeferRendering>;
+export type InitializedEvent = InitializedEventInfo<dxDeferRendering>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDeferRendering> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDeferRendering> & ChangedOptionInfo;
 
 /** @public */
-export type RenderedEvent = ComponentEvent<dxDeferRendering>;
+export type RenderedEvent = EventInfo<dxDeferRendering>;
 
 /** @public */
-export type ShownEvent = ComponentEvent<dxDeferRendering>;
+export type ShownEvent = EventInfo<dxDeferRendering>;
 
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
@@ -53,7 +54,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => void);
+    onRendered?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
     /**
      * @docid
      * @default null
@@ -61,15 +62,15 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => void);
+    onShown?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
     /**
      * @docid
-     * @type TPromise|bool
+     * @type DxPromise|bool
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    renderWhen?: TPromise<void> | boolean;
+    renderWhen?: DxPromise<void> | boolean;
     /**
      * @docid
      * @default false
@@ -94,9 +95,10 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
  * @public
  */
 export default class dxDeferRendering extends Widget {
-    constructor(element: TElement, options?: dxDeferRenderingOptions)
+    constructor(element: UserDefinedElement, options?: dxDeferRenderingOptions)
 }
 
+/** @public */
 export type Options = dxDeferRenderingOptions;
 
 /** @deprecated use Options instead */

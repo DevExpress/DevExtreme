@@ -47,7 +47,7 @@ const Drawer = Widget.inherit({
 
             /**
             * @name dxDrawerOptions.contentTemplate
-            * @type_function_param1 contentElement:dxElement
+            * @type_function_param1 contentElement:DxElement
             * @type template|function
             * @hidden
             * @default "content"
@@ -94,7 +94,6 @@ const Drawer = Widget.inherit({
 
         this.$element().addClass(DRAWER_CLASS);
 
-        this._animations = [];
         this._whenAnimationCompleted = undefined;
         this._whenPanelContentRendered = undefined;
         this._whenPanelContentRefreshed = undefined;
@@ -400,8 +399,6 @@ const Drawer = Widget.inherit({
     _renderPosition(isDrawerOpened, disableAnimation, jumpToEnd) {
         this.stopAnimations(jumpToEnd);
 
-        this._animations = [];
-
         if(!hasWindow()) {
             return;
         }
@@ -421,7 +418,7 @@ const Drawer = Widget.inherit({
             this._toggleShaderVisibility(isDrawerOpened);
         }
 
-        this._strategy.renderPosition(isDrawerOpened, animationEnabled, this.option('animationDuration'));
+        this._strategy.renderPosition(animationEnabled, this.option('animationDuration'));
     },
 
     _animationCompleteHandler() {
@@ -429,7 +426,6 @@ const Drawer = Widget.inherit({
 
         if(this._whenAnimationCompleted) {
             this._whenAnimationCompleted.resolve();
-            this._animations = [];
         }
     },
 
@@ -568,7 +564,7 @@ const Drawer = Widget.inherit({
     /**
     * @name dxDrawer.viewContent
     * @publicName viewContent()
-    * @return dxElement
+    * @return DxElement
     * @hidden
     */
     viewContent() {

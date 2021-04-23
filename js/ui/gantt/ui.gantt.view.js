@@ -37,6 +37,8 @@ export class GanttView extends Widget {
             viewType: this._getViewTypeByScaleType(this.option('scaleType')),
             cultureInfo: this._getCultureInfo(),
             taskTooltipContentTemplate: this.option('taskTooltipContentTemplate'),
+            taskProgressTooltipContentTemplate: this.option('taskProgressTooltipContentTemplate'),
+            taskTimeTooltipContentTemplate: this.option('taskTimeTooltipContentTemplate'),
             taskContentTemplate: this.option('taskContentTemplate')
         });
         this._selectTask(this.option('selectedRowKey'));
@@ -52,7 +54,7 @@ export class GanttView extends Widget {
         return this._ganttViewCore.barManager;
     }
     executeCoreCommand(id) {
-        const command = this._ganttViewCore.commandManager.getCommand(id);
+        const command = this._ganttViewCore.getCommandByKey(id);
         if(command) {
             command.execute();
         }
@@ -194,6 +196,12 @@ export class GanttView extends Widget {
                 break;
             case 'taskTooltipContentTemplate':
                 this._ganttViewCore.setTaskTooltipContentTemplate(args.value);
+                break;
+            case 'taskProgressTooltipContentTemplate':
+                this._ganttViewCore.setTaskProgressTooltipContentTemplate(args.value);
+                break;
+            case 'taskTimeTooltipContentTemplate':
+                this._ganttViewCore.setTaskTimeTooltipContentTemplate(args.value);
                 break;
             case 'taskContentTemplate':
                 this._ganttViewCore.setTaskContentTemplate(args.value);

@@ -18,7 +18,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1, name: 'test' }],
             columns: ['id', 'name'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             sorting: {
                 mode: 'single'
             }
@@ -91,7 +91,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.skip('Change column sortOrder via option method with canceling in onOptionChanged handler', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             columns: [{ dataField: 'column1', sortOrder: 'asc' }],
             onOptionChanged: function(args) {
@@ -113,7 +113,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.skip('Change column sortOrder via columnOption method with canceling in onOptionChanged handler', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             columns: [{ dataField: 'column1', sortOrder: 'asc' }],
             onOptionChanged: function(args) {
@@ -227,7 +227,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('no action cursor for column header when sorting and dragging not allowed', function(assert) {
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2' }],
             dataSource: []
         });

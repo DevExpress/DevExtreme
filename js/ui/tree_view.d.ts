@@ -1,9 +1,10 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -11,9 +12,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -30,80 +31,80 @@ import {
 } from './widget/ui.search_box_mixin';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTreeView>;
+export type ContentReadyEvent = EventInfo<dxTreeView>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTreeView>;
+export type DisposingEvent = EventInfo<dxTreeView>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTreeView>;
+export type InitializedEvent = InitializedEventInfo<dxTreeView>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
 }
 
 /** @public */
-export type ItemCollapsedEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
 }
 
 /** @public */
-export type ItemExpandedEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxTreeView> & {
+export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly itemIndex?: number;
     readonly node?: dxTreeViewNode;
 }
 
 /** @public */
-export type ItemSelectionChangedEvent = ComponentEvent<dxTreeView> & {
+export type ItemSelectionChangedEvent = EventInfo<dxTreeView> & {
     readonly node?: dxTreeViewNode;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
     readonly itemData?: any;
     readonly itemIndex?: number;
 }
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTreeView> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTreeView> & ChangedOptionInfo;
 
 /** @public */
-export type SelectAllValueChangedEvent = ComponentEvent<dxTreeView> & {
-    readonly value?: boolean;
+export type SelectAllValueChangedEvent = EventInfo<dxTreeView> & {
+    readonly value?: boolean | undefined;
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTreeView>;
+export type SelectionChangedEvent = EventInfo<dxTreeView>;
 
 export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
     /**
@@ -120,7 +121,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    createChildren?: ((parentNode: dxTreeViewNode) => TPromise<any> | Array<any>);
+    createChildren?: ((parentNode: dxTreeViewNode) => DxPromise<any> | Array<any>);
     /**
      * @docid
      * @default null
@@ -184,12 +185,12 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -201,12 +202,12 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:Number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -218,12 +219,12 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number | object
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -235,12 +236,12 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:Number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -252,12 +253,12 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -269,11 +270,11 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -285,10 +286,12 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeViewNode
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field1 component:dxTreeView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field6 itemData:object
+     * @type_function_param1_field7 itemIndex:number
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -298,9 +301,9 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:boolean
+     * @type_function_param1_field4 value:boolean | undefined
      * @type_function_param1_field1 component:dxTreeView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -312,7 +315,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeView
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -397,7 +400,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
  * @public
  */
 export default class dxTreeView extends HierarchicalCollectionWidget {
-    constructor(element: TElement, options?: dxTreeViewOptions)
+    constructor(element: UserDefinedElement, options?: dxTreeViewOptions)
     /**
      * @docid
      * @publicName collapseAll()
@@ -413,7 +416,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemData: any): TPromise<void>;
+    collapseItem(itemData: any): DxPromise<void>;
     /**
      * @docid
      * @publicName collapseItem(itemElement)
@@ -422,7 +425,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemElement: Element): TPromise<void>;
+    collapseItem(itemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName collapseItem(key)
@@ -431,7 +434,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(key: any): TPromise<void>;
+    collapseItem(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandAll()
@@ -447,7 +450,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemData: any): TPromise<void>;
+    expandItem(itemData: any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandItem(itemElement)
@@ -456,7 +459,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemElement: Element): TPromise<void>;
+    expandItem(itemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName expandItem(key)
@@ -465,7 +468,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(key: any): TPromise<void>;
+    expandItem(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName getNodes()
@@ -565,7 +568,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): TPromise<void>;
+    updateDimensions(): DxPromise<void>;
     /**
      * @docid
      * @publicName scrollToItem(itemData)
@@ -574,7 +577,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(itemData: any): TPromise<void>;
+    scrollToItem(itemData: any): DxPromise<void>;
     /**
      * @docid
      * @publicName scrollToItem(itemElement)
@@ -583,7 +586,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(itemElement: Element): TPromise<void>;
+    scrollToItem(itemElement: Element): DxPromise<void>;
     /**
      * @docid
      * @publicName scrollToItem(key)
@@ -592,13 +595,13 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(key: any): TPromise<void>;
+    scrollToItem(key: any): DxPromise<void>;
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
  */
 export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
@@ -698,6 +701,7 @@ export interface dxTreeViewNode {
     text?: string;
 }
 
+/** @public */
 export type Options = dxTreeViewOptions;
 
 /** @deprecated use Options instead */

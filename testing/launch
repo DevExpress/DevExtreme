@@ -11,46 +11,13 @@ if(parseInt(versions.node.split('.')[0]) < 6) {
     throw 'Node version is too low';
 }
 
-watchForTests();
-
-function watchForTests ()  {
-    let isRunnerStarted = false;
-    let componentsGenerationCompleted = false;
-    let transpileCompleted = false;
-    let stylesCompilationCompleted = false;
-
-    const processes = spawn('npx', [
-            'gulp',
-            'generate-components-watch',
-            'transpile-watch',
-            'style-compiler-themes-dev'
-        ], {
-            //stdio: 'inherit',
-            shell: true,
-            cwd: join(__dirname, '../'),
-            env
-        }
-    )
-    processes.stdout.on('data', (data) => {
-        componentsGenerationCompleted = componentsGenerationCompleted || data.indexOf('generate-components task is watching for changes') !== -1;
-        transpileCompleted = transpileCompleted || data.indexOf('transpile task is watching for changes') !== -1;
-        stylesCompilationCompleted = stylesCompilationCompleted || data.indexOf('style-compiler-themes task is watching for changes') !== -1;
-
-        process.stdout.write(data);
-
-        if (!isRunnerStarted && componentsGenerationCompleted && transpileCompleted && stylesCompilationCompleted) {
-            isRunnerStarted = true;
-            execRunner();
-        }
-    })
-    processes.stderr.on('data', (data) => process.stdout.write(data));
-}
+execRunner();
 
 function execRunner () {
     spawn(
         'dotnet',
         [ join(__dirname, 'runner/bin/runner.dll') ],
-        { stdio: 'inherit' }
+        { stdio: 'inherit', shell: true }
     );
 
     waitForRunner();

@@ -16,11 +16,7 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() hoverStateEnabled?: boolean;
 
-  @OneWay() expandable = true;
-
   @OneWay() direction: ScrollableDirection = 'vertical';
-
-  @OneWay() scaleRatio = 1;
 
   @OneWay() containerSize = 0;
 
@@ -43,6 +39,8 @@ export class ScrollbarProps extends ScrollableInternalProps {
   @OneWay() bounceEnabled = true;
 
   @OneWay() forceVisibility = false;
+
+  @OneWay() scrollLocation = 0;
 
   @TwoWay() pocketState = TopPocketState.STATE_RELEASED;
 

@@ -205,7 +205,6 @@ QUnit.module('Sync with FilterValue', {
 
         // act
         this.option('filterValue', null);
-        this.dataController.optionChanged({ name: 'filterValue' });
 
         // assert
         assert.deepEqual(this.option('filterValue'), null);
@@ -940,7 +939,7 @@ QUnit.module('Real dataGrid', {
             this.dataGrid = $('#container').dxDataGrid($.extend({
                 dataSource: [{}],
                 filterSyncEnabled: true,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 filterRow: {
                     visible: true
                 },
@@ -1453,7 +1452,7 @@ QUnit.module('Custom operations', {
         this.getAnyOfOperation = function(field, dataSource) {
             const dataGrid = $('#container').dxDataGrid({
                 dataSource: dataSource || [{}],
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 columns: [field]
             }).dxDataGrid('instance');
             return customOperations.anyOf(dataGrid);

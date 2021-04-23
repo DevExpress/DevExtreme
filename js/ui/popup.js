@@ -92,8 +92,6 @@ const getButtonPlace = name => {
                 location = 'after';
                 break;
         }
-    } else if(platform === 'android') {
-        location = 'center';
     }
 
     return {

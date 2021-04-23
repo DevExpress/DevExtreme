@@ -7,7 +7,8 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -16,9 +17,9 @@ import {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -32,44 +33,44 @@ import {
 } from './resizable';
 
 export interface TitleRenderedInfo {
-    readonly titleElement: TElement
+    readonly titleElement: DxElement
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxPopup>;
+export type ContentReadyEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxPopup>;
+export type DisposingEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type HidingEvent = ComponentEvent<dxPopup> & Cancelable;
+export type HidingEvent = Cancelable & EventInfo<dxPopup>;
 
 /** @public */
-export type HiddenEvent = ComponentEvent<dxPopup>;
+export type HiddenEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxPopup>;
+export type InitializedEvent = InitializedEventInfo<dxPopup>;
 
 /** @public */
-export type ShownEvent = ComponentEvent<dxPopup>;
+export type ShownEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type ResizeEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
+export type ResizeEvent = NativeEventInfo<dxPopup> & ResizeInfo;
 
 /** @public */
-export type ResizeStartEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
+export type ResizeStartEvent = NativeEventInfo<dxPopup> & ResizeInfo;
 
 /** @public */
-export type ResizeEndEvent = ComponentNativeEvent<dxPopup> & ResizeInfo;
+export type ResizeEndEvent = NativeEventInfo<dxPopup> & ResizeInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxPopup> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = ComponentEvent<dxPopup>;
+export type ShowingEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type TitleRenderedEvent = ComponentEvent<dxPopup> & TitleRenderedInfo;
+export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
@@ -86,7 +87,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | TElement;
+    container?: string | UserDefinedElement;
     /**
      * @docid
      * @default false
@@ -122,7 +123,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -134,7 +135,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -146,7 +147,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -157,9 +158,9 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 titleElement:dxElement
+     * @type_function_param1_field4 titleElement:DxElement
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -205,12 +206,12 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:dxElement
+     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    titleTemplate?: template | ((titleElement: TElement) => string | TElement);
+    titleTemplate?: template | ((titleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type Array<Object>
@@ -316,9 +317,10 @@ export interface dxPopupToolbarItem {
  * @public
  */
 export default class dxPopup extends dxOverlay {
-    constructor(element: TElement, options?: dxPopupOptions)
+    constructor(element: UserDefinedElement, options?: dxPopupOptions)
 }
 
+/** @public */
 export type Options = dxPopupOptions;
 
 /** @deprecated use Options instead */
