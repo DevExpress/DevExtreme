@@ -24,9 +24,9 @@ import {
 describe('Scrollbar', () => {
   it('render scrollbar with defaults', () => {
     const props = new ScrollbarProps();
-    const scrollable = mount<Scrollbar>(<Scrollbar {...props} />);
+    const viewModel = mount<Scrollbar>(<Scrollbar {...props} />);
 
-    expect(scrollable.props()).toEqual({
+    expect(viewModel.props()).toEqual({
       activeStateEnabled: false,
       baseContainerSize: 0,
       baseContentSize: 0,
