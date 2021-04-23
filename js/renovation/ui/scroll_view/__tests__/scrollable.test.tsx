@@ -114,7 +114,7 @@ describe('Scrollable', () => {
         it('aria property', () => {
           const scrollable = mount(viewFunction({ props: { useNative, aria: { role: 'form' } } } as any) as JSX.Element);
 
-          expect(scrollable.find('.dx-scrollable').getDOMNode().attributes.getNamedItem('role')).toEqual('form');
+          expect(scrollable.find('.dx-scrollable').prop('role')).toEqual('form');
         });
       });
     });
