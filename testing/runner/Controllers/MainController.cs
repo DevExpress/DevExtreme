@@ -79,8 +79,8 @@ namespace Runner.Controllers
                 includeSet = new HashSet<string>(include.Split(','));
             if (!String.IsNullOrEmpty(exclude))
                 excludeSet = new HashSet<string>(exclude.Split(','));
-            if (!String.IsNullOrEmpty(constellation) && constellation.Contains('(')) {
-                var constellationParts = constellation.Split('(');
+            if (!String.IsNullOrEmpty(constellation) && constellation.Contains('(') && constellation.EndsWith(')')) {
+                var constellationParts = constellation.TrimEnd(')').Split('(');
                 var parts = constellationParts[1].Split('/');
 
                 constellation = constellationParts[0];

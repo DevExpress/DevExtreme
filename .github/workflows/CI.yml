@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         BROWSER: [ IE ]
-        CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler(1/2, ui.scheduler(2/2, viz, renovation ]
+        CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz, renovation ]
         JQUERY: [ nojquery=true ]
 
     runs-on: windows-latest
