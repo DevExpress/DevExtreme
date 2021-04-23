@@ -32,18 +32,28 @@ export default class ComponentWrapper extends DOMComponent {
   };
   _isNodeReplaced!: boolean;
   _props: any;
-  _propsInfo!: {
-    allowNull: string[],
-    twoWay: any[],
-    elements: string[],
-    templates: string[]
-  };
   _storedClasses?: string;
   _supportedKeys!: () => {
     [name: string]: Function,
   };
   _viewRef!: RefObject<unknown>;
   _viewComponent!: any;
+
+  get _propsInfo(): {
+    allowNull: string[];
+    twoWay: any[];
+    elements: string[];
+    templates: string[];
+    props: string[];
+  } {
+    return {
+      allowNull: [],
+      twoWay: [],
+      elements: [],
+      templates: [],
+      props: [],
+    };
+  }
 
   get viewRef() {
     return this._viewRef?.current;
@@ -160,38 +170,49 @@ export default class ComponentWrapper extends DOMComponent {
     return this._elementAttr;
   }
 
-  _patchOptionValues(options) {
-    const { allowNull, twoWay, elements } = this._propsInfo;
+  _patchOptionValues(options: Record<string, unknown>) {
+    const { allowNull, twoWay, elements, props } = this._propsInfo;
     const defaultProps = this._viewComponent.defaultProps;
 
+    const widgetProps = props.reduce((acc, propName) => {
+      if (options.hasOwnProperty(propName)) {
+        acc[propName] = options[propName];
+      }
+      return acc;
+    }, {
+      ref: options.ref,
+      children: options.children,
+    });
+
     allowNull.forEach(
-      setDefaultOptionValue(options, () => null)
+      setDefaultOptionValue(widgetProps, () => null)
     );
 
     Object.keys(defaultProps).forEach(
       setDefaultOptionValue(
-        options,
+        widgetProps,
         (name: string) => defaultProps[name]
       )
     );
 
     twoWay.forEach(([name, defaultValue]) =>
-      setDefaultOptionValue(options, () => defaultValue)(name)
+      setDefaultOptionValue(widgetProps, () => defaultValue)(name)
     );
 
     elements.forEach((name: string) => {
-      if (name in options) {
-        const value = options[name];
+      if (name in widgetProps) {
+        const value = widgetProps[name];
         if (isRenderer(value)) {
-          options[name] = this._patchElementParam(value);
+          widgetProps[name] = this._patchElementParam(value);
         }
       }
     });
 
-    return options;
+    return widgetProps;
   }
 
   getProps() {
+    const { elementAttr } = this.option();
     const options = this._patchOptionValues({
       ...this._props,
       ref: this._viewRef,
@@ -201,10 +222,10 @@ export default class ComponentWrapper extends DOMComponent {
     return {
       ...options,
       ...this.elementAttr,
-      ...options.elementAttr,
+      ...elementAttr,
       className: [
         ...(this.elementAttr.class || '').split(' '),
-        ...(options.elementAttr.class || '').split(' '),
+        ...(elementAttr.class || '').split(' '),
       ]
         .filter((c, i, a) => c && a.indexOf(c) === i)
         .join(' ')

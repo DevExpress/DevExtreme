@@ -30,7 +30,7 @@ describe('Public methods', () => {
     { name: 'scrollOffset', argsCount: 0 },
     { name: 'scrollWidth', argsCount: 0 },
     { name: 'scrollHeight', argsCount: 0 },
-    { name: 'scrollToElement', argsCount: 2 },
+    { name: 'scrollToElement', argsCount: 1 },
     { name: 'scrollTo', argsCount: 1 },
     { name: 'scrollBy', argsCount: 1 },
     { name: 'content', argsCount: 0 },

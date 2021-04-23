@@ -36,7 +36,6 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
   const {
     scrollbarRef, start, cancel,
     props: { onBounce, inertiaEnabled, ...scrollbarProps },
-    restAttributes,
   } = viewModel;
 
   return (
@@ -46,8 +45,6 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       onAnimatorCancel={cancel}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...scrollbarProps}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
     />
   );
 };
@@ -58,7 +55,7 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 }
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'contentPositionChange' | 'contentTranslateOffsetChange'>;
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 
 @Component({
   defaultOptionRules: null,
@@ -136,14 +133,14 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   setupBounce(): void {
-    const bounceDistance = this.boundLocation() - this.getScrollLocation();
+    const bounceDistance = this.boundLocation() - this.props.scrollLocation;
 
     this.velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
   }
 
   complete(): void {
     if (this.isBounceAnimator) {
-      this.moveScrollbar(this.boundLocation());
+      this.moveTo(this.boundLocation());
     }
 
     this.scrollComplete();
@@ -188,7 +185,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   /* istanbul ignore next */
   crossBoundOnNextStep(): boolean {
-    const location = this.getScrollLocation();
+    const location = this.props.scrollLocation;
     const nextLocation = location + this.velocity;
 
     const minOffset = this.getMinOffset();
@@ -216,8 +213,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.scrollStep(delta);
   }
 
-  moveScrollbar(location?: number): void {
-    this.scrollbar.moveScrollbar(location);
+  moveTo(location: number): void {
+    this.scrollbar.moveTo(location);
   }
 
   stopComplete(): void {
@@ -231,11 +228,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   @Method()
   boundLocation(value?: number): number {
     return this.scrollbar.boundLocation(value);
-  }
-
-  @Method()
-  getScrollLocation(): number {
-    return this.scrollbar.getScrollLocation();
   }
 
   @Method()

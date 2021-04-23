@@ -478,6 +478,42 @@ describe('option', () => {
 
     expect(widget.option('contentTemplate')).toBe(null);
   });
+
+  it('should not pass excessive options to props', () => {
+    const mockFunction = () => {};
+    const options = {
+      text: 'some text',
+      twoWayProp: 15,
+      twoWayPropChange: mockFunction,
+      excessiveOption: { isExcessive: true },
+    };
+    const { excessiveOption, ...props } = options;
+
+    $('#component').dxOptionsCheckWidget(options);
+
+    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject(props);
+    expect($('#component').dxOptionsCheckWidget('option')).toMatchObject(options);
+  });
+
+  it('should still pass elementAttr to props', () => {
+    const mockFunction = () => {};
+    const elementStyle = { backgroundColor: 'red' };
+    const options = {
+      text: 'some text',
+      twoWayProp: 15,
+      twoWayPropChange: mockFunction,
+      elementAttr: { style: elementStyle },
+    };
+    const { elementAttr, ...props } = options;
+
+    $('#component').dxOptionsCheckWidget(options);
+
+    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject({
+      ...props,
+      style: elementStyle,
+    });
+    expect($('#component').dxOptionsCheckWidget('option')).toMatchObject(options);
+  });
 });
 
 describe('templates and slots', () => {
