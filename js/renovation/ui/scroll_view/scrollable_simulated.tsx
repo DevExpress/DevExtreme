@@ -92,7 +92,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation,
     props: {
-      disabled, height, width, rtlEnabled, children, visible,
+      aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
@@ -107,6 +107,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       rootElementRef={scrollableRef}
       focusStateEnabled={useKeyboard}
       hoverStateEnabled
+      aria={aria}
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
