@@ -304,9 +304,8 @@ const Overlay = Widget.inherit({
 
     _setDeprecatedOptions() {
         this.callBase();
-
         extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', message: 'Functionality associated with this option is not intended for the Overlay widget.' }
+            'elementAttr': { since: '21.1', alias: 'overlayOptions.wrapperAttr' },
         });
     },
 

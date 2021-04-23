@@ -486,8 +486,8 @@ testModule('option', moduleConfig, () => {
                 'W0001',
                 'dxOverlay',
                 'elementAttr',
-                '21.2',
-                'Functionality associated with this option is not intended for the Overlay widget.'
+                '21.1',
+                'Use the \'overlayOptions.wrapperAttr\' option instead'
             ], 'args of the log method');
         } finally {
             errors.log.restore();
