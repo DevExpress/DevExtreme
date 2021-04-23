@@ -172,12 +172,13 @@ export default class ComponentWrapper extends DOMComponent {
     const { allowNull, twoWay, elements, props } = this._propsInfo;
     const defaultProps = this._viewComponent.defaultProps;
 
-    const widgetProps = Object.keys(options).reduce((acc, optionName) => {
-      if (optionName === 'ref' || optionName === 'children' || props.indexOf(optionName) > -1) {
-        acc[optionName] = options[optionName];
-      }
+    const widgetProps = props.reduce((acc, propName) => {
+      acc[propName] = options[propName];
       return acc;
-    }, {});
+    }, {
+      ref: options.ref,
+      children: options.children,
+    });
 
     allowNull.forEach(
       setDefaultOptionValue(widgetProps, () => null)
