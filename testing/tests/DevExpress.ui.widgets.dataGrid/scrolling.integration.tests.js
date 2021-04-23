@@ -169,7 +169,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
     QUnit.test('rowsview should be syncronized while headersView scrolling (T844512)', function(assert) {
         const dataGrid = createDataGrid({
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 useNative: false
             },
@@ -195,7 +195,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
     QUnit.test('headersView should be syncronized while rowsview scrolling (T844512)', function(assert) {
         const dataGrid = createDataGrid({
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 useNative: false
             },
@@ -225,7 +225,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             width: 300.8,
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             scrolling: {
                 useNative: true
@@ -243,7 +243,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             height: 200,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 useNative: false,
                 showScrollbar: 'always'
@@ -265,7 +265,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: 1100,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{
                 OrderNumber: 35703,
                 Employee: 'Harv Mudd'
@@ -354,7 +354,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             height: 100,
             dataSource: array,
             keyExpr: 'id',
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
 
@@ -373,7 +373,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 useNative: true
             },
@@ -410,7 +410,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 'Fax': '(800) 555-2171'
             }],
             columnAutoWidth: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             height: 300,
             width: 1000,
             scrolling: {
@@ -514,7 +514,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const $footerView = $dataGrid.find('.dx-datagrid-total-footer .dx-datagrid-scroll-container').first();
 
         // assert
-        assert.equal(dataGrid._views.rowsView.getScrollable().scrollLeft(), 400, 'scroll left of rows view');
+        assert.equal(dataGrid.getView('rowsView').getScrollable().scrollLeft(), 400, 'scroll left of rows view');
         assert.equal($footerView.scrollLeft(), 400, 'scroll left of footer view');
     });
 
@@ -558,7 +558,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const $headersView = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();
 
         // assert
-        assert.equal(dataGrid._views.rowsView.getScrollable().scrollLeft(), 300, 'scroll left of rows view');
+        assert.equal(dataGrid.getView('rowsView').getScrollable().scrollLeft(), 300, 'scroll left of rows view');
         assert.equal($headersView.scrollLeft(), 300, 'scroll left of headers view');
     });
 
@@ -606,7 +606,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid({
             width: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { field1: 'Test Test' }
             ],
@@ -651,7 +651,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 { id: 4, firstName: 'John', lastName: 'Dow', gender: 'male', age: 61, telephone: 123, city: 'Bali', country: 'Spain', occupy: 'None' },
                 { id: 5, firstName: 'Jenny', lastName: 'Campbell', gender: 'female', age: 22, telephone: 121, city: 'Moscow', country: 'Russia', occupy: 'Accounting' }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 useNative: true
             },
@@ -686,7 +686,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         }
 
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['test'],
             dataSource: items
         });
@@ -711,7 +711,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             width: 600,
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             columns: ['field1', 'field2', {
                 type: 'buttons',
@@ -805,7 +805,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             dataSource: [{}, {}, {}, {}],
             columns: ['test'],
             height: 50,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 useNative: false
             }
@@ -916,7 +916,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
     QUnit.test('Scroll positioned correct with fixed columns', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnFixing: {
                 enabled: true
             },
@@ -949,7 +949,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             width: '700.1px',
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             columnHidingEnabled: true,
             columns: [{
@@ -982,7 +982,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             rtlEnabled: true,
             columnResizingMode: 'widget',
             allowColumnResizing: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [
                 { caption: 'Column 1', width: '125px' },
@@ -1024,7 +1024,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             columns: ['field1', 'field2'],
             dataSource: [],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             stateStoring: {
                 enabled: true,
                 type: 'custom',

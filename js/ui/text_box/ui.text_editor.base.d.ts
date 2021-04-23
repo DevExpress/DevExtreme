@@ -1,9 +1,9 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../../core/element';
 
 import {
-    ComponentNativeEvent
+    NativeEventInfo
 } from '../../events/index';
 
 import dxButton, {
@@ -85,104 +85,104 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onChange?: ((e: ComponentNativeEvent<T>) => void);
+    onChange?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCopy?: ((e: ComponentNativeEvent<T>) => void);
+    onCopy?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCut?: ((e: ComponentNativeEvent<T>) => void);
+    onCut?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEnterKey?: ((e: ComponentNativeEvent<T>) => void);
+    onEnterKey?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: ComponentNativeEvent<T>) => void);
+    onFocusIn?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: ComponentNativeEvent<T>) => void);
+    onFocusOut?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onInput?: ((e: ComponentNativeEvent<T>) => void);
+    onInput?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @default null
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: ComponentNativeEvent<T>) => void);
+    onKeyDown?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default null
@@ -190,39 +190,39 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @type_function_param1_field4 event:event
      * @deprecated
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyPress?: ((e: ComponentNativeEvent<T>) => void);
+    onKeyPress?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyUp?: ((e: ComponentNativeEvent<T>) => void);
+    onKeyUp?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPaste?: ((e: ComponentNativeEvent<T>) => void);
+    onPaste?: ((e: NativeEventInfo<T>) => void);
     /**
      * @docid
      * @default ""
@@ -297,7 +297,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxTextEditor extends Editor {
-    constructor(element: TElement, options?: dxTextEditorOptions)
+    constructor(element: UserDefinedElement, options?: dxTextEditorOptions)
     /**
      * @docid
      * @publicName blur()
@@ -324,9 +324,9 @@ export default class dxTextEditor extends Editor {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxTextEditorButton {
     /**
      * @docid

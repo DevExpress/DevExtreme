@@ -21,7 +21,7 @@ import {
     LAYOUT_MANAGER_ONE_COLUMN
 } from 'ui/form/constants';
 import config from 'core/config';
-import typeUtils from 'core/utils/type';
+import { isFunction, isDefined, isRenderer } from 'core/utils/type';
 import { inArray } from 'core/utils/array';
 import windowUtils from 'core/utils/window';
 
@@ -2170,7 +2170,7 @@ QUnit.module('Templates', () => {
             items: [{
                 dataField: 'test',
                 template: function(data, container) {
-                    assert.deepEqual(typeUtils.isRenderer(container), !!config().useJQuery, 'container is correct');
+                    assert.deepEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
 
                     $(container).append($('<span>').text('Template'));
 
@@ -2309,9 +2309,9 @@ QUnit.module('Public methods', () => {
 
         const layoutManager = $testContainer.dxLayoutManager('instance');
 
-        assert.ok(!typeUtils.isDefined(layoutManager.getEditor('test2')), 'We has\'t instance for \'test2\' field');
-        assert.ok(typeUtils.isDefined(layoutManager.getEditor('test1')), 'We have instance for \'test1\' field');
-        assert.ok(typeUtils.isDefined(layoutManager.getEditor('test3')), 'We have instance for \'test3\' field');
+        assert.ok(!isDefined(layoutManager.getEditor('test2')), 'We has\'t instance for \'test2\' field');
+        assert.ok(isDefined(layoutManager.getEditor('test1')), 'We have instance for \'test1\' field');
+        assert.ok(isDefined(layoutManager.getEditor('test3')), 'We have instance for \'test3\' field');
 
         assert.equal(layoutManager.getEditor('test1').NAME, 'dxTextBox', 'It\'s textbox');
         assert.equal(layoutManager.getEditor('test3').NAME, 'dxNumberBox', 'It\'s numberBox');
@@ -2359,7 +2359,7 @@ QUnit.module('Accessibility', () => {
 
         items.forEach(({ dataField, editorType }) => {
             const editor = layoutManager.getEditor(dataField);
-            const $ariaTarget = editor._getAriaTarget();
+            const $ariaTarget = isFunction(editor._getAriaTarget) ? editor._getAriaTarget() : editor.$element();
             const $label = editor.$element().closest(`.${FIELD_ITEM_CLASS}`).children().first();
             const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
 

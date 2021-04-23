@@ -10,7 +10,7 @@ function exportDataGrid(doc, dataGrid, options) {
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
             const columns = dataProvider.getColumns();
-            const pdfGrid = new PdfGrid(options.splitToTablesByColumns);
+            const pdfGrid = new PdfGrid(options.splitToTablesByColumns, options.columnWidths);
 
             pdfGrid.startNewTable(options.drawTableBorder, options.rect);
 
@@ -26,19 +26,10 @@ function exportDataGrid(doc, dataGrid, options) {
                     if(options.onCellExporting) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
-                    if(isDefined(options.columnWidths)) {
-                        const width = options.columnWidths[cellIndex];
-                        if(isDefined(width) && !pdfCell.skip && !isDefined(pdfCell.rect.w)) {
-                            pdfCell.rect.w = width;
-                        } else {
-                            // TODO
-                        }
-                    } else {
-                        // TODO
-                    }
                     currentRow.push(pdfCell);
                 }
 
+                let rowHeight = null; // TODO: Default Value
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRow };
                     options.onRowExporting(args);
@@ -48,15 +39,11 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
 
                     if(isDefined(args.rowHeight)) {
-                        currentRow.forEach(cell => {
-                            if(!cell.skip && !cell.rect.h) {
-                                cell.rect.h = args.rowHeight;
-                            }
-                        });
+                        rowHeight = args.rowHeight;
                     }
                 }
 
-                pdfGrid.addRow(currentRow);
+                pdfGrid.addRow(currentRow, rowHeight);
             }
 
             pdfGrid.drawTo(doc);

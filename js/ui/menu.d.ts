@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import DataSource, {
@@ -8,9 +9,9 @@ import DataSource, {
 
 import {
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -25,47 +26,47 @@ import dxMenuBase, {
 } from './context_menu/ui.menu_base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxMenu>;
+export type ContentReadyEvent = EventInfo<dxMenu>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxMenu>;
+export type DisposingEvent = EventInfo<dxMenu>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxMenu>;
+export type InitializedEvent = InitializedEventInfo<dxMenu>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxMenu> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxMenu> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxMenu> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxMenu> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxMenu> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxMenu> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxMenu> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxMenu> & SelectionChangedInfo;
 
 /** @public */
-export type SubmenuHiddenEvent = ComponentEvent<dxMenu> & {
-    readonly rootItem?: TElement;
+export type SubmenuHiddenEvent = EventInfo<dxMenu> & {
+    readonly rootItem?: DxElement;
 }
 
 /** @public */
-export type SubmenuHidingEvent = ComponentEvent<dxMenu> & Cancelable & {
-    readonly rootItem?: TElement;
+export type SubmenuHidingEvent = Cancelable & EventInfo<dxMenu> & {
+    readonly rootItem?: DxElement;
 }
 
 /** @public */
-export type SubmenuShowingEvent = ComponentEvent<dxMenu> & {
-    readonly rootItem?: TElement;
+export type SubmenuShowingEvent = EventInfo<dxMenu> & {
+    readonly rootItem?: DxElement;
 }
 
 /** @public */
-export type SubmenuShownEvent = ComponentEvent<dxMenu> & {
-    readonly rootItem?: TElement;
+export type SubmenuShownEvent = EventInfo<dxMenu> & {
+    readonly rootItem?: DxElement;
 }
 
 export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
@@ -100,9 +101,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field1 component:dxMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -113,10 +114,10 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field1 component:dxMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -127,9 +128,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field1 component:dxMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -140,9 +141,9 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rootItem:dxElement
+     * @type_function_param1_field4 rootItem:DxElement
      * @type_function_param1_field1 component:dxMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -166,30 +167,30 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     showFirstSubmenuMode?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default { show: 50, hide: 300 }
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default { show: 50, hide: 300 }
+       */
       delay?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default 300
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default 300
+         */
         hide?: number,
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default 50
-        */
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default 50
+         */
         show?: number
       } | number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type Enums.ShowSubmenuMode
-      * @default "onClick"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.ShowSubmenuMode
+       * @default "onClick"
+       */
       name?: 'onClick' | 'onHover'
     } | 'onClick' | 'onHover';
     /**
@@ -210,7 +211,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  * @public
  */
 export default class dxMenu extends dxMenuBase {
-    constructor(element: TElement, options?: dxMenuOptions)
+    constructor(element: UserDefinedElement, options?: dxMenuOptions)
 }
 
 /**
@@ -281,9 +282,9 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
 }
 
 /**
-* @docid
-* @inherits dxMenuBaseItem
-* @type object
+ * @docid
+ * @inherits dxMenuBaseItem
+ * @type object
  */
 export interface dxMenuItem extends dxMenuBaseItem {
     /**
@@ -294,6 +295,7 @@ export interface dxMenuItem extends dxMenuBaseItem {
     items?: Array<dxMenuItem>;
 }
 
+/** @public */
 export type Options = dxMenuOptions;
 
 /** @deprecated use Options instead */

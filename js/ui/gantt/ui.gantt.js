@@ -15,6 +15,7 @@ import { GanttDialog } from './ui.gantt.dialogs';
 import LoadPanel from '../load_panel';
 import { getPublicElement } from '../../core/element';
 import { GanttDataCache } from './ui.gantt.cache';
+import { GanttExportHelper } from './ui.gantt.export_helper';
 
 const window = getWindow();
 
@@ -172,7 +173,7 @@ class Gantt extends Widget {
             onExpandAll: this._expandAll.bind(this),
             onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener(),
-            exportHelper: this._createGanttViewExportHelper(),
+            exportHelper: this._getExportHelper(),
             taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
             taskProgressTooltipContentTemplate: this._getTaskProgressTooltipContentTemplateFunc(this.option('taskProgressTooltipContentTemplate')),
             taskTimeTooltipContentTemplate: this._getTaskTimeTooltipContentTemplateFunc(this.option('taskTimeTooltipContentTemplate')),
@@ -225,7 +226,7 @@ class Gantt extends Widget {
     }
     _onTreeListRowDblClick(e) {
         if(this._raiseTaskDblClickAction(e.key, e.event)) {
-            this._ganttView._ganttViewCore.commandManager.showTaskEditDialog.execute();
+            this._ganttView._ganttViewCore.showTaskEditDialog();
         }
     }
     _onTreeListSelectionChanged(e) {
@@ -496,6 +497,7 @@ class Gantt extends Widget {
             NotifyTaskUpdating: (args) => { this._raiseUpdatingAction(GANTT_TASKS, args); },
             NotifyTaskMoving: (args) => { this._raiseUpdatingAction(GANTT_TASKS, args, this._getTaskMovingAction()); },
             NotifyTaskEditDialogShowing: (args) => { this._raiseTaskEditDialogShowingAction(args); },
+            NotifyResourceManagerDialogShowing: (args) => { this._raiseResourceManagerDialogShowingAction(args); },
             NotifyDependencyInserting: (args) => { this._raiseInsertingAction(GANTT_DEPENDENCIES, args); },
             NotifyDependencyRemoving: (args) => { this._raiseDeletingAction(GANTT_DEPENDENCIES, args); },
             NotifyResourceCreating: (args) => { this._raiseInsertingAction(GANTT_RESOURCES, args); },
@@ -576,7 +578,7 @@ class Gantt extends Widget {
     }
     _appendCustomFields(data) {
         const modelData = this._tasksOption && this._tasksOption._getItems();
-        const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+        const keyGetter = this._getTaskKeyGetter();
         const invertedData = this.getInvertedData(modelData, keyGetter);
         return data.reduce((previous, item) => {
             const key = keyGetter(item);
@@ -592,6 +594,9 @@ class Gantt extends Widget {
             }
             return previous;
         }, []);
+    }
+    _getTaskKeyGetter() {
+        return compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
     }
     getInvertedData(data, keyGetter) {
         const inverted = { };
@@ -762,6 +767,19 @@ class Gantt extends Widget {
             coreArgs.hiddenFields = this._convertMappedToCoreFields(GANTT_TASKS, args.hiddenFields);
         }
     }
+    _raiseResourceManagerDialogShowingAction(coreArgs) {
+        const action = this._getResourceManagerDialogShowingAction();
+        if(action) {
+            const mappedResources = coreArgs.values.resources.items.map(r => this._convertMappedToCoreData(GANTT_RESOURCES, r));
+            const args = {
+                cancel: false,
+                key: coreArgs.key,
+                values: mappedResources
+            };
+            action(args);
+            coreArgs.cancel = args.cancel;
+        }
+    }
     _raiseTaskClickAction(key, event) {
         if(!this._taskClickAction) {
             this._createTaskClickAction();
@@ -902,6 +920,12 @@ class Gantt extends Widget {
         }
         return this._taskEditDialogShowingAction;
     }
+    _getResourceManagerDialogShowingAction() {
+        if(!this._resourceManagerDialogShowingAction) {
+            this._createResourceManagerDialogShowingAction();
+        }
+        return this._resourceManagerDialogShowingAction;
+    }
     _getDependencyInsertingAction() {
         if(!this._dependencyInsertingAction) {
             this._createDependencyInsertingAction();
@@ -1006,6 +1030,9 @@ class Gantt extends Widget {
     }
     _createTaskEditDialogShowingAction() {
         this._taskEditDialogShowingAction = this._createActionByOption('onTaskEditDialogShowing');
+    }
+    _createResourceManagerDialogShowingAction() {
+        this._resourceManagerDialogShowingAction = this._createActionByOption('onResourceManagerDialogShowing');
     }
     _createDependencyInsertingAction() {
         this._dependencyInsertingAction = this._createActionByOption('onDependencyInserting');
@@ -1443,9 +1470,13 @@ class Gantt extends Widget {
     scrollToDate(date) {
         this._ganttView._ganttViewCore.scrollToDate(date);
     }
+    showResourceManagerDialog() {
+        this._ganttView._ganttViewCore.showResourcesDialog();
+    }
 
     // export
     exportToPdf(options) {
+        this._exportHelper.reset();
         const fullOptions = extend({}, options);
         fullOptions.docCreateMethod ??= window['jspdf']?.['jsPDF'] ?? window['jsPDF'];
         fullOptions.format ??= 'a4';
@@ -1454,94 +1485,9 @@ class Gantt extends Widget {
             resolve(doc);
         });
     }
-    getTreeListTableStyle() {
-        const table = this._treeList._$element.find('.dx-treelist-table').get(0);
-        const style = window.getComputedStyle(table);
-        return {
-            color: style.color,
-            backgroundColor: style.backgroundColor,
-            fontSize: style.fontSize,
-            fontFamily: style.fontFamily,
-            fontWeight: style.fontWeight,
-            fontStyle: style.fontStyle,
-            textAlign: 'left',
-            verticalAlign: 'middle'
-        };
-    }
-    getTreeListColCount() {
-        const headerView = this.getHeaderView();
-        const widths = headerView.getColumnWidths().filter(w => w > 0);
-        return widths.length;
-    }
-    getTreeListHeaderInfo(colIndex) {
-        const element = this.getHeaderElement(colIndex);
-        if(!element) return null;
-
-        const style = window.getComputedStyle(element);
-        const styleForExport = {
-            color: style.color,
-            padding: style.padding,
-            verticalAlign: style.verticalAlign,
-            width: element.clientWidth
-        };
-        return {
-            content: element.textContent,
-            styles: styleForExport
-        };
-    }
-
-    getTreeListCellInfo(rowIndex, colIndex) {
-        const treeList = this._treeList;
-        const cellElement = treeList.getCellElement(rowIndex, colIndex);
-        const cell = cellElement[0];
-        if(!cell) return null;
-
-        const style = window.getComputedStyle(cell);
-        const styleForExport = {
-            color: style.color,
-            padding: style.padding,
-            width: cellElement.clientWidth
-        };
-
-        const nodeKey = treeList.getKeyByRowIndex(rowIndex);
-        const isRowSelected = treeList.isRowSelected(nodeKey);
-
-        let cellBackColor = null;
-        if(isRowSelected) {
-            cellBackColor = style.backgroundColor;
-        } else {
-            const node = treeList.getNodeByKey(nodeKey);
-            const nodeHasChildren = node?.children.length > 0;
-            if(nodeHasChildren) {
-                cellBackColor = window.getComputedStyle(cell.parentNode).backgroundColor;
-            }
-        }
-        if(cellBackColor) {
-            styleForExport.backgroundColor = cellBackColor;
-        }
-
-        const icon = cellElement.find('.dx-treelist-icon-container')[0];
-        const extraSpace = icon?.offsetWidth;
-        if(extraSpace) { styleForExport.extraLeftPadding = extraSpace; }
-
-        return {
-            content: cell.textContent,
-            styles: styleForExport
-        };
-    }
-    getHeaderView() {
-        return this._treeList._views.columnHeadersView;
-    }
-    getHeaderElement(index) {
-        return this.getHeaderView().getHeaderElement(index).get(0);
-    }
-    _createGanttViewExportHelper() {
-        return {
-            getTreeListTableStyle: this.getTreeListTableStyle.bind(this),
-            getTreeListColCount: this.getTreeListColCount.bind(this),
-            getTreeListHeaderInfo: this.getTreeListHeaderInfo.bind(this),
-            getTreeListCellInfo: this.getTreeListCellInfo.bind(this),
-        };
+    _getExportHelper() {
+        this._exportHelper ??= new GanttExportHelper(this);
+        return this._exportHelper;
     }
 
     _optionChanged(args) {
@@ -1608,6 +1554,9 @@ class Gantt extends Widget {
                 break;
             case 'onTaskEditDialogShowing':
                 this._createTaskEditDialogShowingAction();
+                break;
+            case 'onResourceManagerDialogShowing':
+                this._createResourceManagerDialogShowingAction();
                 break;
             case 'onDependencyInserting':
                 this._createDependencyInsertingAction();

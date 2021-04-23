@@ -41,7 +41,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, act
         const dataGridContainer = $('#dataGrid');
         const dataGrid = dataGridContainer.css('float', 'left').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }]
         });
@@ -63,7 +63,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columnAutoWidth: true,
             columns: [{
@@ -85,7 +85,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
             columnAutoWidth: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [{
                 dataField: 'ID',
@@ -125,7 +125,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('#container').width(200);
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnMinWidth: 100,
             dataSource: [{}],
             columns: ['firstName', 'lastName', 'age']
@@ -154,7 +154,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('#container').width(200);
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnMinWidth: 100,
             dataSource: [{}],
             columns: [{ dataField: 'firstName', width: 80 }, { dataField: 'lastName', width: 120 }, 'age']
@@ -184,7 +184,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('#container').width(200);
         // arrange
         $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [{ dataField: 'first', width: '10%', minWidth: 50 }, 'second']
         });
@@ -201,7 +201,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('#container').width(200);
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [{ dataField: 'firstName', minWidth: 80 }, 'lastName', 'age']
         });
@@ -220,7 +220,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('#container').width(200);
 
         $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{
                 firstName: 'First Name',
                 lastName: 'Last Name',
@@ -257,7 +257,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             columns: [
                 { dataField: 'field1' },
@@ -279,7 +279,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('resize on change width', function(assert) {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             columns: [
                 { dataField: 'field1' },
@@ -302,7 +302,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [
                 { dataField: 'field1' },
@@ -324,7 +324,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('resize on change height from auto to fixed', function(assert) {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [
                 { dataField: 'field1' },
@@ -359,7 +359,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('height from extern styles when rendering to detached container', function(assert) {
         // arrange
         const $dataGrid = $('<div />').addClass('fixed-height').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             columns: [
                 { dataField: 'field1' },
@@ -442,7 +442,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('height from extern styles', function(assert) {
         // arrange, act
         const $dataGrid = $('#dataGrid').addClass('fixed-height').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             columns: [
                 { dataField: 'field1' },
@@ -460,7 +460,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ field1: 1, field2: 2, field3: 3, field4: 4 }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             columns: [
                 { dataField: 'field1', groupIndex: 0 },
@@ -485,7 +485,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('max-height from styles', function(assert) {
         // arrange, act
         const $dataGrid = $('#dataGrid').css('maxHeight', 400).dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
             columns: [
                 { dataField: 'field1' },
@@ -512,7 +512,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('max-height as float number from styles', function(assert) {
         // arrange, act
         const dataGrid = $('#dataGrid').css('maxHeight', '100.2px').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
             columns: ['field1']
         }).dxDataGrid('instance');
@@ -600,7 +600,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
             showBorders: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             pager: {
                 visible: true
@@ -628,7 +628,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, act
         const $dataGrid = $('#dataGrid').hide().dxDataGrid({
             width: 1000,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             columns: [
                 { dataField: 'field1' },
@@ -652,7 +652,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const testElement = $('#dataGrid').height(600);
         const $dataGrid = testElement.dxDataGrid({
             width: 1000,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [],
             columns: [
                 { dataField: 'field1', allowReordering: true },
@@ -673,7 +673,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}, {}, {}, {}],
             searchPanel: {
                 visible: true
@@ -702,7 +702,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [
                 { dataField: 'field1', width: 50 },
@@ -722,7 +722,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 300,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: '1', field2: '2', field3: '3', field4: '4' }]
         });
         const dataGridInstance = $dataGrid.dxDataGrid('instance');
@@ -748,7 +748,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
             showBorders: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}, {}, {}, {}],
             searchPanel: {
                 visible: true
@@ -800,7 +800,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}, {}, {}, {}],
             searchPanel: {
                 visible: true
@@ -832,7 +832,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}, {}, {}, {}],
             searchPanel: {
                 visible: true
@@ -873,7 +873,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('#container').width(400);
 
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [
                 { dataField: 'field1', width: '15%' },
@@ -889,12 +889,37 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($(dataGrid.getCellElement(0, 3)).outerWidth(), 125, 'last column width');
     });
 
+    // T983067
+    QUnit.test('Column width should be correct after resizing if it is specified and other columns have percent width (zoom 150%)', function(assert) {
+        // arrange, act
+        $('#container').css('zoom', 1.5);
+        $('#container').width(603.333);
+
+        const $dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{}],
+            columns: [
+                { dataField: 'field1', width: '15%' },
+                { dataField: 'field2', width: '30%' },
+                { dataField: 'field3', width: '50%' },
+                { dataField: 'field4', width: 125 }
+            ],
+            showBorders: true
+        });
+        const dataGrid = $dataGrid.dxDataGrid('instance');
+
+        dataGrid.updateDimensions();
+
+        // assert
+        assert.roughEqual($(dataGrid.getCellElement(0, 3)).outerWidth(), 125, 0.51, 'last column width');
+    });
+
     // T344125
     QUnit.test('column width does not changed after changing grid\'s width when columnAutoWidth enabled', function(assert) {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 100,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             wordWrapEnabled: true,
             columnAutoWidth: true,
             dataSource: [{ field1: '', field2: 'Big big big big big big big big big big big text' }],
@@ -921,7 +946,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, act
         const $dataGridElement = $('#dataGrid').dxDataGrid({
             height: 300,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             wordWrapEnabled: true,
             columnAutoWidth: true,
             dataSource: [{ field1: '', field2: 'Big big big big big big big text' }],
@@ -984,7 +1009,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange
         // act
         const $dataGrid = $('#dataGridWithStyle').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ field1: '1', field2: '2', field3: '3', field4: '4', field5: '5' }]
             },
@@ -1008,7 +1033,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
     QUnit.test('Change column width via option method', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [{ dataField: 'column1', width: 100 }, { dataField: 'column2', width: 100 }]
         }).dxDataGrid('instance');
@@ -1025,7 +1050,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
     QUnit.test('Change column width via columnOption method (T628065)', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [{ dataField: 'column1', width: 100 }, { dataField: 'column2', width: 100 }]
         }).dxDataGrid('instance');
@@ -1050,7 +1075,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
                 { dataField: 'field2', width: 50 },
                 { dataField: 'field3', width: 50 }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2, field3: 3 }]
         });
 
@@ -1073,14 +1098,14 @@ QUnit.module('API Methods', baseModuleConfig, () => {
                 { dataField: 'field2', width: 50 },
                 { dataField: 'field3', width: 50 }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2, field3: 3 }]
         });
 
         sinon.spy(dataGrid.getController('resizing'), '_synchronizeColumns');
 
         // act
-        dataGrid._dimensionChanged();
+        resizeCallbacks.fire();
 
         // assert
         assert.equal(dataGrid.getController('resizing')._synchronizeColumns.callCount, 0, 'synchronizeColumns is not called');
@@ -1088,7 +1113,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
 
         // act
         $(dataGrid.$element()).height(500);
-        dataGrid._dimensionChanged();
+        resizeCallbacks.fire();
 
         // assert
         assert.equal(dataGrid.getController('resizing')._synchronizeColumns.callCount, 1, 'synchronizeColumns is called');
@@ -1105,7 +1130,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
                 { dataField: 'field2', width: 50 },
                 { dataField: 'field3', width: 50 }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2, field3: 3 }]
         });
 
@@ -1115,7 +1140,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
 
         // act
         $('#qunit-fixture').hide();
-        dataGrid._dimensionChanged();
+        resizeCallbacks.fire();
         $('#qunit-fixture').show();
 
         // assert
@@ -1128,7 +1153,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
     QUnit.test('Change expand column width in onInitialized', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             onInitialized: function(e) {
                 e.component.columnOption('command:expand', 'width', 15);
             },
@@ -1150,7 +1175,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             dataSource: [{ field1: 1, field2: 2, field3: 3 }],
             columnWidth: 50,
-            loadingTimeout: undefined
+            loadingTimeout: null
         });
 
         // act
@@ -1177,7 +1202,7 @@ QUnit.module('columnWidth auto option', {
     QUnit.test('Check table params without columnWidth auto', function(assert) {
         $('#dataGrid').dxDataGrid({
             width: 350,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { firstField: 'Alex_', lastField: 'Ziborov_', room: 903 },
                 { firstField: 'Alex_', lastField: 'Ziborov_', room: 903 }
@@ -1207,7 +1232,7 @@ QUnit.module('columnWidth auto option', {
         };
 
         $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: [{
                 dataField: 'firstField', cellTemplate: function(container, options) {
@@ -1234,7 +1259,7 @@ QUnit.module('columnWidth auto option', {
         };
 
         $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: [{
                 dataField: 'firstField', width: '120px', cellTemplate: function(container, options) {
@@ -1255,7 +1280,7 @@ QUnit.module('columnWidth auto option', {
     // T113233
     QUnit.test('Check cell width paddings', function(assert) {
         $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             sorting: {
                 mode: 'none'
@@ -1277,7 +1302,7 @@ QUnit.module('columnWidth auto option', {
     // T198380
     QUnit.test('columnAutoWidth when table with one row in safari', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'small', field2: 'bigbigbigbigbigbigbigbigbigbig' }],
             columnAutoWidth: true
         }).dxDataGrid('instance');
@@ -1293,7 +1318,7 @@ QUnit.module('columnWidth auto option', {
     QUnit.test('column with width auto should have minimum size by content (T654427)', function(assert) {
         const CONTENT_WIDTH = 50;
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2 }],
             columnAutoWidth: true,
             columns: [{
@@ -1316,7 +1341,7 @@ QUnit.module('columnWidth auto option', {
     QUnit.test('column widths if all columns have width auto and columnAutoWidth is true', function(assert) {
         // act
         const dataGrid = $('#dataGrid').css('width', '').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columnAutoWidth: true,
             columns: [{
@@ -1336,7 +1361,7 @@ QUnit.module('columnWidth auto option', {
         const CONTENT_WIDTH = 50;
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2 }],
             columns: [{
                 dataField: 'field1'
@@ -1362,7 +1387,7 @@ QUnit.module('columnWidth auto option', {
         }
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [{
                 dataField: 'field1'
@@ -1382,7 +1407,7 @@ QUnit.module('columnWidth auto option', {
     QUnit.test('column with width 0 should be ignored if all column widths are defined', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [{
                 dataField: 'field1',

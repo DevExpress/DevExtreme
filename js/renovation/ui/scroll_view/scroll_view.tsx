@@ -4,6 +4,7 @@ import {
   Ref,
   Method,
   RefObject,
+  ComponentBindings,
 } from '@devextreme-generator/declarations';
 
 import { current, isMaterial } from '../../../ui/themes';
@@ -19,7 +20,10 @@ import {
 } from './types.d';
 
 import { combineClasses } from '../../utils/combine_classes';
-import { ScrollViewPropsType } from './scroll_view_props';
+import { BaseWidgetProps } from '../common/base_props';
+import {
+  ScrollableProps,
+} from './scrollable_props';
 import { ScrollableSimulated } from './scrollable_simulated';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
@@ -72,6 +76,14 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     )
   );
 };
+
+@ComponentBindings()
+export class ScrollViewProps extends ScrollableProps {
+
+}
+
+export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+
 @Component({
   defaultOptionRules,
   jQuery: { register: true },

@@ -1,11 +1,11 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -27,64 +27,64 @@ import {
 } from './editor/editor';
 
 /** @public */
-export type ChangeEvent = ComponentNativeEvent<dxAutocomplete>;
+export type ChangeEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type ClosedEvent = ComponentEvent<dxAutocomplete>;
+export type ClosedEvent = EventInfo<dxAutocomplete>;
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxAutocomplete>;
+export type ContentReadyEvent = EventInfo<dxAutocomplete>;
 
 /** @public */
-export type CopyEvent = ComponentNativeEvent<dxAutocomplete>;
+export type CopyEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type CutEvent = ComponentNativeEvent<dxAutocomplete>;
+export type CutEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxAutocomplete>;
+export type DisposingEvent = EventInfo<dxAutocomplete>;
 
 /** @public */
-export type EnterKeyEvent = ComponentNativeEvent<dxAutocomplete>;
+export type EnterKeyEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type FocusInEvent = ComponentNativeEvent<dxAutocomplete>;
+export type FocusInEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type FocusOutEvent = ComponentNativeEvent<dxAutocomplete>;
+export type FocusOutEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxAutocomplete>;
+export type InitializedEvent = InitializedEventInfo<dxAutocomplete>;
 
 /** @public */
-export type InputEvent = ComponentNativeEvent<dxAutocomplete>;
+export type InputEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxAutocomplete> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxAutocomplete> & ItemInfo;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxAutocomplete>;
+export type KeyDownEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type KeyPressEvent = ComponentNativeEvent<dxAutocomplete>;
+export type KeyPressEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type KeyUpEvent = ComponentNativeEvent<dxAutocomplete>;
+export type KeyUpEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type OpenedEvent = ComponentEvent<dxAutocomplete>;
+export type OpenedEvent = EventInfo<dxAutocomplete>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxAutocomplete> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxAutocomplete> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = ComponentNativeEvent<dxAutocomplete>;
+export type PasteEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxAutocomplete> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxAutocomplete> & SelectionChangedInfo;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxAutocomplete> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxAutocomplete> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
@@ -129,9 +129,10 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @public
  */
 export default class dxAutocomplete extends dxDropDownList {
-    constructor(element: TElement, options?: dxAutocompleteOptions)
+    constructor(element: UserDefinedElement, options?: dxAutocompleteOptions)
 }
 
+/** @public */
 export type Options = dxAutocompleteOptions;
 
 /** @deprecated use Options instead */

@@ -563,22 +563,24 @@ const EditingController = modules.ViewController.inherit((function() {
             const isLastPage = endPageIndex === dataSource.pageCount() - 1;
 
             if(scrollingMode !== 'standard') {
-                const needInsertOnLastPosition = !isDefined(change.pageIndex) && change.index === -1;
+                const pageSize = dataSource.pageSize() || 1;
+                const changePageIndex = Math.floor(change.index / pageSize);
+                const needInsertOnLastPosition = isLastPage && change.index === -1;
 
                 switch(changeType) {
                     case 'append':
-                        return change.pageIndex === endPageIndex || needInsertOnLastPosition && isLastPage;
+                        return changePageIndex === endPageIndex || needInsertOnLastPosition;
                     case 'prepend':
-                        return change.pageIndex === beginPageIndex;
+                        return changePageIndex === beginPageIndex;
                     default: {
                         const topItemIndex = dataController.topItemIndex?.();
                         const bottomItemIndex = dataController.bottomItemIndex?.();
 
                         if(this.option(NEW_SCROLLING_MODE) && isDefined(topItemIndex)) {
-                            return change.index >= topItemIndex && change.index <= bottomItemIndex || needInsertOnLastPosition && isLastPage;
+                            return change.index >= topItemIndex && change.index <= bottomItemIndex || needInsertOnLastPosition;
                         }
 
-                        return change.pageIndex >= beginPageIndex && change.pageIndex <= endPageIndex || needInsertOnLastPosition && isLastPage;
+                        return changePageIndex >= beginPageIndex && changePageIndex <= endPageIndex || needInsertOnLastPosition;
                     }
                 }
             }
@@ -713,10 +715,8 @@ const EditingController = modules.ViewController.inherit((function() {
             }).length;
         },
 
-        _createInsertInfo: function(rowIndex, change) {
-            const insertInfo = {
-                parentKey: change.parentKey
-            };
+        _createInsertInfo: function() {
+            const insertInfo = {};
 
             insertInfo[INSERT_INDEX] = this._getInsertIndex();
 
@@ -736,8 +736,7 @@ const EditingController = modules.ViewController.inherit((function() {
             return rowIndex;
         },
 
-        _addInsertInfo: function(change) {
-
+        _addInsertInfo: function(change, parentKey) {
             let insertInfo;
             let rowIndex;
             let { key } = change;
@@ -749,8 +748,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
             insertInfo = this._getInternalData(key)?.insertInfo;
             if(!isDefined(insertInfo)) {
-                rowIndex = this._getCorrectedInsertRowIndex(change.parentKey);
-                insertInfo = this._createInsertInfo(rowIndex, change);
+                rowIndex = this._getCorrectedInsertRowIndex(parentKey);
+                insertInfo = this._createInsertInfo();
                 this._setIndexes(change, rowIndex);
             }
 
@@ -764,11 +763,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             change.index = change.index ?? this._calculateIndex(rowIndex);
 
-            if(this.option('scrolling.mode') === 'virtual') {
-                if(change.index !== -1) {
-                    change.pageIndex = Math.min(dataController.pageCount() - 1, Math.floor(change.index / dataController.pageSize()));
-                }
-            } else {
+            if(this.option('scrolling.mode') !== 'virtual') {
                 change.pageIndex = change.pageIndex ?? dataController.pageIndex();
             }
         },
@@ -854,8 +849,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
             const oldEditRowIndex = this._getVisibleEditRowIndex();
-            const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE, parentKey };
-            const { key, rowIndex } = this._addInsertInfo(change);
+            const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
+            const { key, rowIndex } = this._addInsertInfo(change, parentKey);
 
             this._setEditRowKey(key, true);
 

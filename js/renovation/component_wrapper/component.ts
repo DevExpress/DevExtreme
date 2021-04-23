@@ -44,7 +44,7 @@ export default class ComponentWrapper extends DOMComponent {
   _viewComponent!: any;
 
   get viewRef() {
-    return this._viewRef.current;
+    return this._viewRef?.current;
   }
   _getDefaultOptions() {
     return extend(
@@ -116,7 +116,7 @@ export default class ComponentWrapper extends DOMComponent {
     const parentNode = containerNode.parentNode;
     parentNode.$V = containerNode.$V;
     containerNode.$V = null;
-    render(null, parentNode);
+    render(createElement(containerNode.tagName, this.elementAttr), parentNode);
     delete parentNode.$V;
     super._dispose();
   }

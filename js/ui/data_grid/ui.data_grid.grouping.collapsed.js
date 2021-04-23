@@ -648,7 +648,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
                         filter: createOffsetFilter(groupInfo.path, {
                             filter: storeLoadOptions.filter,
                             group: group
-                        }),
+                        }, true),
                         group: group.slice(groupInfo.path.length - 1, groupInfo.path.length),
                         select: storeLoadOptions.select
                     });

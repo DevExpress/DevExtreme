@@ -11,8 +11,15 @@ const dataPath = path.join(path.resolve(), 'tests', 'data');
 
 jest.mock('../../src/modules/bundle-resolver', () => ({
   __esModule: true,
-  default: (): sass.SyncOptions => ({
-    file: path.join(dataPath, 'scss', 'bundles', 'dx.light.scss'),
+  default: (theme: string): sass.SyncOptions => ({
+    file: path.join(
+      dataPath,
+      'scss',
+      'bundles',
+      theme === 'material'
+        ? 'dx.material.blue.light.scss'
+        : 'dx.light.scss',
+    ),
     includePaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
   }),
 }));
@@ -159,5 +166,16 @@ describe('Compile manager - integration test on test sass', () => {
       makeSwatch: true,
       outColorScheme: 'error for sass compiler :)',
     })).rejects.toBeInstanceOf(Error);
+  });
+
+  test('compile test bundle with removeExternalResources option', () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      themeName: 'material',
+      removeExternalResources: true,
+    }).then((result) => {
+      expect(result.css).toBe('');
+      expect(result.compiledMetadata).toEqual({});
+    });
   });
 });

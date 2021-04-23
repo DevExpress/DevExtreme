@@ -770,7 +770,6 @@ QUnit.module('options changed callbacks', {
             assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width');
         }
 
-
         popup.option('width', 'auto');
 
         if(IS_IE11) {

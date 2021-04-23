@@ -1,5 +1,5 @@
 import {
-    TPromise
+    DxPromise
 } from '../../core/utils/deferred';
 
 import Store, {
@@ -557,7 +557,7 @@ export default class PivotGridDataSource {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    load(): TPromise<any>;
+    load(): DxPromise<any>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -603,7 +603,7 @@ export default class PivotGridDataSource {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reload(): TPromise<any>;
+    reload(): DxPromise<any>;
     /**
      * @docid
      * @publicName state()

@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -11,9 +12,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -28,48 +29,48 @@ import dxMultiView, {
 } from './multi_view';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxTabPanel>;
+export type ContentReadyEvent = EventInfo<dxTabPanel>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxTabPanel>;
+export type DisposingEvent = EventInfo<dxTabPanel>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxTabPanel>;
+export type InitializedEvent = InitializedEventInfo<dxTabPanel>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxTabPanel> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxTabPanel> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxTabPanel> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxTabPanel> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo;
 
 /** @public */
-export type TitleClickEvent = ComponentNativeEvent<dxTabPanel> & {
+export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
 }
 
 /** @public */
-export type TitleHoldEvent = ComponentNativeEvent<dxTabPanel> & {
+export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
 }
 
 /** @public */
-export type TitleRenderedEvent = ComponentEvent<dxTabPanel> & {
+export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemData?: any;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
 }
 
 export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
@@ -100,12 +101,12 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @default "title"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires dxTabPanelOptions.onOptionChanged
@@ -118,10 +119,10 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 event:event
      * @type_function_param1_field1 component:dxTabPanel
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -133,10 +134,10 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 event:event
      * @type_function_param1_field1 component:dxTabPanel
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -148,9 +149,9 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field1 component:dxTabPanel
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -202,7 +203,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @public
  */
 export default class dxTabPanel extends dxMultiView {
-    constructor(element: TElement, options?: dxTabPanelOptions)
+    constructor(element: UserDefinedElement, options?: dxTabPanelOptions)
 }
 
 /**
@@ -229,7 +230,7 @@ export interface dxTabPanelItem extends dxMultiViewItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tabTemplate?: template | (() => string | TElement);
+    tabTemplate?: template | (() => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -238,6 +239,7 @@ export interface dxTabPanelItem extends dxMultiViewItem {
     title?: string;
 }
 
+/** @public */
 export type Options = dxTabPanelOptions;
 
 /** @deprecated use Options instead */

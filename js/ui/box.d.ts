@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import DataSource, {
@@ -7,9 +7,9 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo
 } from '../events/index';
@@ -20,28 +20,28 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxBox>;
+export type ContentReadyEvent = EventInfo<dxBox>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxBox>;
+export type DisposingEvent = EventInfo<dxBox>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxBox>;
+export type InitializedEvent = InitializedEventInfo<dxBox>;
 
 /** @public */
-export type ItemClickEvent = ComponentNativeEvent<dxBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxBox> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = ComponentNativeEvent<dxBox> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxBox> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = ComponentNativeEvent<dxBox> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxBox> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = ComponentNativeEvent<dxBox> & ItemInfo;
+export type ItemRenderedEvent = NativeEventInfo<dxBox> & ItemInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxBox> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxBox> & ChangedOptionInfo;
 
 export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     /**
@@ -92,14 +92,14 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
  * @public
  */
 export default class dxBox extends CollectionWidget {
-    constructor(element: TElement, options?: dxBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxBoxOptions)
 }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxBoxItem extends CollectionWidgetItem {
     /**
      * @docid
@@ -132,6 +132,7 @@ export interface dxBoxItem extends CollectionWidgetItem {
     shrink?: number;
 }
 
+/** @public */
 export type Options = dxBoxOptions;
 
 /** @deprecated use Options instead */

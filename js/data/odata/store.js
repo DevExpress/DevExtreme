@@ -9,7 +9,6 @@ import {
     formatFunctionInvocationUrl,
     escapeServiceOperationParams
 } from './utils';
-import proxyUrlFormatter from '../proxy_url_formatter';
 import { errors } from '../errors';
 import query from '../query';
 import Store from '../abstract_store';
@@ -187,11 +186,8 @@ const ODataStore = Store.inherit({
         return result;
     },
 
-    _byKeyUrl(value, useOriginalHost) {
-        const baseUrl = useOriginalHost
-            ? proxyUrlFormatter.formatLocalUrl(this._requestDispatcher.url)
-            : this._requestDispatcher.url;
-
+    _byKeyUrl(value) {
+        const baseUrl = this._requestDispatcher.url;
         const convertedKey = this._convertKey(value);
 
         return `${baseUrl}(${encodeURIComponent(serializeKey(convertedKey, this.version()))})`;

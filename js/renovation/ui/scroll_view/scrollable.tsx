@@ -7,6 +7,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
+  ScrollableDirection,
   ScrollableLocation, ScrollOffset,
 } from './types.d';
 
@@ -164,9 +165,13 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.clientWidth();
   }
 
-  @Method()
   validate(e: Event): boolean {
     return this.scrollableRef.validate(e);
+  }
+
+  @Method()
+  getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
+    return this.scrollableRef.getElementLocation(element, direction);
   }
 
   get scrollableRef(): any {

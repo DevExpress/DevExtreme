@@ -26,10 +26,13 @@ const FocusController = core.ViewController.inherit((function() {
                 this._triggerFocusedRowChangedIfNeed(focusedRowKey, args.value);
                 args.handled = true;
             } else if(args.name === 'focusedRowKey') {
+                args.handled = true;
+                if(Array.isArray(args.value) && JSON.stringify(args.value) === JSON.stringify(args.previousValue)) {
+                    return;
+                }
                 const focusedRowIndex = this.option('focusedRowIndex');
                 this._focusRowByKey(args.value);
                 this._triggerFocusedRowChangedIfNeed(args.value, focusedRowIndex);
-                args.handled = true;
             } else if(args.name === 'focusedColumnIndex') {
                 args.handled = true;
             } else if(args.name === 'focusedRowEnabled') {
@@ -239,7 +242,7 @@ const FocusController = core.ViewController.inherit((function() {
             const scrollable = that.getView('rowsView').getScrollable();
 
             if(rowsScrollController && scrollable && rowIndex >= 0) {
-                const focusedRowIndex = rowIndex + dataController.getRowIndexOffset() - dataController.getRowIndexDelta();
+                const focusedRowIndex = rowIndex + dataController.getRowIndexOffset(true);
                 const offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
                 if(needFocusRow) {

@@ -141,8 +141,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
-        this.options.columnHidingEnabled = true;
-        this.adaptiveColumnsController.optionChanged({ name: 'columnHidingEnabled', value: true });
+        this.option('columnHidingEnabled', true);
         this.clock.tick();
         this.resizingController.updateDimensions();
         this.clock.tick();
@@ -199,8 +198,7 @@ QUnit.module('AdaptiveColumns', {
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
-        this.options.columnHidingEnabled = false;
-        this.adaptiveColumnsController.optionChanged({ name: 'columnHidingEnabled', value: false });
+        this.option('columnHidingEnabled', false);
         this.clock.tick();
         this.resizingController.updateDimensions();
         this.clock.tick();

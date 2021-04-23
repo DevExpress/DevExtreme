@@ -1,13 +1,14 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -36,17 +37,17 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxGantt>;
+export type ContentReadyEvent = EventInfo<dxGantt>;
 
 /** @public */
 export type ContextMenuPreparingEvent = Cancelable & {
     readonly component?: dxGantt;
-    readonly element?: TElement;
-    readonly event?: TEvent;
+    readonly element?: DxElement;
+    readonly event?: DxEvent;
     readonly targetKey?: any;
     readonly targetType?: string;
     readonly data?: any;
@@ -56,119 +57,119 @@ export type ContextMenuPreparingEvent = Cancelable & {
 /** @public */
 export type CustomCommandEvent = {
     readonly component?: dxGantt;
-    readonly element?: TElement;
+    readonly element?: DxElement;
     readonly name: string;
 }
 
 /** @public */
-export type DependencyDeletedEvent = ComponentEvent<dxGantt> & {
+export type DependencyDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type DependencyDeletingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type DependencyDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type DependencyInsertedEvent = ComponentEvent<dxGantt> & {
+export type DependencyInsertedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type DependencyInsertingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type DependencyInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
 }
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxGantt>;
+export type DisposingEvent = EventInfo<dxGantt>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxGantt>;
+export type InitializedEvent = InitializedEventInfo<dxGantt>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxGantt> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxGantt> & ChangedOptionInfo;
 
 /** @public */
-export type ResourceAssignedEvent = ComponentEvent<dxGantt> & {
-    readonly values: any;
-    readonly key: any;
-}
-
-/** @public */
-export type ResourceAssigningEvent = Cancelable & ComponentEvent<dxGantt> & {
-    readonly values: any;
-}
-
-/** @public */
-export type ResourceDeletedEvent = ComponentEvent<dxGantt> & {
+export type ResourceAssignedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type ResourceDeletingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type ResourceAssigningEvent = Cancelable & EventInfo<dxGantt> & {
+    readonly values: any;
+}
+
+/** @public */
+export type ResourceDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type ResourceInsertedEvent = ComponentEvent<dxGantt> & {
+export type ResourceDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type ResourceInsertingEvent = Cancelable & ComponentEvent<dxGantt> & {
-    readonly values: any;
-}
-
-/** @public */
-export type ResourceUnassignedEvent = ComponentEvent<dxGantt> & {
+export type ResourceInsertedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type ResourceUnassigningEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type ResourceInsertingEvent = Cancelable & EventInfo<dxGantt> & {
+    readonly values: any;
+}
+
+/** @public */
+export type ResourceUnassignedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxGantt> & {
+export type ResourceUnassigningEvent = Cancelable & EventInfo<dxGantt> & {
+    readonly values: any;
+    readonly key: any;
+}
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxGantt> & {
     readonly selectedRowKey?: any;
 }
 
 /** @public */
-export type TaskClickEvent = ComponentNativeEvent<dxGantt> & {
+export type TaskClickEvent = NativeEventInfo<dxGantt> & {
     readonly key?: any;
     readonly data?: any;
 }
 
 /** @public */
-export type TaskDblClickEvent = Cancelable & ComponentNativeEvent<dxGantt> & {
+export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt> & {
     readonly key?: any;
     readonly data?: any;
 }
 
 /** @public */
-export type TaskDeletedEvent = ComponentEvent<dxGantt> & {
+export type TaskDeletedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskDeletingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskDeletingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskEditDialogShowingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
     readonly readOnlyFields?: Array<string>;
@@ -176,31 +177,37 @@ export type TaskEditDialogShowingEvent = Cancelable & ComponentEvent<dxGantt> & 
 }
 
 /** @public */
-export type TaskInsertedEvent = ComponentEvent<dxGantt> & {
+export type ResourceManagerDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
+    readonly values: Array<any>;
+    readonly key: any;
+}
+
+/** @public */
+export type TaskInsertedEvent = EventInfo<dxGantt> & {
     readonly value?: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskInsertingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskInsertingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
 }
 
 /** @public */
-export type TaskMovingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskMovingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskUpdatedEvent = ComponentEvent<dxGantt> & {
+export type TaskUpdatedEvent = EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
 }
 
 /** @public */
-export type TaskUpdatingEvent = Cancelable & ComponentEvent<dxGantt> & {
+export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
     readonly key: any
@@ -251,34 +258,34 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     dependencies?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default null
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default null
+       */
       dataSource?: Array<any> | DataSource | DataSourceOptions,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "id"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "id"
+       */
       keyExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "predecessorId"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "predecessorId"
+       */
       predecessorIdExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "successorId"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "successorId"
+       */
       successorIdExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "type"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "type"
+       */
       typeExpr?: string | Function
     };
     /**
@@ -288,10 +295,10 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     editing?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowDependencyAdding?: boolean,
       /**
        * @docid
@@ -300,52 +307,52 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        */
       allowDependencyDeleting?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowResourceAdding?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowResourceDeleting?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowResourceUpdating?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowTaskAdding?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowTaskDeleting?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowTaskResourceUpdating?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default true
+       */
       allowTaskUpdating?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
       enabled?: boolean
     };
     /**
@@ -355,16 +362,16 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     validation?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
       validateDependencies?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default false
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
       autoUpdateParentTasks?: boolean
     };
     /**
@@ -372,7 +379,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 selectedRowKey:any
      * @action
@@ -385,19 +392,19 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 name:String
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     onCustomCommand?: ((e: CustomCommandEvent) => void);
-        /**
+    /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 targetKey:any
@@ -414,7 +421,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -428,7 +435,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -442,7 +449,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -457,7 +464,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -471,7 +478,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 newValues:any
@@ -487,7 +494,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -501,7 +508,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 newValues:any
@@ -517,7 +524,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -534,7 +541,21 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 values:Array<any>
+     * @type_function_param1_field5 key:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResourceManagerDialogShowing?: ((e: ResourceManagerDialogShowingEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxGantt
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -548,7 +569,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -562,7 +583,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -577,7 +598,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -591,7 +612,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -605,7 +626,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -619,7 +640,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -629,12 +650,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     onResourceDeleting?: ((e: ResourceDeletingEvent) => void);
-     /**
+    /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -648,7 +669,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -657,12 +678,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     onResourceAssigning?: ((e: ResourceAssigningEvent) => void);
-     /**
+    /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -676,7 +697,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 values:any
@@ -686,12 +707,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void);
-     /**
+    /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 values:any
      * @type_function_param1_field5 key:any
@@ -705,7 +726,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 key:any
@@ -720,7 +741,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field5 event:event
@@ -739,28 +760,28 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     resourceAssignments?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default null
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default null
+       */
       dataSource?: Array<any> | DataSource | DataSourceOptions,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "id"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "id"
+       */
       keyExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "resourceId"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "resourceId"
+       */
       resourceIdExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "taskId"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "taskId"
+       */
       taskIdExpr?: string | Function
     };
     /**
@@ -771,28 +792,28 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     resources?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "color"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "color"
+       */
       colorExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default null
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default null
+       */
       dataSource?: Array<any> | DataSource | DataSourceOptions,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "id"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "id"
+       */
       keyExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "text"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "text"
+       */
       textExpr?: string | Function
     };
     /**
@@ -855,52 +876,52 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     tasks?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "color"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "color"
+       */
       colorExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default null
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default null
+       */
       dataSource?: Array<any> | DataSource | DataSourceOptions,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "end"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "end"
+       */
       endExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "id"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "id"
+       */
       keyExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "parentId"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "parentId"
+       */
       parentIdExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "progress"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "progress"
+       */
       progressExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "start"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "start"
+       */
       startExpr?: string | Function,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "title"
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default "title"
+       */
       titleExpr?: string | Function
     };
     /**
@@ -925,16 +946,16 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     stripLines?: Array<dxGanttStripLine>;
     /**
      * @docid
-     * @type_function_param1 container:dxElement
+     * @type_function_param1 container:DxElement
      * @type_function_param2 task:any
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskTooltipContentTemplate?: template | ((container: TElement, task: any) => string | TElement);
+    taskTooltipContentTemplate?: template | ((container: DxElement, task: any) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:dxElement
+     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 start:Date
      * @type_function_param2_field2 end:Date
@@ -942,20 +963,20 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskTimeTooltipContentTemplate?: template | ((container: TElement, item: TimeTooltipTemplateData) => string | TElement);
+    taskTimeTooltipContentTemplate?: template | ((container: DxElement, item: TimeTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:dxElement
+     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 progress:number
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskProgressTooltipContentTemplate?: template | ((container: TElement, item: ProgressTooltipTemplateData) => string | TElement);
+    taskProgressTooltipContentTemplate?: template | ((container: DxElement, item: ProgressTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:dxElement
+     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 cellSize:object
      * @type_function_param2_field2 isMilestone:boolean
@@ -968,7 +989,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskContentTemplate?: template | ((container: TElement, item: TaskContentTemplateData) => string | TElement);
+    taskContentTemplate?: template | ((container: DxElement, item: TaskContentTemplateData) => string | UserDefinedElement);
     /**
      * @docid
      * @default 0
@@ -986,7 +1007,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
  * @public
  */
 export default class dxGantt extends Widget {
-    constructor(element: TElement, options?: dxGanttOptions)
+    constructor(element: UserDefinedElement, options?: dxGanttOptions)
     /**
      * @docid
      * @publicName getTaskData(key)
@@ -1163,13 +1184,20 @@ export default class dxGantt extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    exportToPdf(options: any): TPromise<any>;
+    exportToPdf(options: any): DxPromise<any>;
+    /**
+     * @docid
+     * @publicName showResourceManagerDialog()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    showResourceManagerDialog(): void;
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxGanttToolbar {
     /**
      * @docid
@@ -1177,13 +1205,13 @@ export interface dxGanttToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
+    items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager'>;
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxGanttContextMenu {
     /**
      * @docid
@@ -1202,9 +1230,9 @@ export interface dxGanttContextMenu {
 }
 
 /**
-* @docid
-* @inherits dxToolbarItem
-*/
+ * @docid
+ * @inherits dxToolbarItem
+ */
 export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
      * @docid
@@ -1212,7 +1240,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | string;
+    name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'taskDetails' | 'fullScreen' | 'resourceManager' | string;
     /**
      * @docid
      * @default "before"
@@ -1224,9 +1252,9 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
 }
 
 /**
-* @docid
-* @inherits dxContextMenuItem
-*/
+ * @docid
+ * @inherits dxContextMenuItem
+ */
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
@@ -1238,9 +1266,9 @@ export interface dxGanttContextMenuItem extends dxContextMenuItem {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface dxGanttStripLine {
     /**
      * @docid
@@ -1274,6 +1302,7 @@ export interface dxGanttStripLine {
     title?: string;
 }
 
+/** @public */
 export type Options = dxGanttOptions;
 
 /** @deprecated use Options instead */

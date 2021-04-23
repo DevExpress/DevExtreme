@@ -1,11 +1,11 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -28,58 +28,58 @@ import {
 } from './widget/ui.widget';
 
 /** @public */
-export type ChangeEvent = ComponentNativeEvent<dxDateBox>;
+export type ChangeEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type ClosedEvent = ComponentEvent<dxDateBox>;
+export type ClosedEvent = EventInfo<dxDateBox>;
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxDateBox>;
+export type ContentReadyEvent = EventInfo<dxDateBox>;
 
 /** @public */
-export type CopyEvent = ComponentNativeEvent<dxDateBox>;
+export type CopyEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type CutEvent = ComponentNativeEvent<dxDateBox>;
+export type CutEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDateBox>;
+export type DisposingEvent = EventInfo<dxDateBox>;
 
 /** @public */
-export type EnterKeyEvent = ComponentNativeEvent<dxDateBox>;
+export type EnterKeyEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type FocusInEvent = ComponentNativeEvent<dxDateBox>;
+export type FocusInEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type FocusOutEvent = ComponentNativeEvent<dxDateBox>;
+export type FocusOutEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDateBox>;
+export type InitializedEvent = InitializedEventInfo<dxDateBox>;
 
 /** @public */
-export type InputEvent = ComponentNativeEvent<dxDateBox>;
+export type InputEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxDateBox>;
+export type KeyDownEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type KeyPressEvent = ComponentNativeEvent<dxDateBox>;
+export type KeyPressEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type KeyUpEvent = ComponentNativeEvent<dxDateBox>;
+export type KeyUpEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type OpenedEvent = ComponentEvent<dxDateBox>;
+export type OpenedEvent = EventInfo<dxDateBox>;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDateBox> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDateBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = ComponentNativeEvent<dxDateBox>;
+export type PasteEvent = NativeEventInfo<dxDateBox>;
 
 /** @public */
-export type ValueChangedEvent = ComponentNativeEvent<dxDateBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxDateBox> & ValueChangedInfo;
 
 /** @public */
 export type DisabledDate = ComponentDisabledDate<dxDateBox>;
@@ -236,7 +236,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
  * @public
  */
 export default class dxDateBox extends dxDropDownEditor {
-    constructor(element: TElement, options?: dxDateBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxDateBoxOptions)
     /**
      * @docid
      * @publicName close()
@@ -253,6 +253,7 @@ export default class dxDateBox extends dxDropDownEditor {
     open(): void;
 }
 
+/** @public */
 export type Options = dxDateBoxOptions;
 
 /** @deprecated use Options instead */

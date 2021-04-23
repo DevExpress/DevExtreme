@@ -1,10 +1,11 @@
 import {
-  TElement,
-  TElementsArray
+  UserDefinedElement,
+  DxElement,
+  UserDefinedElementsArray
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -18,11 +19,11 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
-    ComponentEvent,
-    ComponentNativeEvent,
-    ComponentInitializedEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
@@ -88,7 +89,7 @@ export interface DataChangeInfo {
 
 export interface NewRowInfo {
   data: any;
-  promise?: TPromise<void>;
+  promise?: DxPromise<void>;
 }
 
 export interface KeyDownInfo {
@@ -107,7 +108,7 @@ export interface RowInsertedInfo {
 
 export interface RowInsertingInfo {
   data: any;
-  cancel: boolean | TPromise<void>;
+  cancel: boolean | DxPromise<void>;
 }
 
 export interface RowRemovedInfo {
@@ -119,7 +120,7 @@ export interface RowRemovedInfo {
 export interface RowRemovingInfo {
   readonly data: any;
   readonly key: any;
-  cancel: boolean | TPromise<void>;
+  cancel: boolean | DxPromise<void>;
 }
 
 export interface RowUpdatedInfo {
@@ -132,7 +133,7 @@ export interface RowUpdatingInfo {
   readonly oldData: any;
   newData: any;
   readonly key: any;
-  cancel: boolean | TPromise<void>;
+  cancel: boolean | DxPromise<void>;
 }
 
 export interface RowValidatingInfo {
@@ -142,12 +143,12 @@ export interface RowValidatingInfo {
   readonly newData: any;
   readonly oldData: any;
   errorText: string;
-  promise?: TPromise<void>;
+  promise?: DxPromise<void>;
 }
 
 export interface SavingInfo {
   changes: Array<DataChange>;
-  promise?: TPromise<void>;
+  promise?: DxPromise<void>;
   cancel: boolean;
 }
 
@@ -162,11 +163,11 @@ export interface ToolbarPreparingInfo {
   toolbarOptions: dxToolbarOptions;
 }
 
-export interface ComponentRowDraggingEvent<T extends GridBase> {
+export interface RowDraggingEventInfo<T extends GridBase> {
   readonly component: T;
-  readonly event: TEvent;
+  readonly event: DxEvent;
   readonly itemData?: any;
-  readonly itemElement: TElement;
+  readonly itemElement: DxElement;
   readonly fromIndex: number;
   readonly toIndex: number;
   readonly fromComponent: dxSortable | dxDraggable;
@@ -175,11 +176,11 @@ export interface ComponentRowDraggingEvent<T extends GridBase> {
   readonly toData?: any;
 }
 
-export interface ComponentDragStartEvent<T extends GridBase> {
+export interface DragStartEventInfo<T extends GridBase> {
   readonly component: T;
-  readonly event: TEvent;
+  readonly event: DxEvent;
   itemData?: any;
-  readonly itemElement: TElement;
+  readonly itemElement: DxElement;
   readonly fromIndex: number;
   readonly fromData?: any;
 }
@@ -190,12 +191,12 @@ export interface DragDropInfo {
 
 export interface DragReorderInfo {
   readonly dropInsideItem: boolean;
-  promise?: TPromise<void>;
+  promise?: DxPromise<void>;
 }
 
 export interface RowDraggingTemplateDataModel {
   readonly itemData: any;
-  readonly itemElement: TElement;
+  readonly itemElement: DxElement;
 }
 
 export interface FilterPanelCustomizeTextArg<T> { 
@@ -238,7 +239,7 @@ export interface FilterPanel<T extends GridBase> {
 }
 
 export interface RowDragging<T extends GridBase> {
-  /**
+    /**
      * @docid GridBaseOptions.rowDragging.allowDropInsideItem
      * @prevFileNamespace DevExpress.ui
      * @default false
@@ -261,13 +262,13 @@ export interface RowDragging<T extends GridBase> {
      * @prevFileNamespace DevExpress.ui
      * @default undefined
      */
-    boundary?: string | TElement,
+    boundary?: string | UserDefinedElement,
     /**
      * @docid GridBaseOptions.rowDragging.container
      * @prevFileNamespace DevExpress.ui
      * @default undefined
      */
-    container?: string | TElement,
+    container?: string | UserDefinedElement,
     /**
      * @docid GridBaseOptions.rowDragging.cursorOffset
      * @prevFileNamespace DevExpress.ui
@@ -304,12 +305,12 @@ export interface RowDragging<T extends GridBase> {
      * @prevFileNamespace DevExpress.ui
      * @type_function_param1 dragInfo:object
      * @type_function_param1_field1 itemData:any
-     * @type_function_param1_field2 itemElement:dxElement
-     * @type_function_param2 containerElement:dxElement
+     * @type_function_param1_field2 itemElement:DxElement
+     * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      */
-    dragTemplate?: template | ((dragInfo: RowDraggingTemplateData, containerElement: TElement) => string | TElement),
+    dragTemplate?: template | ((dragInfo: RowDraggingTemplateData, containerElement: DxElement) => string | UserDefinedElement),
     /**
      * @docid GridBaseOptions.rowDragging.dropFeedbackMode
      * @prevFileNamespace DevExpress.ui
@@ -342,7 +343,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 itemData:any
-     * @type_function_param1_field4 itemElement:dxElement
+     * @type_function_param1_field4 itemElement:DxElement
      * @type_function_param1_field5 fromIndex:number
      * @type_function_param1_field6 toIndex:number
      * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
@@ -351,7 +352,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field10 toData:any
      * @type_function_param1_field11 dropInsideItem:boolean
      */
-    onAdd?: ((e: ComponentRowDraggingEvent<T> & DragDropInfo) => void),
+    onAdd?: ((e: RowDraggingEventInfo<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragChange
      * @prevFileNamespace DevExpress.ui
@@ -360,7 +361,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 fromIndex:number
      * @type_function_param1_field7 toIndex:number
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
@@ -369,7 +370,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 toData:any
      * @type_function_param1_field12 dropInsideItem:boolean
      */
-    onDragChange?: ((e: Cancelable & ComponentRowDraggingEvent<T> & DragDropInfo) => void),
+    onDragChange?: ((e: Cancelable & RowDraggingEventInfo<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragEnd
      * @prevFileNamespace DevExpress.ui
@@ -378,7 +379,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 fromIndex:number
      * @type_function_param1_field7 toIndex:number
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
@@ -387,7 +388,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 toData:any
      * @type_function_param1_field12 dropInsideItem:boolean
      */
-    onDragEnd?: ((e: Cancelable & ComponentRowDraggingEvent<T> & DragDropInfo) => void),
+    onDragEnd?: ((e: Cancelable & RowDraggingEventInfo<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragMove
      * @prevFileNamespace DevExpress.ui
@@ -396,7 +397,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 fromIndex:number
      * @type_function_param1_field7 toIndex:number
      * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
@@ -405,7 +406,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 toData:any
      * @type_function_param1_field12 dropInsideItem:boolean
      */
-    onDragMove?: ((e: Cancelable & ComponentRowDraggingEvent<T> & DragDropInfo) => void),
+    onDragMove?: ((e: Cancelable & RowDraggingEventInfo<T> & DragDropInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onDragStart
      * @prevFileNamespace DevExpress.ui
@@ -414,11 +415,11 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 cancel:boolean
      * @type_function_param1_field4 itemData:any
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 fromIndex:number
      * @type_function_param1_field7 fromData:any
      */
-    onDragStart?: ((e: Cancelable & ComponentDragStartEvent<T>) => void),
+    onDragStart?: ((e: Cancelable & DragStartEventInfo<T>) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onRemove
      * @prevFileNamespace DevExpress.ui
@@ -426,7 +427,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 itemData:any
-     * @type_function_param1_field4 itemElement:dxElement
+     * @type_function_param1_field4 itemElement:DxElement
      * @type_function_param1_field5 fromIndex:number
      * @type_function_param1_field6 toIndex:number
      * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
@@ -434,7 +435,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field9 fromData:any
      * @type_function_param1_field10 toData:any
      */
-    onRemove?: ((e: ComponentRowDraggingEvent<T>) => void),
+    onRemove?: ((e: RowDraggingEventInfo<T>) => void),
     /**
      * @docid GridBaseOptions.rowDragging.onReorder
      * @prevFileNamespace DevExpress.ui
@@ -442,7 +443,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 event:event
      * @type_function_param1_field3 itemData:any
-     * @type_function_param1_field4 itemElement:dxElement
+     * @type_function_param1_field4 itemElement:DxElement
      * @type_function_param1_field5 fromIndex:number
      * @type_function_param1_field6 toIndex:number
      * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
@@ -452,7 +453,7 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1_field11 dropInsideItem:boolean
      * @type_function_param1_field12 promise:Promise<void>
      */
-    onReorder?: ((e: ComponentRowDraggingEvent<dxDataGrid> & DragReorderInfo) => void),
+    onReorder?: ((e: RowDraggingEventInfo<dxDataGrid> & DragReorderInfo) => void),
     /**
      * @docid GridBaseOptions.rowDragging.scrollSensitivity
      * @prevFileNamespace DevExpress.ui
@@ -466,10 +467,10 @@ export interface RowDragging<T extends GridBase> {
      */
     scrollSpeed?: number,
     /**
-    * @docid GridBaseOptions.rowDragging.showDragIcons
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
+     * @docid GridBaseOptions.rowDragging.showDragIcons
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
     showDragIcons?: boolean
 }
 
@@ -712,44 +713,44 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 formOptions:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAdaptiveDetailRowPreparing?: ((e: ComponentEvent<T> & AdaptiveDetailRowPreparingInfo) => void);
+    onAdaptiveDetailRowPreparing?: ((e: EventInfo<T> & AdaptiveDetailRowPreparingInfo) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 error:Error
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDataErrorOccurred?: ((e: ComponentEvent<T> & DataErrorOccurredInfo) => void);
+    onDataErrorOccurred?: ((e: EventInfo<T> & DataErrorOccurredInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
      * @public
      */
-    onEditCanceled?: ((e: ComponentEvent<T> & DataChangeInfo) => void);
+    onEditCanceled?: ((e: EventInfo<T> & DataChangeInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<DataChange>
      * @type_function_param1_field5 cancel:boolean
@@ -757,12 +758,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onEditCanceling?: ((e: Cancelable & ComponentEvent<T> & DataChangeInfo) => void);
+    onEditCanceling?: ((e: Cancelable & EventInfo<T> & DataChangeInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 promise:Promise<void>
@@ -771,12 +772,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onInitNewRow?: ((e: ComponentEvent<T> & NewRowInfo) => void);
+    onInitNewRow?: ((e: EventInfo<T> & NewRowInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 handled:boolean
@@ -785,12 +786,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: ComponentNativeEvent<T> & KeyDownInfo) => void);
+    onKeyDown?: ((e: NativeEventInfo<T> & KeyDownInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 key:any
      * @default null
@@ -798,39 +799,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowCollapsed?: ((e: ComponentEvent<T> & RowKeyInfo) => void);
+    onRowCollapsed?: ((e: EventInfo<T> & RowKeyInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 key:any
-     * @type_function_param1_field5 cancel:boolean
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onRowCollapsing?: ((e: Cancelable & ComponentEvent<T> & RowKeyInfo) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 key:any
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onRowExpanded?: ((e: ComponentEvent<T> & RowKeyInfo) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 key:any
      * @type_function_param1_field5 cancel:boolean
@@ -839,12 +813,39 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowExpanding?: ((e: Cancelable & ComponentEvent<T> & RowKeyInfo) => void);
+    onRowCollapsing?: ((e: Cancelable & EventInfo<T> & RowKeyInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 key:any
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRowExpanded?: ((e: EventInfo<T> & RowKeyInfo) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 key:any
+     * @type_function_param1_field5 cancel:boolean
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRowExpanding?: ((e: Cancelable & EventInfo<T> & RowKeyInfo) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -854,12 +855,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowInserted?: ((e: ComponentEvent<T> & RowInsertedInfo) => void);
+    onRowInserted?: ((e: EventInfo<T> & RowInsertedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 cancel:boolean|Promise<void>
@@ -868,12 +869,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowInserting?: ((e: ComponentEvent<T> & RowInsertingInfo) => void);
+    onRowInserting?: ((e: EventInfo<T> & RowInsertingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -883,12 +884,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowRemoved?: ((e: ComponentEvent<T> & RowRemovedInfo) => void);
+    onRowRemoved?: ((e: EventInfo<T> & RowRemovedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -898,12 +899,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowRemoving?: ((e: ComponentEvent<T> & RowRemovingInfo) => void);
+    onRowRemoving?: ((e: EventInfo<T> & RowRemovingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -913,12 +914,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowUpdated?: ((e: ComponentEvent<T> & RowUpdatedInfo) => void);
+    onRowUpdated?: ((e: EventInfo<T> & RowUpdatedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 oldData:object
      * @type_function_param1_field5 newData:object
@@ -929,12 +930,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowUpdating?: ((e: ComponentEvent<T> & RowUpdatingInfo) => void);
+    onRowUpdating?: ((e: EventInfo<T> & RowUpdatingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @type_function_param1_field5 isValid:boolean
@@ -948,24 +949,24 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowValidating?: ((e: ComponentEvent<T> & RowValidatingInfo) => void);
+    onRowValidating?: ((e: EventInfo<T> & RowValidatingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
      * @public
      */
-    onSaved?: ((e: ComponentEvent<T> & DataChangeInfo) => void);
+    onSaved?: ((e: EventInfo<T> & DataChangeInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 changes:Array<DataChange>
      * @type_function_param1_field5 promise:Promise<void>
@@ -974,12 +975,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onSaving?: ((e: ComponentEvent<T> & SavingInfo) => void);
+    onSaving?: ((e: EventInfo<T> & SavingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 currentSelectedRowKeys:Array<any>
      * @type_function_param1_field5 currentDeselectedRowKeys:Array<any>
@@ -990,12 +991,12 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: ComponentEvent<T> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 toolbarOptions:dxToolbarOptions
      * @default null
@@ -1003,7 +1004,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onToolbarPreparing?: ((e: ComponentEvent<T> & ToolbarPreparingInfo) => void);
+    onToolbarPreparing?: ((e: EventInfo<T> & ToolbarPreparingInfo) => void);
     /**
      * @docid
      * @type object
@@ -1136,7 +1137,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
 }
 
 export interface ColumnChooser {
-  /**
+    /**
      * @docid GridBaseOptions.columnChooser.allowSearch
      * @prevFileNamespace DevExpress.ui
      * @default false
@@ -1188,11 +1189,11 @@ export interface ColumnChooser {
 }
 
 export interface ColumnFixing {
-  /**
-    * @docid GridBaseOptions.columnFixing.enabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
+    /**
+     * @docid GridBaseOptions.columnFixing.enabled
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
     enabled?: boolean,
     /**
      * @docid GridBaseOptions.columnFixing.texts
@@ -1251,7 +1252,7 @@ export interface FilterPanelTexts {
 }
 
 export interface FilterRow {
-   /**
+    /**
      * @docid GridBaseOptions.filterRow.applyFilter
      * @prevFileNamespace DevExpress.ui
      * @type Enums.GridApplyFilterMode
@@ -1283,16 +1284,16 @@ export interface FilterRow {
      */
     operationDescriptions?: FilterRowOperationDescriptions,
     /**
-    * @docid GridBaseOptions.filterRow.resetOperationText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Reset"
-    */
+     * @docid GridBaseOptions.filterRow.resetOperationText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Reset"
+     */
     resetOperationText?: string,
     /**
-    * @docid GridBaseOptions.filterRow.showAllText
-    * @prevFileNamespace DevExpress.ui
-    * @default "(All)"
-    */
+     * @docid GridBaseOptions.filterRow.showAllText
+     * @prevFileNamespace DevExpress.ui
+     * @default "(All)"
+     */
     showAllText?: string,
     /**
      * @docid GridBaseOptions.filterRow.showOperationChooser
@@ -1378,7 +1379,7 @@ export interface FilterRowOperationDescriptions {
 }
 
 export interface HeaderFilter {
-  /**
+    /**
      * @docid GridBaseOptions.headerFilter.allowSearch
      * @prevFileNamespace DevExpress.ui
      * @default false
@@ -1439,7 +1440,7 @@ export interface HeaderFilterTexts {
 }
 
 export interface KeyboardNavigation {
-  /**
+    /**
      * @docid GridBaseOptions.keyboardNavigation.editOnKeyPress
      * @prevFileNamespace DevExpress.ui
      * @default false
@@ -1468,7 +1469,7 @@ export interface KeyboardNavigation {
 }
 
 export interface LoadPanel {
-  /**
+    /**
      * @docid GridBaseOptions.loadPanel.enabled
      * @prevFileNamespace DevExpress.ui
      * @type boolean|Enums.Mode
@@ -1482,34 +1483,34 @@ export interface LoadPanel {
      */
     height?: number,
     /**
-    * @docid GridBaseOptions.loadPanel.indicatorSrc
-    * @prevFileNamespace DevExpress.ui
-    * @default ""
-    */
+     * @docid GridBaseOptions.loadPanel.indicatorSrc
+     * @prevFileNamespace DevExpress.ui
+     * @default ""
+     */
     indicatorSrc?: string,
     /**
-    * @docid GridBaseOptions.loadPanel.shading
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
+     * @docid GridBaseOptions.loadPanel.shading
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
     shading?: boolean,
     /**
-    * @docid GridBaseOptions.loadPanel.shadingColor
-    * @prevFileNamespace DevExpress.ui
-    * @default ''
-    */
+     * @docid GridBaseOptions.loadPanel.shadingColor
+     * @prevFileNamespace DevExpress.ui
+     * @default ''
+     */
     shadingColor?: string,
     /**
-    * @docid GridBaseOptions.loadPanel.showIndicator
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
+     * @docid GridBaseOptions.loadPanel.showIndicator
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
     showIndicator?: boolean,
     /**
-    * @docid GridBaseOptions.loadPanel.showPane
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
+     * @docid GridBaseOptions.loadPanel.showPane
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
     showPane?: boolean,
     /**
      * @docid GridBaseOptions.loadPanel.text
@@ -1526,7 +1527,7 @@ export interface LoadPanel {
 }
 
 export interface Pager {
-  /**
+    /**
      * @docid GridBaseOptions.pager.allowedPageSizes
      * @prevFileNamespace DevExpress.ui
      * @type Array<number, Enums.GridPagerPageSize>|Enums.Mode
@@ -1562,7 +1563,7 @@ export interface Pager {
      * @docid GridBaseOptions.pager.showPageSizeSelector
      * @prevFileNamespace DevExpress.ui
      * @default false
-    */
+     */
     showPageSizeSelector?: boolean,
     /**
      * @docid GridBaseOptions.pager.visible
@@ -1620,46 +1621,46 @@ export interface SearchPanel {
 }
 
 export interface Sorting {
-  /**
-    * @docid GridBaseOptions.sorting.ascendingText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Sort Ascending"
-    */
+    /**
+     * @docid GridBaseOptions.sorting.ascendingText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Sort Ascending"
+     */
     ascendingText?: string,
     /**
-    * @docid GridBaseOptions.sorting.clearText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Clear Sorting"
-    */
+     * @docid GridBaseOptions.sorting.clearText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Clear Sorting"
+     */
     clearText?: string,
     /**
-    * @docid GridBaseOptions.sorting.descendingText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Sort Descending"
-    */
+     * @docid GridBaseOptions.sorting.descendingText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Sort Descending"
+     */
     descendingText?: string,
     /**
-    * @docid GridBaseOptions.sorting.mode
-    * @prevFileNamespace DevExpress.ui
-    * @type Enums.GridSortingMode
-    * @default "single"
-    */
+     * @docid GridBaseOptions.sorting.mode
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.GridSortingMode
+     * @default "single"
+     */
     mode?: 'multiple' | 'none' | 'single',
     /**
-    * @docid GridBaseOptions.sorting.showSortIndexes
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
+     * @docid GridBaseOptions.sorting.showSortIndexes
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
     showSortIndexes?: boolean
 }
 
 export interface StateStoring {
-  /**
+    /**
      * @docid GridBaseOptions.stateStoring.customLoad
      * @prevFileNamespace DevExpress.ui
      * @type_function_return Promise<Object>
      */
-    customLoad?: (() => TPromise<any>),
+    customLoad?: (() => DxPromise<any>),
     /**
      * @docid GridBaseOptions.stateStoring.customSave
      * @prevFileNamespace DevExpress.ui
@@ -1714,14 +1715,14 @@ export interface EditingBase {
      * @default null
      * @fires GridBaseOptions.onOptionChanged
      * @public
-    */
+     */
     editColumnName?: string;
     /**
      * @docid GridBaseOptions.editing.editRowKey
      * @default null
      * @fires GridBaseOptions.onOptionChanged
      * @public
-    */
+     */
     editRowKey?: any;
     /**
      * @docid GridBaseOptions.editing.form
@@ -1784,12 +1785,12 @@ export interface EditingBase {
 }
 
 /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  */
+ * @docid
+ * @prevFileNamespace DevExpress.ui
+ */
 export interface DataChange {
     /**
-     * @docid 
+     * @docid
      */
     key: any;
     /**
@@ -2021,7 +2022,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     /**
      * @docid
      * @publicName cancelEditData()
@@ -2181,7 +2182,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deselectAll(): TPromise<void>;
+    deselectAll(): DxPromise<void>;
     /**
      * @docid
      * @publicName deselectRows(keys)
@@ -2190,7 +2191,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deselectRows(keys: Array<any>): TPromise<any>;
+    deselectRows(keys: Array<any>): DxPromise<any>;
     /**
      * @docid
      * @publicName editCell(rowIndex, dataField)
@@ -2256,27 +2257,27 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    focus(element: TElement): void;
+    focus(element: UserDefinedElement): void;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, dataField)
      * @param1 rowIndex:number
      * @param2 dataField:string
-     * @return dxElement|undefined
+     * @return DxElement|undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getCellElement(rowIndex: number, dataField: string): TElement | undefined;
+    getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
      * @param1 rowIndex:number
      * @param2 visibleColumnIndex:number
-     * @return dxElement|undefined
+     * @return DxElement|undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
+    getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     /**
      * @docid
      * @publicName getCombinedFilter()
@@ -2312,7 +2313,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getRowElement(rowIndex: number): TElementsArray | undefined;
+    getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     /**
      * @docid
      * @publicName getRowIndexByKey(key)
@@ -2422,7 +2423,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    pageIndex(newIndex: number): TPromise<void>;
+    pageIndex(newIndex: number): DxPromise<void>;
     /**
      * @docid
      * @publicName pageSize()
@@ -2446,7 +2447,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(): TPromise<void>;
+    refresh(): DxPromise<void>;
     /**
      * @docid
      * @publicName refresh(changesOnly)
@@ -2455,7 +2456,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(changesOnly: boolean): TPromise<void>;
+    refresh(changesOnly: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName repaintRows(rowIndexes)
@@ -2471,7 +2472,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    saveEditData(): TPromise<void>;
+    saveEditData(): DxPromise<void>;
     /**
      * @docid
      * @publicName searchByText(text)
@@ -2487,7 +2488,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectAll(): TPromise<void>;
+    selectAll(): DxPromise<void>;
     /**
      * @docid
      * @publicName selectRows(keys, preserve)
@@ -2497,7 +2498,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
+    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
     /**
      * @docid
      * @publicName selectRowsByIndexes(indexes)
@@ -2506,7 +2507,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     /**
      * @docid
      * @publicName showColumnChooser()
@@ -2863,7 +2864,7 @@ export interface ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | TPromise<void>);
+    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | DxPromise<void>);
     /**
      * @docid GridBaseColumn.showEditorAlways
      * @default false
@@ -2945,7 +2946,7 @@ export interface ColumnBase {
 }
 
 export interface ColumnHeaderFilter {
-/**
+  /**
    * @docid GridBaseColumn.headerFilter.allowSearch
    * @prevFileNamespace DevExpress.ui
    * @default false
@@ -2989,7 +2990,7 @@ export interface ColumnHeaderFilter {
 }
 
 export interface ColumnLookup {
-/**
+  /**
    * @docid GridBaseColumn.lookup.allowClearing
    * @prevFileNamespace DevExpress.ui
    * @default false
@@ -3054,10 +3055,10 @@ export interface ColumnButtonBase {
 }
 
 /** @public */
-export type AdaptiveDetailRowPreparingEvent = ComponentEvent<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
+export type AdaptiveDetailRowPreparingEvent = EventInfo<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -3067,12 +3068,12 @@ export type CellClickEvent = ComponentNativeEvent<dxDataGrid> & {
   readonly column: any;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly cellElement: TElement;
+  readonly cellElement: DxElement;
   readonly row: RowObject;
 }
 
 /** @public */
-export type CellDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -3082,12 +3083,12 @@ export type CellDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
   readonly column: Column;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly cellElement: TElement;
+  readonly cellElement: DxElement;
   readonly row: RowObject;
 }
 
 /** @public */
-export type CellHoverChangedEvent = ComponentEvent<dxDataGrid> & {
+export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
   readonly eventType: string;
   readonly data: any;
   readonly key: any;
@@ -3098,12 +3099,12 @@ export type CellHoverChangedEvent = ComponentEvent<dxDataGrid> & {
   readonly rowIndex: number;
   readonly column: Column;
   readonly rowType: string;
-  readonly cellElement: TElement;
+  readonly cellElement: DxElement;
   readonly row: RowObject;
 }
 
 /** @public */
-export type CellPreparedEvent = ComponentEvent<dxDataGrid> & {
+export type CellPreparedEvent = EventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -3117,19 +3118,19 @@ export type CellPreparedEvent = ComponentEvent<dxDataGrid> & {
   readonly isSelected?: boolean;
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
-  readonly cellElement: TElement;
+  readonly cellElement: DxElement;
   readonly watch?: Function;
   readonly oldValue?: any;
 }
 
 /** @public */
-export type ContentReadyEvent = ComponentEvent<dxDataGrid>;
+export type ContentReadyEvent = EventInfo<dxDataGrid>;
 
 /** @public */
-export type ContextMenuPreparingEvent = ComponentEvent<dxDataGrid> & {
+export type ContextMenuPreparingEvent = EventInfo<dxDataGrid> & {
   items?: Array<any>;
   readonly target: string;
-  readonly targetElement: TElement;
+  readonly targetElement: DxElement;
   readonly columnIndex: number;
   readonly column?: Column;
   readonly rowIndex: number;
@@ -3137,26 +3138,26 @@ export type ContextMenuPreparingEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type DataErrorOccurredEvent = ComponentEvent<dxDataGrid> & DataErrorOccurredInfo;
+export type DataErrorOccurredEvent = EventInfo<dxDataGrid> & DataErrorOccurredInfo;
 
 /** @public */
-export type DisposingEvent = ComponentEvent<dxDataGrid>;
+export type DisposingEvent = EventInfo<dxDataGrid>;
 
 /** @public */
-export type EditCanceledEvent = ComponentEvent<dxDataGrid> & DataChangeInfo;
+export type EditCanceledEvent = EventInfo<dxDataGrid> & DataChangeInfo;
 
 /** @public */
-export type EditCancelingEvent = Cancelable & ComponentEvent<dxDataGrid> & DataChangeInfo;
+export type EditCancelingEvent = Cancelable & EventInfo<dxDataGrid> & DataChangeInfo;
 
 /** @public */
-export type EditingStartEvent = Cancelable & ComponentEvent<dxDataGrid> & {
+export type EditingStartEvent = Cancelable & EventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly column?: any;
 }
 
 /** @public */
-export type EditorPreparedEvent = ComponentEvent<dxDataGrid> & {
+export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
   readonly parentType: string;
   readonly value?: any;
   readonly setValue?: any;
@@ -3164,14 +3165,14 @@ export type EditorPreparedEvent = ComponentEvent<dxDataGrid> & {
   readonly width?: number;
   readonly disabled: boolean;
   readonly rtlEnabled: boolean;
-  readonly editorElement: TElement;
+  readonly editorElement: DxElement;
   readonly readOnly: boolean;
   readonly dataField?: string;
   readonly row?: RowObject;
 }
 
 /** @public */
-export type EditorPreparingEvent = ComponentEvent<dxDataGrid> & {
+export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
   readonly parentType: string;
   readonly value?: any;
   readonly setValue?: any;
@@ -3180,7 +3181,7 @@ export type EditorPreparingEvent = ComponentEvent<dxDataGrid> & {
   readonly disabled: boolean;
   readonly rtlEnabled: boolean;
   cancel: boolean;
-  readonly editorElement: TElement;
+  readonly editorElement: DxElement;
   readonly readOnly: boolean;
   editorName: string;
   editorOptions: any;
@@ -3189,25 +3190,25 @@ export type EditorPreparingEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type ExportedEvent  = ComponentEvent<dxDataGrid>;
+export type ExportedEvent  = EventInfo<dxDataGrid>;
 
 /** @public */
-export type ExportingEvent = Cancelable & ComponentEvent<dxDataGrid> & {
+export type ExportingEvent = Cancelable & EventInfo<dxDataGrid> & {
   fileName?: string;
 }
 
 /** @public */
 export type FileSavingEvent = Cancelable & {
   readonly component: dxDataGrid;
-  readonly element: TElement;
+  readonly element: DxElement;
   fileName?: string;
   format?: string;
   readonly data: Blob;
 }
 
 /** @public */
-export type FocusedCellChangedEvent = ComponentEvent<dxDataGrid> & {
-  readonly cellElement: TElement;
+export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
+  readonly cellElement: DxElement;
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly row?: RowObject;
@@ -3215,8 +3216,8 @@ export type FocusedCellChangedEvent = ComponentEvent<dxDataGrid> & {
 }
 
 /** @public */
-export type FocusedCellChangingEvent = Cancelable & ComponentNativeEvent<dxDataGrid> & {
-  readonly cellElement: TElement;
+export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
+  readonly cellElement: DxElement;
   readonly prevColumnIndex: number;
   readonly prevRowIndex: number;
   newColumnIndex: number;
@@ -3227,34 +3228,34 @@ export type FocusedCellChangingEvent = Cancelable & ComponentNativeEvent<dxDataG
 }
 
 /** @public */
-export type FocusedRowChangedEvent = ComponentEvent<dxDataGrid> & {
-  readonly rowElement: TElement;
+export type FocusedRowChangedEvent = EventInfo<dxDataGrid> & {
+  readonly rowElement: DxElement;
   readonly rowIndex: number;
   readonly row?: RowObject;
 }
 
 /** @public */
-export type FocusedRowChangingEvent = Cancelable & ComponentNativeEvent<dxDataGrid> & {
-  readonly rowElement: TElement;
+export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
+  readonly rowElement: DxElement;
   readonly prevRowIndex: number;
   newRowIndex: number;
   readonly rows: Array<RowObject>;
 }
 
 /** @public */
-export type InitializedEvent = ComponentInitializedEvent<dxDataGrid>;
+export type InitializedEvent = InitializedEventInfo<dxDataGrid>;
 
 /** @public */
-export type InitNewRowEvent = ComponentEvent<dxDataGrid> & NewRowInfo;
+export type InitNewRowEvent = EventInfo<dxDataGrid> & NewRowInfo;
 
 /** @public */
-export type KeyDownEvent = ComponentNativeEvent<dxDataGrid> & KeyDownInfo;
+export type KeyDownEvent = NativeEventInfo<dxDataGrid> & KeyDownInfo;
 
 /** @public */
-export type OptionChangedEvent = ComponentEvent<dxDataGrid> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxDataGrid> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type RowClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -3265,18 +3266,18 @@ export type RowClickEvent = ComponentNativeEvent<dxDataGrid> & {
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
   readonly groupIndex?: number;
-  readonly rowElement: TElement;
+  readonly rowElement: DxElement;
   readonly handled: boolean;
 }
 
 /** @public */
-export type RowCollapsedEvent = ComponentEvent<dxDataGrid> & RowKeyInfo;
+export type RowCollapsedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowCollapsingEvent = Cancelable & ComponentEvent<dxDataGrid> & RowKeyInfo;
+export type RowCollapsingEvent = Cancelable & EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type RowDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -3287,23 +3288,23 @@ export type RowDblClickEvent = ComponentNativeEvent<dxDataGrid> & {
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
   readonly groupIndex?: number;
-  readonly rowElement: TElement;
+  readonly rowElement: DxElement;
 }
 
 /** @public */
-export type RowExpandedEvent = ComponentEvent<dxDataGrid> & RowKeyInfo;
+export type RowExpandedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowExpandingEvent = Cancelable & ComponentEvent<dxDataGrid> & RowKeyInfo;
+export type RowExpandingEvent = Cancelable & EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowInsertedEvent = ComponentEvent<dxDataGrid> & RowInsertedInfo;
+export type RowInsertedEvent = EventInfo<dxDataGrid> & RowInsertedInfo;
 
 /** @public */
-export type RowInsertingEvent = ComponentEvent<dxDataGrid> & RowInsertingInfo;
+export type RowInsertingEvent = EventInfo<dxDataGrid> & RowInsertingInfo;
 
 /** @public */
-export type RowPreparedEvent = ComponentEvent<dxDataGrid> & {
+export type RowPreparedEvent = EventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -3314,60 +3315,60 @@ export type RowPreparedEvent = ComponentEvent<dxDataGrid> & {
   readonly isSelected?: boolean;
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
-  readonly rowElement: TElement;
+  readonly rowElement: DxElement;
 }
 
 /** @public */
-export type RowRemovedEvent = ComponentEvent<dxDataGrid> & RowRemovedInfo;
+export type RowRemovedEvent = EventInfo<dxDataGrid> & RowRemovedInfo;
 
 /** @public */
-export type RowRemovingEvent = ComponentEvent<dxDataGrid> & RowRemovingInfo;
+export type RowRemovingEvent = EventInfo<dxDataGrid> & RowRemovingInfo;
 
 /** @public */
-export type RowUpdatedEvent = ComponentEvent<dxDataGrid> & RowUpdatedInfo;
+export type RowUpdatedEvent = EventInfo<dxDataGrid> & RowUpdatedInfo;
 
 /** @public */
-export type RowUpdatingEvent = ComponentEvent<dxDataGrid> & RowUpdatingInfo;
+export type RowUpdatingEvent = EventInfo<dxDataGrid> & RowUpdatingInfo;
 
 /** @public */
-export type RowValidatingEvent = ComponentEvent<dxDataGrid> & RowValidatingInfo;
+export type RowValidatingEvent = EventInfo<dxDataGrid> & RowValidatingInfo;
 
 /** @public */
-export type SavedEvent = ComponentEvent<dxDataGrid> & DataChangeInfo;
+export type SavedEvent = EventInfo<dxDataGrid> & DataChangeInfo;
 
 /** @public */
-export type SavingEvent = ComponentEvent<dxDataGrid> & SavingInfo;
+export type SavingEvent = EventInfo<dxDataGrid> & SavingInfo;
 
 /** @public */
-export type SelectionChangedEvent = ComponentEvent<dxDataGrid> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxDataGrid> & SelectionChangedInfo;
 
 /** @public */
-export type ToolbarPreparingEvent = ComponentEvent<dxDataGrid> & ToolbarPreparingInfo;
+export type ToolbarPreparingEvent = EventInfo<dxDataGrid> & ToolbarPreparingInfo;
 
 
 /** @public */
-export type RowDraggingAddEvent = ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
+export type RowDraggingAddEvent = RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type RowDraggingChangeEvent = Cancelable & ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
+export type RowDraggingChangeEvent = Cancelable & RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type RowDraggingEndEvent = Cancelable & ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
+export type RowDraggingEndEvent = Cancelable & RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type RowDraggingMoveEvent = Cancelable & ComponentRowDraggingEvent<dxDataGrid> & DragDropInfo;
+export type RowDraggingMoveEvent = Cancelable & RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
 
 /** @public */
-export type RowDraggingStartEvent = Cancelable & ComponentDragStartEvent<dxDataGrid>;
+export type RowDraggingStartEvent = Cancelable & DragStartEventInfo<dxDataGrid>;
 
 /** @public */
-export type RowDraggingRemoveEvent = ComponentRowDraggingEvent<dxDataGrid>;
+export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxDataGrid>;
 
 /** @public */
-export type RowDraggingReorderEvent = ComponentRowDraggingEvent<dxDataGrid> & DragReorderInfo;
+export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReorderInfo;
 
 /** @public */ 
-export type ColumnButtonClickEvent = ComponentNativeEvent<dxDataGrid> & {
+export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
   row?: RowObject;
   column?: Column;
 }
@@ -3534,7 +3535,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -3546,7 +3547,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field11 column:object
      * @type_function_param1_field12 rowIndex:number
      * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:dxElement
+     * @type_function_param1_field14 cellElement:DxElement
      * @type_function_param1_field15 row:dxDataGridRowObject
      * @default null
      * @action
@@ -3558,7 +3559,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -3570,7 +3571,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field11 column:dxDataGridColumn
      * @type_function_param1_field12 rowIndex:number
      * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:dxElement
+     * @type_function_param1_field14 cellElement:DxElement
      * @type_function_param1_field15 row:dxDataGridRowObject
      * @default null
      * @action
@@ -3582,7 +3583,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 eventType:string
      * @type_function_param1_field5 data:object
@@ -3594,7 +3595,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field11 rowIndex:number
      * @type_function_param1_field12 column:dxDataGridColumn
      * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:dxElement
+     * @type_function_param1_field14 cellElement:DxElement
      * @type_function_param1_field15 row:dxDataGridRowObject
      * @default null
      * @action
@@ -3606,7 +3607,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -3621,7 +3622,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field14 isSelected:boolean
      * @type_function_param1_field15 isExpanded:boolean
      * @type_function_param1_field16 isNewRow:boolean
-     * @type_function_param1_field17 cellElement:dxElement
+     * @type_function_param1_field17 cellElement:DxElement
      * @type_function_param1_field18 watch:function
      * @type_function_param1_field19 oldValue:any
      * @default null
@@ -3634,11 +3635,11 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:Object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 items:Array<Object>
      * @type_function_param1_field5 target:string
-     * @type_function_param1_field6 targetElement:dxElement
+     * @type_function_param1_field6 targetElement:DxElement
      * @type_function_param1_field7 columnIndex:number
      * @type_function_param1_field8 column:dxDataGridColumn
      * @type_function_param1_field9 rowIndex:number
@@ -3653,7 +3654,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -3669,7 +3670,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 options:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 parentType:string
      * @type_function_param1_field5 value:any
@@ -3678,7 +3679,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field8 width:number
      * @type_function_param1_field9 disabled:boolean
      * @type_function_param1_field10 rtlEnabled:boolean
-     * @type_function_param1_field11 editorElement:dxElement
+     * @type_function_param1_field11 editorElement:DxElement
      * @type_function_param1_field12 readOnly:boolean
      * @type_function_param1_field13 dataField:string
      * @type_function_param1_field14 row:dxDataGridRowObject
@@ -3692,7 +3693,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 parentType:string
      * @type_function_param1_field5 value:any
@@ -3702,7 +3703,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field9 disabled:boolean
      * @type_function_param1_field10 rtlEnabled:boolean
      * @type_function_param1_field11 cancel:boolean
-     * @type_function_param1_field12 editorElement:dxElement
+     * @type_function_param1_field12 editorElement:DxElement
      * @type_function_param1_field13 readOnly:boolean
      * @type_function_param1_field14 editorName:string
      * @type_function_param1_field15 editorOptions:object
@@ -3719,7 +3720,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -3731,7 +3732,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
@@ -3745,7 +3746,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 fileName:string
      * @type_function_param1_field4 format:string
      * @type_function_param1_field5 data:BLOB
@@ -3761,9 +3762,9 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cellElement:dxElement
+     * @type_function_param1_field4 cellElement:DxElement
      * @type_function_param1_field5 columnIndex:number
      * @type_function_param1_field6 rowIndex:number
      * @type_function_param1_field7 row:dxDataGridRowObject
@@ -3778,9 +3779,9 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 cellElement:dxElement
+     * @type_function_param1_field4 cellElement:DxElement
      * @type_function_param1_field5 prevColumnIndex:number
      * @type_function_param1_field6 prevRowIndex:number
      * @type_function_param1_field7 newColumnIndex:number
@@ -3800,9 +3801,9 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 rowElement:dxElement
+     * @type_function_param1_field4 rowElement:DxElement
      * @type_function_param1_field5 rowIndex:number
      * @type_function_param1_field6 row:dxDataGridRowObject
      * @default null
@@ -3815,9 +3816,9 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 rowElement:dxElement
+     * @type_function_param1_field4 rowElement:DxElement
      * @type_function_param1_field5 prevRowIndex:number
      * @type_function_param1_field6 newRowIndex:number
      * @type_function_param1_field7 event:event
@@ -3833,7 +3834,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -3846,7 +3847,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
      * @type_function_param1_field14 groupIndex:number
-     * @type_function_param1_field15 rowElement:dxElement
+     * @type_function_param1_field15 rowElement:DxElement
      * @type_function_param1_field16 handled:boolean
      * @default null
      * @action
@@ -3858,7 +3859,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -3871,7 +3872,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
      * @type_function_param1_field14 groupIndex:number
-     * @type_function_param1_field15 rowElement:dxElement
+     * @type_function_param1_field15 rowElement:DxElement
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -3882,7 +3883,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -3894,7 +3895,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field11 isSelected:boolean
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
-     * @type_function_param1_field14 rowElement:dxElement
+     * @type_function_param1_field14 rowElement:DxElement
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -3909,7 +3910,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @public
      */
     remoteOperations?: boolean | {
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default false
@@ -3948,7 +3949,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     } | 'auto';
     /**
      * @docid
-     * @type_function_param1 rowElement:dxElement
+     * @type_function_param1 rowElement:DxElement
      * @type_function_param2 rowInfo:object
      * @type_function_param2_field1 key:any
      * @type_function_param2_field2 data:any
@@ -3963,7 +3964,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowTemplate?: template | ((rowElement: TElement, rowInfo: RowTemplateData) => any);
+    rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -4020,212 +4021,212 @@ export interface ExcelCellInfo {
 
 export interface Export {
   /**
-    * @docid dxDataGridOptions.export.allowExportSelectedData
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   allowExportSelectedData?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.customizeExcelCell
-    * @prevFileNamespace DevExpress.ui
-    * @deprecated
-    * @type_function_param1 options:object
-    * @type_function_param1_field1 component:dxDataGrid
-    * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
-    * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
-    * @type_function_param1_field4 wrapTextEnabled:boolean
-    * @type_function_param1_field5 backgroundColor:string
-    * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
-    * @type_function_param1_field7 fillPatternColor:string
-    * @type_function_param1_field8 font:ExcelFont
-    * @type_function_param1_field9 value:string|number|date
-    * @type_function_param1_field10 numberFormat:string
-    * @type_function_param1_field11 gridCell:ExcelDataGridCell
-    */
-   customizeExcelCell?: ((options: ExcelCellInfo) => void),
-   /**
-    * @docid dxDataGridOptions.export.enabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   enabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.excelFilterEnabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    * @deprecated
-    */
-   excelFilterEnabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.excelWrapTextEnabled
-    * @prevFileNamespace DevExpress.ui
-    * @default undefined
-    * @deprecated
-    */
-   excelWrapTextEnabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.fileName
-    * @prevFileNamespace DevExpress.ui
-    * @default "DataGrid"
-    * @deprecated
-    */
-   fileName?: string,
-   /**
+   * @docid dxDataGridOptions.export.allowExportSelectedData
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  allowExportSelectedData?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.customizeExcelCell
+   * @prevFileNamespace DevExpress.ui
+   * @deprecated
+   * @type_function_param1 options:object
+   * @type_function_param1_field1 component:dxDataGrid
+   * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
+   * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
+   * @type_function_param1_field4 wrapTextEnabled:boolean
+   * @type_function_param1_field5 backgroundColor:string
+   * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
+   * @type_function_param1_field7 fillPatternColor:string
+   * @type_function_param1_field8 font:ExcelFont
+   * @type_function_param1_field9 value:string|number|date
+   * @type_function_param1_field10 numberFormat:string
+   * @type_function_param1_field11 gridCell:ExcelDataGridCell
+   */
+  customizeExcelCell?: ((options: ExcelCellInfo) => void),
+  /**
+   * @docid dxDataGridOptions.export.enabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  enabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.excelFilterEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   * @deprecated
+   */
+  excelFilterEnabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.excelWrapTextEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   * @deprecated
+   */
+  excelWrapTextEnabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.fileName
+   * @prevFileNamespace DevExpress.ui
+   * @default "DataGrid"
+   * @deprecated
+   */
+  fileName?: string,
+  /**
    * @docid dxDataGridOptions.export.ignoreExcelErrors
    * @prevFileNamespace DevExpress.ui
    * @default true
    * @deprecated
    */
-   ignoreExcelErrors?: boolean,
-   /**
-    * @docid dxDataGridOptions.export.proxyUrl
-    * @prevFileNamespace DevExpress.ui
-    * @default undefined
-    * @deprecated
-    */
-   proxyUrl?: string,
-   /**
-    * @docid dxDataGridOptions.export.texts
-    * @type object
-    * @prevFileNamespace DevExpress.ui
-    */
-   texts?: ExportTexts
+  ignoreExcelErrors?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.proxyUrl
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   * @deprecated
+   */
+  proxyUrl?: string,
+  /**
+   * @docid dxDataGridOptions.export.texts
+   * @type object
+   * @prevFileNamespace DevExpress.ui
+   */
+  texts?: ExportTexts
 }
 
 export interface ExportTexts {
-   /**
-    * @docid dxDataGridOptions.export.texts.exportAll
-    * @prevFileNamespace DevExpress.ui
-    * @default "Export all data"
-    */
-   exportAll?: string,
-   /**
-    * @docid dxDataGridOptions.export.texts.exportSelectedRows
-    * @prevFileNamespace DevExpress.ui
-    * @default "Export selected rows"
-    */
-   exportSelectedRows?: string,
-   /**
-    * @docid dxDataGridOptions.export.texts.exportTo
-    * @prevFileNamespace DevExpress.ui
-    * @default "Export"
-    */
-   exportTo?: string
+  /**
+   * @docid dxDataGridOptions.export.texts.exportAll
+   * @prevFileNamespace DevExpress.ui
+   * @default "Export all data"
+   */
+  exportAll?: string,
+  /**
+   * @docid dxDataGridOptions.export.texts.exportSelectedRows
+   * @prevFileNamespace DevExpress.ui
+   * @default "Export selected rows"
+   */
+  exportSelectedRows?: string,
+  /**
+   * @docid dxDataGridOptions.export.texts.exportTo
+   * @prevFileNamespace DevExpress.ui
+   * @default "Export"
+   */
+  exportTo?: string
 }
 
 export interface GroupPanel {
   /**
-    * @docid dxDataGridOptions.groupPanel.allowColumnDragging
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
-   allowColumnDragging?: boolean,
-   /**
-    * @docid dxDataGridOptions.groupPanel.emptyPanelText
-    * @prevFileNamespace DevExpress.ui
-    * @default "Drag a column header here to group by that column"
-    */
-   emptyPanelText?: string,
-   /**
-    * @docid dxDataGridOptions.groupPanel.visible
-    * @prevFileNamespace DevExpress.ui
-    * @type boolean|Enums.Mode
-    * @default false
-    */
-   visible?: boolean | 'auto'
+   * @docid dxDataGridOptions.groupPanel.allowColumnDragging
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  allowColumnDragging?: boolean,
+  /**
+   * @docid dxDataGridOptions.groupPanel.emptyPanelText
+   * @prevFileNamespace DevExpress.ui
+   * @default "Drag a column header here to group by that column"
+   */
+  emptyPanelText?: string,
+  /**
+   * @docid dxDataGridOptions.groupPanel.visible
+   * @prevFileNamespace DevExpress.ui
+   * @type boolean|Enums.Mode
+   * @default false
+   */
+  visible?: boolean | 'auto'
 }
 
 export interface Grouping {
- /**
-    * @docid dxDataGridOptions.grouping.allowCollapsing
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
-   allowCollapsing?: boolean,
-   /**
-    * @docid dxDataGridOptions.grouping.autoExpandAll
-    * @prevFileNamespace DevExpress.ui
-    * @default true
-    */
-   autoExpandAll?: boolean,
-   /**
-    * @docid dxDataGridOptions.grouping.contextMenuEnabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   contextMenuEnabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.grouping.expandMode
-    * @prevFileNamespace DevExpress.ui
-    * @default 'rowClick' [for](mobile_devices)
-    * @type Enums.GridGroupingExpandMode
-    * @default "buttonClick"
-    */
-   expandMode?: 'buttonClick' | 'rowClick',
-   /**
-    * @docid dxDataGridOptions.grouping.texts
-    * @type object
-    * @prevFileNamespace DevExpress.ui
-    */
-   texts?: GroupingTexts
+  /**
+   * @docid dxDataGridOptions.grouping.allowCollapsing
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  allowCollapsing?: boolean,
+  /**
+   * @docid dxDataGridOptions.grouping.autoExpandAll
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  autoExpandAll?: boolean,
+  /**
+   * @docid dxDataGridOptions.grouping.contextMenuEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  contextMenuEnabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.grouping.expandMode
+   * @prevFileNamespace DevExpress.ui
+   * @default 'rowClick' [for](mobile_devices)
+   * @type Enums.GridGroupingExpandMode
+   * @default "buttonClick"
+   */
+  expandMode?: 'buttonClick' | 'rowClick',
+  /**
+   * @docid dxDataGridOptions.grouping.texts
+   * @type object
+   * @prevFileNamespace DevExpress.ui
+   */
+  texts?: GroupingTexts
 }
 
 export interface GroupingTexts {
-   /**
+  /**
    * @docid dxDataGridOptions.grouping.texts.groupByThisColumn
    * @prevFileNamespace DevExpress.ui
    * @default "Group by This Column"
    */
-   groupByThisColumn?: string,
-   /**
-    * @docid dxDataGridOptions.grouping.texts.groupContinuedMessage
-    * @prevFileNamespace DevExpress.ui
-    * @default "Continued from the previous page"
-    */
-   groupContinuedMessage?: string,
-   /**
+  groupByThisColumn?: string,
+  /**
+   * @docid dxDataGridOptions.grouping.texts.groupContinuedMessage
+   * @prevFileNamespace DevExpress.ui
+   * @default "Continued from the previous page"
+   */
+  groupContinuedMessage?: string,
+  /**
    * @docid dxDataGridOptions.grouping.texts.groupContinuesMessage
    * @prevFileNamespace DevExpress.ui
    * @default "Continues on the next page"
    */
-   groupContinuesMessage?: string,
-   /**
+  groupContinuesMessage?: string,
+  /**
    * @docid dxDataGridOptions.grouping.texts.ungroup
    * @prevFileNamespace DevExpress.ui
    * @default "Ungroup"
    */
-   ungroup?: string,
-   /**
+  ungroup?: string,
+  /**
    * @docid dxDataGridOptions.grouping.texts.ungroupAll
    * @prevFileNamespace DevExpress.ui
    * @default "Ungroup All"
    */
-   ungroupAll?: string
+  ungroupAll?: string
 }
 
 export interface MasterDetail {
-   /**
-    * @docid dxDataGridOptions.masterDetail.autoExpandAll
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   autoExpandAll?: boolean,
-   /**
-    * @docid dxDataGridOptions.masterDetail.enabled
-    * @prevFileNamespace DevExpress.ui
-    * @default false
-    */
-   enabled?: boolean,
-   /**
-    * @docid dxDataGridOptions.masterDetail.template
-    * @prevFileNamespace DevExpress.ui
-    * @type_function_param1 detailElement:dxElement
-    * @type_function_param2 detailInfo:object
-    * @type_function_param2_field1 key:any
-    * @type_function_param2_field2 data:object
-    * @type_function_param2_field3 watch:function
-    */
-   template?: template | ((detailElement: TElement, detailInfo: MasterDetailTemplateData) => any)
+  /**
+   * @docid dxDataGridOptions.masterDetail.autoExpandAll
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  autoExpandAll?: boolean,
+  /**
+   * @docid dxDataGridOptions.masterDetail.enabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  enabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.masterDetail.template
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 detailElement:DxElement
+   * @type_function_param2 detailInfo:object
+   * @type_function_param2_field1 key:any
+   * @type_function_param2_field2 data:object
+   * @type_function_param2_field3 watch:function
+   */
+  template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData) => any)
 }
 
 export interface dxDataGridSortByGroupSummaryInfoItem {
@@ -4591,7 +4592,7 @@ export interface Selection extends SelectionBase {
  * @public
  */
 declare class dxDataGrid extends Widget implements GridBase {
-    constructor(element: TElement, options?: dxDataGridOptions)
+    constructor(element: UserDefinedElement, options?: dxDataGridOptions)
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -4607,7 +4608,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): TPromise<void>;
+    addRow(): DxPromise<void>;
     /**
      * @docid
      * @publicName clearGrouping()
@@ -4631,7 +4632,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseRow(key: any): TPromise<void>;
+    collapseRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandAll(groupIndex)
@@ -4648,7 +4649,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandRow(key: any): TPromise<void>;
+    expandRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName exportToExcel(selectionOnly)
@@ -4665,7 +4666,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowKeys(): Array<any> & TPromise<any>;
+    getSelectedRowKeys(): Array<any> & DxPromise<any>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
@@ -4673,7 +4674,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowsData(): Array<any> & TPromise<any>;
+    getSelectedRowsData(): Array<any> & DxPromise<any>;
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
@@ -4737,7 +4738,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     totalCount(): number;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -4756,8 +4757,8 @@ declare class dxDataGrid extends Widget implements GridBase {
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
-    deselectAll(): TPromise<void>;
-    deselectRows(keys: Array<any>): TPromise<any>;
+    deselectAll(): DxPromise<void>;
+    deselectRows(keys: Array<any>): DxPromise<any>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
@@ -4766,14 +4767,14 @@ declare class dxDataGrid extends Widget implements GridBase {
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: TElement): void;
-    getCellElement(rowIndex: number, dataField: string): TElement | undefined;
-    getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
+    focus(element: UserDefinedElement): void;
+    getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
+    getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
     getKeyByRowIndex(rowIndex: number): any;
-    getRowElement(rowIndex: number): TElementsArray | undefined;
+    getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
@@ -4786,17 +4787,17 @@ declare class dxDataGrid extends Widget implements GridBase {
     navigateToRow(key: any): void;
     pageCount(): number;
     pageIndex(): number;
-    pageIndex(newIndex: number): TPromise<void>;
+    pageIndex(newIndex: number): DxPromise<void>;
     pageSize(): number;
     pageSize(value: number): void;
-    refresh(): TPromise<void>;
-    refresh(changesOnly: boolean): TPromise<void>;
+    refresh(): DxPromise<void>;
+    refresh(changesOnly: boolean): DxPromise<void>;
     repaintRows(rowIndexes: Array<number>): void;
-    saveEditData(): TPromise<void>;
+    saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
-    selectAll(): TPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
+    selectAll(): DxPromise<void>;
+    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;
@@ -4850,7 +4851,7 @@ export interface Column extends ColumnBase {
     calculateGroupValue?: string | ((rowData: any) => any);
     /**
      * @docid dxDataGridColumn.cellTemplate
-     * @type_function_param1 cellElement:dxElement
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 data:object
      * @type_function_param2_field2 component:dxDataGrid
@@ -4867,7 +4868,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnCellTemplateData) => any);
+    cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.columns
      * @type Array<dxDataGridColumn|string>
@@ -4878,7 +4879,7 @@ export interface Column extends ColumnBase {
     columns?: Array<Column | string>;
     /**
      * @docid dxDataGridColumn.editCellTemplate
-     * @type_function_param1 cellElement:dxElement
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 setValue(newValue, newText):any
      * @type_function_param2_field2 data:object
@@ -4895,10 +4896,10 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editCellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnEditCellTemplateData) => any);
+    editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.groupCellTemplate
-     * @type_function_param1 cellElement:dxElement
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 data:object
      * @type_function_param2_field2 component:dxDataGrid
@@ -4915,7 +4916,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupCellTemplate?: template | ((cellElement: TElement, cellInfo: ColumnGroupCellTemplateData) => any);
+    groupCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnGroupCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.groupIndex
      * @default undefined
@@ -4926,7 +4927,7 @@ export interface Column extends ColumnBase {
     groupIndex?: number;
     /**
      * @docid dxDataGridColumn.headerCellTemplate
-     * @type_function_param1 columnHeader:dxElement
+     * @type_function_param1 columnHeader:DxElement
      * @type_function_param2 headerInfo:object
      * @type_function_param2_field1 component:dxDataGrid
      * @type_function_param2_field2 columnIndex:number
@@ -4934,7 +4935,7 @@ export interface Column extends ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: ColumnHeaderCellTemplateData) => any);
+    headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.showWhenGrouped
      * @default false
@@ -4970,7 +4971,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @docid dxDataGridColumnButton.onClick
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:dxElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 row:dxDataGridRowObject
@@ -4981,7 +4982,7 @@ export interface ColumnButton extends ColumnButtonBase {
     onClick?: ((e: ColumnButtonClickEvent) => void);
     /**
      * @docid dxDataGridColumnButton.template
-     * @type_function_param1 cellElement:dxElement
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 component:dxDataGrid
      * @type_function_param2_field2 data:object
@@ -4995,7 +4996,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: ColumnButtonTemplateData) => string | TElement);
+    template?: template | ((cellElement: DxElement, cellInfo: ColumnButtonTemplateData) => string | UserDefinedElement);
     /**
      * @docid dxDataGridColumnButton.visible
      * @default true
@@ -5034,7 +5035,7 @@ export interface RowObject {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-     readonly isEditing?: boolean;
+    readonly isEditing?: boolean;
     /**
      * @docid dxDataGridRowObject.isExpanded
      * @prevFileNamespace DevExpress.ui
@@ -5079,6 +5080,7 @@ export interface RowObject {
     readonly values: Array<any>;
 }
 
+/** @public */
 export type Options = dxDataGridOptions;
 
 /** @deprecated use Options instead */

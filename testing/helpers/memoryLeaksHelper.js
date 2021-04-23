@@ -16,13 +16,15 @@
     const exports = {};
 
     exports.createTestNode = function() {
-        const testNode = $('<div />');
-        testNode.appendTo('body');
+        // NOTE: workaround for inferno
+        // component can not be rendered as body first-level child
+        const $container = $('<div />').appendTo('body');
+        const testNode = $('<div />').appendTo($container);
         return testNode;
     };
 
     exports.destroyTestNode = function(testNode) {
-        testNode.remove();
+        testNode.parent().remove();
     };
 
     exports.getAllPossibleEventTargets = function() {

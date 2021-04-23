@@ -1682,4 +1682,33 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         assert.notOk(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is hidden');
     });
+
+    test('itemView updated after directory creation and breadcrumbs navigation - T894271', function(assert) {
+        const testDirName = 'Test Dir 1';
+
+        this.fileManager.option({
+            currentPath: 'Folder 1/Folder 1.1',
+            itemView: {
+                showParentFolder: true,
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        const fileSystem = this.fileManager.option('fileSystemProvider');
+        const parentDir = fileSystem[0].items[0];
+        parentDir.items.push({ name: testDirName, isDirectory: true });
+        this.fileManager.refresh();
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsItemName(6), testDirName, 'directory created');
+
+        this.wrapper.getBreadcrumbsItemByText('Folder 1').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.findDetailsItem('Folder 1.1').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsItemName(6), testDirName, 'itemView updated');
+    });
 });
