@@ -21,12 +21,12 @@ import {
   getPermutations,
 } from './utils';
 
-describe('TopPocket', () => {
+describe('Scrollbar', () => {
   it('render scrollbar with defaults', () => {
     const props = new ScrollbarProps();
-    const scrollable = mount<Scrollbar>(<Scrollbar {...props} />);
+    const viewModel = mount<Scrollbar>(<Scrollbar {...props} />);
 
-    expect(scrollable.props()).toEqual({
+    expect(viewModel.props()).toEqual({
       activeStateEnabled: false,
       baseContainerSize: 0,
       baseContentSize: 0,
@@ -35,7 +35,6 @@ describe('TopPocket', () => {
       containerSize: 0,
       contentSize: 0,
       direction: 'vertical',
-      expandable: true,
       forceGeneratePockets: false,
       forceVisibility: false,
       isScrollableHovered: false,
@@ -45,9 +44,9 @@ describe('TopPocket', () => {
       updateManually: false,
       pullDownEnabled: false,
       reachBottomEnabled: false,
-      scaleRatio: 1,
       scrollByContent: true,
       scrollByThumb: false,
+      scrollLocation: 0,
       scrollableOffset: 0,
       showScrollbar: 'onScroll',
       topPocketSize: 0,
@@ -57,25 +56,34 @@ describe('TopPocket', () => {
 
   describe('Styles', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
-      each(['never', 'always', 'onScroll', 'onHover', null, undefined]).describe('ShowScrollbar: %o', (showScrollbar) => {
-        each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
-          each([100, 200]).describe('ContentSize: %o', (contentSize) => {
-            it('Should assign styles', () => {
-              const scrollbar = new Scrollbar({
-                showScrollbar,
-                direction,
-                containerSize,
-                contentSize,
-                scaleRatio: 1,
+      each([...optionValues.direction, null, undefined]).describe('ShowScrollbar: %o', (showScrollbar) => {
+        each([50, 100, 200]).describe('ContainerSize: %o', (containerSize) => {
+          each([100, 200, 500]).describe('ContentSize: %o', (contentSize) => {
+            each([-200, -64, -20, 0, 28, 100]).describe('ScrollLocation: %o', (scrollLocation) => {
+              it('scrollStyles', () => {
+                const viewModel = new Scrollbar({
+                  showScrollbar,
+                  direction,
+                  containerSize,
+                  contentSize,
+                  scrollLocation,
+                });
+
+                const expectedScrollSize = Math.max(contentSize
+                  ? containerSize * (containerSize / contentSize)
+                  : containerSize * containerSize, 15);
+                const expectedScrollTranslate = -scrollLocation
+                * ((contentSize - containerSize)
+                  ? (containerSize - expectedScrollSize) / (contentSize - containerSize)
+                  : 1
+                );
+
+                // TODO: test with bottom & top
+                expect(viewModel.scrollStyles).toEqual({
+                  [direction === 'vertical' ? 'height' : 'width']: expectedScrollSize,
+                  transform: direction === DIRECTION_VERTICAL ? `translate(0px, ${expectedScrollTranslate}px)` : `translate(${expectedScrollTranslate}px, 0px)`,
+                });
               });
-
-              const { scrollStyles } = scrollbar;
-
-              const expectedSize = contentSize
-                ? containerSize * (containerSize / contentSize)
-                : containerSize * containerSize;
-              expect(scrollStyles).toHaveProperty(direction === 'vertical' ? 'height' : 'width', `${expectedSize}px`);
-              expect(scrollStyles).toHaveProperty(direction === 'vertical' ? 'width' : 'height', undefined);
             });
           });
         });
@@ -85,7 +93,7 @@ describe('TopPocket', () => {
 
   describe('Classes', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
-      each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
+      each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
         each([true, false]).describe('ScrollByThumb: %o', (scrollByThumb) => {
           it('should add hoverable class to scrollbar', () => {
             const viewModel = new Scrollbar({ direction, scrollByThumb, showScrollbar });
@@ -237,15 +245,15 @@ describe('TopPocket', () => {
 
 describe('Methods', () => {
   each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
-    it('updateContent(), should not raise any errors when position change events not defined', () => {
+    it('updateContentTranslate(), should not raise any errors when position change events not defined', () => {
       const viewModel = new Scrollbar({
         showScrollbar: 'always',
         direction,
-        contentPositionChange: undefined,
+        scrollLocationChange: undefined,
         contentTranslateOffsetChange: undefined,
       });
 
-      expect(viewModel.updateContent.bind(viewModel)).not.toThrow();
+      expect(viewModel.updateContentTranslate.bind(viewModel)).not.toThrow();
     });
 
     each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
@@ -262,109 +270,74 @@ describe('Methods', () => {
               bounceEnabled,
               containerSize: 200,
               scrollableOffset: 40,
+              scrollLocation: -250,
             });
 
-            viewModel.moveScrollbar = jest.fn();
+            viewModel.moveTo = jest.fn();
             viewModel.maxOffset = 0;
             viewModel.minOffset = -590;
-            viewModel.scrollLocation = -250;
             Object.defineProperties(viewModel, {
               containerToContentRatio: { get() { return 0.25; } },
             });
 
             viewModel.moveToMouseLocation(clickLocation.eventData);
-
-            expect(viewModel.moveScrollbar).toHaveBeenCalledTimes(1);
-            expect(viewModel.scrollLocation).toEqual(clickLocation.expected);
+            // TODO
+            expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+            expect(viewModel.moveTo).toHaveBeenCalledWith(clickLocation.expected);
           });
         });
       });
 
-      each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
-        it('moveScrollbar(location) call should set correct location & scrollLocation values', () => {
-          const viewModel = new Scrollbar({
-            showScrollbar,
-            direction,
-            scaleRatio,
-            containerSize: 100,
-            contentSize: 500,
-          });
+      each([-500.25, -400, -100.25, 0.25, 100.25, 500.25]).describe('Location: %o', (location) => {
+        each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+          each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+            it('moveTo(location) call should change position of content and scroll', () => {
+              const scrollLocationChange = jest.fn();
+              const contentTranslateOffsetChange = jest.fn();
+              const topPocketSize = 85;
 
-          const location = -100;
-
-          viewModel.moveScrollbar(location);
-
-          const expectedLocation = location * scaleRatio;
-          expect(viewModel.scrollLocation).toEqual(expectedLocation);
-        });
-
-        it('moveScrollbar() call should set correct location & scrollLocation values', () => {
-          const viewModel = new Scrollbar({
-            showScrollbar,
-            direction,
-            scaleRatio,
-            containerSize: 100,
-            contentSize: 500,
-          });
-
-          viewModel.scrollLocation = -20;
-
-          viewModel.moveScrollbar();
-
-          const expectedLocation = -20;
-          expect(viewModel.scrollLocation).toEqual(expectedLocation);
-          expect(viewModel.scrollLocation).toEqual(expectedLocation);
-        });
-
-        each([-500.25, -400, -100.25, 0.25, 100.25, 500.25]).describe('Location: %o', (location) => {
-          each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
-            each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-              it('updateContent() call should change position of content and scroll', () => {
-                const contentPositionChange = jest.fn();
-                const contentTranslateOffsetChange = jest.fn();
-                const topPocketSize = 85;
-
-                const viewModel = new Scrollbar({
-                  showScrollbar,
-                  direction,
-                  scaleRatio,
-                  forceGeneratePockets,
-                  pullDownEnabled,
-                  contentPositionChange,
-                  contentTranslateOffsetChange,
-                  topPocketSize,
-                });
-
-                const minOffset = -400;
-                Object.defineProperties(viewModel, {
-                  minOffset: { get() { return minOffset; } },
-                });
-
-                viewModel.scrollLocation = location;
-
-                viewModel.updateContent();
-
-                expect(contentPositionChange).toHaveBeenCalledTimes(1);
-                expect(contentPositionChange)
-                  .toHaveBeenCalledWith(viewModel.fullScrollProp, location, scaleRatio);
-
-                let expectedContentTranslate = 0;
-                if (location > 0) {
-                  expectedContentTranslate = location;
-                } else if (location <= minOffset) {
-                  expectedContentTranslate = location - minOffset;
-                } else {
-                  expectedContentTranslate = location % 1;
-                }
-
-                if (forceGeneratePockets && pullDownEnabled) {
-                  expectedContentTranslate -= topPocketSize;
-                }
-
-                expect(contentTranslateOffsetChange).toHaveBeenCalledTimes(1);
-                expect(contentTranslateOffsetChange)
-                  .toHaveBeenCalledWith({ [viewModel.scrollProp]: expectedContentTranslate });
+              const viewModel = new Scrollbar({
+                showScrollbar,
+                direction,
+                forceGeneratePockets,
+                pullDownEnabled,
+                scrollLocationChange,
+                contentTranslateOffsetChange,
+                topPocketSize,
+                scrollLocation: location,
+                containerSize: 100,
+                contentSize: 500,
               });
+
+              const minOffset = -400;
+              Object.defineProperties(viewModel, {
+                minOffset: { get() { return minOffset; } },
+              });
+
+              viewModel.moveTo(location);
+
+              expect(scrollLocationChange).toHaveBeenCalledTimes(1);
+              expect(scrollLocationChange)
+                .toHaveBeenCalledWith(viewModel.fullScrollProp, location);
+
+              viewModel.updateContentTranslate();
+
+              let expectedContentTranslate = 0;
+              if (location > 0) {
+                expectedContentTranslate = location;
+              } else if (location <= minOffset) {
+                expectedContentTranslate = location - minOffset;
+              } else {
+                expectedContentTranslate = location % 1;
+              }
+
+              if (forceGeneratePockets && pullDownEnabled) {
+                expectedContentTranslate -= topPocketSize;
+              }
+
+              expect(contentTranslateOffsetChange).toHaveBeenCalledTimes(1);
+              expect(contentTranslateOffsetChange)
+                .toHaveBeenCalledWith({ [viewModel.scrollProp]: expectedContentTranslate });
             });
           });
         });
@@ -541,10 +514,10 @@ describe('Methods', () => {
                 pullDownEnabled,
                 topPocketSize,
                 bottomPocketSize,
+                scrollLocation,
               });
 
               viewModel.minOffset = minOffset;
-              viewModel.scrollLocation = scrollLocation;
 
               if (reachBottomEnabled
                 && (scrollLocation - minOffset - viewModel.bottomPocketSize) <= 0.5) {
@@ -555,26 +528,6 @@ describe('Methods', () => {
             });
           });
         });
-      });
-    });
-
-    each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
-      it('moveScrollbar()', () => {
-        const viewModel = new Scrollbar({ direction, scaleRatio }) as any;
-        viewModel.scrollLocation = 40;
-
-        viewModel.moveScrollbar();
-
-        expect(viewModel.getScrollLocation()).toBe(40);
-      });
-
-      it('moveScrollbar(50)', () => {
-        const viewModel = new Scrollbar({ direction, scaleRatio }) as any;
-        viewModel.scrollLocation = 40;
-
-        viewModel.moveScrollbar(50);
-
-        expect(viewModel.getScrollLocation()).toBe(50 * scaleRatio);
       });
     });
 
@@ -619,10 +572,10 @@ describe('Methods', () => {
                 bounceEnabled,
                 bottomPocketSize: 55,
                 topPocketSize: 80,
+                scrollLocation,
               });
 
               viewModel.boundLocation = jest.fn(() => -300);
-              viewModel.scrollLocation = scrollLocation;
               viewModel.boundaryOffset = 10;
 
               viewModel.updateBoundaryOffset();
@@ -649,20 +602,6 @@ describe('Methods', () => {
       });
 
       each([true, false]).describe('isReachBottom: %o', (isReachBottom) => {
-        it('getScrollLocation()', () => {
-          const viewModel = new Scrollbar({
-            direction,
-            forceGeneratePockets,
-            reachBottomEnabled: true,
-          } as any);
-
-          viewModel.isReachBottom = jest.fn(() => isReachBottom);
-          viewModel.boundaryOffset = -100;
-          viewModel.scrollLocation = -15;
-
-          expect(viewModel.getScrollLocation()).toEqual(-15);
-        });
-
         each([TopPocketState.STATE_RELEASED, TopPocketState.STATE_LOADING,
           TopPocketState.STATE_READY, TopPocketState.STATE_REFRESHING]).describe('pocketState: %o', (pocketState) => {
           each([true, false]).describe('isPullDown: %o', (isPullDown) => {
@@ -681,7 +620,7 @@ describe('Methods', () => {
               viewModel.isPullDown = jest.fn(() => isPullDown);
               viewModel.isReachBottom = jest.fn(() => isReachBottom);
 
-              viewModel.moveScrollbar();
+              viewModel.moveTo(1);
 
               if (forceGeneratePockets) {
                 if (isPullDown) {
@@ -767,7 +706,7 @@ describe('Methods', () => {
 
     each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
       each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
-        each([-20, 20, -80, 80, 120, -120]).describe('Location: %o', (location) => {
+        each([-20, 20, -80, 80, 120, -120]).describe('scrollLocation: %o', (scrollLocation) => {
           it('scrollBy({ x: 10, y: 15 })', () => {
             const delta = { x: 10, y: 15 };
             const OUT_BOUNDS_ACCELERATION = 0.5;
@@ -776,9 +715,9 @@ describe('Methods', () => {
               direction,
               containerSize,
               contentSize,
+              scrollLocation,
             });
 
-            viewModel.scrollLocation = location;
             viewModel.scrollStep = jest.fn();
 
             viewModel.updateMinOffset();
@@ -788,7 +727,7 @@ describe('Methods', () => {
 
             expect(viewModel.scrollStep).toBeCalledTimes(1);
 
-            if ((containerSize - contentSize) < location && location < 0) {
+            if ((containerSize - contentSize) < scrollLocation && scrollLocation < 0) {
               expect(viewModel.scrollStep).toBeCalledWith(delta[axis]);
             } else {
               expect(viewModel.scrollStep).toBeCalledWith(delta[axis] * OUT_BOUNDS_ACCELERATION);

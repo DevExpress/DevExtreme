@@ -16,7 +16,7 @@ import {
 } from './scrollable';
 
 import {
-  ScrollableLocation, ScrollOffset,
+  ScrollOffset,
 } from './types.d';
 
 import { combineClasses } from '../../utils/combine_classes';
@@ -118,18 +118,18 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  scrollBy(distance: number | Partial<ScrollableLocation>): void {
+  scrollBy(distance: number | Partial<ScrollOffset>): void {
     this.scrollableRef.scrollBy(distance);
   }
 
   @Method()
-  scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
+  scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
     this.scrollableRef.scrollTo(targetLocation);
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-    this.scrollableRef.scrollToElement(element, offset);
+  scrollToElement(element: HTMLElement): void {
+    this.scrollableRef.scrollToElement(element);
   }
 
   @Method()
@@ -143,7 +143,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  scrollOffset(): ScrollableLocation {
+  scrollOffset(): ScrollOffset {
     return this.scrollableRef.scrollOffset();
   }
 

@@ -27,7 +27,7 @@ export class ScrollableSimulatedProps extends ScrollableProps {
   contentTranslateOffsetChange?: EventCallback<{ left?: number; top?: number }>;
 
   @Event()
-  contentPositionChange?: (scrollProp: 'scrollLeft' | 'scrollTop', location: number, ratio: number) => void;
+  scrollLocationChange?: (scrollProp: 'scrollLeft' | 'scrollTop', location: number) => void;
 }
 
 export type ScrollableSimulatedPropsType = ScrollableSimulatedProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
