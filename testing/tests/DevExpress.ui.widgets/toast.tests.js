@@ -159,7 +159,7 @@ QUnit.module('general', moduleConfig, () => {
                 'W0001',
                 'dxToast',
                 'elementAttr',
-                '21.1',
+                '21.2',
                 'This property is deprecated in favor of the wrapperAttr property.'
             ], 'args of the log method');
         } finally {

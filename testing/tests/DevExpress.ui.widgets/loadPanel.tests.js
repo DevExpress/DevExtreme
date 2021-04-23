@@ -139,7 +139,7 @@ QUnit.module('init', {
                 'W0001',
                 'dxLoadPanel',
                 'elementAttr',
-                '21.1',
+                '21.2',
                 'This property is deprecated in favor of the wrapperAttr property.'
             ], 'args of the log method');
         } finally {
