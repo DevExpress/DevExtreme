@@ -2340,7 +2340,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
 module('Appointment dragging', {
     beforeEach: function() {
-
         fx.off = true;
 
         this.createInstance = function(options) {
@@ -3134,5 +3133,33 @@ module('Appointment dragging', {
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 9, 0, 37), 'End date is correct');
             });
         });
+    });
+
+    isDesktopEnvironment() && test('Outlook dragging should be work right ', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'Website Re-Design Plan',
+                startDate: new Date(2021, 4, 26, 0, 30),
+                endDate: new Date(2021, 4, 26, 1)
+            }],
+            views: ['workWeek'],
+            currentView: 'workWeek',
+            currentDate: new Date(2021, 4, 27),
+            showAllDayPanel: false,
+            height: 300,
+            width: 300
+        });
+
+        scheduler.appointmentList[0].drag.toCell(8);
+        scheduler.appointmentList[0].click();
+        assert.equal(scheduler.tooltip.getDateText(), '12:30 AM - 1:00 AM');
+
+        scheduler.appointmentList[0].drag.toCell(11);
+        scheduler.appointmentList[0].click();
+        assert.equal(scheduler.tooltip.getDateText(), '12:30 AM - 1:00 AM');
+
+        scheduler.appointmentList[0].drag.toCell(3);
+        scheduler.appointmentList[0].click();
+        assert.equal(scheduler.tooltip.getDateText(), '12:30 AM - 1:00 AM');
     });
 });
