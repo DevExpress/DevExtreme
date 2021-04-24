@@ -1163,7 +1163,6 @@ module('appointmentDragging customization', $.extend({}, {
 
                 const instance = scheduler.instance;
 
-                scheduler.drawControl();
                 if(schedulerPos) {
                     $(instance.element()).css({
                         position: 'absolute',
