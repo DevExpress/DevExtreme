@@ -262,7 +262,7 @@ const Overlay = Widget.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', message: 'Use the \'wrapperAttr\' option instead' }
+            'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' }
         });
     },
 
@@ -450,7 +450,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderWrapperAttributes() {
-        const { wrapperAttr } = this.option() || {};
+        const { wrapperAttr } = this.option();
         this._wrapper().attr(wrapperAttr ?? {});
     },
 

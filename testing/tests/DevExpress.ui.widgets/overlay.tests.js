@@ -508,7 +508,7 @@ testModule('option', moduleConfig, () => {
                 'dxOverlay',
                 'elementAttr',
                 '21.2',
-                'Use the \'wrapperAttr\' option instead'
+                'Use the "wrapperAttr" option instead'
             ], 'args of the log method');
         } finally {
             errors.log.restore();
