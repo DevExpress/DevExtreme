@@ -938,6 +938,33 @@ module('collection updating', () => {
             customButton = textBox.getButton('custom');
             assert.notStrictEqual(customButton.option('stylingMode'), 'text');
         });
+
+        test('custom button should have \'text\' styling mode if editor has stylingMode = \'underlined\' and buttons config was changed (T992034)', function(assert) {
+            const $textBox = $('<div>').dxTextBox({
+                showClearButton: false,
+                stylingMode: 'underlined',
+                value: 'text',
+                buttons: ['clear', {
+                    name: 'custom',
+                    location: 'after',
+                    options: {
+                        text: 'custom'
+                    }
+                }]
+            });
+            const textBox = $textBox.dxTextBox('instance');
+
+            textBox.option('buttons', [{
+                name: 'custom',
+                location: 'after',
+                options: {
+                    text: 'custom1'
+                }
+            }]);
+
+            const customButton = textBox.getButton('custom');
+            assert.strictEqual(customButton.option('stylingMode'), 'text');
+        });
     });
 
     module('numberBox', () => {
