@@ -524,7 +524,6 @@ const DropDownEditor = TextBox.inherit({
         }
 
         this._$popup = $('<div>').addClass(DROP_DOWN_EDITOR_OVERLAY)
-            .addClass(this.option('customOverlayCssClass'))
             .appendTo(this.$element());
 
         this._renderPopup();
