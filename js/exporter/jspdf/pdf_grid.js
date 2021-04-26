@@ -59,6 +59,36 @@ export class PdfGrid {
         this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
     }
 
+    mergeCellsBySpanAttributes() {
+        this._tables.forEach((table) => {
+            for(let rowIndex = 0; rowIndex < table.rows.length; rowIndex++) {
+                for(let cellIndex = 0; cellIndex < table.rows[rowIndex].length; cellIndex++) {
+                    const cell = table.rows[rowIndex][cellIndex];
+                    if(isDefined(cell.rowSpan)) {
+                        for(let i = 1; i < cell.rowSpan; i++) {
+                            const mergeCell = table.rows[rowIndex + i][cellIndex];
+                            if(isDefined(mergeCell)) {
+                                cell._rect.h += mergeCell._rect.h;
+                                mergeCell._rect.h = 0;
+                                mergeCell.skip = true;
+                            }
+                        }
+                    }
+                    if(isDefined(cell.colSpan)) {
+                        for(let i = 1; i < cell.colSpan; i++) {
+                            const mergeCell = table.rows[rowIndex][cellIndex + i];
+                            if(isDefined(mergeCell)) {
+                                cell._rect.w += mergeCell._rect.w;
+                                mergeCell._rect.w = 0;
+                                mergeCell.skip = true;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     drawTo(doc) {
         this._tables.forEach((table) => {
             if(this._newPageTables.indexOf(table) !== -1) {

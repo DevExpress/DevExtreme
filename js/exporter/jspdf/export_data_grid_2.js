@@ -10,6 +10,7 @@ function exportDataGrid(doc, dataGrid, options) {
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
             const columns = dataProvider.getColumns();
+            const mergedCells = [];
             const pdfGrid = new PdfGrid(options.splitToTablesByColumns, options.columnWidths);
 
             pdfGrid.startNewTable(options.drawTableBorder, options.rect);
@@ -23,6 +24,17 @@ function exportDataGrid(doc, dataGrid, options) {
                     const pdfCell = {
                         text: cellData.value
                     };
+
+                    if(cellData.cellSourceData.rowType === 'header') {
+                        const mergedRange = _tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
+                        if(mergedRange && mergedRange.rowSpan > 0) {
+                            pdfCell.rowSpan = mergedRange.rowSpan + 1;
+                        }
+                        if(mergedRange && mergedRange.colSpan > 0) {
+                            pdfCell.colSpan = mergedRange.colSpan + 1;
+                        }
+                    }
+
                     if(options.onCellExporting) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
@@ -46,10 +58,29 @@ function exportDataGrid(doc, dataGrid, options) {
                 pdfGrid.addRow(currentRow, rowHeight);
             }
 
+            pdfGrid.mergeCellsBySpanAttributes();
+
             pdfGrid.drawTo(doc);
             resolve();
         });
     });
+}
+
+function _tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider) {
+    if(!mergedCells[rowIndex] || !mergedCells[rowIndex][cellIndex]) {
+        const { colspan, rowspan } = dataProvider.getCellMerging(rowIndex, cellIndex);
+        if(colspan || rowspan) {
+            for(let i = rowIndex; i <= rowIndex + rowspan || 0; i++) {
+                for(let j = cellIndex; j <= cellIndex + colspan || 0; j++) {
+                    if(!mergedCells[i]) {
+                        mergedCells[i] = [];
+                    }
+                    mergedCells[i][j] = true;
+                }
+            }
+            return { rowSpan: rowspan, colSpan: colspan };
+        }
+    }
 }
 
 export { exportDataGrid };
