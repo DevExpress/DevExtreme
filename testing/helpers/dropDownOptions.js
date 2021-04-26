@@ -20,6 +20,7 @@ const defaultDropDownOptions = {
     deferRendering: false,
     disabled: false,
     dragEnabled: false,
+    elementAttr: {},
     focusStateEnabled: false,
     fullScreen: false,
     height: 'auto',

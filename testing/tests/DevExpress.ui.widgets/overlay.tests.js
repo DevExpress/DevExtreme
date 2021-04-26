@@ -13,6 +13,7 @@ import eventsEngine from 'events/core/events_engine';
 import visibilityChange, { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
+import errors from 'core/errors';
 import Overlay from 'ui/overlay';
 import * as zIndex from 'ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
@@ -493,6 +494,25 @@ testModule('option', moduleConfig, () => {
 
             assert.strictEqual(this.$wrapper.attr('someAttr'), 'someValue');
         });
+    });
+
+    test('show warning if deprecated "elementAttr" option is used', function(assert) {
+        sinon.spy(errors, 'log');
+
+        try {
+            $('#overlay').dxOverlay({
+                elementAttr: { class: 'someClass' },
+            });
+            assert.deepEqual(errors.log.lastCall.args, [
+                'W0001',
+                'dxOverlay',
+                'elementAttr',
+                '21.2',
+                'Use the \'wrapperAttr\' option instead'
+            ], 'args of the log method');
+        } finally {
+            errors.log.restore();
+        }
     });
 });
 

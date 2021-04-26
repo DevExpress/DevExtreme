@@ -2,7 +2,6 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import { value as setViewPort } from 'core/utils/view_port';
-import errors from 'core/errors';
 import Toast from 'ui/toast';
 import devices from 'core/devices.js';
 
@@ -146,25 +145,6 @@ QUnit.module('general', moduleConfig, () => {
         second.show();
 
         assert.equal($('.dx-toast-content:visible').length, 1, 'only the second toast is visible');
-    });
-
-    QUnit.test('show warning if deprecated "elementAttr" option is used', function(assert) {
-        sinon.spy(errors, 'log');
-
-        try {
-            $('#toast').dxToast({
-                elementAttr: { class: 'someClass' },
-            });
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxToast',
-                'elementAttr',
-                '21.2',
-                'Use the \'wrapperAttr\' option instead'
-            ], 'args of the log method');
-        } finally {
-            errors.log.restore();
-        }
     });
 });
 

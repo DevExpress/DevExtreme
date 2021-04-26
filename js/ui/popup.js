@@ -181,13 +181,6 @@ const Popup = Overlay.inherit({
         ]);
     },
 
-    _setDeprecatedOptions() {
-        this.callBase();
-        extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', alias: 'wrapperAttr' }
-        });
-    },
-
     _iosAnimation: {
         show: {
             type: 'slide',

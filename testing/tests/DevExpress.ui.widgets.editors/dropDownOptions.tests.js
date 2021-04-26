@@ -30,6 +30,7 @@ const optionTestValues = {
     deferRendering: false,
     disabled: true,
     dragEnabled: true,
+    elementAttr: { 'custom-attr': 'value' },
     focusStateEnabled: true,
     fullScreen: true,
     height: 500,

@@ -184,13 +184,6 @@ const Toast = Overlay.inherit({
         ]);
     },
 
-    _setDeprecatedOptions() {
-        this.callBase();
-        extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', alias: 'wrapperAttr' }
-        });
-    },
-
     _init: function() {
         this.callBase();
 

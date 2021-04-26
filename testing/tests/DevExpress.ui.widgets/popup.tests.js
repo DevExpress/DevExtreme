@@ -10,7 +10,6 @@ import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import windowUtils from 'core/utils/window';
 import themes from 'ui/themes';
-import errors from 'core/errors';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import visibilityChangeUtils from 'events/visibility_change';
 
@@ -409,25 +408,6 @@ QUnit.module('basic', () => {
         assert.ok(toolbarButtons.eq(0).hasClass('dx-button-mode-text'), 'shortcut has dx-button-mode-text class');
         assert.ok(toolbarButtons.eq(1).hasClass('dx-button-mode-text'), 'button has dx-button-mode-text class');
         devices.current(devices.real());
-    });
-
-    QUnit.test('show warning if deprecated "elementAttr" option is used', function(assert) {
-        sinon.spy(errors, 'log');
-
-        try {
-            $('#popup').dxPopup({
-                elementAttr: { class: 'someClass' },
-            });
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxPopup',
-                'elementAttr',
-                '21.2',
-                'Use the \'wrapperAttr\' option instead'
-            ], 'args of the log method');
-        } finally {
-            errors.log.restore();
-        }
     });
 });
 

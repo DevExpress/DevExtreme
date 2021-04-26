@@ -4,7 +4,6 @@ import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
 import Popover from 'ui/popover';
-import errors from 'core/errors';
 import { getBoundingRect } from 'core/utils/position';
 
 import 'generic_light.css!';
@@ -336,26 +335,6 @@ QUnit.module('options change', () => {
 
         } finally {
             fixtures.collisionTopLeft.drop();
-        }
-    });
-
-    QUnit.test('show warning if deprecated "elementAttr" option is used', function(assert) {
-        fixtures.simple.create();
-        sinon.spy(errors, 'log');
-        try {
-            new Popover($('#what'), {
-                elementAttr: { class: 'someClass' }
-            });
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxPopover',
-                'elementAttr',
-                '21.2',
-                'Use the \'wrapperAttr\' option instead'
-            ], 'args of the log method');
-        } finally {
-            errors.log.restore();
-            fixtures.simple.drop();
         }
     });
 });

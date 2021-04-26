@@ -3,7 +3,6 @@ import { value as viewPort } from 'core/utils/view_port';
 import fx from 'animation/fx';
 import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
-import errors from 'core/errors';
 
 import 'generic_light.css!';
 
@@ -150,23 +149,4 @@ QUnit.module('aria accessibility', () => {
         assert.equal($target.attr('aria-describedby'), $overlay.attr('id'), 'aria-describedby and overlay\'s id are equal');
 
     });
-});
-
-QUnit.test('show warning if deprecated "elementAttr" option is used', function(assert) {
-    sinon.spy(errors, 'log');
-
-    try {
-        $('#tooltip').dxTooltip({
-            elementAttr: { class: 'someClass' },
-        });
-        assert.deepEqual(errors.log.lastCall.args, [
-            'W0001',
-            'dxTooltip',
-            'elementAttr',
-            '21.2',
-            'Use the \'wrapperAttr\' option instead'
-        ], 'args of the log method');
-    } finally {
-        errors.log.restore();
-    }
 });
