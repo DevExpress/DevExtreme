@@ -54,7 +54,8 @@ const defaultDropDownOptions = {
     titleTemplate: 'title',
     toolbarItems: [],
     visible: false,
-    width: null
+    width: null,
+    wrapperAttr: {}
 };
 
 export {

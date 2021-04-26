@@ -9487,6 +9487,11 @@ declare module DevExpress.ui {
          */
         dragEnabled?: boolean;
         /**
+         * [descr:dxOverlayOptions.elementAttr]
+         * @deprecated [depNote:dxOverlayOptions.elementAttr]
+         */
+        elementAttr?: any;
+        /**
          * [descr:dxOverlayOptions.height]
          */
         height?: number | string | (() => number | string);
@@ -9542,6 +9547,10 @@ declare module DevExpress.ui {
          * [descr:dxOverlayOptions.width]
          */
         width?: number | string | (() => number | string);
+        /**
+         * [descr:dxOverlayOptions.wrapperAttr]
+         */
+        wrapperAttr?: any;
     }
     /**
      * [descr:dxOverlayOptions.animation]
