@@ -34,6 +34,7 @@ describe('Scrollbar', () => {
       contentSize: 0,
       direction: 'vertical',
       forceGeneratePockets: false,
+      forceUpdateScrollbarLocation: false,
       forceVisibility: false,
       isScrollableHovered: false,
       needScrollViewContentWrapper: false,
@@ -232,11 +233,77 @@ describe('Scrollbar', () => {
       detach();
       expect(getEventHandlers('dxpointerup').length).toBe(0);
     });
+
+    each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+      each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+        each([0, 55, 85]).describe('initialTopPocketSize: %o', (initialTopPocketSize) => {
+          it('updateContentTranslate(), should update content transform style when topPocket size was changed', () => {
+            const topPocketSize = 85;
+
+            const viewModel = new Scrollbar({
+              showScrollbar: 'always',
+              direction: 'vertical',
+              topPocketSize,
+              scrollLocation: -200,
+              forceGeneratePockets,
+              pullDownEnabled,
+            });
+
+            viewModel.initialTopPocketSize = initialTopPocketSize;
+            viewModel.updateContent = jest.fn();
+
+            viewModel.updateContentTranslate();
+
+            if (forceGeneratePockets && pullDownEnabled && initialTopPocketSize !== topPocketSize) {
+              expect(viewModel.updateContent).toHaveBeenCalledTimes(1);
+              expect(viewModel.updateContent).toHaveBeenCalledWith(-200);
+              expect(viewModel.initialTopPocketSize).toEqual(topPocketSize);
+            } else {
+              expect(viewModel.updateContent).not.toBeCalled();
+              expect(viewModel.initialTopPocketSize).toEqual(viewModel.initialTopPocketSize);
+            }
+          });
+        });
+      });
+    });
+  });
+
+  each([true, false]).describe('forceUpdateScrollbarLocation: %o', (forceUpdateScrollbarLocation) => {
+    each([-100, -50, 0, 50]).describe('scrollLocation: %o', (scrollLocation) => {
+      each([0, -80]).describe('initialTopPocketSize: %o', (maxOffset) => {
+        it('moveToBoundaryOnSizeChange() should call moveTo(boundaryLocation)', () => {
+          const topPocketSize = 85;
+
+          const viewModel = new Scrollbar({
+            showScrollbar: 'always',
+            direction: 'vertical',
+            topPocketSize,
+            scrollLocation,
+            forceUpdateScrollbarLocation,
+          });
+
+          Object.defineProperties(viewModel, {
+            maxOffset: { get() { return maxOffset; } },
+          });
+          viewModel.moveTo = jest.fn();
+          viewModel.boundLocation = jest.fn(() => -300);
+
+          viewModel.moveToBoundaryOnSizeChange();
+
+          if (forceUpdateScrollbarLocation && scrollLocation <= maxOffset) {
+            expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+            expect(viewModel.moveTo).toHaveBeenCalledWith(-300);
+          } else {
+            expect(viewModel.moveTo).not.toBeCalled();
+          }
+        });
+      });
+    });
   });
 
   describe('Methods', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
-      it('updateContentTranslate(), should not raise any errors when position change events not defined', () => {
+      it('updateContent(), should not raise any errors when position change events not defined', () => {
         const viewModel = new Scrollbar({
           showScrollbar: 'always',
           direction,
@@ -244,7 +311,7 @@ describe('Scrollbar', () => {
           contentTranslateOffsetChange: undefined,
         });
 
-        expect(viewModel.updateContentTranslate.bind(viewModel)).not.toThrow();
+        expect(viewModel.updateContent.bind(viewModel)).not.toThrow();
       });
 
       each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
@@ -266,8 +333,9 @@ describe('Scrollbar', () => {
 
               viewModel.moveTo = jest.fn();
               viewModel.maxOffset = 0;
-              viewModel.minOffset = -590;
+
               Object.defineProperties(viewModel, {
+                minOffset: { get() { return -590; } },
                 containerToContentRatio: { get() { return 0.25; } },
               });
 
@@ -279,21 +347,27 @@ describe('Scrollbar', () => {
           });
         });
 
-        each([-500.25, -400, -100.25, 0.25, 100.25, 500.25]).describe('Location: %o', (location) => {
+        each([
+          { location: -500.25, expected: -100.25 },
+          { location: -400, expected: 0 },
+          { location: -100.25, expected: -0.25 },
+          { location: -55.75, expected: -0.75 },
+          { location: 0.25, expected: 0.25 },
+          { location: 100.25, expected: 100.25 },
+          { location: 500.25, expected: 500.25 },
+        ]).describe('Location: %o', ({ location, expected }) => {
           each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
             each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-              it('moveTo(location) call should change position of content and scroll', () => {
-                const scrollLocationChange = jest.fn();
-                const contentTranslateOffsetChange = jest.fn();
+              it('updateContent(location) should change the transform style of content', () => {
                 const topPocketSize = 85;
+                const contentTranslateOffsetChange = jest.fn();
 
                 const viewModel = new Scrollbar({
                   showScrollbar,
                   direction,
                   forceGeneratePockets,
-                  pullDownEnabled,
-                  scrollLocationChange,
                   contentTranslateOffsetChange,
+                  pullDownEnabled,
                   topPocketSize,
                   scrollLocation: location,
                   containerSize: 100,
@@ -305,30 +379,40 @@ describe('Scrollbar', () => {
                   minOffset: { get() { return minOffset; } },
                 });
 
+                viewModel.updateContent(location);
+
+                let expectedContentTranslate = expected;
+
+                if (forceGeneratePockets && pullDownEnabled) {
+                  expectedContentTranslate -= topPocketSize;
+                }
+                expect(contentTranslateOffsetChange).toHaveBeenCalledTimes(1);
+                expect(contentTranslateOffsetChange)
+                  .toHaveBeenCalledWith(viewModel.scrollProp, expectedContentTranslate);
+              });
+
+              it('moveTo(location) call should change position of content and scroll', () => {
+                const scrollLocationChange = jest.fn();
+                const topPocketSize = 85;
+
+                const viewModel = new Scrollbar({
+                  showScrollbar,
+                  direction,
+                  forceGeneratePockets,
+                  pullDownEnabled,
+                  scrollLocationChange,
+                  topPocketSize,
+                  scrollLocation: location,
+                });
+
+                viewModel.updateContent = jest.fn();
                 viewModel.moveTo(location);
 
                 expect(scrollLocationChange).toHaveBeenCalledTimes(1);
                 expect(scrollLocationChange)
                   .toHaveBeenCalledWith(viewModel.fullScrollProp, location);
-
-                viewModel.updateContentTranslate();
-
-                let expectedContentTranslate = 0;
-                if (location > 0) {
-                  expectedContentTranslate = location;
-                } else if (location <= minOffset) {
-                  expectedContentTranslate = location - minOffset;
-                } else {
-                  expectedContentTranslate = location % 1;
-                }
-
-                if (forceGeneratePockets && pullDownEnabled) {
-                  expectedContentTranslate -= topPocketSize;
-                }
-
-                expect(contentTranslateOffsetChange).toHaveBeenCalledTimes(1);
-                expect(contentTranslateOffsetChange)
-                  .toHaveBeenCalledWith({ [viewModel.scrollProp]: expectedContentTranslate });
+                expect(viewModel.updateContent).toHaveBeenCalledTimes(1);
+                expect(viewModel.updateContent).toHaveBeenCalledWith(location);
               });
             });
           });
@@ -483,7 +567,9 @@ describe('Scrollbar', () => {
                   scrollLocation,
                 });
 
-                viewModel.minOffset = minOffset;
+                Object.defineProperties(viewModel, {
+                  minOffset: { get() { return minOffset; } },
+                });
 
                 if (reachBottomEnabled
                 && (scrollLocation - minOffset - viewModel.bottomPocketSize) <= 0.5) {
@@ -500,7 +586,7 @@ describe('Scrollbar', () => {
       each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
         each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
           each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
-            it('updateMinOffset()', () => {
+            it('minOffset()', () => {
               const viewModel = new Scrollbar({
                 direction,
                 forceGeneratePockets,
@@ -511,12 +597,9 @@ describe('Scrollbar', () => {
               });
 
               viewModel.boundLocation = jest.fn(() => -300);
-              viewModel.minOffset = -300;
               Object.defineProperties(viewModel, {
                 bottomBoundaryOffset: { get() { return 300; } },
               });
-
-              viewModel.updateMinOffset();
 
               if (forceGeneratePockets && reachBottomEnabled) {
                 expect(viewModel.minOffset).toEqual(-355);
@@ -686,7 +769,6 @@ describe('Scrollbar', () => {
 
               viewModel.scrollStep = jest.fn();
 
-              viewModel.updateMinOffset();
               viewModel.scrollBy(delta);
 
               const axis = direction === 'horizontal' ? 'x' : 'y';
