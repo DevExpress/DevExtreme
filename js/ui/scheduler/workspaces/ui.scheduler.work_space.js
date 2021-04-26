@@ -3214,7 +3214,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         let result;
         if(this.isVirtualScrolling()) {
-            result = this._groupedStrategy.getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+            const groupedDataMap = this.viewDataProvider.groupedDataMap;
+
+            result = this._groupedStrategy.getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
         } else {
             result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
         }

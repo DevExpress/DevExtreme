@@ -142,16 +142,6 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return this._workSpace.getTimePanelWidth();
     }
 
-    getEdgeCells($cells) {
-        const firstColumnIndex = 0;
-        const lastColumnIndex = $cells.length - 1;
-
-        const startCell = $cells.eq(firstColumnIndex);
-        const endCell = $cells.eq(lastColumnIndex);
-
-        return { startCell, endCell };
-    }
-
     _createGroupBoundOffset(startCell, endCell, cellWidth) {
         const extraOffset = cellWidth / 2;
 
@@ -166,53 +156,51 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         };
     }
 
-    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        let startCell;
-        let endCell;
+    _getGroupedByDateBoundOffset($cells, cellWidth) {
+        const firstCellIndex = 0;
+        const lastCellIndex = $cells.length - 1;
 
-        if(this._workSpace.isGroupedByDate()) {
-            const boundCells = this.getEdgeCells($cells);
-
-            startCell = boundCells.startCell;
-            endCell = boundCells.endCell;
-        } else {
-            const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
-            const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
-            const startCellIndex = groupIndex * cellCount;
-
-            startCell = $cells.eq(startCellIndex);
-            endCell = $cells.eq(startCellIndex + cellCount - 1);
-        }
+        const startCell = $cells.eq(firstCellIndex);
+        const endCell = $cells.eq(lastCellIndex);
 
         return this._createGroupBoundOffset(startCell, endCell, cellWidth);
     }
 
-    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
+    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
+        if(this._workSpace.isGroupedByDate()) {
+            return this._getGroupedByDateBoundOffset($cells, cellWidth);
+        }
+
+        const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
+        const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
+        const startCellIndex = groupIndex * cellCount;
+
+        const startCell = $cells.eq(startCellIndex);
+        const endCell = $cells.eq(startCellIndex + cellCount - 1);
+        return this._createGroupBoundOffset(startCell, endCell, cellWidth);
+    }
+
+    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap) {
+        if(this._workSpace.isGroupedByDate()) {
+            return this._getGroupedByDateBoundOffset($cells, cellWidth);
+        }
+
         let startCell;
         let endCell;
 
-        if(this._workSpace.isGroupedByDate()) {
-            const boundCells = this.getEdgeCells($cells);
+        const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
+        const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
 
-            startCell = boundCells.startCell;
-            endCell = boundCells.endCell;
-        } else {
-            const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
-            const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
+        const cellsGroupToView = groupedDataMap.dateTableGroupedMap[groupIndex];
 
-            const cellsGroupToView = this._workSpace
-                ._viewDataProvider._groupedDataMapProvider
-                .groupedDataMap.dateTableGroupedMap[groupIndex];
+        if(cellsGroupToView) {
+            const groupRowLength = cellsGroupToView[0].length;
 
-            if(cellsGroupToView) {
-                const groupRowLength = cellsGroupToView[0].length;
+            const groupStartPosition = cellsGroupToView[0][0].position;
+            const groupEndPosition = cellsGroupToView[0][groupRowLength - 1].position;
 
-                const groupStartPosition = cellsGroupToView[0][0].position;
-                const groupEndPosition = cellsGroupToView[0][groupRowLength - 1].position;
-
-                startCell = this._workSpace._dom_getDateCell(groupStartPosition);
-                endCell = this._workSpace._dom_getDateCell(groupEndPosition);
-            }
+            startCell = this._workSpace._dom_getDateCell(groupStartPosition);
+            endCell = this._workSpace._dom_getDateCell(groupEndPosition);
         }
 
         return this._createGroupBoundOffset(startCell, endCell, cellWidth);
