@@ -150,4 +150,3 @@ QUnit.module('aria accessibility', () => {
 
     });
 });
-
