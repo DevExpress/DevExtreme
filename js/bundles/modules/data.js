@@ -9,7 +9,7 @@ Object.defineProperty(DevExpress.data, 'errorHandler', {
         return require('../../data/errors').errorHandler;
     },
     set: function(value) {
-        errors.log('W0003', 'DevExpress.data', 'errorHandler', '21.1', 'Use the \'setErrorHandler\' method instead');
+        errors.log('W0003', 'DevExpress.data', 'errorHandler', '21.2', 'Use the \'setErrorHandler\' method instead');
         require('../../data/errors').setErrorHandler(value);
     }
 });
@@ -20,7 +20,7 @@ Object.defineProperty(DevExpress.data, '_errorHandler', {
         return require('../../data/errors').handleError;
     },
     set: function(value) {
-        errors.log('W0003', 'DevExpress.data', '_errorHandler', '21.1', 'Use the \'setErrorHandler\' method instead');
+        errors.log('W0003', 'DevExpress.data', '_errorHandler', '21.2', 'Use the \'setErrorHandler\' method instead');
         require('../../data/errors').setErrorHandler(value);
     }
 });
