@@ -77,24 +77,24 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
 }).before(() => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Appointment 1',
-    startDate: new Date(2021, 4, 16, 9, 30),
-    endDate: new Date(2021, 4, 16, 12, 0),
+    startDate: new Date(2021, 4, 23, 9, 30),
+    endDate: new Date(2021, 4, 23, 12, 0),
   }, {
     text: 'Appointment 2',
-    startDate: new Date(2021, 4, 16, 9, 30),
-    endDate: new Date(2021, 4, 16, 12, 0),
+    startDate: new Date(2021, 4, 23, 9, 30),
+    endDate: new Date(2021, 4, 23, 12, 0),
   }, {
     text: 'Appointment 3',
-    startDate: new Date(2021, 4, 16, 9, 30),
-    endDate: new Date(2021, 4, 16, 11, 0),
+    startDate: new Date(2021, 4, 23, 9, 30),
+    endDate: new Date(2021, 4, 23, 11, 0),
   }, {
     text: 'Appointment 4',
-    startDate: new Date(2021, 4, 16, 9, 30),
-    endDate: new Date(2021, 4, 16, 12, 30),
+    startDate: new Date(2021, 4, 23, 9, 30),
+    endDate: new Date(2021, 4, 23, 12, 30),
   }],
   views: ['week'],
   currentView: 'week',
-  currentDate: new Date(2021, 4, 16),
+  currentDate: new Date(2021, 4, 27),
   startDayHour: 8,
   height: 600,
   width: 1000,
