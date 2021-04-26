@@ -8,10 +8,10 @@ import {
   ComponentBindings,
   Mutable,
   InternalState,
-  ForwardRef,
+  ForwardRef, OneWay,
 } from '@devextreme-generator/declarations';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
-import { Widget } from '../common/widget';
+import { Widget, WidgetProps } from '../common/widget';
 import { ScrollViewLoadPanel } from './load_panel';
 
 import { combineClasses } from '../../utils/combine_classes';
@@ -78,7 +78,7 @@ const HIDE_SCROLLBAR_TIMEOUT = 500;
 export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, topPocketRef, bottomPocketRef, direction,
-    horizontalScrollbarRef, verticalScrollbarRef,
+    hScrollbarRef, vScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
     windowResizeHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
     scrollableRef, isLoadPanelVisible, topPocketState, refreshStrategy,
@@ -86,7 +86,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     topPocketTop, contentStyles, scrollViewContentRef, contentTranslateTop,
     hScrollLocation, vScrollLocation,
     props: {
-      disabled, height, width, rtlEnabled, children, visible,
+      aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText,
@@ -99,6 +99,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   return (
     <Widget
       rootElementRef={scrollableRef}
+      aria={aria}
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
@@ -158,7 +159,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       { showScrollbar && useSimulatedScrollbar && direction.isHorizontal && (
         <Scrollbar
           direction="horizontal"
-          ref={horizontalScrollbarRef}
+          ref={hScrollbarRef}
           scrollByThumb={scrollByThumb}
           contentSize={contentClientWidth}
           containerSize={containerClientWidth}
@@ -169,7 +170,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       { showScrollbar && useSimulatedScrollbar && direction.isVertical && (
         <Scrollbar
           direction="vertical"
-          ref={verticalScrollbarRef}
+          ref={vScrollbarRef}
           scrollByThumb={scrollByThumb}
           contentSize={contentClientHeight}
           containerSize={containerClientHeight}
@@ -182,9 +183,11 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
 };
 @ComponentBindings()
 export class ScrollableNativeProps extends ScrollableProps {
+  @OneWay() useSimulatedScrollbar?: boolean;
 }
 
 export type ScrollableNativePropsType = ScrollableNativeProps
+& Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;
@@ -204,9 +207,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
-  @Ref() verticalScrollbarRef!: RefObject<Scrollbar>;
+  @Ref() vScrollbarRef!: RefObject<Scrollbar>;
 
-  @Ref() horizontalScrollbarRef!: RefObject<Scrollbar>;
+  @Ref() hScrollbarRef!: RefObject<Scrollbar>;
 
   @ForwardRef() topPocketRef!: RefObject<HTMLDivElement>;
 
@@ -425,12 +428,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   scrollOffset(): ScrollOffset {
-    const { left, top } = this.scrollLocation();
+    const { top, left } = this.scrollLocation();
     const scrollLeftMax = getScrollLeftMax(this.containerRef.current!);
 
     return {
-      left: normalizeOffsetLeft(left, scrollLeftMax, !!this.props.rtlEnabled),
       top,
+      left: normalizeOffsetLeft(left, scrollLeftMax, !!this.props.rtlEnabled),
     };
   }
 

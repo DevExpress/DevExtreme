@@ -77,8 +77,8 @@ class ScrollableTestHelper {
     this.viewModel.wrapperRef = React.createRef();
     this.viewModel.topPocketRef = React.createRef();
     this.viewModel.bottomPocketRef = React.createRef();
-    this.viewModel.verticalScrollbarRef = React.createRef();
-    this.viewModel.horizontalScrollbarRef = React.createRef();
+    this.viewModel.vScrollbarRef = React.createRef();
+    this.viewModel.hScrollbarRef = React.createRef();
 
     const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.options.direction);
     this.isVertical = isVertical;
@@ -248,8 +248,6 @@ class ScrollableTestHelper {
           ...{
             contentSize: 200,
             containerSize: 100,
-            baseContentSize: restProps.contentSize || 200,
-            baseContainerSize: restProps.containerSize || 100,
             scrollableOffset: 0,
             contentTranslateOffsetChange:
               scrollbar.props.contentTranslateOffsetChange.bind(this.viewModel),
@@ -266,12 +264,12 @@ class ScrollableTestHelper {
     };
 
     if (this.isBoth) {
-      this.viewModel.horizontalScrollbarRef.current = initSettings(scrollbars.at(0));
-      this.viewModel.verticalScrollbarRef.current = initSettings(scrollbars.at(1));
+      this.viewModel.hScrollbarRef.current = initSettings(scrollbars.at(0));
+      this.viewModel.vScrollbarRef.current = initSettings(scrollbars.at(1));
     } else if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef.current = initSettings(scrollbars.at(0));
+      this.viewModel.vScrollbarRef.current = initSettings(scrollbars.at(0));
     } else if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef.current = initSettings(scrollbars.at(0));
+      this.viewModel.hScrollbarRef.current = initSettings(scrollbars.at(0));
     }
   }
 
@@ -281,34 +279,34 @@ class ScrollableTestHelper {
     this.scrollBarHandlers.forEach((handler) => {
       this[`${handler}HandlerMock`] = jest.fn();
       if (this.isVertical) {
-        this.viewModel.verticalScrollbarRef.current[`${handler}Handler`] = this[`${handler}HandlerMock`];
+        this.viewModel.vScrollbarRef.current[`${handler}Handler`] = this[`${handler}HandlerMock`];
       }
       if (this.isHorizontal) {
-        this.viewModel.horizontalScrollbarRef.current[`${handler}Handler`] = this[`${handler}HandlerMock`];
+        this.viewModel.hScrollbarRef.current[`${handler}Handler`] = this[`${handler}HandlerMock`];
       }
     });
   }
 
   changeScrollbarProp(prop: string, value: number): void {
     if (this.isBoth) {
-      this.viewModel.horizontalScrollbarRef.current.props[prop] = value;
-      this.viewModel.verticalScrollbarRef.current.props[prop] = value;
+      this.viewModel.hScrollbarRef.current.props[prop] = value;
+      this.viewModel.vScrollbarRef.current.props[prop] = value;
     } else if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef.current.props[prop] = value;
+      this.viewModel.vScrollbarRef.current.props[prop] = value;
     } else if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef.current.props[prop] = value;
+      this.viewModel.hScrollbarRef.current.props[prop] = value;
     }
   }
 
   checkScrollbarProps(expectedProps: { [key: string]: any }): void {
     if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef.current!.props = {
+      this.viewModel.vScrollbarRef.current!.props = {
         direction: 'vertical',
         ...expectedProps,
       };
     }
     if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef.current!.props = {
+      this.viewModel.hScrollbarRef.current!.props = {
         direction: 'horizontal',
         ...expectedProps,
       };
@@ -316,28 +314,28 @@ class ScrollableTestHelper {
   }
 
   changeScrollbarMethod(method: string, mock): void {
-    const { horizontalScrollbarRef, verticalScrollbarRef } = this.viewModel;
+    const { hScrollbarRef, vScrollbarRef } = this.viewModel;
 
     if (this.isBoth) {
-      horizontalScrollbarRef.current![method] = mock;
-      verticalScrollbarRef.current![method] = mock;
+      hScrollbarRef.current![method] = mock;
+      vScrollbarRef.current![method] = mock;
     } else if (this.isVertical) {
-      verticalScrollbarRef.current![method] = mock;
+      vScrollbarRef.current![method] = mock;
     } else if (this.isHorizontal) {
-      horizontalScrollbarRef.current![method] = mock;
+      hScrollbarRef.current![method] = mock;
     }
   }
 
   callScrollbarMethod(method: string): void {
-    const { horizontalScrollbarRef, verticalScrollbarRef } = this.viewModel;
+    const { hScrollbarRef, vScrollbarRef } = this.viewModel;
 
     if (this.isBoth) {
-      horizontalScrollbarRef.current![method]();
-      verticalScrollbarRef.current![method]();
+      hScrollbarRef.current![method]();
+      vScrollbarRef.current![method]();
     } else if (this.isVertical) {
-      verticalScrollbarRef.current![method]();
+      vScrollbarRef.current![method]();
     } else if (this.isHorizontal) {
-      horizontalScrollbarRef.current![method]();
+      hScrollbarRef.current![method]();
     }
   }
 
