@@ -126,7 +126,7 @@ export class FileManagerWrapper {
 
     getFolderNodes(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
     }
@@ -142,7 +142,7 @@ export class FileManagerWrapper {
 
     getFolderToggles(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
     }
@@ -511,7 +511,7 @@ export class FileManagerWrapper {
     }
 
     getDialogTextInput() {
-        return $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        return this.getNameEditorDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
     }
 
     getDialogButton(text) {
