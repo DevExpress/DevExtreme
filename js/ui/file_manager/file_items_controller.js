@@ -32,7 +32,7 @@ export default class FileItemsController {
         this._defaultIconMap = this._createDefaultIconMap();
 
         this.setSecurityController();
-        this.setProvider(options.fileProvider);
+        this._setProvider(options.fileProvider);
         this._initialize();
     }
 
@@ -59,9 +59,16 @@ export default class FileItemsController {
         }
     }
 
-    setProvider(fileProvider) {
+    _setProvider(fileProvider) {
         this._fileProvider = this._createFileProvider(fileProvider);
         this._resetState();
+    }
+
+    updateProvider(fileProvider, currentPath) {
+        this._resetCurrentDirectory();
+        this._setProvider(fileProvider);
+        this.refresh();
+        return this.setCurrentPath(currentPath);
     }
 
     _createFileProvider(fileProvider) {
@@ -144,7 +151,7 @@ export default class FileItemsController {
         }
     }
 
-    resetCurrentDirectory() {
+    _resetCurrentDirectory() {
         this._currentDirectoryInfo = this._rootDirectoryInfo;
     }
 
