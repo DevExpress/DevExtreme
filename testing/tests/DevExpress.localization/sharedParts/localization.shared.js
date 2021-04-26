@@ -968,5 +968,13 @@ module.exports = function() {
 
             assert.equal(errorHandler.callCount, 0, 'warning was not rised');
         });
+        QUnit.test('getTimeSeparator should depend on current locale', function(assert) {
+            try {
+                localization.locale('da');
+                assert.equal(dateLocalization.getTimeSeparator(), '.');
+            } finally {
+                localization.locale('en');
+            }
+        });
     });
 };

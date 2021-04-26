@@ -25,7 +25,8 @@ define(function(require, exports, module) {
     const cldrData = [
         require('../../../node_modules/devextreme-cldr-data/ru.json!json'),
         require('../../../node_modules/devextreme-cldr-data/en.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/de.json!json')
+        require('../../../node_modules/devextreme-cldr-data/de.json!json'),
+        require('../../../node_modules/devextreme-cldr-data/da.json!json')
     ];
 
     require('localization/globalize/core');
