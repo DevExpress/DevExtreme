@@ -30,12 +30,12 @@ export default class FileItemsController {
 
         this._defaultIconMap = this._createDefaultIconMap();
 
-        this.setSecurityController();
-        this.setProvider(options.fileProvider);
+        this._setSecurityController();
+        this._setProvider(options.fileProvider);
         this._initialize();
     }
 
-    setSecurityController() {
+    _setSecurityController() {
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
             maxFileSize: this._options.uploadMaxFileSize
@@ -47,20 +47,31 @@ export default class FileItemsController {
         if(isDefined(allowedFileExtensions)) {
             this._options.allowedFileExtensions = allowedFileExtensions;
         }
+        this._setSecurityController();
+        this.refresh();
     }
 
     setUploadOptions({ maxFileSize, chunkSize }) {
-        if(isDefined(maxFileSize)) {
-            this._options.uploadMaxFileSize = maxFileSize;
-        }
         if(isDefined(chunkSize)) {
             this._options.uploadChunkSize = chunkSize;
         }
+        if(isDefined(maxFileSize)) {
+            this._options.uploadMaxFileSize = maxFileSize;
+            this._setSecurityController();
+            this.refresh();
+        }
     }
 
-    setProvider(fileProvider) {
+    _setProvider(fileProvider) {
         this._fileProvider = this._createFileProvider(fileProvider);
         this._resetState();
+    }
+
+    updateProvider(fileProvider, currentPath) {
+        this._resetCurrentDirectory();
+        this._setProvider(fileProvider);
+        this.refresh();
+        return this.setCurrentPath(currentPath);
     }
 
     _createFileProvider(fileProvider) {
@@ -143,7 +154,7 @@ export default class FileItemsController {
         }
     }
 
-    resetCurrentDirectory() {
+    _resetCurrentDirectory() {
         this._currentDirectoryInfo = this._rootDirectoryInfo;
     }
 
