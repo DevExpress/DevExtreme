@@ -79,44 +79,55 @@
     };
 
     exports.getComponentOptions = function(componentName) {
-        if(componentName === 'dxDataGrid') {
-            return {
-                dataSource: {
-                    group: 'name',
-                    store: [{ name: 'Alex', birthDate: new Date() }, { name: 'Dan', birthDate: new Date() }]
-                },
-                allowColumnResizing: true,
-                columnChooser: {
-                    enabled: true
-                },
-                pager: {
-                    visible: true,
-                    showPageSizeSelector: true
-                },
-                groupPanel: {
-                    visible: true
-                },
-                allowColumnReordering: true,
-                editing: {
-                    allowUpdating: true,
-                    allowDeleting: true,
-                    allowAdding: true
-                },
-                hoverStateEnabled: true,
-                searchPanel: {
-                    visible: true
-                },
-                filterRow: {
-                    visible: true
-                }
-            };
-        }
-        if(componentName === 'dxValidator') {
-            return {
-                adapter: {
+        switch(componentName) {
+            case 'dxDataGrid':
+                return {
+                    dataSource: {
+                        group: 'name',
+                        store: [{ name: 'Alex', birthDate: new Date() }, { name: 'Dan', birthDate: new Date() }]
+                    },
+                    allowColumnResizing: true,
+                    columnChooser: {
+                        enabled: true
+                    },
+                    pager: {
+                        visible: true,
+                        showPageSizeSelector: true
+                    },
+                    groupPanel: {
+                        visible: true
+                    },
+                    allowColumnReordering: true,
+                    editing: {
+                        allowUpdating: true,
+                        allowDeleting: true,
+                        allowAdding: true
+                    },
+                    hoverStateEnabled: true,
+                    searchPanel: {
+                        visible: true
+                    },
+                    filterRow: {
+                        visible: true
+                    }
+                };
+            case 'dxValidator':
+                return {
+                    adapter: {
 
-                }
-            };
+                    }
+                };
+            case 'dxFileManager':
+                return {
+                    fileSystemProvider: [{
+                        name: 'Folder 1',
+                        isDirectory: true,
+                        hasSubDirectories: false,
+                        items: []
+                    }]
+                };
+            default:
+                break;
         }
     };
 
