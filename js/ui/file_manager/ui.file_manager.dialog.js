@@ -106,7 +106,7 @@ class FileManagerDialogBase extends Widget {
     }
 
     _closeDialog() {
-        return this._popup.hide();
+        this._popup.hide();
     }
 
     _onPopupHidden() {
