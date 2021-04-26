@@ -63,14 +63,14 @@ const resources = [{
 [1, 2].forEach((intervalCount) => {
   ['horizontal', 'vertical'].forEach((groupOrientation) => {
     [true, false].forEach((showAllDayPanel) => {
-      const testName = `Day view with interval and crossScrollingEnabled, groupOrientation='${groupOrientation}', showAllDayPanel='${showAllDayPanel}'
+      const testName = `Day view with interval and crossScrollingEnabled, groupOrientation='${groupOrientation}', showAllDayPanel='${showAllDayPanel}', intervalCount='${intervalCount}'
       layout test`;
 
       test(testName, async (t) => {
         const scheduler = new Scheduler('#container');
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        const pngName = `day-view-with-interval-crossScrollingEnabled-groupOrientation=${groupOrientation}-showAllDayPanel=${showAllDayPanel}.png`;
+        const pngName = `day-view-with-interval-crossScrollingEnabled-groupOrientation=${groupOrientation}-showAllDayPanel=${showAllDayPanel}-intervalCount=${intervalCount}.png`;
 
         await t
           .expect(await takeScreenshot(pngName, scheduler.workSpace))
