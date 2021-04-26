@@ -53,13 +53,13 @@ export default class FileItemsController {
     }
 
     setUploadOptions({ maxFileSize, chunkSize }) {
+        if(isDefined(chunkSize)) {
+            this._options.uploadChunkSize = chunkSize;
+        }
         if(isDefined(maxFileSize)) {
             this._options.uploadMaxFileSize = maxFileSize;
             this._setSecurityController();
             this.refresh();
-        }
-        if(isDefined(chunkSize)) {
-            this._options.uploadChunkSize = chunkSize;
         }
     }
 
