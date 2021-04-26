@@ -12,6 +12,7 @@ import { Deferred, when } from '../../core/utils/deferred';
 import { find } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { equalByValue } from '../../core/utils/common';
+import { isDefined } from '../../core/utils/type';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
@@ -30,18 +31,48 @@ export default class FileItemsController {
 
         this._defaultIconMap = this._createDefaultIconMap();
 
+        this._setSecurityController();
+        this._setProvider(options.fileProvider);
+        this._initialize();
+    }
+
+    _setSecurityController() {
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
             maxFileSize: this._options.uploadMaxFileSize
         });
+        this._resetState();
+    }
 
-        this._setProvider(options.fileProvider);
-        this._initialize();
+    setAllowedFileExtensions(allowedFileExtensions) {
+        if(isDefined(allowedFileExtensions)) {
+            this._options.allowedFileExtensions = allowedFileExtensions;
+        }
+        this._setSecurityController();
+        this.refresh();
+    }
+
+    setUploadOptions({ maxFileSize, chunkSize }) {
+        if(isDefined(maxFileSize)) {
+            this._options.uploadMaxFileSize = maxFileSize;
+            this._setSecurityController();
+            this.refresh();
+        }
+        if(isDefined(chunkSize)) {
+            this._options.uploadChunkSize = chunkSize;
+        }
     }
 
     _setProvider(fileProvider) {
         this._fileProvider = this._createFileProvider(fileProvider);
         this._resetState();
+    }
+
+    updateProvider(fileProvider, currentPath) {
+        this._resetCurrentDirectory();
+        this._setProvider(fileProvider);
+        this.refresh();
+        return this.setCurrentPath(currentPath);
     }
 
     _createFileProvider(fileProvider) {
@@ -71,7 +102,7 @@ export default class FileItemsController {
         const pathParts = getPathParts(path);
         const rawPath = pathCombine(...pathParts);
         if(this.getCurrentDirectory().fileItem.relativeName === rawPath) {
-            return;
+            return new Deferred().resolve().promise();
         }
 
         return this._setCurrentDirectoryByPathParts(pathParts);
@@ -122,6 +153,10 @@ export default class FileItemsController {
             }
             this._raiseSelectedDirectoryChanged(directoryInfo);
         }
+    }
+
+    _resetCurrentDirectory() {
+        this._currentDirectoryInfo = this._rootDirectoryInfo;
     }
 
     getCurrentItems(onlyFiles) {
@@ -459,6 +494,9 @@ export default class FileItemsController {
     }
 
     _executeDataLoad(action, operation) {
+        if(this._dataLoadingDeferred) {
+            return this._dataLoadingDeferred.then(() => this._executeDataLoad(action, operation));
+        }
         this._dataLoading = true;
         this._dataLoadingDeferred = new Deferred();
 
@@ -467,9 +505,10 @@ export default class FileItemsController {
         }
 
         return action().always(() => {
-            this._dataLoadingDeferred.resolve();
+            const tempDeferred = this._dataLoadingDeferred;
             this._dataLoadingDeferred = null;
             this._dataLoading = false;
+            tempDeferred.resolve();
         });
     }
 
@@ -597,6 +636,10 @@ export default class FileItemsController {
         const result = this._createDirectoryInfo(rootDirectory, null);
         result.displayName = text || DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME;
         return result;
+    }
+
+    setRootText(rootText) {
+        this._rootDirectoryInfo.displayName = rootText || DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME;
     }
 
     _raiseInitialized() {

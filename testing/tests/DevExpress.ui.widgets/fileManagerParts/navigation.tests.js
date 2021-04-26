@@ -874,4 +874,20 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.ok(details.hasError, 'error rendered');
         assert.equal(details.errorText, customMessage, 'details error text rendered');
     });
+
+    test('repaint method does not call data loading', function(assert) {
+        const getItemsStub = sinon.stub();
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                getItems: getItemsStub
+            })
+        });
+        this.clock.tick(400);
+        getItemsStub.reset();
+
+        this.fileManager.repaint();
+        this.clock.tick(400);
+
+        assert.ok(getItemsStub.notCalled, 'getItems method was not called');
+    });
 });
