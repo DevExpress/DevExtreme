@@ -30,7 +30,6 @@ const optionTestValues = {
     deferRendering: false,
     disabled: true,
     dragEnabled: true,
-    elementAttr: { 'custom-attr': 'value' },
     focusStateEnabled: true,
     fullScreen: true,
     height: 500,
@@ -64,7 +63,8 @@ const optionTestValues = {
     titleTemplate: 'custom title',
     toolbarItems: [{ widget: 'dxButton' }],
     visible: true,
-    width: 500
+    width: 500,
+    wrapperAttr: { 'custom-attr': 'value' }
 };
 
 const getPopupInstance = (editor) => {

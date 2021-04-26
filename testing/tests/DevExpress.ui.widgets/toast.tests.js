@@ -148,7 +148,7 @@ QUnit.module('general', moduleConfig, () => {
         assert.equal($('.dx-toast-content:visible').length, 1, 'only the second toast is visible');
     });
 
-    QUnit.test('show warning if deprecated \'elementAttr\' option is used', function(assert) {
+    QUnit.test('show warning if deprecated "elementAttr" option is used', function(assert) {
         sinon.spy(errors, 'log');
 
         try {

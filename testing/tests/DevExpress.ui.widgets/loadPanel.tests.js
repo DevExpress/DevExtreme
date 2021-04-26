@@ -128,7 +128,7 @@ QUnit.module('init', {
         }).dxLoadPanel('instance');
     });
 
-    QUnit.test('show warning if deprecated \'elementAttr\' option is used', function(assert) {
+    QUnit.test('show warning if deprecated "elementAttr" option is used', function(assert) {
         sinon.spy(errors, 'log');
 
         try {

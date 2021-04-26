@@ -74,7 +74,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-     elementAttr?: any;
+    elementAttr?: any;
     /**
      * @docid
      * @default function() { return $(window).height() * 0.8 }
@@ -210,7 +210,6 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @public
      */
     wrapperAttr?: any;
-
 }
 export interface dxOverlayAnimation {
     /**

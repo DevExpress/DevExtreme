@@ -20,7 +20,6 @@ const defaultDropDownOptions = {
     deferRendering: false,
     disabled: false,
     dragEnabled: false,
-    elementAttr: {},
     focusStateEnabled: false,
     fullScreen: false,
     height: 'auto',
@@ -54,7 +53,8 @@ const defaultDropDownOptions = {
     titleTemplate: 'title',
     toolbarItems: [],
     visible: false,
-    width: null
+    width: null,
+    wrapperAttr: {}
 };
 
 export {

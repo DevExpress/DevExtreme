@@ -339,13 +339,12 @@ QUnit.module('options change', () => {
         }
     });
 
-    QUnit.test('show warning if deprecated \'elementAttr\' option is used', function(assert) {
-        $('body').append('<div id="popover"></div>');
-
+    QUnit.test('show warning if deprecated "elementAttr" option is used', function(assert) {
+        fixtures.simple.create();
         sinon.spy(errors, 'log');
         try {
-            $('#popover').dxPopover({
-                elementAttr: { class: 'someClass' },
+            new Popover($('#what'), {
+                elementAttr: { class: 'someClass' }
             });
             assert.deepEqual(errors.log.lastCall.args, [
                 'W0001',
@@ -356,9 +355,8 @@ QUnit.module('options change', () => {
             ], 'args of the log method');
         } finally {
             errors.log.restore();
+            fixtures.simple.drop();
         }
-
-        $('#popover').remove();
     });
 });
 
