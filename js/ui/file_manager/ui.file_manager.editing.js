@@ -36,9 +36,9 @@ class FileManagerEditingControl extends Widget {
                 getDirectories: this._controller.getDirectories.bind(this._controller),
                 getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
             },
+            rtlEnabled: this.option('rtlEnabled'),
             onDialogClosed: this._onDialogClosed.bind(this)
         });
-        this.updateDialogRtl(this.option('rtlEnabled'));
 
         this._fileUploader = this._createFileUploader();
         const notificationControl = this.option('notificationControl');

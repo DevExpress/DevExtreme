@@ -11,29 +11,30 @@ class FileManagerDialogManager {
     constructor($element, options) {
         this._$element = $element;
         this._options = options;
+        const baseDialogOptions = {
+            onClosed: this._options['onDialogClosed'],
+            rtlEnabled: this._options['rtlEnabled']
+        };
 
         const $chooseFolderDialog = $('<div>').appendTo(this._$element);
-        this._chooseDirectoryDialog = new FileManagerFolderChooserDialog($chooseFolderDialog,
-            extend(this._options['chooseDirectoryDialog'], { onClosed: this._options['onDialogClosed'] }));
+        this._chooseDirectoryDialog = new FileManagerFolderChooserDialog($chooseFolderDialog, extend(baseDialogOptions,
+            this._options['chooseDirectoryDialog']
+        ));
 
         const $renameDialog = $('<div>').appendTo(this._$element);
-        this._renameItemDialog = new FileManagerNameEditorDialog($renameDialog, {
+        this._renameItemDialog = new FileManagerNameEditorDialog($renameDialog, extend(baseDialogOptions, {
             title: messageLocalization.format('dxFileManager-dialogRenameItemTitle'),
-            buttonText: messageLocalization.format('dxFileManager-dialogRenameItemButtonText'),
-            onClosed: this._options['onDialogClosed']
-        });
+            buttonText: messageLocalization.format('dxFileManager-dialogRenameItemButtonText')
+        }));
 
         const $createDialog = $('<div>').appendTo(this._$element);
-        this._createItemDialog = new FileManagerNameEditorDialog($createDialog, {
+        this._createItemDialog = new FileManagerNameEditorDialog($createDialog, extend(baseDialogOptions, {
             title: messageLocalization.format('dxFileManager-dialogCreateDirectoryTitle'),
-            buttonText: messageLocalization.format('dxFileManager-dialogCreateDirectoryButtonText'),
-            onClosed: this._options['onDialogClosed']
-        });
+            buttonText: messageLocalization.format('dxFileManager-dialogCreateDirectoryButtonText')
+        }));
 
         const $deleteItemDialog = $('<div>').appendTo(this._$element);
-        this._deleteItemDialog = new FileManagerDeleteItemDialog($deleteItemDialog, {
-            onClosed: this._options['onDialogClosed']
-        });
+        this._deleteItemDialog = new FileManagerDeleteItemDialog($deleteItemDialog, baseDialogOptions);
     }
 
     getCopyDialog(targetItemInfos) {
@@ -65,7 +66,6 @@ class FileManagerDialogManager {
             this._createItemDialog,
             this._deleteItemDialog
         ].forEach(dialog => {
-            dialog._closeDialog();
             dialog.option('rtlEnabled', value);
         });
     }
