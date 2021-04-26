@@ -4,14 +4,14 @@ const getDateParser = require('localization/ldml/date.parser').getParser;
 const getRegExpInfo = require('localization/ldml/date.parser').getRegExpInfo;
 const getDateFormatter = require('localization/ldml/date.formatter').getFormatter;
 const getDateFormat = require('localization/ldml/date.format').getFormat;
-const dateParts = require('localization/default_date_names');
+const defaultDateNames = require('localization/default_date_names');
 const numberLocalization = require('localization/number');
 const dateLocalization = require('localization/date');
 const extend = require('core/utils/extend').extend;
 
 require('localization/currency');
 
-const _dateParts = extend({}, dateParts, {
+const dateParts = extend({}, defaultDateNames, {
     getPeriodNames: function() {
         return ['am', 'pm'];
     },
@@ -23,14 +23,14 @@ const _dateParts = extend({}, dateParts, {
 QUnit.module('date parser', () => {
     QUnit.test('parse with escaped chars', function(assert) {
         const date = new Date(2018, 10, 12, 14, 15, 16);
-        const parser = getDateParser('EEEE, d. MMMM yyyy \'um\' H:mm:ss', _dateParts);
+        const parser = getDateParser('EEEE, d. MMMM yyyy \'um\' H:mm:ss', dateParts);
 
         assert.deepEqual(parser('Monday, 12. November 2018 um 14:15:16'), date, 'parse correct date string');
     });
 
     QUnit.test('parse with escaped pattern chars', function(assert) {
         const date = new Date(2018, 0, 1, 0, 0, 0);
-        const parser = getDateParser('\'dd\' yyyy', _dateParts);
+        const parser = getDateParser('\'dd\' yyyy', dateParts);
 
         assert.deepEqual(parser('dd 2018'), date, 'parse correct date string');
     });
@@ -49,7 +49,7 @@ QUnit.module('date parser', () => {
     });
 
     QUnit.test('case insensitive date parsing for months', function(assert) {
-        const parser = getDateParser('MMM', _dateParts);
+        const parser = getDateParser('MMM', dateParts);
 
         assert.deepEqual(parser('nov').getMonth(), 10, 'lower case');
         assert.deepEqual(parser('Nov').getMonth(), 10, 'capitalized');
@@ -57,14 +57,14 @@ QUnit.module('date parser', () => {
     });
 
     QUnit.test('case insensitive date parsing for part of day', function(assert) {
-        const parser = getDateParser('aaaa', _dateParts);
+        const parser = getDateParser('aaaa', dateParts);
 
         assert.equal(parser('am').getHours(), 0);
     });
 
     QUnit.test('getFormat', function(assert) {
         const checkFormat = function(format, customDateParts) {
-            const formatter = getDateFormatter(format, customDateParts || dateParts);
+            const formatter = getDateFormatter(format, customDateParts || defaultDateNames);
             assert.strictEqual(getDateFormat(formatter), format, format);
         };
 
@@ -108,13 +108,13 @@ QUnit.module('date parser', () => {
 
     QUnit.test('dates are parsed correctly on DST start time (T869511)', function(assert) {
         const date = new Date(2020, 2, 8, 14, 15, 16);
-        const parser = getDateParser('yyyy/MM/dd h:mm:ss aaa', _dateParts);
+        const parser = getDateParser('yyyy/MM/dd h:mm:ss aaa', dateParts);
         assert.deepEqual(parser('2020/03/08 2:15:16 PM'), date, 'parse correct date string');
     });
 
     QUnit.test('dates are parsed correctly on hours after DST start time (T869511)', function(assert) {
         const date = new Date(2020, 2, 8, 15, 14, 13);
-        const parser = getDateParser('yyyy/MM/dd h:mm:ss aaa', _dateParts);
+        const parser = getDateParser('yyyy/MM/dd h:mm:ss aaa', dateParts);
         assert.deepEqual(parser('2020/03/08 3:14:13 PM'), date, 'parse correct date string');
     });
 });
@@ -363,28 +363,28 @@ QUnit.module('number formatter', () => {
     QUnit.module('getRegExpInfo method');
 
     QUnit.test('getRegExpInfo should return correct pattern set when stub is in the end', function(assert) {
-        const regExpInfo = getRegExpInfo('EEE, MMMM, dd, HH:mm:ss \'(stub)\'', _dateParts);
+        const regExpInfo = getRegExpInfo('EEE, MMMM, dd, HH:mm:ss \'(stub)\'', dateParts);
         assert.deepEqual(regExpInfo.patterns, [
             'EEE', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', ':', 'mm', ':', 'ss', '\' (stub)\''
         ]);
     });
 
     QUnit.test('getRegExpInfo should return correct pattern set when there is "ww" inside of it', function(assert) {
-        const regExpInfo = getRegExpInfo('ww, MMMM, dd, HH:mm:ss \'(stub)\'', _dateParts);
+        const regExpInfo = getRegExpInfo('ww, MMMM, dd, HH:mm:ss \'(stub)\'', dateParts);
         assert.deepEqual(regExpInfo.patterns, [
             'ww', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', ':', 'mm', ':', 'ss', '\' (stub)\''
         ]);
     });
 
     QUnit.test('getRegExpInfo should return correct pattern for the single time separator', function(assert) {
-        const regExpInfo = getRegExpInfo('HH:mm', _dateParts);
+        const regExpInfo = getRegExpInfo('HH:mm', dateParts);
         assert.deepEqual(regExpInfo.patterns, [
             'HH', ':', 'mm'
         ]);
     });
 
     QUnit.test('getRegExpInfo should return correct regex for multiple adjacent time separators', function(assert) {
-        const regExpInfo = getRegExpInfo('HH:::mm', _dateParts);
+        const regExpInfo = getRegExpInfo('HH:::mm', dateParts);
         assert.deepEqual(regExpInfo.patterns, [
             'HH', ':::', 'mm'
         ]);

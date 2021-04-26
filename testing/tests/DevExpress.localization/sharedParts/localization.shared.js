@@ -971,7 +971,8 @@ module.exports = function() {
         QUnit.test('getTimeSeparator should depend on current locale', function(assert) {
             try {
                 localization.locale('da');
-                assert.equal(dateLocalization.getTimeSeparator(), '.');
+                const formattedText = localization.formatDate(new Date(2021, 1, 1, 12, 34), 'shorttime');
+                assert.ok(formattedText.indexOf(dateLocalization.getTimeSeparator()) > 0);
             } finally {
                 localization.locale('en');
             }
