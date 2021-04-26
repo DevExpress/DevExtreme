@@ -57,6 +57,18 @@ class FileManagerDialogManager {
     getDeleteItemDialog() {
         return this._deleteItemDialog;
     }
+
+    updateDialogRtl(value) {
+        [
+            this._chooseDirectoryDialog,
+            this._renameItemDialog,
+            this._createItemDialog,
+            this._deleteItemDialog
+        ].forEach(dialog => {
+            dialog._closeDialog();
+            dialog.option('rtlEnabled', value);
+        });
+    }
 }
 
 export default FileManagerDialogManager;

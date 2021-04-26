@@ -38,6 +38,7 @@ class FileManagerEditingControl extends Widget {
             },
             onDialogClosed: this._onDialogClosed.bind(this)
         });
+        this.updateDialogRtl(this.option('rtlEnabled'));
 
         this._fileUploader = this._createFileUploader();
         const notificationControl = this.option('notificationControl');
@@ -391,6 +392,10 @@ class FileManagerEditingControl extends Widget {
         } else {
             this._dialogDeferred.reject();
         }
+    }
+
+    updateDialogRtl(value) {
+        this._dialogManager.updateDialogRtl(value);
     }
 
     _getItemThumbnail(item) {
