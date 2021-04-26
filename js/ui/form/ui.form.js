@@ -996,7 +996,9 @@ const Form = Widget.inherit({
                         const layoutManagerItems = layoutManager.option('items');
                         formItems.forEach((item, index) => {
                             const layoutItem = layoutManagerItems[index];
-                            layoutItem.visibleIndex = item.visibleIndex;
+                            layoutItem.visibleIndex = isDefined(item.visibleIndex)
+                                ? item.visibleIndex
+                                : 0; // T990701
                         });
                     }
                 }
