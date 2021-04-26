@@ -58,6 +58,8 @@ export const Consts = {
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
+    NAME_EDITOR_DIALOG_CLASS: 'dx-filemanager-dialog-name-editor-popup',
+    DELETE_ITEM_DIALOG_CLASS: 'dx-filemanager-dialog-delete-item-popup',
     NOTIFICATION_POPUP_CLASS: 'dx-filemanager-notification-popup',
     POPUP_NORMAL_CLASS: 'dx-popup-normal',
     POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
@@ -498,6 +500,14 @@ export class FileManagerWrapper {
 
     getFolderChooserDialog() {
         return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+    }
+
+    getNameEditorDialog() {
+        return $(`.${Consts.NAME_EDITOR_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+    }
+
+    getDeleteItemDialog() {
+        return $(`.${Consts.DELETE_ITEM_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
     }
 
     getDialogTextInput() {
