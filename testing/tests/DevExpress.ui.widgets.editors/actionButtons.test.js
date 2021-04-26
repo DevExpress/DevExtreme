@@ -940,27 +940,22 @@ module('collection updating', () => {
         });
 
         test('custom button should have \'text\' styling mode if editor has stylingMode = \'underlined\' and buttons config was changed (T992034)', function(assert) {
+            const buttonConfig = {
+                name: 'custom',
+                location: 'after',
+                options: {
+                    text: 'custom'
+                }
+            };
             const $textBox = $('<div>').dxTextBox({
                 showClearButton: false,
                 stylingMode: 'underlined',
                 value: 'text',
-                buttons: ['clear', {
-                    name: 'custom',
-                    location: 'after',
-                    options: {
-                        text: 'custom'
-                    }
-                }]
+                buttons: [buttonConfig]
             });
             const textBox = $textBox.dxTextBox('instance');
 
-            textBox.option('buttons', [{
-                name: 'custom',
-                location: 'after',
-                options: {
-                    text: 'custom1'
-                }
-            }]);
+            textBox.option('buttons', [buttonConfig]);
 
             const customButton = textBox.getButton('custom');
             assert.strictEqual(customButton.option('stylingMode'), 'text');
