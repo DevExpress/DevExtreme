@@ -69,7 +69,7 @@ A VNC server is available within the running container. To track test execution,
 
 ### In a Cloud CI
 
-We provide configuration YAML files for [Travis CI](https://travis-ci.org/) ([.travis.yml](.travis.yml)) and [Shippable](https://app.shippable.com/) ([shippable.yml](shippable.yml)). Enable one of them for your forked repo (we recommend Travis).
+We provide configuration YAML files for [Travis CI](https://travis-ci.org/) ([.travis.yml](.travis.yml)).
 
 Please make sure that each pull request passes all automatic checks before submitting it.
 
