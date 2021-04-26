@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
-import { isDefined, isFunction } from '../../core/utils/type';
+import { isFunction } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
 import { ensureDefined, equalByValue } from '../../core/utils/common';
 
@@ -555,21 +555,15 @@ class FileManager extends Widget {
                 this.repaint();
                 break;
             case 'fileSystemProvider':
-                this._controller.updateProvider(args.value), this.option('currentPath')
+                this._controller.updateProvider(args.value, this.option('currentPath'))
                     .then(() => this.repaint());
                 break;
             case 'allowedFileExtensions':
                 this._controller.setAllowedFileExtensions(args.value);
-                this._controller.setSecurityController();
-                this._controller.refresh();
                 this.repaint();
                 break;
             case 'upload':
                 this._controller.setUploadOptions(this.option('upload'));
-                if(args.fullName === 'upload.maxFileSize' || args.fullName === 'upload' && isDefined(args.value.maxFileSize)) {
-                    this._controller.setSecurityController();
-                    this._controller.refresh();
-                }
                 this.repaint();
                 break;
             case 'permissions':

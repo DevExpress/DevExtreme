@@ -31,12 +31,12 @@ export default class FileItemsController {
 
         this._defaultIconMap = this._createDefaultIconMap();
 
-        this.setSecurityController();
+        this._setSecurityController();
         this._setProvider(options.fileProvider);
         this._initialize();
     }
 
-    setSecurityController() {
+    _setSecurityController() {
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
             maxFileSize: this._options.uploadMaxFileSize
@@ -48,11 +48,15 @@ export default class FileItemsController {
         if(isDefined(allowedFileExtensions)) {
             this._options.allowedFileExtensions = allowedFileExtensions;
         }
+        this._setSecurityController();
+        this.refresh();
     }
 
     setUploadOptions({ maxFileSize, chunkSize }) {
         if(isDefined(maxFileSize)) {
             this._options.uploadMaxFileSize = maxFileSize;
+            this._setSecurityController();
+            this.refresh();
         }
         if(isDefined(chunkSize)) {
             this._options.uploadChunkSize = chunkSize;
