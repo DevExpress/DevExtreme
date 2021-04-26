@@ -5806,3 +5806,25 @@ QUnit.module('valueChanged handler should receive correct event', {
         });
     });
 });
+
+QUnit.module('displayExpr', moduleSetup, () => {
+    [false, true].forEach((deferRendering) => {
+        QUnit.test(`displayExpr should not recalculated on closing dropDown window in case the widget has no actual value(deferRendering is ${deferRendering})`, function(assert) {
+            const displayExprSpy = sinon.spy((itemData) => itemData || 'test');
+            const $element = $('#selectBox').dxSelectBox({
+                items: [1, 2, 3],
+                displayExpr: displayExprSpy,
+                deferRendering
+            });
+            const instance = $element.dxSelectBox('instance');
+
+            assert.strictEqual(displayExprSpy.callCount, deferRendering ? 1 : 4, `Render field value'${ deferRendering ? ' + render 3 items' : ''}`);
+
+            instance.open();
+            assert.strictEqual(displayExprSpy.callCount, 4, `${deferRendering ? 'Render 3 items' : 'It was not called more times on DropDown showing'}`);
+
+            instance.close();
+            assert.strictEqual(displayExprSpy.callCount, 4, 'It was not called more times on DropDown hiding');
+        });
+    });
+});

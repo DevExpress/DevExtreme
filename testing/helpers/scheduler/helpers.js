@@ -33,6 +33,8 @@ export const CLASSES = {
     dateTableCell: '.dx-scheduler-date-table-cell',
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
     selectedCell: '.dx-state-focused',
+    headerPanelCell: '.dx-scheduler-header-panel-cell',
+    weekHeaderPanelCell: '.dx-scheduler-header-panel-week-cell',
 
     appointment: '.dx-scheduler-appointment',
     appointmentDate: '.dx-scheduler-appointment-content-date',
@@ -487,6 +489,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
+            getOrdinaryHeaderPanelCells: () => $(`${CLASSES.headerPanelCell}:not(${CLASSES.weekHeaderPanelCell})`),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
             getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),

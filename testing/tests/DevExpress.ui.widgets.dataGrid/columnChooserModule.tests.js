@@ -1126,8 +1126,7 @@ QUnit.module('Column chooser', {
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 0, 'hidden column count');
 
         // act
-        this.options.columnChooser.allowSearch = false;
-        this.columnChooserView.optionChanged({ name: 'columnChooser' });
+        this.option('columnChooser.allowSearch', false);
 
         // assert
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 2, 'hidden column count');
@@ -1147,9 +1146,8 @@ QUnit.module('Column chooser', {
         assert.strictEqual(popupInstance.option('height'), 350, 'default height');
 
         // act
-        this.options.columnChooser.width = 500;
-        this.options.columnChooser.height = 600;
-        this.columnChooserView.optionChanged({ name: 'columnChooser' });
+        this.option('columnChooser.width', 500);
+        this.option('columnChooser.height', 600);
 
         // asert
         assert.strictEqual(popupInstance.option('width'), 500, 'changed width');

@@ -533,7 +533,14 @@ QUnit.module('Actions', moduleConfig, () => {
         const newStart = new Date('2019-02-21');
         const newEnd = new Date('2019-02-22');
         const newTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '2');
+        const data = {
+            start: newStart,
+            end: newEnd,
+            title: newTitle,
+            progress: 0,
+            parentId: '2'
+        };
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
 
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
@@ -563,7 +570,14 @@ QUnit.module('Actions', moduleConfig, () => {
         const newStart = new Date('2019-02-21');
         const newEnd = new Date('2019-02-22');
         const newTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '2');
+        const data = {
+            start: newStart,
+            end: newEnd,
+            title: newTitle,
+            progress: 0,
+            parentId: '2'
+        };
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
 
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
@@ -937,16 +951,20 @@ QUnit.module('DataSources', moduleConfig, () => {
         this.clock.tick();
 
         const tasksCount = tasks.length;
-        const newStart = new Date('2019-02-21');
-        const newEnd = new Date('2019-02-22');
-        const newTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '1');
+        const data = {
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '1'
+        };
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = tasks[tasks.length - 1];
-        assert.equal(createdTask.title, newTitle, 'new task title is right');
-        assert.equal(createdTask.start, newStart, 'new task start is right');
-        assert.equal(createdTask.end, newEnd, 'new task end is right');
+        assert.equal(createdTask.title, data.title, 'new task title is right');
+        assert.equal(createdTask.start, data.start, 'new task start is right');
+        assert.equal(createdTask.end, data.end, 'new task end is right');
     });
     test('updating', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1000,14 +1018,11 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         this.clock.tick();
 
         const tasksCount = tasks.length;
-        const newStart = new Date('2019-02-21');
-        const newEnd = new Date('2019-02-22');
-        const newTitle = 'New';
         this.instance.option('onTaskInserting', (e) => {
             e.cancel = true;
         });
 
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '1');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(null);
         this.clock.tick();
         assert.equal(tasks.length, tasksCount, 'new task was not created in ds');
     });
@@ -1019,6 +1034,13 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const tasksCount = tasks.length;
         const newStart = new Date('2019-02-23');
         const newEnd = new Date('2019-02-24');
+        const data = {
+            start: '2019-02-21',
+            end: '2019-02-22',
+            title: 'New',
+            progress: 0,
+            parentId: '1'
+        };
         this.instance.option('onTaskInserting', (e) => {
             e.values['title'] = 'My text';
             e.values['start'] = newStart;
@@ -1026,8 +1048,9 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             e.values['color'] = 'red';
         });
 
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute('2019-02-21', '2019-02-22', 'New', 0, '1');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
+
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = tasks[tasks.length - 1];
         assert.equal(createdTask.title, 'My text', 'new task title is right');
@@ -1043,13 +1066,20 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const text = 'My text';
         const newStart = new Date('2019-02-23');
         const newEnd = new Date('2019-02-24');
+        const data = {
+            start: newStart,
+            end: newEnd,
+            title: text,
+            progress: 0,
+            parentId: '1'
+        };
         let values;
         let keyExists = false;
         this.instance.option('onTaskInserted', (e) => {
             values = e.values;
             keyExists = !!e.key;
         });
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, text, 0, '1');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
 
         assert.ok(keyExists, 'key created');
@@ -1104,6 +1134,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         this.clock.tick();
         assert.equal(tasks[1].CustomText, 'new custom text', 'task cust field  is updated');
         assert.equal(tasks[1].ItemName, 'new item text', 'task cust field  is updated');
+        assert.equal(tasks[1].TaskColor, 'red', 'task color field  is updated');
     });
     test('task deleting - canceling', function(assert) {
         this.createInstance(allSourcesOptions);

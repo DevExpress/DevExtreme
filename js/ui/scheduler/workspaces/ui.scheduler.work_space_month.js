@@ -125,7 +125,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _setFirstViewDate() {
         const firstMonthDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
-        this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, this.option('firstDayOfWeek') || dateLocalization.firstDayOfWeekIndex());
+        const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
+        this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
         this._setStartDayHour(this._firstViewDate);
 
         const date = this._getViewStartByOptions();

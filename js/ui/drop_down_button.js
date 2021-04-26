@@ -360,7 +360,7 @@ const DropDownButton = Widget.inherit({
             hoverStateEnabled: this.option('hoverStateEnabled'),
             showItemDataTitle: true,
             onContentReady: () => this._fireContentReadyAction(),
-            selectedItemKeys: selectedItemKey && useSelectMode ? [selectedItemKey] : [],
+            selectedItemKeys: isDefined(selectedItemKey) && useSelectMode ? [selectedItemKey] : [],
             grouped: this.option('grouped'),
             groupTemplate: this.option('groupTemplate'),
             keyExpr: this._getKey(),
@@ -546,7 +546,7 @@ const DropDownButton = Widget.inherit({
         if(value) {
             this._setListOption('selectionMode', 'single');
             const selectedItemKey = this.option('selectedItemKey');
-            this._setListOption('selectedItemKeys', selectedItemKey ? [selectedItemKey] : []);
+            this._setListOption('selectedItemKeys', isDefined(selectedItemKey) ? [selectedItemKey] : []);
         } else {
             this._setListOption('selectionMode', 'none');
             this.option({

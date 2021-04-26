@@ -265,7 +265,10 @@ class SpeedDialMainItem extends SpeedDialItem {
     _optionChanged(args) {
         switch(args.name) {
             case 'actions':
-                if(this._isVisible()) this._renderIcon();
+                if(this._isVisible()) {
+                    this._renderIcon();
+                    this._renderLabel();
+                }
                 this._renderCloseIcon();
                 this._renderClick();
                 this._renderActions();
