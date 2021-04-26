@@ -7141,4 +7141,153 @@ QUnit.module('New virtual scrolling mode', {
             dataSource._dataSource.on('customizeStoreLoadOptions', dataLoadingHandler);
         }
     });
+
+    // TODO the following tests can be removed when newMode is enabled by default
+    QUnit.test('startLoadTime was not initialized when loadingChanged is raised', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const loadingChangeHandler = dataSource._loadingChangedHandler;
+        const startLoadTimeValues = [];
+
+        dataSource._loadingChangedHandler = function() {
+            loadingChangeHandler.apply(dataSource, arguments);
+            startLoadTimeValues.push(dataSource._startLoadTime);
+        };
+        dataSource._dataSource.off('loadingChanged', loadingChangeHandler);
+        dataSource._dataSource.on('loadingChanged', dataSource._loadingChangedHandler);
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.strictEqual(startLoadTimeValues.length, 2, 'change handler call count');
+            assert.notOk(startLoadTimeValues[0], 'not initizlized on the first call');
+            assert.notOk(startLoadTimeValues[1], 'not initizlized on the second call');
+        } finally {
+            dataSource._dataSource.off('loadingChanged', dataSource._loadingChangedHandler);
+            dataSource._dataSource.on('loadingChanged', loadingChangeHandler);
+        }
+    });
+
+    QUnit.test('VirtualScrollController.handleDataChanged is not called when data is loaded', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const handleDataChangedSpy = sinon.spy(dataSource._virtualScrollController, 'handleDataChanged');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.notOk(handleDataChangedSpy.called, 'not called');
+        } finally {
+            handleDataChangedSpy.restore();
+        }
+    });
+
+    QUnit.test('VirtualScrollController.load is not called when data is loaded', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const loadSpy = sinon.spy(dataSource._virtualScrollController, 'load');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.notOk(loadSpy.called, 'not called');
+        } finally {
+            loadSpy.restore();
+        }
+    });
+
+    QUnit.test('resetPagesCache is not called when row is expanded', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3,
+            group: 't'
+        });
+        const resetPagesCacheSpy = sinon.spy(dataSource, 'resetPagesCache');
+
+        try {
+            // act
+            dataSource.changeRowExpand([1]);
+
+            // assert
+            assert.notOk(resetPagesCacheSpy.called, 'not called');
+        } finally {
+            resetPagesCacheSpy.restore();
+        }
+    });
+
+    QUnit.test('VirtualScrollController.getDelayDeferred is not called on reload', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const getDelayDeferredSpy = sinon.spy(dataSource._virtualScrollController, 'getDelayDeferred');
+
+        try {
+            // act
+            dataSource.reload();
+
+            // assert
+            assert.notOk(getDelayDeferredSpy.called, 'not called');
+        } finally {
+            getDelayDeferredSpy.restore();
+        }
+    });
+
+    QUnit.test('VirtualScrollController.reset is not called on refresh', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const resetSpy = sinon.spy(dataSource._virtualScrollController, 'reset');
+
+        try {
+            // act
+            dataSource.refresh({ storeLoadOptions: {} }, { reload: true });
+
+            // assert
+            assert.notOk(resetSpy.called, 'not called');
+        } finally {
+            resetSpy.restore();
+        }
+    });
+
+    QUnit.test('loadingChanged should not fire when loading is failed', function(assert) {
+        // arrange
+        const dataSource = createDataSource({
+            store: new CustomStore({
+                key: 'id',
+                load: function() {
+                    return $.Deferred().reject().promise();
+                }
+            }),
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+        });
+        const fireSpy = sinon.spy(dataSource.loadingChanged, 'fire');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.equal(fireSpy.callCount, 2, 'called twice');
+        } finally {
+            fireSpy.restore();
+        }
+    });
 });
