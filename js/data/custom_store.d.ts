@@ -1,7 +1,3 @@
-import {
-    DxPromise
-} from '../core/utils/deferred';
-
 import Store, {
     StoreOptions
 } from './abstract_store';
@@ -18,7 +14,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey?: ((key: any | string | number) => DxPromise<any>);
+    byKey?: ((key: any | string | number) => PromiseLike<any>);
     /**
      * @docid
      * @default true
@@ -33,7 +29,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert?: ((values: any) => DxPromise<any>);
+    insert?: ((values: any) => PromiseLike<any>);
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
@@ -41,7 +37,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load?: ((options: LoadOptions) => DxPromise<any> | Array<any>);
+    load?: ((options: LoadOptions) => PromiseLike<any> | Array<any>);
     /**
      * @docid
      * @type string
@@ -58,7 +54,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    remove?: ((key: any | string | number) => DxPromise<void>);
+    remove?: ((key: any | string | number) => PromiseLike<void>);
     /**
      * @docid
      * @type_function_param1 loadOptions:object
@@ -68,7 +64,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    totalCount?: ((loadOptions: { filter?: any, group?: any }) => DxPromise<number>);
+    totalCount?: ((loadOptions: { filter?: any, group?: any }) => PromiseLike<number>);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -77,7 +73,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    update?: ((key: any | string | number, values: any) => DxPromise<any>);
+    update?: ((key: any | string | number, values: any) => PromiseLike<any>);
     /**
      * @docid
      * @default undefined

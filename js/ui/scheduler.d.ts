@@ -9,10 +9,6 @@ import {
     template
 } from '../core/templates/template';
 
-import {
-    DxPromise
-} from '../core/utils/deferred';
-
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -63,7 +59,7 @@ export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
 /** @public */
 export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
-  cancel: boolean | DxPromise<boolean>;
+  cancel: boolean | PromiseLike<boolean>;
 }
 
 /** @public */
@@ -90,7 +86,7 @@ export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
 /** @public */
 export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: any;
-  cancel: boolean | DxPromise<boolean>;
+  cancel: boolean | PromiseLike<boolean>;
 }
 
 /** @public */
@@ -115,7 +111,7 @@ export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
 export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
   readonly oldData: any;
   readonly newData: any;
-  cancel?: boolean | DxPromise<boolean>;
+  cancel?: boolean | PromiseLike<boolean>;
 }
 
 /** @public */
