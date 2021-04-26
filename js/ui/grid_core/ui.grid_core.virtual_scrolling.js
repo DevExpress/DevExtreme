@@ -1152,10 +1152,15 @@ export const virtualScrollingModule = {
                         if(isVirtualMode(this)) {
                             this._updateLoadViewportParams();
                             const { pageIndex, loadPageCount } = this.getLoadPageParams();
+                            const dataSourceAdapter = this._dataSource;
 
-                            this._dataSource.pageIndex(pageIndex);
-                            this._dataSource.loadPageCount(loadPageCount);
-                            this.load();
+                            if(pageIndex !== dataSourceAdapter.pageIndex() || loadPageCount !== dataSourceAdapter.loadPageCount()) {
+                                dataSourceAdapter.pageIndex(pageIndex);
+                                dataSourceAdapter.loadPageCount(loadPageCount);
+                                this.load();
+                            } else if(!this._isLoading) {
+                                this.updateItems();
+                            }
                         }
                     },
                     loadIfNeed: function() {
