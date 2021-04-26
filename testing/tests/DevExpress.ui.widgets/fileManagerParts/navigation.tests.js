@@ -875,8 +875,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.equal(details.errorText, customMessage, 'details error text rendered');
     });
 
-    test('currentPathKeys option has  with nameExpr and keyExpr (T988286)', function(assert) {
-        window.canDebug = true;
+    test('currentPathKeys option has correct value with nameExpr and keyExpr (T988286)', function(assert) {
         this.fileManager.option('fileSystemProvider', {
             data: [
                 {
