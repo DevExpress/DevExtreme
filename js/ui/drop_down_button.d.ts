@@ -1,9 +1,10 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -15,7 +16,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -51,7 +52,7 @@ export type InitializedEvent = InitializedEventInfo<dxDropDownButton>;
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxDropDownButton> & {
     readonly itemData?: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
 };
 
 /** @public */
@@ -91,12 +92,12 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @docid
      * @default "content"
      * @type_function_param1 data:Array<string,number,Object>|DataSource
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: TElement) => string | TElement);
+    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default {}
@@ -130,12 +131,12 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default null
@@ -164,7 +165,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 selectedItem:object
      * @type_function_param1_field1 component:dxDropDownButton
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -177,9 +178,9 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:dxElement
+     * @type_function_param1_field6 itemElement:DxElement
      * @type_function_param1_field1 component:dxDropDownButton
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -193,7 +194,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_param1_field4 item:object
      * @type_function_param1_field5 previousItem:object
      * @type_function_param1_field1 component:dxDropDownButton
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -282,7 +283,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
  * @public
  */
 export default class dxDropDownButton extends Widget {
-    constructor(element: TElement, options?: dxDropDownButtonOptions)
+    constructor(element: UserDefinedElement, options?: dxDropDownButtonOptions)
     /**
      * @docid
      * @publicName close()
@@ -290,7 +291,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    close(): TPromise<void>;
+    close(): DxPromise<void>;
     getDataSource(): DataSource;
     /**
      * @docid
@@ -299,7 +300,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    open(): TPromise<void>;
+    open(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle()
@@ -307,7 +308,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): TPromise<void>;
+    toggle(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle(visibility)
@@ -316,7 +317,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(visibility: boolean): TPromise<void>;
+    toggle(visibility: boolean): DxPromise<void>;
 }
 
 /**
@@ -330,13 +331,13 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDropDownButton
-     * @type_function_param1_field2 element:dxElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent }) => void) | string;
+    onClick?: ((e: { component?: dxDropDownButton, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
 }
 
 /** @public */

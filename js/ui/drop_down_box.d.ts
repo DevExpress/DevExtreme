@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -104,12 +105,12 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @type_function_param1 templateData:object
      * @type_function_param1_field1 component:dxDropDownBox
      * @type_function_param1_field2 value:any
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((templateData: ContentTemplateData, contentElement: TElement) => string | TElement);
+    contentTemplate?: template | ((templateData: ContentTemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default null
@@ -129,12 +130,12 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @docid
      * @default null
      * @type_function_param1 value:object
-     * @type_function_param2 fieldElement:dxElement
+     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: any, fieldElement: TElement) => string | TElement);
+    fieldTemplate?: template | ((value: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -167,7 +168,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
  * @public
  */
 export default class dxDropDownBox extends dxDropDownEditor {
-    constructor(element: TElement, options?: dxDropDownBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxDropDownBoxOptions)
     getDataSource(): DataSource;
 }
 

@@ -8,7 +8,7 @@ import {
 
 import {
   ScrollableDirection,
-  ScrollableLocation, ScrollOffset,
+  ScrollOffset,
 } from './types.d';
 
 import { BaseWidgetProps } from '../common/base_props';
@@ -16,17 +16,19 @@ import {
   ScrollableProps,
 } from './scrollable_props';
 
-import { ScrollableNative } from './scrollable_native';
+import { ScrollableNative, ScrollableNativeProps } from './scrollable_native';
 import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
 import { nativeScrolling, touch } from '../../../core/utils/support';
+import { WidgetProps } from '../common/widget';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     scrollableNativeRef,
     scrollableSimulatedRef,
     props: {
+      aria,
       useNative,
       pulledDownText,
       pullingDownText,
@@ -45,6 +47,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
+        aria={aria}
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
@@ -58,6 +61,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
+        aria={aria}
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
@@ -67,7 +71,10 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   );
 };
 
-type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+type ScrollablePropsType = ScrollableProps
+& Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
+& Pick<WidgetProps, 'aria'>
+& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
   device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
@@ -101,7 +108,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  scrollBy(distance: number | Partial<ScrollableLocation>): void {
+  scrollBy(distance: number | Partial<ScrollOffset>): void {
     this.scrollableRef.scrollBy(distance);
   }
 
@@ -121,13 +128,13 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
+  scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
     this.scrollableRef.scrollTo(targetLocation);
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-    this.scrollableRef.scrollToElement(element, offset);
+  scrollToElement(element: HTMLElement): void {
+    this.scrollableRef.scrollToElement(element);
   }
 
   @Method()
@@ -141,7 +148,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  scrollOffset(): ScrollableLocation {
+  scrollOffset(): ScrollOffset {
     return this.scrollableRef.scrollOffset();
   }
 

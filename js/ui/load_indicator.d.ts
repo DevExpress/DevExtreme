@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -42,7 +42,7 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
  * @public
  */
 export default class dxLoadIndicator extends Widget {
-    constructor(element: TElement, options?: dxLoadIndicatorOptions)
+    constructor(element: UserDefinedElement, options?: dxLoadIndicatorOptions)
 }
 
 /** @public */

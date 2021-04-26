@@ -319,6 +319,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
 
         $folderNode.trigger('dxclick');
+        $folderNode.trigger('dxdblclick');
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Move to').trigger('dxclick');
@@ -356,6 +357,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
 
         $folderNode.trigger('dxclick');
+        $folderNode.trigger('dxdblclick');
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
@@ -1459,14 +1461,11 @@ QUnit.module('Editing operations', moduleConfig, () => {
             }
         });
         this.clock.tick(3 * operationDelay + 400);
-        this.wrapper.getFolderToggles().eq(2).trigger('dxclick');
-        this.clock.tick(400);
 
-        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles');
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 3, 'There are 3 node toggles');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), false, '\'Folder 1.1\' toggle is closed');
-        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
 
         assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1.1.1', 'has target folder');
         this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
@@ -1496,14 +1495,11 @@ QUnit.module('Editing operations', moduleConfig, () => {
             }
         });
         this.clock.tick(3 * operationDelay + 400);
-        this.wrapper.getFolderToggles().eq(2).trigger('dxclick');
-        this.clock.tick(400);
 
-        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles');
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 3, 'There are 3 node toggles');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), false, '\'Folder 1.1\' toggle is closed');
-        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
 
         assert.equal(this.wrapper.getThumbnailsItemName(0), 'Folder 1.1.1', 'has target folder');
         this.wrapper.findThumbnailsItem('Folder 1.1.1').trigger('dxclick');
@@ -1536,14 +1532,11 @@ QUnit.module('Editing operations', moduleConfig, () => {
             }
         });
         this.clock.tick(3 * operationDelay + 400);
-        this.wrapper.getFolderToggles().eq(2).trigger('dxclick');
-        this.clock.tick(400);
 
-        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles');
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 3, 'There are 3 node toggles');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), false, '\'Folder 1.1\' toggle is closed');
-        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.2'), null, '\'Folder 1.2\' toggle is absent');
 
         assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1.1.1', 'has target folder');
@@ -1582,14 +1575,11 @@ QUnit.module('Editing operations', moduleConfig, () => {
             }
         });
         this.clock.tick(3 * operationDelay + 400);
-        this.wrapper.getFolderToggles().eq(2).trigger('dxclick');
-        this.clock.tick(operationDelay + 400);
 
-        assert.strictEqual(this.wrapper.getFolderToggles().length, 4, 'There are 4 node toggles');
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 3, 'There are 3 node toggles');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), true, '\'Folder 1\' toggle is opened');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1'), false, '\'Folder 1.1\' toggle is closed');
-        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.2'), null, '\'Folder 1.2\' toggle is absent');
 
         assert.equal(this.wrapper.getThumbnailsItemName(0), 'Folder 1.1.1', 'has target folder');

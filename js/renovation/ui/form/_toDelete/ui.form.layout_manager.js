@@ -34,7 +34,6 @@ import {
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_ITEM_CONTENT_WRAPPER_CLASS,
-    FORM_LAYOUT_MANAGER_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
@@ -320,7 +319,6 @@ const LayoutManager = Widget.inherit({
 
     _initMarkup: function() {
         this._itemsRunTimeInfo.clear();
-        this.$element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 
         this.callBase();
         this._renderResponsiveBox();

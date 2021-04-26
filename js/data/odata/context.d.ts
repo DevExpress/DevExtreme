@@ -1,5 +1,5 @@
 import {
-    TPromise
+    DxPromise
 } from '../../core/utils/deferred';
 
 export interface ODataContextOptions {
@@ -92,7 +92,7 @@ export default class ODataContext {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    get(operationName: string, params: any): TPromise<any>;
+    get(operationName: string, params: any): DxPromise<any>;
     /**
      * @docid
      * @publicName invoke(operationName, params, httpMethod)
@@ -103,7 +103,7 @@ export default class ODataContext {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    invoke(operationName: string, params: any, httpMethod: any): TPromise<void>;
+    invoke(operationName: string, params: any, httpMethod: any): DxPromise<void>;
     /**
      * @docid
      * @publicName objectLink(entityAlias, key)

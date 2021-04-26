@@ -7,7 +7,8 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -15,7 +16,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -155,17 +156,17 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default null
      * @type_function_param1 selectedItem:object
-     * @type_function_param2 fieldElement:dxElement
+     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: TElement) => string | TElement);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
@@ -188,12 +189,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default "group"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
@@ -213,7 +214,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -225,7 +226,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -243,7 +244,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1_field8 reachedTop:boolean
      * @type_function_param1_field9 reachedBottom:boolean
      * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -254,9 +255,9 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 titleElement:dxElement
+     * @type_function_param1_field4 titleElement:DxElement
      * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -272,7 +273,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1_field5 previousValue:object
      * @type_function_param1_field6 event:event
      * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -420,13 +421,13 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:dxElement
+     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    titleTemplate?: template | ((titleElement: TElement) => string | TElement);
+    titleTemplate?: template | ((titleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -469,7 +470,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
  * @public
  */
 export default class dxLookup extends dxDropDownList {
-    constructor(element: TElement, options?: dxLookupOptions)
+    constructor(element: UserDefinedElement, options?: dxLookupOptions)
 }
 
 /** @public */

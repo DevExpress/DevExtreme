@@ -1,9 +1,10 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -11,7 +12,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent,
+    DxEvent,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -53,7 +54,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -113,15 +114,15 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @deprecated
      * @public
      */
-    target?: string | TElement;
+    target?: string | UserDefinedElement;
     /**
      * @docid
-     * @type_function_param1 Element:dxElement
+     * @type_function_param1 Element:DxElement
      * @default 'panel'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((Element: TElement) => any);
+    template?: template | ((Element: DxElement) => any);
 }
 /**
  * @docid
@@ -133,15 +134,15 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
  * @public
  */
 export default class dxDrawer extends Widget {
-    constructor(element: TElement, options?: dxDrawerOptions)
+    constructor(element: UserDefinedElement, options?: dxDrawerOptions)
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): TElement;
+    content(): DxElement;
     /**
      * @docid
      * @publicName hide()
@@ -149,7 +150,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<void>;
+    hide(): DxPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -157,7 +158,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<void>;
+    show(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle()
@@ -165,7 +166,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): TPromise<void>;
+    toggle(): DxPromise<void>;
 }
 
 /** @public */

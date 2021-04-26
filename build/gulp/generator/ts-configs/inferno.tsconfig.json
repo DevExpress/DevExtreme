@@ -3,6 +3,7 @@
   "compilerOptions": {
       "jsx": "preserve",
       "moduleResolution": "node",
+      "isolatedModules": true,
       "allowSyntheticDefaultImports": true
   }
 }

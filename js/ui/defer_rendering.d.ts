@@ -3,11 +3,12 @@ import {
 } from '../animation/fx';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -53,7 +54,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => void);
+    onRendered?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
     /**
      * @docid
      * @default null
@@ -61,15 +62,15 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => void);
+    onShown?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
     /**
      * @docid
-     * @type TPromise|bool
+     * @type DxPromise|bool
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    renderWhen?: TPromise<void> | boolean;
+    renderWhen?: DxPromise<void> | boolean;
     /**
      * @docid
      * @default false
@@ -94,7 +95,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
  * @public
  */
 export default class dxDeferRendering extends Widget {
-    constructor(element: TElement, options?: dxDeferRenderingOptions)
+    constructor(element: UserDefinedElement, options?: dxDeferRenderingOptions)
 }
 
 /** @public */
