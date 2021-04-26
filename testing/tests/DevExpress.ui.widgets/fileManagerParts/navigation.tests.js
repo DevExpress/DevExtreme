@@ -889,7 +889,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
         assert.ok(getItemsStub.notCalled, 'getItems method was not called');
     });
-  
+
     test('currentPathKeys option has correct value with nameExpr and keyExpr (T988286)', function(assert) {
         this.fileManager.option('fileSystemProvider', {
             data: [
