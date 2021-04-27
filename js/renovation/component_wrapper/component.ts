@@ -142,6 +142,7 @@ export default class ComponentWrapper extends DOMComponent {
           return a;
         }, {}),
       };
+      this._storedClasses = this.$element()[0].getAttribute('class') || '';
     }
     const elemStyle = this.$element()[0].style;
 
@@ -151,19 +152,7 @@ export default class ComponentWrapper extends DOMComponent {
     }
     this._elementAttr.style = style;
 
-    const cssClass = this.$element()[0].getAttribute('class') || '';
-    this._storedClasses =
-      this._storedClasses ??
-      cssClass
-        .split(' ')
-        .filter((name) => name.indexOf('dx-') === 0)
-        .join(' ');
-    this._elementAttr.class = cssClass
-      .split(' ')
-      .filter((name) => name.indexOf('dx-') !== 0)
-      .concat(this._storedClasses)
-      .join(' ')
-      .trim();
+    this._elementAttr.class = this._storedClasses;
 
     return this._elementAttr;
   }
