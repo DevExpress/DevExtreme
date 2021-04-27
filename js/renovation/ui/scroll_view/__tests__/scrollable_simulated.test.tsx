@@ -73,29 +73,45 @@ describe('Simulated > Render', () => {
       it('contentStyles()', () => {
         const helper = new ScrollableTestHelper({ direction });
 
-        helper.viewModel.contentTranslateOffset = contentTranslateOffset;
+        let expectedContentTransformStyle = 'translate(0px, 0px)';
 
-        expect(helper.viewModel.contentStyles).toEqual({ transform: `translate(${contentTranslateOffset.left}px, ${contentTranslateOffset.top}px)` });
+        if (direction === 'horizontal') {
+          helper.viewModel.hContentTranslateOffset = contentTranslateOffset.left;
+          expectedContentTransformStyle = `translate(${contentTranslateOffset.left}px, 0px)`;
+        }
+        if (direction === 'vertical') {
+          helper.viewModel.vContentTranslateOffset = contentTranslateOffset.top;
+          expectedContentTransformStyle = `translate(0px, ${contentTranslateOffset.top}px)`;
+        }
+        if (direction === 'both') {
+          helper.viewModel.vContentTranslateOffset = contentTranslateOffset.top;
+          helper.viewModel.hContentTranslateOffset = contentTranslateOffset.left;
+          expectedContentTransformStyle = `translate(${contentTranslateOffset.left}px, ${contentTranslateOffset.top}px)`;
+        }
+
+        expect(helper.viewModel.contentStyles)
+          .toEqual({ transform: expectedContentTransformStyle });
       });
 
       each([30, 40, -20]).describe('contentTranslateOffset: %o', (translateOffsetValue) => {
         it('contentStyles() after contentTranslateOffsetChange()', () => {
           const helper = new ScrollableTestHelper({ direction });
 
-          helper.viewModel.contentTranslateOffset = contentTranslateOffset;
+          helper.viewModel.vContentTranslateOffset = contentTranslateOffset.top;
+          helper.viewModel.hContentTranslateOffset = contentTranslateOffset.left;
 
           const expectedTranslateOffset = contentTranslateOffset;
           if (helper.isVertical) {
-            helper.viewModel.contentTranslateOffsetChange({ top: translateOffsetValue });
+            helper.viewModel.contentTranslateOffsetChange('top', translateOffsetValue);
             expectedTranslateOffset.top = translateOffsetValue;
           }
 
           if (helper.isHorizontal) {
-            helper.viewModel.contentTranslateOffsetChange({ left: translateOffsetValue });
+            helper.viewModel.contentTranslateOffsetChange('left', translateOffsetValue);
             expectedTranslateOffset.left = translateOffsetValue;
           }
 
-          expect(helper.viewModel.contentStyles).toEqual({ transform: `translate(${contentTranslateOffset.left}px, ${contentTranslateOffset.top}px)` });
+          expect(helper.viewModel.contentStyles).toEqual({ transform: `translate(${expectedTranslateOffset.left}px, ${expectedTranslateOffset.top}px)` });
         });
       });
     });
@@ -175,9 +191,8 @@ describe('Simulated > Behavior', () => {
       optionValues.forceGeneratePockets,
       optionValues.pullDownEnabled,
       optionValues.reachBottomEnabled,
-      [true, false],
-    ]))('Should assign swipeDown, pullDown strategy, forceGeneratePockets: %o, pullDownEnabled: %o, reachBottomEnabled: %o, elementRefExist: %o',
-      (forceGeneratePockets, pullDownEnabled, reachBottomEnabled, elementRefExist) => {
+    ]))('Should assign swipeDown, pullDown strategy, forceGeneratePockets: %o, pullDownEnabled: %o, reachBottomEnabled: %o',
+      (forceGeneratePockets, pullDownEnabled, reachBottomEnabled) => {
         const viewModel = new Scrollable({
           forceGeneratePockets,
           pullDownEnabled,
@@ -189,86 +204,106 @@ describe('Simulated > Behavior', () => {
 
         viewModel.containerClientWidth = 1;
         viewModel.containerClientHeight = 2;
-        viewModel.containerOffsetWidth = 3;
-        viewModel.containerOffsetHeight = 4;
 
         viewModel.contentClientWidth = 5;
         viewModel.contentClientHeight = 6;
         viewModel.contentScrollWidth = 7;
         viewModel.contentScrollHeight = 8;
 
-        viewModel.contentOffsetWidth = 9;
-        viewModel.contentOffsetHeight = 10;
-
         viewModel.topPocketClientHeight = 11;
         viewModel.bottomPocketClientHeight = 12;
 
-        const containerRef = {
-          current: elementRefExist ? {
-            clientWidth: 10,
-            clientHeight: 20,
-            offsetWidth: 30,
-            offsetHeight: 40,
-          } : null,
-        } as RefObject;
-
-        const contentRef = {
-          current: elementRefExist ? {
-            clientWidth: 50,
-            clientHeight: 60,
-            scrollWidth: 70,
-            scrollHeight: 80,
-            offsetWidth: 90,
-            offsetHeight: 100,
-          } : null,
-        } as RefObject;
-
-        const topPocketRef = {
-          current: elementRefExist ? {
-            clientHeight: 80,
-          } : null,
-        } as RefObject;
-
-        const bottomPocketRef = {
-          current: elementRefExist ? {
-            clientHeight: 55,
-          } : null,
-        } as RefObject;
-
-        viewModel.containerRef = containerRef;
-        viewModel.contentRef = contentRef;
-        viewModel.topPocketRef = topPocketRef;
-        viewModel.bottomPocketRef = bottomPocketRef;
+        viewModel.prevContainerClientWidth = 13;
+        viewModel.prevContainerClientHeight = 14;
+        viewModel.prevContentClientWidth = 15;
+        viewModel.prevContentClientHeight = 16;
 
         Object.defineProperties(viewModel, {
           scrollableOffset: { get() { return { left: 10, top: 20 }; } },
         });
-        viewModel.updateScrollbarSize();
 
-        expect(viewModel.scrollableOffsetLeft).toEqual(10);
-        expect(viewModel.scrollableOffsetTop).toEqual(20);
+        [-50, 0, 50].forEach((vScrollLocation) => {
+          [true, false].forEach((elementRefExist) => {
+            viewModel.vScrollLocation = vScrollLocation;
 
-        if (elementRefExist) {
-          expect(viewModel.containerClientWidth).toEqual(10);
-          expect(viewModel.containerClientHeight).toEqual(20);
-          expect(viewModel.containerOffsetWidth).toEqual(30);
-          expect(viewModel.containerOffsetHeight).toEqual(40);
+            const containerRef = {
+              current: elementRefExist ? {
+                clientWidth: 10,
+                clientHeight: 20,
+                scrollLeft: 150,
+                scrollTop: 200,
+              } : null,
+            } as RefObject;
 
-          expect(viewModel.contentClientWidth).toEqual(50);
-          expect(viewModel.contentClientHeight).toEqual(60);
-          expect(viewModel.contentScrollWidth).toEqual(70);
-          expect(viewModel.contentScrollHeight).toEqual(80);
-          expect(viewModel.contentOffsetWidth).toEqual(90);
-          expect(viewModel.contentOffsetHeight).toEqual(100);
+            const contentRef = {
+              current: elementRefExist ? {
+                clientWidth: 50,
+                clientHeight: 60,
+                scrollWidth: 70,
+                scrollHeight: 80,
+              } : null,
+            } as RefObject;
 
-          if (forceGeneratePockets && pullDownEnabled) {
-            expect(viewModel.topPocketClientHeight).toEqual(80);
-          }
+            const topPocketRef = {
+              current: elementRefExist ? {
+                clientHeight: 80,
+              } : null,
+            } as RefObject;
 
-          if (forceGeneratePockets && reachBottomEnabled) {
-            expect(viewModel.bottomPocketClientHeight).toEqual(55);
-          }
-        }
+            const bottomPocketRef = {
+              current: elementRefExist ? {
+                clientHeight: 55,
+              } : null,
+            } as RefObject;
+
+            viewModel.containerRef = containerRef;
+            viewModel.contentRef = contentRef;
+            viewModel.topPocketRef = topPocketRef;
+            viewModel.bottomPocketRef = bottomPocketRef;
+
+            viewModel.updateScrollbarSize();
+
+            expect(viewModel.scrollableOffsetLeft).toEqual(10);
+            expect(viewModel.scrollableOffsetTop).toEqual(20);
+
+            if (elementRefExist) {
+              expect(viewModel.containerClientWidth).toEqual(10);
+              expect(viewModel.containerClientHeight).toEqual(20);
+
+              expect(viewModel.contentClientWidth).toEqual(50);
+              expect(viewModel.contentClientHeight).toEqual(60);
+              expect(viewModel.contentScrollWidth).toEqual(70);
+              expect(viewModel.contentScrollHeight).toEqual(80);
+
+              if (forceGeneratePockets && pullDownEnabled) {
+                expect(viewModel.topPocketClientHeight).toEqual(80);
+              }
+
+              if (forceGeneratePockets && reachBottomEnabled) {
+                expect(viewModel.bottomPocketClientHeight).toEqual(55);
+              }
+
+              if (viewModel.prevContentClientWidth !== viewModel.contentClientWidth
+              || viewModel.prevContainerClientWidth !== viewModel.containerClientWidth) {
+                expect(viewModel.forceUpdateHScrollbarLocation).toEqual(true);
+                expect(viewModel.hScrollLocation).toEqual(-150);
+                expect(viewModel.prevContentClientWidth).toEqual(elementRefExist ? 50 : 5);
+                expect(viewModel.prevContainerClientWidth).toEqual(10);
+              }
+
+              if (viewModel.prevContentClientHeight !== viewModel.contentClientHeight
+              || viewModel.prevContainerClientHeight !== viewModel.containerClientHeight) {
+                expect(viewModel.forceUpdateVScrollbarLocation).toEqual(true);
+                expect(viewModel.prevContentClientHeight).toEqual(50);
+                expect(viewModel.prevContainerClientHeight).toEqual(10);
+
+                if (vScrollLocation <= 0) {
+                  expect(viewModel.vScrollLocation).toEqual(-200);
+                }
+              }
+            }
+          });
+        });
       });
 
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {

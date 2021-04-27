@@ -36,6 +36,8 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() forceVisibility = false;
 
+  @OneWay() forceUpdateScrollbarLocation = false;
+
   @OneWay() scrollLocation = 0;
 
   @TwoWay() pocketState = TopPocketState.STATE_RELEASED;
