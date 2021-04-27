@@ -15,7 +15,7 @@ clone:
 pipeline:
 
   build:
-    image: devexpress/devextreme-build:21_1
+    image: devexpress/devextreme-build:21_2
     environment:
       - TRAVIS=true
     commands:
