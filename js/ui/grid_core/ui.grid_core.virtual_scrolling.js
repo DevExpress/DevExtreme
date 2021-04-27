@@ -699,17 +699,10 @@ const VirtualScrollingRowsViewExtender = (function() {
         setLoading: function(isLoading, messageText) {
             const dataController = this._dataController;
             const hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!this._findBottomLoadPanel();
-            const operationTypes = dataController.dataSource()?.operationTypes?.();
-            const hasEnabledOperationType = function(types) {
-                types = types || {};
-                return Object.keys(types).some(name => types[name]);
-            };
+            const operationTypes = dataController.dataSource()?.loadingOperationTypes?.();
 
-            if(this.option(NEW_SCROLLING_MODE) && isLoading && operationTypes) {
-                const loadingOperationTypes = dataController.dataSource()?.loadingOperationTypes?.();
-                if(loadingOperationTypes?.paging || loadingOperationTypes?.fullReload || !hasEnabledOperationType(loadingOperationTypes)) {
-                    return;
-                }
+            if(this.option(NEW_SCROLLING_MODE) && isLoading && operationTypes?.paging) {
+                return;
             }
 
             if(hasBottomLoadPanel) {
