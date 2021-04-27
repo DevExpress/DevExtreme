@@ -341,26 +341,11 @@ const LayoutManager = Widget.inherit({
             that._prepareItemsWithMerging(colCount);
 
             const layoutItems = that._generateLayoutItems();
-            that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
-
             that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
             if(!hasWindow()) {
                 that._renderTemplates(templatesInfo);
             }
         }
-    },
-
-    _extendItemsWithDefaultTemplateOptions: function(targetItems, sourceItems) {
-        sourceItems.forEach(function(item) {
-            if(!item.merged) {
-                if(isDefined(item.disabled)) {
-                    targetItems[item.visibleIndex].disabled = item.disabled;
-                }
-                if(isDefined(item.visible)) {
-                    targetItems[item.visibleIndex].visible = item.visible;
-                }
-            }
-        });
     },
 
     _itemStateChangedHandler: function(e) {
@@ -552,6 +537,12 @@ const LayoutManager = Widget.inherit({
                         col: this._getColByIndex(i, colCount)
                     }
                 };
+                if(isDefined(item.disabled)) {
+                    generatedItem.disabled = item.disabled;
+                }
+                if(isDefined(item.visible)) {
+                    generatedItem.visible = item.visible;
+                }
                 if(isDefined(item.colSpan)) {
                     generatedItem.location.colspan = item.colSpan;
                 }
