@@ -2865,6 +2865,102 @@ QUnit.module('visible/visibleIndex', () => {
         assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
         assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
     });
+
+    QUnit.test('group.all.visible:false -> group.item1.visible:true,group.item2.visible:false (no visibleIndex), useUpdate=false', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false },
+                    { dataField: 'field2', visible: false } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.itemOption('group.field1', 'visible', true);
+        form.itemOption('group.field2', 'visible', false);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
+
+    QUnit.test('group.all.visible:false -> group.item1.visible:true,group.item2.visible:false (no visibleIndex), useUpdate=true', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false },
+                    { dataField: 'field2', visible: false } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.beginUpdate();
+        form.itemOption('group.field1', 'visible', true);
+        form.itemOption('group.field2', 'visible', false);
+        form.endUpdate();
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
+
+    QUnit.test('tabbedGroup.all.visible:false -> tabbedGroup.item1.visible:true, tabbedGroup.item2.visible:false (no visibleIndex), useUpdate=false', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false },
+                        { dataField: 'field2', visible: false }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field2', 'visible', false);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
+
+    QUnit.test('tabbedGroup.all.visible:false -> tabbedGroup.item1.visible:true, tabbedGroup.item2.visible:false (no visibleIndex), useUpdate=true', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false },
+                        { dataField: 'field2', visible: false }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.beginUpdate();
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field2', 'visible', false);
+        form.endUpdate();
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
 });
 
 QUnit.test('resetValues - old test', function(assert) {
