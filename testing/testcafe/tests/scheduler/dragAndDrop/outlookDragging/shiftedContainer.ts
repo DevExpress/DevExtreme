@@ -34,12 +34,12 @@ test('Basic drag-n-drop movements in shifted container', async (t) => {
 }).before(() => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
-    startDate: new Date(2021, 4, 24, 10),
-    endDate: new Date(2021, 4, 24, 12, 30),
+    startDate: new Date(2021, 2, 22, 10),
+    endDate: new Date(2021, 2, 22, 12, 30),
   }],
   views: ['week'],
   currentView: 'week',
-  currentDate: new Date(2021, 4, 27),
+  currentDate: new Date(2021, 2, 22),
   startDayHour: 9,
   height: 600,
   width: 950,
