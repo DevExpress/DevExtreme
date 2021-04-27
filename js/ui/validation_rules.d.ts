@@ -1,7 +1,3 @@
-import {
-    DxPromise
-} from '../core/utils/deferred';
-
 /**
  * @public
  */
@@ -61,7 +57,7 @@ export interface AsyncRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationCallback?: ((options: ValidationCallbackData) => DxPromise<any>);
+    validationCallback?: ((options: ValidationCallbackData) => PromiseLike<any>);
 }
 
 /**

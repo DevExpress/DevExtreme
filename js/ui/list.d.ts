@@ -78,7 +78,7 @@ export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
 
 /** @public */
 export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
-    cancel?: boolean | DxPromise<void>;
+    cancel?: boolean | PromiseLike<void>;
 }
 
 /** @public */
