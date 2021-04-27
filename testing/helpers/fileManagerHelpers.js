@@ -56,6 +56,8 @@ export const Consts = {
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
+    NAME_EDITOR_DIALOG_CLASS: 'dx-filemanager-dialog-name-editor-popup',
+    DELETE_ITEM_DIALOG_CLASS: 'dx-filemanager-dialog-delete-item-popup',
     POPUP_NORMAL_CLASS: 'dx-popup-normal',
     POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
     BUTTON_CLASS: 'dx-button',
@@ -120,7 +122,7 @@ export class FileManagerWrapper {
 
     getFolderNodes(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
     }
@@ -136,7 +138,7 @@ export class FileManagerWrapper {
 
     getFolderToggles(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
     }
@@ -480,8 +482,16 @@ export class FileManagerWrapper {
         return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
     }
 
+    getNameEditorDialog() {
+        return $(`.${Consts.NAME_EDITOR_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+    }
+
+    getDeleteItemDialog() {
+        return $(`.${Consts.DELETE_ITEM_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+    }
+
     getDialogTextInput() {
-        return $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        return this.getNameEditorDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
     }
 
     getDialogButton(text) {
