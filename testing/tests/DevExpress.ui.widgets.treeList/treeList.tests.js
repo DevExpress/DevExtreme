@@ -1,6 +1,6 @@
 QUnit.testStart(function() {
     const markup =
-'<!--qunit-fixture-->\
+        '<!--qunit-fixture-->\
     <div id="container">\
         <div id="treeList">\
         </div>\
@@ -97,7 +97,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('Fixed column should be rendered in separate table', function(assert) {
-    // act
+        // act
         const treeList = createTreeList({
             columns: [{ dataField: 'name', fixed: true }, 'age'],
             dataSource: [
@@ -114,7 +114,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('Resize columns', function(assert) {
-    // arrange
+        // arrange
         const treeList = createTreeList({
             width: 400,
             allowColumnResizing: true,
@@ -168,7 +168,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('Columns hiding - columnHidingEnabled is true', function(assert) {
-    // arrange, act
+        // arrange, act
         let $cellElement;
         const treeList = createTreeList({
             width: 200,
@@ -202,7 +202,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('Height rows view', function(assert) {
-    // arrange, act
+        // arrange, act
         const treeList = createTreeList({
             height: 200,
             showColumnHeaders: false,
@@ -556,7 +556,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
     // T857405
     QUnit.test('Assign new values using the promise parameter in the onInitNewRow', function(assert) {
-    // arrange
+        // arrange
         let visibleRows;
 
         const rowData = { room: 42 };
@@ -682,7 +682,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)', function(assert) {
-    // arrange
+        // arrange
         const columnsWrapper = treeListWrapper.columns;
         const clock = sinon.useFakeTimers();
         const treeList = createTreeList({
@@ -725,7 +725,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
     // T632028
     QUnit.test('Display context menu', function(assert) {
-    // arrange, act
+        // arrange, act
         const contextMenuItems = [{ text: 'test' }];
         const treeList = createTreeList({
             dataSource: [
@@ -748,7 +748,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('filterSyncEnabled is working in TreeList', function(assert) {
-    // act
+        // act
         const treeList = createTreeList({
             filterSyncEnabled: true,
             columns: [{ dataField: 'field', allowHeaderFiltering: true, filterValues: [2] }]
@@ -762,7 +762,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     });
 
     QUnit.test('filterBulider is working in TreeList', function(assert) {
-    // arrange
+        // arrange
         const handlerInit = sinon.spy();
 
         // act
@@ -785,8 +785,8 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
     // T812031
     QUnit.test('Change filterPanel.visible to false', function(assert) {
-    // arrange
-    // act
+        // arrange
+        // act
         const treeList = createTreeList({
             dataSource: [],
             filterPanel: {
@@ -856,7 +856,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 QUnit.module('Option Changed', defaultModuleConfig, () => {
 
     QUnit.test('Change dataSource, selectedRowKeys and scrolling options together', function(assert) {
-    // arrange
+        // arrange
         const treeList = createTreeList({});
         this.clock.tick(30);
 
@@ -874,7 +874,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
 
     // T575440
     QUnit.test('Change options and call selectRows', function(assert) {
-    // arrange
+        // arrange
 
         const createOptions = function() {
             return {
@@ -933,7 +933,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
 
     // T591390
     QUnit.test('Change expandedRowKeys', function(assert) {
-    // arrange
+        // arrange
         const treeList = createTreeList({
             dataSource: [
                 { id: 1, parentId: 0, name: 'Name 1', age: 16 },
@@ -955,7 +955,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList with columnAutoWidth should be rendered', function(assert) {
-    // act
+        // act
         const treeList = createTreeList({
             columnAutoWidth: true,
             columns: ['name', 'age'],
@@ -972,7 +972,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
     });
 
     QUnit.test('Virtual columns', function(assert) {
-    // arrange, act
+        // arrange, act
         const columns = [];
 
         for(let i = 1; i <= 20; i++) {
@@ -1079,7 +1079,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
     // T846709
     ['standard', 'virual'].forEach((rowRenderingMode) => {
         QUnit.test(`Modified expand state should be displayed correctly when repaintChangesOnly is true and scrolling.rowRenderingMode is ${rowRenderingMode}`, function(assert) {
-        // arrange
+            // arrange
             const data = generateData(2);
             const treeList = createTreeList({
                 dataSource: data,
@@ -1112,7 +1112,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
     });
 
     QUnit.test('The select checkbox should be displayed after changing expand state when repaintChangesOnly is true', function(assert) {
-    // arrange
+        // arrange
         const data = generateData(2);
         const treeList = createTreeList({
             dataSource: data,
@@ -1148,7 +1148,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
 
     // T861052
     QUnit.test('The child node position should be updated after changing dataSource when rowRenderingMode is "virtual" and repaintChangesOnly is true', function(assert) {
-    // arrange
+        // arrange
         const array = [
             { id: 1, parentId: 0, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
             { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
@@ -1191,7 +1191,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
     // T627926
     QUnit.test('Nodes should not be shifted after expanding node on last page', function(assert) {
-    // arrange
+        // arrange
         const clock = sinon.useFakeTimers();
         const treeList = createTreeList({
             height: 120,
@@ -1248,7 +1248,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
     // T648005
     QUnit.test('Scrollbar position must be kept after expanding node when the treelist container has max-height', function(assert) {
-    // arrange
+        // arrange
         $('#treeList').css('max-height', 400);
 
         const done = assert.async();
@@ -1264,11 +1264,11 @@ QUnit.module('Expand/Collapse rows', () => {
         treeList.getScrollable().scrollTo({ y: 1000 });
 
         setTimeout(function() {
-        // act
+            // act
             treeList.expandRow(69);
 
             setTimeout(function() {
-            // assert
+                // assert
                 assert.ok($(treeList.element()).find('.dx-treelist-rowsview .dx-scrollbar-vertical > .dx-scrollable-scroll').position().top > 0, 'scrollbar position top');
                 done();
             }, 310);
@@ -1277,7 +1277,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
     // T692068
     QUnit.test('Expand row if repaintChangesOnly is true', function(assert) {
-    // arrange
+        // arrange
         const treeList = createTreeList({
             height: 120,
             loadingTimeout: undefined,
@@ -1299,7 +1299,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
     // T742885
     QUnit.test('Expand node after filtering when it has many children and they are selected', function(assert) {
-    // arrange
+        // arrange
         const clock = sinon.useFakeTimers();
 
         try {
@@ -1360,12 +1360,59 @@ QUnit.module('Expand/Collapse rows', () => {
             clock.restore();
         }
     });
+
+    QUnit.test('The aria-expanded attribute should be changed on row expand when repaintChangesOnly is enabled (T993557)', function(assert) {
+        // arrange
+        const clock = sinon.useFakeTimers();
+
+        try {
+            const treeList = createTreeList({
+                loadingTimeout: 0,
+                dataSource: {
+                    store: {
+                        type: 'array',
+                        key: 'id',
+                        data: [
+                            { id: 1, name: 'test1', parentId: -1 },
+                            { id: 2, name: 'test2', parentId: 1 }
+                        ]
+                    }
+                },
+                rootValue: -1,
+                repaintChangesOnly: true
+            });
+
+            clock.tick();
+            let $rowElement = $(treeList.getRowElement(treeList.getRowIndexByKey(1)));
+
+            // assert
+            assert.strictEqual($rowElement.attr('aria-expanded'), 'false', 'row is collapsed by default');
+
+            // act
+            treeList.expandRow(1);
+            clock.tick();
+            $rowElement = $(treeList.getRowElement(treeList.getRowIndexByKey(1)));
+
+            // assert
+            assert.strictEqual($rowElement.attr('aria-expanded'), 'true', 'row is expanded after expandRow');
+
+            // act
+            treeList.collapseRow(1);
+            clock.tick();
+            $rowElement = $(treeList.getRowElement(treeList.getRowIndexByKey(1)));
+
+            // assert
+            assert.strictEqual($rowElement.attr('aria-expanded'), 'false', 'row is collapsed after collapseRow');
+        } finally {
+            clock.restore();
+        }
+    });
 });
 
 QUnit.module('Focused Row', defaultModuleConfig, () => {
 
     QUnit.test('TreeList with focusedRowEnabled and focusedRowIndex 0', function(assert) {
-    // arrange, act
+        // arrange, act
         const treeList = createTreeList({
             dataSource: generateData(5),
             focusedRowEnabled: true,
@@ -1379,7 +1426,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList with focusedRowKey', function(assert) {
-    // arrange, act
+        // arrange, act
         const treeList = createTreeList({
             height: 100,
             keyExpr: 'id',
@@ -1400,7 +1447,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList with remoteOperations and focusedRowKey', function(assert) {
-    // arrange, act
+        // arrange, act
         const treeList = createTreeList({
             height: 100,
             keyExpr: 'id',
@@ -1422,7 +1469,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList with remoteOperations(filtering, sorting, grouping) and focusedRowKey should not generate repeated node', function(assert) {
-    // arrange, act
+        // arrange, act
         const treeList = createTreeList({
             dataSource: [
                 { 'Task_ID': 1, 'Task_Parent_ID': 0 },
@@ -1452,7 +1499,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('TreeList should focus the corresponding group row if group collapsed and inner data row was focused', function(assert) {
-    // arrange
+        // arrange
         const treeList = createTreeList({
             keyExpr: 'id',
             dataSource: generateData(10),
@@ -1474,7 +1521,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList should focus only one focused row (T827201)', function(assert) {
-    // arrange
+        // arrange
         const rowsViewWrapper = treeListWrapper.rowsView;
         const treeList = createTreeList({
             keyExpr: 'id',
@@ -1499,7 +1546,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList navigateTo', function(assert) {
-    // arrange, act
+        // arrange, act
         const treeList = createTreeList({
             dataSource: generateData(10),
             paging: {
@@ -1519,7 +1566,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList navigateTo to the same page with expand', function(assert) {
-    // arrange, act
+        // arrange, act
         const treeList = createTreeList({
             dataSource: generateData(10),
             paging: {
@@ -1622,7 +1669,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         };
 
         try {
-        // act
+            // act
             createTreeList(options);
             this.clock.tick();
 
@@ -1633,7 +1680,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             createTreeList(options);
             this.clock.tick();
         } catch(e) {
-        // assert
+            // assert
             assert.ok(false, e.message);
         }
 
@@ -1646,7 +1693,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
 
     // T757537
     QUnit.test('TreeList should not hang when scrolling', function(assert) {
-    // arrange
+        // arrange
         const treeList = createTreeList({
             dataSource: [
                 { id: 1, parentId: 0 },
@@ -1685,7 +1732,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         scrollable.scrollTo({ y: 500 });
 
         setTimeout(function() {
-        // assert
+            // assert
             assert.strictEqual(treeList.pageIndex(), 2, 'page index');
             done();
         }, 1000);
@@ -1693,7 +1740,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
 
     // T806141
     QUnit.test('TreeList should correctly load data when filtering is remote and sorting is applied', function(assert) {
-    // arrange
+        // arrange
         const loadSpy = sinon.spy();
         const data = [{ id: 0, parentId: '', hasItems: true }, { id: 1, parentId: 0, hasItems: false }];
         const treeList = createTreeList({
@@ -1871,7 +1918,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList should not reshape data after expand row (T815367)', function(assert) {
-    // arrange
+        // arrange
         const onNodesInitializedSpy = sinon.spy();
         const treeList = createTreeList({
             dataSource: {
@@ -1898,7 +1945,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList should not occur an exception on an attempt to remove the non-existing key from the store (T827142)', function(assert) {
-    // arrange
+        // arrange
         const store = new ArrayStore({
             data: [
                 { id: 1, parentId: 0, age: 19 },
@@ -1926,7 +1973,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList should filter data with unreachable items (T816921)', function(assert) {
-    // arrange
+        // arrange
         const treeList = createTreeList({
             dataSource: [
                 { ID: 1, Head_ID: 0, Name: 'John' },
@@ -1953,7 +2000,7 @@ QUnit.module('Row dragging', defaultModuleConfig, () => {
 
     // T831020
     QUnit.test('The draggable row should have correct markup when defaultOptions is specified', function(assert) {
-    // arrange
+        // arrange
         TreeList.defaultOptions({
             options: {
                 filterRow: {
@@ -2016,7 +2063,7 @@ QUnit.module('Selection', defaultModuleConfig, () => {
     // T861403
     [true, false].forEach(recursive => {
         QUnit.test(`Select and deselect all rows if filter is applied, filterMode is matchOnly and recursive=${recursive}`, function(assert) {
-        // arrange
+            // arrange
             const selectedRowKeys = recursive ? [1, 2] : [2];
             const treeList = createTreeList({
                 dataSource: [{
