@@ -10,10 +10,6 @@ import {
 } from '../core/templates/template';
 
 import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -123,7 +119,7 @@ export type ReorderEvent = NativeEventInfo<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem: boolean;
-    promise?: DxPromise<void>;
+    promise?: PromiseLike<void>;
 }
 
 /** @public */
