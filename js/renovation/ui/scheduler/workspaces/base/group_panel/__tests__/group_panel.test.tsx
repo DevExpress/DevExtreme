@@ -55,7 +55,7 @@ describe('GroupPanel Vertical Layout', () => {
           resourceCellTemplate,
           groupByDate: false,
           className: 'custom-class',
-          style: { height: 724 },
+          styles: { height: 724 },
         });
     });
   });

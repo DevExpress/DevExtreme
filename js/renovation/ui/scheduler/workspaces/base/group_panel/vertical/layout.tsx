@@ -41,8 +41,8 @@ export const viewFunction = ({
 })
 export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelLayoutProps) {
   get style(): CSSAttributes {
-    const { height, style } = this.props;
+    const { height, styles } = this.props;
 
-    return addHeightToStyle(height, style);
+    return addHeightToStyle(height, styles);
   }
 }

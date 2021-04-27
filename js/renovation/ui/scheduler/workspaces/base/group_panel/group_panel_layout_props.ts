@@ -10,5 +10,5 @@ import { GroupRenderItem } from '../../types.d';
 export class GroupPanelLayoutProps extends GroupPanelProps {
   @OneWay() groupsRenderData: GroupRenderItem[][] = [];
 
-  @OneWay() style?: CSSAttributes;
+  @OneWay() styles?: CSSAttributes;
 }
