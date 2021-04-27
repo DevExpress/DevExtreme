@@ -23,7 +23,7 @@ interface IHtmlOptions {
 }
 
 abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent<P> {
-  static get displayContentsStyle(): React.CSSProperties {
+  static displayContentsStyle(): React.CSSProperties {
     return isIE()
       ? {
         width: '100%',
@@ -189,7 +189,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
             this.forceUpdate();
           }
         },
-        style: ComponentBase.displayContentsStyle,
+        style: ComponentBase.displayContentsStyle(),
       })
       : this.renderChildren();
   }
