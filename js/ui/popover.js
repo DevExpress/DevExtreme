@@ -460,7 +460,7 @@ const Popover = Popup.inherit({
             this._$wrapper.css({
                 width: '100%',
                 height: '100%',
-                zIndex: '-100'
+                zIndex: '-1'
             });
         }
     },
