@@ -101,7 +101,7 @@ class FileManagerDialogBase extends Widget {
         const result = this._getDialogResult();
         if(result) {
             this._dialogResult = result;
-            this._popup.hide();
+            this._closeDialog();
         }
     }
 

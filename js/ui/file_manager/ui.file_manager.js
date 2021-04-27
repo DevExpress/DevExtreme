@@ -141,6 +141,7 @@ class FileManager extends Widget {
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             notificationControl,
             uploadDropZonePlaceholderContainer: this.$element(),
+            rtlEnabled: this.option('rtlEnabled'),
             onSuccess: ({ updatedOnlyFiles }) => this._redrawComponent(updatedOnlyFiles),
             onCreating: () => this._setItemsViewAreaActive(false),
             onError: e => this._onEditingError(e)
@@ -619,6 +620,10 @@ class FileManager extends Widget {
             case 'onToolbarItemClick':
             case 'onErrorOccurred':
                 this._actions[name] = this._createActionByOption(name);
+                break;
+            case 'rtlEnabled':
+                this._editing.updateDialogRtl(args.value);
+                super._optionChanged(args);
                 break;
             default:
                 super._optionChanged(args);

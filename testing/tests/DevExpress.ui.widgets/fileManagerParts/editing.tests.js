@@ -1711,4 +1711,34 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         assert.strictEqual(this.wrapper.getDetailsItemName(6), testDirName, 'itemView updated');
     });
+
+    test('rtlEnabled option must affect choose directory dialogs', function(assert) {
+        this.wrapper.getInstance().option({ rtlEnabled: true });
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(100);
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+        assert.ok(this.wrapper.getFolderChooserDialog().hasClass('dx-rtl'));
+        this.wrapper.getDialogButton('Cancel').trigger('dxclick');
+    });
+
+    test('rtlEnabled option must affect edit name dialogs', function(assert) {
+        this.wrapper.getInstance().option({ rtlEnabled: true });
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(100);
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        assert.ok(this.wrapper.getNameEditorDialog().hasClass('dx-rtl'));
+        this.wrapper.getDialogButton('Cancel').trigger('dxclick');
+    });
+
+    test('rtlEnabled option must affect delete item dialog', function(assert) {
+        this.wrapper.getInstance().option({ rtlEnabled: true });
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(100);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        assert.ok(this.wrapper.getDeleteItemDialog().hasClass('dx-rtl'));
+        this.wrapper.getDialogButton('Cancel').trigger('dxclick');
+    });
 });

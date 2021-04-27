@@ -1,6 +1,7 @@
 import { mount } from 'enzyme';
 import { DataGridViews, viewFunction } from '../data_grid_views';
 import { GridBaseViews } from '../../grid_base/grid_base_views';
+import { DataGridViewProps } from '../common/data_grid_view_props';
 
 describe('DataGridViews', () => {
   describe('View', () => {
@@ -10,7 +11,7 @@ describe('DataGridViews', () => {
           { name: 'view1', view: 'viewComponent1' },
           { name: 'view2', view: 'viewComponent2' },
         ],
-        props: {},
+        props: new DataGridViewProps(),
       } as any;
       const tree = mount(viewFunction(props));
 

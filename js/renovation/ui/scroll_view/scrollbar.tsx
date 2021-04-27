@@ -76,7 +76,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() crossThumbScrolling = false;
 
-  @InternalState() prevContainerToContentRatio = 1;
+  @Mutable() initialTopPocketSize = 0;
 
   @InternalState() showOnScrollByWheel?: boolean;
 
@@ -90,8 +90,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @InternalState() maxOffset = 0;
 
-  @InternalState() minOffset = 0;
-
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
@@ -101,15 +99,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     if (this.props.forceGeneratePockets) {
       this.boundaryOffset = this.props.scrollLocation - this.topPocketSize;
       this.maxOffset = this.boundaryOffset > 0 ? this.topPocketSize : 0;
-    }
-  }
-
-  @Effect()
-  updateMinOffset(): void {
-    if (this.props.forceGeneratePockets) {
-      this.minOffset = -Math.max(this.bottomBoundaryOffset + this.bottomPocketSize, 0);
-    } else {
-      this.minOffset = -Math.max(this.bottomBoundaryOffset, 0);
     }
   }
 
@@ -188,15 +177,23 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get axis(): 'x' | 'y' {
-    return this.props.direction === DIRECTION_HORIZONTAL ? 'x' : 'y';
+    return this.isHorizontal ? 'x' : 'y';
   }
 
   get scrollProp(): 'left' | 'top' {
-    return this.props.direction === DIRECTION_HORIZONTAL ? 'left' : 'top';
+    return this.isHorizontal ? 'left' : 'top';
   }
 
   get fullScrollProp(): 'scrollLeft' | 'scrollTop' {
-    return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollLeft' : 'scrollTop';
+    return this.isHorizontal ? 'scrollLeft' : 'scrollTop';
+  }
+
+  get dimension(): 'width' | 'height' {
+    return this.isHorizontal ? 'width' : 'height';
+  }
+
+  get isHorizontal(): boolean {
+    return this.props.direction === DIRECTION_HORIZONTAL;
   }
 
   @Method()
@@ -385,9 +382,16 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Effect()
-  updateContentTranslate(): void {
+  moveToBoundaryOnSizeChange(): void {
+    if (this.props.forceUpdateScrollbarLocation) {
+      if (this.props.scrollLocation <= this.maxOffset) {
+        this.moveTo(this.boundLocation(this.props.scrollLocation));
+      }
+    }
+  }
+
+  updateContent(location: number): void {
     let contentTranslateOffset: number;
-    const location = this.props.scrollLocation;
 
     if (location > 0) {
       contentTranslateOffset = location;
@@ -398,15 +402,27 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
-      contentTranslateOffset -= this.props.topPocketSize;
+      contentTranslateOffset -= this.topPocketSize;
     }
-    this.props.contentTranslateOffsetChange?.({ [this.scrollProp]: contentTranslateOffset });
+
+    this.props.contentTranslateOffsetChange?.(this.scrollProp, contentTranslateOffset);
+  }
+
+  @Effect()
+  updateContentTranslate(): void {
+    if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
+      if (this.initialTopPocketSize !== this.topPocketSize) {
+        this.updateContent(this.props.scrollLocation);
+        this.initialTopPocketSize = this.topPocketSize;
+      }
+    }
   }
 
   @Method()
   moveTo(location: number): void {
     // there is an issue https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
     this.props.scrollLocationChange?.(this.fullScrollProp, location);
+    this.updateContent(location);
 
     if (this.props.forceGeneratePockets) {
       if (this.isPullDown()) {
@@ -455,6 +471,14 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       && (this.props.scrollLocation - this.minOffset - this.bottomPocketSize <= 0.5);
   }
 
+  get minOffset(): number {
+    if (this.props.forceGeneratePockets) {
+      return -Math.max(this.bottomBoundaryOffset + this.bottomPocketSize, 0);
+    }
+
+    return -Math.max(this.bottomBoundaryOffset, 0);
+  }
+
   get scrollSize(): number {
     return Math.max(this.props.containerSize * this.containerToContentRatio, THUMB_MIN_SIZE);
   }
@@ -478,10 +502,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return this.contentSize
       ? this.props.containerSize / this.contentSize
       : this.props.containerSize;
-  }
-
-  get dimension(): string {
-    return this.props.direction === DIRECTION_HORIZONTAL ? 'width' : 'height';
   }
 
   expand(): void {
@@ -537,17 +557,24 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get scrollStyles(): { [key: string]: string | number } {
-    const scrollTranslateOffset: { left: number; top: number } = {
-      ...{ left: 0, top: 0 },
-      ...{ [this.scrollProp]: -this.props.scrollLocation * this.scrollRatio },
-    };
-
     return {
       [this.dimension]: this.scrollSize || THUMB_MIN_SIZE,
-      transform: this.props.showScrollbar === 'never'
-        ? 'none'
-        : `translate(${scrollTranslateOffset.left}px, ${scrollTranslateOffset.top}px)`,
+      transform: this.scrollTransform,
     };
+  }
+
+  get scrollTransform(): string {
+    if (this.props.showScrollbar === 'never') {
+      return 'none';
+    }
+
+    const translateValue = -this.props.scrollLocation * this.scrollRatio;
+
+    if (this.isHorizontal) {
+      return `translate(${translateValue}px, 0px)`;
+    }
+
+    return `translate(0px, ${translateValue}px)`;
   }
 
   get scrollClasses(): string {
