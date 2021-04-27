@@ -64,7 +64,8 @@ const optionTestValues = {
     titleTemplate: 'custom title',
     toolbarItems: [{ widget: 'dxButton' }],
     visible: true,
-    width: 500
+    width: 500,
+    wrapperAttr: { 'custom-attr': 'value' }
 };
 
 const getPopupInstance = (editor) => {
