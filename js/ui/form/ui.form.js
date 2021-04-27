@@ -991,10 +991,6 @@ const Form = Widget.inherit({
                     }
                 }
                 if(optionName === 'visible') { // T874843
-                    if(layoutManager.option(fullOptionName) === value) {
-                        return true; // T990701
-                    }
-
                     const formItems = this.option(getFullOptionName(itemPath, 'items'));
                     if(formItems && formItems.length) {
                         const layoutManagerItems = layoutManager.option('items');
