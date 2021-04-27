@@ -431,13 +431,14 @@ export const DataSource = Class.inherit({
 
             return this._loadFromStore(loadOperation, d);
         };
-        const loadOperation = this._createLoadOperation(d);
-
-        this._eventsStrategy.fireEvent('customizeStoreLoadOptions', [loadOperation]);
 
         this._scheduleLoadCallbacks(d);
         this._scheduleFailCallbacks(d);
         this._scheduleChangedCallbacks(d);
+
+        const loadOperation = this._createLoadOperation(d);
+
+        this._eventsStrategy.fireEvent('customizeStoreLoadOptions', [loadOperation]);
 
         this._loadQueue.add(() => {
             if(typeof loadOperation.delay === 'number') {
