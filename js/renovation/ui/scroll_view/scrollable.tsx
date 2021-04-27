@@ -16,7 +16,7 @@ import {
   ScrollableProps,
 } from './scrollable_props';
 
-import { ScrollableNative } from './scrollable_native';
+import { ScrollableNative, ScrollableNativeProps } from './scrollable_native';
 import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
@@ -72,6 +72,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 };
 
 type ScrollablePropsType = ScrollableProps
+& Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>;
 
