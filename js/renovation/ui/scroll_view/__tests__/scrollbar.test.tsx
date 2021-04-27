@@ -27,7 +27,7 @@ describe('Scrollbar', () => {
     const props = new ScrollbarProps();
     const viewModel = mount<Scrollbar>(<Scrollbar {...props} />);
 
-    expect(viewModel.props()).toEqual({
+    expect({ ...viewModel.props() }).toMatchObject({
       activeStateEnabled: false,
       bottomPocketSize: 0,
       containerSize: 0,
