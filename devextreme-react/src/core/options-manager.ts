@@ -113,7 +113,7 @@ class OptionsManager {
     }
 
     const { value, type } = valueDescriptor;
-    if (type === ValueType.Complex) {
+    if (type === ValueType.Complex && value instanceof Object) {
       Object.keys(value).forEach((key) => {
         if (value[key] === (e.value as Record<string, unknown>)[key]) {
           return;

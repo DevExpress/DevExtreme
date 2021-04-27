@@ -34,6 +34,7 @@ class NestedComponent extends ConfigurationComponent<{
   b?: string;
   c?: string;
   defaultC?: string;
+  complexValue?: Record<string, unknown>;
   value?: number;
   onValueChange?: (value: number) => void;
 }> {
@@ -256,8 +257,9 @@ describe('option control', () => {
     fireOptionChange('complexOption', {});
     jest.runAllTimers();
 
-    expect(Widget.option.mock.calls.length).toBe(1);
-    expect(Widget.option.mock.calls[0]).toEqual(['complexOption', { a: 123, b: 234 }]);
+    expect(Widget.option.mock.calls.length).toBe(2);
+    expect(Widget.option.mock.calls[0]).toEqual(['complexOption.a', 123]);
+    expect(Widget.option.mock.calls[1]).toEqual(['complexOption.b', 234]);
   });
 
   it('rolls back complex option controlled field', () => {
@@ -434,6 +436,20 @@ describe('cfg-component option control', () => {
     jest.runAllTimers();
     expect(Widget.option.mock.calls.length).toBe(1);
     expect(Widget.option.mock.calls[0]).toEqual(['items[0].a', 1]);
+  });
+
+  it('rolls cfg-component option complex value', () => {
+    render(
+      <ControlledComponent>
+        <NestedComponent complexValue={{ a: 123, b: 234 }} />
+      </ControlledComponent>,
+    );
+
+    fireOptionChange('nestedOption.complexValue', {});
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(2);
+    expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.complexValue.a', 123]);
+    expect(Widget.option.mock.calls[1]).toEqual(['nestedOption.complexValue.b', 234]);
   });
 
   it('rolls cfg-component option value if parent object changes another field', () => {

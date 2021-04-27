@@ -2,13 +2,13 @@ import { IConfigNode, ITemplate } from './config-node';
 import { mergeNameParts, parseOptionName } from './utils';
 
 interface IConfig {
-  options: Record<string, any>;
+  options: Record<string, unknown>;
   templates: Record<string, ITemplate>;
 }
 
 function buildTemplates(
   node: IConfigNode,
-  optionsAccum: Record<string, any>,
+  optionsAccum: Record<string, unknown>,
   templatesAccum: Record<string, ITemplate>,
 ): void {
   node.templates.forEach(
@@ -28,8 +28,8 @@ function buildNode(
   node: IConfigNode,
   templatesAccum: Record<string, ITemplate>,
   ignoreInitialValues: boolean,
-): Record<string, any> {
-  const result: Record<string, any> = {};
+): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
 
   Object.keys(node.predefinedOptions).forEach((key) => {
     result[key] = node.predefinedOptions[key];
@@ -71,7 +71,7 @@ function buildConfig(root: IConfigNode, ignoreInitialValues: boolean): IConfig {
 }
 
 interface IValueDescriptor {
-  value: any;
+  value: unknown;
   type: ValueType;
 }
 
@@ -86,7 +86,7 @@ function findValueInObject(obj: unknown, path: string[]): undefined | IValueDesc
   if (!key) {
     return {
       value: obj,
-      type: ValueType.Simple,
+      type: obj instanceof Object ? ValueType.Complex : ValueType.Simple,
     };
   }
 
