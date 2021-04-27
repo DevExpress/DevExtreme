@@ -889,4 +889,50 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
         assert.ok(getItemsStub.notCalled, 'getItems method was not called');
     });
+
+    test('currentPathKeys option has correct value with nameExpr and keyExpr (T988286)', function(assert) {
+        this.fileManager.option('fileSystemProvider', {
+            data: [
+                {
+                    title: 'Folder 1',
+                    id: 'dir-1',
+                    isDirectory: true,
+                    items: [
+                        {
+                            title: 'Folder 1.1',
+                            id: 'dir-1.1',
+                            isDirectory: true
+                        }
+                    ]
+                }
+            ],
+            nameExpr: 'title',
+            keyExpr: 'id'
+        });
+        this.clock.tick(400);
+
+        let currentPathKeys = this.fileManager.option('currentPathKeys');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, '', 'Current directory is root');
+        assert.strictEqual(currentPathKeys.length, 0, 'Current path keys has correct size');
+
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        currentPathKeys = this.fileManager.option('currentPathKeys');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/Folder 1', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, 'dir-1', 'Current directory is Folder 1');
+        assert.strictEqual(currentPathKeys.length, 1, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], 'dir-1', 'Current path keys are correct');
+
+        this.wrapper.findThumbnailsItem('Folder 1.1').trigger('dxdblclick');
+        this.clock.tick(400);
+
+        currentPathKeys = this.fileManager.option('currentPathKeys');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/Folder 1/Folder 1.1', 'Breadcrumbs has correct path');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().key, 'dir-1.1', 'Current directory is Folder 1.1');
+        assert.strictEqual(currentPathKeys.length, 2, 'Current path keys has correct size');
+        assert.strictEqual(currentPathKeys[0], 'dir-1');
+        assert.strictEqual(currentPathKeys[1], 'dir-1.1', 'Current path keys are correct');
+    });
 });
