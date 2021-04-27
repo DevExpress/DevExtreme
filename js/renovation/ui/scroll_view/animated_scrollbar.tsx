@@ -37,6 +37,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
   const {
     scrollbarRef, start, cancel,
     props: {
+      direction,
       scrollableOffset, contentSize, containerSize,
       showScrollbar, scrollByThumb, bounceEnabled,
       forceGeneratePockets, pullDownEnabled, reachBottomEnabled,
@@ -51,6 +52,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
   return (
     <Scrollbar
       ref={scrollbarRef}
+      direction={direction}
       onAnimatorStart={start}
       onAnimatorCancel={cancel}
       scrollableOffset={scrollableOffset}
