@@ -191,16 +191,16 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
         const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
 
-        const cellsGroupToView = groupedDataMap.dateTableGroupedMap[groupIndex];
+        const currentCellGroup = groupedDataMap.dateTableGroupedMap[groupIndex];
 
-        if(cellsGroupToView) {
-            const groupRowLength = cellsGroupToView[0].length;
+        if(currentCellGroup) {
+            const groupRowLength = currentCellGroup[0].length;
 
-            const groupStartPosition = cellsGroupToView[0][0].position;
-            const groupEndPosition = cellsGroupToView[0][groupRowLength - 1].position;
+            const groupStartPosition = currentCellGroup[0][0].position;
+            const groupEndPosition = currentCellGroup[0][groupRowLength - 1].position;
 
-            startCell = this._workSpace._dom_getDateCell(groupStartPosition);
-            endCell = this._workSpace._dom_getDateCell(groupEndPosition);
+            startCell = $cells.eq(groupStartPosition.cellIndex);
+            endCell = $cells.eq(groupEndPosition.cellIndex);
         }
 
         return this._createGroupBoundOffset(startCell, endCell, cellWidth);
