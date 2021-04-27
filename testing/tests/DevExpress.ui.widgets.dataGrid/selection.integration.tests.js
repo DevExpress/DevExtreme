@@ -776,7 +776,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(resizingController.updateDimensions.callCount, 0, 'updateDimensions is not called');
-        assert.strictEqual(selectionChangedSpy.callCount, 2, 'onSelectionChanged is called twice');
+        assert.ok(selectionChangedSpy.called, 'onSelectionChanged is called');
         assert.notOk($(dataGrid.getRowElement(0)).hasClass('dx-selection'), 'no dx-selection on the first row');
         assert.ok($(dataGrid.getRowElement(1)).hasClass('dx-selection'), 'dx-selection on the second row');
     });

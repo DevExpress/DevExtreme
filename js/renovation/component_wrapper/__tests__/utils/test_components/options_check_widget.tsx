@@ -3,6 +3,7 @@ import {
   ComponentBindings,
   JSXComponent,
   Method,
+  Nested,
   OneWay,
   Template,
   TwoWay,
@@ -34,6 +35,10 @@ export class OptionsCheckWidgetProps {
   @TwoWay() twoWayNullWithValue: string | null = '20';
 
   @OneWay() propWithElement?: HTMLDivElement | number;
+
+  @Nested() nestedObject?: { nestedProp: string } = { nestedProp: 'default value' };
+
+  @Nested() nestedArray?: { nestedProp: string }[];
 
   @Template() contentTemplate = (): JSX.Element => <div />;
 }
