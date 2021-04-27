@@ -459,7 +459,8 @@ const Popover = Popup.inherit({
         if(this.option('shading')) {
             this._$wrapper.css({
                 width: '100%',
-                height: '100%'
+                height: '100%',
+                zIndex: '-100'
             });
         }
     },
