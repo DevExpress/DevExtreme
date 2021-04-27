@@ -42,7 +42,6 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
     cssClasses, scrollStyles, scrollRef, scrollbarRef, hoverStateEnabled,
     onHoverStart, onHoverEnd, isVisible,
     props: { activeStateEnabled },
-    restAttributes,
   } = viewModel;
 
   return (
@@ -54,8 +53,6 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
       visible={isVisible}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
     >
       <div className={viewModel.scrollClasses} style={scrollStyles} ref={scrollRef}>
         <div className={SCROLLABLE_SCROLL_CONTENT_CLASS} />
@@ -66,8 +63,8 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 
 export type ScrollbarPropsType = ScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
-& Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' >
-& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange' | 'forceGeneratePockets'>;
+& Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
+& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,

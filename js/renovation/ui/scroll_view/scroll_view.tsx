@@ -19,7 +19,6 @@ import {
   ScrollOffset,
 } from './types.d';
 
-import { combineClasses } from '../../utils/combine_classes';
 import { BaseWidgetProps } from '../common/base_props';
 import {
   ScrollableProps,
@@ -30,7 +29,6 @@ import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
-    cssClasses,
     pulledDownText,
     refreshingText,
     pullingDownText,
@@ -50,7 +48,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   return (
     <Scrollable
       useNative={useNative}
-      classes={cssClasses}
+      classes="dx-scrollview"
       ref={scrollableRef}
       aria={aria}
       width={width}
@@ -98,7 +96,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
 @ComponentBindings()
 export class ScrollViewProps extends ScrollableProps {}
 
-export type ScrollViewPropsType =
+type ScrollViewPropsType =
 Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 'needScrollViewLoadPanel'>
 & Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
@@ -184,13 +182,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Method()
   clientWidth(): number {
     return this.scrollable.clientWidth();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  get cssClasses(): string {
-    return combineClasses({
-      'dx-scrollview': true,
-    });
   }
 
   get pullingDownText(): string | undefined {

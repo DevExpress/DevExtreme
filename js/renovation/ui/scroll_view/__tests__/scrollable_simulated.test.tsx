@@ -52,7 +52,6 @@ describe('Simulated > View', () => {
       bounceEnabled: true,
       direction: 'vertical',
       forceGeneratePockets: false,
-      inertiaEnabled: true,
       needScrollViewContentWrapper: false,
       needScrollViewLoadPanel: false,
       pullDownEnabled: false,
