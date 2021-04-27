@@ -14,12 +14,6 @@ export class ScrollableInternalProps {
 
   @OneWay() scrollByThumb = false;
 
-  @OneWay() bounceEnabled = true;
-
-  @OneWay() scrollByContent = true;
-
-  @OneWay() useKeyboard = true;
-
   @OneWay() updateManually = false;
 
   @OneWay() classes?: string;
@@ -46,6 +40,8 @@ export class ScrollableInternalProps {
 @ComponentBindings()
 export class ScrollableProps extends ScrollableInternalProps {
   @OneWay() useNative = true;
+
+  @Slot() children?: JSX.Element | JSX.Element[];
 
   @OneWay() pullingDownText?: string;
 

@@ -16,6 +16,12 @@ import { WidgetProps } from '../common/widget';
 export class ScrollableSimulatedProps extends ScrollableProps {
   @OneWay() inertiaEnabled = true;
 
+  @OneWay() bounceEnabled = true;
+
+  @OneWay() scrollByContent = true;
+
+  @OneWay() useKeyboard = true;
+
   @Event() onStart?: EventCallback<ScrollEventArgs>;
 
   @Event() onEnd?: EventCallback<ScrollEventArgs>;
