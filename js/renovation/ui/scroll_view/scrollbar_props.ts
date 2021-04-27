@@ -5,7 +5,7 @@ import {
   TwoWay,
 } from '@devextreme-generator/declarations';
 
-import { EventCallback } from '../common/event_callback';
+import noop from '../../utils/noop';
 import { TopPocketState } from './common/consts';
 
 @ComponentBindings()
@@ -36,13 +36,13 @@ export class ScrollbarProps {
 
   @Event() onAnimatorStart?: (animator: 'inertia'| 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
-  @Event() onAnimatorCancel?: EventCallback;
+  @Event() onAnimatorCancel?: () => void = noop;
 
-  @Event() pocketStateChange?: EventCallback<number>;
+  @Event() pocketStateChange?: (state: number) => void;
 
-  @Event() onPullDown?: EventCallback;
+  @Event() onPullDown?: () => void = noop;
 
-  @Event() onReachBottom?: EventCallback;
+  @Event() onReachBottom?: () => void = noop;
 
-  @Event() onRelease?: EventCallback;
+  @Event() onRelease?: () => void = noop;
 }
