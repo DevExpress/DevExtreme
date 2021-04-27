@@ -33,7 +33,7 @@ export const viewFunction = ({
     groupsRenderData={groupsRenderData}
     baseColSpan={baseColSpan}
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
+    style={restAttributes.style}
   />
 );
 

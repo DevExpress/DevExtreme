@@ -100,8 +100,7 @@ describe('GroupPanel Vertical Layout', () => {
       describe('style', () => {
         it('should call addHeightToStyle with proper parameters', () => {
           const style = { width: '555px', height: '666px' };
-          const layout = new Layout({ height: 500 });
-          layout.restAttributes = { style };
+          const layout = new Layout({ height: 500, style });
 
           expect(layout.style)
             .toBe('style');
