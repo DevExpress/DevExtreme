@@ -4,11 +4,21 @@ const getDateParser = require('localization/ldml/date.parser').getParser;
 const getRegExpInfo = require('localization/ldml/date.parser').getRegExpInfo;
 const getDateFormatter = require('localization/ldml/date.formatter').getFormatter;
 const getDateFormat = require('localization/ldml/date.format').getFormat;
-const dateParts = require('localization/default_date_names');
+const defaultDateNames = require('localization/default_date_names');
 const numberLocalization = require('localization/number');
+const dateLocalization = require('localization/date');
 const extend = require('core/utils/extend').extend;
 
 require('localization/currency');
+
+const dateParts = extend({}, defaultDateNames, {
+    getPeriodNames: function() {
+        return ['am', 'pm'];
+    },
+    getTimeSeparator: function() {
+        return ':';
+    }
+});
 
 QUnit.module('date parser', () => {
     QUnit.test('parse with escaped chars', function(assert) {
@@ -47,19 +57,14 @@ QUnit.module('date parser', () => {
     });
 
     QUnit.test('case insensitive date parsing for part of day', function(assert) {
-        const _dateParts = extend({}, dateParts, {
-            getPeriodNames: function() {
-                return ['am', 'pm'];
-            }
-        });
-        const parser = getDateParser('aaaa', _dateParts);
+        const parser = getDateParser('aaaa', dateParts);
 
         assert.equal(parser('am').getHours(), 0);
     });
 
     QUnit.test('getFormat', function(assert) {
         const checkFormat = function(format, customDateParts) {
-            const formatter = getDateFormatter(format, customDateParts || dateParts);
+            const formatter = getDateFormatter(format, customDateParts || defaultDateNames);
             assert.strictEqual(getDateFormat(formatter), format, format);
         };
 
@@ -360,14 +365,51 @@ QUnit.module('number formatter', () => {
     QUnit.test('getRegExpInfo should return correct pattern set when stub is in the end', function(assert) {
         const regExpInfo = getRegExpInfo('EEE, MMMM, dd, HH:mm:ss \'(stub)\'', dateParts);
         assert.deepEqual(regExpInfo.patterns, [
-            'EEE', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', '\':\'', 'mm', '\':\'', 'ss', '\' (stub)\''
+            'EEE', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', ':', 'mm', ':', 'ss', '\' (stub)\''
         ]);
     });
 
     QUnit.test('getRegExpInfo should return correct pattern set when there is "ww" inside of it', function(assert) {
         const regExpInfo = getRegExpInfo('ww, MMMM, dd, HH:mm:ss \'(stub)\'', dateParts);
         assert.deepEqual(regExpInfo.patterns, [
-            'ww', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', '\':\'', 'mm', '\':\'', 'ss', '\' (stub)\''
+            'ww', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', ':', 'mm', ':', 'ss', '\' (stub)\''
         ]);
+    });
+
+    QUnit.test('getRegExpInfo should return correct pattern for the single time separator', function(assert) {
+        const regExpInfo = getRegExpInfo('HH:mm', dateParts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'HH', ':', 'mm'
+        ]);
+    });
+
+    QUnit.test('getRegExpInfo should return correct regex for multiple adjacent time separators', function(assert) {
+        const regExpInfo = getRegExpInfo('HH:::mm', dateParts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'HH', ':::', 'mm'
+        ]);
+        assert.notOk(regExpInfo.regexp.test('11:11'));
+        assert.notOk(regExpInfo.regexp.test('11::::::11'));
+        assert.ok(regExpInfo.regexp.test('11:::11'));
+    });
+
+    QUnit.test('getRegExpInfo should consider custom time separators in different locales', function(assert) {
+        const baseFormat = dateLocalization.format;
+        const baseGetTimeSeparator = dateLocalization.format;
+        dateLocalization.format = function(date, format) {
+            return baseFormat(...arguments).replace(/:/g, '.');
+        };
+        dateLocalization.getTimeSeparator = function() {
+            return '.';
+        };
+        try {
+            const regExpInfo = getRegExpInfo('HH:mm', dateLocalization);
+            const formattedString = dateLocalization.format(new Date(2021, 1, 1, 15, 43), 'HH:mm');
+            assert.ok(regExpInfo.regexp.test(formattedString));
+        } finally {
+            dateLocalization.format = baseFormat;
+            dateLocalization.getTimeSeparator = baseGetTimeSeparator;
+        }
+
     });
 });
