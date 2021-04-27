@@ -9,6 +9,7 @@ import {
 
 import {
   Scrollbar,
+  ScrollbarPropsType,
   viewFunction as ScrollbarComponent,
 } from '../scrollbar';
 
