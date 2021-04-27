@@ -89,7 +89,14 @@ const attachEvent = function(that, name) {
         }
     }).bind(that), { validatingTargetName: 'target' });
 
+    const oldTargetZIndex = $(target).css('z-index');
+    const oldPosition = $(target).css('position');
+    const newTargetZIndex = 2000;
+    const newPosition = 'relative';
+
     const handler = function(e) {
+        event === 'mouseenter' && $(target).css({ 'z-index': newTargetZIndex, 'position': newPosition });
+        event === 'mouseleave' && $(target).css({ 'z-index': oldTargetZIndex, 'position': oldPosition });
         action({ event: e, target: $(e.currentTarget) });
     };
 
@@ -459,8 +466,7 @@ const Popover = Popup.inherit({
         if(this.option('shading')) {
             this._$wrapper.css({
                 width: '100%',
-                height: '100%',
-                zIndex: '-1'
+                height: '100%'
             });
         }
     },
