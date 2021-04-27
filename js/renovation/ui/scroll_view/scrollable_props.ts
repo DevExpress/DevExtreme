@@ -47,8 +47,6 @@ export class ScrollableInternalProps {
 export class ScrollableProps extends ScrollableInternalProps {
   @OneWay() useNative = true;
 
-  @OneWay() useSimulatedScrollbar?: boolean;
-
   @OneWay() pullingDownText?: string;
 
   @OneWay() pulledDownText?: string;
