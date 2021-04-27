@@ -26,8 +26,8 @@ test('Basic drag-n-drop movements in groups', async (t) => {
 }).before(() => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
-    startDate: new Date(2021, 4, 26, 8, 30),
-    endDate: new Date(2021, 4, 26, 11, 0),
+    startDate: new Date(2021, 2, 26, 8, 30),
+    endDate: new Date(2021, 2, 26, 11, 0),
     priorityId: 1,
   }],
   groups: ['priorityId'],
@@ -47,7 +47,7 @@ test('Basic drag-n-drop movements in groups', async (t) => {
   }],
   views: ['day'],
   currentView: 'day',
-  currentDate: new Date(2021, 4, 26),
+  currentDate: new Date(2021, 2, 26),
   startDayHour: 8,
   height: 600,
   width: 1000,
@@ -77,24 +77,24 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
 }).before(() => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Appointment 1',
-    startDate: new Date(2021, 4, 23, 9, 30),
-    endDate: new Date(2021, 4, 23, 12, 0),
+    startDate: new Date(2021, 2, 21, 9, 30),
+    endDate: new Date(2021, 2, 21, 12, 0),
   }, {
     text: 'Appointment 2',
-    startDate: new Date(2021, 4, 23, 9, 30),
-    endDate: new Date(2021, 4, 23, 12, 0),
+    startDate: new Date(2021, 2, 21, 9, 30),
+    endDate: new Date(2021, 2, 21, 12, 0),
   }, {
     text: 'Appointment 3',
-    startDate: new Date(2021, 4, 23, 9, 30),
-    endDate: new Date(2021, 4, 23, 11, 0),
+    startDate: new Date(2021, 2, 21, 9, 30),
+    endDate: new Date(2021, 2, 21, 11, 0),
   }, {
     text: 'Appointment 4',
-    startDate: new Date(2021, 4, 23, 9, 30),
-    endDate: new Date(2021, 4, 23, 12, 30),
+    startDate: new Date(2021, 2, 21, 9, 30),
+    endDate: new Date(2021, 2, 21, 12, 30),
   }],
   views: ['week'],
   currentView: 'week',
-  currentDate: new Date(2021, 4, 27),
+  currentDate: new Date(2021, 2, 21),
   startDayHour: 8,
   height: 600,
   width: 1000,
@@ -151,15 +151,15 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
   currentView: 'timelineWeek',
   dataSource: [{
     text: 'Website Re-Design Plan',
-    startDate: new Date(2021, 4, 23, 9, 30),
-    endDate: new Date(2021, 4, 23, 10, 45),
+    startDate: new Date(2021, 2, 21, 9, 30),
+    endDate: new Date(2021, 2, 21, 10, 45),
   }],
 }, {
   currentView: 'timelineMonth',
   dataSource: [{
     text: 'Website Re-Design Plan',
-    startDate: new Date(2021, 4, 2, 9, 30),
-    endDate: new Date(2021, 4, 3, 11, 0),
+    startDate: new Date(2021, 2, 2, 9, 30),
+    endDate: new Date(2021, 2, 3, 11, 0),
   }],
 }].forEach(({ currentView, dataSource }) => {
   test(`Basic drag-n-drop movements in ${currentView} view`, async (t) => {
@@ -183,7 +183,7 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
     dataSource,
     views: ['timelineWeek', 'timelineMonth'],
     currentView,
-    currentDate: new Date(2021, 4, 27),
+    currentDate: new Date(2021, 2, 21),
     startDayHour: 9,
     height: 600,
     width: 1000,
@@ -218,12 +218,12 @@ test('Basic drag-n-drop movements', async (t) => {
 }).before(() => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
-    startDate: new Date(2021, 4, 24, 10),
-    endDate: new Date(2021, 4, 24, 12, 30),
+    startDate: new Date(2021, 2, 22, 10),
+    endDate: new Date(2021, 2, 22, 12, 30),
   }],
   views: ['week'],
   currentView: 'week',
-  currentDate: new Date(2021, 4, 27),
+  currentDate: new Date(2021, 2, 22),
   startDayHour: 9,
   height: 600,
   width: 1000,
@@ -257,12 +257,12 @@ test('Basic drag-n-drop movements with mouse offset', async (t) => {
 }).before(() => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
-    startDate: new Date(2021, 4, 24, 10),
-    endDate: new Date(2021, 4, 24, 12, 30),
+    startDate: new Date(2021, 2, 22, 10),
+    endDate: new Date(2021, 2, 22, 12, 30),
   }],
   views: ['week'],
   currentView: 'week',
-  currentDate: new Date(2021, 4, 27),
+  currentDate: new Date(2021, 2, 22),
   startDayHour: 9,
   height: 600,
   width: 1000,
@@ -296,12 +296,12 @@ test('Basic drag-n-drop all day appointment movements', async (t) => {
 }).before(() => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
-    startDate: new Date(2021, 4, 25, 10),
-    endDate: new Date(2021, 4, 27, 12, 30),
+    startDate: new Date(2021, 2, 23, 10),
+    endDate: new Date(2021, 2, 25, 12, 30),
   }],
   views: ['week'],
   currentView: 'week',
-  currentDate: new Date(2021, 4, 27),
+  currentDate: new Date(2021, 2, 23),
   startDayHour: 9,
   height: 600,
   width: 1000,
@@ -331,12 +331,12 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
 }).before(() => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
-    startDate: new Date(2021, 4, 24, 10),
-    endDate: new Date(2021, 4, 24, 12, 30),
+    startDate: new Date(2021, 2, 22, 10),
+    endDate: new Date(2021, 2, 22, 12, 30),
   }],
   views: ['week'],
   currentView: 'week',
-  currentDate: new Date(2021, 4, 27),
+  currentDate: new Date(2021, 2, 22),
   startDayHour: 9,
   height: 600,
   width: 1000,
