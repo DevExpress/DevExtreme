@@ -64,23 +64,23 @@ export class PdfGrid {
             for(let rowIndex = 0; rowIndex < table.rows.length; rowIndex++) {
                 for(let cellIndex = 0; cellIndex < table.rows[rowIndex].length; cellIndex++) {
                     const cell = table.rows[rowIndex][cellIndex];
-                    if(isDefined(cell.rowSpan)) {
-                        for(let i = 1; i < cell.rowSpan; i++) {
-                            const mergeCell = table.rows[rowIndex + i][cellIndex];
-                            if(isDefined(mergeCell)) {
-                                cell._rect.h += mergeCell._rect.h;
-                                mergeCell._rect.h = 0;
-                                mergeCell.skip = true;
+                    if(!cell.skip) {
+                        if(isDefined(cell.rowSpan)) {
+                            for(let i = 1; i <= cell.rowSpan; i++) {
+                                const mergedCell = table.rows[rowIndex + i][cellIndex];
+                                if(isDefined(mergedCell)) {
+                                    cell._rect.h += mergedCell._rect.h;
+                                    mergedCell.skip = true;
+                                }
                             }
                         }
-                    }
-                    if(isDefined(cell.colSpan)) {
-                        for(let i = 1; i < cell.colSpan; i++) {
-                            const mergeCell = table.rows[rowIndex][cellIndex + i];
-                            if(isDefined(mergeCell)) {
-                                cell._rect.w += mergeCell._rect.w;
-                                mergeCell._rect.w = 0;
-                                mergeCell.skip = true;
+                        if(isDefined(cell.colSpan)) {
+                            for(let i = 1; i <= cell.colSpan; i++) {
+                                const mergedCell = table.rows[rowIndex][cellIndex + i];
+                                if(isDefined(mergedCell)) {
+                                    cell._rect.w += mergedCell._rect.w;
+                                    mergedCell.skip = true;
+                                }
                             }
                         }
                     }
