@@ -1467,6 +1467,198 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
+    QUnit.test('Split grid by columns - Bands, [f1, band[f2, f3], f4]', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [
+                'f1',
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ]
+                },
+                'f4'
+            ],
+            dataSource: [{ f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' }],
+        });
+
+        const splitToTablesByColumns = [{
+            columnIndex: 2,
+            drawOnNewPage: true,
+            tableRect: { x: 10, y: 15, w: 130, h: 60 }
+        }];
+
+        const onRowExporting = (e) => {
+            const notEmptyCell = e.rowCells.filter((cell) => cell.text)[0];
+            if(notEmptyCell.text === 'F1') {
+                e.rowHeight = 16;
+            } else if(notEmptyCell.text === 'F2') {
+                e.rowHeight = 20;
+            } else if(notEmptyCell.text === 'f1_1') {
+                e.rowHeight = 24;
+            }
+        };
+
+        const expectedLog = [
+            'text,F1,10,33,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,36',
+            'text,Band1,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,50,16',
+            'text,F2,100,41,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,50,20',
+            'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,90,24',
+            'text,f2_1,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,50,24',
+            'addPage,',
+            'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,60,16',
+            'text,F4,70,33,{baseline:middle}', 'setLineWidth,1', 'rect,70,15,70,36',
+            'text,F3,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,60,20',
+            'text,f3_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,60,24',
+            'text,f4_1,70,63,{baseline:middle}', 'setLineWidth,1', 'rect,70,51,70,24',
+        ];
+
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 140, h: 60 }, columnWidths: [ 90, 50, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('Split grid by columns - split band [f1, band[f2, f3, f4, f5], f6]', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [
+                'f1',
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' },
+                    ]
+                },
+                'f6'
+            ],
+            dataSource: [{ f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1', f5: 'f5_1', f6: 'f6_1' }],
+        });
+
+        const splitToTablesByColumns = [{
+            columnIndex: 3,
+            drawOnNewPage: true,
+            tableRect: { x: 10, y: 15, w: 240, h: 60 }
+        }];
+
+        const onRowExporting = (e) => {
+            const notEmptyCell = e.rowCells.filter((cell) => cell.text)[0];
+            if(notEmptyCell.text === 'F1') {
+                e.rowHeight = 16;
+            } else if(notEmptyCell.text === 'F2') {
+                e.rowHeight = 20;
+            } else if(notEmptyCell.text === 'f1_1') {
+                e.rowHeight = 24;
+            }
+        };
+
+        const expectedLog = [
+            'text,F1,10,33,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,36',
+            'text,Band1,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,110,16',
+            'text,F2,100,41,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,50,20',
+            'text,F3,150,41,{baseline:middle}', 'setLineWidth,1', 'rect,150,31,60,20',
+            'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,90,24',
+            'text,f2_1,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,50,24',
+            'text,f3_1,150,63,{baseline:middle}', 'setLineWidth,1', 'rect,150,51,60,24',
+            'addPage,',
+            'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
+            'text,F6,160,33,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,36',
+            'text,F4,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,70,20',
+            'text,F5,80,41,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,80,20',
+            'text,f4_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
+            'text,f5_1,80,63,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,80,24',
+            'text,f6_1,160,63,{baseline:middle}', 'setLineWidth,1', 'rect,160,51,90,24',
+        ];
+
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 200, h: 60 }, columnWidths: [ 90, 50, 60, 70, 80, 90 ], onRowExporting, splitToTablesByColumns }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('Split grid by columns - split band [f1, [band [f2, band[f3, f4], f5], f6]', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [
+                'f1',
+                {
+                    caption: 'Band1',
+                    columns: [
+                        'f2',
+                        {
+                            caption: 'Band1_1',
+                            columns: [
+                                { dataField: 'f3' },
+                                { dataField: 'f4' },
+                            ]
+                        },
+                        'f5',
+                    ]
+                },
+                'f6'
+            ],
+            dataSource: [{ f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1', f5: 'f5_1', f6: 'f6_1' }],
+        });
+
+        const splitToTablesByColumns = [{
+            columnIndex: 3,
+            drawOnNewPage: true,
+            tableRect: { x: 10, y: 15, w: 240, h: 60 }
+        }];
+
+        const onRowExporting = (e) => {
+            const notEmptyCell = e.rowCells.filter((cell) => cell.text)[0];
+            if(notEmptyCell.text === 'F1') {
+                e.rowHeight = 16;
+            } else if(notEmptyCell.text === 'F2') {
+                e.rowHeight = 20;
+            } else if(notEmptyCell.text === 'F3') {
+                e.rowHeight = 24;
+            } else if(notEmptyCell.text === 'f1_1') {
+                e.rowHeight = 30;
+            }
+        };
+
+        const expectedLog = [
+            'text,F1,10,45,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,60',
+            'text,Band1,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,110,16',
+            'text,F2,100,53,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,50,44',
+            'text,Band1_1,150,41,{baseline:middle}', 'setLineWidth,1', 'rect,150,31,60,20',
+            'text,F3,150,63,{baseline:middle}', 'setLineWidth,1', 'rect,150,51,60,24',
+            'text,f1_1,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,90,30',
+            'text,f2_1,100,90,{baseline:middle}', 'setLineWidth,1', 'rect,100,75,50,30',
+            'text,f3_1,150,90,{baseline:middle}', 'setLineWidth,1', 'rect,150,75,60,30',
+            'addPage,',
+            'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
+            'text,F6,160,45,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,60',
+            'text,Band1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,70,20',
+            'text,F5,80,53,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,80,44',
+            'text,F4,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
+            'text,f4_1,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,70,30',
+            'text,f5_1,80,90,{baseline:middle}', 'setLineWidth,1', 'rect,80,75,80,30',
+            'text,f6_1,160,90,{baseline:middle}', 'setLineWidth,1', 'rect,160,75,90,30',
+        ];
+
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 200, h: 60 }, columnWidths: [ 90, 50, 60, 70, 80, 90 ], onRowExporting, splitToTablesByColumns }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('Split grid by rows and by columns - 3 cols - 2 rows - show cell borders with table border', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();

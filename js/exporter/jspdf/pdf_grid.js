@@ -48,13 +48,20 @@ export class PdfGrid {
         let currentTableIndex = 0;
         let currentTableCells = [];
         for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+            const currentCell = cells[cellIndex];
             const isNewTableColumn = this._splitByColumns.filter((splitByColumn) => splitByColumn.columnIndex === cellIndex)[0];
             if(isNewTableColumn) {
                 this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
+                if(currentCell.colSpan > 0 && currentCell.text === '') {
+                    const notEmptyColSpanCells = currentTableCells.filter(cell => cell.colSpan > 0 && cell.text.length > 0);
+                    if(notEmptyColSpanCells.length > 0) {
+                        currentCell.text = notEmptyColSpanCells[notEmptyColSpanCells.length - 1].text;
+                    }
+                }
                 currentTableIndex++;
                 currentTableCells = [];
             }
-            currentTableCells.push(cells[cellIndex]);
+            currentTableCells.push(currentCell);
         }
         this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
     }
@@ -77,7 +84,7 @@ export class PdfGrid {
                         if(isDefined(cell.colSpan)) {
                             for(let i = 1; i <= cell.colSpan; i++) {
                                 const mergedCell = table.rows[rowIndex][cellIndex + i];
-                                if(isDefined(mergedCell)) {
+                                if(isDefined(mergedCell) && isDefined(mergedCell.colSpan)) {
                                     cell._rect.w += mergedCell._rect.w;
                                     mergedCell.skip = true;
                                 }
