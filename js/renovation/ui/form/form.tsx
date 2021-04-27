@@ -2,7 +2,6 @@ import {
   Component, JSXComponent, Ref, RefObject,
 } from '@devextreme-generator/declarations';
 
-import React from 'react';
 import { FormProps } from './form_props';
 
 import { combineClasses } from '../../utils/combine_classes';
