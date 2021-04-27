@@ -59,12 +59,12 @@ describe('ScrollView', () => {
         const viewModel = new ScrollView({ });
         const funcHandler = jest.fn();
         Object.defineProperties(viewModel, {
-          scrollableRef: {
+          scrollable: {
             get() { return ({ [`${methodInfo.name}`]: funcHandler }); },
           },
         });
 
-        if (isDefined(viewModel.scrollableRef)) {
+        if (isDefined(viewModel.scrollable)) {
           if (methodInfo.argsCount === 2) {
             viewModel[methodInfo.name]('arg1', 'arg2');
             expect(funcHandler).toHaveBeenCalledWith('arg1', 'arg2');
@@ -84,7 +84,7 @@ describe('ScrollView', () => {
         const viewModel = new ScrollView({ pullDownEnabled });
         const funcHandler = jest.fn();
         Object.defineProperties(viewModel, {
-          scrollableRef: {
+          scrollable: {
             get() { return ({ refresh: funcHandler }); },
           },
         });
@@ -142,12 +142,11 @@ describe('ScrollView', () => {
           const viewModel = new ScrollView({ useNative });
 
           Object.defineProperties(viewModel, {
-            scrollableNativeRef: { get() { return { current: 'native' }; } },
-            scrollViewSimulatedRef: { get() { return { current: 'simulated' }; } },
+            scrollableRef: { get() { return { current: 'scrollableRef' }; } },
           });
 
-          expect(viewModel.scrollableRef)
-            .toEqual(useNative ? 'native' : 'simulated');
+          expect(viewModel.scrollable)
+            .toEqual('scrollableRef');
         });
       });
     });

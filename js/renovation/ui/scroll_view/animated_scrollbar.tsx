@@ -8,6 +8,7 @@ import {
   Method,
   Event,
 } from '@devextreme-generator/declarations';
+import { BaseWidgetProps } from '../common/base_props';
 import { isDefined } from '../../../core/utils/type';
 import devices from '../../../core/devices';
 
@@ -55,6 +56,7 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 }
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
+& Pick<BaseWidgetProps, 'rtlEnabled'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 
 @Component({

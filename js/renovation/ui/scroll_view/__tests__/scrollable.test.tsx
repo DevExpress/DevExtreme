@@ -24,7 +24,7 @@ jest.mock('../../../../ui/themes', () => ({
 }));
 
 describe('Scrollable', () => {
-  it('render scrollbar with defaults', () => {
+  it('render with defaults', () => {
     const props = new ScrollableProps();
     const viewModel = mount<Scrollable>(<Scrollable {...props} />);
 
@@ -40,7 +40,6 @@ describe('Scrollable', () => {
       scrollByThumb: false,
       showScrollbar: 'onScroll',
       updateManually: false,
-      useKeyboard: true,
       useNative: true,
     });
   });
