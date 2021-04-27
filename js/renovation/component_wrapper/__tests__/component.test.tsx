@@ -121,8 +121,9 @@ describe('Widget\'s container manipulations', () => {
       $('#component').addClass('test-class');
       $('#component').addClass('dx-test-class');
       $('#component').dxTestWidget({});
+      $('#component').addClass('runtime-added-class');
 
-      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
+      expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class runtime-added-class');
 
       $('#component').dxTestWidget('repaint');
       expect($('#component')[0].className).toBe('dx-test-widget test-class dx-test-class');
