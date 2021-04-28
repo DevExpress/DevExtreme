@@ -70,8 +70,7 @@ export default class FileItemsController {
     updateProvider(fileProvider, currentPath) {
         this._resetCurrentDirectory();
         this._setProvider(fileProvider);
-        this.refresh();
-        return this.setCurrentPath(currentPath);
+        return this.refresh().then(() => this.setCurrentPath(currentPath));
     }
 
     _createFileProvider(fileProvider) {
