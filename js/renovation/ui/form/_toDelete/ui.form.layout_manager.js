@@ -15,7 +15,6 @@ import { compileGetter } from '../../core/utils/data';
 import { removeEvent } from '../../core/remove_event';
 import { name as clickEventName } from '../../events/click';
 import errors from '../widget/ui.errors';
-import messageLocalization from '../../localization/message';
 import { styleProp } from '../../core/utils/style';
 import { captionize } from '../../core/utils/inflector';
 import Widget from '../widget/ui.widget';
@@ -72,23 +71,6 @@ const DATA_OPTIONS = ['dataSource', 'items'];
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
 
 const LayoutManager = Widget.inherit({
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            layoutData: {},
-            readOnly: false,
-            labelLocation: 'left',
-            onFieldDataChanged: null,
-            onEditorEnterKey: null,
-            customizeItem: null,
-            minColWidth: 200,
-            showRequiredMark: true,
-            showOptionalMark: false,
-            requiredMark: '*',
-            optionalMark: messageLocalization.format('dxForm-optionalMark'),
-            requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage')
-        });
-    },
-
     _setOptionsByReference: function() {
         this.callBase();
 

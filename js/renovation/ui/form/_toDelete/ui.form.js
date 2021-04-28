@@ -11,7 +11,6 @@ import { isEmpty } from '../../core/utils/string';
 import browser from '../../core/utils/browser';
 import { triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { getPublicElement } from '../../core/element';
-import messageLocalization from '../../localization/message';
 import Widget from '../widget/ui.widget';
 import Editor from '../editor/editor';
 import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
@@ -80,25 +79,6 @@ const Form = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             formID: 'dx-' + new Guid(),
-            formData: {},
-            labelLocation: 'left',
-            readOnly: false,
-            onFieldDataChanged: null,
-            customizeItem: null,
-            onEditorEnterKey: null,
-            minColWidth: 200,
-            alignRootItemLabels: true,
-            showColonAfterLabel: true,
-            showRequiredMark: true,
-            showOptionalMark: false,
-            requiredMark: '*',
-            optionalMark: messageLocalization.format('dxForm-optionalMark'),
-            requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage'),
-            showValidationSummary: false,
-            items: undefined,
-            scrollingEnabled: false,
-            validationGroup: undefined,
-            stylingMode: undefined
         });
     },
 

@@ -1,15 +1,31 @@
-import { ComponentBindings, OneWay } from '@devextreme-generator/declarations';
-import { ColCountByScreen, ScreenSize } from './types';
+import { ComponentBindings, Event, OneWay } from '@devextreme-generator/declarations';
+import { OnEditorEnterKeyCallback, OnFieldDataChangedCallback, LabelLocation } from './types';
 
 @ComponentBindings()
 export class FormLayoutManagerProps {
   @OneWay() isRoot = false;
 
-  @OneWay() colCount?: number = 1;
+  @OneWay() layoutData: any = {};
 
-  @OneWay() alignItemLabels?: boolean = true;
+  @OneWay() readOnly = false;
 
-  @OneWay() screenByWidth?: (width) => ScreenSize;
+  @OneWay() labelLocation: LabelLocation = 'left';
 
-  @OneWay() colCountByScreen?: ColCountByScreen = undefined;
+  @Event() onFieldDataChanged?: OnFieldDataChangedCallback;
+
+  @Event() onEditorEnterKey?: OnEditorEnterKeyCallback;
+
+  @Event() customizeItem?: (item: any) => void;
+
+  @OneWay() minColWidth = 200;
+
+  @OneWay() showRequiredMark = true;
+
+  @OneWay() showOptionalMark = false;
+
+  @OneWay() requiredMark = '*';
+
+  @OneWay() optionalMark?: string = undefined;
+
+  @OneWay() requiredMessage?: () => string = undefined;
 }

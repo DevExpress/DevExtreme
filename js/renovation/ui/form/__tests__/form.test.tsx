@@ -4,13 +4,39 @@ import each from 'jest-each';
 import { FormProps } from '../form_props';
 import { Form } from '../form';
 import { Scrollable } from '../../scroll_view/scrollable';
+import { defaultScreenFactorFunc } from '../form_utils';
+import { isDefined } from '../../../../core/utils/type';
+import messageLocalization from '../../../../localization/message';
 
 it('Form > InitialProps', () => {
   const props = new FormProps();
   const form = mount<Form>(<Form {...props} />);
 
   expect(form.props()).toEqual({
+    alignItemLabels: true,
+    alignItemLabelsInAllGroups: true,
+    alignRootItemLabels: true,
+    colCount: 1,
+    colCountByScreen: undefined,
+    customizeItem: null,
+    formData: {},
+    items: undefined,
+    labelLocation: 'left',
+    minColWidth: 200,
+    onEditorEnterKey: null,
+    onFieldDataChanged: null,
+    optionalMark: undefined,
+    readOnly: false,
+    requiredMark: '*',
+    requiredMessage: undefined,
+    screenByWidth: defaultScreenFactorFunc,
     scrollingEnabled: false,
+    showColonAfterLabel: true,
+    showOptionalMark: false,
+    showRequiredMark: true,
+    showValidationSummary: true,
+    stylingMode: undefined,
+    validationGroup: undefined,
   });
 });
 
@@ -63,6 +89,33 @@ describe('Form > Attrs', () => {
       it('Check has form role', () => {
         const form = mount<Form>(<Form {...scrollingEnabled} />);
         expect(form.getDOMNode().getAttribute('role')).toEqual('form');
+      });
+    });
+  });
+});
+
+describe('Form > Getters', () => {
+  describe('localization', () => {
+    each([undefined, null, 'test']).describe('optionalMark %o', (optionalMark) => {
+      it('Check optionalMark', () => {
+        const form = new Form({ optionalMark });
+
+        const expected = isDefined(optionalMark)
+          ? optionalMark
+          : messageLocalization.format('dxForm-optionalMark');
+        expect(form.optionalMark).toEqual(expected);
+      });
+    });
+
+    each([undefined, null, () => 'test']).describe('requiredMessage %o', (requiredMessage) => {
+      it('Check requiredMessage', () => {
+        const form = new Form({ requiredMessage });
+
+        const expected = isDefined(requiredMessage)
+          ? requiredMessage
+          : messageLocalization.getFormatter('dxForm-requiredMessage');
+
+        expect(form.requiredMessage.toString()).toEqual(expected.toString());
       });
     });
   });

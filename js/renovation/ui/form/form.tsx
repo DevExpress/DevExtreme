@@ -1,40 +1,26 @@
 import {
-  Component, JSXComponent, Ref, RefObject,
+  Component, JSXComponent,
 } from '@devextreme-generator/declarations';
 
 import { FormProps } from './form_props';
 
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
-import { FormLayoutManager } from './form_layout_manager';
 import { Scrollable } from '../scroll_view/scrollable';
+import { isDefined } from '../../../core/utils/type';
+import messageLocalization from '../../../localization/message';
 
 export const viewFunction = (viewModel: Form): JSX.Element => {
   const aria = { role: 'form' };
   const cssClasses = combineClasses({ 'dx-form': true });
+
   const {
-    rootLayoutManagerRef,
     props: {
       scrollingEnabled,
       useNativeScrolling,
-      colCount,
-      alignItemLabels,
-      screenByWidth,
-      colCountByScreen,
     },
     restAttributes,
   } = viewModel;
-
-  const content = (
-    <FormLayoutManager
-      ref={rootLayoutManagerRef}
-      isRoot
-      colCount={colCount}
-      alignItemLabels={alignItemLabels}
-      screenByWidth={screenByWidth}
-      colCountByScreen={colCountByScreen}
-    />
-  );
 
   return (scrollingEnabled
     ? (
@@ -46,9 +32,7 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
         useKeyboard={false}
         direction="both"
         bounceEnabled={false}
-      >
-        {content}
-      </Scrollable>
+      />
     )
     : (
       <Widget
@@ -56,9 +40,7 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
         classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
-      >
-        {content}
-      </Widget>
+      />
     )
   );
 };
@@ -70,5 +52,19 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
 })
 
 export class Form extends JSXComponent<FormProps>() {
-  @Ref() rootLayoutManagerRef!: RefObject; // TODO: any -> FormLayoutManager (Generators)
+  get optionalMark(): string | undefined {
+    if (isDefined(this.props.optionalMark)) {
+      return this.props.optionalMark;
+    }
+
+    return messageLocalization.format('dxForm-optionalMark');
+  }
+
+  get requiredMessage(): () => string {
+    if (isDefined(this.props.requiredMessage)) {
+      return this.props.requiredMessage;
+    }
+
+    return messageLocalization.getFormatter('dxForm-requiredMessage');
+  }
 }
