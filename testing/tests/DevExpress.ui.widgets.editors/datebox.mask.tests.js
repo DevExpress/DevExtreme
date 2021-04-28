@@ -708,9 +708,10 @@ module('Keyboard navigation', setupModule, () => {
 
     QUnit.test('command+v should not be prevented (T988724)', function(assert) {
         if(!devices.real().mac) {
-            assert.expect(0);
+            assert.ok(true, 'Test is actual only for mac');
             return;
         }
+
         this.keyboard.keyDown('v', { metaKey: true });
 
         assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, 'keydown event is not prevented');
