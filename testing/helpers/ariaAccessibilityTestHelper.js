@@ -55,7 +55,7 @@ class ariaAccessibilityTestHelper {
         const skipAttributes = ['class', 'style', 'onclick'];
         const attributeNames = this._getAttributeNames(element).filter(name => skipAttributes.indexOf(name) === -1).map(name => name.toLowerCase());
 
-        assert.equal(attributeNames.length === Object.keys(expectedAttributes).length, true, `${prefix || ''}.attributes.count`);
+        assert.strictEqual(attributeNames.length, Object.keys(expectedAttributes).length, `${prefix || ''}.attributes.count`);
         attributeNames.forEach((attributeName) => {
             assert.strictEqual(element.getAttribute(attributeName), attributeName in expectedAttributes ? expectedAttributes[attributeName] : null, `${prefix || ''}.${attributeName}`);
         });
@@ -86,7 +86,9 @@ class ariaAccessibilityTestHelper {
 
         this.checkAttributes($checkBox, {
             role: 'checkbox',
-            'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue
+            'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue,
+            'aria-invalid': 'false',
+            'aria-readonly': 'false'
         }, `checkbox[${index}]`);
     }
 
