@@ -75,6 +75,7 @@ describe('DateHeaderLayout', () => {
           leftVirtualCellWidth: 2,
           rightVirtualCellCount: 3,
           rightVirtualCellWidth: 4,
+          isHeaderRow: true,
         });
     });
 
