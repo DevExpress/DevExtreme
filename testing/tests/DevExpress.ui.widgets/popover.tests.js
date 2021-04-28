@@ -1519,7 +1519,7 @@ QUnit.module('behavior', () => {
     });
 
 
-    QUnit.module('show \'W0018\' warning that "hideEvent" is ignored when the "shading" property is true', {
+    QUnit.module('show "W0018" warning when "hideEvent" is not "click" and the "shading" is true', {
         beforeEach: function() {
             fixtures.simple.create();
             this.$target = $('#where');
@@ -1537,14 +1537,14 @@ QUnit.module('behavior', () => {
         }
     }, () => {
         QUnit.test('on init', function(assert) {
-            assert.equal(this.stub.callCount, 1, 'the log method is called once');
+            assert.ok(this.stub.calledOnce, 'the log method is called once');
             assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
         });
 
-        QUnit.test('at run time', function(assert) {
+        QUnit.test('at runtime', function(assert) {
             this.popover.option('hideEvent', 'mouseout');
 
-            assert.equal(this.stub.callCount, 2, 'the log method is called twice');
+            assert.strictEqual(this.stub.callCount, 2, 'the log method is called twice');
             assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
         });
     });
