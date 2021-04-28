@@ -8,13 +8,18 @@ import { DomComponentWrapper } from '../common/dom_component_wrapper';
 
 jest.mock('../../../ui/calendar', () => jest.fn());
 
+const defaultProps = {
+  _todayDate: () => new Date(),
+  hasFocus: () => true,
+};
+
 describe('Calendar', () => {
   describe('View', () => {
     it('View render', () => {
       const rootElementRef = createTestRef();
       const componentProps = new CalendarProps();
       const props = {
-        props: { rootElementRef },
+        props: { rootElementRef, ...defaultProps },
         componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Calendar>;
@@ -30,6 +35,14 @@ describe('Calendar', () => {
   });
 
   describe('Logic', () => {
+    it('props defaults', () => {
+      const props = new CalendarProps();
+
+      expect(props.hasFocus({} as any)).toEqual(true);
+      // eslint-disable-next-line no-underscore-dangle
+      expect(props._todayDate() instanceof Date).toEqual(true);
+    });
+
     it('componentProps', () => {
       const props = new CalendarProps();
       const calendar = new Calendar({ ...props });

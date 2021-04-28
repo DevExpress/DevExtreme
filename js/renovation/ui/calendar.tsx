@@ -31,11 +31,11 @@ export class CalendarProps extends WidgetProps {
 
   @TwoWay() value?: Date|number| string | null = null;
 
-  @OneWay() _todayDate?: () => Date = () => new Date();
+  @OneWay() _todayDate: () => Date = () => new Date();
 
   @OneWay() focusStateEnabled?: boolean;
 
-  @OneWay() hasFocus?: ((e: DxElement) => boolean) = () => true;
+  @OneWay() hasFocus: ((e: DxElement) => boolean) = () => true;
 
   @OneWay() tabIndex?: number;
 }
