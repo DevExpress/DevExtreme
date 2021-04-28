@@ -68,16 +68,18 @@ const getEventDelay = function(that, optionName) {
     return isObject(optionValue) && optionValue.delay;
 };
 const attachEvent = function(that, name) {
-    const target = that.option('target');
+    const { target, shading, disabled } = that.option();
     const isSelector = isString(target);
-    let event = getEventName(that, name + 'Event');
+    let event = getEventName(that, `${name}Event`);
+    const isClickEvent = event === 'click' || event === 'dxclick';
+    const shouldIgnoreHideEvent = shading && name === 'hide' && event && !isClickEvent;
 
-    if(that.option('shading') && name === 'hide' && that.option('hideEvent') && event !== 'click' && event !== 'dxclick') {
+    if(shouldIgnoreHideEvent) {
         event = undefined;
         errors.log('W0018');
     }
 
-    if(!event || that.option('disabled')) {
+    if(!event || disabled) {
         return;
     }
 

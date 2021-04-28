@@ -1518,34 +1518,58 @@ QUnit.module('behavior', () => {
         }
     });
 
-
-    QUnit.module('show "W0018" warning when "hideEvent" is not "click" and the "shading" is true', {
+    QUnit.module('when "shading" is true and "hideEvent" is', {
         beforeEach: function() {
             fixtures.simple.create();
             this.$target = $('#where');
             this.$popover = $('#what');
             this.stub = sinon.stub();
             errors.log = this.stub;
-            this.popover = new Popover(this.$popover, {
-                target: this.$target,
-                hideEvent: 'mouseleave',
-                shading: true,
-            });
         },
         afterEach: function() {
             fixtures.simple.drop();
         }
     }, () => {
-        QUnit.test('on init', function(assert) {
-            assert.ok(this.stub.calledOnce, 'the log method is called once');
-            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+        QUnit.module('not "click" - show "W0018" warning', {
+            beforeEach: function() {
+                this.popover = new Popover(this.$popover, {
+                    target: this.$target,
+                    hideEvent: 'mouseleave',
+                    shading: true,
+                });
+            }
+        }, () => {
+            QUnit.test('on init', function(assert) {
+                assert.ok(this.stub.calledOnce, 'the log method is called once');
+                assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+            });
+
+            QUnit.test('at runtime', function(assert) {
+                this.popover.option('hideEvent', 'mouseout');
+
+                assert.strictEqual(this.stub.callCount, 2, 'the log method is called twice');
+                assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+            });
         });
 
-        QUnit.test('at runtime', function(assert) {
-            this.popover.option('hideEvent', 'mouseout');
+        QUnit.module('"click" - don\'t show "W0018" warning', {
+            beforeEach: function() {
+                this.popover = new Popover(this.$popover, {
+                    target: this.$target,
+                    hideEvent: 'click',
+                    shading: true,
+                });
+            }
+        }, () => {
+            QUnit.test('on init', function(assert) {
+                assert.strictEqual(this.stub.callCount, 0, 'the log method wasn\'t called');
+            });
 
-            assert.strictEqual(this.stub.callCount, 2, 'the log method is called twice');
-            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+            QUnit.test('at runtime', function(assert) {
+                this.popover.option('hideEvent', 'dxclick');
+
+                assert.strictEqual(this.stub.callCount, 0, 'the log method wasn\'t called');
+            });
         });
     });
 });
