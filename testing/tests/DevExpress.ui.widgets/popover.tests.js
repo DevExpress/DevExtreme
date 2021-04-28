@@ -3,6 +3,7 @@ import fixtures from '../../helpers/positionFixtures.js';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
+import errors from 'core/errors';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
 
@@ -1517,23 +1518,21 @@ QUnit.module('behavior', () => {
         }
     });
 
-    QUnit.test('popover should not "blink" (open and close forever) when "shading" option is true', function(assert) {
+    QUnit.test('should show \'W0018\' warning if "mouseleave" event is used as "hideEvent" when "shading" option is true', function(assert) {
         fixtures.simple.create();
         try {
-            const $target = $('#where').css({
-                width: 25,
-                height: 25
-            });
+            const stub = sinon.stub();
+            errors.log = stub;
+
             new Popover($('#what'), {
-                target: $target,
+                target: $('#where'),
                 showEvent: 'mouseenter',
                 hideEvent: 'mouseleave',
                 shading: true,
             });
 
-            $target.trigger('mouseenter');
-
-            assert.strictEqual($target.css('zIndex'), '2000', 'target element get big z-index when hovered');
+            assert.equal(stub.callCount, 1, 'the log method is called once');
+            assert.strictEqual(stub.lastCall.args[0], 'W0018');
         } finally {
             fixtures.simple.drop();
         }

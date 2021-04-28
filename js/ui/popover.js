@@ -12,6 +12,7 @@ import positionUtils from '../animation/position';
 import { isObject, isString } from '../core/utils/type';
 import { fitIntoRange } from '../core/utils/math';
 import { addNamespace } from '../events/utils/index';
+import errors from '../core/errors';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
 
@@ -69,7 +70,12 @@ const getEventDelay = function(that, optionName) {
 const attachEvent = function(that, name) {
     const target = that.option('target');
     const isSelector = isString(target);
-    const event = getEventName(that, name + 'Event');
+    let event = getEventName(that, name + 'Event');
+
+    if(that.option('shading') && event === 'mouseleave') {
+        event = undefined;
+        errors.log('W0018');
+    }
 
     if(!event || that.option('disabled')) {
         return;
@@ -89,14 +95,7 @@ const attachEvent = function(that, name) {
         }
     }).bind(that), { validatingTargetName: 'target' });
 
-    const oldTargetZIndex = $(target).css('zIndex');
-    const oldPosition = $(target).css('position');
-    const newTargetZIndex = 2000;
-    const newPosition = (oldPosition === 'absolute' || oldPosition === 'fixed' || oldPosition === 'sticky') ? oldPosition : 'relative';
-
     const handler = function(e) {
-        that.option('shading') && event === 'mouseenter' && $(target).css({ 'zIndex': newTargetZIndex, 'position': newPosition });
-        that.option('shading') && event === 'mouseleave' && $(target).css({ 'zIndex': oldTargetZIndex, 'position': oldPosition });
         action({ event: e, target: $(e.currentTarget) });
     };
 
