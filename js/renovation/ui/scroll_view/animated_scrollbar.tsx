@@ -233,13 +233,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   inBounds(): boolean {
-    const scrollbar = this.scrollbarRef.current;
-
-    if (!isDefined(scrollbar)) {
-      return false;
-    }
-
-    return scrollbar.inBounds();
+    return this.scrollbar.inBounds();
   }
 
   getMaxOffset(): number {

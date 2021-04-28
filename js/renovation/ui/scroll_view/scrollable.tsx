@@ -21,6 +21,7 @@ import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
 import { nativeScrolling, touch } from '../../../core/utils/support';
+import { ScrollableWrapper } from '../../component_wrapper/scrollable';
 import { WidgetProps } from '../common/widget';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
@@ -111,7 +112,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         onEnd={onEnd}
         onBounce={onBounce}
         onStop={onStop}
-         // eslint-disable-next-line react/jsx-props-no-spreading
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
       >
         {children}
@@ -143,7 +144,7 @@ export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>(
 
 @Component({
   defaultOptionRules,
-  jQuery: { register: true },
+  jQuery: { register: true, component: ScrollableWrapper },
   view: viewFunction,
 })
 

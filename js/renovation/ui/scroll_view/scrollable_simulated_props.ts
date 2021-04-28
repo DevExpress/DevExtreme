@@ -30,7 +30,7 @@ export class ScrollableSimulatedProps extends ScrollableProps {
   contentTranslateOffsetChange?: (scrollProp: 'left' | 'top', translateOffset: number) => void;
 
   @Event()
-  scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number) => void;
+  scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number, scrollDelta: number) => void;
 }
 
 export type ScrollableSimulatedPropsType = ScrollableSimulatedProps

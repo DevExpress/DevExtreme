@@ -9,51 +9,37 @@ import {
   AnimatedScrollbar,
 } from '../animated_scrollbar';
 
-import { isDefined } from '../../../../core/utils/type';
-
 describe('Public methods', () => {
   each([
-    { name: 'inBounds', argsCount: 0, defaultValue: false },
-    { name: 'getMaxOffset', argsCount: 0 },
-    { name: 'scrollStep', argsCount: 1 },
-    { name: 'moveTo', argsCount: 1 },
-    { name: 'stopComplete', argsCount: 0 },
-    { name: 'scrollComplete', argsCount: 0 },
-    { name: 'boundLocation', argsCount: 1 },
-    { name: 'getMinOffset', argsCount: 0 },
-    { name: 'validateEvent', argsCount: 1 },
-    { name: 'isThumb', argsCount: 1 },
-    { name: 'reachedMin', argsCount: 0 },
-    { name: 'reachedMax', argsCount: 0 },
-    { name: 'initHandler', argsCount: 2 },
-    { name: 'startHandler', argsCount: 0 },
-    { name: 'moveHandler', argsCount: 1 },
-    { name: 'endHandler', argsCount: 1 },
-    { name: 'stopHandler', argsCount: 0 },
-    { name: 'scrollByHandler', argsCount: 1 },
-    { name: 'releaseHandler', argsCount: 0 },
+    { name: 'inBounds', calledWith: [] },
+    { name: 'getMaxOffset', calledWith: [] },
+    { name: 'scrollStep', calledWith: ['arg1'] },
+    { name: 'moveTo', calledWith: ['arg1'] },
+    { name: 'stopComplete', calledWith: [] },
+    { name: 'scrollComplete', calledWith: [] },
+    { name: 'boundLocation', calledWith: ['arg1'] },
+    { name: 'getMinOffset', calledWith: [] },
+    { name: 'validateEvent', calledWith: ['arg1'] },
+    { name: 'isThumb', calledWith: ['arg1'] },
+    { name: 'reachedMin', calledWith: [] },
+    { name: 'reachedMax', calledWith: [] },
+    { name: 'initHandler', calledWith: ['arg1', 'arg2'] },
+    { name: 'startHandler', calledWith: [] },
+    { name: 'moveHandler', calledWith: ['arg1'] },
+    { name: 'endHandler', calledWith: ['arg1'] },
+    { name: 'stopHandler', calledWith: [] },
+    { name: 'scrollByHandler', calledWith: ['arg1'] },
+    { name: 'releaseHandler', calledWith: [] },
   ]).describe('Method: %o', (methodInfo) => {
-    each([{ [`${methodInfo.name}`]: jest.fn() }, null]).describe('ScrollbarRef.current: %o', (current) => {
-      it(`${methodInfo.name}() method should call according method from scrollbar`, () => {
-        const viewModel = new AnimatedScrollbar({ });
-        (viewModel as any).scrollbarRef = { current };
+    it(`${methodInfo.name}() method should call according scrollbar method`, () => {
+      const viewModel = new AnimatedScrollbar({ });
+      const handlerMock = jest.fn();
+      (viewModel as any).scrollbarRef = { current: { [`${methodInfo.name}`]: handlerMock } };
 
-        if (isDefined(viewModel.scrollbarRef.current)) {
-          if (methodInfo.argsCount === 2) {
-            viewModel[methodInfo.name]('arg1', 'arg2');
-            expect(viewModel.scrollbarRef.current[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1', 'arg2');
-          } else if (methodInfo.argsCount === 1) {
-            viewModel[methodInfo.name]('arg1');
-            expect(viewModel.scrollbarRef.current[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1');
-          } else {
-            viewModel[methodInfo.name]();
-          }
-          expect(viewModel.scrollbarRef.current[`${methodInfo.name}`]).toHaveBeenCalledTimes(1);
-        } else if (isDefined(methodInfo.defaultValue)) {
-          const returnValue = viewModel[methodInfo.name]();
-          expect(returnValue).toEqual(methodInfo.defaultValue);
-        }
-      });
+      viewModel[methodInfo.name](...methodInfo.calledWith);
+
+      expect(handlerMock).toBeCalledTimes(1);
+      expect(handlerMock).toHaveBeenCalledWith(...methodInfo.calledWith);
     });
   });
 
