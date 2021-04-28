@@ -1,5 +1,7 @@
 import { ComponentBindings, Event, OneWay } from '@devextreme-generator/declarations';
-import { OnEditorEnterKeyCallback, OnFieldDataChangedCallback, LabelLocation } from './types';
+import {
+  OnEditorEnterKeyCallback, OnFieldDataChangedCallback, LabelLocation, OnCustomizeItemCallback,
+} from './types';
 
 @ComponentBindings()
 export class FormLayoutManagerProps {
@@ -15,7 +17,7 @@ export class FormLayoutManagerProps {
 
   @Event() onEditorEnterKey?: OnEditorEnterKeyCallback;
 
-  @Event() customizeItem?: (item: any) => void;
+  @Event() customizeItem?: OnCustomizeItemCallback;
 
   @OneWay() minColWidth = 200;
 
