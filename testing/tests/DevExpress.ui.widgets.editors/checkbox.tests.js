@@ -354,7 +354,7 @@ QUnit.module('Checkbox', function() {
             });
         });
 
-        QUnit.test('onContentReady if fired after first render', function(assert) {
+        QUnit.test('onContentReady is fired after first render', function(assert) {
             assert.expect(2);
 
             $('#checkBox').dxCheckBox({
