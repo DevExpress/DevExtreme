@@ -2,11 +2,9 @@ export type ScreenSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export type LabelLocation = 'top' | 'left';
 
-export type OnFieldDataChangedCallback = ((component: any, dataField: string,
-  element: HTMLDivElement, model: any, value: any) => void) | null;
+export type OnFieldDataChangedCallback = ((e: { dataField: string; value: any }) => void) | null;
 
-export type OnEditorEnterKeyCallback = ((component: any, dataField: string,
-  element: HTMLDivElement, model: any) => void) | null;
+export type OnEditorEnterKeyCallback = ((e: { dataField: string }) => void) | null;
 
 export type OnCustomizeItemCallback = ((item: any) => void) | null;
 
