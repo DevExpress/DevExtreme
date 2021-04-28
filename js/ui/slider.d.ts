@@ -176,7 +176,10 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
 }
 
 /** @public */
+export type Properties = dxSliderOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSliderOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSliderOptions;

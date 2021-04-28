@@ -94,7 +94,10 @@ export default class dxSwitch extends Editor {
 }
 
 /** @public */
+export type Properties = dxSwitchOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSwitchOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSwitchOptions;

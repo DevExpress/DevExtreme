@@ -1286,6 +1286,9 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxSchedulerOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSchedulerOptions;
 
 /**
@@ -1303,5 +1306,5 @@ export interface dxSchedulerScrolling {
   mode?: 'standard' | 'virtual';
 }
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSchedulerOptions;

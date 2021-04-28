@@ -167,7 +167,10 @@ export interface dxTileViewItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxTileViewOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTileViewOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTileViewOptions;

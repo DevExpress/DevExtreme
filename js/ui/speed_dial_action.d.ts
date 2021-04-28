@@ -100,7 +100,10 @@ export default class dxSpeedDialAction extends Widget {
 }
 
 /** @public */
+export type Properties = dxSpeedDialActionOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSpeedDialActionOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSpeedDialActionOptions;

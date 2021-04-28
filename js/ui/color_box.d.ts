@@ -145,7 +145,10 @@ export default class dxColorBox extends dxDropDownEditor {
 }
 
 /** @public */
+export type Properties = dxColorBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxColorBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxColorBoxOptions;
