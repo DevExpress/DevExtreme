@@ -32,6 +32,7 @@ import {
 
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 import { ScrollableProps } from './scrollable_props';
+import { BaseWidgetProps } from '../common/base_props';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const THUMB_MIN_SIZE = 15;
@@ -41,7 +42,6 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
     cssClasses, scrollStyles, scrollRef, scrollbarRef, hoverStateEnabled,
     onHoverStart, onHoverEnd, isVisible,
     props: { activeStateEnabled },
-    restAttributes,
   } = viewModel;
 
   return (
@@ -53,8 +53,6 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
       visible={isVisible}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
     >
       <div className={viewModel.scrollClasses} style={scrollStyles} ref={scrollRef}>
         <div className={SCROLLABLE_SCROLL_CONTENT_CLASS} />
@@ -64,8 +62,9 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 };
 
 export type ScrollbarPropsType = ScrollbarProps
-& Pick<ScrollableSimulatedProps, 'scrollLocationChange' | 'contentTranslateOffsetChange' | 'forceGeneratePockets'>
-& Pick<ScrollableProps, 'pullDownEnabled' | 'reachBottomEnabled'>;
+& Pick<BaseWidgetProps, 'rtlEnabled'>
+& Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
+& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
