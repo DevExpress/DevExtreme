@@ -23,6 +23,7 @@ export const OUT_BOUNDS_ACCELERATION = 0.5;
 
 // TODO: it does not work before. Devices.real is a function. Can we remove it?
 const isSluggishPlatform = devices.real().platform === 'android';
+/* istanbul ignore next */
 export const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
 export const MIN_VELOCITY_LIMIT = 1;
 export const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
