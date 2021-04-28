@@ -1542,11 +1542,7 @@ QUnit.module('behavior', () => {
         });
 
         QUnit.test('at run time', function(assert) {
-            const clock = sinon.useFakeTimers();
-
-            clock.tick(500);
             this.popover.option('hideEvent', 'mouseout');
-            clock.restore();
 
             assert.equal(this.stub.callCount, 2, 'the log method is called twice');
             assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
