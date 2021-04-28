@@ -322,26 +322,6 @@ QUnit.module('datebox tests', moduleConfig, () => {
         assert.notOk(dateBox.option('isValid'), 'widget is invalid');
     });
 
-    QUnit.test('clear button should change validation state to valid', function(assert) {
-        const $dateBox = $('#widthRootStyle').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar',
-            showClearButton: true,
-            value: null
-        });
-
-        const dateBox = $dateBox.dxDateBox('instance');
-        const $input = $dateBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-        const keyboard = keyboardMock($input);
-        const $clearButton = $dateBox.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
-
-        keyboard.type('123').press('enter');
-        assert.notOk(dateBox.option('isValid'), 'widget is invalid');
-
-        $clearButton.trigger('dxclick');
-        assert.ok(dateBox.option('isValid'), 'widget is valid');
-    });
-
     QUnit.test('type change should raise validation', function(assert) {
         const now = new Date();
         const $dateBox = $('#widthRootStyle').dxDateBox({
@@ -5944,5 +5924,55 @@ QUnit.module('valueChanged handler should receive correct event', {
 
         this.checkEvent(assert, 'dxclick', $todayButton);
         this.testProgramChange(assert);
+    });
+});
+
+QUnit.module('validation', {
+    beforeEach: function() {
+        this.$dateBox = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            showClearButton: true
+        });
+
+        this.dateBox = this.$dateBox.dxDateBox('instance');
+        this.$input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+        this.$clearButton = this.$dateBox.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
+    }
+}, () => {
+    [null, new Date(2020, 1, 1)].forEach(value => {
+        QUnit.test(`click on clear button should raise custom validation when value is ${value ? 'custom' : 'default'} (T993296)`, function(assert) {
+            this.$dateBox.dxValidator({
+                validationRules: [{
+                    type: 'required',
+                    message: 'required'
+                }]
+            });
+            this.dateBox.option({ value });
+
+            this.keyboard.type('123').press('enter');
+            this.$clearButton.trigger('dxclick');
+
+            assert.notOk(this.dateBox.option('isValid'), 'dateBox is invalid');
+            assert.strictEqual(this.dateBox.option('validationError').message, 'required', 'validation callback is failed');
+        });
+
+        QUnit.test(`clear button click should raise inner validation when value is ${value ? 'custom' : 'default'}`, function(assert) {
+            this.dateBox.option({ value });
+
+            this.keyboard.type('123').press('enter');
+            this.$clearButton.trigger('dxclick');
+
+            assert.ok(this.dateBox.option('isValid'), 'datebox is valid after clear button click');
+        });
+
+        QUnit.test(`reset method call should raise inner validation when value is ${value ? 'custom' : 'default'}`, function(assert) {
+            this.dateBox.option({ value });
+
+            this.keyboard.type('123').press('enter');
+            this.dateBox.reset();
+
+            assert.ok(this.dateBox.option('isValid'), 'datebox is valid after clear button click');
+        });
     });
 });
