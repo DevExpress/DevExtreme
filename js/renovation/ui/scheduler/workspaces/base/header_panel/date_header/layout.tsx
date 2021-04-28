@@ -42,6 +42,7 @@ export const viewFunction = ({
           leftVirtualCellCount={leftVirtualCellCount}
           rightVirtualCellWidth={rightVirtualCellWidth}
           rightVirtualCellCount={rightVirtualCellCount}
+          isHeaderRow
         >
           {dateHeaderRow.map(({
             startDate,

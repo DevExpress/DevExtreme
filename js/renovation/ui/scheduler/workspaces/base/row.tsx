@@ -12,6 +12,7 @@ export const viewFunction = ({
     rightVirtualCellCount,
     children,
     styles,
+    isHeaderRow,
   },
   hasLeftVirtualCell,
   hasRightVirtualCell,
@@ -24,6 +25,7 @@ export const viewFunction = ({
       <VirtualCell
         width={leftVirtualCellWidth}
         colSpan={leftVirtualCellCount}
+        isHeaderCell={isHeaderRow}
       />
     )}
 
@@ -33,6 +35,7 @@ export const viewFunction = ({
       <VirtualCell
         width={rightVirtualCellWidth}
         colSpan={rightVirtualCellCount}
+        isHeaderCell={isHeaderRow}
       />
     )}
   </tr>
@@ -51,6 +54,8 @@ export class RowProps {
   @OneWay() rightVirtualCellCount?: number;
 
   @OneWay() styles?: CSSAttributes;
+
+  @OneWay() isHeaderRow = false;
 
   @Slot() children?: JSX.Element | JSX.Element[];
 }
