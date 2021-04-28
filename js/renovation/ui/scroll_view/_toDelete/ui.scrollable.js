@@ -1,6 +1,4 @@
 import $ from '../../core/renderer';
-import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
-import { getWindow, hasWindow } from '../../core/utils/window';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
 
@@ -12,75 +10,10 @@ const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const Scrollable = DOMComponent.inherit({
-    _getWindowDevicePixelRatio: function() {
-        return hasWindow()
-            ? getWindow().devicePixelRatio
-            : 1;
-    },
-
-    _dimensionChanged: function() {
-        this._updateRtlPosition();
-    },
-
     _render: function() {
         this._renderDisabledState();
-        this.update();
 
         this.callBase();
-
-        this._rtlConfig = {
-            scrollRight: 0,
-            clientWidth: this._container().get(0).clientWidth,
-            windowPixelRatio: this._getWindowDevicePixelRatio()
-        };
-        this._updateRtlPosition();
-    },
-
-    _isHorizontalAndRtlEnabled: function() {
-        return this.option('rtlEnabled') && this.option('direction') !== VERTICAL;
-    },
-
-    _updateRtlPosition: function() {
-        this._updateBounds();
-        if(this._isHorizontalAndRtlEnabled()) {
-            deferUpdate(() => {
-                let scrollLeft = this._getMaxOffset().left - this._rtlConfig.scrollRight;
-
-                if(scrollLeft <= 0) {
-                    scrollLeft = 0;
-                    this._rtlConfig.scrollRight = this._getMaxOffset().left;
-                }
-
-                deferRender(() => {
-                    if(this.scrollLeft() !== scrollLeft) {
-                        this._rtlConfig.skipUpdating = true;
-                        this.scrollTo({ left: scrollLeft });
-                        this._rtlConfig.skipUpdating = false;
-                    }
-                });
-            });
-        }
-    },
-
-    _getMaxOffset: function() {
-        const { scrollWidth, clientWidth, scrollHeight, clientHeight } = this._container().get(0);
-
-        return {
-            left: scrollWidth - clientWidth,
-            top: scrollHeight - clientHeight,
-        };
-    },
-
-    _updateRtlConfig: function() {
-        if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
-            const { clientWidth, scrollLeft } = this._container().get(0);
-            const windowPixelRatio = this._getWindowDevicePixelRatio();
-            if(this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
-                this._rtlConfig.scrollRight = this._getMaxOffset().left - scrollLeft;
-            }
-            this._rtlConfig.clientWidth = clientWidth;
-            this._rtlConfig.windowPixelRatio = windowPixelRatio;
-        }
     },
 
     _renderStrategy: function() {
@@ -130,38 +63,6 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    scrollBy: function(distance) {
-        distance = this._normalizeLocation(distance);
-
-        if(!distance.top && !distance.left) {
-            return;
-        }
-
-        this._updateIfNeed();
-        this._strategy.scrollBy(distance);
-        this._updateRtlConfig();
-    },
-
-    scrollTo: function(targetLocation) {
-        targetLocation = this._normalizeLocation(targetLocation);
-
-        this._updateIfNeed();
-
-        const location = this._location();
-
-        const distance = this._normalizeLocation({
-            left: ensureDefined(targetLocation.left, location.left) - location.top,
-            top: ensureDefined(targetLocation.top, location.top) - location.left
-        });
-
-        if(!distance.top && !distance.left) {
-            return;
-        }
-
-        this._strategy.scrollBy(distance);
-        this._updateRtlConfig();
-    },
-
     scrollToElementTopLeft: function(element) {
         const $element = $(element);
         const elementInsideContent = this.$content().find(element).length;
@@ -184,16 +85,6 @@ const Scrollable = DOMComponent.inherit({
         }
 
         this.scrollTo(scrollPosition);
-    },
-
-    _updateIfNeed: function() {
-        if(!this.option('updateManually')) {
-            this.update();
-        }
-    },
-
-    _useTemplates: function() {
-        return false;
     },
 });
 

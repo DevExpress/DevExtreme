@@ -172,6 +172,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
               forceUpdateScrollbarLocation={forceUpdateHScrollbarLocation}
+              rtlEnabled={rtlEnabled}
             />
           )}
           {direction.isVertical && (
@@ -642,7 +643,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.topPocketState = state;
   }
 
-  scrollLocationChange(scrollProp: 'scrollLeft' | 'scrollTop', location: number): void {
+  scrollLocationChange(scrollProp: 'scrollLeft' | 'scrollTop', location: number, scrollDelta: number): void {
     const containerEl = this.containerElement;
 
     containerEl[scrollProp] = -location;
@@ -656,9 +657,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.forceUpdateHScrollbarLocation = false;
     this.forceUpdateVScrollbarLocation = false;
 
-    // if (Math.abs(location + containerEl[scrollProp] * ratio) > 1) {
-    this.triggerScrollEvent();
-    // }
+    if (scrollDelta >= 1) {
+      this.triggerScrollEvent();
+    }
   }
 
   /* istanbul ignore next */

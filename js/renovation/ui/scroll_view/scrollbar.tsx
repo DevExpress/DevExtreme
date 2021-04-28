@@ -77,6 +77,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() initialTopPocketSize = 0;
 
+  @Mutable() rightScrollLocation = 0;
+
+  @Mutable() prevScrollLocation = 0;
+
   @InternalState() showOnScrollByWheel?: boolean;
 
   @InternalState() hovered = false;
@@ -384,7 +388,17 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   moveToBoundaryOnSizeChange(): void {
     if (this.props.forceUpdateScrollbarLocation) {
       if (this.props.scrollLocation <= this.maxOffset) {
-        this.moveTo(this.boundLocation(this.props.scrollLocation));
+        let newScrollLocation = this.boundLocation();
+
+        if (this.isHorizontal && this.props.rtlEnabled) {
+          newScrollLocation = this.minOffset - this.rightScrollLocation;
+
+          if (newScrollLocation >= 0) {
+            newScrollLocation = 0;
+          }
+        }
+
+        this.moveTo(newScrollLocation);
       }
     }
   }
@@ -419,9 +433,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   moveTo(location: number): void {
+    const scrollDelta = Math.abs(this.prevScrollLocation - location);
     // there is an issue https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
-    this.props.scrollLocationChange?.(this.fullScrollProp, location);
+    this.props.scrollLocationChange?.(this.fullScrollProp, location, scrollDelta);
     this.updateContent(location);
+    this.prevScrollLocation = location;
+    this.rightScrollLocation = this.minOffset - location;
 
     if (this.props.forceGeneratePockets) {
       if (this.isPullDown()) {

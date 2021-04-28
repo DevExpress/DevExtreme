@@ -17,8 +17,6 @@ import { touch } from '../../../../core/utils/support';
 import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
 
-import { isDefined } from '../../../../core/utils/type';
-
 interface Mock extends jest.Mock {}
 
 jest.mock('../../../../core/devices', () => {
@@ -62,41 +60,30 @@ describe('ScrollView', () => {
 
   describe('Public methods', () => {
     each([
-      { name: 'clientWidth', argsCount: 0 },
-      { name: 'clientHeight', argsCount: 0 },
-      { name: 'scrollLeft', argsCount: 0 },
-      { name: 'scrollTop', argsCount: 0 },
-      { name: 'scrollOffset', argsCount: 0 },
-      { name: 'scrollWidth', argsCount: 0 },
-      { name: 'scrollHeight', argsCount: 0 },
-      { name: 'scrollToElement', argsCount: 1 },
-      { name: 'scrollTo', argsCount: 1 },
-      { name: 'scrollBy', argsCount: 1 },
-      { name: 'content', argsCount: 0 },
-      { name: 'update', argsCount: 0 },
-      { name: 'release', argsCount: 0 },
+      { name: 'clientWidth', calledWith: [] },
+      { name: 'clientHeight', calledWith: [] },
+      { name: 'scrollLeft', calledWith: [] },
+      { name: 'scrollTop', calledWith: [] },
+      { name: 'scrollOffset', calledWith: [] },
+      { name: 'scrollWidth', calledWith: [] },
+      { name: 'scrollHeight', calledWith: [] },
+      { name: 'scrollToElement', calledWith: ['arg1'] },
+      { name: 'scrollTo', calledWith: ['arg1'] },
+      { name: 'scrollBy', calledWith: ['arg1'] },
+      { name: 'content', calledWith: [] },
+      { name: 'update', calledWith: [] },
+      { name: 'release', calledWith: [] },
     ]).describe('Method: %o', (methodInfo) => {
-      it(`${methodInfo.name}() method should call according method from scrollbar`, () => {
+      it(`${methodInfo.name}() method should call according scrollable method`, () => {
         const viewModel = new ScrollView({ });
-        const funcHandler = jest.fn();
-        Object.defineProperties(viewModel, {
-          scrollable: {
-            get() { return ({ [`${methodInfo.name}`]: funcHandler }); },
-          },
-        });
+        const handlerMock = jest.fn();
 
-        if (isDefined(viewModel.scrollable)) {
-          if (methodInfo.argsCount === 2) {
-            viewModel[methodInfo.name]('arg1', 'arg2');
-            expect(funcHandler).toHaveBeenCalledWith('arg1', 'arg2');
-          } else if (methodInfo.argsCount === 1) {
-            viewModel[methodInfo.name]('arg1');
-            expect(funcHandler).toHaveBeenCalledWith('arg1');
-          } else {
-            viewModel[methodInfo.name]();
-            expect(funcHandler).toHaveBeenCalledTimes(1);
-          }
-        }
+        (viewModel as any).scrollableRef = { current: { [`${methodInfo.name}`]: handlerMock } };
+
+        viewModel[methodInfo.name](...methodInfo.calledWith);
+
+        expect(handlerMock).toBeCalledTimes(1);
+        expect(handlerMock).toHaveBeenCalledWith(...methodInfo.calledWith);
       });
     });
 
