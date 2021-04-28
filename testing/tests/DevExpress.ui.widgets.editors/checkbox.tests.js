@@ -253,11 +253,11 @@ QUnit.module('Checkbox', function() {
             const handler = sinon.stub();
             const newHandler = sinon.stub();
             const $element = $('#checkBox').dxCheckBox({ onValueChanged: handler });
-            const checkbox = $element.dxCheckBox('instance');
+            const checkBox = $element.dxCheckBox('instance');
 
-            checkbox.option('onValueChanged', newHandler);
+            checkBox.option('onValueChanged', newHandler);
             $element.trigger('dxclick');
-            assert.ok(handler.calledOnce);
+            assert.ok(newHandler.calledOnce);
         });
 
         QUnit.test('valueChanged should have correct previousValue when it is undefined', function(assert) {
