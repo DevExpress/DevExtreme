@@ -170,7 +170,7 @@ export default class ComponentWrapper extends DOMComponent {
         optionName = propNameWithoutDefault[0].toLowerCase() + propNameWithoutDefault.slice(1);
       }
       if(options.hasOwnProperty(optionName)) {
-        acc[propName] = options[optionName];
+        acc[propName] = acc[optionName] = options[optionName];
       }
 
       return acc;
@@ -208,8 +208,14 @@ export default class ComponentWrapper extends DOMComponent {
 
   getProps() {
     const { elementAttr } = this.option();
+    const actualTwoWayProps = this._propsInfo.twoWay.reduce((acc, [name, ...args]) => {
+      acc[name] = this.option(name);
+      return acc;
+    }, {});
+
     const options = this._patchOptionValues({
       ...this._props,
+      ...actualTwoWayProps,
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
     });
