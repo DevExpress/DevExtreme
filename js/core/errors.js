@@ -251,5 +251,5 @@ export default errorUtils({
     /**
     * @name ErrorsCore.W0018
     */
-    W0018: '"mouseleave" event can\'t be used as "hideEvent" when "shading" option is true'
+    W0018: 'hideEvent is ignored when the shading property is true'
 });

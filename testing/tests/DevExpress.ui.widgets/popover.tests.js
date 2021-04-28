@@ -1518,24 +1518,39 @@ QUnit.module('behavior', () => {
         }
     });
 
-    QUnit.test('should show \'W0018\' warning if "mouseleave" event is used as "hideEvent" when "shading" option is true', function(assert) {
-        fixtures.simple.create();
-        try {
-            const stub = sinon.stub();
-            errors.log = stub;
 
-            new Popover($('#what'), {
-                target: $('#where'),
-                showEvent: 'mouseenter',
+    QUnit.module('show \'W0018\' warning that "hideEvent" is ignored when the "shading" property is true', {
+        beforeEach: function() {
+            fixtures.simple.create();
+            this.$target = $('#where');
+            this.$popover = $('#what');
+            this.stub = sinon.stub();
+            errors.log = this.stub;
+            this.popover = new Popover(this.$popover, {
+                target: this.$target,
                 hideEvent: 'mouseleave',
                 shading: true,
             });
-
-            assert.equal(stub.callCount, 1, 'the log method is called once');
-            assert.strictEqual(stub.lastCall.args[0], 'W0018');
-        } finally {
+        },
+        afterEach: function() {
             fixtures.simple.drop();
         }
+    }, () => {
+        QUnit.test('on init', function(assert) {
+            assert.equal(this.stub.callCount, 1, 'the log method is called once');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+        });
+
+        QUnit.test('at run time', function(assert) {
+            const clock = sinon.useFakeTimers();
+
+            clock.tick(500);
+            this.popover.option('hideEvent', 'mouseout');
+            clock.restore();
+
+            assert.equal(this.stub.callCount, 2, 'the log method is called twice');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+        });
     });
 });
 
