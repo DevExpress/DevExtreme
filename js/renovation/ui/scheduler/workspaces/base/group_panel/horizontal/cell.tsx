@@ -2,7 +2,6 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../../../utils/combine_classes';
-import { HeaderCell } from '../../header_cell';
 import { GroupPanelCellProps } from '../cell_props';
 
 export const viewFunction = ({
@@ -17,7 +16,7 @@ export const viewFunction = ({
     colSpan,
   },
 }: GroupPanelHorizontalCell): JSX.Element => (
-  <HeaderCell
+  <th
     className={classes}
     colSpan={colSpan}
   >
@@ -36,7 +35,7 @@ export const viewFunction = ({
         </div>
       )}
     </div>
-  </HeaderCell>
+  </th>
 );
 
 @ComponentBindings()

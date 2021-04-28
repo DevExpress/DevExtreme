@@ -1,6 +1,8 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as CellView, VirtualCell } from '../virtual_cell';
 import { addWidthToStyle } from '../../utils';
+import { HeaderCell } from '../header_cell';
+import { OrdinaryCell } from '../ordinary_cell';
 
 jest.mock('../../utils', () => ({
   ...jest.requireActual('../../utils'),
@@ -14,8 +16,11 @@ jest.mock('../../utils', () => ({
 describe('VirtualCell', () => {
   describe('Render', () => {
     const render = (viewModel): ShallowWrapper => shallow(CellView({
+      cellComponent: OrdinaryCell,
       ...viewModel,
-      props: { ...viewModel.props },
+      props: {
+        ...viewModel.props,
+      },
     }));
 
     it('should pass style to the root component', () => {
@@ -38,14 +43,30 @@ describe('VirtualCell', () => {
       describe('style', () => {
         it('should call addWidthToStyle with proper parameters', () => {
           const style = { width: '100px', height: '200px' };
-          const row = new VirtualCell({ width: 500 });
-          row.restAttributes = { style };
+          const cell = new VirtualCell({ width: 500 });
+          cell.restAttributes = { style };
 
-          expect(row.style)
+          expect(cell.style)
             .toBe('style');
 
           expect(addWidthToStyle)
             .toHaveBeenCalledWith(500, style);
+        });
+      });
+
+      describe('cellComponent', () => {
+        it('should return HeaderCell if isHeaderCell is true', () => {
+          const row = new VirtualCell({ isHeaderCell: true });
+
+          expect(row.cellComponent)
+            .toBe(HeaderCell);
+        });
+
+        it('should return OrdinaryCell if isHeaderCell is false', () => {
+          const row = new VirtualCell({ isHeaderCell: false });
+
+          expect(row.cellComponent)
+            .toBe(OrdinaryCell);
         });
       });
     });

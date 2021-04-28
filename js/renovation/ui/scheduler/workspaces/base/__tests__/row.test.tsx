@@ -98,6 +98,47 @@ describe('RowBase', () => {
         });
       });
     });
+
+    it('should pass isHeaderCell as true to virtual cells when it is a header row', () => {
+      const row = render({
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
+          leftVirtualCellCount: 3,
+          rightVirtualCellCount: 4,
+          isHeaderRow: true,
+        },
+        hasLeftVirtualCell: true,
+        hasRightVirtualCell: true,
+      });
+
+      const virtualCells = row.find(VirtualCell);
+
+      expect(virtualCells.at(0).prop('isHeaderCell'))
+        .toBe(true);
+      expect(virtualCells.at(1).prop('isHeaderCell'))
+        .toBe(true);
+    });
+
+    it('should pass isHeaderCell as false to virtual cells when it is not a header row', () => {
+      const row = render({
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
+          leftVirtualCellCount: 3,
+          rightVirtualCellCount: 4,
+        },
+        hasLeftVirtualCell: true,
+        hasRightVirtualCell: true,
+      });
+
+      const virtualCells = row.find(VirtualCell);
+
+      expect(virtualCells.at(0).prop('isHeaderCell'))
+        .toBe(false);
+      expect(virtualCells.at(1).prop('isHeaderCell'))
+        .toBe(false);
+    });
   });
 
   describe('Logic', () => {
