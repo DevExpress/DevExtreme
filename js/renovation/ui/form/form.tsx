@@ -21,7 +21,6 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
     },
     restAttributes,
   } = viewModel;
-
   return (scrollingEnabled
     ? (
       <Scrollable
@@ -32,6 +31,8 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
         useKeyboard={false}
         direction="both"
         bounceEnabled={false}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        // TODO: {...restAttributes} waits for the https://trello.com/c/er8aTcsZ/2711-renovation-react-some-events-from-restattributes-may-have-the-same-type-as-react-exists-events
       />
     )
     : (
