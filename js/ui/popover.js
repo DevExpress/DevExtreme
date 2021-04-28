@@ -89,14 +89,14 @@ const attachEvent = function(that, name) {
         }
     }).bind(that), { validatingTargetName: 'target' });
 
-    const oldTargetZIndex = $(target).css('z-index');
+    const oldTargetZIndex = $(target).css('zIndex');
     const oldPosition = $(target).css('position');
     const newTargetZIndex = 2000;
-    const newPosition = 'relative';
+    const newPosition = (oldPosition === 'absolute' || oldPosition === 'fixed') ? oldPosition : 'relative';
 
     const handler = function(e) {
-        event === 'mouseenter' && $(target).css({ 'z-index': newTargetZIndex, 'position': newPosition });
-        event === 'mouseleave' && $(target).css({ 'z-index': oldTargetZIndex, 'position': oldPosition });
+        that.option('shading') && event === 'mouseenter' && $(target).css({ 'zIndex': newTargetZIndex, 'position': newPosition });
+        that.option('shading') && event === 'mouseleave' && $(target).css({ 'zIndex': oldTargetZIndex, 'position': oldPosition });
         action({ event: e, target: $(e.currentTarget) });
     };
 
