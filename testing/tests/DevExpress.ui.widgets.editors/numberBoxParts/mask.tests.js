@@ -970,6 +970,11 @@ QUnit.module('format: text input', moduleConfig, () => {
         assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, 'keydown event is not prevented');
     });
 
+    QUnit.test('command+v should not be prevented (T988724)', function(assert) {
+        this.keyboard.keyDown('v', { metaKey: true });
+        assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, 'keydown event is not prevented');
+    });
+
     QUnit.test('decimal point input should be prevented when it is restricted by the format', function(assert) {
         this.instance.option({
             format: '#0',
