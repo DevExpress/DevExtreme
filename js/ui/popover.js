@@ -92,7 +92,7 @@ const attachEvent = function(that, name) {
     const oldTargetZIndex = $(target).css('zIndex');
     const oldPosition = $(target).css('position');
     const newTargetZIndex = 2000;
-    const newPosition = (oldPosition === 'absolute' || oldPosition === 'fixed') ? oldPosition : 'relative';
+    const newPosition = (oldPosition === 'absolute' || oldPosition === 'fixed' || oldPosition === 'sticky') ? oldPosition : 'relative';
 
     const handler = function(e) {
         that.option('shading') && event === 'mouseenter' && $(target).css({ 'zIndex': newTargetZIndex, 'position': newPosition });
