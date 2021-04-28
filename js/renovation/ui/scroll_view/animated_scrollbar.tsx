@@ -250,7 +250,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   moveTo(location: number): void {
-    this.scrollbar.moveTo(location, false);
+    this.scrollbar.moveTo(location);
   }
 
   stopComplete(): void {
