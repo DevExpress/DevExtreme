@@ -10,7 +10,6 @@ import { getBoundingRect } from '../../core/utils/position';
 import { resetPosition, move, locate } from '../../animation/translator';
 import Class from '../../core/class';
 import Animator from './animator';
-import devices from '../../core/devices';
 import {
     isDxMouseWheelEvent,
     addNamespace as addEventNamespace,
@@ -20,9 +19,6 @@ import {
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
 import Scrollbar from './ui.scrollbar';
 import { when, Deferred } from '../../core/utils/deferred';
-
-const realDevice = devices.real;
-const isSluggishPlatform = realDevice.platform === 'android';
 
 const SCROLLABLE_SIMULATED = 'dxSimulatedScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -36,7 +32,7 @@ const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
-const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
+const ACCELERATION = 0.92;
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const MIN_VELOCITY_LIMIT = 1;
 const FRAME_DURATION = Math.round(1000 / 60);
@@ -44,7 +40,7 @@ const SCROLL_LINE_HEIGHT = 40;
 const VALIDATE_WHEEL_TIMEOUT = 500;
 
 const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
-const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
+const BOUNCE_DURATION = 400;
 const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
 const BOUNCE_ACCELERATION_SUM = (1 - Math.pow(ACCELERATION, BOUNCE_FRAMES)) / (1 - ACCELERATION);
 
