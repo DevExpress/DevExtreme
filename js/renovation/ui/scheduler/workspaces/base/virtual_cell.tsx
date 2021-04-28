@@ -2,25 +2,34 @@ import {
   Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay,
 } from '@devextreme-generator/declarations';
 import { addWidthToStyle } from '../utils';
+import { HeaderCell } from './header_cell';
+import { OrdinaryCell } from './ordinary_cell';
 
 export const viewFunction = ({
   style,
   props: {
     colSpan,
+    isHeaderCell,
   },
-}: VirtualCell): JSX.Element => (
-  <td
-    className="dx-scheduler-virtual-cell"
-    style={style}
-    colSpan={colSpan}
-  />
-);
+}: VirtualCell): JSX.Element => {
+  const Cell = isHeaderCell ? HeaderCell : OrdinaryCell;
+
+  return (
+    <Cell
+      className="dx-scheduler-virtual-cell"
+      style={style}
+      colSpan={colSpan}
+    />
+  );
+};
 
 @ComponentBindings()
 export class VirtualCellProps {
   @OneWay() width = 0;
 
   @OneWay() colSpan?: number;
+
+  @OneWay() isHeaderCell = false;
 }
 
 @Component({

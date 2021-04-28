@@ -9,22 +9,24 @@ import {
 } from '@devextreme-generator/declarations';
 import { getGroupCellClasses } from '../utils';
 import { ContentTemplateProps } from '../types.d';
+import { OrdinaryCell } from './ordinary_cell';
 
 export const viewFunction = (viewModel: CellBase): JSX.Element => {
   const ContentTemplate = viewModel.props.contentTemplate;
 
   return (
-    <td
+    <OrdinaryCell
       className={viewModel.classes}
     >
-      {!ContentTemplate && viewModel.props.children}
-      {ContentTemplate && (
+      {!ContentTemplate ? (
+        viewModel.props.children
+      ) : (
         <ContentTemplate
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...viewModel.props.contentTemplateProps}
         />
       )}
-    </td>
+    </OrdinaryCell>
   );
 };
 

@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction as CellView, VirtualCell } from '../virtual-cell';
+import { viewFunction as CellView, VirtualCell } from '../virtual_cell';
 import { addWidthToStyle } from '../../utils';
 
 jest.mock('../../utils', () => ({

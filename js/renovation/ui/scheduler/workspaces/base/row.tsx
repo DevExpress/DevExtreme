@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, Slot, OneWay, CSSAttributes,
 } from '@devextreme-generator/declarations';
-import { VirtualCell } from './virtual-cell';
+import { VirtualCell } from './virtual_cell';
 
 export const viewFunction = ({
   props: {
