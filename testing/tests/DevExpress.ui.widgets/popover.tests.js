@@ -1516,6 +1516,28 @@ QUnit.module('behavior', () => {
             fixtures.collisionTopLeft.drop();
         }
     });
+
+    QUnit.test('popover should not "blink" (open and close forever) when "shading" option is true', function(assert) {
+        fixtures.simple.create();
+        try {
+            const $target = $('#where').css({
+                width: 25,
+                height: 25
+            });
+            new Popover($('#what'), {
+                target: $target,
+                showEvent: 'mouseenter',
+                hideEvent: 'mouseleave',
+                shading: true,
+            });
+
+            $target.trigger('mouseenter');
+
+            assert.strictEqual($target.css('zIndex'), '2000', 'target element get big z-index when hovered');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
 });
 
 QUnit.module('position offset', {
