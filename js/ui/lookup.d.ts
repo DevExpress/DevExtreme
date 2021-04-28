@@ -474,7 +474,10 @@ export default class dxLookup extends dxDropDownList {
 }
 
 /** @public */
+export type Properties = dxLookupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxLookupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxLookupOptions;

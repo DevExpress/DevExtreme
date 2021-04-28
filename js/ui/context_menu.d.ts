@@ -270,7 +270,10 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
 }
 
 /** @public */
+export type Properties = dxContextMenuOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxContextMenuOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxContextMenuOptions;

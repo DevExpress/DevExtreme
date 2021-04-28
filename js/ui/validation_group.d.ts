@@ -107,7 +107,10 @@ export interface dxValidationGroupResult {
 }
 
 /** @public */
+export type Properties = dxValidationGroupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidationGroupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxValidationGroupOptions;

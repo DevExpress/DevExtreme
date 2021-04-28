@@ -870,7 +870,10 @@ export interface dxFormTabbedItem {
 }
 
 /** @public */
+export type Properties = dxFormOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxFormOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxFormOptions;
