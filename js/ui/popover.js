@@ -72,7 +72,7 @@ const attachEvent = function(that, name) {
     const isSelector = isString(target);
     let event = getEventName(that, name + 'Event');
 
-    if(that.option('shading') && name === 'hide' && that.option('hideEvent')) {
+    if(that.option('shading') && name === 'hide' && that.option('hideEvent') && event !== 'click' && event !== 'dxclick') {
         event = undefined;
         errors.log('W0018');
     }
