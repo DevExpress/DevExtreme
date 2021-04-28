@@ -165,7 +165,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @ForwardRef() target!: RefObject<HTMLDivElement>;
 
-  @Effect()
+  @Effect({ run: 'always' })
   updateValidationMessageVisibility(): EffectReturn {
     this.showValidationMessage = this.shouldShowValidationMessage;
   }

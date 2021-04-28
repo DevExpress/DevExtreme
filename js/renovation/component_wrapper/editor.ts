@@ -44,6 +44,12 @@ export default class Editor extends Component {
     props.saveValueChangeEvent = (e: Event): void => {
       this._valueChangeEventInstance = e;
     };
+
+    const propertiesToPass = ['isValid', 'validationStatus', 'validationError', 'validationErrors'];
+    propertiesToPass.forEach((prop) => {
+      props[prop] = this.option(prop);
+    });
+
     return props;
   }
 
