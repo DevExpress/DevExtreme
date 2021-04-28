@@ -1,36 +1,43 @@
 import { dxElementWrapper } from '../core/renderer';
 
 export interface ElementWrapper<T extends Element> { }
+export interface ElementsArrayWrapper<T extends Element> { }
 /**
  * @docid
- * @type dxElement|dxSVGElement
+ * @type HTMLElement|SVGElement|JQuery
  * @prevFileNamespace DevExpress.core
  */
-export type TElement<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>
+export type DxElement<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>;
+
+/**
+ * @docid
+ * @type HTMLElement|SVGElement|JQuery
+ * @prevFileNamespace DevExpress.core
+ */
+export type UserDefinedElement<T extends Element = Element> = {} extends ElementWrapper<T> ? T : ElementWrapper<T> | T;
+
+export type UserDefinedElementsArray = {} extends ElementsArrayWrapper<Element> ? Array<Element> : ElementsArrayWrapper<Element>;
 
 export interface InternalElementWrapper<T extends Element> { }
-export type TInternalElement<T extends Element = HTMLElement> = {} extends InternalElementWrapper<T> ? dxElementWrapper : InternalElementWrapper<T>
-
-export interface ElementsArrayWrapper<T extends Element> { }
-export type TElementsArray<T extends Element = HTMLElement> = {} extends ElementsArrayWrapper<T> ? Array<T> : ElementsArrayWrapper<T>
+export type InternalElement<T extends Element> = {} extends InternalElementWrapper<T> ? dxElementWrapper : InternalElementWrapper<T>;
 
 /**
  * @docid
  * @hidden
  * @type HTMLElement|JQuery
  * @prevFileNamespace DevExpress.core
- * @deprecated TElement
+ * @deprecated
  */
-export type dxElement = TElement<HTMLElement>;
+export type dxElement = DxElement<HTMLElement>;
 
 /**
  * @docid
  * @hidden
  * @type SVGElement|JQuery
  * @prevFileNamespace DevExpress.core
- * @deprecated TElement
+ * @deprecated
  */
-export type dxSVGElement = TElement<SVGElement>;
+export type dxSVGElement = DxElement<SVGElement>;
 
-export function getPublicElement(element: TInternalElement): TElement;
-export function setPublicElementWrapper(newStrategy: (element: TInternalElement) => TElement): void;
+export function getPublicElement(element: InternalElement<Element>): DxElement<Element>;
+export function setPublicElementWrapper(newStrategy: (element: InternalElement<Element>) => DxElement<Element>): void;

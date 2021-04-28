@@ -3368,5 +3368,34 @@ module('Virtual scrolling integration', () => {
 
             assert.equal(workSpace.getAllDayCellHeight(), 75, 'AllDayPanel height is correct');
         });
+
+        // Virtual Scrolling in IE
+        QUnit.test('WorkSpace elements should have correct height when there are a log of groups in timeline month', function(assert) {
+            const scheduler = createWrapper({
+                views: ['timelineMonth'],
+                currentView: 'timelineMonth',
+                currentDate: new Date(2021, 2, 6),
+                scrolling: {
+                    mode: 'virtual',
+                    type: 'both',
+                },
+                groups: ['resourceId'],
+                resources: [{
+                    fieldExpr: 'resourceId',
+                    dataSource: [
+                        { id: 1, text: '1' }, { id: 2, text: '2' }, { id: 3, text: '3' }, { id: 4, text: '4' },
+                        { id: 5, text: '5' }, { id: 6, text: '6' }, { id: 7, text: '7' }, { id: 8, text: '8' },
+                        { id: 9, text: '9' }, { id: 10, text: '10' }, { id: 11, text: '11' }, { id: 12, text: '12' },
+                        { id: 13, text: '13' }, { id: 14, text: '14' }, { id: 15, text: '15' }, { id: 16, text: '16' },
+                    ],
+                }],
+                height: 500,
+                width: 800,
+            });
+
+            const groupPanelHeight = scheduler.workSpace.groups.getGroupsContainer().outerHeight();
+
+            assert.equal(groupPanelHeight, 800, 'GroupPanel height is correct');
+        });
     });
 });

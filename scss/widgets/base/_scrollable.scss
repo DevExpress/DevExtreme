@@ -103,6 +103,9 @@
     ::-webkit-scrollbar {
       display: none;
     }
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 }
 
@@ -186,9 +189,9 @@
   .dx-scrollable-container {
     direction: ltr;
 
-    @at-root #{selector-append(".dx-scrollable-renovated", &)} {
+    @at-root #{selector-append(".dx-scrollable-renovated.dx-scrollable-native", &)} {
       direction: rtl;
-      float: none;
+      float: right;
     }
   }
 

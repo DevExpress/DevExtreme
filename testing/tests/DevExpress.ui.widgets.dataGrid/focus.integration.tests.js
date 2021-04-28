@@ -507,7 +507,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         assert.ok(dataGridWrapper.rowsView.isRowVisible(29, 1), 'navigated row in viewport');
 
-        dataGrid.option('columns[0].sortOrder', 'desc');
+        dataGrid.columnOption(0, 'sortOrder', 'desc');
         this.clock.tick();
 
         assert.ok(dataGridWrapper.rowsView.isRowVisible(0, 1), 'navigated row in viewport');

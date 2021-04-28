@@ -47,7 +47,7 @@ const Drawer = Widget.inherit({
 
             /**
             * @name dxDrawerOptions.contentTemplate
-            * @type_function_param1 contentElement:dxElement
+            * @type_function_param1 contentElement:DxElement
             * @type template|function
             * @hidden
             * @default "content"
@@ -418,7 +418,7 @@ const Drawer = Widget.inherit({
             this._toggleShaderVisibility(isDrawerOpened);
         }
 
-        this._strategy.renderPosition(isDrawerOpened, animationEnabled, this.option('animationDuration'));
+        this._strategy.renderPosition(animationEnabled, this.option('animationDuration'));
     },
 
     _animationCompleteHandler() {
@@ -564,7 +564,7 @@ const Drawer = Widget.inherit({
     /**
     * @name dxDrawer.viewContent
     * @publicName viewContent()
-    * @return dxElement
+    * @return DxElement
     * @hidden
     */
     viewContent() {

@@ -1,9 +1,10 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -39,7 +40,7 @@ export type ContentReadyEvent = EventInfo<dxFileManager>;
 /** @public */
 export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemData: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly itemIndex: number;
     readonly fileSystemItem?: FileSystemItem;
     readonly viewArea: 'navPane' | 'itemView';
@@ -48,7 +49,7 @@ export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
 /** @public */
 export type ContextMenuShowingEvent = Cancelable & NativeEventInfo<dxFileManager> & {
     readonly fileSystemItem?: FileSystemItem;
-    readonly targetElement?: TElement;
+    readonly targetElement?: DxElement;
     readonly viewArea: 'navPane' | 'itemView';
 }
 
@@ -70,7 +71,7 @@ export type ErrorOccurredEvent =  EventInfo<dxFileManager> & {
 /** @public */
 export type FocusedItemChangedEvent =  EventInfo<dxFileManager> & {
     readonly item?: FileSystemItem;
-    readonly itemElement?: TElement;
+    readonly itemElement?: DxElement;
 }
 
 /** @public */
@@ -96,7 +97,7 @@ export type SelectionChangedEvent =  EventInfo<dxFileManager> & {
 /** @public */
 export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemData: any;
-    readonly itemElement: TElement;
+    readonly itemElement: DxElement;
     readonly itemIndex: number;
 }
 
@@ -214,10 +215,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 fileSystemItem:FileSystemItem
@@ -232,10 +233,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 fileSystemItem:FileSystemItem
-     * @type_function_param1_field5 targetElement:dxElement
+     * @type_function_param1_field5 targetElement:DxElement
      * @type_function_param1_field6 cancel:boolean
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 viewArea:Enums.FileManagerViewArea
@@ -248,7 +249,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 directory:FileSystemItem
      * @default null
@@ -261,7 +262,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 file:FileSystemItem
      * @default null
@@ -274,7 +275,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 currentSelectedItemKeys:Array<string>
      * @type_function_param1_field5 currentDeselectedItemKeys:Array<string>
@@ -290,10 +291,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @action
@@ -305,10 +306,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:FileSystemItem
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -319,7 +320,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFileManager
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 errorCode:number
      * @type_function_param1_field5 errorText:string
@@ -443,7 +444,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
  * @public
  */
 export default class dxFileManager extends Widget {
-    constructor(element: TElement, options?: dxFileManagerOptions)
+    constructor(element: UserDefinedElement, options?: dxFileManagerOptions)
     /**
      * @docid
      * @publicName getCurrentDirectory()
@@ -467,7 +468,7 @@ export default class dxFileManager extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(): TPromise<any>;
+    refresh(): DxPromise<any>;
 }
 
 /**
@@ -514,7 +515,7 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | TElement);
+    template?: template | (() => string | UserDefinedElement);
 }
 
 /**
@@ -586,13 +587,13 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | TElement);
+    template?: template | (() => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    menuItemTemplate?: template | (() => string | TElement);
+    menuItemTemplate?: template | (() => string | UserDefinedElement);
 }
 
 

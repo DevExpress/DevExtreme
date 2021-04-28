@@ -7,12 +7,9 @@ import {
 } from '../../core/devices';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
-
-import {
-    TPromise
-} from '../../core/utils/deferred';
 
 import {
     EventInfo
@@ -40,7 +37,7 @@ export interface IncidentInfo {
 
 export interface FileSavingEventInfo<T> {
   readonly component: T;
-  readonly element: TElement;
+  readonly element: DxElement;
   readonly fileName: string;
   readonly format: string;
   readonly data: Blob;
@@ -88,7 +85,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
@@ -101,7 +98,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.viz
@@ -112,7 +109,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
@@ -127,7 +124,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 fileName:string
      * @type_function_param1_field4 format:string
      * @type_function_param1_field5 data:BLOB
@@ -143,7 +140,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:any
      * @action
@@ -274,7 +271,7 @@ export interface BaseWidgetExport {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => TPromise<void>);
+    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>);
 }
 export interface BaseWidgetLoadingIndicator {
     /**
@@ -551,7 +548,7 @@ export interface BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    container?: string | TElement;
+    container?: string | UserDefinedElement;
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0
@@ -654,7 +651,7 @@ export interface BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseWidget extends DOMComponent {
-    constructor(element: TElement, options?: BaseWidgetOptions)
+    constructor(element: UserDefinedElement, options?: BaseWidgetOptions)
     /**
      * @docid
      * @static

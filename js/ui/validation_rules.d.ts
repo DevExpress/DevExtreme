@@ -1,7 +1,3 @@
-import {
-    TPromise
-} from '../core/utils/deferred';
-
 /**
  * @public
  */
@@ -61,7 +57,7 @@ export interface AsyncRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationCallback?: ((options: ValidationCallbackData) => TPromise<any>);
+    validationCallback?: ((options: ValidationCallbackData) => PromiseLike<any>);
 }
 
 /**

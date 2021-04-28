@@ -46,14 +46,14 @@ export function drawPdfTable(doc, table) {
             if(cell.skip === true) {
                 return;
             }
-            if(!isDefined(cell.rect)) {
-                throw 'cell.rect is required';
+            if(!isDefined(cell._rect)) {
+                throw 'cell._rect is required';
             }
             if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-                const textY = cell.rect.y + (cell.rect.h / 2);
-                doc.text(cell.text, cell.rect.x, textY, { baseline: 'middle' }); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
+                const textY = cell._rect.y + (cell._rect.h / 2);
+                doc.text(cell.text, cell._rect.x, textY, { baseline: 'middle' }); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
             }
-            drawBorder(cell.rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
+            drawBorder(cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
         });
     }
 

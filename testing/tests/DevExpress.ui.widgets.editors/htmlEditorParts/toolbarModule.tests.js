@@ -39,6 +39,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const BOX_ITEM_CONTENT_CLASS = 'dx-box-item-content';
+const POPUP_TITLE_CLASS = 'dx-popup-title';
 
 const BOLD_FORMAT_CLASS = 'dx-bold-format';
 const SIZE_FORMAT_CLASS = 'dx-size-format';
@@ -152,7 +153,6 @@ const dialogModuleConfig = {
             getLength: () => { return 1; },
             getModule: (moduleName) => this.quillMock[moduleName]
         };
-        this.formDialogOptionStub = sinon.stub();
 
         this.options = {
             editorInstance: {
@@ -168,7 +168,7 @@ const dialogModuleConfig = {
                 _saveValueChangeEvent: noop,
                 on: noop,
                 option: noop,
-                formDialogOption: this.formDialogOptionStub,
+                formDialogOption: (...options) => this.formDialog && this.formDialog.popupOption(...options),
                 showFormDialog: (formConfig) => {
                     return this.formDialog.show(formConfig);
                 }
@@ -861,11 +861,14 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         const $colorView = $form.find(`.${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
         const $boxItemContent = $colorView.closest(`.${BOX_ITEM_CONTENT_CLASS}`);
+        const popupTitleText = $(`.${POPUP_TITLE_CLASS}`).text();
 
         assert.strictEqual($form.length, 1, 'Form shown');
         assert.strictEqual($colorView.length, 1, 'Form contains ColorView');
         assert.strictEqual($hexValueInput.val(), '000000', 'Base value');
         assert.strictEqual($boxItemContent.css('flexBasis'), 'auto', 'Box item content flex-basis is \'auto\'');
+        assert.strictEqual(popupTitleText, 'Change Font Color');
+        assert.strictEqual($form.attr('aria-label'), popupTitleText);
     });
 
     test('show color dialog when formatted text selected', function(assert) {
@@ -932,10 +935,13 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         const $form = $(`.${FORM_CLASS}`);
         const $colorView = $form.find(`.${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+        const popupTitleText = $(`.${POPUP_TITLE_CLASS}`).text();
 
         assert.equal($form.length, 1, 'Form shown');
         assert.equal($colorView.length, 1, 'Form contains ColorView');
         assert.equal($hexValueInput.val(), '000000', 'Base value');
+        assert.strictEqual(popupTitleText, 'Change Background Color');
+        assert.strictEqual($form.attr('aria-label'), popupTitleText);
     });
 
     test('show background dialog when formatted text selected', function(assert) {
@@ -986,10 +992,12 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         const $form = $(`.${FORM_CLASS}`);
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
         const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}`).text();
+        const popupTitleText = $(`.${POPUP_TITLE_CLASS}`).text();
 
         assert.equal($fields.length, 4, 'Form with 4 fields shown');
         assert.equal(fieldsText, 'URL:Width (px):Height (px):Alternate text:', 'Check labels');
-
+        assert.strictEqual(popupTitleText, 'Add Image');
+        assert.strictEqual($form.attr('aria-label'), popupTitleText);
     });
 
     test('show image dialog when an image selected', function(assert) {
@@ -1130,9 +1138,12 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         const $form = $(`.${FORM_CLASS}`);
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
         const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}, .${CHECKBOX_TEXT_CLASS}`).text();
+        const popupTitleText = $(`.${POPUP_TITLE_CLASS}`).text();
 
         assert.equal($fields.length, 3, 'Form with 3 fields shown');
         assert.equal(fieldsText, 'URL:Text:Open link in new window', 'Check labels');
+        assert.strictEqual(popupTitleText, 'Add Link');
+        assert.strictEqual($form.attr('aria-label'), popupTitleText);
     });
 
     test('show link dialog when a link selected', function(assert) {
@@ -1242,9 +1253,12 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         const $form = $(`.${FORM_CLASS}`);
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
         const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}`).text();
+        const popupTitleText = $(`.${POPUP_TITLE_CLASS}`).text();
 
         assert.strictEqual($fields.length, 2, 'Form with 2 fields shown');
         assert.strictEqual(fieldsText, 'Rows:Columns:', 'Check labels');
+        assert.strictEqual(popupTitleText, 'Insert Table');
+        assert.strictEqual($form.attr('aria-label'), popupTitleText);
     });
 
     test('do not show insertTable dialog when a table focused', function(assert) {

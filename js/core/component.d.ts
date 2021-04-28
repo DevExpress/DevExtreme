@@ -1,5 +1,5 @@
 import {
-  TElement
+  DxElement
 } from './element';
 
 export interface ComponentOptions<T = Component> {
@@ -17,12 +17,12 @@ export interface ComponentOptions<T = Component> {
    * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
-   * @type_function_param1_field2 element:TElement
+   * @type_function_param1_field2 element:DxElement
    * @default null
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onInitialized?: ((e: { component?: T, element?: TElement }) => void);
+  onInitialized?: ((e: { component?: T, element?: DxElement }) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -151,11 +151,16 @@ export default class Component {
    */
   resetOption(optionName: string): void;
 
+  _options: { silent(path, value): void };
   _createActionByOption(optionName: string, config: object): Function;
   _dispose(): void;
   _getDefaultOptions(): object;
   _init(): void;
+  _initializeComponent(): void;
+  _optionChanging(name: string, value: unknown, prevValue: unknown): void;
   _optionChanged(args: { name: string; value: unknown }): void;
   _setOptionsByReference(): void;
-  _optionsByReference: Record<string, boolean>;
+  _optionsByReference: object;
+  _setDeprecatedOptions(): void;
+  _deprecatedOptions: object;
 }

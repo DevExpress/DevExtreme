@@ -19,7 +19,8 @@ const COMMANDS = {
     zoomOut: 9,
     fullScreen: 10,
     collapseAll: 11,
-    expandAll: 12
+    expandAll: 12,
+    resourceManager: 13
 };
 
 class Bar {
@@ -64,6 +65,7 @@ class Bar {
             case 'zoomout': return this._createDefaultItem(COMMANDS.zoomOut, messageLocalization.format('dxGantt-zoomOut'), this._getIcon('zoom-out'));
             case 'fullscreen': return this._createDefaultItem(COMMANDS.fullScreen, messageLocalization.format('dxGantt-fullScreen'), this._getIcon('full-screen'));
             case 'taskdetails': return this._createDefaultItem(COMMANDS.taskInformation, messageLocalization.format('dxGantt-dialogTaskDetailsTitle') + '...', this._getIcon('task-details'));
+            case 'resourcemanager': return this._createDefaultItem(COMMANDS.resourceManager, messageLocalization.format('dxGantt-dialogResourceManagerTitle'), this._getIcon('resource-manager'));
             default: return extend(this._getDefaultItemOptions(), { options: { text: text } });
         }
     }

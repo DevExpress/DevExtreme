@@ -26,10 +26,13 @@ const FocusController = core.ViewController.inherit((function() {
                 this._triggerFocusedRowChangedIfNeed(focusedRowKey, args.value);
                 args.handled = true;
             } else if(args.name === 'focusedRowKey') {
+                args.handled = true;
+                if(Array.isArray(args.value) && JSON.stringify(args.value) === JSON.stringify(args.previousValue)) {
+                    return;
+                }
                 const focusedRowIndex = this.option('focusedRowIndex');
                 this._focusRowByKey(args.value);
                 this._triggerFocusedRowChangedIfNeed(args.value, focusedRowIndex);
-                args.handled = true;
             } else if(args.name === 'focusedColumnIndex') {
                 args.handled = true;
             } else if(args.name === 'focusedRowEnabled') {

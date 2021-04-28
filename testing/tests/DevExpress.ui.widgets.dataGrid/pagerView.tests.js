@@ -560,7 +560,7 @@ QUnit.module('Pager', {
         pagerView._invalidate = function() {
             isInvalidateCalled = true;
         };
-        pagerView.optionChanged({ name: 'dataSource', value: [{}] });
+        pagerView.option('dataSource', [{}]);
 
         // assert
         assert.equal(pagerView._isVisible, true, 'isVisible');
@@ -676,7 +676,7 @@ QUnit.module('Pager', {
 
         // act
         this.dataController.skipProcessingPagingChange = function() { return true; };
-        this.pagerView.optionChanged({ name: 'paging', fullName: 'paging.pageSize', value: 6 });
+        this.option('paging.pageSize', 6);
 
         // assert
         assert.ok(this.pagerView._isVisible, 'pager visible');

@@ -35,7 +35,7 @@ export class NumberBoxProps extends WidgetProps {
   @OneWay() mode?: 'number' | 'text' | 'tel';
 
   // Needed only for jQuery. Should be auto-generated
-  // onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any,
+  // onValueChanged?: ((e: { component?: T, element?: DxElement, model?: any,
   // value?: any, previousValue?: any, event?: event }) => any);
   @OneWay() showSpinButtons?: boolean;
 
