@@ -9,47 +9,36 @@ import {
 
 import {
   Scrollbar,
+  ScrollbarPropsType,
   viewFunction as ScrollbarComponent,
 } from '../scrollbar';
 
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TopPocketState } from '../common/consts';
-import { ScrollbarProps } from '../scrollbar_props';
 
 import {
   optionValues,
   getPermutations,
 } from './utils';
+import { ScrollbarProps } from '../scrollbar_props';
 
 describe('Scrollbar', () => {
   it('render scrollbar with defaults', () => {
     const props = new ScrollbarProps();
     const viewModel = mount<Scrollbar>(<Scrollbar {...props} />);
 
-    expect(viewModel.props()).toEqual({
+    expect({ ...viewModel.props() }).toMatchObject({
       activeStateEnabled: false,
       bottomPocketSize: 0,
-      bounceEnabled: true,
       containerSize: 0,
       contentSize: 0,
-      direction: 'vertical',
-      forceGeneratePockets: false,
       forceUpdateScrollbarLocation: false,
       forceVisibility: false,
       isScrollableHovered: false,
-      needScrollViewContentWrapper: false,
-      needScrollViewLoadPanel: false,
       pocketState: 0,
-      updateManually: false,
-      pullDownEnabled: false,
-      reachBottomEnabled: false,
-      scrollByContent: true,
-      scrollByThumb: false,
       scrollLocation: 0,
       scrollableOffset: 0,
-      showScrollbar: 'onScroll',
       topPocketSize: 0,
-      useKeyboard: true,
     });
   });
 
@@ -421,7 +410,7 @@ describe('Scrollbar', () => {
         it('isScrollbar(element), element is scrollbar element', () => {
           const viewModel = new Scrollbar({
             showScrollbar, direction,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
           viewModel.scrollbarRef = { current: scrollbar.getDOMNode() };
@@ -432,7 +421,7 @@ describe('Scrollbar', () => {
         it('isScrollbar(element), element is not scrollbar element', () => {
           const viewModel = new Scrollbar({
             showScrollbar, direction,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
           viewModel.scrollbarRef = scrollbar.getDOMNode();
@@ -443,7 +432,7 @@ describe('Scrollbar', () => {
         it('isThumb(element), element is scrollable scroll element', () => {
           const viewModel = new Scrollbar({
             showScrollbar, direction,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           const scrollbar = mount(ScrollbarComponent(viewModel) as JSX.Element);
           viewModel.scrollbarRef = { current: scrollbar.getDOMNode() };
@@ -454,12 +443,12 @@ describe('Scrollbar', () => {
         it('isThumb(element), element is scrollable scroll element other scrollbar', () => {
           const firstViewModel = new Scrollbar({
             showScrollbar, direction,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           const invertedDirection = direction === 'vertical' ? 'horizontal' : 'vertical';
           const secondViewModel = new Scrollbar({
             showScrollbar, direction: invertedDirection,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           const firstScrollbar = mount(ScrollbarComponent(firstViewModel) as JSX.Element);
           firstViewModel.scrollbarRef = firstScrollbar.getDOMNode();
@@ -472,7 +461,7 @@ describe('Scrollbar', () => {
         it('isThumb(element), element is scrollable content element', () => {
           const viewModel = new Scrollbar({
             showScrollbar, direction,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
           viewModel.scrollbarRef = { current: scrollbar.getDOMNode() };
@@ -483,12 +472,12 @@ describe('Scrollbar', () => {
         it('isThumb(element), element is scrollable content element other scrollbar', () => {
           const firstViewModel = new Scrollbar({
             showScrollbar, direction,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           const invertedDirection = direction === 'vertical' ? 'horizontal' : 'vertical';
           const secondViewModel = new Scrollbar({
             showScrollbar, direction: invertedDirection,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           const firstScrollbar = mount(ScrollbarComponent(firstViewModel) as JSX.Element);
           firstViewModel.scrollbarRef = firstScrollbar.getDOMNode();
@@ -501,7 +490,7 @@ describe('Scrollbar', () => {
         it('isThumb(element), element is scrollbar element', () => {
           const viewModel = new Scrollbar({
             showScrollbar, direction,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
           viewModel.scrollbarRef = scrollbar.getDOMNode();
@@ -969,7 +958,7 @@ describe('Scrollbar', () => {
         });
 
       it('change visibility scrollbar state on scrollstart', () => {
-        const viewModel = new Scrollbar({ direction } as ScrollbarProps);
+        const viewModel = new Scrollbar({ direction } as ScrollbarPropsType);
 
         viewModel.startHandler();
 
@@ -983,7 +972,7 @@ describe('Scrollbar', () => {
         const viewModel = new Scrollbar({
           direction,
           showScrollbar,
-        } as ScrollbarProps);
+        } as ScrollbarPropsType);
         viewModel.showOnScrollByWheel = true;
 
         viewModel.hide();
@@ -1059,7 +1048,7 @@ describe('Scrollbar', () => {
                   const viewModel = new Scrollbar({
                     direction,
                     scrollByThumb,
-                  } as ScrollbarProps);
+                  } as ScrollbarPropsType);
 
                   mount(ScrollbarComponent(viewModel as any) as JSX.Element);
 
@@ -1156,7 +1145,7 @@ describe('Scrollbar', () => {
             showScrollbar: 'always',
             direction,
             pocketStateChange: actionHandler,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           viewModel.setPocketState(TopPocketState.STATE_REFRESHING);
 
@@ -1171,7 +1160,7 @@ describe('Scrollbar', () => {
             showScrollbar: 'always',
             direction,
             onPullDown: actionHandler,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           viewModel.onPullDown();
 
@@ -1185,7 +1174,7 @@ describe('Scrollbar', () => {
             showScrollbar: 'always',
             direction,
             onReachBottom: actionHandler,
-          } as ScrollbarProps) as any;
+          } as ScrollbarPropsType) as any;
 
           viewModel.onReachBottom();
 

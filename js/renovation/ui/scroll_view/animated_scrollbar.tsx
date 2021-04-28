@@ -8,6 +8,7 @@ import {
   Method,
   Event,
 } from '@devextreme-generator/declarations';
+import { BaseWidgetProps } from '../common/base_props';
 import { isDefined } from '../../../core/utils/type';
 import devices from '../../../core/devices';
 
@@ -16,11 +17,12 @@ import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/
 import { ScrollbarProps } from './scrollbar_props';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 import { EventCallback } from '../common/event_callback.d';
+import { ScrollableProps } from './scrollable_props';
 
 export const OUT_BOUNDS_ACCELERATION = 0.5;
 
-const realDevice = devices.real;
-const isSluggishPlatform = (realDevice as any).platform === 'android';
+// TODO: it does not work before. Devices.real is a function. Can we remove it?
+const isSluggishPlatform = devices.real().platform === 'android';
 /* istanbul ignore next */
 export const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
 export const MIN_VELOCITY_LIMIT = 1;
@@ -35,16 +37,49 @@ export const BOUNCE_ACCELERATION_SUM = (1 - ACCELERATION ** BOUNCE_FRAMES) / (1 
 export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
   const {
     scrollbarRef, start, cancel,
-    props: { onBounce, inertiaEnabled, ...scrollbarProps },
+    props: {
+      direction,
+      scrollableOffset, contentSize, containerSize,
+      showScrollbar, scrollByThumb, bounceEnabled,
+      forceGeneratePockets, pullDownEnabled, reachBottomEnabled,
+      scrollLocation, forceUpdateScrollbarLocation, contentTranslateOffsetChange,
+      scrollLocationChange, isScrollableHovered, topPocketSize, bottomPocketSize,
+      onPullDown, onRelease, onReachBottom,
+      pocketState, pocketStateChange,
+      rtlEnabled,
+    },
   } = viewModel;
 
   return (
     <Scrollbar
       ref={scrollbarRef}
+      direction={direction}
       onAnimatorStart={start}
       onAnimatorCancel={cancel}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...scrollbarProps}
+      scrollableOffset={scrollableOffset}
+      contentSize={contentSize}
+      containerSize={containerSize}
+      isScrollableHovered={isScrollableHovered}
+      scrollLocation={scrollLocation}
+      scrollLocationChange={scrollLocationChange}
+      contentTranslateOffsetChange={contentTranslateOffsetChange}
+      scrollByThumb={scrollByThumb}
+      bounceEnabled={bounceEnabled}
+      showScrollbar={showScrollbar}
+      forceUpdateScrollbarLocation={forceUpdateScrollbarLocation}
+      // Horizontal
+      rtlEnabled={rtlEnabled}
+      // Vertical
+      forceGeneratePockets={forceGeneratePockets}
+      topPocketSize={topPocketSize}
+      bottomPocketSize={bottomPocketSize}
+      onPullDown={onPullDown}
+      onRelease={onRelease}
+      onReachBottom={onReachBottom}
+      pullDownEnabled={pullDownEnabled}
+      reachBottomEnabled={reachBottomEnabled}
+      pocketState={pocketState}
+      pocketStateChange={pocketStateChange}
     />
   );
 };
@@ -55,7 +90,9 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 }
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
+& Pick<BaseWidgetProps, 'rtlEnabled'>
+& Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'bounceEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 
 @Component({
   defaultOptionRules: null,
@@ -291,6 +328,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   get scrollbar(): any { // technical limitation in the generator
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.scrollbarRef.current!;
   }
 }
