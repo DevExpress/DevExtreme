@@ -2253,7 +2253,7 @@ QUnit.module('file uploading', moduleConfig, () => {
         assert.ok($fileUploader.empty(), 'widget container empty');
     });
 
-    test('whole file instantly upload can be cancelled with abortUpload', function(assert) {
+    test('whole file instantly upload can be cancelled with abortUpload (T990523)', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: true,
             uploadMode: 'instantly',
@@ -2264,18 +2264,9 @@ QUnit.module('file uploading', moduleConfig, () => {
             }
         });
         const instance = $fileUploader.dxFileUploader('instance');
-        const files = [fakeFile, fakeFile1, fakeFile2];
 
-        // simulateFileChoose($fileUploader, files);
-
-        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
-        const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
-        $inputWrapper.trigger(event);
-
-        // instance.option('value', files);
-        // instance.upload();
-
-        this.clock.tick(500);
+        simulateFileChoose($fileUploader, [fakeFile, fakeFile1, fakeFile2]);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
 
         $($fileUploader.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS)).each(function(i, message) {
             assert.equal($(message).text(), instance.option('uploadAbortedMessage'), 'has uploadAbortedMessage');
