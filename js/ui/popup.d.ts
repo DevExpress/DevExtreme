@@ -321,8 +321,11 @@ export default class dxPopup extends dxOverlay {
 }
 
 /** @public */
+export type Properties = dxPopupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxPopupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxPopupOptions;
 export type ToolbarItem = dxPopupToolbarItem;

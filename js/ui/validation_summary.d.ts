@@ -51,7 +51,10 @@ export default class dxValidationSummary extends CollectionWidget {
 }
 
 /** @public */
+export type Properties = dxValidationSummaryOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidationSummaryOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxValidationSummaryOptions;

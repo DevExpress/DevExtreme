@@ -81,7 +81,10 @@ export interface dxNavBarItem extends dxTabsItem {
 }
 
 /** @public */
+export type Properties = dxNavBarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxNavBarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxNavBarOptions;

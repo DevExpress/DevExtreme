@@ -170,7 +170,10 @@ export default class dxDrawer extends Widget {
 }
 
 /** @public */
+export type Properties = dxDrawerOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDrawerOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDrawerOptions;

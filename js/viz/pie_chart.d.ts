@@ -1000,7 +1000,10 @@ export interface pieChartSeriesObject extends baseSeriesObject {
 }
 
 /** @public */
+export type Properties = dxPieChartOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxPieChartOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxPieChartOptions;

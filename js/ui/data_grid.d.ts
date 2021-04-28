@@ -5081,9 +5081,12 @@ export interface RowObject {
 }
 
 /** @public */
+export type Properties = dxDataGridOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDataGridOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDataGridOptions;
 
 export default dxDataGrid;

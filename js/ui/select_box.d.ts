@@ -183,7 +183,10 @@ export default class dxSelectBox extends dxDropDownList {
 }
 
 /** @public */
+export type Properties = dxSelectBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSelectBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSelectBoxOptions;

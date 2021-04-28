@@ -1845,7 +1845,10 @@ export interface dxDiagramMoveShapeArgs {
 }
 
 /** @public */
+export type Properties = dxDiagramOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDiagramOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDiagramOptions;

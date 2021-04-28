@@ -185,7 +185,10 @@ export default class dxLoadPanel extends dxOverlay {
 }
 
 /** @public */
+export type Properties = dxLoadPanelOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxLoadPanelOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxLoadPanelOptions;
