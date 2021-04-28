@@ -14,7 +14,12 @@ jest.mock('../data_grid_views', () => ({ DataGridViews: () => null }));
 jest.mock('../../../../../ui/data_grid/ui.data_grid', () => jest.fn());
 jest.mock('../datagrid_component', () => ({
   DataGridComponent: jest.fn().mockImplementation((element, options) => ({
+    options,
     option: () => options,
+    beginUpdate: jest.fn(),
+    endUpdate: jest.fn(),
+    // eslint-disable-next-line no-underscore-dangle
+    _options: { silent: jest.fn() },
     dispose: jest.fn(),
     on: jest.fn(),
     element: () => element,
@@ -109,6 +114,14 @@ describe('DataGrid', () => {
       const instance = component.createInstance();
 
       expect(instance.element()).toBe(component.widgetElementRef.current);
+    });
+
+    // Related to
+    // QUnit.test('The onOptionChanged event should be called once when changing column option'
+    it('internal component shouldnt raise optionChanged', () => {
+      const component = new DataGrid({ onOptionChanged: jest.fn() } as any);
+      const internalGrid = component.createInstance() as any;
+      expect(internalGrid.options.onOptionChanged).toBeUndefined();
     });
 
     describe('Methods', () => {
@@ -244,6 +257,36 @@ describe('DataGrid', () => {
 
         expect(component.instance.dispose).toBeCalledTimes(1);
       });
+
+      it('updateOptions', () => {
+        (getUpdatedOptions as jest.Mock).mockReturnValue([{
+          path: 'columns',
+          value: ['test', 'test2'],
+          previousValue: ['test'],
+        }]);
+        const initialProps = {
+          columns: ['test'],
+        } as DataGridProps;
+        const component = new DataGrid(initialProps);
+
+        component.initInstanceElement();
+
+        component.instance.option = jest.fn();
+        component.updateOptions();
+        expect(component.prevProps).toBe(initialProps);
+        component.props = {
+          columns: ['test', 'test2'],
+        } as DataGridProps;
+        component.updateOptions();
+        expect(getUpdatedOptions).toBeCalledTimes(1);
+        expect(getUpdatedOptions).toBeCalledWith(initialProps, component.props);
+        expect(component.prevProps).toBe(component.props);
+        // eslint-disable-next-line no-underscore-dangle
+        expect(component.instance._options.silent).toBeCalledWith('columns', ['test']);
+        expect(component.instance.option).toBeCalledWith('columns', ['test', 'test2']);
+        expect(component.instance.beginUpdate).toBeCalledTimes(1);
+        expect(component.instance.endUpdate).toBeCalledTimes(1);
+      });
     });
 
     describe('Events', () => {
@@ -289,34 +332,6 @@ describe('DataGrid', () => {
 
         expect(component.onDimensionChanged.bind(component)).not.toThrow();
       });
-    });
-  });
-
-  describe('', () => {
-    it('updateOptions', () => {
-      (getUpdatedOptions as jest.Mock).mockReturnValue([{ path: 'columns', value: ['test', 'test2'] }]);
-      const initialProps = {
-        columns: ['test'],
-      } as DataGridProps;
-      const component = new DataGrid(initialProps);
-
-      component.initInstanceElement();
-
-      component.instance.option = jest.fn();
-      component.instance.beginUpdate = jest.fn();
-      component.instance.endUpdate = jest.fn();
-      component.updateOptions();
-      expect(component.prevProps).toBe(initialProps);
-      component.props = {
-        columns: ['test', 'test2'],
-      } as DataGridProps;
-      component.updateOptions();
-      expect(getUpdatedOptions).toBeCalledTimes(1);
-      expect(getUpdatedOptions).toBeCalledWith(initialProps, component.props);
-      expect(component.prevProps).toBe(component.props);
-      expect(component.instance.option).toBeCalledWith('columns', ['test', 'test2']);
-      expect(component.instance.beginUpdate).toBeCalledTimes(1);
-      expect(component.instance.endUpdate).toBeCalledTimes(1);
     });
   });
 
@@ -372,7 +387,7 @@ describe('DataGrid', () => {
         value: newValue,
         previousValue: null,
         component: { option: (name) => name === propName && newValue },
-      });
+      } as any);
 
       expect(component.props[propName]).toBe(newValue);
     });
@@ -399,12 +414,12 @@ describe('DataGrid', () => {
         value: newValue,
         previousValue: null,
         component: { option: (optionName) => optionName === fullName && newValue },
-      });
+      } as any);
 
       expect(component.props[name][propName]).toBe(newValue);
     });
 
-    test('property should not be assigned if compomnent value is changed during updating', () => {
+    it('property should not be assigned if compomnent value is changed during updating', () => {
       const oldValue = -1;
       const newValue = 1;
       const componentValue = 2;
@@ -421,12 +436,12 @@ describe('DataGrid', () => {
         value: newValue,
         previousValue: null,
         component: { option: (name) => name === propName && componentValue },
-      });
+      } as any);
 
       expect(component.props[propName]).toBe(oldValue);
     });
 
-    test('property should not be assigned if value is not changed', () => {
+    it('property should not be assigned if value is not changed', () => {
       const oldValue = null;
       const newValue = [];
       const propName = 'focusedRowKey';
@@ -442,9 +457,22 @@ describe('DataGrid', () => {
         value: newValue,
         previousValue: newValue,
         component: { option: (name) => name === propName && newValue },
-      });
+      } as any);
 
       expect(component.props[propName]).toBe(oldValue);
+    });
+
+    it('not update internal component', () => {
+      const props = {
+      } as DataGridProps;
+      const component = new DataGrid(props);
+      component.initInstanceElement();
+      component.prevProps = {} as any;
+      component.instance.option = jest.fn();
+      // simulate updateOptions effect call after state changed
+      component.updateTwoWayValue = () => { component.updateOptions(); };
+      component.instanceOptionChangedHandler({ } as any);
+      expect(component.instance.option).not.toBeCalled();
     });
   });
 });
