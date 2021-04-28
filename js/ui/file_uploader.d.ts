@@ -4,10 +4,6 @@ import {
 } from '../core/element';
 
 import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -104,7 +100,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    abortUpload?: ((file: File, uploadInfo?: UploadInfo) => DxPromise<any> | any);
+    abortUpload?: ((file: File, uploadInfo?: UploadInfo) => PromiseLike<any> | any);
     /**
      * @docid
      * @default ""
@@ -413,7 +409,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    uploadChunk?: ((file: File, uploadInfo: UploadInfo) => DxPromise<any> | any);
+    uploadChunk?: ((file: File, uploadInfo: UploadInfo) => PromiseLike<any> | any);
     /**
      * @docid
      * @default "Upload failed"
@@ -436,7 +432,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    uploadFile?: ((file: File, progressCallback: Function) => DxPromise<any> | any);
+    uploadFile?: ((file: File, progressCallback: Function) => PromiseLike<any> | any);
     /**
      * @docid
      * @default {}

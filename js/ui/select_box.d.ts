@@ -4,10 +4,6 @@ import {
 } from '../core/element';
 
 import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import {
     template
 } from '../core/templates/template';
 
@@ -37,7 +33,7 @@ import {
 
 export interface CustomItemCreatingInfo {
     readonly text?: string;
-    customItem?: string | any | DxPromise<any>;
+    customItem?: string | any | PromiseLike<any>;
 }
 
 /** @public */
