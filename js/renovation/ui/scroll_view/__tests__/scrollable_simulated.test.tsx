@@ -44,7 +44,7 @@ jest.mock('../../../../core/devices', () => {
 });
 
 describe('Simulated > View', () => {
-  it('render scrollable with defaults', () => {
+  it('render with defaults', () => {
     const props = new ScrollableSimulatedProps();
     const scrollable = mount<Scrollable>(<Scrollable {...props} />);
 

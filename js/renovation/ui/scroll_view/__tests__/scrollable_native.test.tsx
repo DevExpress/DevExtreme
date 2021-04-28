@@ -37,7 +37,6 @@ import { Scrollbar } from '../scrollbar';
 import { ScrollableTestHelper } from './scrollable_native_test_helper';
 
 jest.mock('../../../../core/utils/scroll_rtl_behavior');
-jest.mock('../../../../core/utils/support', () => ({ nativeScrolling: true }));
 jest.mock('../../../../core/utils/browser', () => ({ mozilla: false }));
 
 jest.mock('../../../../core/devices', () => {
@@ -47,7 +46,7 @@ jest.mock('../../../../core/devices', () => {
 });
 
 describe('Native > View', () => {
-  it('render scrollable with defaults', () => {
+  it('render with defaults', () => {
     const props = new ScrollableNativeProps();
     const scrollable = mount<Scrollable>(<Scrollable {...props} />);
 
@@ -63,7 +62,6 @@ describe('Native > View', () => {
       scrollByThumb: false,
       showScrollbar: 'onScroll',
       updateManually: false,
-      useKeyboard: true,
       useNative: true,
     });
   });

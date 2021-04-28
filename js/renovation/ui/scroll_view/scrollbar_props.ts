@@ -5,18 +5,14 @@ import {
   TwoWay,
 } from '@devextreme-generator/declarations';
 
-import { ScrollableDirection } from './types.d';
-import { ScrollableInternalProps } from './scrollable_props';
-import { EventCallback } from '../common/event_callback';
+import noop from '../../utils/noop';
 import { TopPocketState } from './common/consts';
 
 @ComponentBindings()
-export class ScrollbarProps extends ScrollableInternalProps {
+export class ScrollbarProps {
   @OneWay() activeStateEnabled?: boolean = false;
 
   @OneWay() hoverStateEnabled?: boolean;
-
-  @OneWay() direction: ScrollableDirection = 'vertical';
 
   @OneWay() containerSize = 0;
 
@@ -28,11 +24,7 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() scrollableOffset = 0;
 
-  @OneWay() scrollByThumb = false;
-
   @OneWay() isScrollableHovered = false;
-
-  @OneWay() bounceEnabled = true;
 
   @OneWay() forceVisibility = false;
 
@@ -40,17 +32,17 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() scrollLocation = 0;
 
-  @TwoWay() pocketState = TopPocketState.STATE_RELEASED;
+  @TwoWay() pocketState = TopPocketState.STATE_RELEASED; // TODO: avoid twoWay
 
   @Event() onAnimatorStart?: (animator: 'inertia'| 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
-  @Event() onAnimatorCancel?: EventCallback;
+  @Event() onAnimatorCancel?: () => void = noop;
 
-  @Event() pocketStateChange?: EventCallback<number>;
+  @Event() pocketStateChange?: (state: number) => void;
 
-  @Event() onPullDown?: EventCallback;
+  @Event() onPullDown?: () => void = noop;
 
-  @Event() onReachBottom?: EventCallback;
+  @Event() onReachBottom?: () => void = noop;
 
-  @Event() onRelease?: EventCallback;
+  @Event() onRelease?: () => void = noop;
 }
