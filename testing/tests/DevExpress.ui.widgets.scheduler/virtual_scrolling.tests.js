@@ -295,7 +295,6 @@ module('Virtual Scrolling', {
                     startIndex: 0,
                     startRowIndex: 0,
                     topVirtualRowHeight: 0,
-                    cellWidth: 150,
                 }
             }, {
                 orientation: 'horizontal',
