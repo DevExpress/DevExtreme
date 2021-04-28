@@ -25,7 +25,7 @@ export class FormLayoutManagerProps {
 
   @OneWay() requiredMark = '*';
 
-  @OneWay() optionalMark?: string = undefined;
+  @OneWay() optionalMark?: string;
 
-  @OneWay() requiredMessage?: () => string = undefined;
+  @OneWay() requiredMessage?: () => string;
 }

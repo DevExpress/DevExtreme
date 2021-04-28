@@ -4,7 +4,7 @@ import each from 'jest-each';
 import { FormProps } from '../form_props';
 import { Form } from '../form';
 import { Scrollable } from '../../scroll_view/scrollable';
-import { defaultScreenFactorFunc } from '../form_utils';
+import { defaultScreenFactorFunc } from '../screen_utils';
 import { isDefined } from '../../../../core/utils/type';
 import messageLocalization from '../../../../localization/message';
 

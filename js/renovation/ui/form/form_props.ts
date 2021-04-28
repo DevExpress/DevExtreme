@@ -6,7 +6,7 @@ import {
   ScreenSize,
   OnCustomizeItemCallback, OnEditorEnterKeyCallback, FormItem, StylingMode,
 } from './types';
-import { defaultScreenFactorFunc } from './form_utils';
+import { defaultScreenFactorFunc } from './screen_utils';
 
 @ComponentBindings()
 export class FormProps {
@@ -50,13 +50,13 @@ export class FormProps {
 
   @OneWay() optionalMark?: string = undefined;
 
-  @OneWay() requiredMessage?: () => string = undefined;
+  @OneWay() requiredMessage?: () => string;
 
   @OneWay() showValidationSummary = true;
 
-  @OneWay() items?: FormItem[] = undefined;
+  @OneWay() items?: FormItem[];
 
-  @OneWay() validationGroup?: string = undefined;
+  @OneWay() validationGroup?: string;
 
-  @OneWay() stylingMode?: StylingMode = undefined;
+  @OneWay() stylingMode?: StylingMode;
 }
