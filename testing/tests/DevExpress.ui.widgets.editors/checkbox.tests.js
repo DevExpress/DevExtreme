@@ -18,47 +18,15 @@ QUnit.testStart(function() {
 });
 
 const CHECKBOX_CLASS = 'dx-checkbox';
-const CHECKBOX_CONTAINER_CLASS = 'dx-checkbox-container';
-const CHECKBOX_CONTAINER_SELECTOR = '.dx-checkbox-container';
 const ICON_SELECTOR = '.dx-checkbox-icon';
-const CHECKED_CLASS = 'dx-checkbox-checked';
-const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
-const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 
 QUnit.module('Checkbox', function() {
     QUnit.module('render', function() {
-        QUnit.test('markup init', function(assert) {
-            const $element = $('#checkBox').dxCheckBox();
-
-            assert.ok($element.hasClass(CHECKBOX_CLASS));
-
-            const $content = $element.find(CHECKBOX_CONTAINER_SELECTOR);
-
-            assert.ok($content.hasClass(CHECKBOX_CONTAINER_CLASS), 'checkbox has a container');
-            assert.equal($content.find(ICON_SELECTOR).length, 1, 'checkbox has an icon');
-        });
-
         QUnit.test('init with default options', function(assert) {
             const $element = $('#checkBox').dxCheckBox();
             const instance = $element.dxCheckBox('instance');
 
             assert.strictEqual(instance.option('value'), false, 'checkbox has a false value by default');
-            assert.notOk($element.hasClass(CHECKED_CLASS));
-            assert.notOk($element.hasClass(CHECKBOX_HAS_TEXT_CLASS), 'checkbox without text has not text class');
-        });
-
-        QUnit.test('init with options', function(assert) {
-            const $element = $('#checkBox').dxCheckBox({
-                value: true,
-                text: 'text'
-            });
-
-            const $content = $element.find(CHECKBOX_CONTAINER_SELECTOR);
-            const contentText = $content.find(`.${CHECKBOX_TEXT_CLASS}`).text();
-
-            assert.ok($element.hasClass(CHECKED_CLASS), 'checkBox is checked');
-            assert.strictEqual(contentText, 'text', 'text is correct');
-            assert.ok($element.hasClass(CHECKBOX_HAS_TEXT_CLASS), 'checkbox with text has text class');
         });
 
         QUnit.test('click triggers user handler and changes state', function(assert) {
@@ -190,18 +158,6 @@ QUnit.module('Checkbox', function() {
             instance.option('height', newSize);
 
             assert.equal($element.find(ICON_SELECTOR).height(), initHeight, 'icon height is not resized');
-        });
-
-        QUnit.test('value option should be processed correctly (Q504139)', function(assert) {
-            const $element = $('#checkBox').dxCheckBox({ value: undefined });
-            const instance = $element.dxCheckBox('instance');
-            assert.ok(!$element.hasClass(CHECKED_CLASS));
-
-            instance.option({ value: null });
-            assert.ok(!$element.hasClass(CHECKED_CLASS));
-
-            instance.option({ value: 0 });
-            assert.ok(!$element.hasClass(CHECKED_CLASS));
         });
 
         QUnit.test('widget input should get the "name" attribute with a correct value', function(assert) {
