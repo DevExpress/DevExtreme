@@ -358,7 +358,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     };
   }
 
-  get cssClasses(): string | undefined {
+  get cssClasses(): string {
     const {
       classes,
       className,
