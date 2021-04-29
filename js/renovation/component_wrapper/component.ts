@@ -145,14 +145,15 @@ export default class ComponentWrapper extends DOMComponent {
         }, {}),
       };
       this._storedClasses = this.$element()[0].getAttribute('class') || '';
-    }
-    const elemStyle = this.$element()[0].style;
 
-    const style = {};
-    for (let i = 0; i < elemStyle.length; i++) {
-      style[elemStyle[i]] = elemStyle.getPropertyValue(elemStyle[i]);
+      const elemStyle = this.$element()[0].style;
+      const style = {};
+      for (let i = 0; i < elemStyle.length; i++) {
+        style[elemStyle[i]] = elemStyle.getPropertyValue(elemStyle[i]);
+      }
+      this._elementAttr.style = style;
     }
-    this._elementAttr.style = style;
+    
 
     this._elementAttr.class = this._storedClasses;
 
