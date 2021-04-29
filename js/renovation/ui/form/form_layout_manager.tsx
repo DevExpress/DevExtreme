@@ -7,7 +7,7 @@ import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
 import { FormLayoutManagerProps } from './form_layout_manager_props';
 
-export const viewFunction = (viewModel: FormLayoutManager): JSX.Element => {
+export const viewFunction = (viewModel: LayoutManager): JSX.Element => {
   const { cssClasses, restAttributes } = viewModel;
   return (
     <Widget
@@ -23,7 +23,7 @@ export const viewFunction = (viewModel: FormLayoutManager): JSX.Element => {
   view: viewFunction,
 })
 
-export class FormLayoutManager extends JSXComponent<FormLayoutManagerProps>() {
+export class LayoutManager extends JSXComponent<FormLayoutManagerProps>() {
   // eslint-disable-next-line class-methods-use-this
   get cssClasses(): string {
     return combineClasses({

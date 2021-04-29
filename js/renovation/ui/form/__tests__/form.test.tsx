@@ -4,7 +4,7 @@ import each from 'jest-each';
 import { FormProps } from '../form_props';
 import { Form } from '../form';
 import { Scrollable } from '../../scroll_view/scrollable';
-import { FormLayoutManager } from '../form_layout_manager';
+import { LayoutManager } from '../form_layout_manager';
 
 it('Form > InitialProps', () => {
   const props = new FormProps();
@@ -48,14 +48,17 @@ describe('Form > Markup', () => {
         useSimulatedScrollbar: !useNativeScrolling,
       }));
     });
+  });
 
-    it('root layoutManager is rendered', () => {
-      const props = { scrollingEnabled: true, useNativeScrolling } as FormProps;
-      const form = mount<Form>(<Form {...props} />);
+  each([false, true]).describe('scrollingEnabled: %o', (scrollingEnabled) => {
+    each([false, true, undefined, null]).describe('scrollingEnabled: %o', (useNativeScrolling) => {
+      it('root layoutManager is rendered', () => {
+        const props = { scrollingEnabled, useNativeScrolling } as FormProps;
+        const form = mount<Form>(<Form {...props} />);
 
-      const layoutManager = form.find(FormLayoutManager);
-      expect(layoutManager.exists()).toEqual(true);
-      expect(layoutManager.props().isRoot).toEqual(true);
+        const layoutManager = form.find(LayoutManager);
+        expect(layoutManager.exists()).toEqual(true);
+      });
     });
   });
 });

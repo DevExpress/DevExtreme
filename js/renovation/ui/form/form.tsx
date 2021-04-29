@@ -6,11 +6,11 @@ import { FormProps } from './form_props';
 
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
-import { FormLayoutManager } from './form_layout_manager';
+import { LayoutManager } from './form_layout_manager';
 import { Scrollable } from '../scroll_view/scrollable';
 
-const renderLayoutManager = (isRoot: boolean): JSX.Element => (
-  <FormLayoutManager isRoot={isRoot} />
+const renderLayoutManager = (): JSX.Element => (
+  <LayoutManager />
 );
 
 export const viewFunction = (viewModel: Form): JSX.Element => {
@@ -25,7 +25,7 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
     restAttributes,
   } = viewModel;
 
-  const rootLayoutManager = renderLayoutManager(true);
+  const rootLayoutManager = renderLayoutManager();
   return (scrollingEnabled
     ? (
       <Scrollable
