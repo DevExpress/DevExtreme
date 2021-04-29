@@ -675,7 +675,7 @@ describe('Widget', () => {
         });
 
         it('should add widget class', () => {
-          const widget = new Widget({ addWidgetClass: true, visible: true });
+          const widget = new Widget({ applyDefaultStyles: true, visible: true });
 
           expect(widget.cssClasses).toEqual('dx-widget');
         });
@@ -799,7 +799,7 @@ describe('Widget', () => {
       const defaultProps = new WidgetProps();
 
       expect(defaultProps).toEqual({
-        addWidgetClass: true,
+        applyDefaultStyles: true,
         activeStateEnabled: false,
         disabled: false,
         focusStateEnabled: false,

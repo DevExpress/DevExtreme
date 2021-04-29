@@ -86,7 +86,7 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() name?: string = '';
 
-  @OneWay() addWidgetClass = true;
+  @OneWay() applyDefaultStyles = true;
 
   @Event() onActive?: (e: Event) => void;
 
@@ -343,7 +343,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   get cssClasses(): string {
     const {
       classes,
-      addWidgetClass,
+      applyDefaultStyles,
       className,
       disabled,
       activeStateEnabled,
@@ -357,7 +357,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const isHoverable = !!hoverStateEnabled && !disabled;
     const canBeActive = !!activeStateEnabled && !disabled;
     const classesMap = {
-      'dx-widget': addWidgetClass,
+      'dx-widget': applyDefaultStyles,
       [String(classes)]: !!classes,
       [String(className)]: !!className,
       'dx-state-disabled': !!disabled,

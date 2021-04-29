@@ -14,7 +14,7 @@ describe('Overlay', () => {
       const rootElementRef = createTestRef();
       const componentProps = new OverlayProps();
       const props = {
-        props: { rootElementRef, addWidgetClass: true },
+        props: { rootElementRef, applyDefaultStyles: true },
         componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Overlay>;
