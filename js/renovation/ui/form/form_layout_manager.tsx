@@ -27,12 +27,12 @@ export const viewFunction = (viewModel: FormLayoutManager): JSX.Element => {
 export class FormLayoutManager extends JSXComponent<FormLayoutManagerProps>() {
   get optionalMark(): string | undefined {
     return this.props.optionalMark
-    || messageLocalization.format('dxForm-optionalMark');
+      || messageLocalization.format('dxForm-optionalMark');
   }
 
   get requiredMessage(): () => string {
     return this.props.requiredMessage
-    || messageLocalization.getFormatter('dxForm-requiredMessage');
+      || messageLocalization.getFormatter('dxForm-requiredMessage');
   }
 
   // eslint-disable-next-line class-methods-use-this

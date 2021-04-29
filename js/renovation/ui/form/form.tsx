@@ -54,11 +54,11 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
 export class Form extends JSXComponent<FormProps>() {
   get optionalMark(): string | undefined {
     return this.props.optionalMark
-    || messageLocalization.format('dxForm-optionalMark');
+      || messageLocalization.format('dxForm-optionalMark');
   }
 
   get requiredMessage(): () => string {
     return this.props.requiredMessage
-    || messageLocalization.getFormatter('dxForm-requiredMessage');
+      || messageLocalization.getFormatter('dxForm-requiredMessage');
   }
 }
