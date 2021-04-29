@@ -574,7 +574,10 @@ export interface dxHtmlEditorVariables {
 }
 
 /** @public */
+export type Properties = dxHtmlEditorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxHtmlEditorOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxHtmlEditorOptions;

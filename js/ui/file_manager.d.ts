@@ -687,7 +687,10 @@ export interface dxFileManagerDetailsColumn {
 }
 
 /** @public */
+export type Properties = dxFileManagerOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxFileManagerOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxFileManagerOptions;

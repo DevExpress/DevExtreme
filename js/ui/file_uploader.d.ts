@@ -560,7 +560,10 @@ export default class dxFileUploader extends Editor {
 }
 
 /** @public */
+export type Properties = dxFileUploaderOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxFileUploaderOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxFileUploaderOptions;

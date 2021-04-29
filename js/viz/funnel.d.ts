@@ -794,7 +794,10 @@ export interface dxFunnelItem {
 }
 
 /** @public */
+export type Properties = dxFunnelOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxFunnelOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxFunnelOptions;

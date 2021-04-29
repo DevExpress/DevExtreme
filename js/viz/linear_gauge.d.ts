@@ -191,7 +191,10 @@ export default class dxLinearGauge extends BaseGauge {
 }
 
 /** @public */
+export type Properties = dxLinearGaugeOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxLinearGaugeOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxLinearGaugeOptions;
