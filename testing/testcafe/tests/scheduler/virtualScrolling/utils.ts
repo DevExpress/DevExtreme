@@ -1,0 +1,115 @@
+import { ClientFunction } from 'testcafe';
+
+export const resources = [{
+  fieldExpr: 'resourceId',
+  dataSource: [
+    {
+      text: 'Resource 0',
+      id: 0,
+      color: '#24ff50',
+    }, {
+      text: 'Resource 1',
+      id: 1,
+      color: '#24ff50',
+    }, {
+      text: 'Resource 2',
+      id: 2,
+      color: '#24ff50',
+    }, {
+      text: 'Resource 3',
+      id: 3,
+      color: '#24ff50',
+    }, {
+      text: 'Resource 4',
+      id: 4,
+      color: '#24ff50',
+    }, {
+      text: 'Resource 5',
+      id: 5,
+      color: '#24ff50',
+    }, {
+      text: 'Resource 6',
+      id: 6,
+      color: '#24ff50',
+    }, {
+      text: 'Resource 7',
+      id: 7,
+      color: '#24ff50',
+    },
+  ],
+  label: 'Priority',
+}];
+
+export const views = [{
+  type: 'day',
+  intervalCount: 7,
+}, {
+  type: 'week',
+  intervalCount: 4,
+}, {
+  type: 'month',
+}, {
+  type: 'timelineDay',
+  intervalCount: 7,
+}, {
+  type: 'timelineWeek',
+}, {
+  type: 'timelineMonth',
+}];
+
+export const verticalViews = views
+  .map((view) => ({
+    ...view,
+    groupOrientation: 'vertical',
+  }));
+export const horizontalViews = views
+  .map((view) => ({
+    ...view,
+    groupOrientation: 'horizontal',
+  }));
+export const groupedByDateViews = views
+  .map((view) => ({
+    ...view,
+    groupOrientation: 'horizontal',
+    groupByDate: true,
+  }));
+
+export const createDataSetForScreenShotTests = (): Record<string, unknown>[] => {
+  const result: {
+    text: string;
+    startDate: Date;
+    endDate: Date;
+    resourceId: number;
+    allDay?: boolean;
+  }[] = [];
+  for (let day = 1; day < 25; day += 1) {
+    result.push({
+      text: '1 appointment',
+      startDate: new Date(2021, 0, day, 0),
+      endDate: new Date(2021, 0, day, 1),
+      resourceId: 0,
+    });
+
+    result.push({
+      text: '2 appointment',
+      startDate: new Date(2021, 0, day, 2),
+      endDate: new Date(2021, 0, day, 3),
+      resourceId: 0,
+    });
+  }
+
+  return result
+    .reduce<Record<string, unknown>[]>((currentAppointments, appointment) => [
+    ...currentAppointments,
+    ...resources[0].dataSource.map((resource) => ({
+      ...appointment,
+      resourceId: resource.id,
+    })),
+  ], []);
+};
+
+export const scrollTo = ClientFunction((date) => {
+  const instance = ($('#container') as any).dxScheduler('instance');
+
+  instance.scrollTo(date);
+});
