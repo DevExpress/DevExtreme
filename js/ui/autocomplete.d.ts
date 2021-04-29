@@ -133,7 +133,10 @@ export default class dxAutocomplete extends dxDropDownList {
 }
 
 /** @public */
+export type Properties = dxAutocompleteOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxAutocompleteOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxAutocompleteOptions;

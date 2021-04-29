@@ -200,7 +200,10 @@ export default class dxPopover extends dxPopup {
 }
 
 /** @public */
+export type Properties = dxPopoverOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxPopoverOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxPopoverOptions;

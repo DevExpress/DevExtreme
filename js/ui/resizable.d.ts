@@ -155,7 +155,10 @@ export default class dxResizable extends DOMComponent {
 }
 
 /** @public */
+export type Properties = dxResizableOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxResizableOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxResizableOptions;

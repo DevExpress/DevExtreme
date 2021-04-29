@@ -103,7 +103,10 @@ export default class dxRangeSlider extends dxTrackBar {
 }
 
 /** @public */
+export type Properties = dxRangeSliderOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxRangeSliderOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxRangeSliderOptions;

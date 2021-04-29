@@ -128,6 +128,4 @@ export default class DOMComponent extends Component {
 }
 
 export type Options = DOMComponentOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = DOMComponentOptions;

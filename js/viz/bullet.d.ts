@@ -132,7 +132,10 @@ export default class dxBullet extends BaseSparkline {
 }
 
 /** @public */
+export type Properties = dxBulletOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxBulletOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxBulletOptions;

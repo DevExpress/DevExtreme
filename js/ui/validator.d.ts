@@ -211,7 +211,10 @@ export interface dxValidatorResult {
 }
 
 /** @public */
+export type Properties = dxValidatorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidatorOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxValidatorOptions;

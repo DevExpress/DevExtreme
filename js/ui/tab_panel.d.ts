@@ -240,7 +240,10 @@ export interface dxTabPanelItem extends dxMultiViewItem {
 }
 
 /** @public */
+export type Properties = dxTabPanelOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTabPanelOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTabPanelOptions;

@@ -803,7 +803,10 @@ export interface dxListItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxListOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxListOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxListOptions;

@@ -446,7 +446,10 @@ export default class dxBarGauge extends BaseWidget {
 }
 
 /** @public */
+export type Properties = dxBarGaugeOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxBarGaugeOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxBarGaugeOptions;

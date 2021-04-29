@@ -250,7 +250,10 @@ export default class dxDraggable extends DOMComponent implements DraggableBase {
 }
 
 /** @public */
+export type Properties = dxDraggableOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDraggableOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDraggableOptions;
