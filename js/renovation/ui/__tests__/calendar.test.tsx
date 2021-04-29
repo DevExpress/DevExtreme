@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
 import { createTestRef } from '../../test_utils/create_ref';
