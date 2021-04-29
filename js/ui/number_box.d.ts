@@ -160,7 +160,10 @@ export default class dxNumberBox extends dxTextEditor {
 }
 
 /** @public */
+export type Properties = dxNumberBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxNumberBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxNumberBoxOptions;

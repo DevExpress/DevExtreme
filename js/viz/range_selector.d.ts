@@ -917,7 +917,10 @@ export default class dxRangeSelector extends BaseWidget {
 }
 
 /** @public */
+export type Properties = dxRangeSelectorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxRangeSelectorOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxRangeSelectorOptions;

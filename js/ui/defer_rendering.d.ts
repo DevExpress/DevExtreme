@@ -95,7 +95,10 @@ export default class dxDeferRendering extends Widget {
 }
 
 /** @public */
+export type Properties = dxDeferRenderingOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDeferRenderingOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDeferRenderingOptions;

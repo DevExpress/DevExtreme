@@ -248,7 +248,10 @@ export default class dxPivotGridFieldChooser extends Widget {
 }
 
 /** @public */
+export type Properties = dxPivotGridFieldChooserOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxPivotGridFieldChooserOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxPivotGridFieldChooserOptions;

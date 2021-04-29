@@ -96,7 +96,10 @@ export default class dxRadioGroup extends Editor {
 }
 
 /** @public */
+export type Properties = dxRadioGroupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxRadioGroupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxRadioGroupOptions;

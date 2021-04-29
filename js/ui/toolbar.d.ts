@@ -156,7 +156,10 @@ export interface dxToolbarItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxToolbarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxToolbarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxToolbarOptions;

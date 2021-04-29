@@ -126,7 +126,10 @@ export default class dxScrollView extends dxScrollable {
 }
 
 /** @public */
+export type Properties = dxScrollViewOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxScrollViewOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxScrollViewOptions;
