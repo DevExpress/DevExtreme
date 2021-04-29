@@ -1,4 +1,4 @@
-import { addNamespace, normalizeKeyName } from '../../events/utils';
+import { addNamespace, normalizeKeyName, isCommandKeyPressed } from '../../events/utils';
 import { isFunction, isString, isDate, isDefined } from '../../core/utils/type';
 import { clipboardText } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
@@ -124,13 +124,13 @@ const DateBoxMask = DateBoxBase.inherit({
         });
     },
 
-    _isSingleCharKey({ originalEvent, ctrl, alt }) {
+    _isSingleCharKey({ originalEvent, alt }) {
         const key = originalEvent.data || (
             normalizeKeyName(originalEvent) === 'space' ? // IE11 (T972456)
                 ' ' :
                 originalEvent.key
         );
-        return typeof key === 'string' && key.length === 1 && !ctrl && !alt;
+        return typeof key === 'string' && key.length === 1 && !alt && !isCommandKeyPressed(originalEvent);
     },
 
     _isSingleDigitKey(e) {
