@@ -1441,9 +1441,9 @@ module('View Data Provider', {
                 const dateHeaderData = {
                     dataMap: dateHeaderMap,
                     leftVirtualCellCount: 0,
-                    leftVirtualCellWidth: undefined,
+                    leftVirtualCellWidth: 0,
                     rightVirtualCellCount: 0,
-                    rightVirtualCellWidth: undefined,
+                    rightVirtualCellWidth: 0,
                     weekDayLeftVirtualCellCount: undefined,
                     weekDayLeftVirtualCellWidth: undefined,
                     weekDayRightVirtualCellCount: undefined,
@@ -2504,7 +2504,13 @@ module('View Data Provider', {
 
             test('dateHeaderMap should be generated correctly', function(assert) {
                 const viewDataProvider = createViewDataProvider({
-                    workspaceMock: horizontalGroupedWorkspaceMock,
+                    workspaceMock: {
+                        ...horizontalGroupedWorkspaceMock,
+                        generateRenderOptions: () => ({
+                            ...horizontalGroupedWorkspaceMock.generateRenderOptions(),
+                            cellWidth: 100,
+                        }),
+                    },
                     completeViewDataMap: horizontalDataMap,
                     completeDateHeaderMap: horizontalDateHeaderMap,
                 });
@@ -2513,9 +2519,9 @@ module('View Data Provider', {
                 const dateHeaderData = {
                     dataMap: dateHeaderMap,
                     leftVirtualCellCount: 1,
-                    leftVirtualCellWidth: 20,
+                    leftVirtualCellWidth: 100,
                     rightVirtualCellCount: 1,
-                    rightVirtualCellWidth: 30,
+                    rightVirtualCellWidth: 100,
                     weekDayLeftVirtualCellCount: undefined,
                     weekDayLeftVirtualCellWidth: undefined,
                     weekDayRightVirtualCellCount: undefined,
