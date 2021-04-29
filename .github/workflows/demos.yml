@@ -1,0 +1,72 @@
+name: Demos TestCafe tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  testcafe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    # - name: Restore npm cache
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ./node_modules
+    #     key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-node
+
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Clone devextreme-demos repo from PR author fork
+      continue-on-error: true
+      if: github.event_name == 'pull_request'
+      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos ./devextreme-demos
+
+    - name: Clone devextreme-demos repo
+      run: test -d ./devextreme-demos || git clone -b 21_1 https://github.com/devexpress/devextreme-demos ./devextreme-demos
+
+    - name: Install packages
+      run: |
+        pwd
+        npm install --no-audit --no-fund
+
+    - name: Build devextreme
+      run: |
+        npm run build
+
+    - name: Install devextreme package
+      run: |
+        cd ./devextreme-demos
+        rm -rf ./node_modules/devextreme 
+        npm install --no-package-lock ../artifacts/npm/devextreme
+
+    - name: Prepare JS
+      run: |
+        cd ./devextreme-demos
+        npm run prepare-js
+
+    - name: Run Web Server
+      run: |
+        cd ./devextreme-demos
+        npm run webserver &
+
+    - name: Run TestCafe tests
+      run: |
+        cd ./devextreme-demos
+        npm run test-testcafe
+
+    - name: Copy screenshots artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots
+        path: ${{ github.workspace }}/devextreme-demos/testing/artifacts/*
+        if-no-files-found: ignore
