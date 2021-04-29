@@ -6,8 +6,12 @@ import { FormProps } from './form_props';
 
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
+import { FormLayoutManager } from './form_layout_manager';
 import { Scrollable } from '../scroll_view/scrollable';
-import messageLocalization from '../../../localization/message';
+
+const renderLayoutManager = (isRoot: boolean): JSX.Element => (
+  <FormLayoutManager isRoot={isRoot} />
+);
 
 export const viewFunction = (viewModel: Form): JSX.Element => {
   const aria = { role: 'form' };
@@ -20,6 +24,8 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
     },
     restAttributes,
   } = viewModel;
+
+  const rootLayoutManager = renderLayoutManager(true);
   return (scrollingEnabled
     ? (
       <Scrollable
@@ -32,7 +38,9 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
         bounceEnabled={false}
         // eslint-disable-next-line react/jsx-props-no-spreading
         // TODO: {...restAttributes} waits for the https://trello.com/c/er8aTcsZ/2711-renovation-react-some-events-from-restattributes-may-have-the-same-type-as-react-exists-events
-      />
+      >
+        {rootLayoutManager}
+      </Scrollable>
     )
     : (
       <Widget
@@ -40,7 +48,9 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
         classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
-      />
+      >
+        {rootLayoutManager}
+      </Widget>
     )
   );
 };
@@ -52,13 +62,4 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
 })
 
 export class Form extends JSXComponent<FormProps>() {
-  get optionalMark(): string | undefined {
-    return this.props.optionalMark
-      || messageLocalization.format('dxForm-optionalMark');
-  }
-
-  get requiredMessage(): () => string {
-    return this.props.requiredMessage
-      || messageLocalization.getFormatter('dxForm-requiredMessage');
-  }
 }
