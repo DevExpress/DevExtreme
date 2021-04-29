@@ -697,7 +697,7 @@ describe('templates and slots', () => {
     });
     const root = $('#component').children('.templates-root')[0];
 
-    expect($(root.firstChild)[0].nextSibling).toBe(template[0]);
+    expect($(root.firstChild)[0]).toBe(template[0]);
   });
 });
 
