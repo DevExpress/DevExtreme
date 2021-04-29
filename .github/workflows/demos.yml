@@ -33,10 +33,10 @@ jobs:
     - name: Clone devextreme-demos repo
       run: test -d ./devextreme-demos || git clone -b 21_1 https://github.com/devexpress/devextreme-demos ./devextreme-demos
 
-    - name: Install packages
+    - name: Install packages for devextreme-demos
       run: |
-        pwd
-        npm install --no-audit --no-fund
+        cd ./devextreme-demos
+        npm install --no-package-lock --no-audit --no-fund
 
     - name: Build devextreme
       run: |
