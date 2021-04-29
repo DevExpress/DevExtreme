@@ -7,7 +7,6 @@ import { FormProps } from './form_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
 import { Scrollable } from '../scroll_view/scrollable';
-import { isDefined } from '../../../core/utils/type';
 import messageLocalization from '../../../localization/message';
 
 export const viewFunction = (viewModel: Form): JSX.Element => {
@@ -54,18 +53,12 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
 
 export class Form extends JSXComponent<FormProps>() {
   get optionalMark(): string | undefined {
-    if (isDefined(this.props.optionalMark)) {
-      return this.props.optionalMark;
-    }
-
-    return messageLocalization.format('dxForm-optionalMark');
+    return this.props.optionalMark
+    || messageLocalization.format('dxForm-optionalMark');
   }
 
   get requiredMessage(): () => string {
-    if (isDefined(this.props.requiredMessage)) {
-      return this.props.requiredMessage;
-    }
-
-    return messageLocalization.getFormatter('dxForm-requiredMessage');
+    return this.props.requiredMessage
+    || messageLocalization.getFormatter('dxForm-requiredMessage');
   }
 }
