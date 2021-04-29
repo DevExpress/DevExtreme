@@ -449,7 +449,6 @@ const Form = Widget.inherit({
         //#ENDDEBUG
 
         that._rootLayoutManager = that._renderLayoutManager(items, $content, {
-            isRoot: true,
             colCount: that.option('colCount'),
             alignItemLabels: that.option('alignItemLabels'),
             screenByWidth: this.option('screenByWidth'),
