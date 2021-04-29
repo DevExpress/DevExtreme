@@ -94,6 +94,8 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() _feedbackShowTimeout?: number = 30;
 
+  @OneWay() _disposed?: boolean;
+
   @OneWay() activeStateUnit?: string;
 
   @OneWay() aria?: Record<string, string> = {};
@@ -358,7 +360,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     };
   }
 
-  get cssClasses(): string {
+  get cssClasses(): string | undefined {
     const {
       classes,
       className,
@@ -368,9 +370,11 @@ export class Widget extends JSXComponent(WidgetProps) {
       hoverStateEnabled,
       onVisibilityChange,
       visible,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _disposed,
     } = this.props;
 
-    return getCssClasses({
+    return _disposed ? undefined : getCssClasses({
       active: this.active,
       focused: this.focused,
       hovered: this.hovered,

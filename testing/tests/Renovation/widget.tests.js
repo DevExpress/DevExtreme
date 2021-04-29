@@ -116,6 +116,14 @@ QUnit.module('Container', moduleConfig, () => {
         widget.dispose();
 
         assert.strictEqual($('#component').length, 1, 'container is not removed');
+        assert.strictEqual($('#component').attr('class'), '', 'class attribute is empty');
+    });
+
+    QUnit.test('should remove container on remove call', function(assert) {
+        const $element = this.Widget({});
+        $element.remove();
+
+        assert.strictEqual($('#component').length, 0, 'container is removed');
     });
 });
 
