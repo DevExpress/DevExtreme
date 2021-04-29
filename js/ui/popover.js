@@ -74,7 +74,6 @@ const attachEvent = function(that, name) {
     const event = shouldIgnoreHideEvent ? null : getEventName(that, `${name}Event`);
 
     if(shouldIgnoreHideEvent) {
-        event = undefined;
         errors.log('W0018');
     }
 
