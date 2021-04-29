@@ -440,7 +440,6 @@ const Form = Widget.inherit({
     _renderLayout: function() {
         const that = this;
         let items = that.option('items');
-        const $content = that._getContent();
 
         items = that._prepareItems(items);
 
@@ -448,7 +447,7 @@ const Form = Widget.inherit({
         that._testResultItems = items;
         //#ENDDEBUG
 
-        that._rootLayoutManager = that._renderLayoutManager(items, $content, {
+        that._rootLayoutManager = that._renderLayoutManager(items, {
             colCount: that.option('colCount'),
             alignItemLabels: that.option('alignItemLabels'),
             screenByWidth: this.option('screenByWidth'),
