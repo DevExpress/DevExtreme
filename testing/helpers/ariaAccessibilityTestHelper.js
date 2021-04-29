@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { isDefined } from 'core/utils/type';
+import CheckBox from 'ui/check_box';
 
 const { assert } = QUnit;
 
@@ -87,8 +88,8 @@ class ariaAccessibilityTestHelper {
         this.checkAttributes($checkBox, {
             role: 'checkbox',
             'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue,
-            'aria-invalid': 'false',
-            'aria-readonly': 'false'
+            'aria-invalid': CheckBox.IS_RENOVATED_WIDGET ? 'false' : null,
+            'aria-readonly': CheckBox.IS_RENOVATED_WIDGET ? 'false' : null
         }, `checkbox[${index}]`);
     }
 
