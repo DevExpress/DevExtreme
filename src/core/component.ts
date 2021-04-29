@@ -74,6 +74,7 @@ function initBaseComponent() {
 
         updated() {
             const thisComponent = this as any as IBaseComponent;
+            const nodes = cleanWidgetNode(this.$el);
             getChildren(thisComponent).forEach((child) => {
                 initOptionChangedFunc(
                     child.$_config,
@@ -104,6 +105,8 @@ function initBaseComponent() {
             this.$_applyConfigurationChanges();
 
             thisComponent.$_instance.endUpdate();
+
+            restoreNodes(this.$el, nodes);
             this.eventBus.fire();
         },
 
