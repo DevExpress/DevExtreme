@@ -12,6 +12,7 @@ import positionUtils from '../animation/position';
 import { isObject, isString } from '../core/utils/type';
 import { fitIntoRange } from '../core/utils/math';
 import { addNamespace } from '../events/utils/index';
+import errors from '../core/errors';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
 
@@ -67,11 +68,16 @@ const getEventDelay = function(that, optionName) {
     return isObject(optionValue) && optionValue.delay;
 };
 const attachEvent = function(that, name) {
-    const target = that.option('target');
+    const { target, shading, disabled } = that.option();
     const isSelector = isString(target);
-    const event = getEventName(that, name + 'Event');
+    const shouldIgnoreHideEvent = shading && name === 'hide';
+    const event = shouldIgnoreHideEvent ? null : getEventName(that, `${name}Event`);
 
-    if(!event || that.option('disabled')) {
+    if(shouldIgnoreHideEvent) {
+        errors.log('W0018');
+    }
+
+    if(!event || disabled) {
         return;
     }
 

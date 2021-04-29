@@ -3,6 +3,7 @@ import fixtures from '../../helpers/positionFixtures.js';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
+import errors from 'core/errors';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
 
@@ -1515,6 +1516,37 @@ QUnit.module('behavior', () => {
         } finally {
             fixtures.collisionTopLeft.drop();
         }
+    });
+
+    QUnit.module('show "W0018" warning when "shading" is true and "hideEvent" is set', {
+        beforeEach: function() {
+            fixtures.simple.create();
+            this.$target = $('#where');
+            this.$popover = $('#what');
+            this.stub = sinon.stub();
+            errors.log = this.stub;
+            this.popover = new Popover(this.$popover, {
+                target: this.$target,
+                hideEvent: 'mouseleave',
+                shading: true,
+            });
+        },
+        afterEach: function() {
+            fixtures.simple.drop();
+            this.stub.reset();
+        }
+    }, () => {
+        QUnit.test('on init', function(assert) {
+            assert.ok(this.stub.calledOnce, 'the log method is called once');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+        });
+
+        QUnit.test('at runtime', function(assert) {
+            this.popover.option('hideEvent', 'click');
+
+            assert.strictEqual(this.stub.callCount, 2, 'the log method is called twice');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+        });
     });
 });
 
