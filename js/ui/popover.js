@@ -71,8 +71,7 @@ const attachEvent = function(that, name) {
     const { target, shading, disabled } = that.option();
     const isSelector = isString(target);
     let event = getEventName(that, `${name}Event`);
-    const isClickEvent = event === 'click' || event === 'dxclick';
-    const shouldIgnoreHideEvent = shading && name === 'hide' && event && !isClickEvent;
+    const shouldIgnoreHideEvent = shading && name === 'hide' && event;
 
     if(shouldIgnoreHideEvent) {
         event = undefined;
