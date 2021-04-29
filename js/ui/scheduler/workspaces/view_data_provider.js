@@ -317,8 +317,6 @@ class ViewDataGenerator {
     _generateDateHeaderData(completeDateHeaderMap, options) {
         const {
             startCellIndex,
-            leftVirtualCellWidth,
-            rightVirtualCellWidth,
             cellCount,
             totalCellCount,
             isGenerateWeekDaysHeaderData,
@@ -333,12 +331,12 @@ class ViewDataGenerator {
         let weekDayRightVirtualCellWidth;
         let weekDayLeftVirtualCellCount;
         let weekDayRightVirtualCellCount;
+        const validCellWidth = cellWidth || 0;
 
         if(isGenerateWeekDaysHeaderData) {
             const colSpan = groupByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
             const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
             const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
-            const validCellWidth = cellWidth || 0;
 
             const weekDayRow = completeDateHeaderMap[0].slice(leftVirtualCellCount, actualCellCount);
 
@@ -350,15 +348,22 @@ class ViewDataGenerator {
             weekDayRightVirtualCellWidth = weekDayRightVirtualCellCount * validCellWidth;
         }
 
-        const dateRow = completeDateHeaderMap[completeDateHeaderMap.length - 1].slice(startCellIndex, startCellIndex + cellCount);
+        const colSpan = groupByDate ? horizontalGroupCount : 1;
+        const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
+        const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
+
+        const dateRow = completeDateHeaderMap[completeDateHeaderMap.length - 1].slice(leftVirtualCellCount, actualCellCount);
         dataMap.push(dateRow);
+
+        const finalLeftVirtualCellCount = leftVirtualCellCount * colSpan;
+        const finalRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
 
         return {
             dataMap,
-            leftVirtualCellWidth,
-            rightVirtualCellWidth,
-            leftVirtualCellCount: startCellIndex,
-            rightVirtualCellCount: totalCellCount - startCellIndex - cellCount,
+            leftVirtualCellWidth: finalLeftVirtualCellCount * validCellWidth,
+            rightVirtualCellWidth: finalRightVirtualCellCount * validCellWidth,
+            leftVirtualCellCount: finalLeftVirtualCellCount,
+            rightVirtualCellCount: finalRightVirtualCellCount,
             weekDayLeftVirtualCellCount,
             weekDayLeftVirtualCellWidth,
             weekDayRightVirtualCellCount,
