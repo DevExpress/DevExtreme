@@ -44,9 +44,11 @@ export const resources = [{
 export const views = [{
   type: 'day',
   intervalCount: 7,
+  endDayHour: 8,
 }, {
   type: 'week',
   intervalCount: 10,
+  endDayHour: 8,
 }, {
   type: 'month',
 }, {
@@ -103,8 +105,28 @@ export const createDataSetForScreenShotTests = (): Record<string, unknown>[] => 
   return result;
 };
 
-export const scrollTo = ClientFunction((date) => {
+export const scrollTo = ClientFunction((date: Date, groups?: Record<string, unknown>) => {
   const instance = ($('#container') as any).dxScheduler('instance');
 
-  instance.scrollTo(date);
+  instance.scrollTo(date, groups);
 });
+
+export const scrollConfig = [{
+  firstDate: new Date(2021, 0, 7),
+  lastDate: new Date(2021, 0, 1),
+}, {
+  firstDate: new Date(2021, 0, 15),
+  lastDate: new Date(2020, 11, 27),
+}, {
+  firstDate: new Date(2021, 0, 1),
+  lastDate: new Date(2020, 11, 27),
+}, {
+  firstDate: new Date(2021, 0, 7),
+  lastDate: new Date(2021, 0, 1),
+}, {
+  firstDate: new Date(2021, 0, 15),
+  lastDate: new Date(2020, 11, 27),
+}, {
+  firstDate: new Date(2021, 0, 30),
+  lastDate: new Date(2021, 0, 1),
+}];
