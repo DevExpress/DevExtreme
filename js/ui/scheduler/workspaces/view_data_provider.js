@@ -316,58 +316,76 @@ class ViewDataGenerator {
 
     _generateDateHeaderData(completeDateHeaderMap, options) {
         const {
-            startCellIndex,
-            cellCount,
-            totalCellCount,
             isGenerateWeekDaysHeaderData,
-            groupByDate,
-            horizontalGroupCount,
             cellCountInDay,
             cellWidth,
         } = options;
 
         const dataMap = [];
-        let weekDayLeftVirtualCellWidth;
-        let weekDayRightVirtualCellWidth;
-        let weekDayLeftVirtualCellCount;
-        let weekDayRightVirtualCellCount;
+        let weekDayRowConfig = {};
         const validCellWidth = cellWidth || 0;
 
         if(isGenerateWeekDaysHeaderData) {
-            const colSpan = groupByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
-            const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
-            const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
+            weekDayRowConfig = this._generateDateHeaderDataRow(
+                options,
+                completeDateHeaderMap,
+                cellCountInDay,
+                0,
+                validCellWidth,
+            );
 
-            const weekDayRow = completeDateHeaderMap[0].slice(leftVirtualCellCount, actualCellCount);
-
-            dataMap.push(weekDayRow);
-
-            weekDayLeftVirtualCellCount = leftVirtualCellCount * colSpan;
-            weekDayLeftVirtualCellWidth = weekDayLeftVirtualCellCount * validCellWidth;
-            weekDayRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
-            weekDayRightVirtualCellWidth = weekDayRightVirtualCellCount * validCellWidth;
+            dataMap.push(weekDayRowConfig.dateRow);
         }
 
-        const colSpan = groupByDate ? horizontalGroupCount : 1;
-        const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
-        const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
+        const datesRowConfig = this._generateDateHeaderDataRow(
+            options,
+            completeDateHeaderMap,
+            1,
+            isGenerateWeekDaysHeaderData ? 1 : 0,
+            validCellWidth,
+        );
 
-        const dateRow = completeDateHeaderMap[completeDateHeaderMap.length - 1].slice(leftVirtualCellCount, actualCellCount);
-        dataMap.push(dateRow);
-
-        const finalLeftVirtualCellCount = leftVirtualCellCount * colSpan;
-        const finalRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
+        dataMap.push(datesRowConfig.dateRow);
 
         return {
             dataMap,
-            leftVirtualCellWidth: finalLeftVirtualCellCount * validCellWidth,
-            rightVirtualCellWidth: finalRightVirtualCellCount * validCellWidth,
+            leftVirtualCellWidth: datesRowConfig.leftVirtualCellWidth,
+            rightVirtualCellWidth: datesRowConfig.rightVirtualCellWidth,
+            leftVirtualCellCount: datesRowConfig.leftVirtualCellCount,
+            rightVirtualCellCount: datesRowConfig.rightVirtualCellCount,
+            weekDayLeftVirtualCellWidth: weekDayRowConfig.leftVirtualCellWidth,
+            weekDayRightVirtualCellWidth: weekDayRowConfig.rightVirtualCellWidth,
+            weekDayLeftVirtualCellCount: weekDayRowConfig.leftVirtualCellCount,
+            weekDayRightVirtualCellCount: weekDayRowConfig.rightVirtualCellCount,
+        };
+    }
+
+    _generateDateHeaderDataRow(options, completeDateHeaderMap, baseColSpan, rowIndex, cellWidth) {
+        const {
+            groupByDate,
+            horizontalGroupCount,
+            startCellIndex,
+            cellCount,
+            totalCellCount,
+        } = options;
+
+        const colSpan = groupByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
+        const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
+        const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
+
+        const dateRow = completeDateHeaderMap[rowIndex].slice(leftVirtualCellCount, actualCellCount);
+
+        const finalLeftVirtualCellCount = leftVirtualCellCount * colSpan;
+        const finalLeftVirtualCellWidth = finalLeftVirtualCellCount * cellWidth;
+        const finalRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
+        const finalRightVirtualCellWidth = finalRightVirtualCellCount * cellWidth;
+
+        return {
+            dateRow,
             leftVirtualCellCount: finalLeftVirtualCellCount,
+            leftVirtualCellWidth: finalLeftVirtualCellWidth,
             rightVirtualCellCount: finalRightVirtualCellCount,
-            weekDayLeftVirtualCellCount,
-            weekDayLeftVirtualCellWidth,
-            weekDayRightVirtualCellCount,
-            weekDayRightVirtualCellWidth,
+            rightVirtualCellWidth: finalRightVirtualCellWidth,
         };
     }
 
