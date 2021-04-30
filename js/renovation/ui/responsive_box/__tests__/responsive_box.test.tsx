@@ -6,14 +6,13 @@ import { ResponsiveBoxProps } from '../responsive_box_props';
 import { ResponsiveBox } from '../responsive_box';
 
 import domAdapter from '../../../../core/dom_adapter';
-import { convertToScreenSizeQualifier } from '../screen_utils';
 
 it('ResponsiveBox > InitialProps', () => {
   const props = new ResponsiveBoxProps();
   const responsiveBox = mount<ResponsiveBox>(<ResponsiveBox {...props} />);
 
   expect(responsiveBox.props()).toEqual({
-    screenByWidth: convertToScreenSizeQualifier,
+    screenByWidth: undefined,
   });
 });
 

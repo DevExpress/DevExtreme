@@ -14,17 +14,17 @@ const HD_SCREEN_WIDTH = 1920;
 const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
 const SCREEN_SIZE_CLASS_PREFIX = `${RESPONSIVE_BOX_CLASS}-screen-`;
 
-const getCurrentScreen = (viewModel: ResponsiveBox): ScreenSizeQualifier => {
-  const screenWidth = hasWindow()
-    ? domAdapter.getDocumentElement().clientWidth
-    : HD_SCREEN_WIDTH;
-
-  const screenSizeFunc = viewModel.props.screenByWidth ?? convertToScreenSizeQualifier;
-  return screenSizeFunc(screenWidth);
-};
-
 export const viewFunction = (viewModel: ResponsiveBox): JSX.Element => {
-  const screenSizeQualifier = getCurrentScreen(viewModel);
+  const getCurrentScreenSizeQualifier = (): ScreenSizeQualifier => {
+    const screenWidth = hasWindow()
+      ? domAdapter.getDocumentElement().clientWidth
+      : HD_SCREEN_WIDTH;
+
+    const screenSizeFunc = viewModel.props.screenByWidth ?? convertToScreenSizeQualifier;
+    return screenSizeFunc(screenWidth);
+  };
+
+  const screenSizeQualifier = getCurrentScreenSizeQualifier();
   const cssClasses = combineClasses({
     [RESPONSIVE_BOX_CLASS]: true,
     [SCREEN_SIZE_CLASS_PREFIX + screenSizeQualifier]: true,
