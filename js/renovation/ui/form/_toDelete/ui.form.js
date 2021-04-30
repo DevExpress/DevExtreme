@@ -18,7 +18,6 @@ import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from '../.
 import ValidationEngine from '../validation_engine';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import TabPanel from '../tab_panel';
-import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
 import { isMaterial } from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
@@ -310,10 +309,6 @@ const Form = Widget.inherit({
 
         this.callBase();
 
-        if(this.option('scrollingEnabled')) {
-            this._renderScrollable();
-        }
-
         this._renderLayout();
         this._renderValidationSummary();
 
@@ -346,17 +341,6 @@ const Form = Widget.inherit({
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         this._lastMarkupScreenFactor = undefined;
-    },
-
-    _renderScrollable: function() {
-        const useNativeScrolling = this.option('useNativeScrolling');
-        this._scrollable = new Scrollable(this.$element(), {
-            useNative: !!useNativeScrolling,
-            useSimulatedScrollbar: !useNativeScrolling,
-            useKeyboard: false,
-            direction: 'both',
-            bounceEnabled: false
-        });
     },
 
     _getContent: function() {
