@@ -7,35 +7,35 @@ export const resources = [{
     {
       text: 'Resource 0',
       id: 0,
-      color: '#24ff50',
+      color: '#20B2AA',
     }, {
       text: 'Resource 1',
       id: 1,
-      color: '#24ff50',
+      color: '#87CEEB',
     }, {
       text: 'Resource 2',
       id: 2,
-      color: '#24ff50',
+      color: '#228B22',
     }, {
       text: 'Resource 3',
       id: 3,
-      color: '#24ff50',
+      color: '#98FB98',
     }, {
       text: 'Resource 4',
       id: 4,
-      color: '#24ff50',
+      color: '#2E8B57',
     }, {
       text: 'Resource 5',
       id: 5,
-      color: '#24ff50',
+      color: '#66CDAA',
     }, {
       text: 'Resource 6',
       id: 6,
-      color: '#24ff50',
+      color: '#008080',
     }, {
       text: 'Resource 7',
       id: 7,
-      color: '#24ff50',
+      color: '#00FFFF',
     },
   ],
   label: 'Priority',
@@ -46,7 +46,7 @@ export const views = [{
   intervalCount: 7,
 }, {
   type: 'week',
-  intervalCount: 4,
+  intervalCount: 10,
 }, {
   type: 'month',
 }, {
@@ -54,6 +54,7 @@ export const views = [{
   intervalCount: 7,
 }, {
   type: 'timelineWeek',
+  intervalCount: 3,
 }, {
   type: 'timelineMonth',
 }];

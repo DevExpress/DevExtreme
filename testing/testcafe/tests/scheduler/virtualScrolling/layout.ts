@@ -19,7 +19,6 @@ const createScheduler = async (
     dataSource: createDataSetForScreenShotTests(),
     currentDate: new Date(2021, 0, 1),
     height: 600,
-    width: 600,
     resources,
     views,
     currentView: 'day',
@@ -55,7 +54,7 @@ test('Virtual scrolling layout in scheduler views', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  // views[0] is day view and we have a but in its CSS
+  // TODO: views[0] is day view and we have a bug in its CSS
   // It is not advisable to create screenshots for incorrect layout
   for (let i = 1; i < views.length; i += 1) {
     const view = views[i];
@@ -63,19 +62,19 @@ test('Virtual scrolling layout in scheduler views', async (t) => {
     await scheduler.option('currentView', view.type);
 
     await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll.png`, scheduler.workSpace),
+      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll.png`),
     ).ok();
 
     await scrollTo(scrollConfig[i].firstDate);
 
     await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll.png`, scheduler.workSpace),
+      await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll.png`),
     ).ok();
 
     await scrollTo(scrollConfig[i].lastDate);
 
     await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll.png`, scheduler.workSpace),
+      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll.png`),
     ).ok();
   }
 
