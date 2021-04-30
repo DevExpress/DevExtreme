@@ -9,7 +9,7 @@ import {
   scrollTo,
 } from './utils';
 
-fixture`Scheduler: Adaptive Generic theme layout`
+fixture`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 const createScheduler = async (
