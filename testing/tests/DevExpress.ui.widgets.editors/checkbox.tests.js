@@ -10,58 +10,23 @@ import 'ui/validator';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="qunit-fixture">\
-            <div id="checkbox"></div>\
-            <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
-        </div>';
+        `<div id="qunit-fixture">
+            <div id="checkBox"></div>
+        </div>`;
 
     $('#qunit-fixture').html(markup);
 });
 
 const CHECKBOX_CLASS = 'dx-checkbox';
-const CHECKBOX_CONTAINER_CLASS = 'dx-checkbox-container';
-const CHECKBOX_CONTAINER_SELECTOR = '.dx-checkbox-container';
 const ICON_SELECTOR = '.dx-checkbox-icon';
-const CHECKED_CLASS = 'dx-checkbox-checked';
-const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
-const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 
 QUnit.module('Checkbox', function() {
     QUnit.module('render', function() {
-
-        QUnit.test('markup init', function(assert) {
-            const element = $('#checkbox').dxCheckBox();
-
-            assert.ok(element.hasClass(CHECKBOX_CLASS));
-
-            const checkboxContent = element.find(CHECKBOX_CONTAINER_SELECTOR);
-
-            assert.ok(checkboxContent.hasClass(CHECKBOX_CONTAINER_CLASS), 'checkbox has a container');
-
-            assert.equal(checkboxContent.find(ICON_SELECTOR).length, 1, 'checkbox has an icon');
-        });
-
         QUnit.test('init with default options', function(assert) {
-            const element = $('#checkbox').dxCheckBox();
-            const instance = element.dxCheckBox('instance');
+            const $element = $('#checkBox').dxCheckBox();
+            const instance = $element.dxCheckBox('instance');
 
-            assert.equal(instance.option('value'), false, 'checkbox has a false value by default');
-            assert.ok(!element.hasClass(CHECKED_CLASS));
-            assert.ok(!element.hasClass(CHECKBOX_HAS_TEXT_CLASS, 'checkbox without text has not text class'));
-        });
-
-        QUnit.test('init with options', function(assert) {
-            const element = $('#checkbox').dxCheckBox({
-                value: true,
-                text: 'text'
-            });
-
-            const checkboxContent = element.find(CHECKBOX_CONTAINER_SELECTOR);
-
-            assert.ok(element.hasClass(CHECKED_CLASS, 'checkBox is checked'));
-            assert.equal($.trim(checkboxContent.find('.' + CHECKBOX_TEXT_CLASS).text()), 'text');
-            assert.ok(element.hasClass(CHECKBOX_HAS_TEXT_CLASS), 'checkbox with text has text class');
+            assert.strictEqual(instance.option('value'), false, 'checkbox has a false value by default');
         });
 
         QUnit.test('click triggers user handler and changes state', function(assert) {
@@ -69,94 +34,71 @@ QUnit.module('Checkbox', function() {
 
             let checked = false;
 
-            const element = $('#checkbox').dxCheckBox({
+            const $element = $('#checkBox').dxCheckBox({
                 onValueChanged: function(e) {
                     assert.ok(e.value, 'value present');
                     checked = true;
                 }
             });
 
-            const instance = element.dxCheckBox('instance');
+            const instance = $element.dxCheckBox('instance');
 
-            assert.ok(!checked);
-            assert.ok(!instance.option('value'));
+            assert.notOk(checked);
+            assert.notOk(instance.option('value'));
 
-            element.trigger('dxclick');
+            $element.trigger('dxclick');
+
             assert.ok(checked);
             assert.ok(instance.option('value'));
-        });
-
-        QUnit.test('changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
-            const checkbox = $('#checkbox').dxCheckBox({
-                onValueChanged: function(args) {
-                    assert.equal(args.value, true, 'correct value present');
-                    assert.ok(true);
-                }
-            }).dxCheckBox('instance');
-
-            checkbox.option('value', true);
-        });
-
-        QUnit.test('onContentReady fired after setting the value', function(assert) {
-            assert.expect(2);
-
-            $('#checkbox').dxCheckBox({
-                value: true,
-                onContentReady: function(e) {
-                    assert.ok($(e.element).find('input').val());
-                    assert.ok($(e.element).hasClass(CHECKBOX_CLASS));
-                }
-            });
         });
     });
 
     QUnit.module('validation', function() {
-
         if(devices.real().deviceType === 'desktop') {
             QUnit.test('the click should be processed before the validation message is shown (T570458)', function(assert) {
-                const $checkbox = $('#checkbox')
+                const $checkBox = $('#checkBox')
                     .dxCheckBox({})
                     .dxValidator({
                         validationRules: [{ type: 'required', message: 'message' }]
                     });
-                const checkbox = $checkbox.dxCheckBox('instance');
+                const checkBox = $checkBox.dxCheckBox('instance');
                 const isValidationMessageVisible = () => {
-                    const message = $checkbox.find('.dx-overlay-wrapper.dx-invalid-message').get(0);
+                    const message = $checkBox.find('.dx-overlay-wrapper.dx-invalid-message').get(0);
 
                     return message && window.getComputedStyle(message).visibility === 'visible';
                 };
 
                 validateGroup();
-                assert.notOk(checkbox.option('isValid'));
+                assert.notOk(checkBox.option('isValid'));
 
-                $checkbox.focus();
-                assert.notOk(checkbox.option('isValid'));
+                $checkBox.focus();
+                assert.notOk(checkBox.option('isValid'));
                 assert.notOk(isValidationMessageVisible());
 
-                $checkbox.trigger('dxclick');
-                assert.ok(checkbox.option('isValid'));
+                $checkBox.trigger('dxclick');
+                assert.ok(checkBox.option('isValid'));
                 assert.notOk(isValidationMessageVisible());
 
-                $checkbox.trigger('dxclick');
-                assert.notOk(checkbox.option('isValid'));
+                $checkBox.trigger('dxclick');
+                assert.notOk(checkBox.option('isValid'));
                 assert.ok(isValidationMessageVisible());
             });
 
             QUnit.test('should show validation message after focusing', function(assert) {
                 const clock = sinon.useFakeTimers();
-                const $checkbox = $('#checkbox')
+                const $checkBox = $('#checkBox')
                     .dxCheckBox({})
                     .dxValidator({
                         validationRules: [{ type: 'required', message: 'message' }]
                     });
 
-                const instance = $checkbox.dxCheckBox('instance');
+                const instance = $checkBox.dxCheckBox('instance');
 
                 validateGroup();
                 instance.focus();
                 clock.tick(200);
 
-                const message = $checkbox.find('.dx-overlay-wrapper.dx-invalid-message').get(0);
+                const message = $checkBox.find('.dx-overlay-wrapper.dx-invalid-message').get(0);
 
                 assert.strictEqual(window.getComputedStyle(message).visibility, 'visible');
                 clock.restore();
@@ -165,9 +107,8 @@ QUnit.module('Checkbox', function() {
     });
 
     QUnit.module('options', function() {
-
         QUnit.test('visible', function(assert) {
-            const $element = $('#checkbox').dxCheckBox();
+            const $element = $('#checkBox').dxCheckBox();
             const instance = $element.dxCheckBox('instance');
             instance.option('width', 1);
             assert.ok($element.is(':visible'), 'checkBox is visible');
@@ -177,7 +118,7 @@ QUnit.module('Checkbox', function() {
         });
 
         QUnit.test('text is changed according to the corresponding option', function(assert) {
-            const $element = $('#checkbox').dxCheckBox();
+            const $element = $('#checkBox').dxCheckBox();
             const instance = $element.dxCheckBox('instance');
 
             instance.option('text', 'new text');
@@ -188,7 +129,7 @@ QUnit.module('Checkbox', function() {
         });
 
         QUnit.test('disabled', function(assert) {
-            const $element = $('#checkbox').dxCheckBox({
+            const $element = $('#checkBox').dxCheckBox({
                 disabled: true,
                 value: false
             });
@@ -202,86 +143,67 @@ QUnit.module('Checkbox', function() {
             assert.equal(instance.option('value'), true);
         });
 
-        QUnit.test('checkbox icon must not resize according to the \'width\' and \'height\' options', function(assert) {
+        QUnit.test('checkbox icon must not resize according to the "width" and "height" options', function(assert) {
             const newSize = 50;
 
-            const $element = $('#checkbox').dxCheckBox();
+            const $element = $('#checkBox').dxCheckBox();
             const instance = $element.dxCheckBox('instance');
             const initWidth = $element.find(ICON_SELECTOR).width();
             const initHeight = $element.find(ICON_SELECTOR).height();
 
             instance.option('width', newSize);
 
-            assert.equal($element.find(ICON_SELECTOR).width(), initWidth, 'icon width is not resized ');
+            assert.equal($element.find(ICON_SELECTOR).width(), initWidth, 'icon width is not resized');
 
             instance.option('height', newSize);
 
             assert.equal($element.find(ICON_SELECTOR).height(), initHeight, 'icon height is not resized');
         });
 
-        QUnit.test('value option should be processed correctly (Q504139)', function(assert) {
-            const $element = $('#checkbox').dxCheckBox({ value: undefined });
-            const instance = $element.dxCheckBox('instance');
-            assert.ok(!$element.hasClass(CHECKED_CLASS));
+        QUnit.test('widget input should get the "name" attribute with a correct value', function(assert) {
+            const expectedName = 'some_name';
+            const $element = $('#checkBox').dxCheckBox({
+                name: expectedName
+            });
+            const $input = $element.find('input');
 
-            instance.option({ value: null });
-            assert.ok(!$element.hasClass(CHECKED_CLASS));
-
-            instance.option({ value: 0 });
-            assert.ok(!$element.hasClass(CHECKED_CLASS));
+            assert.strictEqual($input.attr('name'), expectedName, 'the input "name" attribute has correct value');
         });
     });
 
     QUnit.module('hidden input', function() {
-
-        QUnit.test('the hidden input has \'true\' value', function(assert) {
-            const $element = $('#checkbox').dxCheckBox({ value: true });
+        QUnit.test('the hidden input has "true" value', function(assert) {
+            const $element = $('#checkBox').dxCheckBox({ value: true });
             const $input = $element.find('input');
 
-            assert.equal($input.val(), 'true', 'a hidden input\'s value');
+            assert.strictEqual($input.val(), 'true', 'hidden input value is correct');
         });
 
-        QUnit.test('the hidden input has \'false\' value', function(assert) {
-            const $element = $('#checkbox').dxCheckBox();
+        QUnit.test('the hidden input has "false" value', function(assert) {
+            const $element = $('#checkBox').dxCheckBox();
             const $input = $element.find('input');
 
-            assert.equal($input.val(), 'false', 'a hidden input\'s value');
+            assert.strictEqual($input.val(), 'false', 'hidden input value is correct');
         });
 
         QUnit.test('the hidden should change its value on widget value change', function(assert) {
-            const $element = $('#checkbox').dxCheckBox({
+            const $element = $('#checkBox').dxCheckBox({
                 value: undefined
             });
             const instance = $element.dxCheckBox('instance');
             const $input = $element.find('input');
 
             instance.option('value', false);
-            assert.equal($input.val(), 'false', 'input value has been changed');
+            assert.strictEqual($input.val(), 'false', 'input value has been changed');
 
             instance.option('value', true);
-            assert.equal($input.val(), 'true', 'input value has been changed second time');
+            assert.strictEqual($input.val(), 'true', 'input value has been changed second time');
         });
     });
-
-
-    QUnit.module('the \'name\' option', function() {
-
-        QUnit.test('widget input should get the \'name\' attribute with a correct value', function(assert) {
-            const expectedName = 'some_name';
-            const $element = $('#checkbox').dxCheckBox({
-                name: expectedName
-            });
-            const $input = $element.find('input');
-
-            assert.equal($input.attr('name'), expectedName, 'the input \'name\' attribute has correct value');
-        });
-    });
-
 
     QUnit.module('widget sizing render', function() {
-
         QUnit.test('constructor', function(assert) {
-            const $element = $('#widget').dxCheckBox({ width: 400 });
+            const $element = $('#checkBox').dxCheckBox({ width: 400 });
             const instance = $element.dxCheckBox('instance');
 
             assert.strictEqual(instance.option('width'), 400);
@@ -289,7 +211,7 @@ QUnit.module('Checkbox', function() {
         });
 
         QUnit.test('change width', function(assert) {
-            const $element = $('#widget').dxCheckBox();
+            const $element = $('#checkBox').dxCheckBox();
             const instance = $element.dxCheckBox('instance');
             const customWidth = 400;
 
@@ -299,17 +221,10 @@ QUnit.module('Checkbox', function() {
         });
     });
 
-
     QUnit.module('keyboard navigation', function() {
-
-        QUnit.test('check state changes on space press', function(assert) {
-            assert.expect(2);
-
-            const $element = $('#checkbox').dxCheckBox({
+        QUnit.test('space press should toggle value', function(assert) {
+            const $element = $('#checkBox').dxCheckBox({
                 focusStateEnabled: true,
-                onValueChanged: function() {
-                    assert.ok(true, 'press space on button call click action');
-                },
                 value: false
             });
             const instance = $element.dxCheckBox('instance');
@@ -317,16 +232,15 @@ QUnit.module('Checkbox', function() {
 
             $element.trigger('focusin');
             keyboard.keyDown('space');
-            assert.equal(instance.option('value'), true, 'value has been change successfully');
 
+            assert.ok(instance.option('value'), 'value has been changed successfully');
         });
     });
 
     QUnit.module('events', function() {
-
         QUnit.test('valueChanged event fired after setting the value by click', function(assert) {
             const handler = sinon.stub();
-            const $element = $('#checkbox').dxCheckBox({});
+            const $element = $('#checkBox').dxCheckBox({});
             const checkbox = $element.dxCheckBox('instance');
 
             checkbox.on('valueChanged', handler);
@@ -338,20 +252,17 @@ QUnit.module('Checkbox', function() {
         QUnit.test('valueChanged handler runtime change', function(assert) {
             const handler = sinon.stub();
             const newHandler = sinon.stub();
-            const $element = $('#checkbox').dxCheckBox({ onValueChanged: handler });
-            const checkbox = $element.dxCheckBox('instance');
+            const $element = $('#checkBox').dxCheckBox({ onValueChanged: handler });
+            const checkBox = $element.dxCheckBox('instance');
 
+            checkBox.option('onValueChanged', newHandler);
             $element.trigger('dxclick');
-            assert.ok(handler.calledOnce);
-
-            checkbox.option('onValueChanged', newHandler);
-            $element.trigger('dxclick');
-            assert.ok(handler.calledOnce);
+            assert.ok(newHandler.calledOnce);
         });
 
         QUnit.test('valueChanged should have correct previousValue when it is undefined', function(assert) {
             const handler = sinon.stub();
-            const $element = $('#checkbox').dxCheckBox({ onValueChanged: handler, value: undefined });
+            const $element = $('#checkBox').dxCheckBox({ onValueChanged: handler, value: undefined });
 
             $element.trigger('dxclick');
             assert.ok(handler.calledOnce);
@@ -359,7 +270,7 @@ QUnit.module('Checkbox', function() {
         });
 
         QUnit.test('value=undefined should be set correctly', function(assert) {
-            const $element = $('#checkbox').dxCheckBox({ value: undefined });
+            const $element = $('#checkBox').dxCheckBox({ value: undefined });
             const checkbox = $element.dxCheckBox('instance');
             assert.strictEqual(checkbox.option('value'), undefined, 'value on init is correct');
             assert.ok($element.hasClass('dx-checkbox-indeterminate'), '"dx-checkbox-indeterminate"class has been added');
@@ -375,7 +286,7 @@ QUnit.module('Checkbox', function() {
 
         QUnit.test('valueChanged event fired after setting the value by keyboard', function(assert) {
             const handler = sinon.stub();
-            const $element = $('#checkbox').dxCheckBox({ focusStateEnabled: true });
+            const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
             const checkbox = $element.dxCheckBox('instance');
             const keyboard = keyboardMock($element);
 
@@ -388,7 +299,7 @@ QUnit.module('Checkbox', function() {
 
         QUnit.test('valueChanged event fired after setting the value by option', function(assert) {
             const handler = sinon.stub();
-            const $element = $('#checkbox').dxCheckBox({
+            const $element = $('#checkBox').dxCheckBox({
                 value: true
             });
             const checkbox = $element.dxCheckBox('instance');
@@ -402,7 +313,7 @@ QUnit.module('Checkbox', function() {
         QUnit.module('valueChanged handler should receive correct event parameter', {
             beforeEach: function() {
                 this.valueChangedHandler = sinon.stub();
-                this.$element = $('#checkbox').dxCheckBox({ onValueChanged: this.valueChangedHandler, focusStateEnabled: true });
+                this.$element = $('#checkBox').dxCheckBox({ onValueChanged: this.valueChangedHandler, focusStateEnabled: true });
                 this.instance = this.$element.dxCheckBox('instance');
                 this.keyboard = keyboardMock(this.$element);
 
@@ -440,6 +351,18 @@ QUnit.module('Checkbox', function() {
 
             QUnit.test('after runtime change', function(assert) {
                 this.testProgramChange(assert);
+            });
+        });
+
+        QUnit.test('onContentReady is fired after first render', function(assert) {
+            assert.expect(2);
+
+            $('#checkBox').dxCheckBox({
+                value: true,
+                onContentReady: function(e) {
+                    assert.ok($(e.element).find('input').val());
+                    assert.ok($(e.element).hasClass(CHECKBOX_CLASS));
+                }
             });
         });
     });

@@ -44,6 +44,7 @@ export default class Editor extends Component {
     props.saveValueChangeEvent = (e: Event): void => {
       this._valueChangeEventInstance = e;
     };
+
     return props;
   }
 
@@ -93,6 +94,7 @@ export default class Editor extends Component {
             editor: this,
           });
         }
+        super._optionChanged(option);
         break;
       case 'isValid':
       case 'validationError':
@@ -100,6 +102,7 @@ export default class Editor extends Component {
       case 'validationStatus':
         this.option((ValidationEngine as unknown as ({ synchronizeValidationOptions }))
           .synchronizeValidationOptions(option, this.option()));
+        super._optionChanged(option);
         break;
       default:
         super._optionChanged(option);
