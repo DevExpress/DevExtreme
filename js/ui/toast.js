@@ -211,7 +211,7 @@ const Toast = Overlay.inherit({
         this.callBase();
 
         this.$element().addClass(TOAST_CLASS);
-        this._wrapper().addClass(TOAST_WRAPPER_CLASS);
+        this._$wrapper.addClass(TOAST_WRAPPER_CLASS);
         this._$content.addClass(TOAST_CLASS_PREFIX + String(this.option('type')).toLowerCase());
         this.$content().addClass(TOAST_CONTENT_CLASS);
 

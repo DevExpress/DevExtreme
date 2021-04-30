@@ -245,7 +245,7 @@ const Popover = Popup.inherit({
         this._timeouts = {};
 
         this.$element().addClass(POPOVER_CLASS);
-        this._wrapper().addClass(POPOVER_WRAPPER_CLASS);
+        this._$wrapper.addClass(POPOVER_WRAPPER_CLASS);
     },
 
     _render: function() {
@@ -296,7 +296,7 @@ const Popover = Popup.inherit({
     },
 
     _renderTitle: function() {
-        this._wrapper().toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
+        this._$wrapper.toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
         this.callBase();
     },
 
