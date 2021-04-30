@@ -4919,6 +4919,44 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             setContentItemSizesSpy.restore();
         }
     });
+
+    QUnit.test('New mode. updateItems should not be called on data loading when loadViewport method is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const updateItemsSpy = sinon.spy(this.dataController, 'updateItems');
+
+        try {
+            // act
+            this.dataController._isLoading = true;
+            this.dataController.loadViewport();
+
+            // assert
+            assert.notOk(updateItemsSpy.called, 'not called');
+
+            // act
+            this.dataController._isLoading = false;
+            this.dataController.loadViewport();
+
+            // assert
+            assert.ok(updateItemsSpy.called, 'called');
+        } finally {
+            updateItemsSpy.restore();
+        }
+    });
+
 });
 
 QUnit.module('Infinite scrolling', {

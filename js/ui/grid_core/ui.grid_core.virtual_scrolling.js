@@ -699,17 +699,9 @@ const VirtualScrollingRowsViewExtender = (function() {
         setLoading: function(isLoading, messageText) {
             const dataController = this._dataController;
             const hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!this._findBottomLoadPanel();
-            const operationTypes = dataController.dataSource()?.operationTypes?.();
-            const hasEnabledOperationType = function(types) {
-                types = types || {};
-                return Object.keys(types).some(name => types[name]);
-            };
 
-            if(this.option(NEW_SCROLLING_MODE) && isLoading && operationTypes) {
-                const loadingOperationTypes = dataController.dataSource()?.loadingOperationTypes?.();
-                if(loadingOperationTypes?.paging || loadingOperationTypes?.fullReload || !hasEnabledOperationType(loadingOperationTypes)) {
-                    return;
-                }
+            if(this.option(NEW_SCROLLING_MODE) && isLoading && dataController.isViewportChanging()) {
+                return;
             }
 
             if(hasBottomLoadPanel) {
@@ -839,10 +831,13 @@ export const virtualScrollingModule = {
 
                         this._visibleItems = this.option(NEW_SCROLLING_MODE) ? null : [];
                         this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
+                        this._viewportChanging = false;
 
                         this._rowsScrollController.positionChanged.add(() => {
                             if(this.option(NEW_SCROLLING_MODE)) {
+                                this._viewportChanging = true;
                                 this.loadViewport();
+                                this._viewportChanging = false;
                                 return;
                             }
                             this._dataSource?.setViewportItemIndex(this._rowsScrollController.getViewportItemIndex());
@@ -851,6 +846,9 @@ export const virtualScrollingModule = {
                         if(this.isLoaded() && !this.option(NEW_SCROLLING_MODE)) {
                             this._rowsScrollController.load();
                         }
+                    },
+                    isViewportChanging: function() {
+                        return this._viewportChanging;
                     },
                     _getRowsScrollDataOptions: function() {
                         const that = this;
@@ -1152,10 +1150,15 @@ export const virtualScrollingModule = {
                         if(isVirtualMode(this)) {
                             this._updateLoadViewportParams();
                             const { pageIndex, loadPageCount } = this.getLoadPageParams();
+                            const dataSourceAdapter = this._dataSource;
 
-                            this._dataSource.pageIndex(pageIndex);
-                            this._dataSource.loadPageCount(loadPageCount);
-                            this.load();
+                            if(pageIndex !== dataSourceAdapter.pageIndex() || loadPageCount !== dataSourceAdapter.loadPageCount()) {
+                                dataSourceAdapter.pageIndex(pageIndex);
+                                dataSourceAdapter.loadPageCount(loadPageCount);
+                                this.load();
+                            } else if(!this._isLoading) {
+                                this.updateItems();
+                            }
                         }
                     },
                     loadIfNeed: function() {
