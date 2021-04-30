@@ -442,7 +442,9 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
-    _renderLabel: function(options) {
+    _renderLabel: function(container) {
+        const TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS = 'dx-texteditor-with-custom-buttons';
+
         if(this._$label) {
             this._$label.remove();
             this._$label = null;
@@ -450,7 +452,8 @@ const TextEditorBase = Editor.inherit({
 
         this.$element()
             .removeClass(TEXTEDITOR_WITH_LABEL_CLASS)
-            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS);
+            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
+            .removeClass(TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS);
 
         if(!this.option('label') || this.option('labelMode') === 'hidden') return;
 
@@ -461,7 +464,21 @@ const TextEditorBase = Editor.inherit({
             .addClass(TEXTEDITOR_LABEL_CLASS)
             .html('<span>' + labelText + '</span>');
 
-        $label.appendTo(this._$textEditorInputContainer);
+
+        if(this._$beforeButtonsContainer) {
+            const $container = container || this.$element();
+            const $textEditorInputContainer = $container.find('.' + TEXTEDITOR_INPUT_CONTAINER_CLASS);
+
+            $label.appendTo($textEditorInputContainer);
+
+            if(this.option('stylingMode') === 'outlined') {
+                this.$element().addClass(TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS);
+            }
+        } else if(this.NAME === 'dxLookup') {
+            $label.appendTo(container);
+        } else {
+            $label.appendTo(this._$textEditorContainer);
+        }
     },
 
     _renderPlaceholder: function() {

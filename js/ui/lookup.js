@@ -440,6 +440,10 @@ const Lookup = DropDownList.inherit({
         }
     },
 
+    _renderLabel: function() {
+        this.callBase(this._inputWrapper());
+    },
+
     _renderField: function() {
         const fieldTemplate = this._getTemplateByOption('fieldTemplate');
 

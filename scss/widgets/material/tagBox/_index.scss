@@ -5,6 +5,7 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../textEditor" as *;
+@use "../textEditor/sizes" as *;
 @use "../common/sizes" as *;
 @use "../../base/tagBox";
 
@@ -17,6 +18,46 @@
 
   .dx-texteditor-input {
     height: $material-tagbox-tag-height;
+  }
+
+  &.dx-texteditor-with-floating-label,
+  &.dx-texteditor-with-label {
+    &:not(.dx-texteditor-empty) {
+      .dx-tag-container {
+        padding-left: 0;
+      }
+
+      .dx-texteditor-container {
+        padding-left: $material-tagbox-tag-content-padding-left;
+      }
+
+      &.dx-rtl {
+        .dx-tag-container {
+          padding-right: 0;
+        }
+
+        .dx-texteditor-container {
+          padding-right: $material-tagbox-tag-content-padding-left;
+        }
+      }
+    }
+
+    &.dx-editor-filled {
+      &:not(.dx-texteditor-empty) {
+        .dx-tag-container {
+          padding-top: $material-tagbox-tag-margin + $material-texteditor-font-size;
+        }
+      }
+    }
+
+    &.dx-editor-underlined {
+      &:not(.dx-texteditor-empty):not(.dx-texteditor-filled) {
+        .dx-tag-container {
+          padding-top: $material-tagbox-tag-margin + $material-texteditor-font-size;
+          margin-top: -$material-texteditor-font-size;
+        }
+      }
+    }
   }
 
   &.dx-editor-filled,

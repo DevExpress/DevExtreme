@@ -3,6 +3,7 @@
 // adduse
 
 $generic-tagbox-tag-container-padding-bottom: null !default;
+$generic-tagbox-tag-container-padding-left: null !default;
 $generic-tagbox-tag-content-margin: null !default;
 $generic-tagbox-tag-content-padding-left: null !default;
 $generic-tagbox-tag-content-padding-right: null !default;
@@ -14,6 +15,7 @@ $generic-tagbox-select-all-padding-bottom: null !default;
 $generic-tagbox-select-all-margin-bottom: null !default;
 
 @if $size == "default" {
+  $generic-tagbox-tag-container-padding-left: 4px !default;
   $generic-tagbox-tag-container-padding-bottom: 4px !default;
   $generic-tagbox-tag-content-margin: 4px 0 0 4px !default;
   $generic-tagbox-tag-content-padding-left: 6px !default;
@@ -27,6 +29,7 @@ $generic-tagbox-select-all-margin-bottom: null !default;
 }
 
 @else if $size == "compact" {
+  $generic-tagbox-tag-container-padding-left: 2px !default;
   $generic-tagbox-tag-container-padding-bottom: 2px !default;
   $generic-tagbox-tag-content-margin: 2px 0 0 2px !default;
   $generic-tagbox-tag-content-padding-left: 4px !default;

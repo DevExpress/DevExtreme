@@ -138,6 +138,25 @@
       }
     }
   }
+
+  &.dx-texteditor-with-floating-label.dx-editor-underlined,
+  &.dx-texteditor-with-label.dx-editor-underlined {
+    .dx-texteditor-label {
+      left: $material-base-standard-texteditor-input-horizontal-padding;
+    }
+
+    &.dx-rtl {
+      right: $material-base-standard-texteditor-input-horizontal-padding;
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-lookup-empty {
+      .dx-lookup-field {
+        font-size: 0;
+      }
+    }
+  }
 }
 
 .dx-lookup-field {

@@ -28,7 +28,10 @@ $generic-texteditor-clear-icon-size: $generic-texteditor-icon-size + $generic-te
 
 $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $generic-invalid-badge-horizontal-padding;
 
-$generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms, font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+$generic-texteditor-label-transition:
+  font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 
 @mixin dx-texteditor-icon() {
@@ -196,7 +199,7 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
 
 .dx-texteditor-label {
   position: absolute;
-  top: 0;
+  left: 0;
   font-size: $generic-texteditor-label-size;
   color: $texteditor-label-color;
   max-height: 1px;
@@ -213,7 +216,6 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
 
 .dx-editor-filled {
   $input-vertical-diff: $generic-base-inline-borderedwidget-top-padding;
-  $label-transform: translate(0, 0);
 
   .dx-texteditor-label {
     left: $generic-base-inline-borderedwidget-horizontal-padding;
@@ -227,8 +229,9 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
     }
 
     .dx-texteditor-label {
-      transform: $label-transform;
       font-size: $generic-texteditor-label-size;
+      top: 0;
+      margin-top: 0;
     }
 
     .dx-placeholder {
@@ -237,26 +240,44 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
   }
 
   &.dx-texteditor-with-floating-label {
-    &.dx-texteditor-empty {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty,
+    &.dx-texteditor-empty.dx-state-readonly,
+    &.dx-lookup-empty.dx-state-readonly {
       .dx-placeholder {
         display: none;
       }
 
       .dx-texteditor-label {
         transition: $generic-texteditor-label-transition;
-        transform: translate(0, $generic-base-inline-borderedwidget-top-padding);
         font-size: $generic-base-font-size;
+        top: 50%;
+        line-height: $generic-base-font-size;
+        margin-top: -($generic-base-font-size / 2);
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
+          margin-top: 0;
+        }
+
+        .dx-placeholder {
+          display: none;
+        }
       }
     }
 
-    &.dx-state-focused {
+    &.dx-state-focused,
+    &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
       }
 
       .dx-texteditor-label {
-        transform: $label-transform;
         font-size: $generic-texteditor-label-size;
+        top: 0;
+        margin-top: 0;
       }
     }
   }
@@ -266,10 +287,10 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
 .dx-editor-outlined {
   $border-width: 1px;
   $label-offset-y: ($border-width + $generic-base-font-size) / 2;
-  $label-default-transform: translate(0, $generic-base-inline-borderedwidget-top-padding);
+  $label-default-transform: translate(0, 0);
 
   @mixin dx-state($borderColor) {
-    border-color: transparent;
+    border: none;
     box-shadow:
       inset #{$border-width} 0 $borderColor,
       inset -#{$border-width} 0 $borderColor,
@@ -278,6 +299,8 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
 
     .dx-texteditor-label {
       width: 100%;
+      top: 0;
+      margin-top: 0;
 
       span {
         transform: translate(0, -$label-offset-y);
@@ -289,10 +312,37 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
         box-shadow: inset 0 #{$border-width} $borderColor;
       }
     }
+
+    &.dx-texteditor-with-custom-buttons {
+      .dx-texteditor-buttons-container {
+        box-shadow: inset 0 #{$border-width} $borderColor;
+      }
+    }
+  }
+
+  &.dx-texteditor-with-custom-buttons {
+    .dx-texteditor-label {
+      &::after,
+      &::before {
+        border-radius: 0;
+      }
+
+      &::before {
+        padding-left: 1px;
+        margin-left: -1px;
+      }
+
+      &::after {
+        padding-right: 1px;
+        margin-right: -1px;
+      }
+    }
   }
 
   .dx-texteditor-label {
     display: flex;
+    top: 0;
+    margin-top: 0;
 
     span {
       position: relative;
@@ -306,21 +356,17 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
       display: block;
       box-sizing: border-box;
       margin-top: 0;
-      border-top: solid 0;
-      border-top-color: $texteditor-border-color;
       min-width: $generic-base-inline-borderedwidget-horizontal-padding - 2px;
       height: 1px;
       box-shadow: inset 0 0 transparent;
     }
 
     &::before {
-      border-left: solid $border-width transparent;
       border-radius: $texteditor-input-border-radius 0;
     }
 
     &::after {
       flex-grow: 1;
-      border-right: solid $border-width transparent;
       border-radius: 0 $texteditor-input-border-radius;
     }
   }
@@ -336,7 +382,8 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
   }
 
   &.dx-texteditor-with-floating-label {
-    &.dx-texteditor-empty {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty {
       box-shadow: inset 0 0 0 $border-width $texteditor-border-color;
 
       &.dx-invalid {
@@ -362,8 +409,53 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
         }
       }
 
+      &.dx-state-readonly {
+        &.dx-state-focused,
+        &.dx-state-focused.dx-state-hover,
+        &.dx-textarea.dx-state-focused {
+          .dx-texteditor-label {
+            width: 0;
+            top: 50%;
+            line-height: $generic-base-font-size;
+            margin-top: -($generic-base-font-size / 2);
+
+            span {
+              transition: $generic-texteditor-label-transition;
+              transform: $label-default-transform;
+              font-size: $generic-base-font-size;
+            }
+
+            &::before,
+            &::after {
+              box-shadow: inset 0 $border-width transparent;
+            }
+          }
+
+          .dx-placeholder {
+            display: none;
+          }
+
+          &.dx-textarea {
+            .dx-texteditor-label {
+              top: $generic-base-inline-borderedwidget-top-padding;
+              margin-top: 0;
+              font-size: $generic-base-font-size;
+            }
+          }
+
+          &.dx-invalid {
+            box-shadow: inset 0 0 0 2px $texteditor-invalid-focused-border-color;
+          }
+
+          box-shadow: inset 0 0 0 2px $texteditor-focused-border-color;
+        }
+      }
+
       .dx-texteditor-label {
         width: 0;
+        top: 50%;
+        line-height: $generic-base-font-size;
+        margin-top: -($generic-base-font-size / 2);
 
         span {
           transition: $generic-texteditor-label-transition;
@@ -376,10 +468,27 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
           box-shadow: inset 0 $border-width transparent;
         }
       }
+
+      &.dx-texteditor-with-custom-buttons {
+        .dx-texteditor-buttons-container {
+          box-shadow: inset 0 $border-width transparent;
+        }
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: $generic-base-inline-borderedwidget-top-padding;
+          margin-top: 0;
+        }
+
+        .dx-placeholder {
+          display: none;
+        }
+      }
     }
 
     &.dx-state-hover {
-      &:not(.dx-texteditor-empty) {
+      &:not(.dx-texteditor-empty):not(.dx-lookup-empty) {
         @include dx-state($texteditor-hover-border-color);
 
         &.dx-invalid {
@@ -391,7 +500,7 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
-    border-color: transparent;
+    border: none;
     box-shadow:
       inset 1px 0 $texteditor-border-color,
       inset -1px 0 $texteditor-border-color,
@@ -410,14 +519,37 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
           box-shadow: inset 0 1px $texteditor-invalid-faded-border-color;
         }
       }
+
+      &.dx-texteditor-with-custom-buttons {
+        .dx-texteditor-buttons-container {
+          box-shadow: inset 0 1px $texteditor-invalid-faded-border-color;
+        }
+      }
     }
 
-    .dx-texteditor-container {
+    .dx-texteditor-container,
+    .dx-dropdowneditor-input-wrapper {
       overflow: visible;
+    }
+
+    &.dx-texteditor-with-custom-buttons {
+      .dx-texteditor-buttons-container {
+        box-shadow: inset 0 1px $texteditor-border-color;
+
+        &:first-child {
+          border-radius: $texteditor-input-border-radius 0;
+        }
+
+        &:last-child {
+          border-radius: 0 $texteditor-input-border-radius;
+        }
+      }
     }
 
     .dx-texteditor-label {
       width: 100%;
+      top: 0;
+      margin-top: 0;
 
       span {
         transform: translate(0, -$label-offset-y);
@@ -430,6 +562,7 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
       }
     }
 
+    &.dx-textarea.dx-state-focused,
     &.dx-state-focused,
     &.dx-state-focused.dx-state-hover {
       @include dx-state($texteditor-focused-border-color);
@@ -450,14 +583,12 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
   $input-top-padding: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff + 2px;
   $label-transform: translate(0, -2px);
 
-  .dx-texteditor-label {
-    left: 0;
-  }
-
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-label {
       transform: $label-transform;
+      top: 0;
+      margin-top: 0;
     }
 
     .dx-texteditor-input {
@@ -467,22 +598,44 @@ $generic-texteditor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 
   }
 
   &.dx-texteditor-with-floating-label {
-    &.dx-texteditor-empty {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty,
+    &.dx-texteditor-empty.dx-state-readonly,
+    &.dx-lookup-empty.dx-state-readonly {
       .dx-placeholder {
         display: none;
       }
 
       .dx-texteditor-label {
         transition: $generic-texteditor-label-transition;
-        transform: translate(0, $input-top-padding);
+        transform: translate(0, 0);
         font-size: $generic-base-font-size;
+        top: 50%;
+        line-height: $generic-base-font-size;
+        margin-top: -($generic-base-font-size / 2);
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
+          margin-top: 0;
+          transform: translate(0, 0);
+          font-size: $generic-base-font-size;
+        }
+
+        .dx-placeholder {
+          display: none;
+        }
       }
     }
 
-    &.dx-state-focused {
+    &.dx-state-focused,
+    &.dx-textarea.dx-state-focused {
       .dx-texteditor-label {
         transform: $label-transform;
         font-size: $generic-texteditor-label-size;
+        top: 0;
+        margin-top: 0;
       }
 
       .dx-placeholder {
