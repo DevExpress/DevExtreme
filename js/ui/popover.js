@@ -1,6 +1,5 @@
 import $ from '../core/renderer';
-import { getWindow, hasWindow } from '../core/utils/window';
-const window = getWindow();
+import { hasWindow } from '../core/utils/window';
 import { getPublicElement } from '../core/element';
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
@@ -130,7 +129,7 @@ const detachEvent = function(that, target, name, event) {
 const Popover = Popup.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            target: window,
+            target: undefined,
 
             shading: false,
 
@@ -422,7 +421,7 @@ const Popover = Popup.inherit({
         const contentLocation = contentOffset[axis];
         const contentSize = getBoundingRect(this._$content.get(0))[sizeProperty];
         const targetLocation = targetOffset[axis];
-        const targetSize = $target.get(0).preventDefault ? 0 : getBoundingRect($target.get(0))[sizeProperty];
+        const targetSize = $target.get(0)?.preventDefault ? 0 : getBoundingRect($target.get(0))[sizeProperty];
 
         const min = Math.max(contentLocation, targetLocation);
         const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
