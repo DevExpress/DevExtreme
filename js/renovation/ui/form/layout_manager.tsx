@@ -5,6 +5,7 @@ import {
 
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
+import { ResponsiveBox } from '../responsive_box/responsive_box';
 import { LayoutManagerProps } from './layout_manager_props';
 
 export const viewFunction = (viewModel: LayoutManager): JSX.Element => {
@@ -13,7 +14,9 @@ export const viewFunction = (viewModel: LayoutManager): JSX.Element => {
     <Widget
       classes={cssClasses}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
-    />
+    >
+      <ResponsiveBox />
+    </Widget>
   );
 };
 
