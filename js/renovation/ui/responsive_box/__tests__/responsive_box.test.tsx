@@ -6,6 +6,7 @@ import { ResponsiveBoxProps } from '../responsive_box_props';
 import { ResponsiveBox } from '../responsive_box';
 
 import domAdapter from '../../../../core/dom_adapter';
+import { setWindow } from '../../../../core/utils/window';
 
 it('ResponsiveBox > InitialProps', () => {
   const props = new ResponsiveBoxProps();
@@ -24,7 +25,7 @@ describe('ResponsiveBox > Attrs', () => {
       { clientWidth: 900, expectedClass: 'dx-responsivebox-screen-sm' },
       { clientWidth: 700, expectedClass: 'dx-responsivebox-screen-xs' },
     ]).describe('Config: %o', ({ clientWidth, expectedClass }) => {
-      it('Check has valid screen size. default implementation', () => {
+      it('Check has valid screen size. Default implementation. Has window', () => {
         const defaultImplementation = domAdapter.getDocumentElement;
         domAdapter.getDocumentElement = () => ({ clientWidth });
 
@@ -37,6 +38,17 @@ describe('ResponsiveBox > Attrs', () => {
 
         domAdapter.getDocumentElement = defaultImplementation;
       });
+    });
+
+    it('Check has valid screen size. Default implementation. Has no window', () => {
+      setWindow({ }, false);
+
+      const props = new ResponsiveBoxProps();
+      const responsiveBox = mount<ResponsiveBox>(<ResponsiveBox {...props} />);
+      const { classList } = responsiveBox.getDOMNode();
+
+      expect(classList.contains('dx-responsivebox')).toEqual(true);
+      expect(classList.contains('dx-responsivebox-screen-lg')).toEqual(true);
     });
 
     each([
