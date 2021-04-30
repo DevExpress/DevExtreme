@@ -9,10 +9,6 @@ import { Widget } from '../common/widget';
 import { LayoutManager } from './form_layout_manager';
 import { Scrollable } from '../scroll_view/scrollable';
 
-const renderLayoutManager = (): JSX.Element => (
-  <LayoutManager />
-);
-
 export const viewFunction = (viewModel: Form): JSX.Element => {
   const aria = { role: 'form' };
   const cssClasses = combineClasses({ 'dx-form': true });
@@ -25,7 +21,7 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
     restAttributes,
   } = viewModel;
 
-  const rootLayoutManager = renderLayoutManager();
+  const rootLayoutManager = <LayoutManager />;
   return (scrollingEnabled
     ? (
       <Scrollable
