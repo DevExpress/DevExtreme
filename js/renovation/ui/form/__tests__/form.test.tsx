@@ -4,7 +4,7 @@ import each from 'jest-each';
 import { FormProps } from '../form_props';
 import { Form } from '../form';
 import { Scrollable } from '../../scroll_view/scrollable';
-import { LayoutManager } from '../form_layout_manager';
+import { LayoutManager } from '../layout_manager';
 
 it('Form > InitialProps', () => {
   const props = new FormProps();

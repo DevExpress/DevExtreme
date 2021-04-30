@@ -5,7 +5,7 @@ import {
 
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
-import { FormLayoutManagerProps } from './form_layout_manager_props';
+import { FormLayoutManagerProps } from './layout_manager_props';
 
 export const viewFunction = (viewModel: LayoutManager): JSX.Element => {
   const { cssClasses, restAttributes } = viewModel;

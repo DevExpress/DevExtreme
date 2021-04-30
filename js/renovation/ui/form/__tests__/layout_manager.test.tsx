@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { LayoutManager } from '../form_layout_manager';
-import { FormLayoutManagerProps } from '../form_layout_manager_props';
+import { LayoutManager } from '../layout_manager';
+import { FormLayoutManagerProps } from '../layout_manager_props';
 
 describe('FormLayoutManager', () => {
   it('InitialProps', () => {

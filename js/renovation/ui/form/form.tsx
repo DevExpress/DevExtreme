@@ -6,7 +6,7 @@ import { FormProps } from './form_props';
 
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
-import { LayoutManager } from './form_layout_manager';
+import { LayoutManager } from './layout_manager';
 import { Scrollable } from '../scroll_view/scrollable';
 
 export const viewFunction = (viewModel: Form): JSX.Element => {
