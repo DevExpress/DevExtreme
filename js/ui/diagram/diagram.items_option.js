@@ -2,7 +2,9 @@ import { extend } from '../../core/utils/extend';
 import Component from '../../core/component';
 import DataHelperMixin from '../../data_helper';
 
-class ItemsOption extends Component {
+const ItemsOptionBase = Component.inherit({}).include(DataHelperMixin);
+
+class ItemsOption extends ItemsOptionBase {
     constructor(diagramWidget) {
         super();
         this._diagramWidget = diagramWidget;
@@ -184,6 +186,10 @@ class ItemsOption extends Component {
     _getContainerChildrenExpr() {
     }
 
+    _initDataSource() {
+        super._initDataSource();
+        this._dataSource && this._dataSource.paginate(false);
+    }
     _dataSourceOptions() {
         return {
             paginate: false
@@ -213,6 +219,5 @@ class ItemsOption extends Component {
         this._cache = {};
     }
 }
-ItemsOption.include(DataHelperMixin);
 
 export default ItemsOption;
