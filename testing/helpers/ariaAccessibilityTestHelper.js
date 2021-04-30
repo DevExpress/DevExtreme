@@ -85,12 +85,15 @@ class ariaAccessibilityTestHelper {
     _checkCheckboxAttributes(options, index, defaultValue) {
         const $checkBox = this.getItems().eq(index).prev();
 
-        this.checkAttributes($checkBox, {
+        const expectedAttributes = {
             role: 'checkbox',
-            'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue,
-            'aria-invalid': CheckBox.IS_RENOVATED_WIDGET ? 'false' : null,
-            'aria-readonly': CheckBox.IS_RENOVATED_WIDGET ? 'false' : null
-        }, `checkbox[${index}]`);
+            'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue
+        };
+        if(CheckBox.IS_RENOVATED_WIDGET) {
+            expectedAttributes['aria-invalid'] = 'false';
+            expectedAttributes['aria-readonly'] = 'false';
+        }
+        this.checkAttributes($checkBox, expectedAttributes, `checkbox[${index}]`);
     }
 
     _checkNodeAttributes(options, $node, index) {
