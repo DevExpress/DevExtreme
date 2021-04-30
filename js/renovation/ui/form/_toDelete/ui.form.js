@@ -456,7 +456,6 @@ const Form = Widget.inherit({
     _renderLayout: function() {
         const that = this;
         let items = that.option('items');
-        const $content = that._getContent();
 
         items = that._prepareItems(items);
 
@@ -464,7 +463,7 @@ const Form = Widget.inherit({
         that._testResultItems = items;
         //#ENDDEBUG
 
-        that._rootLayoutManager = that._renderLayoutManager(items, $content, {
+        that._rootLayoutManager = that._renderLayoutManager(items, {
             isRoot: true,
             colCount: that.option('colCount'),
             alignItemLabels: that.option('alignItemLabels'),
@@ -592,7 +591,6 @@ const Form = Widget.inherit({
     },
 
     _renderLayoutManager: function(items, $rootElement, options) {
-        const $element = $('<div>');
         const that = this;
         const config = that._getLayoutManagerConfig(items, options);
         const baseColCountByScreen = {
@@ -603,9 +601,8 @@ const Form = Widget.inherit({
         };
 
         that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
-        $element.appendTo($rootElement);
 
-        const instance = that._createComponent($element, 'dxLayoutManager', config);
+        const instance = that._createComponent('dxLayoutManager', config);
         instance.on('autoColCountChanged', function() { that._refresh(); });
         that._cachedLayoutManagers.push(instance);
         return instance;
