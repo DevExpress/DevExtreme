@@ -58,22 +58,22 @@ test('Virtual scrolling layout in scheduler views', async (t) => {
   // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < views.length; i += 1) {
     const view = views[i];
-    await scheduler.option('currentView', view);
+    await scheduler.option('currentView', view.type);
 
     await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view}-before-scroll.png`, scheduler.workSpace),
+      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll.png`, scheduler.workSpace),
     ).ok();
 
     await scrollTo(scrollConfig[i].firstDate);
 
     await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view}-after-scroll.png`, scheduler.workSpace),
+      await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll.png`, scheduler.workSpace),
     ).ok();
 
     await scrollTo(scrollConfig[i].lastDate);
 
     await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view}-before-scroll.png`, scheduler.workSpace),
+      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll.png`, scheduler.workSpace),
     ).ok();
 
     await t.expect(compareResults.isValid())
