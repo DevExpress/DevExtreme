@@ -184,6 +184,4 @@ export default class dxDropDownEditor extends dxTextBox {
 }
 
 export type Options = dxDropDownEditorOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = dxDropDownEditorOptions;

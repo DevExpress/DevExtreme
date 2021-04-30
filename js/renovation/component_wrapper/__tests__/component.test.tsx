@@ -359,6 +359,17 @@ describe('Widget\'s container manipulations', () => {
 
     expect($('#components').children().get(1)).toBe($('#component').get(0));
   });
+
+  it('should be rendered not in "div" container', () => {
+    document.body.innerHTML = `
+      <div id="components">
+          <a id="component"></a>
+      </div>
+      `;
+
+    expect(() => $('#component').dxTestWidget({})).not.toThrowError();
+    expect($('#component')[0].nodeName.toLowerCase()).toBe('a');
+  });
 });
 
 describe('option', () => {

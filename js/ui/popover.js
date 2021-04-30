@@ -1,6 +1,5 @@
 import $ from '../core/renderer';
-import { getWindow, hasWindow } from '../core/utils/window';
-const window = getWindow();
+import { hasWindow } from '../core/utils/window';
 import { getPublicElement } from '../core/element';
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
@@ -12,6 +11,7 @@ import positionUtils from '../animation/position';
 import { isObject, isString } from '../core/utils/type';
 import { fitIntoRange } from '../core/utils/math';
 import { addNamespace } from '../events/utils/index';
+import errors from '../core/errors';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
 
@@ -67,11 +67,16 @@ const getEventDelay = function(that, optionName) {
     return isObject(optionValue) && optionValue.delay;
 };
 const attachEvent = function(that, name) {
-    const target = that.option('target');
+    const { target, shading, disabled } = that.option();
     const isSelector = isString(target);
-    const event = getEventName(that, name + 'Event');
+    const shouldIgnoreHideEvent = shading && name === 'hide';
+    const event = shouldIgnoreHideEvent ? null : getEventName(that, `${name}Event`);
 
-    if(!event || that.option('disabled')) {
+    if(shouldIgnoreHideEvent) {
+        errors.log('W0018');
+    }
+
+    if(!event || disabled) {
         return;
     }
 
@@ -124,7 +129,7 @@ const detachEvent = function(that, target, name, event) {
 const Popover = Popup.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            target: window,
+            target: undefined,
 
             shading: false,
 
@@ -416,7 +421,7 @@ const Popover = Popup.inherit({
         const contentLocation = contentOffset[axis];
         const contentSize = getBoundingRect(this._$content.get(0))[sizeProperty];
         const targetLocation = targetOffset[axis];
-        const targetSize = $target.get(0).preventDefault ? 0 : getBoundingRect($target.get(0))[sizeProperty];
+        const targetSize = $target.get(0)?.preventDefault ? 0 : getBoundingRect($target.get(0))[sizeProperty];
 
         const min = Math.max(contentLocation, targetLocation);
         const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);

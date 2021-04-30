@@ -204,7 +204,10 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxActionSheetOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxActionSheetOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxActionSheetOptions;

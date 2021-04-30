@@ -246,5 +246,10 @@ export default errorUtils({
     /**
     * @name ErrorsCore.W0017
     */
-    W0017: 'Filter query string exceeds maximum length limit of {0} characters.'
+    W0017: 'Filter query string exceeds maximum length limit of {0} characters.',
+
+    /**
+    * @name ErrorsCore.W0018
+    */
+    W0018: 'hideEvent is ignored when the shading property is true'
 });
