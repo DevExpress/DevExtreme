@@ -1,20 +1,18 @@
 import { mount } from 'enzyme';
 import React from 'react';
 import { LayoutManager } from '../layout_manager';
-import { FormLayoutManagerProps } from '../layout_manager_props';
+import { LayoutManagerProps } from '../layout_manager_props';
 
-describe('FormLayoutManager', () => {
+describe('LayoutManager', () => {
   it('InitialProps', () => {
-    const props = new FormLayoutManagerProps();
+    const props = new LayoutManagerProps();
     const form = mount<LayoutManager>(<LayoutManager {...props} />);
 
-    expect(form.props()).toEqual({
-      isRoot: false,
-    });
+    expect(form.props()).toEqual({});
   });
 });
 
-describe('FormLayoutManager > Getters', () => {
+describe('LayoutManager > Getters', () => {
   describe('cssClasses', () => {
     it('Check has dx-layout-manager class', () => {
       const layoutManager = new LayoutManager({});
