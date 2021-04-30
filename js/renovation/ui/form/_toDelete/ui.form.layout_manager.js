@@ -334,14 +334,12 @@ const LayoutManager = Widget.inherit({
 
         if(that._items && that._items.length) {
             const colCount = that._getColCount();
-            const $container = $('<div>').appendTo(that.$element());
-
             that._prepareItemsWithMerging(colCount);
 
             const layoutItems = that._generateLayoutItems();
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
 
-            that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
+            that._responsiveBox = that._createComponent(/* $container, */ ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
             if(!hasWindow()) {
                 that._renderTemplates(templatesInfo);
             }
