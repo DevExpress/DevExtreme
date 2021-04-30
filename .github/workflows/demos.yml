@@ -31,7 +31,9 @@ jobs:
       run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos ./devextreme-demos
 
     - name: Clone devextreme-demos repo
-      run: test -d ./devextreme-demos || git clone -b 21_2 https://github.com/devexpress/devextreme-demos ./devextreme-demos
+      run: |
+        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
+        test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
 
     - name: Install packages for devextreme-demos
       run: |
