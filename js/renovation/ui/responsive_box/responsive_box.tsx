@@ -8,6 +8,7 @@ import { combineClasses } from '../../utils/combine_classes';
 import { hasWindow } from '../../../core/utils/window';
 import domAdapter from '../../../core/dom_adapter';
 import { ScreenSizeQualifier } from './types';
+import { convertToScreenSizeQualifier } from './screen_utils';
 
 const HD_SCREEN_WIDTH = 1920;
 const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
@@ -18,7 +19,8 @@ const getCurrentScreen = (viewModel: ResponsiveBox): ScreenSizeQualifier => {
     ? domAdapter.getDocumentElement().clientWidth
     : HD_SCREEN_WIDTH;
 
-  return viewModel.props.screenByWidth(screenWidth);
+  const screenSizeFunc = viewModel.props.screenByWidth ?? convertToScreenSizeQualifier;
+  return screenSizeFunc(screenWidth);
 };
 
 export const viewFunction = (viewModel: ResponsiveBox): JSX.Element => {
