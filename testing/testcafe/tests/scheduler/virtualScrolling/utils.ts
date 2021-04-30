@@ -2,6 +2,7 @@ import { ClientFunction } from 'testcafe';
 
 export const resources = [{
   fieldExpr: 'resourceId',
+  allowMultiple: true,
   dataSource: [
     {
       text: 'Resource 0',
@@ -79,33 +80,26 @@ export const createDataSetForScreenShotTests = (): Record<string, unknown>[] => 
     text: string;
     startDate: Date;
     endDate: Date;
-    resourceId: number;
+    resourceId: number[];
     allDay?: boolean;
   }[] = [];
-  for (let day = 1; day < 25; day += 1) {
+  for (let day = 1; day < 31; day += 1) {
     result.push({
       text: '1 appointment',
       startDate: new Date(2021, 0, day, 0),
       endDate: new Date(2021, 0, day, 1),
-      resourceId: 0,
+      resourceId: [0, 1, 2, 3, 4, 5, 6, 7],
     });
 
     result.push({
       text: '2 appointment',
       startDate: new Date(2021, 0, day, 2),
       endDate: new Date(2021, 0, day, 3),
-      resourceId: 0,
+      resourceId: [0, 1, 2, 3, 4, 5, 6, 7],
     });
   }
 
-  return result
-    .reduce<Record<string, unknown>[]>((currentAppointments, appointment) => [
-    ...currentAppointments,
-    ...resources[0].dataSource.map((resource) => ({
-      ...appointment,
-      resourceId: resource.id,
-    })),
-  ], []);
+  return result;
 };
 
 export const scrollTo = ClientFunction((date) => {
