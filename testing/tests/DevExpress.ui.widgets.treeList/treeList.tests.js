@@ -1785,6 +1785,68 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         loadSpy.reset();
     });
 
+    // T991320
+    QUnit.test('TreeList should load data once on expand after scrolling', function(assert) {
+        // arrange
+        const loadSpy = sinon.spy();
+        const treeList = createTreeList({
+            height: 100,
+            dataSource: {
+                load: function(options) {
+                    loadSpy(options);
+                    const d = $.Deferred();
+                    setTimeout(() => {
+                        const items = [];
+
+                        if(options.filter[2] === 2) {
+                            items.push({ id: 201, parentId: 2 });
+
+                        } else if(options.filter[2] === -1) {
+                            for(let i = 1; i <= 6; i++) {
+                                items.push({ id: i, parentId: -1 });
+                            }
+                        }
+
+                        d.resolve(items);
+
+                    });
+                    return d;
+
+                }
+            },
+            remoteOperations: {
+                filtering: true
+            },
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            rootValue: -1,
+            columns: [
+                { dataField: 'id' }
+            ],
+            paging: {
+                pageSize: 5
+            },
+            scrolling: {
+                useNative: false
+            }
+        });
+
+        this.clock.tick(100);
+
+        // act
+        treeList.getScrollable().scrollTo({ y: 10 });
+        this.clock.tick(100);
+
+        treeList.expandRow(2);
+        this.clock.tick(100);
+
+        // assert
+        assert.equal(loadSpy.callCount, 2, 'load call count');
+
+        assert.deepEqual(loadSpy.args[0][0].filter, ['parentId', '=', -1], 'first load arguments');
+        assert.deepEqual(loadSpy.args[1][0].filter, ['parentId', '=', 2], 'second load arguments');
+    });
+
     // T806547
     QUnit.test('TreeList should correctly switch dx-row-alt class for fixed column after expand if repaintChangesOnly = true', function(assert) {
         // arrange
