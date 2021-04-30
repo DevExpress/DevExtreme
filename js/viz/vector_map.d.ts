@@ -921,8 +921,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxVectorMap extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: dxVectorMapOptions)
+export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     /**
      * @docid
      * @publicName center()

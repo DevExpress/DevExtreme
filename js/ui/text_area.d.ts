@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -104,9 +100,7 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxTextArea extends dxTextBox {
-    constructor(element: UserDefinedElement, options?: dxTextAreaOptions)
-}
+export default class dxTextArea extends dxTextBox<dxTextAreaOptions> { }
 
 /** @public */
 export type Properties = dxTextAreaOptions;

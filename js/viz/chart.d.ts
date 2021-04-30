@@ -2974,8 +2974,7 @@ export interface dxChartValueAxisTitle extends dxChartCommonAxisSettingsTitle {
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxChart extends BaseChart {
-    constructor(element: UserDefinedElement, options?: dxChartOptions)
+export default class dxChart extends BaseChart<dxChartOptions> {
     /**
      * @docid
      * @publicName getArgumentAxis()

@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     DxPromise
 } from '../core/utils/deferred';
 
@@ -105,8 +101,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxScrollView extends dxScrollable {
-    constructor(element: UserDefinedElement, options?: dxScrollViewOptions)
+export default class dxScrollView extends dxScrollable<dxScrollViewOptions> {
     /**
      * @docid
      * @publicName refresh()

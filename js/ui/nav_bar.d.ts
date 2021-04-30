@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -62,9 +58,7 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxNavBar extends dxTabs {
-    constructor(element: UserDefinedElement, options?: dxNavBarOptions)
-}
+export default class dxNavBar extends dxTabs<dxNavBarOptions> { }
 
 /**
  * @docid

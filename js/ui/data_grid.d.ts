@@ -47,7 +47,7 @@ import {
 } from './form';
 
 import {
-    dxPopupOptions
+    Properties as PopupProperties
 } from './popup';
 
 import dxScrollable from './scroll_view/ui.scrollable';
@@ -609,7 +609,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    filterBuilderPopup?: dxPopupOptions;
+    filterBuilderPopup?: PopupProperties;
     /**
      * @docid
      * @type object
@@ -1743,7 +1743,7 @@ export interface EditingBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    popup?: dxPopupOptions;
+    popup?: PopupProperties;
     /**
      * @docid GridBaseOptions.editing.refreshMode
      * @type Enums.GridEditRefreshMode
@@ -4591,8 +4591,7 @@ export interface Selection extends SelectionBase {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-declare class dxDataGrid extends Widget implements GridBase {
-    constructor(element: UserDefinedElement, options?: dxDataGridOptions)
+declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
     /**
      * @docid
      * @publicName addColumn(columnOptions)

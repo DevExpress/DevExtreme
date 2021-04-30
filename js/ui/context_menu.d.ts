@@ -3,8 +3,7 @@ import {
 } from '../animation/position';
 
 import {
-    UserDefinedElement,
-    DxElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -226,8 +225,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxContextMenu extends dxMenuBase {
-    constructor(element: UserDefinedElement, options?: dxContextMenuOptions)
+export default class dxContextMenu extends dxMenuBase<dxContextMenuOptions> {
     /**
      * @docid
      * @publicName hide()

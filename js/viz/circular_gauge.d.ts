@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -163,9 +159,7 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxCircularGauge extends BaseGauge {
-    constructor(element: UserDefinedElement, options?: dxCircularGaugeOptions)
-}
+export default class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> { }
 
 /** @public */
 export type Properties = dxCircularGaugeOptions;

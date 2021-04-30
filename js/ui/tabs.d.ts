@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -47,7 +43,7 @@ export type OptionChangedEvent = EventInfo<dxTabs> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
 
-export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
+export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
     /**
      * @docid
      * @default null
@@ -129,9 +125,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxTabs extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxTabsOptions)
-}
+export default class dxTabs<TProperties = Properties> extends CollectionWidget<TProperties> { }
 
 /**
  * @docid
@@ -154,10 +148,10 @@ export interface dxTabsItem extends CollectionWidgetItem {
 }
 
 /** @public */
-export type Properties = dxTabsOptions;
+export type Properties = dxTabsOptions<dxTabs<Properties>>;
 
 /** @deprecated use Properties instead */
-export type Options = dxTabsOptions;
+export type Options = Properties;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxTabsOptions;
+export type IOptions = Properties;

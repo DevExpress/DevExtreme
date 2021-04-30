@@ -3,10 +3,6 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -150,9 +146,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxResizable extends DOMComponent {
-    constructor(element: UserDefinedElement, options?: dxResizableOptions)
-}
+export default class dxResizable extends DOMComponent<dxResizableOptions> { }
 
 /** @public */
 export type Properties = dxResizableOptions;

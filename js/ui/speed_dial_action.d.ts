@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -95,9 +94,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxSpeedDialAction extends Widget {
-    constructor(element: UserDefinedElement, options?: dxSpeedDialActionOptions)
-}
+export default class dxSpeedDialAction extends Widget<dxSpeedDialActionOptions> { }
 
 /** @public */
 export type Properties = dxSpeedDialActionOptions;

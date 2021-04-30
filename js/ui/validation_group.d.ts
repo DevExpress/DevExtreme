@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
@@ -48,8 +44,7 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxValidationGroup extends DOMComponent {
-    constructor(element: UserDefinedElement, options?: dxValidationGroupOptions)
+export default class dxValidationGroup extends DOMComponent<dxValidationGroupOptions> {
     /**
      * @docid
      * @publicName reset()

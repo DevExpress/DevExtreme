@@ -425,8 +425,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxBarGauge extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: dxBarGaugeOptions)
+export default class dxBarGauge extends BaseWidget<dxBarGaugeOptions> {
     /**
      * @docid
      * @publicName values()

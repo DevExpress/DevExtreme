@@ -7,10 +7,6 @@ import {
 } from '../animation/position';
 
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -178,9 +174,7 @@ export interface dxToastAnimation extends dxOverlayAnimation {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxToast extends dxOverlay {
-    constructor(element: UserDefinedElement, options?: dxToastOptions)
-}
+export default class dxToast extends dxOverlay<dxToastOptions> { }
 
 /** @public */
 export type Properties = dxToastOptions;

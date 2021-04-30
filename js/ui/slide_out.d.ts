@@ -184,8 +184,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxSlideOut extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxSlideOutOptions)
+export default class dxSlideOut extends CollectionWidget<dxSlideOutOptions> {
     /**
      * @docid
      * @publicName hideMenu()

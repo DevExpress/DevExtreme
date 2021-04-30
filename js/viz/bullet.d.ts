@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -127,9 +123,7 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxBullet extends BaseSparkline {
-    constructor(element: UserDefinedElement, options?: dxBulletOptions)
-}
+export default class dxBullet extends BaseSparkline<dxBulletOptions> { }
 
 /** @public */
 export type Properties = dxBulletOptions;

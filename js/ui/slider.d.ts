@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -54,9 +50,7 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxSlider extends dxTrackBar {
-    constructor(element: UserDefinedElement, options?: dxSliderOptions)
-}
+export default class dxSlider extends dxTrackBar<dxSliderOptions> { }
 
 /**
  * @docid dxSliderBase
@@ -64,7 +58,7 @@ export default class dxSlider extends dxTrackBar {
  * @hidden
  * @prevFileNamespace DevExpress.ui
  */
-export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
+export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComponent> {
     /**
      * @docid
      * @default true

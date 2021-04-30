@@ -666,8 +666,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxSankey extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: dxSankeyOptions)
+export default class dxSankey extends BaseWidget<dxSankeyOptions> {
     /**
      * @docid
      * @publicName getAllLinks()

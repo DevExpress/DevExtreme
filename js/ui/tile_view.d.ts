@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -132,8 +128,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxTileView extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxTileViewOptions)
+export default class dxTileView extends CollectionWidget<dxTileViewOptions> {
     /**
      * @docid
      * @publicName scrollPosition()

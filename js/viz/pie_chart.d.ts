@@ -476,8 +476,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxPieChart extends BaseChart {
-    constructor(element: UserDefinedElement, options?: dxPieChartOptions)
+export default class dxPieChart extends BaseChart<dxPieChartOptions> {
     /**
      * @docid
      * @publicName getInnerRadius()

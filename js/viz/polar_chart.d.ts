@@ -1459,8 +1459,7 @@ export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSetting
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxPolarChart extends BaseChart {
-    constructor(element: UserDefinedElement, options?: dxPolarChartOptions)
+export default class dxPolarChart extends BaseChart<dxPolarChartOptions> {
     /**
      * @docid dxPolarChart.getValueAxis
      * @publicName getValueAxis()

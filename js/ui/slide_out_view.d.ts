@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -79,8 +78,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxSlideOutView extends Widget {
-    constructor(element: UserDefinedElement, options?: dxSlideOutViewOptions)
+export default class dxSlideOutView extends Widget<dxSlideOutViewOptions> {
     /**
      * @docid
      * @publicName content()

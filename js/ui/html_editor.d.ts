@@ -164,8 +164,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxHtmlEditor extends Editor {
-    constructor(element: UserDefinedElement, options?: dxHtmlEditorOptions)
+export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
     /**
      * @docid
      * @publicName blur()

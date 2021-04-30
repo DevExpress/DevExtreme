@@ -140,8 +140,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxActionSheet extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxActionSheetOptions)
+export default class dxActionSheet extends CollectionWidget<dxActionSheetOptions> {
     /**
      * @docid
      * @publicName hide()

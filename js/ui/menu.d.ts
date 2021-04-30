@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -210,9 +209,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxMenu extends dxMenuBase {
-    constructor(element: UserDefinedElement, options?: dxMenuOptions)
-}
+export default class dxMenu extends dxMenuBase<dxMenuOptions> { }
 
 /**
  * @docid

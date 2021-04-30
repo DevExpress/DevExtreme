@@ -1,5 +1,5 @@
 import {
-    dxTextBoxOptions
+    Properties as TextBoxProperties
 } from '../text_box';
 
 export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
@@ -9,7 +9,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    searchEditorOptions?: dxTextBoxOptions;
+    searchEditorOptions?: TextBoxProperties;
     /**
      * @docid
      * @default false

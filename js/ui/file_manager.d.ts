@@ -443,8 +443,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxFileManager extends Widget {
-    constructor(element: UserDefinedElement, options?: dxFileManagerOptions)
+export default class dxFileManager extends Widget<dxFileManagerOptions> {
     /**
      * @docid
      * @publicName getCurrentDirectory()

@@ -269,8 +269,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxForm extends Widget {
-    constructor(element: UserDefinedElement, options?: dxFormOptions)
+export default class dxForm extends Widget<dxFormOptions> {
     /**
      * @docid
      * @publicName getButton(name)

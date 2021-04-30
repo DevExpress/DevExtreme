@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -82,9 +78,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxCheckBox extends Editor {
-    constructor(element: UserDefinedElement, options?: dxCheckBoxOptions)
-}
+export default class dxCheckBox extends Editor<dxCheckBoxOptions> { }
 
 /** @public */
 export type Properties = dxCheckBoxOptions;

@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../../core/element';
-
-import {
     NativeEventInfo
 } from '../../events/index';
 
@@ -15,7 +11,7 @@ export interface ValueChangedInfo {
     readonly value?: any;
 }
 
-export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
+export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid
      * @default true
@@ -37,7 +33,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: NativeEventInfo<T> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<TComponent> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
@@ -101,8 +97,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
  * @hidden
  * @prevFileNamespace DevExpress.ui
  */
-export default class Editor extends Widget {
-    constructor(element: UserDefinedElement, options?: EditorOptions)
+export default class Editor<TProperties = Properties> extends Widget<TProperties> {
     /**
      * @docid
      * @publicName reset()
@@ -111,3 +106,5 @@ export default class Editor extends Widget {
      */
     reset(): void;
 }
+
+type Properties = EditorOptions<Editor<Properties>>;

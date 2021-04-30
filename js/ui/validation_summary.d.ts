@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -46,9 +42,7 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxValidationSummary extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxValidationSummaryOptions)
-}
+export default class dxValidationSummary extends CollectionWidget<dxValidationSummaryOptions> { }
 
 /** @public */
 export type Properties = dxValidationSummaryOptions;

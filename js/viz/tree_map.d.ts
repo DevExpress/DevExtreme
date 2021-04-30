@@ -630,8 +630,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxTreeMap extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: dxTreeMapOptions)
+export default class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
     /**
      * @docid
      * @publicName clearSelection()

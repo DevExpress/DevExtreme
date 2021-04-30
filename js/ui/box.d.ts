@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -91,9 +87,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxBox extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxBoxOptions)
-}
+export default class dxBox extends CollectionWidget<dxBoxOptions> { }
 
 /**
  * @docid

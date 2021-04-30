@@ -3,7 +3,6 @@ import {
 } from '../animation/fx';
 
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -90,9 +89,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxDeferRendering extends Widget {
-    constructor(element: UserDefinedElement, options?: dxDeferRenderingOptions)
-}
+export default class dxDeferRendering extends Widget<dxDeferRenderingOptions> { }
 
 /** @public */
 export type Properties = dxDeferRenderingOptions;

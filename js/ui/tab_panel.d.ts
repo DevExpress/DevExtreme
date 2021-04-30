@@ -202,9 +202,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxTabPanel extends dxMultiView {
-    constructor(element: UserDefinedElement, options?: dxTabPanelOptions)
-}
+export default class dxTabPanel extends dxMultiView<dxTabPanelOptions> { }
 
 /**
  * @docid

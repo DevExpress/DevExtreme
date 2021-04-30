@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -399,8 +398,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxTreeView extends HierarchicalCollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxTreeViewOptions)
+export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewOptions> {
     /**
      * @docid
      * @publicName collapseAll()

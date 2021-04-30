@@ -575,8 +575,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxList extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxListOptions)
+export default class dxList extends CollectionWidget<dxListOptions> {
     /**
      * @docid
      * @publicName clientHeight()

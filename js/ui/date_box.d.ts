@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -26,6 +22,11 @@ import {
 import {
     format
 } from './widget/ui.widget';
+
+import {
+    Properties as PopupProperties
+} from './popup';
+
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxDateBox>;
@@ -225,6 +226,8 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @public
      */
     value?: Date | number | string;
+
+    dropDownOptions?: PopupProperties;
 }
 /**
  * @docid
@@ -235,8 +238,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxDateBox extends dxDropDownEditor {
-    constructor(element: UserDefinedElement, options?: dxDateBoxOptions)
+export default class dxDateBox extends dxDropDownEditor<dxDateBoxOptions> {
     /**
      * @docid
      * @publicName close()

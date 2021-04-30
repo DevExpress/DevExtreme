@@ -31,6 +31,10 @@ import {
     DataExpressionMixinOptions
 } from './editor/ui.data_expression';
 
+import {
+    Properties as PopupProperties
+} from './popup';
+
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxDropDownBox>;
 
@@ -156,6 +160,8 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @public
      */
     valueChangeEvent?: string;
+
+    dropDownOptions?: PopupProperties;
 }
 /**
  * @docid
@@ -167,8 +173,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxDropDownBox extends dxDropDownEditor {
-    constructor(element: UserDefinedElement, options?: dxDropDownBoxOptions)
+export default class dxDropDownBox extends dxDropDownEditor<dxDropDownBoxOptions> {
     getDataSource(): DataSource;
 }
 

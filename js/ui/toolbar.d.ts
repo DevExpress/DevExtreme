@@ -92,9 +92,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxToolbar extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxToolbarOptions)
-}
+export default class dxToolbar extends CollectionWidget<dxToolbarOptions> { }
 
 /**
  * @docid

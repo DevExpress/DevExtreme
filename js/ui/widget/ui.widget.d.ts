@@ -3,14 +3,10 @@ import DOMComponent, {
 } from '../../core/dom_component';
 
 import {
-    UserDefinedElement
-} from '../../core/element';
-
-import {
     EventInfo
 } from '../../events/index';
 
-export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
+export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
      * @default undefined
@@ -64,7 +60,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: EventInfo<T>) => void);
+    onContentReady?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default 0
@@ -88,8 +84,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
  * @hidden
  * @prevFileNamespace DevExpress.ui
  */
-export default class Widget extends DOMComponent {
-    constructor(element: UserDefinedElement, options?: WidgetOptions)
+export default class Widget<TProperties> extends DOMComponent<TProperties> {
     /**
      * @docid
      * @publicName focus()

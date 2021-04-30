@@ -322,8 +322,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxFilterBuilder extends Widget {
-    constructor(element: UserDefinedElement, options?: dxFilterBuilderOptions)
+export default class dxFilterBuilder extends Widget<dxFilterBuilderOptions> {
     /**
      * @docid
      * @publicName getFilterExpression()

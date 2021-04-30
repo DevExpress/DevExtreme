@@ -1,6 +1,5 @@
 import {
-    UserDefinedElement,
-    DxElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -180,9 +179,7 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxLoadPanel extends dxOverlay {
-    constructor(element: UserDefinedElement, options?: dxLoadPanelOptions)
-}
+export default class dxLoadPanel extends dxOverlay<dxLoadPanelOptions> { }
 
 /** @public */
 export type Properties = dxLoadPanelOptions;

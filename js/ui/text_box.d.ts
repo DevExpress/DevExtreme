@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -65,7 +61,7 @@ export type PasteEvent = NativeEventInfo<dxTextBox>;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxTextBox> & ValueChangedInfo;
 
-export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
+export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TComponent> {
     /**
      * @docid
      * @default null
@@ -98,15 +94,13 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxTextBox extends dxTextEditor {
-    constructor(element: UserDefinedElement, options?: dxTextBoxOptions)
-}
+export default class dxTextBox<TProperties = Properties> extends dxTextEditor<TProperties> { }
 
 /** @public */
-export type Properties = dxTextBoxOptions;
+export type Properties = dxTextBoxOptions<dxTextBox<Properties>>;
 
 /** @deprecated use Properties instead */
-export type Options = dxTextBoxOptions;
+export type Options = Properties;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxTextBoxOptions;
+export type IOptions = Properties;
