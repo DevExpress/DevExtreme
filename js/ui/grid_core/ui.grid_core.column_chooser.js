@@ -370,7 +370,7 @@ const ColumnChooserView = ColumnsView.inherit({
 
     getBoundingRect: function() {
         const that = this;
-        const container = that._popupContainer && that._popupContainer.$content();
+        const container = that._popupContainer && that._popupContainer.$overlayContent();
 
         if(container && container.is(':visible')) {
             const offset = container.offset();
