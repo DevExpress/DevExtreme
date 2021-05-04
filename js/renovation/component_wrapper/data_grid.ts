@@ -2,6 +2,7 @@
 import Component from './component';
 import type { DataGrid } from '../ui/grids/data_grid/data_grid';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
+import { updatePropsImmutable } from './utils';
 
 export default class DataGridWrapper extends Component {
     _onInitialized!: Function;
@@ -46,15 +47,25 @@ export default class DataGridWrapper extends Component {
         return gridInstance?.state(state);
     }
 
-    // TODO remove this after fixing the synchronization of the grid options
-    _optionChanged(e): void {
-        const gridInstance = (this.viewRef as DataGrid)?.getComponentInstance();
+    _wrapKeyDownHandler(handler) {
+        return handler;
+    }
 
-        gridInstance?.option(e.fullName, e.value);
-        if(e.name !== e.fullName) {
-            gridInstance?._optionChanged(e);
+    _optionChanging(fullName: string, value: unknown, prevValue: unknown): void {
+        super._optionChanging(fullName, value, prevValue);
+        if(this.viewRef) {
+            const name = fullName.split(/[.[]/)[0];
+            const prevProps = { ...(this.viewRef as DataGrid).prevProps };
+            updatePropsImmutable(prevProps, this.option(), name, fullName);
+            (this.viewRef as DataGrid).prevProps = prevProps;
         }
+    }
 
+    _optionChanged(e): void {
+        const gridInstance = (this.viewRef as DataGrid)?.getComponentInstance?.();
+        if (e.fullName === 'dataSource' && e.value === gridInstance?.option('dataSource')) {
+            gridInstance?.option('dataSource', e.value);
+        }
         super._optionChanged(e);
     }
 

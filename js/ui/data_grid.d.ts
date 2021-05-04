@@ -89,7 +89,7 @@ export interface DataChangeInfo {
 
 export interface NewRowInfo {
   data: any;
-  promise?: DxPromise<void>;
+  promise?: PromiseLike<void>;
 }
 
 export interface KeyDownInfo {
@@ -108,7 +108,7 @@ export interface RowInsertedInfo {
 
 export interface RowInsertingInfo {
   data: any;
-  cancel: boolean | DxPromise<void>;
+  cancel: boolean | PromiseLike<void>;
 }
 
 export interface RowRemovedInfo {
@@ -120,7 +120,7 @@ export interface RowRemovedInfo {
 export interface RowRemovingInfo {
   readonly data: any;
   readonly key: any;
-  cancel: boolean | DxPromise<void>;
+  cancel: boolean | PromiseLike<void>;
 }
 
 export interface RowUpdatedInfo {
@@ -133,7 +133,7 @@ export interface RowUpdatingInfo {
   readonly oldData: any;
   newData: any;
   readonly key: any;
-  cancel: boolean | DxPromise<void>;
+  cancel: boolean | PromiseLike<void>;
 }
 
 export interface RowValidatingInfo {
@@ -143,12 +143,12 @@ export interface RowValidatingInfo {
   readonly newData: any;
   readonly oldData: any;
   errorText: string;
-  promise?: DxPromise<void>;
+  promise?: PromiseLike<void>;
 }
 
 export interface SavingInfo {
   changes: Array<DataChange>;
-  promise?: DxPromise<void>;
+  promise?: PromiseLike<void>;
   cancel: boolean;
 }
 
@@ -191,7 +191,7 @@ export interface DragDropInfo {
 
 export interface DragReorderInfo {
   readonly dropInsideItem: boolean;
-  promise?: DxPromise<void>;
+  promise?: PromiseLike<void>;
 }
 
 export interface RowDraggingTemplateDataModel {
@@ -1660,7 +1660,7 @@ export interface StateStoring {
      * @prevFileNamespace DevExpress.ui
      * @type_function_return Promise<Object>
      */
-    customLoad?: (() => DxPromise<any>),
+    customLoad?: (() => PromiseLike<any>),
     /**
      * @docid GridBaseOptions.stateStoring.customSave
      * @prevFileNamespace DevExpress.ui
@@ -2864,7 +2864,7 @@ export interface ColumnBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | DxPromise<void>);
+    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | PromiseLike<void>);
     /**
      * @docid GridBaseColumn.showEditorAlways
      * @default false
@@ -5081,9 +5081,12 @@ export interface RowObject {
 }
 
 /** @public */
+export type Properties = dxDataGridOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDataGridOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDataGridOptions;
 
 export default dxDataGrid;

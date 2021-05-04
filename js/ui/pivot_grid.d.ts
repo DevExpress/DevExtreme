@@ -4,10 +4,6 @@ import {
 } from '../core/element';
 
 import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import {
     Cancelable,
     NativeEventInfo,
     EventInfo,
@@ -657,7 +653,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @prevFileNamespace DevExpress.ui
        * @type_function_return Promise<Object>
        */
-      customLoad?: (() => DxPromise<any>),
+      customLoad?: (() => PromiseLike<any>),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1059,7 +1055,10 @@ export interface dxPivotGridSummaryCell {
 }
 
 /** @public */
+export type Properties = dxPivotGridOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxPivotGridOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxPivotGridOptions;

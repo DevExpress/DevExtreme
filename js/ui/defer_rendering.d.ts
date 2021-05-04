@@ -8,10 +8,6 @@ import {
 } from '../core/element';
 
 import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -70,7 +66,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    renderWhen?: DxPromise<void> | boolean;
+    renderWhen?: PromiseLike<void> | boolean;
     /**
      * @docid
      * @default false
@@ -99,7 +95,10 @@ export default class dxDeferRendering extends Widget {
 }
 
 /** @public */
+export type Properties = dxDeferRenderingOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDeferRenderingOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDeferRenderingOptions;

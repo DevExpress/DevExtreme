@@ -126,7 +126,10 @@ export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxMultiViewOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxMultiViewOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxMultiViewOptions;

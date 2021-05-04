@@ -5,20 +5,20 @@ import { EventCallback } from '../common/event_callback.d';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
 
 @ComponentBindings()
-export class ScrollableInternalProps {
+export class ScrollableProps {
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
+
+  @OneWay() useNative = true;
 
   @OneWay() direction: ScrollableDirection = 'vertical';
 
   @OneWay() showScrollbar: ScrollableShowScrollbar = 'onScroll';
 
-  @OneWay() scrollByThumb = false;
-
   @OneWay() bounceEnabled = true;
 
   @OneWay() scrollByContent = true;
 
-  @OneWay() useKeyboard = true;
+  @OneWay() scrollByThumb = false;
 
   @OneWay() updateManually = false;
 
@@ -41,13 +41,6 @@ export class ScrollableInternalProps {
   @Event() onPullDown?: EventCallback<unknown>;
 
   @Event() onReachBottom?: EventCallback<unknown>;
-}
-
-@ComponentBindings()
-export class ScrollableProps extends ScrollableInternalProps {
-  @OneWay() useNative = true;
-
-  @OneWay() useSimulatedScrollbar?: boolean;
 
   @OneWay() pullingDownText?: string;
 

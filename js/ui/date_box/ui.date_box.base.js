@@ -757,9 +757,22 @@ const DateBox = DropDownEditor.inherit({
         return dateSerialization.serializeDate(date, serializationFormat);
     },
 
-    reset: function() {
+    _clearValue: function() {
+        const value = this.option('value');
+
         this.callBase();
-        this._updateValue(this.dateOption('value'));
+        if(value === null) {
+            this._applyCustomValidation(null);
+        }
+    },
+
+    reset: function() {
+        const value = this.option('value');
+
+        this.callBase();
+        if(value === null) {
+            this._applyInternalValidation(null);
+        }
     }
 });
 

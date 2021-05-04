@@ -826,7 +826,10 @@ export interface dxSankeyNode {
 }
 
 /** @public */
+export type Properties = dxSankeyOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSankeyOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSankeyOptions;

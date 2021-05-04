@@ -232,8 +232,6 @@ class ScrollableTestHelper {
         },
       });
 
-      scrollbar.updateMinOffset();
-
       return scrollbar;
     };
 

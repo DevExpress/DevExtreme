@@ -32,6 +32,7 @@ export default class FileManagerNotificationControl extends Widget {
 
         this._isInAdaptiveState = this._isSmallScreen();
         this._managerMap = {};
+        this._notificationManagerStubId = null;
 
         this._setNotificationManager();
         const $progressPanelContainer = this.option('progressPanelContainer');

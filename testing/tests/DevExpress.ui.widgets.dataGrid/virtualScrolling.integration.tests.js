@@ -3515,11 +3515,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // act
         this.clock.tick();
         dataGrid.getDataSource().on('customizeLoadResult', customizeLoadResultSpy);
-        dataGrid.getScrollable().scrollTo({ top: 75 });
+        dataGrid.getScrollable().scrollTo({ top: 600 });
         this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 85 });
+        dataGrid.getScrollable().scrollTo({ top: 1300 });
         this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 100 });
+        dataGrid.getScrollable().scrollTo({ top: 3200 });
         this.clock.tick();
 
         // assert

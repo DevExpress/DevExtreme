@@ -373,10 +373,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _setTableSizes() {
         const cellHeight = this.getCellHeight();
         const minHeight = this._getWorkSpaceMinHeight();
-        const $groupCells = this._$sidebarTable
-            .find('tr');
+        const verticalGroupCount = this._isVerticalGroupedWorkSpace()
+            ? this._getGroupCount()
+            : 1;
 
-        let height = cellHeight * $groupCells.length;
+        // WA for IE: virtual scrolling does not work correctly if we do not set this height
+        let height = cellHeight * verticalGroupCount;
         if(height < minHeight) {
             height = minHeight;
         }

@@ -296,7 +296,10 @@ export interface dxMenuItem extends dxMenuBaseItem {
 }
 
 /** @public */
+export type Properties = dxMenuOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxMenuOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxMenuOptions;

@@ -151,11 +151,13 @@ export default class Component {
    */
   resetOption(optionName: string): void;
 
+  _options: { silent(path, value): void };
   _createActionByOption(optionName: string, config: object): Function;
   _dispose(): void;
   _getDefaultOptions(): object;
   _init(): void;
   _initializeComponent(): void;
+  _optionChanging(name: string, value: unknown, prevValue: unknown): void;
   _optionChanged(args: { name: string; value: unknown }): void;
   _setOptionsByReference(): void;
   _optionsByReference: object;

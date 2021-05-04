@@ -278,6 +278,4 @@ export default class dxOverlay extends Widget {
 export function baseZIndex(zIndex: number): void;
 
 export type Options = dxOverlayOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = dxOverlayOptions;

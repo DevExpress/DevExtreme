@@ -1,3 +1,4 @@
+import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
 
@@ -39,6 +40,26 @@ jest.mock('../../../../ui/themes', () => ({
 }));
 
 describe('ScrollView', () => {
+  it('render with defaults', () => {
+    const props = new ScrollViewProps();
+    const scrollable = mount<ScrollView>(<ScrollView {...props} />);
+
+    expect(scrollable.props()).toEqual({
+      bounceEnabled: true,
+      direction: 'vertical',
+      forceGeneratePockets: false,
+      needScrollViewContentWrapper: false,
+      needScrollViewLoadPanel: false,
+      pullDownEnabled: false,
+      reachBottomEnabled: false,
+      scrollByContent: true,
+      scrollByThumb: false,
+      showScrollbar: 'onScroll',
+      updateManually: false,
+      useNative: true,
+    });
+  });
+
   describe('Public methods', () => {
     each([
       { name: 'clientWidth', argsCount: 0 },
@@ -59,12 +80,12 @@ describe('ScrollView', () => {
         const viewModel = new ScrollView({ });
         const funcHandler = jest.fn();
         Object.defineProperties(viewModel, {
-          scrollableRef: {
+          scrollable: {
             get() { return ({ [`${methodInfo.name}`]: funcHandler }); },
           },
         });
 
-        if (isDefined(viewModel.scrollableRef)) {
+        if (isDefined(viewModel.scrollable)) {
           if (methodInfo.argsCount === 2) {
             viewModel[methodInfo.name]('arg1', 'arg2');
             expect(funcHandler).toHaveBeenCalledWith('arg1', 'arg2');
@@ -84,7 +105,7 @@ describe('ScrollView', () => {
         const viewModel = new ScrollView({ pullDownEnabled });
         const funcHandler = jest.fn();
         Object.defineProperties(viewModel, {
-          scrollableRef: {
+          scrollable: {
             get() { return ({ refresh: funcHandler }); },
           },
         });
@@ -102,11 +123,6 @@ describe('ScrollView', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('cssClasses', () => {
-        it('Check default property values', () => {
-          const { cssClasses } = new ScrollView({});
-          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollview'));
-        });
-
         each([false, true]).describe('useNative: %o', (useNative) => {
           it('Check strategy branch', () => {
             const scrollView = mount(viewFunction({ props: { useNative } } as any) as JSX.Element);
@@ -142,12 +158,11 @@ describe('ScrollView', () => {
           const viewModel = new ScrollView({ useNative });
 
           Object.defineProperties(viewModel, {
-            scrollableNativeRef: { get() { return { current: 'native' }; } },
-            scrollViewSimulatedRef: { get() { return { current: 'simulated' }; } },
+            scrollableRef: { get() { return { current: 'scrollableRef' }; } },
           });
 
-          expect(viewModel.scrollableRef)
-            .toEqual(useNative ? 'native' : 'simulated');
+          expect(viewModel.scrollable)
+            .toEqual('scrollableRef');
         });
       });
     });

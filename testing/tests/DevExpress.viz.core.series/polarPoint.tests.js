@@ -16,7 +16,7 @@ const environment = {
     beforeEach: function() {
         const that = this;
 
-        this.valTranslator = { translate: sinon.stub(), getBusinessRange: sinon.stub() };
+        this.valTranslator = { translate: sinon.stub(), getBusinessRange: sinon.stub(), isInverted: sinon.stub() };
         this.argTranslator = { translate: sinon.stub() };
 
         this.valTranslator.translate.returns(10)
@@ -295,6 +295,29 @@ QUnit.test('translate, value out of visible area (over then maxVisible)', functi
     const point = createAndDrawPoint.call(this);
 
     assert.notOk(point.inVisibleArea);
+});
+
+QUnit.module('Translate. inverted axis', {
+    afterEach: environment.afterEach,
+    beforeEach() {
+        environment.beforeEach.apply(this, arguments);
+        this.valTranslator.isInverted.returns(true);
+        this.valTranslator.translate.withArgs('canvas_position_end').returns(0);
+        this.valTranslator.translate.withArgs('canvas_position_start').returns(150);
+    }
+});
+
+QUnit.test('translate point for line series', function(assert) {
+    const point = createTranslatedPoint.call(this, { type: 'line' });
+
+    assert.strictEqual(point.inVisibleArea, true);
+});
+
+QUnit.test('translate point for bar series', function(assert) {
+    const point = createTranslatedPoint.call(this, { type: 'bar' });
+
+    assert.strictEqual(point.radiusOuter, 10);
+    assert.strictEqual(point.radiusInner, 2);
 });
 
 QUnit.module('Bar point', environment);

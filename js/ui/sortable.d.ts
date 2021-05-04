@@ -10,10 +10,6 @@ import {
 } from '../core/templates/template';
 
 import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -123,7 +119,7 @@ export type ReorderEvent = NativeEventInfo<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem: boolean;
-    promise?: DxPromise<void>;
+    promise?: PromiseLike<void>;
 }
 
 /** @public */
@@ -366,7 +362,10 @@ export default class dxSortable extends DOMComponent implements DraggableBase {
 }
 
 /** @public */
+export type Properties = dxSortableOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSortableOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSortableOptions;

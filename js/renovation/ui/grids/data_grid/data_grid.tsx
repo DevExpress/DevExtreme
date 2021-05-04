@@ -17,6 +17,7 @@ import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-l
 import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
+import type { OptionChangedEvent } from '../../../../ui/data_grid';
 
 const aria = { role: 'presentation' };
 
@@ -80,6 +81,8 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Ref() widgetElementRef?: RefObject<HTMLDivElement>;
 
   @InternalState() instance!: GridInstance;
+
+  @Mutable() isTwoWayPropUpdating = false;
 
   @Mutable() prevProps!: DataGridProps;
 
@@ -455,14 +458,19 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   // #endregion
 
   @Effect() updateOptions(): void {
-    if (this.instance && this.prevProps) {
+    if (this.instance && this.prevProps && !this.isTwoWayPropUpdating) {
       const updatedOptions = getUpdatedOptions(this.prevProps, this.props);
       this.instance.beginUpdate();
-      updatedOptions.forEach(({ path, value }) => this.instance.option(path, value));
+      updatedOptions.forEach(({ path, value, previousValue }) => {
+        // eslint-disable-next-line no-underscore-dangle
+        this.instance._options.silent(path, previousValue);
+        this.instance.option(path, value);
+      });
+      this.prevProps = this.props;
       this.instance.endUpdate();
+    } else {
+      this.prevProps = this.props;
     }
-
-    this.prevProps = this.props;
   }
 
   @Effect({ run: 'once' })
@@ -480,40 +488,50 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     this.instance?.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
   }
 
-  instanceOptionChangedHandler(e: any): void {
-    const isValueCorrect = e.value === e.component.option(e.fullName); // T867777
+  instanceOptionChangedHandler(e: OptionChangedEvent): void {
+    try {
+      this.isTwoWayPropUpdating = true;
+      this.updateTwoWayValue(e);
+    } finally {
+      this.isTwoWayPropUpdating = false;
+    }
+  }
+
+  updateTwoWayValue(e: OptionChangedEvent): void {
+    // T867777
+    const isValueCorrect = e.value === e.component.option(e.fullName);
     if (e.value !== e.previousValue && isValueCorrect) {
       if (e.name === 'editing' && this.props.editing) {
         if (e.fullName === 'editing.changes') {
-          this.props.editing.changes = e.value;
+          this.props.editing.changes = e.value as [];
         }
         if (e.fullName === 'editing.editRowKey') {
           this.props.editing.editRowKey = e.value;
         }
         if (e.fullName === 'editing.editColumnName') {
-          this.props.editing.editColumnName = e.value;
+          this.props.editing.editColumnName = e.value as string;
         }
       }
       if (e.fullName === 'searchPanel.text' && this.props.searchPanel) {
-        this.props.searchPanel.text = e.value;
+        this.props.searchPanel.text = e.value as string;
       }
       if (e.fullName === 'focusedRowKey') {
         this.props.focusedRowKey = e.value;
       }
       if (e.fullName === 'focusedRowIndex') {
-        this.props.focusedRowIndex = e.value;
+        this.props.focusedRowIndex = e.value as number;
       }
       if (e.fullName === 'focusedColumnIndex') {
-        this.props.focusedColumnIndex = e.value;
+        this.props.focusedColumnIndex = e.value as number;
       }
       if (e.fullName === 'filterValue') {
-        this.props.filterValue = e.value;
+        this.props.filterValue = e.value as string;
       }
       if (e.fullName === 'selectedRowKeys') {
-        this.props.selectedRowKeys = e.value;
+        this.props.selectedRowKeys = e.value as [];
       }
       if (e.fullName === 'selectionFilter') {
-        this.props.selectionFilter = e.value;
+        this.props.selectionFilter = e.value as string;
       }
     }
   }
@@ -542,12 +560,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   //   editing: __getNestedEditing()
   //   ...
   // }
-  normalizeProps(): Record<string, unknown> {
+  normalizeProps(props: Record<string, unknown>): Record<string, unknown> {
     const result = {};
 
-    Object.keys(this.props).forEach((key) => {
+    Object.keys(props).forEach((key) => {
       if (this.props[key] !== undefined) {
-        result[key] = this.props[key];
+        result[key] = props[key];
       }
     });
     return result;
@@ -555,12 +573,14 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   createInstance(): GridInstance {
     const element = this.widgetElementRef?.current as HTMLElement;
+    // TODO Vitik: Not only optionChanged should be rewrited.
+    // All other events should be re-raised by renovated grid.
+    const { onOptionChanged, ...restProps } = this.props as unknown as Record<string, unknown>;
     const instance: GridInstance = new DataGridComponent(
       element,
-      this.normalizeProps(),
+      this.normalizeProps(restProps),
     ) as unknown as GridInstance;
     instance.getController('resizing').updateSize(element);
-
     return instance as GridInstance;
   }
 }

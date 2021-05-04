@@ -87,7 +87,10 @@ export default class dxProgressBar extends dxTrackBar {
 }
 
 /** @public */
+export type Properties = dxProgressBarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxProgressBarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxProgressBarOptions;

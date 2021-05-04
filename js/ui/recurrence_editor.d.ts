@@ -30,6 +30,4 @@ export default class dxRecurrenceEditor extends Editor {
 }
 
 export type Options = dxRecurrenceEditorOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = dxRecurrenceEditorOptions;
