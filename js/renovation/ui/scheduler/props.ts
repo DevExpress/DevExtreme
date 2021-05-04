@@ -33,7 +33,6 @@ import type {
   AppointmentUpdatedEvent,
   AppointmentUpdatingEvent,
   CellContextMenuEvent,
-  dxSchedulerScrolling,
   AppointmentTooltipTemplateData,
   CellClickEvent,
 } from '../../../ui/scheduler';
@@ -41,12 +40,189 @@ import type {
 import type { UserDefinedElement, DxElement } from '../../../core/element'; // eslint-disable-line import/named
 
 @ComponentBindings()
+export class ResourceProps {
+  @OneWay()
+  allowMultiple?: boolean;
+
+  @OneWay()
+  dataSource?: string | unknown[] | DataSource | DataSourceOptions;
+
+  @OneWay()
+  label?: string;
+
+  @OneWay()
+  useColorAsDefault?: boolean;
+
+  /* Field expressions */
+
+  @OneWay()
+  valueExpr?: string | ((data: unknown) => string);
+
+  @OneWay()
+  colorExpr?: string;
+
+  @OneWay()
+  displayExpr?: string | ((resource: unknown) => string);
+
+  @OneWay()
+  fieldExpr?: string;
+}
+
+@ComponentBindings()
+export class ViewProps {
+  @OneWay()
+  agendaDuration?: number;
+
+  @OneWay()
+  cellDuration?: number;
+
+  @OneWay()
+  endDayHour?: number;
+
+  @OneWay()
+  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+  @OneWay()
+  groupByDate?: boolean;
+
+  @OneWay()
+  groupOrientation?: 'horizontal' | 'vertical';
+
+  @OneWay()
+  groups?: string[];
+
+  @OneWay()
+  intervalCount?: number;
+
+  @OneWay()
+  maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+
+  @OneWay()
+  name?: string;
+
+  @OneWay()
+  startDate?: Date | number | string;
+
+  @OneWay()
+  startDayHour?: number;
+
+  @OneWay()
+  type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+
+  @Nested()
+  scrolling?: ScrollingProps;
+
+  @Template()
+  appointmentCollectorTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  appointmentTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  appointmentTooltipTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  dataCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  dateCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  dropDownAppointmentTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  resourceCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  timeCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+}
+
+@ComponentBindings()
+export class AppointmentEditingProps {
+  @OneWay()
+  allowAdding?: boolean;
+
+  @OneWay()
+  allowDeleting?: boolean;
+
+  @OneWay()
+  allowDragging?: boolean;
+
+  @OneWay()
+  allowResizing?: boolean;
+
+  @OneWay()
+  allowTimeZoneEditing?: boolean;
+
+  @OneWay()
+  allowUpdating?: boolean;
+
+  @OneWay()
+  allowEditingTimeZones?: boolean;
+}
+
+@ComponentBindings()
+export class AppointmentDraggingProps {
+  @OneWay()
+  autoScroll?: boolean;
+
+  @OneWay()
+  data?: unknown;
+
+  @OneWay()
+  group?: string;
+
+  @OneWay()
+  scrollSensitivity?: number;
+
+  @OneWay()
+  scrollSpeed?: number;
+
+  @Event()
+  onAdd?: ((e: AppointmentDraggingAddEvent) => void);
+
+  @Event()
+  onDragEnd?: ((e: AppointmentDraggingEndEvent) => void);
+
+  @Event()
+  onDragMove?: ((e: AppointmentDraggingMoveEvent) => void);
+
+  @Event()
+  onDragStart?: ((e: AppointmentDraggingStartEvent) => void);
+
+  @Event()
+  onRemove?: ((e: AppointmentDraggingRemoveEvent) => void);
+}
+
+@ComponentBindings()
+export class ScrollingProps {
+  @OneWay()
+  mode?: 'standard' | 'virtual';
+}
+
+@ComponentBindings()
 export class SchedulerProps {
   @OneWay()
   adaptivityEnabled?: boolean;
 
   @Nested()
-  appointmentDragging?: AppointmentDragging;
+  appointmentDragging?: AppointmentDraggingProps;
 
   @OneWay()
   cellDuration?: number;
@@ -70,7 +246,7 @@ export class SchedulerProps {
   descriptionExpr?: string;
 
   @Nested()
-  editing?: AppointmentEditing;
+  editing?: AppointmentEditingProps;
 
   @OneWay()
   endDayHour?: number;
@@ -109,10 +285,10 @@ export class SchedulerProps {
   remoteFiltering?: boolean;
 
   @Nested()
-  resources?: Resource[];
+  resources?: ResourceProps[];
 
   @Nested()
-  scrolling?: dxSchedulerScrolling;
+  scrolling?: ScrollingProps;
 
   // TODO Is @TwoWay()?
   @OneWay()
@@ -137,7 +313,7 @@ export class SchedulerProps {
   useDropDownViewSwitcher?: boolean;
 
   @Nested()
-  views?: ('day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | View)[];
+  views?: ('day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | ViewProps)[];
 
   /* Events */
 
@@ -250,175 +426,4 @@ export class SchedulerProps {
 
   @OneWay()
   textExpr?: string;
-}
-
-@ComponentBindings()
-export class Resource {
-  @OneWay()
-  allowMultiple?: boolean;
-
-  @OneWay()
-  dataSource?: string | unknown[] | DataSource | DataSourceOptions;
-
-  @OneWay()
-  label?: string;
-
-  @OneWay()
-  useColorAsDefault?: boolean;
-
-  /* Field expressions */
-
-  @OneWay()
-  valueExpr?: string | ((data: unknown) => string);
-
-  @OneWay()
-  colorExpr?: string;
-
-  @OneWay()
-  displayExpr?: string | ((resource: unknown) => string);
-
-  @OneWay()
-  fieldExpr?: string;
-}
-
-@ComponentBindings()
-export class View {
-  @OneWay()
-  agendaDuration?: number;
-
-  @OneWay()
-  cellDuration?: number;
-
-  @OneWay()
-  endDayHour?: number;
-
-  @OneWay()
-  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
-  @OneWay()
-  groupByDate?: boolean;
-
-  @OneWay()
-  groupOrientation?: 'horizontal' | 'vertical';
-
-  @OneWay()
-  groups?: string[];
-
-  @OneWay()
-  intervalCount?: number;
-
-  @OneWay()
-  maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
-
-  @OneWay()
-  name?: string;
-
-  @OneWay()
-  startDate?: Date | number | string;
-
-  @OneWay()
-  startDayHour?: number;
-
-  @OneWay()
-  type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
-
-  @Nested()
-  scrolling?: dxSchedulerScrolling;
-
-  @Template()
-  appointmentCollectorTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  appointmentTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  appointmentTooltipTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  dataCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  dateCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  dropDownAppointmentTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  resourceCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  timeCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-}
-
-@ComponentBindings()
-export class AppointmentEditing {
-  @OneWay()
-  allowAdding?: boolean;
-
-  @OneWay()
-  allowDeleting?: boolean;
-
-  @OneWay()
-  allowDragging?: boolean;
-
-  @OneWay()
-  allowResizing?: boolean;
-
-  @OneWay()
-  allowTimeZoneEditing?: boolean;
-
-  @OneWay()
-  allowUpdating?: boolean;
-
-  @OneWay()
-  allowEditingTimeZones?: boolean;
-}
-
-@ComponentBindings()
-export class AppointmentDragging {
-  @OneWay()
-  autoScroll?: boolean;
-
-  @OneWay()
-  data?: unknown;
-
-  @OneWay()
-  group?: string;
-
-  @OneWay()
-  scrollSensitivity?: number;
-
-  @OneWay()
-  scrollSpeed?: number;
-
-  @Event()
-  onAdd?: ((e: AppointmentDraggingAddEvent) => void);
-
-  @Event()
-  onDragEnd?: ((e: AppointmentDraggingEndEvent) => void);
-
-  @Event()
-  onDragMove?: ((e: AppointmentDraggingMoveEvent) => void);
-
-  @Event()
-  onDragStart?: ((e: AppointmentDraggingStartEvent) => void);
-
-  @Event()
-  onRemove?: ((e: AppointmentDraggingRemoveEvent) => void);
 }

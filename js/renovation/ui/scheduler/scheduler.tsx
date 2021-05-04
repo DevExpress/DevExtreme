@@ -23,7 +23,7 @@ export const viewFunction = (viewModel: Scheduler): JSX.Element => {
   view: viewFunction,
 })
 
-export class Scheduler extends JSXComponent<SchedulerProps>() {
+export class Scheduler extends JSXComponent(SchedulerProps) {
   // eslint-disable-next-line class-methods-use-this
   // get cssClasses(): string {
   //   return combineClasses({
