@@ -1430,7 +1430,15 @@ class SchedulerWorkSpace extends WidgetObserver {
             });
             this[componentName] = component;
         } else {
+            const $element = component.$element();
+            const elementStyle = $element.get(0).style;
+            const height = elementStyle.height;
+            const width = elementStyle.width;
+
             component.option(viewModel);
+
+            height && $element.height(height);
+            width && $element.width(width);
         }
     }
 

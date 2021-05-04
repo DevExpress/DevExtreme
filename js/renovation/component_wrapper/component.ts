@@ -144,7 +144,6 @@ export default class ComponentWrapper extends DOMComponent {
         }, {}),
       };
       this._storedClasses = this.$element()[0].getAttribute('class') || '';
-    }
     const elemStyle = this.$element()[0].style;
 
     const style = {};
@@ -152,6 +151,7 @@ export default class ComponentWrapper extends DOMComponent {
       style[elemStyle[i]] = elemStyle.getPropertyValue(elemStyle[i]);
     }
     this._elementAttr.style = style;
+  }
 
     this._elementAttr.class = this._storedClasses;
 
@@ -201,7 +201,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   getProps() {
     const { elementAttr } = this.option();
-    
+
     const options = this._patchOptionValues({
       ...this._props,
       ref: this._viewRef,
@@ -260,7 +260,7 @@ export default class ComponentWrapper extends DOMComponent {
     }
     this._actionsMap[event] = action;
   }
-  
+
   _optionChanged(option) {
     const { name, fullName } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);
