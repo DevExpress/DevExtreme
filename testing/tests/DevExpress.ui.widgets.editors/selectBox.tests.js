@@ -1426,7 +1426,7 @@ QUnit.module('widget options', moduleSetup, () => {
             opened: true
         }).dxSelectBox('instance');
 
-        assert.strictEqual(instance._popup.overlayContent().attr('tabindex'), '-1', 'tabindex is correct in the markup');
+        assert.strictEqual(instance._popup.$overlayContent().attr('tabindex'), '-1', 'tabindex is correct in the markup');
     });
 
     QUnit.testInActiveWindow('don\'t rise valueChange event on focusout in readonly state with searchEnabled', function(assert) {

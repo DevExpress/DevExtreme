@@ -362,7 +362,7 @@ QUnit.module('render', moduleConfig(), () => {
             opened: true
         });
         const popoverInstance = $dropDownMenu.find('.dx-popup').dxPopover('instance');
-        const $content = $(popoverInstance.content());
+        const $content = popoverInstance.$content();
 
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });
@@ -376,7 +376,7 @@ QUnit.module('render', moduleConfig(), () => {
         $dropDownMenu.dxDropDownMenu('option', 'container', $container);
 
         const popoverInstance = $dropDownMenu.find('.dx-popup').dxPopover('instance');
-        const $content = $(popoverInstance.content());
+        const $content = popoverInstance.$content();
 
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });

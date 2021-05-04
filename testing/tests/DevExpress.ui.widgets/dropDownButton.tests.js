@@ -519,7 +519,7 @@ QUnit.module('popup integration', {
             }
         });
 
-        const $popupContent = $(getPopup(instance).content());
+        const $popupContent = getPopup(instance).$content();
         assert.ok($popupContent.hasClass(DROP_DOWN_BUTTON_CONTENT), 'popup has special class');
     });
 
@@ -558,7 +558,7 @@ QUnit.module('popup integration', {
         });
 
         const instance = $dropDownButton.dxDropDownButton('instance');
-        const $popupContent = $(getPopup(instance).content());
+        const $popupContent = getPopup(instance).$content();
 
         assert.equal($popupContent.outerWidth(), 84, 'width is right');
     });
@@ -2320,11 +2320,11 @@ QUnit.module('custom content template', {}, () => {
             deferRendering: false
         });
 
-        const popupContent = getPopup(dropDownButton).content();
+        const popupContent = getPopup(dropDownButton).$content();
         assert.strictEqual(templateHandler.callCount, 1, 'templateHandler was called');
         assert.deepEqual(templateHandler.getCall(0).args[0], [1, 2, 3], 'data is correct');
         assert.strictEqual(templateHandler.getCall(0).args[1], popupContent, 'container is correct');
-        assert.strictEqual($(popupContent).text(), 'Template 1', 'template was rendered');
+        assert.strictEqual(popupContent.text(), 'Template 1', 'template was rendered');
 
         const templateHandler2 = sinon.stub().returns('Template 2');
         dropDownButton.option('dropDownContentTemplate', templateHandler2);

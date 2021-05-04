@@ -267,7 +267,7 @@ const Popover = Popup.inherit({
     _renderArrow: function() {
         this._$arrow = $('<div>')
             .addClass(POPOVER_ARROW_CLASS)
-            .prependTo(this.overlayContent());
+            .prependTo(this.$overlayContent());
     },
 
     _documentDownHandler: function(e) {

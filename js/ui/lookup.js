@@ -580,7 +580,7 @@ const Lookup = DropDownList.inherit({
         const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(flipped) return;
 
-        const popupContentParent = $(this._popup.content()).parent();
+        const popupContentParent = $(this._popup.$content()).parent();
         const popupOffset = this._getPopupOffset();
 
         const position = locate(popupContentParent);

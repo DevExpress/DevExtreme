@@ -1157,7 +1157,7 @@ QUnit.module('dateView integration', {
             'opened': false
         });
         this.instance.open();
-        $(this.popup().overlayContent()).find(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
+        $(this.popup().$overlayContent()).find(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), new Date(2000, 1, 1));
     });
@@ -1216,7 +1216,7 @@ QUnit.module('dateView integration', {
         rollers.month.option('selectedIndex', 10);
         rollers.year.option('selectedIndex', 2);
 
-        $(this.popup().overlayContent()).find(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
+        $(this.popup().$overlayContent()).find(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), new Date(2002, 10, 13));
 
         this.instance.open();
@@ -1226,7 +1226,7 @@ QUnit.module('dateView integration', {
         rollers.month.option('selectedIndex', 8);
         rollers.year.option('selectedIndex', 0);
 
-        $(this.popup().overlayContent()).find('.dx-popup-cancel.dx-button').trigger('dxclick');
+        $(this.popup().$overlayContent()).find('.dx-popup-cancel.dx-button').trigger('dxclick');
         assert.deepEqual(this.instance.option('value'), new Date(2002, 10, 13));
     });
 

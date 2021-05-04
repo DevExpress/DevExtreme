@@ -776,8 +776,8 @@ QUnit.module('option change', {}, () => {
             return;
         }
 
-        const popupContent = getPopup(dropDownButton).content();
-        assert.strictEqual($(popupContent).text(), 'Custom template', 'option has been changed');
+        const popupContent = getPopup(dropDownButton).$content();
+        assert.strictEqual(popupContent.text(), 'Custom template', 'option has been changed');
     });
 
     QUnit.test('items option change', function(assert) {

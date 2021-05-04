@@ -525,11 +525,11 @@ const Popup = Overlay.inherit({
     _setContentHeight: function() {
         (this.option('forceApplyBindings') || noop)();
 
-        const overlayContent = this.overlayContent().get(0);
+        const overlayContent = this.$overlayContent().get(0);
         const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
         this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
-        this._setHeightClasses(this.overlayContent(), currentHeightStrategyClass);
+        this._setHeightClasses(this.$overlayContent(), currentHeightStrategyClass);
     },
 
     _heightStrategyChangeOffset: function(currentHeightStrategyClass, popupVerticalPaddings) {
@@ -604,7 +604,7 @@ const Popup = Overlay.inherit({
     },
 
     _isAutoHeight: function() {
-        return this.overlayContent().get(0).style.height === 'auto';
+        return this.$overlayContent().get(0).style.height === 'auto';
     },
 
     _splitPopupHeight: function() {
@@ -614,7 +614,7 @@ const Popup = Overlay.inherit({
         return {
             header: getVisibleHeight(topToolbar && topToolbar.get(0)),
             footer: getVisibleHeight(bottomToolbar && bottomToolbar.get(0)),
-            contentVerticalOffsets: getVerticalOffsets(this.overlayContent().get(0), true),
+            contentVerticalOffsets: getVerticalOffsets(this.$overlayContent().get(0), true),
             popupVerticalOffsets: getVerticalOffsets(this.$content().get(0), true),
             popupVerticalPaddings: getVerticalOffsets(this.$content().get(0), false)
         };
@@ -652,7 +652,7 @@ const Popup = Overlay.inherit({
     },
 
     _renderFullscreenWidthClass: function() {
-        this.overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, this.overlayContent().outerWidth() === $(window).width());
+        this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, this.$overlayContent().outerWidth() === $(window).width());
     },
 
     refreshPosition: function() {
@@ -745,7 +745,7 @@ const Popup = Overlay.inherit({
         return getPublicElement(this._$popupContent);
     },
 
-    overlayContent: function() {
+    $overlayContent: function() {
         return this._$content;
     }
 });
