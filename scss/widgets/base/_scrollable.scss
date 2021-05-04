@@ -9,6 +9,10 @@
   display: block;
   height: 100%;
   min-height: 0;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .dx-scrollable-native {
