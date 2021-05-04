@@ -1469,6 +1469,27 @@ QUnit.module('regressions', {
         assert.strictEqual(selectionChangedStub.lastCall.args[0].selectedItem, null);
     });
 
+    QUnit.test('onSelectionChanged event should trigger on item selection if its text is equal to input text (T991350)', function(assert) {
+        const selectionChangedStub = sinon.stub();
+        const timeToWait = 300;
+
+        this.instance.option({
+            searchTimeout: timeToWait,
+            onSelectionChanged: selectionChangedStub
+        });
+
+        this.keyboard
+            .type('item 2');
+
+        this.clock.tick(timeToWait + 100);
+        const $listItems = $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
+        const $secondItem = $listItems.eq(0);
+        $secondItem.trigger('dxclick');
+
+        assert.strictEqual(selectionChangedStub.callCount, 1);
+        assert.strictEqual(this.instance.option('selectedItem'), 'item 2');
+    });
+
     QUnit.test('item initialization scenario', function(assert) {
         const instance = $('#autocomplete').dxAutocomplete({
             items: ['a', 'b', 'c']
