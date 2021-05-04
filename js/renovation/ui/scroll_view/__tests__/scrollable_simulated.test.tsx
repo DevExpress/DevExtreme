@@ -1065,7 +1065,7 @@ describe('Simulated > Behavior', () => {
       });
     });
 
-    it('should prevent default key down event by common keys down', () => {
+    it('should not prevent default key down event by common keys down', () => {
       const scrollFunc = jest.fn();
       const options = {
         originalEvent: {
@@ -1084,6 +1084,109 @@ describe('Simulated > Behavior', () => {
       expect(options.originalEvent.preventDefault).not.toBeCalled();
       expect(options.originalEvent.stopPropagation).not.toBeCalled();
       expect(scrollFunc).toBeCalledTimes(0);
+    });
+
+    it('should not prevent default key down event by tab key down', () => {
+      const options = {
+        originalEvent: {
+          key: 'tab',
+          preventDefault: jest.fn(),
+          stopPropagation: jest.fn(),
+        },
+      };
+      const helper = new ScrollableTestHelper({ });
+      helper.viewModel.tabWasPressed = false;
+
+      helper.viewModel.onWidgetKeyDown(options);
+
+      expect(options.originalEvent.preventDefault).not.toBeCalled();
+      expect(options.originalEvent.stopPropagation).not.toBeCalled();
+      expect(helper.viewModel.tabWasPressed).toEqual(true);
+    });
+
+    it('keyboardEffect(), should subscribe container to keyboard event', () => {
+      const helper = new ScrollableTestHelper({ });
+      helper.viewModel.tabWasPressed = false;
+
+      helper.viewModel.keyboardEffect();
+
+      emit('keydown', { key: 'pageUp' } as any);
+      expect(helper.viewModel.tabWasPressed).toEqual(false);
+      emit('keydown', { key: 'tab' } as any);
+      expect(helper.viewModel.tabWasPressed).toEqual(true);
+    });
+
+    it('keyboardEffect(), should return unsubscribe callback', () => {
+      const helper = new ScrollableTestHelper({ });
+      const detach = helper.viewModel.keyboardEffect();
+      helper.viewModel.tabWasPressed = false;
+
+      emit('keydown', { key: 'tab' } as any);
+      expect(helper.viewModel.tabWasPressed).toEqual(true);
+
+      helper.viewModel.tabWasPressed = false;
+      detach();
+
+      emit('keydown', { key: 'tab' } as any);
+      expect(helper.viewModel.tabWasPressed).toEqual(false);
+    });
+
+    it('should not syncronize scrollbar location & container on "scroll" if tab key was not pressed', () => {
+      const helper = new ScrollableTestHelper({});
+
+      helper.viewModel.tabWasPressed = false;
+      helper.viewModel.vScrollLocation = -100;
+      helper.viewModel.hScrollLocation = -100;
+      helper.viewModel.scrollOffset = jest.fn(() => ({ top: 50, left: 50 }));
+
+      helper.viewModel.handleScroll();
+
+      expect(helper.viewModel.vScrollLocation).toEqual(-100);
+      expect(helper.viewModel.hScrollLocation).toEqual(-100);
+      expect(helper.viewModel.tabWasPressed).toEqual(false);
+    });
+
+    it('should syncronize scrollbar location & container on "scroll" if tab key was pressed', () => {
+      const helper = new ScrollableTestHelper({});
+
+      expect.extend({
+        toBeValid(received, expected) {
+          if (received === expected) {
+            return {
+              message: () => 'passed',
+              pass: true,
+            };
+          }
+          return {
+            message: () => `scrollLocation - actual: ${received}, expected: ${expected}`,
+            pass: false,
+          };
+        },
+      });
+
+      [100, 0, -50, -70, -100, -200].forEach((hScrollLocation) => {
+        [100, 0, -50, -70, -100, -200].forEach((vScrollLocation) => {
+          helper.viewModel.tabWasPressed = true;
+          helper.viewModel.vScrollLocation = vScrollLocation;
+          helper.viewModel.hScrollLocation = hScrollLocation;
+          helper.viewModel.scrollOffset = jest.fn(() => ({ top: 50, left: 50 }));
+
+          helper.viewModel.handleScroll();
+
+          let expectedVScrollLocation = vScrollLocation;
+          let expectedHScrollLocation = hScrollLocation;
+
+          if ((vScrollLocation <= 0 && vScrollLocation >= -100)
+          && (hScrollLocation <= 0 && hScrollLocation >= -100)) {
+            expectedVScrollLocation = -50;
+            expectedHScrollLocation = -50;
+          }
+
+          (expect(helper.viewModel.vScrollLocation) as any).toBeValid(expectedVScrollLocation);
+          (expect(helper.viewModel.hScrollLocation) as any).toBeValid(expectedHScrollLocation);
+          expect(helper.viewModel.tabWasPressed).toEqual(false);
+        });
+      });
     });
   });
 
