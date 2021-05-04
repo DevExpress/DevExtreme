@@ -28,7 +28,7 @@ if(Quill) {
 
             this.options = extend({}, this._getDefaultOptions(), options);
             this._popup = this.renderPopup();
-            this._popup._$wrapper.addClass(SUGGESTION_LIST_WRAPPER_CLASS);
+            this._popup.$wrapper().addClass(SUGGESTION_LIST_WRAPPER_CLASS);
         }
 
         renderList($container, options) {
