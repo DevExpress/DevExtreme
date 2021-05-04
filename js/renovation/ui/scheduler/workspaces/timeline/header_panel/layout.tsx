@@ -1,6 +1,5 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
 } from '@devextreme-generator/declarations';
 import { HeaderPanelLayout, HeaderPanelLayoutProps } from '../../base/header_panel/layout';
@@ -36,12 +35,9 @@ export const viewFunction = ({
   />
 );
 
-@ComponentBindings()
-export class TimelineHeaderPanelLayoutProps extends HeaderPanelLayoutProps {}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
   jQuery: { register: true, component: HeaderPanel },
 })
-export class TimelineHeaderPanelLayout extends JSXComponent(TimelineHeaderPanelLayoutProps) {}
+export class TimelineHeaderPanelLayout extends JSXComponent<HeaderPanelLayoutProps, 'dateHeaderData'>() {}
