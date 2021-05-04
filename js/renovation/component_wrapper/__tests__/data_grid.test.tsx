@@ -4,7 +4,7 @@ import DataGridComponent from '../data_grid';
 const mockBeginUpdate = jest.fn();
 const mockEndUpdate = jest.fn();
 
-jest.mock('../component', () => class {
+jest.mock('../common/component', () => class {
   beginUpdate() {
     mockBeginUpdate();
   }

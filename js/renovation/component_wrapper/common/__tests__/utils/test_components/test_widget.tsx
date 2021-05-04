@@ -10,10 +10,10 @@ import {
   Ref,
   RefObject,
 } from '@devextreme-generator/declarations';
-import { combineClasses } from '../../../../utils/combine_classes';
+import { combineClasses } from '../../../../../utils/combine_classes';
 import {
   keyboard,
-} from '../../../../../events/short';
+} from '../../../../../../events/short';
 
 import BaseComponent from './base_test_widget';
 

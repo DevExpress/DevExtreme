@@ -15,10 +15,12 @@ module.exports = {
         './js/renovation/**/*.ts?(x)',
         '!**/*.j.tsx',
         '!**/test_utils/**/*',
-        '!**/component_wrapper/**/*',
+        '!**/component_wrapper/*',
         '!**/__tests__/**/*',
     ],
     coveragePathIgnorePatterns: [
+        './js/renovation/component_wrapper/common/editor.ts',
+        './js/renovation/component_wrapper/utils/utils.ts',
         './js/renovation/ui/grids/data_grid/datagrid_component.ts',
         './js/renovation/ui/scheduler/workspaces/utils.ts',
         './js/renovation/ui/scroll_view/utils/get_element_offset.ts',
@@ -39,6 +41,18 @@ module.exports = {
             statements: 100, // (after start testing declarations)
             lines: 100,
             branches: 100
+        },
+        './js/renovation/component_wrapper/common/component.ts': {
+            functions: 97,
+            statements: 97,
+            lines: 97,
+            branches: 90
+        },
+        './js/renovation/component_wrapper/common/template_wrapper.ts': {
+            functions: 100,
+            statements: 100,
+            lines: 100,
+            branches: 90
         }
     },
     roots: ['<rootDir>/js/renovation'],

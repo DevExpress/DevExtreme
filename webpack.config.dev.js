@@ -21,7 +21,7 @@ module.exports = Object.assign({
                             platform: 'inferno',
                             defaultOptionsModule: 'js/core/options/utils',
                             jqueryComponentRegistratorModule: 'js/core/component_registrator',
-                            jqueryBaseComponentModule: 'js/renovation/component_wrapper/component',
+                            jqueryBaseComponentModule: 'js/renovation/component_wrapper/common/component',
                             tsConfig: path.resolve('build/gulp/generator/ts-configs/inferno.tsconfig.json')
                         },
                     },
