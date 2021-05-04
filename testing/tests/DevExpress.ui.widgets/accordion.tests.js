@@ -1366,6 +1366,23 @@ QUnit.module('optionChanged', moduleSetup, () => {
             assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
             assert.strictEqual(item1.outerHeight(), 0, 'item1 has zero height');
         });
+
+        QUnit.test(config.message + 'accordion.selectedItem=item1 -> accordion.items=[item1, newItem2] (T992552)', function(assert) {
+            const items = [ { title: 'item0', text: 'Any text' }, { title: 'item1', text: 'Any text' } ];
+            const $element = this.$element.dxAccordion(extend(config, { items, selectedItems: [items[0]] }));
+            const instance = $element.dxAccordion('instance');
+
+            const $items = $element.find(`.${ACCORDION_ITEM_CLASS}`);
+            assert.roughEqual($items.eq(0).outerHeight(), 93, 1.001, 'item1 has valid height');
+            assert.roughEqual($items.eq(1).outerHeight(), 43, 1.001, 'item2 has valid height');
+
+            items[1] = { title: 'new title', text: 'new text' };
+            instance.option('items', items);
+
+            const $itemsAfterUpdate = $element.find(`.${ACCORDION_ITEM_CLASS}`);
+            assert.roughEqual($itemsAfterUpdate.eq(0).outerHeight(), 93, 1.001, 'item1 has valid height after changing option');
+            assert.roughEqual($itemsAfterUpdate.eq(1).outerHeight(), 43, 1.001, 'item2 has valid height after changing option');
+        });
     });
 });
 
