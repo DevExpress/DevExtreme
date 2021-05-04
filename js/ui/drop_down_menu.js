@@ -280,7 +280,7 @@ const DropDownMenu = Widget.inherit({
 
         return {
             onInitialized: function(args) {
-                args.component.$wrapper()
+                args.component._$wrapper
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
                     .toggleClass(DROP_DOWN_MENU_POPUP_CLASS, usePopup);
             },

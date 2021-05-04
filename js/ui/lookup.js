@@ -660,7 +660,7 @@ const Lookup = DropDownList.inherit({
         }
 
         this._$popup.addClass(LOOKUP_POPUP_CLASS);
-        this._popup.$wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
+        this._popup._$wrapper.addClass(LOOKUP_POPUP_WRAPPER_CLASS);
     },
 
     _renderPopover: function() {
@@ -908,7 +908,7 @@ const Lookup = DropDownList.inherit({
 
     _toggleSearchClass: function(isSearchEnabled) {
         if(this._popup) {
-            this._popup.$wrapper().toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
+            this._popup._$wrapper.toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
         }
     },
 

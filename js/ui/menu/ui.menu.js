@@ -407,7 +407,7 @@ class Menu extends MenuBase {
             .addClass(DX_ADAPTIVE_MODE_CLASS)
             .addClass(this.option('cssClass'));
 
-        this._overlay.$wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
+        this._overlay._$wrapper.addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
 
         this._$adaptiveContainer.append($hamburger);
         this._$adaptiveContainer.append(this._overlay.$element());

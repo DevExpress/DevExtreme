@@ -118,7 +118,7 @@ const LoadPanel = Overlay.inherit({
         this.callBase();
 
         this.$element().addClass(LOADPANEL_CLASS);
-        this._$wrapper.addClass(LOADPANEL_WRAPPER_CLASS);
+        this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
     },
 
     _renderContentImpl: function() {

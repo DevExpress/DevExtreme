@@ -173,13 +173,13 @@ export const custom = function(options) {
         boundaryOffset: { h: 10, v: 0 }
     }, options.popupOptions));
 
-    popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
+    popupInstance._$wrapper.addClass(DX_DIALOG_WRAPPER_CLASSNAME);
 
     if(options.position) {
         popupInstance.option('position', options.position);
     }
 
-    popupInstance.$wrapper()
+    popupInstance._$wrapper
         .addClass(DX_DIALOG_ROOT_CLASSNAME);
 
     function show() {
