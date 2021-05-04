@@ -55,7 +55,7 @@ describe('Form > Markup', () => {
 
   each([false, true]).describe('scrollingEnabled: %o', (scrollingEnabled) => {
     each([false, true, undefined, null]).describe('useNativeScrolling: %o', (useNativeScrolling) => {
-      it('root layoutManager with responsiveBox is rendered', () => {
+      it('root layoutManager is rendered', () => {
         const props = extend(new FormProps(), { scrollingEnabled, useNativeScrolling });
         const form = mount<Form>(<Form {...props} />);
 

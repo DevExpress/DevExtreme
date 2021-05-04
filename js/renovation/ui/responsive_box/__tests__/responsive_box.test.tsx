@@ -31,7 +31,7 @@ describe('ResponsiveBox > Attrs', () => {
       { clientWidth: 1000, expectedClass: 'dx-responsivebox-screen-md' },
       { clientWidth: 900, expectedClass: 'dx-responsivebox-screen-sm' },
       { clientWidth: 700, expectedClass: 'dx-responsivebox-screen-xs' },
-    ])('Check has valid screen size. Default implementation. Has window, config: %o ',
+    ])('Check has valid screen size class. Default implementation. Has window, config: %o ',
       ({ clientWidth, expectedClass }) => {
         const defaultImplementation = domAdapter.getDocumentElement;
         domAdapter.getDocumentElement = () => ({ clientWidth });
@@ -44,7 +44,7 @@ describe('ResponsiveBox > Attrs', () => {
         domAdapter.getDocumentElement = defaultImplementation;
       });
 
-    it('Check has valid screen size. Default implementation. Has no window', () => {
+    it('Check has valid screen size class. Default implementation. Has no window', () => {
       setWindow({}, false);
 
       const props = new ResponsiveBoxProps();
@@ -60,7 +60,7 @@ describe('ResponsiveBox > Attrs', () => {
       { customScreenByWidth: () => 'md', expectedClass: 'dx-responsivebox-screen-md' },
       { customScreenByWidth: () => 'sm', expectedClass: 'dx-responsivebox-screen-sm' },
       { customScreenByWidth: () => 'xs', expectedClass: 'dx-responsivebox-screen-xs' },
-    ])('Check has valid screen size. custom implementation, config: %o',
+    ])('Check has valid screen size class. custom implementation, config: %o',
       ({ customScreenByWidth, expectedClass }) => {
         const props = { screenByWidth: customScreenByWidth } as ResponsiveBoxProps;
         const responsiveBox = mount<ResponsiveBox>(<ResponsiveBox {...props} />);
