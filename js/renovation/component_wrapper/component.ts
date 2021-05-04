@@ -125,10 +125,14 @@ export default class ComponentWrapper extends DOMComponent {
   _dispose() {
     const containerNode = this.$element()[0];
     const parentNode = containerNode.parentNode;
-    parentNode.$V = containerNode.$V;
-    containerNode.$V = null;
-    render(createElement(containerNode.tagName, this.elementAttr), parentNode);
-    delete parentNode.$V;
+
+    if (parentNode) {
+      parentNode.$V = containerNode.$V;
+      render(createElement(containerNode.tagName, this.elementAttr), parentNode);
+      delete parentNode.$V;
+    }
+    delete containerNode.$V;
+
     super._dispose();
   }
 
