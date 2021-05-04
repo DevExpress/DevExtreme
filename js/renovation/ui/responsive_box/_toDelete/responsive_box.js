@@ -123,8 +123,6 @@ const ResponsiveBox = CollectionWidget.inherit({
 
     _initMarkup: function() {
         this.callBase();
-        this.$element().addClass(RESPONSIVE_BOX_CLASS);
-
         // NOTE: Fallback box strategy
         this._updateRootBox();
     },
