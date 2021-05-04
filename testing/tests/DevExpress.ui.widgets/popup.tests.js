@@ -1002,11 +1002,10 @@ QUnit.module('options changed callbacks', {
             visible: true
         });
 
-        const $overlayContent = this.instance.$content().parent();
-        const $wrapper = $overlayContent.parent().get(0);
+        const wrapper = this.instance.$wrapper().get(0);
 
-        assert.equal(parseInt(getComputedStyle($wrapper).width), $(window).width(), 'wrappers width specified');
-        assert.equal(parseInt(getComputedStyle($wrapper).height), $(window).height(), 'wrappers height specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).width), $(window).width(), 'wrappers width specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).height), $(window).height(), 'wrappers height specified');
     });
 
     QUnit.test('title', function(assert) {
