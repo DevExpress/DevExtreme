@@ -79,10 +79,10 @@ QUnit.test('Create tooltip', function(assert) {
 
     // assert
     assert.equal(tooltip._eventTrigger, et, 'eventTrigger');
-    assert.deepEqual(tooltip._renderer.ctorArgs, [{ pathModified: 'pathModified-option', container: tooltip.$wrapper()[0] }], 'renderer with rendererOptions');
+    assert.deepEqual(tooltip._renderer.ctorArgs, [{ pathModified: 'pathModified-option', container: tooltip._wrapper[0] }], 'renderer with rendererOptions');
 
-    assert.ok(tooltip.$wrapper(), 'wrapper');
-    const wrapper = tooltip.$wrapper().get(0);
+    assert.ok(tooltip._wrapper, 'wrapper');
+    const wrapper = tooltip._wrapper.get(0);
     assert.equal(wrapper.nodeName, 'DIV');
     assert.equal(wrapper.className, 'tooltip-class');
     assert.equal(wrapper.style.position, 'absolute');
@@ -100,7 +100,7 @@ QUnit.test('Create tooltip', function(assert) {
     assert.ok(tooltip._textGroupHtml, 'textGroupHtml');
     div = tooltip._textGroupHtml.get(0);
     assert.equal(div.nodeName, 'DIV');
-    assert.equal(div.parentNode, tooltip.$wrapper().get(0));
+    assert.equal(div.parentNode, tooltip._wrapper.get(0));
     assert.equal(div.style.position, 'absolute');
     assert.equal(div.style.width, '');
     assert.equal(div.style.padding, '0px');
@@ -161,13 +161,13 @@ QUnit.test('Set options. ZIndex', function(assert) {
     const tooltip = new Tooltip({ eventTrigger: et });
     this.options.zIndex = 1000;
     // act
-    sinon.spy(tooltip.$wrapper(), 'css');
+    sinon.spy(tooltip._wrapper, 'css');
     const result = tooltip.setOptions(this.options);
 
     // assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, this.options, 'whole options');
-    assert.deepEqual(tooltip.$wrapper().css.lastCall.args[0], { 'zIndex': 1000 }, 'zIndex');
+    assert.deepEqual(tooltip._wrapper.css.lastCall.args[0], { 'zIndex': 1000 }, 'zIndex');
 });
 
 QUnit.test('Set options. Container is incorrect', function(assert) {
@@ -246,8 +246,8 @@ QUnit.test('Container has offset', function(assert) {
     tooltip.show({ description: 'some-text' }, { x: 100, y: 200 });
 
     // assert
-    assert.equal(tooltip.$wrapper().get(0).style.left, '10042px', 'wrapper is moved to invisible area');
-    assert.equal(tooltip.$wrapper().get(0).style.top, '10121px', 'wrapper is moved to invisible area');
+    assert.equal(tooltip._wrapper.get(0).style.left, '10042px', 'wrapper is moved to invisible area');
+    assert.equal(tooltip._wrapper.get(0).style.top, '10121px', 'wrapper is moved to invisible area');
 });
 
 QUnit.test('Body has vertical scroll', function(assert) {
@@ -259,8 +259,8 @@ QUnit.test('Body has vertical scroll', function(assert) {
         // act
         tooltip.show({ description: 'some-text' }, { x: 100, y: 2000 });
         // assert
-        assert.equal(tooltip.$wrapper().get(0).style.left, '62px', 'wrapper is moved to invisible area');
-        assert.equal(tooltip.$wrapper().get(0).style.top, '1941px', 'wrapper is moved to invisible area');
+        assert.equal(tooltip._wrapper.get(0).style.left, '62px', 'wrapper is moved to invisible area');
+        assert.equal(tooltip._wrapper.get(0).style.top, '1941px', 'wrapper is moved to invisible area');
     } finally {
         container.remove();
     }
@@ -280,8 +280,8 @@ QUnit.test('Body has horizontal scroll', function(assert) {
         // act
         tooltip.show({ description: 'some-text' }, { x: 3100, y: 100 });
         // assert
-        assert.equal(tooltip.$wrapper().get(0).style.left, '3062px');
-        assert.equal(tooltip.$wrapper().get(0).style.top, '41px');
+        assert.equal(tooltip._wrapper.get(0).style.left, '3062px');
+        assert.equal(tooltip._wrapper.get(0).style.top, '41px');
     } finally {
         body.scrollLeft = bodyScrollLeft;
         documentElement.scrollLeft = documentScrollLeft;
@@ -305,8 +305,8 @@ QUnit.test('document.documentElement has width less than body (T960374)', functi
     // act
     tooltip.show({ description: 'some-text' }, { x: 1000, y: 100 });
     // assert
-    assert.equal(tooltip.$wrapper().get(0).style.left, '962px');
-    assert.equal(tooltip.$wrapper().get(0).style.top, '41px');
+    assert.equal(tooltip._wrapper.get(0).style.left, '962px');
+    assert.equal(tooltip._wrapper.get(0).style.top, '41px');
 
     delete document.documentElement.clientWidth;
     delete body.clientWidth;
@@ -386,7 +386,7 @@ QUnit.test('Set renderer options', function(assert) {
     tooltip.setRendererOptions(options);
 
     assert.deepEqual(this.renderer.setOptions.lastCall.args, [options], 'renderer options');
-    assert.strictEqual(tooltip.$wrapper().children().first().css('direction'), 'ltr', 'direction');
+    assert.strictEqual(tooltip._wrapper.children().first().css('direction'), 'ltr', 'direction');
 });
 
 QUnit.test('Set renderer options / rtl enabled', function(assert) {
@@ -396,15 +396,15 @@ QUnit.test('Set renderer options / rtl enabled', function(assert) {
     tooltip.setRendererOptions(options);
 
     assert.deepEqual(this.renderer.setOptions.lastCall.args, [options], 'renderer options');
-    assert.strictEqual(tooltip.$wrapper().children().first().css('direction'), 'rtl', 'direction');
+    assert.strictEqual(tooltip._wrapper.children().first().css('direction'), 'rtl', 'direction');
 });
 
 QUnit.test('Update', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
 
-    tooltip.$wrapper().appendTo = sinon.spy();
-    tooltip.$wrapper().detach = sinon.spy();
+    tooltip._wrapper.appendTo = sinon.spy();
+    tooltip._wrapper.detach = sinon.spy();
     tooltip._textGroupHtml.css = sinon.spy();
 
     const result = tooltip.update(this.options);
@@ -412,9 +412,9 @@ QUnit.test('Update', function(assert) {
     // assert
     assert.equal(tooltip, result);
 
-    assert.equal(tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
-    assert.equal(tooltip.$wrapper().get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
-    assert.equal(tooltip.$wrapper().detach.callCount, 1, 'wrapper detached');
+    assert.equal(tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(tooltip._wrapper.get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
+    assert.equal(tooltip._wrapper.detach.callCount, 1, 'wrapper detached');
 
     // for svg text ↓
     assert.equal(tooltip._text.css.callCount, 1, 'text styles');
@@ -437,14 +437,14 @@ QUnit.test('Update', function(assert) {
 QUnit.test('Disposing', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et, widgetRoot: $('#qunit-fixture') });
-    tooltip.$wrapper().remove && (tooltip.$wrapper().remove = sinon.spy());
+    tooltip._wrapper.remove && (tooltip._wrapper.remove = sinon.spy());
 
     // act
     tooltip.dispose();
 
     // assert
     assert.equal(tooltip._renderer.dispose.callCount, 1);
-    assert.equal(tooltip.$wrapper().remove.callCount, 1);
+    assert.equal(tooltip._wrapper.remove.callCount, 1);
     assert.equal(tooltip._options, null);
     assert.equal(tooltip._widgetRoot, null);
 });
@@ -592,7 +592,7 @@ QUnit.test('Show preparations. W/o customize, empty text', function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const result = this.tooltip.show({ valueText: '' }, {});
@@ -604,14 +604,14 @@ QUnit.test('Show preparations. W/o customize, empty text', function(assert) {
         a: 'b'
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(this.tooltip.move.callCount, 0);
 });
 
 QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: 'some-text' };
@@ -645,8 +645,8 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
         'pointer-events': 'none'
     });
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 1, 'wrapper is added to dom');
-    assert.deepEqual(this.tooltip.$wrapper().appendTo.firstCall.args, [$('body').get(0)]);
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
 QUnit.test('Tooltip with corener radius', function(assert) {
@@ -665,7 +665,7 @@ QUnit.test('Show preparations. W/o customize, w/ text from \'description\' filed
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { description: 'some-text' };
@@ -685,15 +685,15 @@ QUnit.test('Show preparations. W/o customize, w/ text from \'description\' filed
         templateCallback: undefined
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 1, 'wrapper is added to dom');
-    assert.deepEqual(this.tooltip.$wrapper().appendTo.firstCall.args, [$('body').get(0)]);
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
 QUnit.test('Show preparations. W/ customize empty text, empty text', function(assert) {
     this.options.customizeTooltip = sinon.spy(function() { return { text: '', color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: '' };
@@ -710,7 +710,7 @@ QUnit.test('Show preparations. W/ customize empty text, empty text', function(as
         a: 'b'
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(this.tooltip.move.callCount, 0);
 });
 
@@ -718,7 +718,7 @@ QUnit.test('Show preparations. W/ customize undefined text, empty text', functio
     this.options.customizeTooltip = sinon.spy(function() { return { text: undefined, color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: '' };
@@ -735,7 +735,7 @@ QUnit.test('Show preparations. W/ customize undefined text, empty text', functio
         a: 'b'
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(this.tooltip.move.callCount, 0);
 });
 
@@ -743,7 +743,7 @@ QUnit.test('Show preparations. W/ customize w/o text, empty text', function(asse
     this.options.customizeTooltip = sinon.spy(function() { return { color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: '' };
@@ -760,7 +760,7 @@ QUnit.test('Show preparations. W/ customize w/o text, empty text', function(asse
         a: 'b'
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(this.tooltip.move.callCount, 0);
 });
 
@@ -768,7 +768,7 @@ QUnit.test('Show preparations. W/ customize w/o text, w/ text', function(assert)
     this.options.customizeTooltip = sinon.spy(function() { return { color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: 'some-text' };
@@ -791,14 +791,14 @@ QUnit.test('Show preparations. W/ customize w/o text, w/ text', function(assert)
         templateCallback: undefined
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 1, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is not added to dom');
 });
 
 QUnit.test('Show preparations. customizeTooltip is not function - use custom format', function(assert) {
     this.options.customizeTooltip = {};
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: 'some-text' };
@@ -813,7 +813,7 @@ QUnit.test('Show preparations. W/ customize w/ text, empty text', function(asser
     this.options.customizeTooltip = sinon.spy(function() { return { text: 'some-customized-text', color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: '' };
@@ -836,15 +836,15 @@ QUnit.test('Show preparations. W/ customize w/ text, empty text', function(asser
         templateCallback: undefined
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 1, 'wrapper is added to dom');
-    assert.deepEqual(this.tooltip.$wrapper().appendTo.firstCall.args, [$('body').get(0)]);
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
 QUnit.test('Show preparations. W/ customize w/ text, w/ text', function(assert) {
     this.options.customizeTooltip = sinon.spy(function() { return { text: 'some-customized-text', color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: 'some-text' };
@@ -867,15 +867,15 @@ QUnit.test('Show preparations. W/ customize w/ text, w/ text', function(assert) 
         templateCallback: undefined
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 1, 'wrapper is added to dom');
-    assert.deepEqual(this.tooltip.$wrapper().appendTo.firstCall.args, [$('body').get(0)]);
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
 QUnit.test('Show preparations. W/ customize empty html', function(assert) {
     this.options.customizeTooltip = sinon.spy(function() { return { html: '', color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: '' };
@@ -892,7 +892,7 @@ QUnit.test('Show preparations. W/ customize empty html', function(assert) {
         a: 'b'
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(this.tooltip.move.callCount, 0);
 });
 
@@ -900,7 +900,7 @@ QUnit.test('Show preparations. W/ customize empty html, w/text', function(assert
     this.options.customizeTooltip = sinon.spy(function() { return { html: '', color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: '10' };
@@ -917,7 +917,7 @@ QUnit.test('Show preparations. W/ customize empty html, w/text', function(assert
         a: 'b'
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(this.tooltip.move.callCount, 0);
 });
 
@@ -925,7 +925,7 @@ QUnit.test('Show preparations. W/ customize undefined html', function(assert) {
     this.options.customizeTooltip = sinon.spy(function() { return { html: undefined, color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: '' };
@@ -942,7 +942,7 @@ QUnit.test('Show preparations. W/ customize undefined html', function(assert) {
         a: 'b'
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(this.tooltip.move.callCount, 0);
 });
 
@@ -950,7 +950,7 @@ QUnit.test('Show preparations. W/ customize w/ html', function(assert) {
     this.options.customizeTooltip = sinon.spy(function() { return { html: 'some-customized-html', color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: '' };
@@ -973,15 +973,15 @@ QUnit.test('Show preparations. W/ customize w/ html', function(assert) {
         templateCallback: undefined
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 1, 'wrapper is added to dom');
-    assert.deepEqual(this.tooltip.$wrapper().appendTo.firstCall.args, [$('body').get(0)]);
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
 QUnit.test('Show preparations. W/ customize w/ html/text', function(assert) {
     this.options.customizeTooltip = sinon.spy(function() { return { text: 'some-customized-text', html: 'some-customized-html', color: 'cColor1', borderColor: 'cColor2', fontColor: 'cColor3', someAnotherProperty: 'some-value' }; });
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: '' };
@@ -1005,8 +1005,8 @@ QUnit.test('Show preparations. W/ customize w/ html/text', function(assert) {
         templateCallback: undefined
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 1, 'wrapper is added to dom');
-    assert.deepEqual(this.tooltip.$wrapper().appendTo.firstCall.args, [$('body').get(0)]);
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
 QUnit.test('Show preparations. Certain container', function(assert) {
@@ -1015,7 +1015,7 @@ QUnit.test('Show preparations. Certain container', function(assert) {
     this.tooltip._getCanvas = function() { return CANVAS; };
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: 'some-text' };
@@ -1034,8 +1034,8 @@ QUnit.test('Show preparations. Certain container', function(assert) {
         templateCallback: undefined
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 1, 'wrapper is added to dom');
-    assert.deepEqual(this.tooltip.$wrapper().appendTo.firstCall.args, [$('.some-correct-class-name').get(0)]);
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('.some-correct-class-name').get(0)]);
 });
 
 QUnit.test('Show preparations. Certain container, tooltip out of canvas', function(assert) {
@@ -1058,7 +1058,7 @@ QUnit.test('Show. W/o params', function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
     this.tooltip._textGroupHtml.width = sinon.spy(function() { return 85; });
     this.tooltip._textGroupHtml.height = sinon.spy(function() { return 43; });
@@ -1107,7 +1107,7 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
     this.tooltip._textGroupHtml.width = sinon.spy();
     this.tooltip._textGroupHtml.height = sinon.spy();
@@ -1153,9 +1153,9 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: '' }]);
 
     if(this.getComputedStyle) {
-        assert.ok(this.tooltip.$wrapper().appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
+        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
     } else {
-        assert.ok(this.tooltip.$wrapper().appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
+        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
     }
 });
 
@@ -1173,7 +1173,7 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
     this.tooltip._textHtml.empty = sinon.spy();
@@ -1219,9 +1219,9 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     assert.equal(this.tooltip._text.stub('attr').callCount, 0, 'text attrs');
 
     if(this.getComputedStyle) {
-        assert.ok(this.tooltip.$wrapper().appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
+        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
     } else {
-        assert.ok(this.tooltip.$wrapper().appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
+        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
     }
 
     assert.equal(this.options.contentTemplate.callCount, 1);
@@ -1241,7 +1241,7 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     this.resetTooltipMocks();
 
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
     this.tooltip._textGroupHtml.width = sinon.spy();
     this.tooltip._textGroupHtml.height = sinon.spy();
@@ -1281,7 +1281,7 @@ QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div',
     this.resetTooltipMocks();
 
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
     this.tooltip._textGroupHtml.width = sinon.spy();
     this.tooltip._textGroupHtml.height = sinon.spy();
@@ -1383,7 +1383,7 @@ QUnit.test('Call template if empty text', function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
     this.tooltip._textGroupHtml.width = sinon.spy();
     this.tooltip._textGroupHtml.height = sinon.spy();
@@ -1417,7 +1417,7 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
     this.resetTooltipMocks();
 
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
     this.tooltip._textGroupHtml.width = sinon.spy(function() { return 85; });
     this.tooltip._textGroupHtml.height = sinon.spy(function() { return 43; });
@@ -1468,7 +1468,7 @@ QUnit.test('Show. W/o params. Html. T298249', function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip.move = sinon.spy(function() { return this; });
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
     this.tooltip._textGroupHtml.width = sinon.spy();
     this.tooltip._textGroupHtml.height = sinon.spy();
@@ -1484,9 +1484,9 @@ QUnit.test('Show. W/o params. Html. T298249', function(assert) {
     this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     if(this.getComputedStyle) {
-        assert.ok(this.tooltip.$wrapper().appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
+        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
     } else {
-        assert.ok(this.tooltip.$wrapper().appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
+        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
     }
 });
 
@@ -1577,17 +1577,17 @@ QUnit.test('Hide.', function(assert) {
     this.eventTrigger.reset();
 
     this.resetTooltipMocks();
-    this.tooltip.$wrapper().appendTo = sinon.spy();
-    this.tooltip.$wrapper().detach = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._wrapper.detach = sinon.spy();
     this.tooltip._textHtml.empty = sinon.spy();
 
     // act
     this.tooltip.hide();
 
     // assert
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
-    assert.equal(this.tooltip.$wrapper().get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
-    assert.equal(this.tooltip.$wrapper().detach.callCount, 1, 'wrapper detached');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
+    assert.equal(this.tooltip._wrapper.detach.callCount, 1, 'wrapper detached');
     assert.equal(this.eventTrigger.callCount, 1);
     assert.deepEqual(this.eventTrigger.firstCall.args, ['tooltipHidden', eventObject]);
     assert.ok(this.tooltip._textHtml.empty.calledOnce, 'textHtml empty');
@@ -1608,7 +1608,7 @@ QUnit.test('forceEvents. rise tooltipShown event, but tooltip not shown', functi
     this.options.forceEvents = true;
     this.options.enabled = false;
     this.tooltip.update(this.options);
-    this.tooltip.$wrapper().appendTo = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const result = this.tooltip.show({ valueText: 'some-text' }, { x: 100, y: 200, offset: 50 }, {});
@@ -1620,7 +1620,7 @@ QUnit.test('forceEvents. rise tooltipShown event, but tooltip not shown', functi
         a: 'b'
     }, 'state');
 
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
 });
 
 // Funcionality for blazor charts
@@ -1630,15 +1630,15 @@ QUnit.test('forceEvents. rise tooltipHidden event', function(assert) {
     this.tooltip.update(this.options).show({ valueText: 'some-text' }, {}, eventObject);
     this.eventTrigger.reset();
 
-    this.tooltip.$wrapper().appendTo = sinon.spy();
-    this.tooltip.$wrapper().detach = sinon.spy();
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._wrapper.detach = sinon.spy();
     // act
     this.tooltip.hide();
 
     // assert
-    assert.equal(this.tooltip.$wrapper().appendTo.callCount, 0, 'wrapper is not added to dom');
-    assert.equal(this.tooltip.$wrapper().get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
-    assert.equal(this.tooltip.$wrapper().detach.callCount, 1, 'wrapper detached');
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
+    assert.equal(this.tooltip._wrapper.detach.callCount, 1, 'wrapper detached');
     assert.equal(this.eventTrigger.callCount, 1);
     assert.deepEqual(this.eventTrigger.firstCall.args, ['tooltipHidden', eventObject]);
 });
@@ -2160,8 +2160,8 @@ QUnit.test('Out of bounds vertically. Left side of page', function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, 'renderer resize');
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 1030]);
 
-    assert.equal(this.tooltip.$wrapper().css('left'), '10px'); // x - lm
-    assert.equal(this.tooltip.$wrapper().css('top'), '11px'); // canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css('left'), '10px'); // x - lm
+    assert.equal(this.tooltip._wrapper.css('top'), '11px'); // canvas.top - tm
 });
 
 QUnit.test('Out of bounds vertically. Center of page', function(assert) {
@@ -2182,8 +2182,8 @@ QUnit.test('Out of bounds vertically. Center of page', function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, 'renderer resize');
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 1030]);
 
-    assert.equal(this.tooltip.$wrapper().css('left'), '360px'); // x - bBox.width / 2 - lm
-    assert.equal(this.tooltip.$wrapper().css('top'), '11px'); // canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css('left'), '360px'); // x - bBox.width / 2 - lm
+    assert.equal(this.tooltip._wrapper.css('top'), '11px'); // canvas.top - tm
 });
 
 QUnit.test('Out of bounds vertically. Right side of page', function(assert) {
@@ -2202,8 +2202,8 @@ QUnit.test('Out of bounds vertically. Right side of page', function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, 'renderer resize');
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [60 + 10 + 20, 1030]);
 
-    assert.equal(this.tooltip.$wrapper().css('left'), '710px'); // x - bBox.width - lm
-    assert.equal(this.tooltip.$wrapper().css('top'), '11px'); // canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css('left'), '710px'); // x - bBox.width - lm
+    assert.equal(this.tooltip._wrapper.css('top'), '11px'); // canvas.top - tm
 });
 
 QUnit.test('Out of bounds horizontally. Top side of page', function(assert) {
@@ -2223,8 +2223,8 @@ QUnit.test('Out of bounds horizontally. Top side of page', function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, 'renderer resize');
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [1030, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(this.tooltip.$wrapper().css('left'), '-105px'); // canvas.left - lm
-    assert.equal(this.tooltip.$wrapper().css('top'), '101px'); // y + offset - tm
+    assert.equal(this.tooltip._wrapper.css('left'), '-105px'); // canvas.left - lm
+    assert.equal(this.tooltip._wrapper.css('top'), '101px'); // y + offset - tm
 });
 
 QUnit.test('Out of bounds horizontally. Center of page', function(assert) {
@@ -2244,6 +2244,6 @@ QUnit.test('Out of bounds horizontally. Center of page', function(assert) {
     assert.equal(this.tooltip._renderer.resize.callCount, 1, 'renderer resize');
     assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [1030, 40 + 9 + 21 + this.options.arrowLength]);
 
-    assert.equal(this.tooltip.$wrapper().css('left'), '-105px'); // canvas.left - lm
-    assert.equal(this.tooltip.$wrapper().css('top'), '211px'); // y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(this.tooltip._wrapper.css('left'), '-105px'); // canvas.left - lm
+    assert.equal(this.tooltip._wrapper.css('top'), '211px'); // y - (bBox.height + arrowLength) - offset - tm
 });
