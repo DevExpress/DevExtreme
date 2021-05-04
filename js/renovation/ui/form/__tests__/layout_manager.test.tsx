@@ -20,6 +20,9 @@ describe('LayoutManager > Markup', () => {
 
     const responsiveBox = layoutManager.find(ResponsiveBox);
     expect(responsiveBox.exists()).toBe(true);
+    expect(responsiveBox.props()).toEqual({
+      screenByWidth: undefined,
+    });
   });
 });
 
