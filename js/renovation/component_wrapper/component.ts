@@ -201,6 +201,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   getProps() {
     const { elementAttr } = this.option();
+    
     const options = this._patchOptionValues({
       ...this._props,
       ref: this._viewRef,

@@ -2,9 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Event,
 } from '@devextreme-generator/declarations';
 import { WidgetProps } from './common/widget';
-import LegacyCalendar from '../../ui/calendar';
-/* eslint-disable import/named */
-import { DxElement } from '../../core/element';
+import LegacyDateBox from '../../ui/date_box';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { EventCallback } from './common/event_callback.d';
 
@@ -12,10 +10,10 @@ export const viewFunction = ({
   props: { rootElementRef },
   componentProps,
   restAttributes,
-}: Calendar): JSX.Element => (
+}: DateBox): JSX.Element => (
   <DomComponentWrapper
     rootElementRef={rootElementRef}
-    componentType={LegacyCalendar}
+    componentType={LegacyDateBox}
     componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -23,30 +21,27 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class CalendarProps extends WidgetProps {
-  @OneWay() min?: Date|number|string;
-
-  @OneWay() max?: Date|number|string;
-
-  @OneWay() firstDayOfWeek?: number;
-
-  @TwoWay() value?: Date|number| string | null = null;
+export class DateBoxProps extends WidgetProps {
+  @TwoWay() value?: Date | number | string | null = null;
 
   @Event() valueChange?: EventCallback<Date|number|string>;
 
-  @OneWay() _todayDate: () => Date = () => new Date();
+  @OneWay() width?: number | string | (() => number| string);
 
-  @OneWay() focusStateEnabled?: boolean;
+  @OneWay() calendarOptions?: {
+    firstDayOfWeek?: number;
+  };
 
-  @OneWay() hasFocus: ((e: DxElement) => boolean) = () => true;
+  @OneWay() field?: string;
 
-  @OneWay() tabIndex?: number;
+  @OneWay() type?: string ;
 }
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Calendar extends JSXComponent(CalendarProps) {
+export class DateBox extends JSXComponent(DateBoxProps) {
   get componentProps(): WidgetProps {
     const {
       rootElementRef,

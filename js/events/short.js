@@ -154,6 +154,14 @@ export const dxScrollCancel = {
         eventsEngine.off($el, addNamespace('dxscrollcancel', namespace));
     }
 };
+export const keyDown = {
+    on: ($el, onKeyDown, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('keydown', namespace), onKeyDown);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('keydown', namespace));
+    }
+};
 
 export const dxPointerDown = {
     on: ($el, onPointerDown, { namespace } = {}) => {
