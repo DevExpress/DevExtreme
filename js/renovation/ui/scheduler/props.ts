@@ -55,10 +55,10 @@ export class SchedulerProps {
   crossScrollingEnabled?: boolean;
 
   @TwoWay()
-  currentDate?: Date | number | string;
+  currentDate?: Date | number | string = new Date();
 
   @TwoWay()
-  currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+  currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' = 'day';
 
   @OneWay()
   dataSource?: string | dxSchedulerAppointment[] | DataSource | DataSourceOptions;
@@ -114,6 +114,7 @@ export class SchedulerProps {
   @Nested()
   scrolling?: dxSchedulerScrolling;
 
+  // TODO Is @TwoWay()?
   @OneWay()
   selectedCellData?: unknown[];
 
