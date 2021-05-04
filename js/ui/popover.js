@@ -245,7 +245,7 @@ const Popover = Popup.inherit({
         this._timeouts = {};
 
         this.$element().addClass(POPOVER_CLASS);
-        this._$wrapper.addClass(POPOVER_WRAPPER_CLASS);
+        this.$wrapper().addClass(POPOVER_WRAPPER_CLASS);
     },
 
     _render: function() {
@@ -296,7 +296,7 @@ const Popover = Popup.inherit({
     },
 
     _renderTitle: function() {
-        this._$wrapper.toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
+        this.$wrapper().toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
         this.callBase();
     },
 
@@ -394,13 +394,13 @@ const Popover = Popup.inherit({
     },
 
     _togglePositionClass: function(positionClass) {
-        this._$wrapper
+        this.$wrapper()
             .removeClass('dx-position-left dx-position-right dx-position-top dx-position-bottom')
             .addClass(positionClass);
     },
 
     _toggleFlippedClass: function(isFlippedHorizontal, isFlippedVertical) {
-        this._$wrapper
+        this.$wrapper()
             .toggleClass('dx-popover-flipped-horizontal', isFlippedHorizontal)
             .toggleClass('dx-popover-flipped-vertical', isFlippedVertical);
     },
@@ -456,13 +456,13 @@ const Popover = Popup.inherit({
 
     _renderWrapperPosition: function() {
         if(this.option('shading')) {
-            this._$wrapper.css({ top: 0, left: 0 });
+            this.$wrapper().css({ top: 0, left: 0 });
         }
     },
 
     _renderWrapperDimensions: function() {
         if(this.option('shading')) {
-            this._$wrapper.css({
+            this.$wrapper().css({
                 width: '100%',
                 height: '100%'
             });

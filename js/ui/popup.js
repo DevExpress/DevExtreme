@@ -233,7 +233,7 @@ const Popup = Overlay.inherit({
         this.callBase();
 
         this.$element().addClass(POPUP_CLASS);
-        this._$wrapper.addClass(POPUP_WRAPPER_CLASS);
+        this.$wrapper().addClass(POPUP_WRAPPER_CLASS);
         this._$popupContent = this._$content
             .wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
             .children().eq(0);
@@ -470,10 +470,10 @@ const Popup = Overlay.inherit({
             const className = POPUP_CLASS + '-' + alias;
 
             if(inArray(className, this._toolbarItemClasses) >= 0) {
-                this._$wrapper.addClass(className + '-visible');
+                this.$wrapper().addClass(className + '-visible');
                 this._$bottom.addClass(className);
             } else {
-                this._$wrapper.removeClass(className + '-visible');
+                this.$wrapper().removeClass(className + '-visible');
                 this._$bottom.removeClass(className);
             }
         });

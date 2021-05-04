@@ -253,7 +253,7 @@ const DropDownList = DropDownEditor.inherit({
     _createPopup: function() {
         this.callBase();
         this._updateCustomBoundaryContainer();
-        this._popup._$wrapper.addClass(this._popupWrapperClass());
+        this._popup.$wrapper().addClass(this._popupWrapperClass());
 
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');

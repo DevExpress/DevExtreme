@@ -273,15 +273,15 @@ const Overlay = Widget.inherit({
         this._initInnerOverlayClass();
 
         const $element = this.$element();
-        this._$wrapper.addClass($element.attr('class'));
+        this.$wrapper().addClass($element.attr('class'));
         $element.addClass(OVERLAY_CLASS);
 
-        this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
+        this.$wrapper().attr('data-bind', 'dxControlsDescendantBindings: true');
 
         // NOTE: hack to fix B251087
-        eventsEngine.on(this._$wrapper, 'MSPointerDown', noop);
+        eventsEngine.on(this.$wrapper(), 'MSPointerDown', noop);
         // NOTE: bootstrap integration T342292
-        eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
+        eventsEngine.on(this.$wrapper(), 'focusin', e => { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
@@ -447,7 +447,7 @@ const Overlay = Widget.inherit({
 
     _renderWrapperAttributes() {
         const { wrapperAttr } = this.option();
-        this._$wrapper.attr(wrapperAttr ?? {});
+        this.$wrapper().attr(wrapperAttr ?? {});
     },
 
     _renderVisibilityAnimate: function(visible) {
@@ -688,8 +688,8 @@ const Overlay = Widget.inherit({
                 overlayStack.push(this);
             }
 
-            this._$wrapper.css('zIndex', this._zIndex);
-            this._$content.css('zIndex', this._zIndex);
+            this.$wrapper().css('zIndex', this._zIndex);
+            this.$content().css('zIndex', this._zIndex);
         } else if(index !== -1) {
             overlayStack.splice(index, 1);
             zIndexPool.remove(this._zIndex);
@@ -697,10 +697,10 @@ const Overlay = Widget.inherit({
     },
 
     _toggleShading: function(visible) {
-        this._$wrapper.toggleClass(OVERLAY_MODAL_CLASS, this.option('shading') && !this.option('container'));
-        this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && this.option('shading'));
+        this.$wrapper().toggleClass(OVERLAY_MODAL_CLASS, this.option('shading') && !this.option('container'));
+        this.$wrapper().toggleClass(OVERLAY_SHADER_CLASS, visible && this.option('shading'));
 
-        this._$wrapper.css('backgroundColor', this.option('shading') ? this.option('shadingColor') : '');
+        this.$wrapper().css('backgroundColor', this.option('shading') ? this.option('shadingColor') : '');
 
         this._toggleTabTerminator(visible && this.option('shading'));
     },
@@ -722,7 +722,7 @@ const Overlay = Widget.inherit({
     },
 
     _findTabbableBounds: function() {
-        const $elements = this._$wrapper.find('*');
+        const $elements = this.$wrapper().find('*');
         const elementsCount = $elements.length - 1;
         const result = { first: null, last: null };
 
@@ -756,7 +756,7 @@ const Overlay = Widget.inherit({
         const isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0);
         const isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0);
         const isEmptyTabList = tabbableElements.length === 0;
-        const isOutsideTarget = !contains(this._$wrapper.get(0), e.target);
+        const isOutsideTarget = !contains(this.$wrapper().get(0), e.target);
 
         if(isTabOnLast || isShiftTabOnFirst ||
             isEmptyTabList || isOutsideTarget) {
@@ -959,7 +959,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderScrollTerminator: function() {
-        const $scrollTerminator = this._$wrapper;
+        const $scrollTerminator = this.$wrapper();
         const terminatorEventName = addNamespace(dragEventMove, this.NAME);
 
         eventsEngine.off($scrollTerminator, terminatorEventName);
@@ -1066,7 +1066,7 @@ const Overlay = Widget.inherit({
         const position = locate(this._$content);
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
-        const shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? locate(this._$wrapper) : { top: 0, left: 0 };
+        const shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? locate(this.$wrapper()) : { top: 0, left: 0 };
         const boundaryOffset = this.option('boundaryOffset');
 
         return {
@@ -1084,13 +1084,13 @@ const Overlay = Widget.inherit({
     },
 
     _detachWrapperToContainer: function() {
-        this._$wrapper.detach();
+        this.$wrapper().detach();
     },
 
     _moveToContainer: function() {
         this._attachWrapperToContainer();
 
-        this._$content.appendTo(this._$wrapper);
+        this._$content.appendTo(this.$wrapper());
     },
 
     _attachWrapperToContainer: function() {
@@ -1102,12 +1102,12 @@ const Overlay = Widget.inherit({
             renderContainer = $element;
         }
 
-        this._$wrapper.appendTo(renderContainer);
+        this.$wrapper().appendTo(renderContainer);
     },
 
     _fixHeightAfterSafariAddressBarResizing: function() {
         if(this._isWindow(this._getContainer()) && hasSafariAddressBar) {
-            this._$wrapper.css('minHeight', window.innerHeight);
+            this.$wrapper().css('minHeight', window.innerHeight);
         }
     },
 
@@ -1129,7 +1129,7 @@ const Overlay = Widget.inherit({
     },
 
     _fixWrapperPosition: function() {
-        this._$wrapper.css('position', this._useFixedPosition() ? 'fixed' : 'absolute');
+        this.$wrapper().css('position', this._useFixedPosition() ? 'fixed' : 'absolute');
     },
 
     _useFixedPosition: function() {
@@ -1176,7 +1176,7 @@ const Overlay = Widget.inherit({
         wrapperWidth = isWindow ? '' : $container.outerWidth(),
         wrapperHeight = isWindow ? '' : $container.outerHeight();
 
-        this._$wrapper.css({
+        this.$wrapper().css({
             width: wrapperWidth,
             height: wrapperHeight
         });
@@ -1190,7 +1190,7 @@ const Overlay = Widget.inherit({
         const $container = this._getContainer();
 
         if($container) {
-            positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: $container });
+            positionUtils.setup(this.$wrapper(), { my: 'top left', at: 'top left', of: $container });
         }
     },
 
@@ -1328,7 +1328,7 @@ const Overlay = Widget.inherit({
         this.callBase();
 
         zIndexPool.remove(this._zIndex);
-        this._$wrapper.remove();
+        this.$wrapper().remove();
         this._$content.remove();
     },
 

@@ -577,7 +577,7 @@ const Lookup = DropDownList.inherit({
     _setPopupPosition: function() {
         if(!this.option('dropDownCentered')) return;
 
-        const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
+        const flipped = this._popup.$wrapper().hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(flipped) return;
 
         const popupContentParent = $(this._popup.$content()).parent();

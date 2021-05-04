@@ -2446,10 +2446,10 @@ testModule('container', moduleConfig, () => {
                     visible: true
                 }).dxOverlay('instance');
 
-            assert.ok(!$(instance._$wrapper).hasClass(OVERLAY_MODAL_CLASS));
+            assert.ok(!$(instance.$wrapper()).hasClass(OVERLAY_MODAL_CLASS));
 
             instance.option('container', null);
-            assert.ok($(instance._$wrapper).hasClass(OVERLAY_MODAL_CLASS));
+            assert.ok($(instance.$wrapper()).hasClass(OVERLAY_MODAL_CLASS));
         } finally {
             $overlappedDiv.remove();
         }
