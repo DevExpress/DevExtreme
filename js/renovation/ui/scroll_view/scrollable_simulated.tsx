@@ -73,11 +73,13 @@ import {
   dxScrollEnd,
   dxScrollStop,
   dxScrollCancel,
+  keyDown,
 } from '../../../events/short';
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { restoreLocation } from './utils/restore_location';
 import { getScrollTopMax } from './utils/get_scroll_top_max';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
+import { inRange } from '../../../core/utils/math';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -242,6 +244,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Mutable() prevContentClientHeight = 0;
 
+  @Mutable() tabWasPressed = false;
+
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
@@ -353,13 +357,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     if (this.direction.isVertical) {
       const scrollbar = this.vScrollbarRef.current;
-      location.top = scrollbar.boundLocation(
+      location.top = scrollbar.getLocationWithinRange(
         location.top! + this.vScrollLocation,
       ) - this.vScrollLocation;
     }
     if (this.direction.isHorizontal) {
       const scrollbar = this.hScrollbarRef.current;
-      location.left = scrollbar.boundLocation(
+      location.left = scrollbar.getLocationWithinRange(
         location.left! + this.hScrollLocation,
       ) - this.hScrollLocation;
     }
@@ -497,7 +501,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   handleScroll(): void {
+    this.handleTabKey();
     this.props.onScroll?.(this.getEventArgs());
+  }
+
+  @Effect()
+  keyboardEffect(): DisposeEffectReturn {
+    keyDown.on(this.containerRef.current,
+      (e) => {
+        if (normalizeKeyName(e) === KEY_CODES.TAB) {
+          this.tabWasPressed = true;
+        }
+      });
+
+    return (): void => keyDown.off(this.containerRef.current);
   }
 
   getEventArgs(): ScrollEventArgs {
@@ -925,15 +942,37 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return result;
     }
 
-    this.keyDownHandler(originalEvent);
+    this.handleKeyDown(originalEvent);
 
     return undefined;
   }
 
-  keyDownHandler(e): void {
+  handleTabKey(): void {
+    if (this.tabWasPressed) {
+      const { top, left } = this.scrollOffset();
+      const containerEl = this.containerRef.current!;
+      if (inRange(this.hScrollLocation, -getScrollLeftMax(containerEl), 0)
+        && inRange(this.vScrollLocation, -getScrollTopMax(containerEl), 0)) {
+        if (this.hScrollLocation !== -left) {
+          this.hScrollLocation = -left;
+        }
+
+        if (this.vScrollLocation !== -top) {
+          this.vScrollLocation = -top;
+        }
+      }
+      this.tabWasPressed = false;
+    }
+  }
+
+  handleKeyDown(e): void {
     let handled = true;
 
     switch (normalizeKeyName(e)) {
+      case KEY_CODES.TAB:
+        this.tabWasPressed = true;
+        handled = false;
+        break;
       case KEY_CODES.DOWN:
         this.scrollByLine({ y: 1 });
         break;
