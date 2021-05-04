@@ -429,7 +429,7 @@ const DropDownEditor = TextBox.inherit({
             this._detachFocusOutEvents();
             eventsEngine.on(this._inputWrapper(), addNamespace('focusout', this.NAME), (event) => {
                 const newTarget = event.relatedTarget;
-                const popupWrapper = this.content ? $(this.$content()).closest('.' + DROP_DOWN_EDITOR_OVERLAY) : this._$popup;
+                const popupWrapper = this.content ? $(this.content()).closest('.' + DROP_DOWN_EDITOR_OVERLAY) : this._$popup;
                 if(newTarget && this.option('opened')) {
                     const isNewTargetOutside = $(newTarget).closest('.' + DROP_DOWN_EDITOR_OVERLAY, popupWrapper).length === 0;
                     if(isNewTargetOutside) {
