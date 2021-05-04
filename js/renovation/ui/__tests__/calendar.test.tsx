@@ -19,7 +19,7 @@ describe('Calendar', () => {
       const rootElementRef = createTestRef();
       const componentProps = new CalendarProps();
       const props = {
-        props: { rootElementRef, applyDefaultStyles: true, ...defaultProps },
+        props: { rootElementRef, addWidgetClass: true, ...defaultProps },
         componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Calendar>;
