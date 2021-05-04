@@ -9,7 +9,9 @@ describe('LayoutManager', () => {
     const props = new LayoutManagerProps();
     const layoutManager = mount<LayoutManager>(<LayoutManager {...props} />);
 
-    expect(layoutManager.props()).toEqual({});
+    expect(layoutManager.props()).toEqual({
+      screenByWidth: undefined,
+    });
   });
 });
 
