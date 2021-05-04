@@ -5171,7 +5171,7 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
             opened: true
         });
         const instance = $element.dxSelectBox('instance');
-        const $applyButton = instance._popup._wrapper().find('.dx-popup-done.dx-button');
+        const $applyButton = instance._popup.$wrapper().find('.dx-popup-done.dx-button');
 
         keyboardMock($element.find(toSelector(TEXTEDITOR_INPUT_CLASS)), true)
             .focus()
