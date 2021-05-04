@@ -578,7 +578,7 @@ export const AreaItem = Class.inherit({
         if(scrollable) {
             scrollable.on(eventName, function(e) {
                 if(that.option('rtlEnabled') && isDefined(e.scrollOffset.left)) {
-                    e.scrollOffset.left = scrollable._container().width() - scrollable._container().width() - e.scrollOffset.left;
+                    e.scrollOffset.left = scrollable.$content().width() - scrollable._container().width() - e.scrollOffset.left;
                 }
                 handler(e);
             });
