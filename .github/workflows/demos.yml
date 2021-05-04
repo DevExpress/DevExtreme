@@ -38,7 +38,6 @@ jobs:
     - name: Install packages for devextreme-demos
       run: |
         cd ./devextreme-demos
-        sed -i -- 's/21.2-next/21.1-next/' ./package.json
         npm install --no-package-lock --no-audit --no-fund
 
     - name: Build devextreme
