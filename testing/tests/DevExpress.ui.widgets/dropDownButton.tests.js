@@ -2320,11 +2320,11 @@ QUnit.module('custom content template', {}, () => {
             deferRendering: false
         });
 
-        const popupContent = getPopup(dropDownButton).$content();
+        const popupContent = getPopup(dropDownButton).$content().get(0);
         assert.strictEqual(templateHandler.callCount, 1, 'templateHandler was called');
         assert.deepEqual(templateHandler.getCall(0).args[0], [1, 2, 3], 'data is correct');
         assert.strictEqual(templateHandler.getCall(0).args[1], popupContent, 'container is correct');
-        assert.strictEqual(popupContent.text(), 'Template 1', 'template was rendered');
+        assert.strictEqual($(popupContent).text(), 'Template 1', 'template was rendered');
 
         const templateHandler2 = sinon.stub().returns('Template 2');
         dropDownButton.option('dropDownContentTemplate', templateHandler2);

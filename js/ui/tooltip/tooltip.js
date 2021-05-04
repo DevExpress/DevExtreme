@@ -64,7 +64,7 @@ const Tooltip = Popover.inherit({
 
         this._contentId = 'dx-' + new Guid();
 
-        this.$content().attr({
+        this._$content.attr({
             'id': this._contentId,
             'role': 'tooltip'
         });
