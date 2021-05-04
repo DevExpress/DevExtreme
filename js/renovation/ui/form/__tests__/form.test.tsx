@@ -5,6 +5,8 @@ import { FormProps } from '../form_props';
 import { Form } from '../form';
 import { Scrollable } from '../../scroll_view/scrollable';
 import { LayoutManager } from '../layout_manager';
+import { convertToScreenSizeQualifier } from '../../responsive_box/screen_utils';
+import { extend } from '../../../../core/utils/extend';
 
 it('Form > InitialProps', () => {
   const props = new FormProps();
@@ -12,6 +14,7 @@ it('Form > InitialProps', () => {
 
   expect(form.props()).toEqual({
     scrollingEnabled: false,
+    screenByWidth: convertToScreenSizeQualifier,
   });
 });
 
@@ -51,13 +54,16 @@ describe('Form > Markup', () => {
   });
 
   each([false, true]).describe('scrollingEnabled: %o', (scrollingEnabled) => {
-    each([false, true, undefined, null]).describe('scrollingEnabled: %o', (useNativeScrolling) => {
-      it('root layoutManager is rendered', () => {
-        const props = { scrollingEnabled, useNativeScrolling } as FormProps;
+    each([false, true, undefined, null]).describe('useNativeScrolling: %o', (useNativeScrolling) => {
+      it('root layoutManager with responsiveBox is rendered', () => {
+        const props = extend(new FormProps(), { scrollingEnabled, useNativeScrolling });
         const form = mount<Form>(<Form {...props} />);
 
         const layoutManager = form.find(LayoutManager);
         expect(layoutManager.exists()).toEqual(true);
+        expect(layoutManager.props()).toEqual({
+          screenByWidth: convertToScreenSizeQualifier,
+        });
       });
     });
   });

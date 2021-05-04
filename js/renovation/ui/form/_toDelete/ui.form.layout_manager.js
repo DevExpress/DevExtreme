@@ -85,7 +85,6 @@ const LayoutManager = Widget.inherit({
             alignItemLabels: true,
             minColWidth: 200,
             showRequiredMark: true,
-            screenByWidth: null,
             showOptionalMark: false,
             requiredMark: '*',
             optionalMark: messageLocalization.format('dxForm-optionalMark'),
@@ -449,7 +448,6 @@ const LayoutManager = Widget.inherit({
             cols: that._generateRatio(colCount),
             rows: that._generateRatio(that._getRowsCount(), true),
             dataSource: layoutItems,
-            screenByWidth: that.option('screenByWidth'),
             singleColumnScreen: xsColCount ? false : 'xs'
         };
     },
