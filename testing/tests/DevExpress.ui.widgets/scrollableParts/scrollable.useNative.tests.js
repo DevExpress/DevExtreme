@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import translator from 'animation/translator';
 import animationFrame from 'animation/frame';
+import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import 'generic_light.css!';
@@ -14,7 +15,6 @@ import {
     SCROLLBAR_HORIZONTAL_CLASS,
     SCROLLABLE_NATIVE_CLASS
 } from './scrollable.constants.js';
-import { act } from 'preact/test-utils';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -109,7 +109,7 @@ QUnit.test('scroll action fired when scrollable scrolling', function(assert) {
     pointer.wheel(10);
 });
 
-QUnit.todo('scroll action does not fired when scroll location does not changed', function(assert) {
+QUnit.test('scroll action does not fired when scroll location does not changed', function(assert) {
     assert.expect(1);
 
     const $scrollable = $('#scrollable').dxScrollable({
@@ -208,18 +208,17 @@ QUnit.test('simulatedScrollbar visibility', function(assert) {
         useSimulatedScrollbar: true
     });
 
+    const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS);
+    const scrollbar = Scrollbar.getInstance($scrollbar);
     const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
-    assert.equal($scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).hasClass('dx-state-invisible'), true, 'on start thumb is hidden');
+    assert.equal(scrollbar.option('visible'), false, 'on start thumb is hidden');
 
-    const pointer = pointerMock($container);
+    pointerMock($container)
+        .start()
+        .wheel(10);
 
-    pointer.start();
-    act(() => {
-        pointer.wheel(10);
-    });
-
-    assert.equal($scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).hasClass('dx-state-invisible'), false, 'after move thumb is visible');
+    assert.equal(scrollbar.option('visible'), true, 'after move thumb is visible');
 });
 
 QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is true', function(assert) {
@@ -261,14 +260,10 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
 
     $container.height(containerHeight);
     $content.height(contentHeight);
-    act(() => {
-        $scrollable.dxScrollable('instance').update();
-    });
+    $scrollable.dxScrollable('instance').update();
 
     $scrollable.dxScrollable('scrollTo', 2 * distance);
-    act(() => {
-        $container.trigger('scroll');
-    });
+    $container.trigger('scroll');
 
     const location = translator.locate($scroll);
     assert.equal(location.top, 2 * scrollbarDistance, 'scrollbar follows pointer everytime');
@@ -281,17 +276,16 @@ QUnit.test('scrollbar appears for simulated scrolling even when useSimulatedScro
         inertiaEnabled: false
     });
 
-    assert.equal($scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).hasClass('dx-state-invisible'), true, 'scrollbar is hidden before scrolling');
+    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
 
-    const pointer = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS));
+    assert.equal(scrollbar.option('visible'), false, 'scrollbar is hidden before scrolling');
 
-    pointer.start();
+    pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
+        .start()
+        .down()
+        .move(0, -1);
 
-    act(() => {
-        pointer.wheel(10);
-    });
-
-    assert.equal($scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).hasClass('dx-state-invisible'), false, 'scrollbar is shown during scrolling');
+    assert.equal(scrollbar.option('visible'), true, 'scrollbar is shown during scrolling');
 });
 
 QUnit.test('scrollOffset', function(assert) {

@@ -9,9 +9,8 @@ import support from 'core/utils/support';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import initMobileViewport from 'mobile/init_mobile_viewport';
-import 'ui/scrollable';
-import Scrollable from 'renovation/ui/scroll_view/scrollable';
-import { act } from 'preact/test-utils';
+import 'ui/scroll_view/ui.scrollable';
+import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import {
     calculateInertiaDistance,
@@ -61,7 +60,7 @@ const getScrollOffset = function($scrollable) {
 
 QUnit.module('markup', moduleConfig);
 
-QUnit.todo('scrollable render', function(assert) {
+QUnit.test('scrollable render', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({});
     const $wrapper = $scrollable.children().eq(0);
     const $container = $wrapper.children().eq(0);
@@ -324,8 +323,11 @@ QUnit.module('Hoverable interaction',
                             }
 
                             const $scrollBar = $scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
+                            const scrollBar = Scrollbar.getInstance($scrollBar);
+
                             const isScrollbarHoverable = (showScrollbarMode === 'onHover' || showScrollbarMode === 'always');
 
+                            assert.strictEqual(scrollBar.option('hoverStateEnabled'), isScrollbarHoverable, 'scrollbar.hoverStateEnabled');
                             assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isScrollbarHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
                             assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, 'scrollable-disabled-class');
 
@@ -460,7 +462,7 @@ QUnit.test('scrollable returns to bound and prevent other gestures', function(as
     assert.equal($scrollable.dxScrollable('scrollTop'), 0);
 });
 
-QUnit.todo('scrollable locking', function(assert) {
+QUnit.test('scrollable locking', function(assert) {
     const $scrollable = $('#scrollable');
     const $scrollableWrapper = $scrollable.wrap('<div>').parent();
 
@@ -507,7 +509,7 @@ QUnit.test('B250273 - dxList: showScrollbar option does not work on device.', fu
     assert.equal($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS).length, 0);
 });
 
-QUnit.todo('simulated scrollable should stop animators on disposing', function(assert) {
+QUnit.test('simulated scrollable should stop animators on disposing', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         direction: 'both'
@@ -531,7 +533,7 @@ QUnit.todo('simulated scrollable should stop animators on disposing', function(a
 
 QUnit.module('scrollers interaction', moduleConfig);
 
-QUnit.todo('scrolling component with content size equal to container size nested in another component causes outer component scrolling', function(assert) {
+QUnit.test('scrolling component with content size equal to container size nested in another component causes outer component scrolling', function(assert) {
     assert.expect(1);
 
     const complete = $.Deferred();
@@ -559,7 +561,7 @@ QUnit.todo('scrolling component with content size equal to container size nested
     });
 });
 
-QUnit.todo('disabled scrollable nested in another scrollable causes outer component scrolling (B238642)', function(assert) {
+QUnit.test('disabled scrollable nested in another scrollable causes outer component scrolling (B238642)', function(assert) {
     assert.expect(1);
 
     const complete = $.Deferred();
@@ -608,9 +610,6 @@ const testDefaultValue = function(realDevice, currentDevice, realVersion) {
         version: realVersion
     });
     devices.current({ platform: currentDevice });
-
-    Scrollable.defaultOptions({});
-
     $('#scrollable').dxScrollable({});
 
     return $('#scrollable').dxScrollable('option', 'useNative');
@@ -804,7 +803,7 @@ QUnit.test('scroll should save position on dxhiding and restore on dxshown', fun
     assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after dxshown');
 });
 
-QUnit.todo('scroll should restore on second dxshown', function(assert) {
+QUnit.test('scroll should restore on second dxshown', function(assert) {
     const $scrollable = $('#scrollable');
 
     const scrollable = $scrollable.dxScrollable({
@@ -851,6 +850,7 @@ if(styleUtils.styleProp('touchAction')) {
         let $scrollable = $('<div>').width(50).height(50);
 
         $scrollable.append($content).appendTo('#qunit-fixture');
+
         $scrollable = $scrollable.dxScrollable({
             useNative: false,
             direction: 'both',
@@ -863,21 +863,15 @@ if(styleUtils.styleProp('touchAction')) {
         assert.equal($container.css('touchAction'), 'none');
 
         $content.width(50).height(100);
-        act(() => {
-            scrollable.update();
-        });
+        scrollable.update();
         assert.equal($container.css('touchAction'), 'pan-x');
 
         $content.width(100).height(50);
-        act(() => {
-            scrollable.update();
-        });
+        scrollable.update();
         assert.equal($container.css('touchAction'), 'pan-y');
 
         $content.width(50).height(50);
-        act(() => {
-            scrollable.update();
-        });
+        scrollable.update();
         assert.notEqual($container.css('touchAction'), 'none');
     });
 }

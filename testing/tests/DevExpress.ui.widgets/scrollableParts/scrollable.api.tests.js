@@ -2,12 +2,11 @@ import $ from 'jquery';
 import translator from 'animation/translator';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import animationFrame from 'animation/frame';
+import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
-import Scrollable from 'ui/scrollable';
-import { getElementLocation } from 'renovation/ui/scroll_view/scrollable_utils';
 
 import 'generic_light.css!';
 
@@ -20,7 +19,6 @@ import {
     SCROLLABLE_DISABLED_CLASS,
     calculateInertiaDistance
 } from './scrollable.constants.js';
-import { act } from 'preact/test-utils';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -54,8 +52,6 @@ const getScrollOffset = function($scrollable) {
     };
 };
 
-const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
-
 QUnit.module('api', moduleConfig);
 
 QUnit.test('update', function(assert) {
@@ -79,17 +75,13 @@ QUnit.test('update', function(assert) {
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
 
     $scrollableChild.height(-1 * distance + 1);
-    act(() => {
-        $scrollable.dxScrollable('instance').update();
-    });
+    $scrollable.dxScrollable('instance').update();
 
     mouse
         .down()
         .wait(moveDuration)
         .move(0, moveDistance)
         .up();
-
-
 });
 
 QUnit.test('scroll event should be triggered if scroll position changed', function(assert) {
@@ -230,10 +222,6 @@ QUnit.test('scrollBy to location with dynamic content', function(assert) {
 
 
     $content.append($('<div>').height(100));
-    act(() => {
-        scrollable.update();
-    });
-
     scrollable.scrollBy(distance);
     scrollable.scrollBy(distance);
 });
@@ -267,12 +255,14 @@ QUnit.test('scrollTo to location', function(assert) {
     const distance = 10;
     let actionFiredCount = 0;
 
-    const scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
             actionFiredCount++;
         }
-    }).dxScrollable('instance');
+    });
+
+    const scrollable = $scrollable.dxScrollable('instance');
 
     scrollable.scrollTo(distance);
     scrollable.scrollTo(distance);
@@ -298,11 +288,7 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
 
     scrollable.scrollTo(100);
-    $content.empty().append($('<div>').height(102));
-    act(() => {
-        scrollable.update();
-    });
-
+    $content.empty().append($('<div>').height(101));
     scrollable.scrollTo(50);
 });
 
@@ -326,9 +312,7 @@ QUnit.test('scrollLeft', function(assert) {
 
     translator.move($content, { left: -10 });
 
-    const scrollLeft = $scrollable.dxScrollable('instance').scrollLeft();
-
-    assert.equal(scrollLeft, 10, 'scrollLeft is correct');
+    assert.equal($scrollable.dxScrollable('scrollLeft'), 10, 'scrollLeft is correct');
 });
 
 QUnit.test('scrollTop', function(assert) {
@@ -355,7 +339,7 @@ QUnit.test('scrollbar hidden while scrolling when showScrollbar is false', funct
         .down()
         .move(0, -1);
 
-    assert.equal($scrollbar.hasClass('dx-state-invisible'), true, 'scrollbar is hidden');
+    assert.equal($scrollbar.is(':hidden'), true, 'scrollbar is hidden');
 });
 
 QUnit.test('showScrollbar render', function(assert) {
@@ -377,7 +361,7 @@ QUnit.test('event arguments', function(assert) {
         inertiaEnabled: false,
         onScroll: function(e) {
             assert.notEqual(e.event, undefined, 'Event passed');
-            assert.deepEqual(e.scrollOffset, { top: 10, left: isRenovation ? 0 : undefined }, 'scrollOffset passed');
+            assert.deepEqual(e.scrollOffset, { top: 10, left: undefined }, 'scrollOffset passed');
             assert.equal(e.reachedLeft, undefined, 'reachedLeft passed');
             assert.equal(e.reachedRight, undefined, 'reachedRight passed');
             assert.equal(e.reachedTop, false, 'reachedTop passed');
@@ -410,21 +394,20 @@ QUnit.test('disabled: scroll was not moved when disabled is true', function(asse
 
 QUnit.test('simulated strategy should subscribe to the poiner events after disabled option changed', function(assert) {
     const $scrollable = $('#scrollable');
-    const scrollable = $('#scrollable').dxScrollable({
+    const scrollableInstance = $('#scrollable').dxScrollable({
         useNative: false,
         showScrollbar: 'onHover',
         disabled: true
     }).dxScrollable('instance');
 
-    scrollable.option('disabled', false);
+    scrollableInstance.option('disabled', false);
 
+    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS));
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
-    act(() => {
-        $container.trigger('mouseenter');
-    });
+    $container.trigger('mouseenter');
 
-    assert.equal($scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS} .dx-scrollable-scroll`).hasClass('dx-state-invisible'), false, 'thumb is visible after mouse enter');
+    assert.equal(scrollbar.option('visible'), true, 'thumb is visible after mouse enter');
 });
 
 QUnit.test('disabled option add class to root element', function(assert) {
@@ -452,7 +435,7 @@ QUnit.test('changing option showScrollbar does not duplicate scrollbar', functio
     assert.equal($scrollbars.length, 1, 'scrollbar is not duplicated');
 });
 
-QUnit.todo('switching useNative to false turns off native scrolling', function(assert) {
+QUnit.test('switching useNative to false turns off native scrolling', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
@@ -460,7 +443,7 @@ QUnit.todo('switching useNative to false turns off native scrolling', function(a
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     assert.notEqual($container.css('overflowY'), 'hidden');
 
-    $scrollable.dxScrollable('instance').option('useNative', false);
+    $scrollable.dxScrollable('option', 'useNative', false);
 
     assert.equal($container.css('overflowY'), 'hidden');
 });
@@ -490,21 +473,7 @@ QUnit.test('getScrollElementPosition', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-
-    let position;
-
-    if(isRenovation) {
-        position = getElementLocation(
-            $item.get(0),
-            scrollable.scrollOffset(),
-            'vertical',
-            $scrollable.find('.dx-scrollable-container').get(0),
-            false,
-        );
-    } else {
-        position = scrollable.getScrollElementPosition($item, 'vertical');
-    }
-
+    const position = scrollable.getScrollElementPosition($item, 'vertical');
 
     assert.equal(position, $item.offset().top - $scrollable.offset().top - $item.height());
 });
@@ -544,7 +513,6 @@ QUnit.test('scrollToElement with offset', function(assert) {
 QUnit.test('scrollToElement with offset in opposite direction', function(assert) {
     const topOffset = 30;
     const $scrollable = $('#scrollable').empty().height(100);
-
     const $item1 = $('<div>').height(50).appendTo($scrollable);
     const $item2 = $('<div>').height(50).appendTo($scrollable);
 
@@ -554,9 +522,6 @@ QUnit.test('scrollToElement with offset in opposite direction', function(assert)
         direction: 'vertical'
     }).dxScrollable('instance');
 
-    act(() => {
-        scrollable.scrollTo(200);
-    });
     scrollable.scrollTo(200);
     scrollable.scrollToElement($item2, { top: topOffset });
     assert.equal(scrollable.scrollTop(), $item1.outerHeight() - topOffset);
@@ -578,10 +543,7 @@ QUnit.test('scrollToElement with absolute position in the container(T162489)', f
 
     const scrollable = $scrollable.dxScrollable('instance');
 
-    act(() => {
-        scrollable.scrollTo(50);
-    });
-
+    scrollable.scrollTo(50);
     scrollable.scrollToElement($item.children().eq(0));
 
     assert.equal(scrollable.scrollTop(), $wrapper.height() - scrollable.clientHeight());
@@ -604,7 +566,6 @@ QUnit.test('scrollToElement does not scroll to element when element is not child
 
 QUnit.test('scrollToElement scrolls to bottom position of element when scroll scrollTop less than element position.top', function(assert) {
     const $scrollable = $('#scrollable').height(50);
-
     const $wrapper = $scrollable.wrapInner('<div>').children().eq(0);
     const $item = $('<div>').height(100).appendTo($scrollable);
     const $spaceItem = $('<div>').height(500).appendTo($scrollable);
@@ -614,10 +575,7 @@ QUnit.test('scrollToElement scrolls to bottom position of element when scroll sc
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    act(() => {
-        scrollable.scrollTo($wrapper.height() + $item.height() + $spaceItem.height());
-    });
-
+    scrollable.scrollTo($wrapper.height() + $item.height() + $spaceItem.height());
     scrollable.scrollToElement($item);
 
     assert.equal(scrollable.scrollTop(), $wrapper.outerHeight() + $item.outerHeight() - scrollable.clientHeight());
@@ -728,7 +686,7 @@ class ScrollableTestHelper {
         const maxHorizontalOffset = containerElement.scrollWidth - containerElement.clientWidth;
 
         return {
-            vertical: maxVerticalOffset,
+            vertical: this._useNative ? maxVerticalOffset : maxVerticalOffset,
             horizontal: maxHorizontalOffset
         };
     }
@@ -786,13 +744,8 @@ class ScrollableTestHelper {
                 setInitialState();
 
                 const $element = $('#element').css({ top: elementOffset.top });
-                act(() => {
-                    helper.scrollable.update();
-                });
                 helper.scrollable.scrollToElement($element);
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.update();
 
                 const expectedTopOffset = direction !== 'horizontal' ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') : 0;
 
@@ -804,13 +757,8 @@ class ScrollableTestHelper {
                 setInitialState();
 
                 const $element = $('#element').css({ left: elementOffset.left });
-                act(() => {
-                    helper.scrollable.update();
-                });
                 helper.scrollable.scrollToElement($element);
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.update();
 
                 const expectedLeftOffset = direction !== 'vertical' ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') : 0;
 
@@ -822,21 +770,11 @@ class ScrollableTestHelper {
                 setInitialState();
 
                 const $element = $('#element').css({ top: elementOffset.top });
-                act(() => {
-                    helper.scrollable.update();
-                });
-                act(() => {
-                    helper.scrollable.scrollTo({ top: helper.getMaxScrollOffset().vertical });
-                });
-
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.scrollTo({ top: helper.getMaxScrollOffset().vertical });
+                helper.scrollable.update();
 
                 helper.scrollable.scrollToElement($element);
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.update();
 
                 const expectedTopOffset = direction !== 'horizontal' ? elementOffset.top : 0;
 
@@ -848,21 +786,11 @@ class ScrollableTestHelper {
                 setInitialState();
 
                 const $element = $('#element').css({ left: elementOffset.left });
-                act(() => {
-                    helper.scrollable.update();
-                });
-                act(() => {
-                    helper.scrollable.scrollTo({ left: helper.getMaxScrollOffset().horizontal });
-                });
-
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.scrollTo({ left: helper.getMaxScrollOffset().horizontal });
+                helper.scrollable.update();
 
                 helper.scrollable.scrollToElement($element);
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.update();
 
                 const expectedLeftOffset = direction !== 'vertical' ? elementOffset.left : 0;
 
@@ -874,13 +802,9 @@ class ScrollableTestHelper {
                 setInitialState();
 
                 const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
-                act(() => {
-                    helper.scrollable.update();
-                });
+
                 helper.scrollable.scrollToElement($element);
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.update();
 
                 const expectedTopOffset = direction !== 'horizontal' ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') : 0;
                 const expectedLeftOffset = direction !== 'vertical' ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') : 0;
@@ -894,18 +818,11 @@ class ScrollableTestHelper {
 
                 const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
 
-                act(() => {
-                    helper.scrollable.scrollTo({ top: helper.getMaxScrollOffset().vertical });
-                });
                 helper.scrollable.scrollTo({ top: helper.getMaxScrollOffset().vertical });
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.update();
 
                 helper.scrollable.scrollToElement($element);
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.update();
 
                 const expectedTopOffset = direction !== 'horizontal' ? elementOffset.top : 0;
                 const expectedLeftOffset = direction !== 'vertical' ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') : 0;
@@ -918,19 +835,12 @@ class ScrollableTestHelper {
                 setInitialState();
 
                 const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
-                act(() => {
-                    helper.scrollable.update();
-                });
-                act(() => {
-                    helper.scrollable.scrollTo({ top: helper.getMaxScrollOffset().vertical, left: helper.getMaxScrollOffset().horizontal });
-                });
-                act(() => {
-                    helper.scrollable.update();
-                });
+
+                helper.scrollable.scrollTo({ top: helper.getMaxScrollOffset().vertical, left: helper.getMaxScrollOffset().horizontal });
+                helper.scrollable.update();
+
                 helper.scrollable.scrollToElement($element);
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.update();
 
                 const expectedTopOffset = direction !== 'horizontal' ? elementOffset.top : 0;
                 const expectedLeftOffset = direction !== 'vertical' ? elementOffset.left : 0;
@@ -943,19 +853,12 @@ class ScrollableTestHelper {
                 setInitialState();
 
                 const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
-                act(() => {
-                    helper.scrollable.update();
-                });
-                act(() => {
-                    helper.scrollable.scrollTo({ left: helper.getMaxScrollOffset().horizontal });
-                });
-                act(() => {
-                    helper.scrollable.update();
-                });
+
+                helper.scrollable.scrollTo({ left: helper.getMaxScrollOffset().horizontal });
+                helper.scrollable.update();
+
                 helper.scrollable.scrollToElement($element);
-                act(() => {
-                    helper.scrollable.update();
-                });
+                helper.scrollable.update();
 
                 const expectedTopOffset = direction !== 'horizontal' ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') : 0;
                 const expectedLeftOffset = direction !== 'vertical' ? elementOffset.left : 0;
@@ -969,16 +872,12 @@ class ScrollableTestHelper {
             setInitialState();
 
             helper.scrollable.scrollTo({ top: helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') / 2 });
-            act(() => {
-                helper.scrollable.update();
-            });
+            helper.scrollable.update();
 
             const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
 
             helper.scrollable.scrollToElement($element);
-            act(() => {
-                helper.scrollable.update();
-            });
+            helper.scrollable.update();
 
             const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width');
             const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height');
@@ -991,15 +890,11 @@ class ScrollableTestHelper {
             setInitialState();
 
             helper.scrollable.scrollTo({ left: helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') / 2 });
-            act(() => {
-                helper.scrollable.update();
-            });
+            helper.scrollable.update();
 
             const $element = $('#element').css({ top: elementOffset.top, left: elementOffset.left });
             helper.scrollable.scrollToElement($element);
-            act(() => {
-                helper.scrollable.update();
-            });
+            helper.scrollable.update();
 
             const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width');
             const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height');

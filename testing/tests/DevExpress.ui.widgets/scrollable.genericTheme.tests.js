@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import Scrollable from 'ui/scrollable';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 import { SCROLLABLE_CONTENT_CLASS, SCROLLABLE_CONTAINER_CLASS } from './scrollableParts/scrollable.constants.js';
 import { extend } from 'core/utils/extend';
 

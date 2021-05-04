@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { QUnitTestIfSupported, checkScrollableSizes } from '../../../helpers/scrollableTestsHelper.js';
 
-import 'ui/scrollable';
+import 'ui/scroll_view/ui.scrollable';
 import 'ui/box';
 import 'ui/responsive_box';
 

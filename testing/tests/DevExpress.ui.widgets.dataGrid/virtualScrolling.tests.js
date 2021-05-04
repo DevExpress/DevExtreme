@@ -1,5 +1,5 @@
 import 'generic_light.css!';
-import 'ui/scrollable';
+import 'ui/scroll_view/ui.scrollable';
 
 import $ from 'jquery';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';

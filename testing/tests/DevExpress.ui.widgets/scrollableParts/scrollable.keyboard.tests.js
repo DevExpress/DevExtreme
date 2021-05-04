@@ -2,8 +2,7 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import Scrollable from 'ui/scrollable';
-import { setWindow, getWindow } from 'core/utils/window';
+import translator from 'animation/translator';
 
 import 'generic_light.css!';
 
@@ -11,11 +10,8 @@ import {
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_SCROLL_CLASS,
 } from './scrollable.constants.js';
-import { act } from 'preact/test-utils';
 
 const SCROLL_LINE_HEIGHT = 40;
-
-const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('keyboard support', {
     beforeEach: function() {
@@ -46,40 +42,25 @@ QUnit.test('support arrow keys', function(assert) {
 
     $scrollable.dxScrollable({
         useNative: false,
-        direction: 'both',
-        showScrollbar: 'always'
+        direction: 'both'
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    let keyboard;
-    if(isRenovation) {
-        keyboard = keyboardMock($scrollable);
-        $scrollable.focus();
-    } else {
-        const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        keyboard = keyboardMock($container);
-        $container.focus();
-    }
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
 
-    act(() => {
-        keyboard.keyDown('down');
-    });
+    $container.focus();
 
+    keyboard.keyDown('down');
     assert.equal(scrollable.scrollOffset().top, SCROLL_LINE_HEIGHT, 'down key moves to one line down');
 
-    act(() => {
-        keyboard.keyDown('up');
-    });
+    keyboard.keyDown('up');
     assert.equal(scrollable.scrollOffset().top, 0, 'up key moves to one line up');
 
-    act(() => {
-        keyboard.keyDown('right');
-    });
+    keyboard.keyDown('right');
     assert.equal(scrollable.scrollOffset().left, SCROLL_LINE_HEIGHT, 'right key moves to one column right');
 
-    act(() => {
-        keyboard.keyDown('left');
-    });
+    keyboard.keyDown('left');
     assert.equal(scrollable.scrollOffset().left, 0, 'left key moves to one column down');
 });
 
@@ -100,28 +81,16 @@ QUnit.test('support pageup and pagedown', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
 
-    let keyboard;
-    if(isRenovation) {
-        keyboard = keyboardMock($scrollable);
-        $scrollable.focus();
-    } else {
-        const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        keyboard = keyboardMock($container);
-        $container.focus();
-    }
+    $container.focus();
 
-    act(() => {
-        keyboard.keyDown('pagedown');
-    });
-    act(() => {
-        keyboard.keyDown('pagedown');
-    });
+    keyboard.keyDown('pagedown');
+    keyboard.keyDown('pagedown');
     assert.equal(scrollable.scrollOffset().top, 2 * containerHeight, 'page down key moves to one page down');
 
-    act(() => {
-        keyboard.keyDown('pageup');
-    });
+    keyboard.keyDown('pageup');
     assert.equal(scrollable.scrollOffset().top, containerHeight, 'page up key moves to one page up');
 });
 
@@ -142,24 +111,15 @@ QUnit.test('support end and home', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    let keyboard;
-    if(isRenovation) {
-        keyboard = keyboardMock($scrollable);
-        $scrollable.focus();
-    } else {
-        const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        keyboard = keyboardMock($container);
-        $container.focus();
-    }
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
 
-    act(() => {
-        keyboard.keyDown('end');
-    });
+    $container.focus();
+
+    keyboard.keyDown('end');
     assert.roughEqual(scrollable.scrollOffset().top, contentHeight - containerHeight, 1, 'end key moves to the bottom');
 
-    act(() => {
-        keyboard.keyDown('home');
-    });
+    keyboard.keyDown('home');
     assert.equal(scrollable.scrollOffset().top, 0, 'home key moves to the top');
 });
 
@@ -185,7 +145,7 @@ QUnit.test('supportKeyboard option', function(assert) {
 
 });
 
-QUnit.todo('supportKeyboard option after render', function(assert) {
+QUnit.test('supportKeyboard option after render', function(assert) {
     if(devices.real().deviceType !== 'desktop') {
         assert.ok(true, 'mobile device does not support tabindex on div element');
         return;
@@ -202,26 +162,17 @@ QUnit.todo('supportKeyboard option after render', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    let keyboard;
-    if(isRenovation) {
-        keyboard = keyboardMock($scrollable);
-        $scrollable.focus();
-    } else {
-        const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        keyboard = keyboardMock($container);
-        $container.focus();
-    }
-    // bug:  return isFocusable ? tabIndex : undefined;
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
+
+    $container.focus();
+
     scrollable.option('useKeyboard', false);
-    act(() => {
-        keyboard.keyDown('down');
-    });
+    keyboard.keyDown('down');
     assert.equal(scrollable.scrollOffset().top, 0, 'down key does not move to one line down after option change');
 
     scrollable.option('useKeyboard', true);
-    act(() => {
-        keyboard.keyDown('down');
-    });
+    keyboard.keyDown('down');
     assert.equal(scrollable.scrollOffset().top, SCROLL_LINE_HEIGHT, 'right key moves to one column down after option change');
 });
 
@@ -247,19 +198,8 @@ QUnit.test('arrow keys does not trigger when it not need', function(assert) {
     $scrollable.on('scroll', function(assert) {
         count++;
     });
-
-    let keyboard;
-    if(isRenovation) {
-        keyboard = keyboardMock($scrollable);
-        $scrollable.focus();
-    } else {
-        const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        keyboard = keyboardMock($container);
-        $container.focus();
-    }
-
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    keyboard.keyDown('down');
+    keyboardMock($container).keyDown('down');
 
     $container.focus();
 
@@ -285,19 +225,12 @@ QUnit.test('arrows work correctly after scroll by scrollbar', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-
-    let keyboard;
-    if(isRenovation) {
-        keyboard = keyboardMock($scrollable);
-        $scrollable.focus();
-    } else {
-        const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-        keyboard = keyboardMock($container);
-        $container.focus();
-    }
-
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
     const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
     const pointer = pointerMock($scrollbar).start();
+
+    $container.focus();
 
     pointer
         .down()
@@ -306,10 +239,7 @@ QUnit.test('arrows work correctly after scroll by scrollbar', function(assert) {
 
     const scrollLocation = scrollable.scrollOffset().top;
 
-    act(() => {
-        keyboard.keyDown('down');
-    });
-
+    keyboard.keyDown('down');
     assert.equal(scrollable.scrollOffset().top, SCROLL_LINE_HEIGHT + scrollLocation);
 });
 
@@ -338,58 +268,58 @@ QUnit.testInActiveWindow('arrows was not handled when focus on input element', f
 
 
 if(devices.real().deviceType === 'desktop') {
-    // [true, false].forEach((useNativeMode) => {
-    //     ['vertical', 'horizontal'].forEach((scrollbarDirection) => {
-    //         function checkScrollLocation($scrollable, expectedLocation) {
-    //             const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
-    //             const scrollLocation = translator.locate($scroll);
-    //             QUnit.assert.deepEqual(scrollLocation, expectedLocation, 'scroll location');
-    //         }
+    [true, false].forEach((useNativeMode) => {
+        ['vertical', 'horizontal'].forEach((scrollbarDirection) => {
+            function checkScrollLocation($scrollable, expectedLocation) {
+                const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+                const scrollLocation = translator.locate($scroll);
+                QUnit.assert.deepEqual(scrollLocation, expectedLocation, 'scroll location');
+            }
 
-    //         QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}, direction: ${scrollbarDirection}`, function(assert) {
-    //             if(devices.real().deviceType !== 'desktop') {
-    //                 assert.ok(true, 'mobile device does not support tabindex on div element');
-    //                 return;
-    //             }
+            QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}, direction: ${scrollbarDirection}`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'mobile device does not support tabindex on div element');
+                    return;
+                }
 
-    //             const done = assert.async();
+                const done = assert.async();
 
-    //             const scrollableContainerSize = 200;
-    //             const $scrollable = $('#scrollable_container').dxScrollable({
-    //                 height: scrollableContainerSize,
-    //                 width: scrollableContainerSize,
-    //                 useNative: useNativeMode,
-    //                 direction: scrollbarDirection,
-    //                 showScrollbar: 'always',
-    //                 useSimulatedScrollbar: true
-    //             });
+                const scrollableContainerSize = 200;
+                const $scrollable = $('#scrollable_container').dxScrollable({
+                    height: scrollableContainerSize,
+                    width: scrollableContainerSize,
+                    useNative: useNativeMode,
+                    direction: scrollbarDirection,
+                    showScrollbar: 'always',
+                    useSimulatedScrollbar: true
+                });
 
-    //             const $contentContainer1 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_1`);
-    //             const $contentContainer2 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_2`);
+                const $contentContainer1 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_1`);
+                const $contentContainer2 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_2`);
 
-    //             if(scrollbarDirection === 'horizontal') {
-    //                 $contentContainer1.css('display', 'inline-block');
-    //                 $contentContainer2.css('display', 'inline-block');
-    //             }
+                if(scrollbarDirection === 'horizontal') {
+                    $contentContainer1.css('display', 'inline-block');
+                    $contentContainer2.css('display', 'inline-block');
+                }
 
-    //             return new Promise(function(resolve) {
-    //                 $scrollable.dxScrollable('option', 'onScroll', function() {
-    //                     setTimeout(() => {
-    //                         checkScrollLocation($scrollable, scrollbarDirection === 'vertical' ? { top: 100, left: 0 } : { top: 0, left: 100 });
-    //                         done();
-    //                     });
-    //                     resolve();
-    //                 });
+                return new Promise(function(resolve) {
+                    $scrollable.dxScrollable('option', 'onScroll', function() {
+                        setTimeout(() => {
+                            checkScrollLocation($scrollable, scrollbarDirection === 'vertical' ? { top: 100, left: 0 } : { top: 0, left: 100 });
+                            done();
+                        });
+                        resolve();
+                    });
 
-    //                 checkScrollLocation($scrollable, { top: 0, left: 0 });
+                    checkScrollLocation($scrollable, { top: 0, left: 0 });
 
-    //                 const keyboard = keyboardMock($contentContainer1);
-    //                 $contentContainer2.focus();
-    //                 keyboard.keyDown('tab');
-    //             });
-    //         });
-    //     });
-    // });
+                    const keyboard = keyboardMock($contentContainer1);
+                    $contentContainer2.focus();
+                    keyboard.keyDown('tab');
+                });
+            });
+        });
+    });
 
 
     [true, false].forEach((bounceEnabled) => {
@@ -439,30 +369,16 @@ if(devices.real().deviceType === 'desktop') {
                 });
 
                 const scrollable = $scrollable.dxScrollable('instance');
+                const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
 
-                act(() => {
-                    scrollable.scrollTo({ top: 200, left: 200 });
-                });
+                scrollable.scrollTo({ top: 200, left: 200 });
 
+                $container.focus();
+                $container.attr('tabIndex', 1);
 
-                let keyboard;
-                if(isRenovation) {
-                    keyboard = keyboardMock($scrollable);
-                    $scrollable.focus();
-                } else {
-                    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-                    keyboard = keyboardMock($container);
-                    $container.focus();
-                }
+                scrollable._strategy._tryGetDevicePixelRatio = () => browserZoom;
 
-                const defaultDevicePixelRatio = getWindow().devicePixelRatio;
-                setWindow({
-                    devicePixelRatio: browserZoom
-                }, true);
-
-                act(() => {
-                    keyboard.keyDown(key);
-                });
+                keyboardMock($container).keyDown(key);
 
                 const expectedOffset = { top: 200, left: 200 };
                 const delta = SCROLL_LINE_HEIGHT / browserZoom;
@@ -480,12 +396,8 @@ if(devices.real().deviceType === 'desktop') {
                     expectedOffset.left += delta;
                 }
 
-                assert.roughEqual(scrollable.scrollOffset().top, expectedOffset.top, 1, 'scrollOffset.top');
-                assert.roughEqual(scrollable.scrollOffset().left, expectedOffset.left, 1, 'scrollOffset.left');
-
-                setWindow({
-                    devicePixelRatio: defaultDevicePixelRatio
-                }, true);
+                assert.roughEqual(scrollable.scrollOffset().top, expectedOffset.top, 0.01, 'scrollOffset.top');
+                assert.roughEqual(scrollable.scrollOffset().left, expectedOffset.left, 0.01, 'scrollOffset.left');
             });
         });
     });

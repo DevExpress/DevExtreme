@@ -11,7 +11,6 @@ import {
     SCROLLABLE_CONTENT_CLASS,
     calculateInertiaDistance
 } from './scrollable.constants.js';
-import { act } from 'preact/test-utils';
 
 const INERTIA_TIMEOUT = 100;
 
@@ -168,7 +167,7 @@ QUnit.test('gesture prevent when scrollable is full and bounce enabled false', f
     assert.ok(!$scrollable.data(GESTURE_LOCK_KEY), 'gesture was prevented');
 });
 
-QUnit.todo('stop inertia on click', function(assert) {
+QUnit.test('stop inertia on click', function(assert) {
     assert.expect(1);
 
     animationFrame.requestAnimationFrame = function(callback) {
@@ -202,7 +201,7 @@ QUnit.todo('stop inertia on click', function(assert) {
     this.clock.tick();
 });
 
-QUnit.todo('scrollbar is hidden on stop', function(assert) {
+QUnit.test('scrollbar is hidden on stop', function(assert) {
     assert.expect(1);
 
     animationFrame.requestAnimationFrame = function(callback) {
@@ -302,7 +301,7 @@ QUnit.test('bounce up', function(assert) {
         .up();
 });
 
-QUnit.todo('stop bounce on click', function(assert) {
+QUnit.test('stop bounce on click', function(assert) {
     assert.expect(1);
 
     animationFrame.requestAnimationFrame = function(callback) {
@@ -336,7 +335,7 @@ QUnit.todo('stop bounce on click', function(assert) {
     this.clock.tick();
 });
 
-QUnit.todo('stop inertia bounce on after mouse up', function(assert) {
+QUnit.test('stop inertia bounce on after mouse up', function(assert) {
     assert.expect(1);
 
     animationFrame.requestAnimationFrame = function(callback) {
@@ -372,7 +371,7 @@ QUnit.todo('stop inertia bounce on after mouse up', function(assert) {
     this.clock.tick();
 });
 
-QUnit.todo('bounce elastic', function(assert) {
+QUnit.test('bounce elastic', function(assert) {
     assert.expect(2);
 
     const moveDistance = 10;
@@ -381,6 +380,7 @@ QUnit.todo('bounce elastic', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false,
+
         onScroll: function() {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
@@ -397,7 +397,6 @@ QUnit.todo('bounce elastic', function(assert) {
         .down()
         .move(0, moveDistance)
         .move(0, moveDistance);
-
 });
 
 QUnit.test('inertia calc distance out of bounds', function(assert) {
@@ -542,21 +541,18 @@ QUnit.test('velocity calculated correctly when content height less than containe
 });
 
 QUnit.test('window resize should call update', function(assert) {
-    assert.expect(1);
+    assert.expect(2);
 
     const $scrollable = $('#scrollable');
-    const onUpdatedHandler = sinon.spy();
 
     $scrollable.dxScrollable({
         useNative: true,
-        onUpdated: onUpdatedHandler
+        onUpdated: function() {
+            assert.ok(true, 'update fired');
+        }
     });
 
-    onUpdatedHandler.reset();
-
     resizeCallbacks.fire();
-
-    assert.equal(onUpdatedHandler.callCount, 1, 'update fired');
 });
 
 QUnit.test('scrollable should have correct scrollPosition when content is not cropped by overflow hidden', function(assert) {
@@ -585,10 +581,6 @@ QUnit.test('scrollable should have correct scrollPosition when content is not cr
     $content.css({
         height: '100px',
         width: '100px'
-    });
-
-    act(() => {
-        $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
     });
 
     $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
@@ -628,9 +620,7 @@ QUnit.test('scrollable should have correct scrollPosition when content is croppe
         overflow: 'hidden'
     });
 
-    act(() => {
-        $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
-    });
+    $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
     $scrollable.dxScrollable('instance').update();
     $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
 

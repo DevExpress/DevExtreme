@@ -6,7 +6,7 @@ const HORIZONTAL_WIDTH_SMALL = 900;
 
 import 'generic_light.css!';
 import 'ui/pivot_grid/ui.sortable';
-import 'ui/scrollable';
+import 'ui/scroll_view/ui.scrollable';
 
 QUnit.testStart(function() {
     const markup =
