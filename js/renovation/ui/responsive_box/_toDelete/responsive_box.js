@@ -1,5 +1,4 @@
 import $ from '../core/renderer';
-import eventsEngine from '../events/core/events_engine';
 import { grep, noop } from '../core/utils/common';
 import { isDefined, isPlainObject, isEmptyObject } from '../core/utils/type';
 import errors from './widget/ui.errors';
@@ -123,18 +122,6 @@ const ResponsiveBox = CollectionWidget.inherit({
 
     _initMarkup: function() {
         this.callBase();
-        // NOTE: Fallback box strategy
-        this._updateRootBox();
-    },
-
-    _updateRootBox: function() {
-        clearTimeout(this._updateTimer);
-
-        this._updateTimer = setTimeout((function() {
-            if(this._$root) {
-                eventsEngine.triggerHandler(this._$root, 'dxupdate');
-            }
-        }).bind(this));
     },
 
     _renderItems: function() {
@@ -390,8 +377,7 @@ const ResponsiveBox = CollectionWidget.inherit({
         const rootBox = this._prepareBoxConfig(result.box || { direction: 'row', items: [extend(result, { ratio: 1 })] });
         extend(rootBox, this._rootBoxConfig(rootBox.items));
 
-        this._$root = $('<div>').appendTo(this._itemContainer());
-        this._createComponent(this._$root, Box, rootBox);
+        this._createComponent(/* this._$root, */ Box, rootBox);
     },
 
     _rootBoxConfig: function(items) {
@@ -566,7 +552,6 @@ const ResponsiveBox = CollectionWidget.inherit({
         }
 
         this._layoutChangedAction();
-        this._updateRootBox();
     },
 
     _saveAssistantRoot: function($root) {
@@ -599,9 +584,6 @@ const ResponsiveBox = CollectionWidget.inherit({
 
     _toggleVisibility: function(visible) {
         this.callBase(visible);
-        if(visible) {
-            this._updateRootBox();
-        }
     },
 
     _attachClickEvent: noop,
