@@ -43,7 +43,7 @@ export let Tooltip = function(params) {
     that._widgetRoot = params.widgetRoot;
     that._widget = params.widget;
 
-    that.$wrapper = $('<div>')
+    that._$wrapper = $('<div>')
         .css({ position: 'absolute', overflow: 'hidden', 'pointerEvents': 'none' }) // T265557, T447623
         .addClass(params.cssClass);
 
