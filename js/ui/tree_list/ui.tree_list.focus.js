@@ -92,7 +92,6 @@ core.registerModule('focus', extend(true, {}, focusModule, {
 
                     that.expandAscendants(key).done(function() {
                         dataSource.load({
-                            filter: that.getCombinedFilter(),
                             sort: that.getController('columns').getSortDataSourceParameters(!dataSource.remoteOperations().sorting),
                             parentIds: []
                         }).done(function(nodes) {
