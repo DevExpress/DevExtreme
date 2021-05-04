@@ -185,8 +185,14 @@ class Gantt extends Widget {
     }
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
+        this._updateGanttRowHeights();
+    }
+    _updateGanttRowHeights() {
         const rowHeight = this._getTreeListRowHeight();
-        this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
+        if(this._getGanttViewOption('rowHeight') !== rowHeight) {
+            this._setGanttViewOption('rowHeight', rowHeight);
+            this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
+        }
     }
     _onTreeListContentReady(e) {
         if(e.component.getDataSource()) {
@@ -366,6 +372,9 @@ class Gantt extends Widget {
     _setGanttViewOption(optionName, value) {
         this._ganttView && this._ganttView.option(optionName, value);
     }
+    _getGanttViewOption(optionName, value) {
+        return this._ganttView?.option(optionName);
+    }
     _setTreeListOption(optionName, value) {
         this._treeList && this._treeList.option(optionName, value);
     }
@@ -523,6 +532,9 @@ class Gantt extends Widget {
                     }
                     this._selectTreeListRows(this._getArrayFromOneElement(insertedId));
                     this._setTreeListOption('focusedRowKey', insertedId);
+                    setTimeout(() => {
+                        this._updateGanttRowHeights();
+                    }, 300);
                 }
                 this._raiseInsertedAction(optionName, data, insertedId);
             });
@@ -609,7 +621,7 @@ class Gantt extends Widget {
         return this.option('validation.autoUpdateParentTasks');
     }
     _selectTreeListRows(keys) {
-        this._treeList?.selectRows(keys);
+        this._setTreeListOption('selectedRowKeys', keys);
     }
     // custom fields cache updating
     _addCustomFieldsDataFromCache(key, data) {
@@ -624,6 +636,8 @@ class Gantt extends Widget {
                     dataOption.update(key, data, () => {
                         this._updateTreeListDataSource();
                         dataOption._refreshDataSource();
+                        const selectedRowKey = this.option('selectedRowKey');
+                        this._ganttView._selectTask(selectedRowKey);
                     });
                 }
             };
