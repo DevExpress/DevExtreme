@@ -55,7 +55,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         const popup = this._getPopup();
 
         if(popup) {
-            popup._wrapper().toggleClass(DATEBOX_ADAPTIVITY_MODE_CLASS, this._isSmallScreen());
+            popup.$wrapper().toggleClass(DATEBOX_ADAPTIVITY_MODE_CLASS, this._isSmallScreen());
         }
 
         clearTimeout(this._repaintTimer);

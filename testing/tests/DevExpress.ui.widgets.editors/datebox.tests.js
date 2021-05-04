@@ -2220,7 +2220,7 @@ QUnit.module('datebox w/ calendar', {
     QUnit.test('dateBox must apply the wrapper class with appropriate picker type to the drop-down overlay wrapper', function(assert) {
         const dateBox = this.fixture.dateBox;
         dateBox.open();
-        assert.ok(this.fixture.dateBox._popup._wrapper().hasClass(DATEBOX_WRAPPER_CLASS + '-' + dateBox.option('pickerType')));
+        assert.ok(this.fixture.dateBox._popup.$wrapper().hasClass(DATEBOX_WRAPPER_CLASS + '-' + dateBox.option('pickerType')));
     });
 
     QUnit.test('dateBox must correctly reopen the calendar after refreshing when it was not hidden beforehand', function(assert) {

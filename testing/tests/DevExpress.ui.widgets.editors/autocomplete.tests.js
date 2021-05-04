@@ -79,7 +79,7 @@ QUnit.module('dxAutocomplete', {
     }
 }, () => {
     QUnit.test('popup init', function(assert) {
-        assert.ok(this.popup._wrapper().hasClass('dx-autocomplete-popup-wrapper'), 'popup wrapper class set');
+        assert.ok(this.popup.$wrapper().hasClass('dx-autocomplete-popup-wrapper'), 'popup wrapper class set');
 
         this.instance.option('value', 'i');
         assert.equal($('.dx-viewport ' + '.' + LIST_CLASS).length, 1, 'Element has ' + LIST_CLASS + ' class');

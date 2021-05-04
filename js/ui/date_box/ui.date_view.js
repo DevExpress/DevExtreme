@@ -137,7 +137,7 @@ const DateView = Editor.inherit({
                 }
             });
         });
-        that._$rollersContainer.appendTo(that._wrapper());
+        that._$rollersContainer.appendTo(that.$wrapper());
     },
 
     _createRollerConfigs: function(type) {

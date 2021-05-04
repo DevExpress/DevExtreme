@@ -43,11 +43,11 @@ export let Tooltip = function(params) {
     that._widgetRoot = params.widgetRoot;
     that._widget = params.widget;
 
-    that._wrapper = $('<div>')
+    that.$wrapper = $('<div>')
         .css({ position: 'absolute', overflow: 'hidden', 'pointerEvents': 'none' }) // T265557, T447623
         .addClass(params.cssClass);
 
-    that._renderer = renderer = new Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
+    that._renderer = renderer = new Renderer({ pathModified: params.pathModified, container: that.$wrapper()[0] });
     const root = renderer.root;
     root.attr({ 'pointer-events': 'none' });
 
@@ -55,7 +55,7 @@ export let Tooltip = function(params) {
     that._text = renderer.text(undefined, 0, 0);
 
     // html text
-    that._textGroupHtml = $('<div>').css({ position: 'absolute', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._wrapper);
+    that._textGroupHtml = $('<div>').css({ position: 'absolute', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that.$wrapper());
     that._textHtml = $('<div>').css({ position: 'relative', display: 'inline-block', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._textGroupHtml);
 };
 
@@ -63,7 +63,7 @@ Tooltip.prototype = {
     constructor: Tooltip,
 
     dispose: function() {
-        this._wrapper.remove();
+        this.$wrapper().remove();
         this._renderer.dispose();
         this._options = this._widgetRoot = null;
     },
@@ -90,7 +90,7 @@ Tooltip.prototype = {
         that._options = options;
         that._textFontStyles = patchFontOptions(options.font);
         that._textFontStyles.color = that._textFontStyles.fill;
-        that._wrapper.css({ 'zIndex': options.zIndex });
+        that.$wrapper().css({ 'zIndex': options.zIndex });
 
         that._customizeTooltip = options.customizeTooltip;
 
@@ -211,7 +211,7 @@ Tooltip.prototype = {
         that.setOptions(options);
 
         // The following is because after update (on widget refresh) tooltip must be hidden
-        hideElement(that._wrapper);
+        hideElement(that.$wrapper());
 
         // text area
         const normalizedCSS = {};
@@ -270,7 +270,7 @@ Tooltip.prototype = {
 
         that._state = state;
 
-        that._wrapper.appendTo(that._getContainer());
+        that.$wrapper().appendTo(that._getContainer());
 
         that._clear();
 
@@ -294,7 +294,7 @@ Tooltip.prototype = {
 
     hide: function() {
         const that = this;
-        hideElement(that._wrapper);
+        hideElement(that.$wrapper());
         // trigger event
         if(that._eventData) {
             that._eventTrigger('tooltipHidden', that._eventData);
@@ -318,11 +318,11 @@ Tooltip.prototype = {
         that._renderer.resize(plaqueBBox.width, plaqueBBox.height);
 
         // move wrapper
-        const offset = that._wrapper.css({ left: 0, top: 0 }).offset();
+        const offset = that.$wrapper().css({ left: 0, top: 0 }).offset();
         const left = plaqueBBox.x;
         const top = plaqueBBox.y;
 
-        that._wrapper.css({
+        that.$wrapper().css({
             left: left - offset.left,
             top: top - offset.top
         });

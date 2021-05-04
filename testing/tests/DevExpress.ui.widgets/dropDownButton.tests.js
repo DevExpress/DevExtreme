@@ -507,8 +507,8 @@ QUnit.module('popup integration', {
     });
 
     QUnit.test('popup should have special classes', function(assert) {
-        assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), 'popup has a special class');
-        assert.ok($(this.popup._wrapper()).hasClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS), 'popup wrapper has a special class');
+        assert.ok($(this.popup.$content()).hasClass(DROP_DOWN_BUTTON_CONTENT), 'popup has a special class');
+        assert.ok($(this.popup.$wrapper()).hasClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS), 'popup wrapper has a special class');
     });
 
     QUnit.test('popup content should have special class when custom template is used', function(assert) {
