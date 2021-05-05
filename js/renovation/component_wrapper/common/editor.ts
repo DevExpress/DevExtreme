@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import Component from './component';
-import ValidationEngine from '../../ui/validation_engine';
-import { extend } from '../../core/utils/extend';
-import $ from '../../core/renderer';
-import { data } from '../../core/element_data';
-import Callbacks from '../../core/utils/callbacks';
-import OldEditor from '../../ui/editor/editor';
+import ValidationEngine from '../../../ui/validation_engine';
+import { extend } from '../../../core/utils/extend';
+import $ from '../../../core/renderer';
+import { data } from '../../../core/element_data';
+import Callbacks from '../../../core/utils/callbacks';
+import OldEditor from '../../../ui/editor/editor';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';

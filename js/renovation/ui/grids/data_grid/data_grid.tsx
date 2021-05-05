@@ -478,16 +478,6 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return () => { this.instance.dispose(); };
   }
 
-  @Effect({ run: 'once' })
-  initInstanceElement(): void {
-    this.instance = this.createInstance();
-  }
-
-  @Effect()
-  subscribeOptionChanged(): void {
-    this.instance?.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
-  }
-
   instanceOptionChangedHandler(e: OptionChangedEvent): void {
     try {
       this.isTwoWayPropUpdating = true;
@@ -571,7 +561,8 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return result;
   }
 
-  createInstance(): GridInstance {
+  @Effect({ run: 'once' })
+  setupInstance(): void {
     const element = this.widgetElementRef?.current as HTMLElement;
     // TODO Vitik: Not only optionChanged should be rewrited.
     // All other events should be re-raised by renovated grid.
@@ -581,6 +572,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
       this.normalizeProps(restProps),
     ) as unknown as GridInstance;
     instance.getController('resizing').updateSize(element);
-    return instance as GridInstance;
+    instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+    this.instance = instance;
   }
 }

@@ -5,6 +5,7 @@ import CalendarStrategy from './ui.date_box.strategy.calendar';
 import TimeView from './ui.time_view';
 import dateLocalization from '../../localization/date';
 import { extend } from '../../core/utils/extend';
+import dateUtils from '../../core/utils/date';
 import Box from '../box';
 import uiDateUtils from './ui.date_utils';
 
@@ -21,6 +22,10 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
             buttonsLocation: 'bottom after',
             'dropDownOptions.showTitle': false
         });
+    },
+
+    _closeDropDownByEnter: function() {
+        return dateUtils.sameDate(this._getContouredValue(), this.widgetOption('value'));
     },
 
     getDisplayFormat: function(displayFormat) {
