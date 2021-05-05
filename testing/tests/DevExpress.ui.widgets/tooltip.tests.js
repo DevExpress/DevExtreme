@@ -123,6 +123,7 @@ QUnit.module('overlay integration', {
 QUnit.module('base z-index', () => {
     QUnit.test('tooltip should have correct z-index', function(assert) {
         Tooltip.baseZIndex(10000);
+
         const tooltip = new Tooltip($('#tooltip'), { visible: true });
         const $tooltipContent = tooltip.$overlayContent();
 
