@@ -1,9 +1,7 @@
 import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSchedulerModule,
-         DxSchedulerComponent,
-         DxTemplateModule } from 'devextreme-angular';
+import { DxSchedulerModule, DxSchedulerComponent, DxTemplateModule } from 'devextreme-angular';
 import { Service, MovieData, TheatreData, Data } from './app.service';
 import Query from 'devextreme/data/query';
 

@@ -34,8 +34,8 @@ $(function(){
                         "<div>" + movieInfo.text + "</div>" +
                         "<div>Ticket Price: <strong>$" + model.appointmentData.price + "</strong>" +
                         "</div>" + 
-                        "<div>" + Globalize.formatDate(model.appointmentData.startDate, { time: "short" }) +
-                            " - " + Globalize.formatDate(model.appointmentData.endDate, { time: "short" }) +
+                        "<div>" + DevExpress.localization.formatDate(model.appointmentData.startDate, "shortTime") +
+                            " - " + DevExpress.localization.formatDate(model.appointmentData.endDate, "shortTime") +
                         "</div>" + 
                     "</div>");
         },
@@ -126,6 +126,6 @@ $(function(){
                             "Duration: " + movieData.duration + " minutes" +
                         "</div>" +
                     "</div>" +
-                 "</div>");
+                "</div>");
     }
 });

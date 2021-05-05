@@ -1,9 +1,7 @@
 import React from 'react';
 import Query from 'devextreme/data/query';
-import 'devextreme/localization/globalize/date';
-
-import Globalize from 'globalize';
 import { moviesData } from './data.js';
+import { formatDate } from 'devextreme/localization';
 
 function getMovieById(id) {
   return Query(moviesData).filter(['id', id]).toArray()[0];
@@ -11,7 +9,9 @@ function getMovieById(id) {
 
 export default function Appointment(model) {
   const { appointmentData } = model.data;
+
   const movieData = getMovieById(appointmentData.movieId) || {};
+
   return (
     <div className="showtime-preview">
       <div> {movieData.text}</div>
@@ -19,9 +19,9 @@ export default function Appointment(model) {
         Ticket Price: <strong>${ appointmentData.price }</strong>
       </div>
       <div>
-        {Globalize.formatDate(appointmentData.startDate, { time: 'short' })}
+        {formatDate(appointmentData.startDate, 'shortTime')}
         {' - '}
-        {Globalize.formatDate(appointmentData.endDate, { time: 'short' }) }
+        {formatDate(appointmentData.endDate, 'shortTime')}
       </div>
     </div>
   );
