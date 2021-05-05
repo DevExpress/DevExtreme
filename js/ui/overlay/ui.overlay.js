@@ -992,7 +992,7 @@ const Overlay = Widget.inherit({
     },
 
     _getDragTarget: function() {
-        return this._$content;
+        return this.$content();
     },
 
     _dragStartHandler: function(e) {
