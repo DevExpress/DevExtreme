@@ -7,6 +7,6 @@ export default {
         format: 'cjs'
     },
     plugins: [nodeResolve({
-        moduleDirectories: ['/home/runner/work/DevExtreme/DevExtreme/artifacts/npm/', 'node_modules']
+        moduleDirectories: ['~/artifacts/npm/', 'node_modules']
     })]
 };
