@@ -13,7 +13,6 @@
   "repository": "https://github.com/DevExpress/DevExtreme",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "@types/clean-css": "^4.2.2",
     "autoprefixer": "^9.8.0",
     "bootstrap": "^4.3.1",
     "clean-css": "^4.2.3",
@@ -33,6 +32,7 @@
   },
   "devDependencies": {
     "@types/autoprefixer": "^9.7.2",
+    "@types/clean-css": "^4.2.2",
     "@types/dependency-tree": "^7.2.0",
     "@types/filing-cabinet": "^2.5.0",
     "@types/fs-extra": "^9.0.1",
