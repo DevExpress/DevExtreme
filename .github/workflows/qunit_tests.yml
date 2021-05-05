@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   qunit-tests:
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         NORENOVATION: [ true ]
         BROWSER: [ google-chrome ]
