@@ -3016,7 +3016,7 @@ module('Virtual scrolling integration', () => {
         });
     });
 
-    module('Appointments', {
+    module('Appointment rendering', {
         before: function() {
             this.createInstance = function(options) {
                 this.scheduler = createWrapper(options);
@@ -3337,7 +3337,7 @@ module('Virtual scrolling integration', () => {
         });
     });
 
-    module('Customization', () => {
+    module('CSS customization', () => {
         module('Vertical orientation', () => {
             supportedViews.forEach(viewName => {
                 test(`Cell height should be correct in "${viewName}" view`, function(assert) {
