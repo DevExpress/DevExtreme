@@ -41,11 +41,12 @@ describe('ResponsiveBox > Attrs', () => {
         const { classList } = responsiveBox.getDOMNode();
 
         expect(classList.contains(expectedClass)).toEqual(true);
+
         domAdapter.getDocumentElement = defaultImplementation;
       });
 
     it('Check has valid screen size class. Default implementation. Has no window', () => {
-      setWindow({}, false);
+      setWindow({ }, false);
 
       const props = new ResponsiveBoxProps();
       const responsiveBox = mount<ResponsiveBox>(<ResponsiveBox {...props} />);
