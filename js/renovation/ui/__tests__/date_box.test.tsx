@@ -13,7 +13,7 @@ describe('DateBox', () => {
       const rootElementRef = createTestRef();
       const componentProps = new DateBoxProps();
       const props = {
-        props: { rootElementRef },
+        props: { rootElementRef, addWidgetClass: true },
         componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<DateBox>;
