@@ -3,8 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import { grep, noop } from '../core/utils/common';
 import { isDefined, isPlainObject, isEmptyObject } from '../core/utils/type';
 import errors from './widget/ui.errors';
-import { getWindow, defaultScreenFactorFunc, hasWindow } from '../core/utils/window';
-const window = getWindow();
+
 import { each, map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import registerComponent from '../core/component_registrator';
@@ -13,12 +12,8 @@ import CollectionWidget from './collection/ui.collection_widget.edit';
 
 // STYLE responsiveBox
 
-const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
-const SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + '-screen-';
 const BOX_ITEM_CLASS = 'dx-box-item';
 const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
-
-const HD_SCREEN_WIDTH = 1920;
 
 const ResponsiveBox = CollectionWidget.inherit({
 
@@ -26,8 +21,6 @@ const ResponsiveBox = CollectionWidget.inherit({
         return extend(this.callBase(), {
             rows: [],
             cols: [],
-
-            screenByWidth: null,
 
             singleColumnScreen: '',
 
@@ -99,10 +92,6 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _init: function() {
-        if(!this.option('screenByWidth')) {
-            this._options.silent('screenByWidth', defaultScreenFactorFunc);
-        }
-
         this.callBase();
         this._initLayoutChangedAction();
     },
@@ -161,17 +150,7 @@ const ResponsiveBox = CollectionWidget.inherit({
 
     _setScreenSize: function() {
         const currentScreen = this._getCurrentScreen();
-
-        this._removeScreenSizeClass();
-
-        this.$element().addClass(SCREEN_SIZE_CLASS_PREFIX + currentScreen);
         this.option('currentScreenFactor', currentScreen);
-    },
-
-    _removeScreenSizeClass: function() {
-        const currentScreenFactor = this.option('currentScreenFactor');
-
-        currentScreenFactor && this.$element().removeClass(SCREEN_SIZE_CLASS_PREFIX + currentScreenFactor);
     },
 
     _prepareGrid: function() {
@@ -270,15 +249,6 @@ const ResponsiveBox = CollectionWidget.inherit({
     _screenRegExp: function() {
         const screen = this._getCurrentScreen();
         return new RegExp('(^|\\s)' + screen + '($|\\s)', 'i');
-    },
-
-    _getCurrentScreen: function() {
-        const width = this._screenWidth();
-        return this.option('screenByWidth')(width);
-    },
-
-    _screenWidth: function() {
-        return hasWindow() ? $(window).width() : HD_SCREEN_WIDTH;
     },
 
     _createEmptyCell: function() {
