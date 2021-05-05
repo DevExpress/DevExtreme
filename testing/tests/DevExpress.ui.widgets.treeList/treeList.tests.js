@@ -1696,7 +1696,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             keyExpr: 'id',
             dataSource: generateData(6),
             paging: {
-                pageSize: 3
+                pageSize: 4
             },
             focusedRowEnabled: true,
             focusedRowKey: 12,
@@ -1720,7 +1720,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         this.clock.tick(100);
 
         // assert
-        assert.strictEqual(treeList.pageIndex(), 2, 'page is changed');
+        assert.strictEqual(treeList.pageIndex(), 1, 'page is changed');
         assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'focus parent is expanded');
         assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass('dx-row-focused'), 'focused row is visible');
     });
