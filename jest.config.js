@@ -43,16 +43,16 @@ module.exports = {
             branches: 100
         },
         './js/renovation/component_wrapper/common/component.ts': {
-            functions: 97,
+            functions: 95,
             statements: 97,
             lines: 97,
             branches: 90
         },
         './js/renovation/component_wrapper/common/template_wrapper.ts': {
             functions: 100,
-            statements: 100,
-            lines: 100,
-            branches: 90
+            statements: 96,
+            lines: 96,
+            branches: 88
         }
     },
     roots: ['<rootDir>/js/renovation'],
