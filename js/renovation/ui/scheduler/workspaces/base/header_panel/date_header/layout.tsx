@@ -9,7 +9,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { Row } from '../../row';
 import {
-  DateHeaderCellData,
+  DateHeaderData,
   DateTimeCellTemplateProps,
   Group,
 } from '../../../types.d';
@@ -20,45 +20,63 @@ import { DateHeaderCell } from './cell';
 export const viewFunction = ({
   isHorizontalGrouping,
   props: {
-    dateHeaderMap,
+    dateHeaderData,
     dateCellTemplate,
   },
-}: DateHeaderLayout): JSX.Element => (
-  <Fragment>
-    {dateHeaderMap.map((dateHeaderRow, rowIndex) => (
-      <Row className="dx-scheduler-header-row" key={rowIndex.toString()}>
-        {dateHeaderRow.map(({
-          startDate,
-          endDate,
-          today,
-          groups: cellGroups,
-          groupIndex,
-          isFirstGroupCell,
-          isLastGroupCell,
-          index,
-          key,
-          text,
-          colSpan,
-        }) => (
-          <DateHeaderCell
-            startDate={startDate}
-            endDate={endDate}
-            groups={isHorizontalGrouping ? cellGroups : undefined}
-            groupIndex={isHorizontalGrouping ? groupIndex : undefined}
-            today={today}
-            index={index}
-            text={text}
-            isFirstGroupCell={isFirstGroupCell}
-            isLastGroupCell={isLastGroupCell}
-            dateCellTemplate={dateCellTemplate}
-            key={key}
-            colSpan={colSpan}
-          />
-        ))}
-      </Row>
-    ))}
-  </Fragment>
-);
+}: DateHeaderLayout): JSX.Element => {
+  const {
+    dataMap,
+    leftVirtualCellCount,
+    leftVirtualCellWidth,
+    rightVirtualCellCount,
+    rightVirtualCellWidth,
+  } = dateHeaderData;
+
+  return (
+    <Fragment>
+      {dataMap.map((dateHeaderRow, rowIndex) => (
+        <Row
+          className="dx-scheduler-header-row"
+          key={rowIndex.toString()}
+          leftVirtualCellWidth={leftVirtualCellWidth}
+          leftVirtualCellCount={leftVirtualCellCount}
+          rightVirtualCellWidth={rightVirtualCellWidth}
+          rightVirtualCellCount={rightVirtualCellCount}
+          isHeaderRow
+        >
+          {dateHeaderRow.map(({
+            startDate,
+            endDate,
+            today,
+            groups: cellGroups,
+            groupIndex,
+            isFirstGroupCell,
+            isLastGroupCell,
+            index,
+            key,
+            text,
+            colSpan,
+          }) => (
+            <DateHeaderCell
+              startDate={startDate}
+              endDate={endDate}
+              groups={isHorizontalGrouping ? cellGroups : undefined}
+              groupIndex={isHorizontalGrouping ? groupIndex : undefined}
+              today={today}
+              index={index}
+              text={text}
+              isFirstGroupCell={isFirstGroupCell}
+              isLastGroupCell={isLastGroupCell}
+              dateCellTemplate={dateCellTemplate}
+              key={key}
+              colSpan={colSpan}
+            />
+          ))}
+        </Row>
+      ))}
+    </Fragment>
+  );
+};
 
 @ComponentBindings()
 export class DateHeaderLayoutProps {
@@ -67,7 +85,7 @@ export class DateHeaderLayoutProps {
 
   @OneWay() groupByDate = false;
 
-  @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
+  @OneWay() dateHeaderData!: DateHeaderData;
 
   @OneWay() groups: Group[] = [];
 
@@ -80,7 +98,7 @@ export class DateHeaderLayoutProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateHeaderLayout extends JSXComponent(DateHeaderLayoutProps) {
+export class DateHeaderLayout extends JSXComponent<DateHeaderLayoutProps, 'dateHeaderData'>() {
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups, groupByDate } = this.props;
 
