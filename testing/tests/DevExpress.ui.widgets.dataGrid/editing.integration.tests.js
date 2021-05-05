@@ -3269,6 +3269,10 @@ QUnit.module('API methods', baseModuleConfig, () => {
                     .keyDown('left')
                     .press('enter');
 
+                if(dataType === 'datetime') {
+                    keyboard.press('enter'); // confirm date
+                }
+
                 // assert
                 editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
                 const expectedValue = dataType === 'date' ? '12/31/1999' : '12/31/1999, 12:00 AM';

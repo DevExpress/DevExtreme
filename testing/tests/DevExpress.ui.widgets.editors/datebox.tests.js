@@ -415,6 +415,11 @@ QUnit.module('datebox tests', moduleConfig, () => {
                 .keyDown('left', { ctrlKey: true })
                 .press('right')
                 .press('enter');
+
+            if(options.type === 'datetime') {
+                kb.press('enter'); // confirm date with time
+            }
+
             assert.deepEqual(instance.option('text'), selectedDate, `value is successfully changed by calendar when useMaskBehavior:${options.useMaskBehavior}, type:${options.type}`);
         });
     });
@@ -3465,6 +3470,7 @@ QUnit.module('datebox with time component', {
         timeView.option('value', time);
         keyboard
             .focus()
+            .press('enter')
             .press('enter');
 
         const expectedDate = new Date(time);
@@ -4772,6 +4778,44 @@ QUnit.module('keyboard navigation', {
 
             assert.ok(!this.dateBox.option('opened'));
         });
+    });
+
+    QUnit.test('DateBox value is applied after the second press of the "Enter" key', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
+        this.dateBox.option({
+            pickerType: 'calendar',
+            type: 'datetime',
+            applyValueMode: 'useButtons',
+            focusStateEnabled: true,
+            value: null,
+            opened: true
+        });
+
+        const instance = this.dateBox;
+        const $content = $(instance.content());
+        const $input = $(instance.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+        function getValue() {
+            return instance.option('value');
+        }
+        function calendarHasSelectedDate() {
+            return $content.find('.dx-calendar-selected-date').length > 0;
+        }
+
+        assert.notOk(getValue());
+        assert.notOk(calendarHasSelectedDate());
+
+        keyboard.press('enter');
+
+        assert.notOk(getValue(), 'value does not applied to the DateBox after the first press of the "Enter" key');
+        assert.ok(calendarHasSelectedDate(), 'but Calendar got selected date');
+
+        keyboard.press('enter');
+        assert.ok(getValue(), 'DateBox got selected value after the second press of the "Enter" key');
     });
 });
 
