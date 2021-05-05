@@ -7,6 +7,6 @@ module.exports = {
         hints: false
     },
     resolve: {
-        modules: ['./artifacts/npm/', 'node_modules'],
+        modules: ['/home/runner/work/DevExtreme/DevExtreme/artifacts/npm/', 'node_modules'],
     },
 };

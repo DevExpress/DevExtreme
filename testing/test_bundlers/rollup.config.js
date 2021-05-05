@@ -4,9 +4,9 @@ export default {
     input: './testing/test_bundlers/src/index.js',
     output: {
         file: './artifacts/test_bundlers/dist_rollup/main.js',
-        format: 'es'
+        format: 'cjs'
     },
     plugins: [nodeResolve({
-        moduleDirectories: ['./artifacts/npm/', 'node_modules']
+        moduleDirectories: ['/home/runner/work/DevExtreme/DevExtreme/artifacts/npm/', 'node_modules']
     })]
 };
