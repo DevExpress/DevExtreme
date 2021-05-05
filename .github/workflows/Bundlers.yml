@@ -26,8 +26,10 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: npm run build
 
+    - name: Build test bundle by rollup
+      run: npx rollup --config ./testing/test_bundlers/rollup.config.js
+
     - name: Build test bundle by webpack
       run: npx webpack --config ./testing/test_bundlers/webpack.config.js
 
-    - name: Build test bundle by rollup
-      run: npx rollup --config ./testing/test_bundlers/rollup.config.js
+
