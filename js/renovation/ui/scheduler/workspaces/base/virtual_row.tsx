@@ -3,7 +3,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { addHeightToStyle } from '../utils';
 import { RowProps, Row } from './row';
-import { VirtualCell } from './virtual-cell';
+import { VirtualCell } from './virtual_cell';
 
 export const viewFunction = ({
   props: {
