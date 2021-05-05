@@ -1,8 +1,11 @@
 <template>
   <li>
-    <img :src="product.ImageSrc"/><br/>
+    <img :src="product.ImageSrc"><br>
     <div>{{ product.Name }}</div>
-    <DxCheckBox @value-changed="onValueChanged" text="Available"/>
+    <DxCheckBox
+      @value-changed="onValueChanged"
+      text="Available"
+    />
   </li>
 </template>
 <script>
