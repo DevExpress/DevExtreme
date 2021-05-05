@@ -8,7 +8,7 @@ fixture`Layout:Views:Day:AllDay`
   .page(url(__dirname, '../../../../container.html'));
 
 const enableNativeScroll = ClientFunction(() => {
-  ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().option('scrolling', { useNative: true });
+  ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().option('useNative', true);
 });
 
 [1, 2].forEach((intervalCount) => {
@@ -26,7 +26,7 @@ const enableNativeScroll = ClientFunction(() => {
         const pngName = `day-view-interval-orientation=${groupOrientation}-allDay=${showAllDayPanel}-interval=${intervalCount}.png`;
 
         await t
-          .expect(await takeScreenshot(pngName, scheduler.element))
+          .expect(await takeScreenshot(pngName, scheduler.workSpace))
           .ok()
 
           .expect(compareResults.isValid())
