@@ -247,7 +247,7 @@ const Popup = Overlay.inherit({
     },
 
     _toggleFullScreenClass: function(value) {
-        this._$content
+        this.$overlayContent()
             .toggleClass(POPUP_FULL_SCREEN_CLASS, value)
             .toggleClass(POPUP_NORMAL_CLASS, !value);
     },
@@ -500,7 +500,7 @@ const Popup = Overlay.inherit({
     },
 
     _resetContentHeight: function() {
-        this._$popupContent.css({
+        this.$content().css({
             'height': 'auto',
             'maxHeight': 'none'
         });
@@ -509,7 +509,7 @@ const Popup = Overlay.inherit({
     _renderDrag: function() {
         this.callBase();
 
-        this._$content.toggleClass(POPUP_DRAGGABLE_CLASS, this.option('dragEnabled'));
+        this.$overlayContent().toggleClass(POPUP_DRAGGABLE_CLASS, this.option('dragEnabled'));
     },
 
     _renderResize: function() {
@@ -635,7 +635,7 @@ const Popup = Overlay.inherit({
 
     _renderDimensions: function() {
         if(this.option('fullScreen')) {
-            this._$content.css({
+            this.$overlayContent().css({
                 width: '100%',
                 height: '100%',
                 minWidth: '',
@@ -661,7 +661,7 @@ const Popup = Overlay.inherit({
 
     _renderPosition: function() {
         if(this.option('fullScreen')) {
-            move(this._$content, {
+            move(this.$overlayContent(), {
                 top: 0,
                 left: 0
             });
@@ -679,12 +679,12 @@ const Popup = Overlay.inherit({
             case 'titleTemplate':
                 this._renderTitle();
                 this._renderGeometry();
-                triggerResizeEvent(this._$content);
+                triggerResizeEvent(this.$overlayContent());
                 break;
             case 'bottomTemplate':
                 this._renderBottom();
                 this._renderGeometry();
-                triggerResizeEvent(this._$content);
+                triggerResizeEvent(this.$overlayContent());
                 break;
             case 'onTitleRendered':
                 this._createTitleRenderAction(args.value);
@@ -701,7 +701,7 @@ const Popup = Overlay.inherit({
 
                 if(shouldRenderGeometry) {
                     this._renderGeometry();
-                    triggerResizeEvent(this._$content);
+                    triggerResizeEvent(this.$overlayContent());
                 }
                 break;
             }
@@ -710,7 +710,7 @@ const Popup = Overlay.inherit({
                 break;
             case 'autoResizeEnabled':
                 this._renderGeometry();
-                triggerResizeEvent(this._$content);
+                triggerResizeEvent(this.$overlayContent());
                 break;
             case 'fullScreen':
                 this._toggleFullScreenClass(args.value);
@@ -719,7 +719,7 @@ const Popup = Overlay.inherit({
 
                 this._renderGeometry();
 
-                triggerResizeEvent(this._$content);
+                triggerResizeEvent(this.$overlayContent());
                 break;
             case 'showCloseButton':
                 this._renderTitle();
@@ -742,7 +742,7 @@ const Popup = Overlay.inherit({
     },
 
     content: function() {
-        return getPublicElement(this._$popupContent);
+        return getPublicElement(this.$content());
     },
 
     $overlayContent: function() {

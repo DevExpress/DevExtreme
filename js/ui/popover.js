@@ -312,7 +312,7 @@ const Popover = Popup.inherit({
         this._updateContentSize();
 
         const contentPosition = this._getContainerPosition();
-        const resultLocation = positionUtils.setup(this._$content, contentPosition);
+        const resultLocation = positionUtils.setup(this.$overlayContent(), contentPosition);
 
         const positionSide = this._getSideByLocation(resultLocation);
 
@@ -330,7 +330,7 @@ const Popover = Popup.inherit({
         this._setContentHeight(true);
         this._togglePositionClass('dx-position-' + this._positionSide);
 
-        move(this._$content, { left: 0, top: 0 });
+        move(this.$overlayContent(), { left: 0, top: 0 });
 
         this._$arrow.css({
             top: 'auto', right: 'auto', bottom: 'auto', left: 'auto'
@@ -338,24 +338,24 @@ const Popover = Popup.inherit({
     },
 
     _updateContentSize: function() {
-        if(!this._$popupContent) {
+        if(!this.$content()) {
             return;
         }
 
-        const containerLocation = positionUtils.calculate(this._$content, this._getContainerPosition());
+        const containerLocation = positionUtils.calculate(this.$overlayContent(), this._getContainerPosition());
 
         if((containerLocation.h.oversize > 0) && this._isHorizontalSide() && !containerLocation.h.fit) {
-            const newContainerWidth = this._$content.width() - containerLocation.h.oversize;
+            const newContainerWidth = this.$overlayContent().width() - containerLocation.h.oversize;
 
-            this._$content.width(newContainerWidth);
+            this.$overlayContent().width(newContainerWidth);
         }
 
         if((containerLocation.v.oversize > 0) && this._isVerticalSide() && !containerLocation.v.fit) {
-            const newOverlayContentHeight = this._$content.height() - containerLocation.v.oversize;
-            const newPopupContentHeight = this._$popupContent.height() - containerLocation.v.oversize;
+            const newOverlayContentHeight = this.$overlayContent().height() - containerLocation.v.oversize;
+            const newPopupContentHeight = this.$content().height() - containerLocation.v.oversize;
 
-            this._$content.height(newOverlayContentHeight);
-            this._$popupContent.height(newPopupContentHeight);
+            this.$overlayContent().height(newOverlayContentHeight);
+            this.$content().height(newPopupContentHeight);
         }
     },
 
@@ -380,7 +380,7 @@ const Popover = Popup.inherit({
     },
 
     _getContentBorderWidth: function(side) {
-        const borderWidth = this._$content.css(SIDE_BORDER_WIDTH_STYLES[side]);
+        const borderWidth = this.$overlayContent().css(SIDE_BORDER_WIDTH_STYLES[side]);
         return parseInt(borderWidth) || 0;
     },
 
@@ -415,11 +415,11 @@ const Popover = Popup.inherit({
         const $target = $(this._position.of);
 
         const targetOffset = positionUtils.offset($target) || { top: 0, left: 0 };
-        const contentOffset = positionUtils.offset(this._$content);
+        const contentOffset = positionUtils.offset(this.$overlayContent());
 
         const arrowSize = arrowRect[sizeProperty];
         const contentLocation = contentOffset[axis];
-        const contentSize = getBoundingRect(this._$content.get(0))[sizeProperty];
+        const contentSize = getBoundingRect(this.$overlayContent().get(0))[sizeProperty];
         const targetLocation = targetOffset[axis];
         const targetSize = $target.get(0)?.preventDefault ? 0 : getBoundingRect($target.get(0))[sizeProperty];
 

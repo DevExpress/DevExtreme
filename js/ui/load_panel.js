@@ -127,7 +127,7 @@ const LoadPanel = Overlay.inherit({
         this.$content().addClass(LOADPANEL_CONTENT_CLASS);
 
         this._$loadPanelContentWrapper = $('<div>').addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
-        this._$loadPanelContentWrapper.appendTo(this._$content);
+        this._$loadPanelContentWrapper.appendTo(this.$content());
 
         this._togglePaneVisible();
 
