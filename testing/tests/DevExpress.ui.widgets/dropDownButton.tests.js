@@ -534,7 +534,7 @@ QUnit.module('popup integration', {
 
         const instance = $dropDownButton.dxDropDownButton('instance');
         const dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
-        const popupContentElementRect = getPopup(instance)._$content.get(0).getBoundingClientRect();
+        const popupContentElementRect = getPopup(instance).$overlayContent().get(0).getBoundingClientRect();
 
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, 'popup position is correct, rtlEnabled = false');
     });
@@ -2320,7 +2320,7 @@ QUnit.module('custom content template', {}, () => {
             deferRendering: false
         });
 
-        const popupContent = getPopup(dropDownButton).content();
+        const popupContent = getPopup(dropDownButton).$content().get(0);
         assert.strictEqual(templateHandler.callCount, 1, 'templateHandler was called');
         assert.deepEqual(templateHandler.getCall(0).args[0], [1, 2, 3], 'data is correct');
         assert.strictEqual(templateHandler.getCall(0).args[1], popupContent, 'container is correct');

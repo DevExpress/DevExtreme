@@ -94,7 +94,7 @@ const testRendering = function(usePopover) {
             try {
                 ddMenu._popupOptions = function() {
                     return $.extend(initialPopupOptions.call(ddMenu), { onContentReady: function() {
-                        assert.ok(this._$content.find('.' + DROP_DOWN_MENU_LIST_CLASS).length, 'List is already rendered');
+                        assert.ok(this.$overlayContent().find('.' + DROP_DOWN_MENU_LIST_CLASS).length, 'List is already rendered');
                     }
                     });
                 };
