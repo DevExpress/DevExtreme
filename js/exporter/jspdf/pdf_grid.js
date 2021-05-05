@@ -52,11 +52,8 @@ export class PdfGrid {
             const isNewTableColumn = this._splitByColumns.filter((splitByColumn) => splitByColumn.columnIndex === cellIndex)[0];
             if(isNewTableColumn) {
                 this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
-                if(currentCell.colSpan > 0 && currentCell.text === '') {
-                    const notEmptyColSpanCells = currentTableCells.filter(cell => cell.colSpan > 0 && cell.text.length > 0);
-                    if(notEmptyColSpanCells.length > 0) {
-                        currentCell.text = notEmptyColSpanCells[notEmptyColSpanCells.length - 1].text;
-                    }
+                if(currentCell.colSpan > 0) {
+                    this._splitColSpanArea(cells, cellIndex);
                 }
                 currentTableIndex++;
                 currentTableCells = [];
@@ -64,6 +61,66 @@ export class PdfGrid {
             currentTableCells.push(currentCell);
         }
         this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
+    }
+
+    _splitColSpanArea(cells, splitIndex) {
+        const { startColSpanCellIndex, endColSpanCellIndex, colSpanCellText } = this._getColSpanArea(cells, splitIndex);
+
+        if(startColSpanCellIndex !== -1 && endColSpanCellIndex !== -1) {
+            const leftSpanCells = splitIndex - startColSpanCellIndex - 1;
+            for(let index = startColSpanCellIndex; index < splitIndex; index++) {
+                if(leftSpanCells > 0) {
+                    cells[index].colSpan = leftSpanCells;
+                } else {
+                    delete cells[index].colSpan;
+                }
+            }
+            cells[splitIndex].text = colSpanCellText;
+            const rightSpanCells = endColSpanCellIndex - splitIndex;
+            for(let index = splitIndex; index <= endColSpanCellIndex; index++) {
+                if(rightSpanCells > 0) {
+                    cells[index].colSpan = rightSpanCells;
+                } else {
+                    delete cells[index].colSpan;
+                }
+            }
+        }
+    }
+
+    _getColSpanArea(cells, cellIndex) {
+        let colSpanValue = -1;
+        let colSpanCellText = '';
+        let startColSpanCellIndex = -1;
+        let endColSpanCellIndex = -1;
+
+        for(let index = 0; index < cells.length; index++) {
+            if(cells[index].colSpan > 0 && startColSpanCellIndex === -1) {
+                colSpanValue = cells[index].colSpan;
+                colSpanCellText = cells[index].text;
+                startColSpanCellIndex = index;
+                endColSpanCellIndex = index;
+            }
+
+            if(startColSpanCellIndex !== -1) {
+                endColSpanCellIndex = index;
+                if(endColSpanCellIndex - startColSpanCellIndex >= colSpanValue) {
+                    if(startColSpanCellIndex < cellIndex && cellIndex <= endColSpanCellIndex) {
+                        break;
+                    } else {
+                        colSpanValue = -1;
+                        colSpanCellText = '';
+                        startColSpanCellIndex = -1;
+                        endColSpanCellIndex = -1;
+                    }
+                }
+            }
+        }
+
+        return {
+            startColSpanCellIndex,
+            endColSpanCellIndex,
+            colSpanCellText
+        };
     }
 
     mergeCellsBySpanAttributes() {
@@ -84,7 +141,7 @@ export class PdfGrid {
                         if(isDefined(cell.colSpan)) {
                             for(let i = 1; i <= cell.colSpan; i++) {
                                 const mergedCell = table.rows[rowIndex][cellIndex + i];
-                                if(isDefined(mergedCell) && isDefined(mergedCell.colSpan)) {
+                                if(isDefined(mergedCell)) {
                                     cell._rect.w += mergedCell._rect.w;
                                     mergedCell.skip = true;
                                 }
