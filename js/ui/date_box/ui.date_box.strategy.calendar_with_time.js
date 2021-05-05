@@ -6,6 +6,7 @@ const dateLocalization = require('../../localization/date');
 const extend = require('../../core/utils/extend').extend;
 const Box = require('../box');
 const uiDateUtils = require('./ui.date_utils');
+const dateUtils = require('../../core/utils/date');
 
 const SHRINK_VIEW_SCREEN_WIDTH = 573;
 const DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
@@ -20,6 +21,10 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
             buttonsLocation: 'bottom after',
             'dropDownOptions.showTitle': false
         });
+    },
+
+    _closeDropDownByEnter: function() {
+        return dateUtils.sameDate(this._getContouredValue(), this.widgetOption('value'));
     },
 
     getDisplayFormat: function(displayFormat) {
