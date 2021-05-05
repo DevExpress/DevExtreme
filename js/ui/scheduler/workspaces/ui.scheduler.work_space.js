@@ -2793,9 +2793,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getHorizontalMax(groupIndex) {
-        groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
+        if(this.isVirtualScrolling()) {
+            return this._groupedStrategy.getHorizontalMax(groupIndex);
+        }
 
-        return this._groupedStrategy.getHorizontalMax(groupIndex);
+        const correctedGroupIndex = this.isGroupedByDate()
+            ? this._getGroupCount() - 1
+            : groupIndex;
+
+        return this._groupedStrategy.getHorizontalMax(correctedGroupIndex);
     }
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {

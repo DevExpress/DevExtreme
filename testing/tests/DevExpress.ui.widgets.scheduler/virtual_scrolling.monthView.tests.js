@@ -575,6 +575,90 @@ module('Virtual scrolling Month View', () => {
                 });
             });
         });
+
+        module('Group by date', () => {
+            test('Regular appointment should be rendered correctly if grouped by date', function(assert) {
+                const resources = [{
+                    id: 0,
+                    text: 'David Carter',
+                    color: '#74d57b'
+                }, {
+                    id: 1,
+                    text: 'Emma Lewis',
+                    color: '#1db2f5'
+                }, {
+                    id: 2,
+                    text: 'Noah Hill',
+                    color: '#f5564a'
+                }, {
+                    id: 3,
+                    text: 'William Bell',
+                    color: '#97c95c'
+                }];
+                const appointment = {
+                    text: 'Test',
+                    startDate: new Date('2021-02-26T12:16:00.000Z'),
+                    endDate: new Date('2021-02-26T15:36:00.000Z'),
+                    humanId: 1
+                };
+                const scheduler = createWrapper({
+                    width: 400,
+                    currentDate: new Date(2021, 1, 2),
+                    dataSource: [appointment],
+                    views: ['month'],
+                    currentView: 'month',
+                    scrolling: {
+                        mode: 'virtual'
+                    },
+                    groups: ['humanId'],
+                    groupByDate: true,
+                    resources: [{
+                        fieldExpr: 'humanId',
+                        allowMultiple: false,
+                        dataSource: resources
+                    }]
+                });
+
+                const { instance } = scheduler;
+                const workspace = instance.getWorkSpace();
+                const scrollable = workspace.getScrollable();
+
+                workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                return asyncWrapper(assert, promise => {
+                    [{
+                        scrollX: 1066,
+                        expectedSettings: {
+                            hMax: 1650,
+                            left: 1575
+                        }
+                    }, {
+                        scrollX: 1300,
+                        expectedSettings: {
+                            hMax: 1950,
+                            left: 1575
+                        }
+                    }].forEach(({ scrollX, expectedSettings }) => {
+                        promise = asyncScrollTest(
+                            assert,
+                            promise,
+                            () => {
+                                const settings = instance.fire('createAppointmentSettings', appointment)[0];
+
+                                assert.ok(true, `scrollX: ${scrollX}`);
+
+                                assert.equal(settings.hMax, expectedSettings.hMax, 'Last group cell position is correct');
+                                assert.equal(settings.left, expectedSettings.left, 'Cell left position is correct');
+                            },
+                            scrollable,
+                            { left: scrollX }
+                        );
+                    });
+
+                    return promise;
+                });
+            });
+        });
     });
 
     module('Recurrent appointments', () => {
