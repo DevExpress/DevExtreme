@@ -12,7 +12,7 @@
 </template>
 <script>
 
-import { formatDate } from 'devextreme/localization';
+import localization from 'devextreme/localization';
 import DxButton from 'devextreme-vue/button';
 import Query from 'devextreme/data/query';
 
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     getFormatDate(value) {
-      return formatDate(value, 'shortTime');
+      return localization.formatDate(value, 'shortTime');
     }
   }
 };
