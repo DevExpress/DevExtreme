@@ -19,10 +19,8 @@ export const viewFunction = (viewModel: Scheduler): JSX.Element => {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
   view: viewFunction,
 })
-
 export class Scheduler extends JSXComponent(SchedulerProps) {
   // eslint-disable-next-line class-methods-use-this
   // get cssClasses(): string {
