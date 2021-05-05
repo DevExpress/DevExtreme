@@ -37,6 +37,7 @@ export default class ComponentWrapper extends DOMComponent {
   };
   _viewRef!: RefObject<unknown>;
   _viewComponent!: any;
+  _disposeMethodCalled = false;
 
   get _propsInfo(): {
     allowNull: string[];
@@ -122,12 +123,22 @@ export default class ComponentWrapper extends DOMComponent {
 
   _render() { } // NOTE: Inherited from DOM_Component
 
+  dispose() {
+    this._disposeMethodCalled = true;
+    super.dispose();
+  }
+
   _dispose() {
     const containerNode = this.$element()[0];
     const parentNode = containerNode.parentNode;
     parentNode.$V = containerNode.$V;
     containerNode.$V = null;
-    render(createElement(containerNode.tagName, this.elementAttr), parentNode);
+    render(
+      this._disposeMethodCalled ? createElement(
+        containerNode.tagName, 
+        this.elementAttr
+      ) : null,
+      parentNode);
     delete parentNode.$V;
     super._dispose();
   }
