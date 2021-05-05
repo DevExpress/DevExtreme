@@ -11,6 +11,7 @@ import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
+import localization from 'localization';
 
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
@@ -1316,7 +1317,7 @@ testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
         });
     });
 
-    test('separator item', function(assert) {
+    test('check separator item height', function(assert) {
         this.options.multiline = false;
         this.options.items = ['separator'];
 
@@ -1445,6 +1446,84 @@ testModule('tables', simpleModuleConfig, function() {
             $(element).trigger('dxclick');
 
             assert.ok(isMethodCalled(), `${operationName} called after click on toolbar item`);
+        });
+    });
+});
+
+testModule('Toolbar localization', simpleModuleConfig, function() {
+    const messages = {
+        'ru': {
+            'dxHtmlEditor-italic': 'Курсив',
+            'dxHtmlEditor-list': 'Список',
+            'dxHtmlEditor-ordered': 'Нумерованный',
+            'dxHtmlEditor-bullet': 'Маркированный'
+        }
+    };
+
+    function init(that, locateInMenu) {
+        localization.loadMessages(messages);
+
+        that.options.multiline = false;
+        that.options.items = [
+            {
+                name: 'italic',
+                locateInMenu: locateInMenu ? 'always' : 'never'
+            },
+            {
+                name: 'list',
+                locateInMenu: locateInMenu ? 'always' : 'never',
+                acceptedValues: ['ordered', 'bullet']
+            }
+        ];
+    }
+
+    function getElementsData() {
+        const $button = $('.dx-italic-format');
+        const $selectBox = $('.dx-list-format');
+        const selectBox = $selectBox.dxSelectBox('instance');
+
+        selectBox.open();
+        selectBox.close();
+
+        return {
+            buttonTitle: $button.attr('title'),
+            buttonText: $button.text(),
+            isButtonTextVisible: $button.find('.dx-button-text').is(':visible'),
+
+            selectBoxPlaceholder: $selectBox.find('.dx-placeholder').attr('data-dx_placeholder'),
+            selectBoxItemsText: $selectBox.find('.dx-item').text()
+        };
+    }
+
+    function getExpectedData(locatedInMenu) {
+        return {
+            buttonText: 'Курсив',
+            buttonTitle: 'Курсив',
+            isButtonTextVisible: locatedInMenu,
+            selectBoxItemsText: 'НумерованныйМаркированный',
+            selectBoxPlaceholder: 'Список'
+        };
+    }
+
+    [false, true].forEach(function(locateInMenu) {
+        const testCaption = `items located in the ${locateInMenu ? 'adaptive menu' : 'Toolbar'} should be correctly localized`;
+        test(testCaption, function(assert) {
+            assert.expect(1);
+            const locale = localization.locale();
+            init(this, locateInMenu);
+
+            try {
+                localization.locale('ru');
+                new Toolbar(this.quillMock, this.options);
+
+                if(locateInMenu) {
+                    $('.dx-dropdownmenu').trigger('dxclick');
+                }
+
+                assert.deepEqual(getElementsData(), getExpectedData(locateInMenu));
+            } finally {
+                localization.locale(locale);
+            }
         });
     });
 });
