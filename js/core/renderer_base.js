@@ -665,7 +665,7 @@ initRender.prototype.parents = function(selector) {
 
     while(parent && parent[0] && !domAdapter.isDocument(parent[0])) {
         if(domAdapter.isElementNode(parent[0])) {
-            if(!selector || (selector && parent.is(selector))) {
+            if(!selector || parent.is(selector)) {
                 result.push(parent.get(0));
             }
         }
