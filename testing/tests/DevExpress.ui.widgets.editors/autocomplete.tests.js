@@ -1490,6 +1490,28 @@ QUnit.module('regressions', {
         assert.strictEqual(this.instance.option('selectedItem'), 'item 2');
     });
 
+    QUnit.test('onSelectionChanged event should trigger on item selection by keyboard if its text is equal to input text (T991350)', function(assert) {
+        const selectionChangedStub = sinon.stub();
+        const timeToWait = 300;
+
+        this.instance.option({
+            searchTimeout: timeToWait,
+            onSelectionChanged: selectionChangedStub
+        });
+
+        this.keyboard
+            .type('item 2');
+
+        this.clock.tick(timeToWait + 100);
+
+        this.keyboard
+            .keyDown(KEY_DOWN)
+            .keyDown(KEY_ENTER);
+
+        assert.strictEqual(selectionChangedStub.callCount, 1);
+        assert.strictEqual(this.instance.option('selectedItem'), 'item 2');
+    });
+
     QUnit.test('item initialization scenario', function(assert) {
         const instance = $('#autocomplete').dxAutocomplete({
             items: ['a', 'b', 'c']
