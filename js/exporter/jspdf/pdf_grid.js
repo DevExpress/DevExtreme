@@ -48,38 +48,29 @@ export class PdfGrid {
         let currentTableIndex = 0;
         let currentTableCells = [];
         for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-            const currentCell = cells[cellIndex];
             const isNewTableColumn = this._splitByColumns.filter((splitByColumn) => splitByColumn.columnIndex === cellIndex)[0];
             if(isNewTableColumn) {
                 this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
-                if(currentCell.colSpan > 0) {
-                    this._splitColSpanArea(cells, cellIndex);
-                }
+                this._trySplitColSpanArea(cells, cellIndex);
                 currentTableIndex++;
                 currentTableCells = [];
             }
-            currentTableCells.push(currentCell);
+            currentTableCells.push(cells[cellIndex]);
         }
         this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
     }
 
-    _splitColSpanArea(cells, splitIndex) {
-        const { startColSpanCellIndex, endColSpanCellIndex, colSpanCellText } = this._getColSpanArea(cells, splitIndex);
+    _trySplitColSpanArea(cells, splitIndex) {
+        const { startIndex, endIndex } = this._findColSpanArea(cells, splitIndex);
+        if(isDefined(startIndex) && isDefined(endIndex)) {
+            const leftAreaColSpan = splitIndex - startIndex - 1;
+            const rightAreaColSpan = endIndex - splitIndex;
 
-        if(startColSpanCellIndex !== -1 && endColSpanCellIndex !== -1) {
-            const leftSpanCells = splitIndex - startColSpanCellIndex - 1;
-            for(let index = startColSpanCellIndex; index < splitIndex; index++) {
-                if(leftSpanCells > 0) {
-                    cells[index].colSpan = leftSpanCells;
-                } else {
-                    delete cells[index].colSpan;
-                }
-            }
-            cells[splitIndex].text = colSpanCellText;
-            const rightSpanCells = endColSpanCellIndex - splitIndex;
-            for(let index = splitIndex; index <= endColSpanCellIndex; index++) {
-                if(rightSpanCells > 0) {
-                    cells[index].colSpan = rightSpanCells;
+            cells[splitIndex].text = cells[startIndex].text;
+            for(let index = startIndex; index <= endIndex; index++) {
+                const colSpan = (index < splitIndex) ? leftAreaColSpan : rightAreaColSpan;
+                if(colSpan > 0) {
+                    cells[index].colSpan = colSpan;
                 } else {
                     delete cells[index].colSpan;
                 }
@@ -87,39 +78,35 @@ export class PdfGrid {
         }
     }
 
-    _getColSpanArea(cells, cellIndex) {
-        let colSpanValue = -1;
-        let colSpanCellText = '';
-        let startColSpanCellIndex = -1;
-        let endColSpanCellIndex = -1;
+    _findColSpanArea(cells, targetCellIndex) {
+        let colSpan;
+        let startIndex;
+        let endIndex;
 
         for(let index = 0; index < cells.length; index++) {
-            if(cells[index].colSpan > 0 && startColSpanCellIndex === -1) {
-                colSpanValue = cells[index].colSpan;
-                colSpanCellText = cells[index].text;
-                startColSpanCellIndex = index;
-                endColSpanCellIndex = index;
+            if(cells[index].colSpan > 0 && !isDefined(startIndex)) {
+                colSpan = cells[index].colSpan;
+                startIndex = index;
+                endIndex = index;
             }
 
-            if(startColSpanCellIndex !== -1) {
-                endColSpanCellIndex = index;
-                if(endColSpanCellIndex - startColSpanCellIndex >= colSpanValue) {
-                    if(startColSpanCellIndex < cellIndex && cellIndex <= endColSpanCellIndex) {
+            if(isDefined(startIndex)) {
+                endIndex = index;
+                if(endIndex - startIndex >= colSpan) {
+                    if(startIndex < targetCellIndex && targetCellIndex <= endIndex) {
                         break;
                     } else {
-                        colSpanValue = -1;
-                        colSpanCellText = '';
-                        startColSpanCellIndex = -1;
-                        endColSpanCellIndex = -1;
+                        colSpan = undefined;
+                        startIndex = undefined;
+                        endIndex = undefined;
                     }
                 }
             }
         }
 
         return {
-            startColSpanCellIndex,
-            endColSpanCellIndex,
-            colSpanCellText
+            startIndex,
+            endIndex
         };
     }
 
