@@ -335,8 +335,12 @@ export const VirtualScrollController = Class.inherit((function() {
 
         // new mode
         getViewportParams: function() {
-            const skip = Math.floor(this._viewportItemIndex);
-            let take = this._viewportSize + 1;
+            const topIndex = this._viewportItemIndex;
+            const bottomIndex = this._viewportSize + topIndex;
+            const pageSize = this.pageSize();
+            const skip = Math.floor(Math.max(0, topIndex - 1) / pageSize) * pageSize;
+            let take = Math.ceil((bottomIndex + 1) / pageSize) * pageSize - skip;
+
             if(isVirtualMode(this)) {
                 const remainedItems = this._dataOptions.totalItemsCount() - skip;
                 take = Math.min(take, remainedItems);
