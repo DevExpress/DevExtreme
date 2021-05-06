@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       views: ['week', 'month'],
-      currentDate: new Date(2021, 4, 25),
+      currentDate: new Date(2021, 2, 25),
       cellDuration: 30,
       dataSource: data,
       priorities: priorities,

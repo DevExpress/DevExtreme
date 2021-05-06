@@ -20,7 +20,7 @@ export class AppComponent {
     @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
 
     appointmentsData: Appointment[];
-    currentDate: Date = new Date(2021, 4, 25);
+    currentDate: Date = new Date(2021, 2, 25);
     resourcesData: Resource[];
 
     constructor(service: Service) {

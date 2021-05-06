@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      currentDate: new Date(2021, 4, 25),
+      currentDate: new Date(2021, 2, 25),
       dataSource: data,
       resourcesData: resourcesData,
     };

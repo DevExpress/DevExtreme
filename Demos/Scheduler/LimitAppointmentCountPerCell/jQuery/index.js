@@ -16,7 +16,7 @@ $(function(){
             maxAppointmentsPerCell: 2
         }],
         currentView: "Auto Mode",
-        currentDate: new Date(2021, 4, 25),
+        currentDate: new Date(2021, 2, 25),
         resources: [{
             fieldExpr: "roomId",
             dataSource: resourcesData,
