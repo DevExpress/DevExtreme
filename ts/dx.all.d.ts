@@ -4891,6 +4891,10 @@ declare module DevExpress.ui {
      */
     export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
         /**
+         * [descr:dxAutocompleteOptions.dropDownOptions]
+         */
+        dropDownOptions?: dxPopupOptions;
+        /**
          * [descr:dxAutocompleteOptions.maxItemCount]
          */
         maxItemCount?: number;
@@ -5220,6 +5224,10 @@ declare module DevExpress.ui {
          * [descr:dxColorBoxOptions.cancelButtonText]
          */
         cancelButtonText?: string;
+        /**
+         * [descr:dxColorBoxOptions.dropDownOptions]
+         */
+        dropDownOptions?: dxPopupOptions;
         /**
          * [descr:dxColorBoxOptions.editAlphaChannel]
          */
@@ -5759,6 +5767,10 @@ declare module DevExpress.ui {
          * [descr:dxDateBoxOptions.displayFormat]
          */
         displayFormat?: format;
+        /**
+         * [descr:dxDateBoxOptions.dropDownOptions]
+         */
+        dropDownOptions?: dxPopupOptions;
         /**
          * [descr:dxDateBoxOptions.interval]
          */
@@ -6465,6 +6477,10 @@ declare module DevExpress.ui {
          */
         displayValueFormatter?: ((value: string | Array<any>) => string);
         /**
+         * [descr:dxDropDownBoxOptions.dropDownOptions]
+         */
+        dropDownOptions?: dxPopupOptions;
+        /**
          * [descr:dxDropDownBoxOptions.fieldTemplate]
          */
         fieldTemplate?: DevExpress.core.template | ((value: any, fieldElement: DevExpress.core.DxElement) => string | Element | JQuery);
@@ -6664,7 +6680,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDropDownEditorOptions.dropDownOptions]
          */
-        dropDownOptions?: dxPopupOptions;
+        dropDownOptions?: dxPopupOptions | dxPopoverOptions;
         /**
          * [descr:dxDropDownEditorOptions.onClosed]
          */
@@ -10889,6 +10905,10 @@ declare module DevExpress.ui {
          * [descr:dxSelectBoxOptions.acceptCustomValue]
          */
         acceptCustomValue?: boolean;
+        /**
+         * [descr:dxSelectBoxOptions.dropDownOptions]
+         */
+        dropDownOptions?: dxPopupOptions;
         /**
          * [descr:dxSelectBoxOptions.fieldTemplate]
          */
