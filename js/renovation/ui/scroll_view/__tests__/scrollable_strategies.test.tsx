@@ -70,16 +70,30 @@ each([{
 
       each([true, false]).describe('NeedScrollViewContentWrapper: %o', (needScrollViewContentWrapper) => {
         it('should render scrollView content only if needScrollViewContentWrapper option is enabled', () => {
-          const viewModel = new Scrollable({ needScrollViewContentWrapper });
-          viewModel.contentRef = React.createRef();
-          viewModel.containerRef = React.createRef();
-          viewModel.hScrollbarRef = React.createRef();
-          viewModel.vScrollbarRef = React.createRef();
+          const helper = new ScrollableTestHelper({ needScrollViewContentWrapper });
 
-          const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-
-          const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
+          const scrollViewContent = helper.getScrollable().find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
           expect(scrollViewContent.exists()).toBe(needScrollViewContentWrapper);
+        });
+      });
+
+      each(optionValues.direction).describe('Direction: %o', (direction) => {
+        it('should render scrollbars', () => {
+          const helper = new ScrollableTestHelper({ direction, useSimulatedScrollbar: true, showScrollbar: 'always' });
+
+          const scrollbars = helper.getScrollbars();
+
+          if (helper.isBoth) {
+            expect(scrollbars.length).toEqual(2);
+            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal');
+            expect(scrollbars.at(1).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical');
+          } else if (helper.isVertical) {
+            expect(scrollbars.length).toEqual(1);
+            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical');
+          } else if (helper.isHorizontal) {
+            expect(scrollbars.length).toEqual(1);
+            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal');
+          }
         });
       });
 
@@ -230,31 +244,6 @@ each([{
           });
         });
       }
-    });
-
-    describe('Scrollbar', () => {
-      describe('cssClasses', () => {
-        each(['horizontal', 'vertical', 'both', undefined, null]).describe('Direction: %o', (direction) => {
-          it('should add direction class', () => {
-            const viewModel = new Scrollable({ direction, useSimulatedScrollbar: true, showScrollbar: 'always' });
-            viewModel.contentRef = React.createRef();
-            viewModel.containerRef = React.createRef();
-            viewModel.hScrollbarRef = React.createRef();
-            viewModel.vScrollbarRef = React.createRef();
-
-            const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-
-            const horizontalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-horizontal');
-            const verticalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-vertical');
-
-            const isHorizontalScrollbarExists = direction === 'horizontal' || direction === 'both';
-            const isVerticalScrollbarExists = direction === 'vertical' || direction === 'both' || !direction;
-
-            expect(horizontalScrollbar.exists()).toBe(isHorizontalScrollbarExists);
-            expect(verticalScrollbar.exists()).toBe(isVerticalScrollbarExists);
-          });
-        });
-      });
     });
 
     describe('Behavior', () => {
@@ -597,25 +586,27 @@ each([{
 
     describe('Getters', () => {
       describe('cssClasses', () => {
-        it('should add vertical direction class', () => {
-          const { cssClasses } = new Scrollable({ direction: 'vertical' });
-          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-horizontal'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-both'));
-        });
+        each(optionValues.direction).describe('Direction: %o', (direction) => {
+          it('strategy classes', () => {
+            const helper = new ScrollableTestHelper({ direction });
 
-        it('should add horizontal direction class', () => {
-          const { cssClasses } = new Scrollable({ direction: 'horizontal' });
-          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-horizontal'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-vertical'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-both'));
-        });
+            const rootClasses = helper.getScrollable().getDOMNode().className;
 
-        it('should add both direction class', () => {
-          const { cssClasses } = new Scrollable({ direction: 'both' });
-          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-vertical'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-horizontal'));
+            expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
+            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
+            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
+            expect(rootClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
+            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+
+            if (Scrollable === ScrollableNative) {
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
+            } else {
+              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
+            }
+          });
         });
 
         each([true, false]).describe('Disabled: %o', (isDisabled) => {

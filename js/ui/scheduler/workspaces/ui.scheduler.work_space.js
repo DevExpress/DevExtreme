@@ -2793,9 +2793,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getHorizontalMax(groupIndex) {
-        groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
+        if(this.isVirtualScrolling()) {
+            return this._groupedStrategy.getHorizontalMax(groupIndex);
+        }
 
-        return this._groupedStrategy.getHorizontalMax(groupIndex);
+        const correctedGroupIndex = this.isGroupedByDate()
+            ? this._getGroupCount() - 1
+            : groupIndex;
+
+        return this._groupedStrategy.getHorizontalMax(correctedGroupIndex);
     }
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
@@ -3211,7 +3217,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellCount = this._getCellCount();
         const $cells = this._getCells();
         const cellWidth = this.getCellWidth();
-        const result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+
+        let result;
+        if(this.isVirtualScrolling()) {
+            const groupedDataMap = this.viewDataProvider.groupedDataMap;
+
+            result = this._groupedStrategy.getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
+        } else {
+            result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+        }
 
         if(this._isRTL()) {
             const startOffset = result.left;

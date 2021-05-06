@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import Component from './component';
+import Component from './common/component';
 
 export class GridPagerWrapper extends Component {
   _optionChanged(args: { name: string; value: unknown }): void {

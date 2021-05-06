@@ -542,7 +542,7 @@ describe('Scrollbar', () => {
 
       each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
         each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
-          each([-100, 0, 100]).describe('boundaryOffset: %o', (boundaryOffset) => {
+          each([-100, 0, 85, 100]).describe('scrollLocation: %o', (scrollLocation) => {
             it('isPullDown()', () => {
               const topPocketSize = 85;
               const bottomPocketSize = 55;
@@ -553,15 +553,16 @@ describe('Scrollbar', () => {
                 pullDownEnabled,
                 topPocketSize,
                 bottomPocketSize,
+                scrollLocation,
               });
 
-              viewModel.boundaryOffset = boundaryOffset;
+              let expectedIsPullDown = false;
 
-              if (pullDownEnabled && bounceEnabled && boundaryOffset >= 0) {
-                expect(viewModel.isPullDown()).toBe(true);
-              } else {
-                expect(viewModel.isPullDown()).toBe(false);
+              if (pullDownEnabled && bounceEnabled && scrollLocation >= 85) {
+                expectedIsPullDown = true;
               }
+
+              expect(viewModel.isPullDown()).toBe(expectedIsPullDown);
             });
           });
         });
@@ -641,27 +642,15 @@ describe('Scrollbar', () => {
                   scrollLocation,
                 });
 
-                viewModel.getLocationWithinRange = jest.fn(() => -300);
-                viewModel.boundaryOffset = 10;
-
                 viewModel.updateBoundaryOffset();
 
-                if (forceGeneratePockets) {
-                  if (pullDownEnabled) {
-                    expect(viewModel.boundaryOffset).toEqual(scrollLocation - 80);
-                  } else {
-                    expect(viewModel.boundaryOffset).toEqual(scrollLocation);
-                  }
+                let expectedMaxOffset = 0;
 
-                  if (scrollLocation === 100 && pullDownEnabled) {
-                    expect(viewModel.maxOffset).toEqual(80);
-                  } else {
-                    expect(viewModel.maxOffset).toEqual(0);
-                  }
-                } else {
-                  expect(viewModel.boundaryOffset).toEqual(10);
-                  expect(viewModel.maxOffset).toEqual(0);
+                if (forceGeneratePockets && scrollLocation === 100 && pullDownEnabled) {
+                  expectedMaxOffset = 80;
                 }
+
+                expect(viewModel.maxOffset).toEqual(expectedMaxOffset);
               });
             });
           });

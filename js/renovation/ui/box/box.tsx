@@ -5,12 +5,9 @@ import { Widget } from '../common/widget';
 import { BoxProps } from './box_props';
 import { combineClasses } from '../../utils/combine_classes';
 
-export const viewFunction = (): JSX.Element => {
-  const cssClasses = combineClasses({ 'dx-box dx-box-flex': true });
-  return (
-    <Widget classes={cssClasses} />
-  );
-};
+export const viewFunction = (viewModel: Box): JSX.Element => (
+  <Widget classes={viewModel.cssClasses} />
+);
 
 @Component({
   defaultOptionRules: null,
@@ -19,4 +16,8 @@ export const viewFunction = (): JSX.Element => {
 })
 
 export class Box extends JSXComponent<BoxProps>() {
+  // eslint-disable-next-line class-methods-use-this
+  get cssClasses(): string {
+    return combineClasses({ 'dx-box dx-box-flex': true });
+  }
 }

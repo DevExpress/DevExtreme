@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import Component from './component';
+import Component from './common/component';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export class ScrollableWrapper extends Component {
