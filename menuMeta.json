@@ -427,7 +427,6 @@
             "Title": "Filter Panel",
             "Equivalents": "dxFilterBuilder, FilterBuilder, QueryBuilder, dxFilterPanel, FilterPanel",
             "Name": "FilterPanel",
-            "DocUrl": "ApiReference/UI_Components/dxDataGrid/Configuration/filterPanel/",
             "Widget": "DataGrid",
             "DemoType": "Web",
             "MvcAdditionalFiles": [
@@ -1483,7 +1482,6 @@
             "Title": "Filter Panel",
             "Equivalents": "dxFilterBuilder, FilterBuilder, QueryBuilder, dxFilterPanel, FilterPanel",
             "Name": "FilterPanel",
-            "DocUrl": "ApiReference/UI_Components/dxTreeList/Configuration/filterPanel/",
             "Widget": "TreeList",
             "DemoType": "Web",
             "MvcAdditionalFiles": [
@@ -1507,7 +1505,6 @@
           {
             "Title": "Column Chooser",
             "Name": "ColumnChooser",
-            "DocUrl": "Guide/UI_Components/TreeList/Columns/Column_Chooser/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",
