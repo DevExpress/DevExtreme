@@ -322,26 +322,6 @@ QUnit.module('datebox tests', moduleConfig, () => {
         assert.notOk(dateBox.option('isValid'), 'widget is invalid');
     });
 
-    QUnit.test('clear button should change validation state to valid', function(assert) {
-        const $dateBox = $('#widthRootStyle').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar',
-            showClearButton: true,
-            value: null
-        });
-
-        const dateBox = $dateBox.dxDateBox('instance');
-        const $input = $dateBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-        const keyboard = keyboardMock($input);
-        const $clearButton = $dateBox.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
-
-        keyboard.type('123').press('enter');
-        assert.notOk(dateBox.option('isValid'), 'widget is invalid');
-
-        $clearButton.trigger('dxclick');
-        assert.ok(dateBox.option('isValid'), 'widget is valid');
-    });
-
     QUnit.test('type change should raise validation', function(assert) {
         const now = new Date();
         const $dateBox = $('#widthRootStyle').dxDateBox({
@@ -414,6 +394,11 @@ QUnit.module('datebox tests', moduleConfig, () => {
                 .keyDown('left', { ctrlKey: true })
                 .press('right')
                 .press('enter');
+
+            if(options.type === 'datetime') {
+                kb.press('enter'); // confirm date with time
+            }
+
             assert.deepEqual(instance.option('text'), selectedDate, `value is successfully changed by calendar when useMaskBehavior:${options.useMaskBehavior}, type:${options.type}`);
         });
     });
@@ -3464,6 +3449,7 @@ QUnit.module('datebox with time component', {
         timeView.option('value', time);
         keyboard
             .focus()
+            .press('enter')
             .press('enter');
 
         const expectedDate = new Date(time);
@@ -4772,6 +4758,44 @@ QUnit.module('keyboard navigation', {
             assert.ok(!this.dateBox.option('opened'));
         });
     });
+
+    QUnit.test('DateBox value is applied after the second press of the "Enter" key', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
+        this.dateBox.option({
+            pickerType: 'calendar',
+            type: 'datetime',
+            applyValueMode: 'useButtons',
+            focusStateEnabled: true,
+            value: null,
+            opened: true
+        });
+
+        const instance = this.dateBox;
+        const $content = $(instance.content());
+        const $input = $(instance.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+        function getValue() {
+            return instance.option('value');
+        }
+        function calendarHasSelectedDate() {
+            return $content.find('.dx-calendar-selected-date').length > 0;
+        }
+
+        assert.notOk(getValue());
+        assert.notOk(calendarHasSelectedDate());
+
+        keyboard.press('enter');
+
+        assert.notOk(getValue(), 'value does not applied to the DateBox after the first press of the "Enter" key');
+        assert.ok(calendarHasSelectedDate(), 'but Calendar got selected date');
+
+        keyboard.press('enter');
+        assert.ok(getValue(), 'DateBox got selected value after the second press of the "Enter" key');
+    });
 });
 
 QUnit.module('aria accessibility', {}, () => {
@@ -5944,5 +5968,55 @@ QUnit.module('valueChanged handler should receive correct event', {
 
         this.checkEvent(assert, 'dxclick', $todayButton);
         this.testProgramChange(assert);
+    });
+});
+
+QUnit.module('validation', {
+    beforeEach: function() {
+        this.$dateBox = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            showClearButton: true
+        });
+
+        this.dateBox = this.$dateBox.dxDateBox('instance');
+        this.$input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+        this.$clearButton = this.$dateBox.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
+    }
+}, () => {
+    [null, new Date(2020, 1, 1)].forEach(value => {
+        QUnit.test(`click on clear button should raise custom validation when value is ${value ? 'custom' : 'default'} (T993296)`, function(assert) {
+            this.$dateBox.dxValidator({
+                validationRules: [{
+                    type: 'required',
+                    message: 'required'
+                }]
+            });
+            this.dateBox.option({ value });
+
+            this.keyboard.type('123').press('enter');
+            this.$clearButton.trigger('dxclick');
+
+            assert.notOk(this.dateBox.option('isValid'), 'dateBox is invalid');
+            assert.strictEqual(this.dateBox.option('validationError').message, 'required', 'validation callback is failed');
+        });
+
+        QUnit.test(`clear button click should raise inner validation when value is ${value ? 'custom' : 'default'}`, function(assert) {
+            this.dateBox.option({ value });
+
+            this.keyboard.type('123').press('enter');
+            this.$clearButton.trigger('dxclick');
+
+            assert.ok(this.dateBox.option('isValid'), 'datebox is valid after clear button click');
+        });
+
+        QUnit.test(`reset method call should raise inner validation when value is ${value ? 'custom' : 'default'}`, function(assert) {
+            this.dateBox.option({ value });
+
+            this.keyboard.type('123').press('enter');
+            this.dateBox.reset();
+
+            assert.ok(this.dateBox.option('isValid'), 'datebox is valid after clear button click');
+        });
     });
 });

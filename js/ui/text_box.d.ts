@@ -103,7 +103,10 @@ export default class dxTextBox extends dxTextEditor {
 }
 
 /** @public */
+export type Properties = dxTextBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTextBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTextBoxOptions;

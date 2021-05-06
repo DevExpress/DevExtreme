@@ -183,7 +183,10 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxButtonGroupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxButtonGroupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxButtonGroupOptions;

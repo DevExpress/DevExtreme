@@ -251,6 +251,7 @@ export class VirtualDataLoader {
 
     endPageIndex() {
         const endPageIndex = getEndPageIndex(this);
+
         return endPageIndex > 0 ? endPageIndex : this._lastPageIndex;
     }
 

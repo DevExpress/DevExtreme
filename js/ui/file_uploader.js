@@ -1804,7 +1804,7 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
     }
 
     _shouldHandleError(file, e) {
-        return this._isStatusError(e.status) || !file._isProgressStarted;
+        return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
     }
 
     _createFormData(fieldName, fieldValue) {

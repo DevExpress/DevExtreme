@@ -168,7 +168,10 @@ export default class dxCircularGauge extends BaseGauge {
 }
 
 /** @public */
+export type Properties = dxCircularGaugeOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCircularGaugeOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxCircularGaugeOptions;

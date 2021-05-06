@@ -268,7 +268,11 @@ const DataControllerFilterSyncExtender = {
 
     _parseColumnPropertyName: function(fullName) {
         const matched = fullName.match(/.*\.(.*)/);
-        return matched[1];
+        if(matched) {
+            return matched[1];
+        } else {
+            return null;
+        }
     },
 
     clearFilter: function(filterName) {

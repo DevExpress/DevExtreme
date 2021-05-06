@@ -10,10 +10,13 @@ import { ScrollEventArgs } from './types.d';
 import { BaseWidgetProps } from '../common/base_props';
 import { TopPocketProps } from './top_pocket';
 import { BottomPocketProps } from './bottom_pocket';
+import { WidgetProps } from '../common/widget';
 
 @ComponentBindings()
 export class ScrollableSimulatedProps extends ScrollableProps {
   @OneWay() inertiaEnabled = true;
+
+  @OneWay() useKeyboard = true;
 
   @Event() onStart?: EventCallback<ScrollEventArgs>;
 
@@ -24,12 +27,14 @@ export class ScrollableSimulatedProps extends ScrollableProps {
   @Event() onStop?: EventCallback<ScrollEventArgs>;
 
   @Event()
-  contentTranslateOffsetChange?: EventCallback<{ left?: number; top?: number }>;
+  contentTranslateOffsetChange?: (scrollProp: 'left' | 'top', translateOffset: number) => void;
 
   @Event()
-  contentPositionChange?: (scrollProp: 'scrollLeft' | 'scrollTop', location: number, ratio: number) => void;
+  scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number) => void;
 }
 
-export type ScrollableSimulatedPropsType = ScrollableSimulatedProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
+export type ScrollableSimulatedPropsType = ScrollableSimulatedProps
+& Pick<WidgetProps, 'aria'>
+& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;

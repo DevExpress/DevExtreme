@@ -133,7 +133,10 @@ export interface dxBoxItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxBoxOptions;

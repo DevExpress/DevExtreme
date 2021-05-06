@@ -121,7 +121,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    createChildren?: ((parentNode: dxTreeViewNode) => DxPromise<any> | Array<any>);
+    createChildren?: ((parentNode: dxTreeViewNode) => PromiseLike<any> | Array<any>);
     /**
      * @docid
      * @default null
@@ -702,7 +702,10 @@ export interface dxTreeViewNode {
 }
 
 /** @public */
+export type Properties = dxTreeViewOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTreeViewOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTreeViewOptions;

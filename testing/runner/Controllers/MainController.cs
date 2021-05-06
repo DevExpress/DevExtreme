@@ -72,11 +72,21 @@ namespace Runner.Controllers
         public IActionResult RunAll(string constellation, string include, string exclude)
         {
             HashSet<string> includeSet = null, excludeSet = null;
+            int partIndex = 0;
+            int partCount = 1;
 
             if (!String.IsNullOrEmpty(include))
                 includeSet = new HashSet<string>(include.Split(','));
             if (!String.IsNullOrEmpty(exclude))
                 excludeSet = new HashSet<string>(exclude.Split(','));
+            if (!String.IsNullOrEmpty(constellation) && constellation.Contains('(') && constellation.EndsWith(')')) {
+                var constellationParts = constellation.TrimEnd(')').Split('(');
+                var parts = constellationParts[1].Split('/');
+
+                constellation = constellationParts[0];
+                partIndex = Int32.Parse(parts[0]) - 1;
+                partCount = Int32.Parse(parts[1]);
+            }
 
             var packageJson = IOFile.ReadAllText(Path.Combine(_env.ContentRootPath, "package.json"));
 
@@ -85,7 +95,7 @@ namespace Runner.Controllers
                 Constellation = constellation ?? "",
                 CategoriesList = include,
                 Version = JsonConvert.DeserializeObject<IDictionary>(packageJson)["version"].ToString(),
-                Suites = UIModelHelper.GetAllSuites(HasDeviceModeFlag(), constellation, includeSet, excludeSet)
+                Suites = UIModelHelper.GetAllSuites(HasDeviceModeFlag(), constellation, includeSet, excludeSet, partIndex, partCount)
             };
 
             AssignBaseRunProps(model);

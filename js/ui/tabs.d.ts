@@ -154,7 +154,10 @@ export interface dxTabsItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxTabsOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTabsOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTabsOptions;

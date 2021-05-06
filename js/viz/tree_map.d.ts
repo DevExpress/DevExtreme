@@ -839,7 +839,10 @@ export interface dxTreeMapNode {
 }
 
 /** @public */
+export type Properties = dxTreeMapOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTreeMapOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTreeMapOptions;

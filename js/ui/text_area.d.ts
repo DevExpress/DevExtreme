@@ -109,7 +109,10 @@ export default class dxTextArea extends dxTextBox {
 }
 
 /** @public */
+export type Properties = dxTextAreaOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTextAreaOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTextAreaOptions;

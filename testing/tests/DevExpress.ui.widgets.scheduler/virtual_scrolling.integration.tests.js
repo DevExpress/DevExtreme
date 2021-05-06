@@ -3241,6 +3241,100 @@ module('Virtual scrolling integration', () => {
                 )
             );
         });
+
+        [
+            {
+                appointment: {
+                    text: 'a',
+                    startDate: new Date(2021, 1, 1, 9),
+                    endDate: new Date(2021, 1, 1, 10),
+                    humanId: 18
+                },
+                groupByDate: false,
+                scrollCoordinates: { x: 9500 },
+                expectedAppointmentCount: 1
+            },
+            {
+                appointment: {
+                    text: 'b',
+                    startDate: new Date(2021, 1, 1, 9),
+                    endDate: new Date(2021, 1, 1, 10),
+                    humanId: 0
+                },
+                groupByDate: false,
+                scrollCoordinates: { x: 9500 },
+                expectedAppointmentCount: 0
+            },
+            {
+                appointment: {
+                    text: 'c',
+                    startDate: new Date(2021, 1, 1, 9),
+                    endDate: new Date(2021, 1, 1, 10),
+                    humanId: 18
+                },
+                groupByDate: true,
+                scrollCoordinates: { x: 3000 },
+                expectedAppointmentCount: 1
+            }
+        ].forEach(({ appointment, groupByDate, scrollCoordinates, expectedAppointmentCount }) => {
+            test(`After scrolling appointment count in DOM should be ${expectedAppointmentCount}
+            when groupByDate is ${groupByDate}`, function(assert) {
+                const resources = [
+                    { id: 0 }, { id: 1 },
+                    { id: 2 }, { id: 3 },
+                    { id: 4 }, { id: 5 },
+                    { id: 6 }, { id: 7 },
+                    { id: 8 }, { id: 9 },
+                    { id: 10 }, { id: 11 },
+                    { id: 12 }, { id: 13 },
+                    { id: 14 }, { id: 15 },
+                    { id: 16 }, { id: 17 },
+                    { id: 18 }, { id: 19 }
+                ];
+
+                const scheduler = createWrapper({
+                    height: 600,
+                    width: 600,
+                    currentDate: new Date(2021, 1, 2),
+                    dataSource: [appointment],
+                    views: [
+                        {
+                            type: 'month',
+                            groupOrientation: 'horizontal'
+                        }
+                    ],
+                    currentView: 'month',
+                    scrolling: {
+                        mode: 'virtual'
+                    },
+                    groups: ['humanId'],
+                    resources: [{
+                        fieldExpr: 'humanId',
+                        dataSource: resources
+                    }],
+                    groupByDate
+                });
+
+                const workspace = scheduler.instance.getWorkSpace();
+                const scrollable = workspace.getScrollable();
+
+                workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                return asyncWrapper(assert, promise => {
+                    promise = asyncScrollTest(
+                        assert,
+                        promise,
+                        () => {
+                            const appointmentCount = scheduler.appointmentList.length;
+                            assert.equal(appointmentCount, expectedAppointmentCount, 'DOM contain right count of appoinments');
+                        },
+                        scrollable,
+                        scrollCoordinates);
+
+                    return promise;
+                });
+            });
+        });
     });
 
     module('Customization', () => {
@@ -3367,6 +3461,35 @@ module('Virtual scrolling integration', () => {
             });
 
             assert.equal(workSpace.getAllDayCellHeight(), 75, 'AllDayPanel height is correct');
+        });
+
+        // Virtual Scrolling in IE
+        QUnit.test('WorkSpace elements should have correct height when there are a log of groups in timeline month', function(assert) {
+            const scheduler = createWrapper({
+                views: ['timelineMonth'],
+                currentView: 'timelineMonth',
+                currentDate: new Date(2021, 2, 6),
+                scrolling: {
+                    mode: 'virtual',
+                    type: 'both',
+                },
+                groups: ['resourceId'],
+                resources: [{
+                    fieldExpr: 'resourceId',
+                    dataSource: [
+                        { id: 1, text: '1' }, { id: 2, text: '2' }, { id: 3, text: '3' }, { id: 4, text: '4' },
+                        { id: 5, text: '5' }, { id: 6, text: '6' }, { id: 7, text: '7' }, { id: 8, text: '8' },
+                        { id: 9, text: '9' }, { id: 10, text: '10' }, { id: 11, text: '11' }, { id: 12, text: '12' },
+                        { id: 13, text: '13' }, { id: 14, text: '14' }, { id: 15, text: '15' }, { id: 16, text: '16' },
+                    ],
+                }],
+                height: 500,
+                width: 800,
+            });
+
+            const groupPanelHeight = scheduler.workSpace.groups.getGroupsContainer().outerHeight();
+
+            assert.equal(groupPanelHeight, 800, 'GroupPanel height is correct');
         });
     });
 });

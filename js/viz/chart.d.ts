@@ -5845,7 +5845,10 @@ export interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCo
 }
 
 /** @public */
+export type Properties = dxChartOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxChartOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxChartOptions;

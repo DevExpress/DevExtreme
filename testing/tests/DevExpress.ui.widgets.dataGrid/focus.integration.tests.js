@@ -40,7 +40,6 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import ArrayStore from 'data/array_store';
-import DataGrid from 'ui/data_grid';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -508,7 +507,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         assert.ok(dataGridWrapper.rowsView.isRowVisible(29, 1), 'navigated row in viewport');
 
-        dataGrid.option('columns[0].sortOrder', 'desc');
+        dataGrid.columnOption(0, 'sortOrder', 'desc');
         this.clock.tick();
 
         assert.ok(dataGridWrapper.rowsView.isRowVisible(0, 1), 'navigated row in viewport');
@@ -1448,16 +1447,59 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(onOptionChanged.callCount, DataGrid.IS_RENOVATED_WIDGET ? 7 : 4, 'onOptionChanged call count');
+        assert.equal(onOptionChanged.callCount, 4, 'onOptionChanged call count');
 
         assert.equal(onOptionChanged.getCall(0).args[0].fullName, 'columns[0].filterValue', 'option fullName');
         assert.equal(onOptionChanged.getCall(1).args[0].fullName, 'filterValue', 'option fullName');
-        assert.equal(onOptionChanged.getCall(DataGrid.IS_RENOVATED_WIDGET ? 3 : 2).args[0].fullName, 'columns[0].filterType', 'option fullName');
-        assert.equal(onOptionChanged.getCall(DataGrid.IS_RENOVATED_WIDGET ? 4 : 3).args[0].fullName, 'columns[0].filterValues', 'option fullName');
+        assert.equal(onOptionChanged.getCall(2).args[0].fullName, 'columns[0].filterType', 'option fullName');
+        assert.equal(onOptionChanged.getCall(3).args[0].fullName, 'columns[0].filterValues', 'option fullName');
 
         assert.ok($filterRowEditor.hasClass('dx-focused'), 'dx-focused');
         assert.ok($filterRowEditor.find('.dx-editor-outlined').hasClass('dx-state-focused'), 'dx-state-focused');
         assert.ok($filterRowEditor.find('.dx-texteditor-input').is(':focus'), 'focus');
+    });
+
+    // T993300
+    QUnit.test('The focused row should not be changed after filtering', function(assert) {
+        // arrange
+        const generateData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({ id: i + 1 });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: generateData(6),
+            paging: {
+                pageSize: 2
+            },
+            focusedRowEnabled: true,
+            focusedRowKey: 6,
+            columns: ['id']
+        });
+
+        this.clock.tick(100);
+
+        // act
+        dataGrid.searchByText(3);
+        this.clock.tick(100);
+
+        // assert
+        const visibleRows = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRows.length, 1, 'count row');
+        assert.strictEqual(visibleRows[0].key, 3, 'key row');
+        assert.strictEqual(dataGrid.option('focusedRowKey'), 6, 'focused row key');
+
+        // act
+        dataGrid.searchByText('');
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(dataGrid.pageIndex(), 2, 'page is changed');
+        assert.ok($(dataGrid.getRowElement(dataGrid.getRowIndexByKey(6))).hasClass('dx-row-focused'), 'focused row is visible');
     });
 });
 

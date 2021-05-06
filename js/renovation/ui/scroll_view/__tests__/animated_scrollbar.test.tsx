@@ -16,8 +16,7 @@ describe('Public methods', () => {
     { name: 'inBounds', argsCount: 0, defaultValue: false },
     { name: 'getMaxOffset', argsCount: 0 },
     { name: 'scrollStep', argsCount: 1 },
-    { name: 'moveScrollbar', argsCount: 1 },
-    { name: 'getScrollLocation', argsCount: 0 },
+    { name: 'moveTo', argsCount: 1 },
     { name: 'stopComplete', argsCount: 0 },
     { name: 'scrollComplete', argsCount: 0 },
     { name: 'boundLocation', argsCount: 1 },
@@ -72,13 +71,13 @@ describe('Public methods', () => {
   each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
     it('animator should call scrollComplete during step if was finished', () => {
       const scrollCompleteHandler = jest.fn();
-      const scrollbarMoveHandler = jest.fn();
+      const scrollbarMoveToHandler = jest.fn();
 
       const viewModel = new AnimatedScrollbar({ });
       (viewModel as any).scrollbarRef = {
         current: {
           scrollComplete: scrollCompleteHandler,
-          moveScrollbar: scrollbarMoveHandler,
+          moveTo: scrollbarMoveToHandler,
           boundLocation: () => -700,
         },
       };
@@ -91,8 +90,8 @@ describe('Public methods', () => {
 
       expect(viewModel.finished).toBe(true);
       if (isBounceAnimator) {
-        expect(scrollbarMoveHandler).toHaveBeenCalledTimes(1);
-        expect(scrollbarMoveHandler).toHaveBeenCalledWith(-700);
+        expect(scrollbarMoveToHandler).toHaveBeenCalledTimes(1);
+        expect(scrollbarMoveToHandler).toHaveBeenCalledWith(-700);
       }
 
       expect(scrollCompleteHandler).toHaveBeenCalledTimes(1);
@@ -169,13 +168,14 @@ describe('Animator', () => {
 
   describe('Bounce', () => {
     it('should setup bounce on animator start()', () => {
-      const viewModel = new AnimatedScrollbar({ });
+      const viewModel = new AnimatedScrollbar({
+        scrollLocation: -1500,
+      });
 
       viewModel.stepCore = jest.fn();
       (viewModel as any).scrollbarRef = {
         current: {
           boundLocation: () => -700,
-          getScrollLocation: () => -1500,
         },
       };
 

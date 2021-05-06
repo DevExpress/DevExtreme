@@ -5,12 +5,19 @@ import {
 } from '../layout';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../../../consts';
 import { TimelineDateHeaderLayout } from '../date_header/layout';
+import { DateHeaderData } from '../../../types';
 
 describe('TimelineHeaderPanelLayout', () => {
   describe('Render', () => {
-    const dateHeaderMap = [[]];
+    const dateHeaderData: DateHeaderData = {
+      dataMap: [[]],
+      leftVirtualCellCount: 0,
+      rightVirtualCellCount: 0,
+      leftVirtualCellWidth: 0,
+      rightVirtualCellWidth: 0,
+    };
     const baseProps = {
-      dateHeaderMap,
+      dateHeaderData,
       groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
       groups: [],
       groupByDate: false,

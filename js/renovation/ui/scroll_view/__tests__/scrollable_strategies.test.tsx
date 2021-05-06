@@ -59,8 +59,8 @@ each([{
         const viewModel = new Scrollable({ });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
@@ -73,8 +73,8 @@ each([{
           const viewModel = new Scrollable({ needScrollViewContentWrapper });
           viewModel.contentRef = React.createRef();
           viewModel.containerRef = React.createRef();
-          viewModel.horizontalScrollbarRef = React.createRef();
-          viewModel.verticalScrollbarRef = React.createRef();
+          viewModel.hScrollbarRef = React.createRef();
+          viewModel.vScrollbarRef = React.createRef();
 
           const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
@@ -87,8 +87,8 @@ each([{
         const viewModel = new Scrollable({ });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
@@ -101,8 +101,8 @@ each([{
         const viewModel = new Scrollable({ forceGeneratePockets: true });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
@@ -115,8 +115,8 @@ each([{
         const viewModel = new Scrollable({ forceGeneratePockets: true });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
@@ -134,8 +134,8 @@ each([{
         const viewModel = new Scrollable({ forceGeneratePockets: true });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const reachBottom = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom');
@@ -150,8 +150,8 @@ each([{
         const viewModel = new Scrollable({ children: <div className="content" /> });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = shallow(viewFunction(viewModel) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-content .content').exists()).toBe(true);
@@ -170,8 +170,8 @@ each([{
         const viewModel = new Scrollable(config);
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         Object.defineProperties(viewModel, {
           cssClasses: {
@@ -191,8 +191,8 @@ each([{
         const contentRef = React.createRef();
         const viewModel = new Scrollable({});
         viewModel.contentRef = contentRef;
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         Object.defineProperties(viewModel, {
           contentWidth: { get() { return 0; } },
@@ -208,8 +208,8 @@ each([{
         const containerRef = React.createRef();
         const viewModel = new Scrollable({});
         viewModel.containerRef = containerRef;
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
@@ -239,8 +239,8 @@ each([{
             const viewModel = new Scrollable({ direction, useSimulatedScrollbar: true, showScrollbar: 'always' });
             viewModel.contentRef = React.createRef();
             viewModel.containerRef = React.createRef();
-            viewModel.horizontalScrollbarRef = React.createRef();
-            viewModel.verticalScrollbarRef = React.createRef();
+            viewModel.hScrollbarRef = React.createRef();
+            viewModel.vScrollbarRef = React.createRef();
 
             const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
 

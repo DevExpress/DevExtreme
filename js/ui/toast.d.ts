@@ -183,7 +183,10 @@ export default class dxToast extends dxOverlay {
 }
 
 /** @public */
+export type Properties = dxToastOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxToastOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxToastOptions;

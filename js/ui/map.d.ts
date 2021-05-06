@@ -420,7 +420,10 @@ export default class dxMap extends Widget {
 }
 
 /** @public */
+export type Properties = dxMapOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxMapOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxMapOptions;

@@ -1093,12 +1093,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         const minWidth = this.getWorkSpaceMinWidth();
-        const $headerCells = this._$headerPanel
-            .find('tr')
-            .last()
-            .find('th');
 
-        let width = cellWidth * $headerCells.length;
+        const groupCount = this._getGroupCount();
+        const totalCellCount = this._getTotalCellCount(groupCount);
+
+        let width = cellWidth * totalCellCount;
 
         if(width < minWidth) {
             width = minWidth;
@@ -1403,7 +1402,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.renovatedHeaderPanelComponent,
             'renovatedHeaderPanel',
             {
-                dateHeaderMap: this.viewDataProvider.dateHeaderMap,
+                dateHeaderData: this.viewDataProvider.dateHeaderData,
                 dateCellTemplate: this.option('dateCellTemplate'),
                 timeCellTemplate: this.option('timeCellTemplate'),
                 groups: this.option('groups'),
@@ -3211,7 +3210,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellCount = this._getCellCount();
         const $cells = this._getCells();
         const cellWidth = this.getCellWidth();
-        const result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+
+        let result;
+        if(this.isVirtualScrolling()) {
+            const groupedDataMap = this.viewDataProvider.groupedDataMap;
+
+            result = this._groupedStrategy.getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
+        } else {
+            result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+        }
 
         if(this._isRTL()) {
             const startOffset = result.left;
@@ -3666,7 +3673,7 @@ const createDragBehaviorConfig = (
             getElementsFromPoint(newX, newY) :
             getElementsFromPoint(newX + appointmentWidth / 2, newY);
 
-        const droppableCell = elements.find(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1);
+        const droppableCell = elements.filter(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1)[0];
 
         if(droppableCell) {
             const oldDroppableCell = getDroppableCell();
