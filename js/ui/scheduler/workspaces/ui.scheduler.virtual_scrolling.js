@@ -284,6 +284,17 @@ export default class VirtualScrollingDispatcher {
             this.renderer._renderGrid();
         }
     }
+
+    updateState() {
+        if(this.verticalVirtualScrolling) {
+            const prevTop = this.verticalVirtualScrolling.state.prevPosition;
+            this.verticalVirtualScrolling.updateState(prevTop, true);
+        }
+        if(this.horizontalVirtualScrolling) {
+            const prevLeft = this.horizontalVirtualScrolling.state.prevPosition;
+            this.horizontalVirtualScrolling?.updateState(prevLeft, true);
+        }
+    }
 }
 
 class VirtualScrollingBase {
@@ -391,10 +402,10 @@ class VirtualScrollingBase {
             : -1;
     }
 
-    updateState(position) {
+    updateState(position, isForceUpdate) {
         position = this._correctPosition(position);
 
-        if(!this.needUpdateState(position)) {
+        if(!this.needUpdateState(position) && !isForceUpdate) {
             return false;
         }
 
