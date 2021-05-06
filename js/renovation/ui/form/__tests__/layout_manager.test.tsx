@@ -9,7 +9,9 @@ describe('LayoutManager', () => {
     const props = new LayoutManagerProps();
     const layoutManager = mount<LayoutManager>(<LayoutManager {...props} />);
 
-    expect(layoutManager.props()).toEqual({});
+    expect(layoutManager.props()).toEqual({
+      screenByWidth: undefined,
+    });
   });
 });
 
@@ -20,6 +22,9 @@ describe('LayoutManager > Markup', () => {
 
     const responsiveBox = layoutManager.find(ResponsiveBox);
     expect(responsiveBox.exists()).toBe(true);
+    expect(responsiveBox.props()).toEqual({
+      screenByWidth: undefined,
+    });
   });
 });
 

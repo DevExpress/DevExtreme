@@ -21,7 +21,11 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
     restAttributes,
   } = viewModel;
 
-  const rootLayoutManager = <LayoutManager />;
+  const rootLayoutManager = (
+    <LayoutManager
+      screenByWidth={viewModel.props.screenByWidth}
+    />
+  );
   return (scrollingEnabled
     ? (
       <Scrollable
