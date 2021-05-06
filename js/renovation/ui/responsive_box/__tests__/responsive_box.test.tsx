@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import React from 'react';
 import { ResponsiveBoxProps } from '../responsive_box_props';
 import { ResponsiveBox } from '../responsive_box';
+import { Box } from '../../box/box';
 
 import domAdapter from '../../../../core/dom_adapter';
 import { setWindow } from '../../../../core/utils/window';
@@ -13,6 +14,16 @@ it('ResponsiveBox > InitialProps', () => {
 
   expect(responsiveBox.props()).toEqual({
     screenByWidth: undefined,
+  });
+});
+
+describe('LayoutManager > Markup', () => {
+  it('Box is rendered', () => {
+    const props = new ResponsiveBoxProps();
+    const responsiveBox = mount<ResponsiveBox>(<ResponsiveBox {...props} />);
+
+    const box = responsiveBox.find(Box);
+    expect(box.exists()).toBe(true);
   });
 });
 
