@@ -1469,47 +1469,43 @@ QUnit.module('regressions', {
         assert.strictEqual(selectionChangedStub.lastCall.args[0].selectedItem, null);
     });
 
-    QUnit.test('onSelectionChanged event should trigger on item selection if its text is equal to input text (T991350)', function(assert) {
-        const selectionChangedStub = sinon.stub();
-        const timeToWait = 300;
 
-        this.instance.option({
-            searchTimeout: timeToWait,
-            onSelectionChanged: selectionChangedStub
+    QUnit.module('onSelectionChanged', {
+        beforeEach: function() {
+            this.selectionChangedStub = sinon.stub();
+            this.timeToWait = 300;
+            this.instance.option({
+                searchTimeout: this.timeToWait,
+                onSelectionChanged: this.selectionChangedStub
+            });
+        }
+    }, () => {
+        QUnit.test('onSelectionChanged event should trigger on item selection if its text is equal to input text (T991350)', function(assert) {
+            this.keyboard
+                .type('item 2');
+
+            this.clock.tick(this.timeToWait + 100);
+            const $listItems = this.instance.$content().find(`.${LIST_ITEM_CLASS}`);
+            const $secondItem = $listItems.eq(0);
+            $secondItem.trigger('dxclick');
+
+            assert.strictEqual(this.selectionChangedStub.callCount, 1);
+            assert.strictEqual(this.instance.option('selectedItem'), 'item 2');
         });
 
-        this.keyboard
-            .type('item 2');
+        QUnit.test('onSelectionChanged event should trigger on item selection by keyboard if its text is equal to input text (T991350)', function(assert) {
+            this.keyboard
+                .type('item 2');
 
-        this.clock.tick(timeToWait + 100);
-        const $listItems = $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
-        const $secondItem = $listItems.eq(0);
-        $secondItem.trigger('dxclick');
+            this.clock.tick(this.timeToWait + 100);
 
-        assert.strictEqual(selectionChangedStub.callCount, 1);
-        assert.strictEqual(this.instance.option('selectedItem'), 'item 2');
-    });
+            this.keyboard
+                .keyDown(KEY_DOWN)
+                .keyDown(KEY_ENTER);
 
-    QUnit.test('onSelectionChanged event should trigger on item selection by keyboard if its text is equal to input text (T991350)', function(assert) {
-        const selectionChangedStub = sinon.stub();
-        const timeToWait = 300;
-
-        this.instance.option({
-            searchTimeout: timeToWait,
-            onSelectionChanged: selectionChangedStub
+            assert.strictEqual(this.selectionChangedStub.callCount, 1);
+            assert.strictEqual(this.instance.option('selectedItem'), 'item 2');
         });
-
-        this.keyboard
-            .type('item 2');
-
-        this.clock.tick(timeToWait + 100);
-
-        this.keyboard
-            .keyDown(KEY_DOWN)
-            .keyDown(KEY_ENTER);
-
-        assert.strictEqual(selectionChangedStub.callCount, 1);
-        assert.strictEqual(this.instance.option('selectedItem'), 'item 2');
     });
 
     QUnit.test('item initialization scenario', function(assert) {
