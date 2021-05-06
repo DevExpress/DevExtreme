@@ -80,7 +80,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     cssClasses, wrapperRef, contentRef, containerRef, topPocketRef, bottomPocketRef, direction,
     hScrollbarRef, vScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
-    windowResizeHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
+    updateHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
     scrollableRef, isLoadPanelVisible, topPocketState, refreshStrategy,
     pullDownTranslateTop, pullDownIconAngle, pullDownOpacity,
     topPocketTop, contentStyles, scrollViewContentRef, contentTranslateTop,
@@ -100,13 +100,14 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     <Widget
       rootElementRef={scrollableRef}
       aria={aria}
+      addWidgetClass={false}
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
       height={height}
       width={width}
       visible={visible}
-      onDimensionChanged={windowResizeHandler}
+      onDimensionChanged={updateHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
@@ -464,12 +465,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   handleScroll(e: Event): void {
-    // https://supportcenter.devexpress.com/internal/ticket/details/B250122
-    // if (!this.isScrollLocationChanged()) { // TODO: need check it after renovation
-    //   e.stopImmediatePropagation();
-    //   return;
-    // }
-
     this.eventForUserAction = e;
     if (this.useSimulatedScrollbar) {
       this.moveScrollbars();
@@ -549,15 +544,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     };
   }
 
-  // isScrollLocationChanged(): boolean {
-  //   const currentLocation = this.location();
-
-  //   const isTopChanged = this.lastLocation.top !== -currentLocation.top;
-  //   const isLeftChanged = this.lastLocation.left !== -currentLocation.left;
-
-  //   return isTopChanged || isLeftChanged;
-  // }
-
   @Effect() effectDisabledState(): void {
     if (this.props.disabled) {
       this.lock();
@@ -594,7 +580,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.updateSizes();
   }
 
-  windowResizeHandler(): void { // update if simulatedScrollbars are using
+  updateHandler(): void { // TODO: update if simulatedScrollbars are using
     this.update();
   }
 
