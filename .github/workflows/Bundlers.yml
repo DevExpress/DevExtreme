@@ -20,7 +20,6 @@ jobs:
       run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Build
-      env:
       run: npm run build
 
     - name: Build test bundle by rollup
