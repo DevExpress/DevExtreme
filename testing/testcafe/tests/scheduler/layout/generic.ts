@@ -63,7 +63,7 @@ const resources = [{
 test('Header cells should be aligned with date-table cells in timeline-month when current date changes', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  scheduler.option('currentDate', new Date(2020, 11, 1));
+  await scheduler.option('currentDate', new Date(2020, 11, 1));
 
   await t.expect(
     await compareScreenshot(t, 'virtual-scrolling-timeline-month-change-current-date.png'),
