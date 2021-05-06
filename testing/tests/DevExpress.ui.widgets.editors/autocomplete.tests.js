@@ -1485,7 +1485,7 @@ QUnit.module('regressions', {
                 .type('item 2');
 
             this.clock.tick(this.timeToWait + 100);
-            const $listItems = this.instance.$content().find(`.${LIST_ITEM_CLASS}`);
+            const $listItems = $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
             const $secondItem = $listItems.eq(0);
             $secondItem.trigger('dxclick');
 
