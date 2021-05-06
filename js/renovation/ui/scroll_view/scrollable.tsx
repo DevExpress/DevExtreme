@@ -55,7 +55,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         rtlEnabled={rtlEnabled}
         direction={direction}
         showScrollbar={showScrollbar} // TODO: https://trello.com/c/ztUBYg5y/
-        scrollByThumb={scrollByThumb} // TODO: https://trello.com/c/Qtod4mcE/
         updateManually={updateManually}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
