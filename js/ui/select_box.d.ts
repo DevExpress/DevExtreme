@@ -173,6 +173,10 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      */
     valueChangeEvent?: string;
 
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
     dropDownOptions?: PopupProperties;
 }
 /**

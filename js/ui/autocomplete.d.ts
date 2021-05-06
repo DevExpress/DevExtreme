@@ -119,6 +119,10 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
      */
     value?: string;
 
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
     dropDownOptions?: PopupProperties;
 }
 /**

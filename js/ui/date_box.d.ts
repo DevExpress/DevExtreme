@@ -227,6 +227,10 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      */
     value?: Date | number | string;
 
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
     dropDownOptions?: PopupProperties;
 }
 /**

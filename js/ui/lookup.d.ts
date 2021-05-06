@@ -456,6 +456,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     dropDownCentered?: boolean;
     /**
      * @docid
+     * @type dxPopoverOptions
      */
     dropDownOptions?: PopoverProperties;
 

@@ -8,6 +8,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxTextBoxOptions
      */
     searchEditorOptions?: TextBoxProperties;
     /**

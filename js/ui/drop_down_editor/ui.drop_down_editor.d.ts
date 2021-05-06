@@ -61,6 +61,7 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxPopupOptions | dxPopoverOptions
      */
     dropDownOptions?: PopupProperties | PopoverProperties;
     /**

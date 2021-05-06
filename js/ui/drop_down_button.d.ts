@@ -103,6 +103,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxPopupOptions
      */
     dropDownOptions?: PopupProperties;
     /**

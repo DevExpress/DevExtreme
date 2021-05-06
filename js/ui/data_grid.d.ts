@@ -608,6 +608,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxPopupOptions
      */
     filterBuilderPopup?: PopupProperties;
     /**
@@ -1742,6 +1743,7 @@ export interface EditingBase {
      * @docid GridBaseOptions.editing.popup
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxPopupOptions
      */
     popup?: PopupProperties;
     /**

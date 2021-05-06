@@ -161,6 +161,10 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      */
     valueChangeEvent?: string;
 
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
     dropDownOptions?: PopupProperties;
 }
 /**

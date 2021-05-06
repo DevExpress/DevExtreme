@@ -135,6 +135,10 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     value?: string;
 
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
     dropDownOptions?: PopupProperties;
 }
 /**
