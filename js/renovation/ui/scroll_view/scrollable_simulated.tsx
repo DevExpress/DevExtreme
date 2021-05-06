@@ -83,14 +83,14 @@ import { inRange } from '../../../core/utils/math';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
-    cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
+    cssClasses, wrapperRef, contentRef, containerRef, handleKeyDown,
     hScrollbarRef, vScrollbarRef,
     topPocketRef, bottomPocketRef, bottomPocketClientHeight, topPocketClientHeight,
     cursorEnterHandler, cursorLeaveHandler,
     isHovered, contentTranslateOffsetChange, scrollLocationChange,
     scrollableOffsetLeft, scrollableOffsetTop,
     contentWidth, containerClientWidth, contentHeight, containerClientHeight,
-    scrollableRef, windowResizeHandler, contentStyles, containerStyles, onBounce,
+    scrollableRef, updateHandler, contentStyles, containerStyles, onBounce,
     onReachBottom, onRelease, onPullDown, direction, topPocketState,
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation,
@@ -112,16 +112,18 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       focusStateEnabled={useKeyboard}
       hoverStateEnabled
       aria={aria}
+      addWidgetClass={false}
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
       height={height}
       width={width}
       visible={visible}
-      onKeyDown={onWidgetKeyDown}
+      onKeyDown={useKeyboard ? handleKeyDown : undefined}
       onHoverStart={cursorEnterHandler}
       onHoverEnd={cursorLeaveHandler}
-      onDimensionChanged={windowResizeHandler}
+      onDimensionChanged={updateHandler}
+      onVisibilityChange={updateHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
@@ -933,20 +935,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return isDefined(this.allowedDirection());
   }
 
-  onWidgetKeyDown(options): Event | undefined {
-    const { onKeyDown } = this.props;
-    const { originalEvent } = options;
-
-    const result = onKeyDown?.(options);
-    if (result?.cancel) {
-      return result;
-    }
-
-    this.handleKeyDown(originalEvent);
-
-    return undefined;
-  }
-
   handleTabKey(): void {
     if (this.tabWasPressed) {
       const { top, left } = this.scrollOffset();
@@ -965,10 +953,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
   }
 
-  handleKeyDown(e): void {
+  handleKeyDown({ originalEvent }: any): void {
     let handled = true;
 
-    switch (normalizeKeyName(e)) {
+    switch (normalizeKeyName(originalEvent)) {
       case KEY_CODES.TAB:
         this.tabWasPressed = true;
         handled = false;
@@ -1003,8 +991,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     if (handled) {
-      e.stopPropagation();
-      e.preventDefault();
+      originalEvent.stopPropagation();
+      originalEvent.preventDefault();
     }
   }
 
@@ -1111,7 +1099,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.updateSizes();
   }
 
-  windowResizeHandler(): void {
+  updateHandler(): void {
     this.update();
   }
 

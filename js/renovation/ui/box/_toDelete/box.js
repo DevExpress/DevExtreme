@@ -14,7 +14,6 @@ import CollectionWidget from './collection/ui.collection_widget.edit';
 
 // STYLE box
 
-const BOX_CLASS = 'dx-box';
 const BOX_SELECTOR = '.dx-box';
 const BOX_ITEM_CLASS = 'dx-box-item';
 const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
@@ -525,7 +524,6 @@ class Box extends CollectionWidget {
 
     _init() {
         super._init();
-        this.$element().addClass(`${BOX_CLASS}-${this.option('_layoutStrategy')}`);
         this._initLayout();
         this._initBoxQueue();
     }
@@ -553,7 +551,6 @@ class Box extends CollectionWidget {
     }
 
     _initMarkup() {
-        this.$element().addClass(BOX_CLASS);
         this._layout.renderBox();
         super._initMarkup();
         this._renderAlign();
