@@ -125,7 +125,6 @@ describe('CheckBox', () => {
         height: 100,
         hint: 'hint',
         hoverStateEnabled: true,
-        onContentReady: (): null => null,
         rtlEnabled: true,
         tabIndex: -2,
         visible: true,
@@ -223,35 +222,6 @@ describe('CheckBox', () => {
   describe('Behavior', () => {
     describe('Effects', () => {
       afterEach(clearEventHandlers);
-
-      describe('contentReadyEffect', () => {
-        it('should call "onContentReady" callback with the widget root node', () => {
-          const onContentReady = jest.fn();
-          const checkBox = new CheckBox({ onContentReady });
-          checkBox.contentReadyEffect();
-          expect(onContentReady).toHaveBeenCalledTimes(1);
-          expect(onContentReady).toHaveBeenCalledWith({});
-        });
-
-        it('should not raise any error if contentReady is not defined', () => {
-          const checkBox = new CheckBox({ onContentReady: undefined });
-          expect(checkBox.contentReadyEffect.bind(checkBox)).not.toThrow();
-        });
-      });
-
-      describe('updateValidationMessageVisibility', () => {
-        it('should set showValidationMessage', () => {
-          const checkBox = new CheckBox({
-            isValid: false,
-            validationStatus: 'invalid',
-            validationErrors: [{ message: 'error message' }],
-          });
-          expect(checkBox.showValidationMessage).toBe(false);
-
-          checkBox.updateValidationMessageVisibility();
-          expect(checkBox.showValidationMessage).toBe(true);
-        });
-      });
 
       describe('Methods', () => {
         describe('focus', () => {

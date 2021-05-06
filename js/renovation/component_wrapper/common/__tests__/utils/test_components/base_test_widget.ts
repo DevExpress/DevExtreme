@@ -9,6 +9,10 @@ export default class BaseTestWidget extends Component {
     return this.lastPassedProps;
   }
 
+  _getContentReadyOptions(): string[] {
+    return [...super._getContentReadyOptions(), 'width', 'height'];
+  }
+
   _renderWrapper(props: unknown): void {
     this.lastPassedProps = props;
     super._renderWrapper(props);

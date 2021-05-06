@@ -68,7 +68,6 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       onFocusIn={viewModel.onFocusIn}
       onFocusOut={viewModel.onFocusOut}
       aria={viewModel.aria}
-      onContentReady={viewModel.props.onContentReady}
       onClick={viewModel.onWidgetClick}
       onInactive={viewModel.onInactive}
       onKeyDown={viewModel.onWidgetKeyDown}
@@ -173,12 +172,6 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Method()
   focus(): void {
     this.widgetRef.current!.focus();
-  }
-
-  @Effect()
-  contentReadyEffect(): EffectReturn {
-    const { onContentReady } = this.props;
-    onContentReady?.({});
   }
 
   onActive(event: Event): void {

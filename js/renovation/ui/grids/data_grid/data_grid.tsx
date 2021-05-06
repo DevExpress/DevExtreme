@@ -37,7 +37,6 @@ export const viewFunction = ({
     height,
     hint,
     hoverStateEnabled,
-    onContentReady,
     rtlEnabled,
     tabIndex,
     visible,
@@ -57,7 +56,6 @@ export const viewFunction = ({
     height={height}
     hint={hint}
     hoverStateEnabled={hoverStateEnabled}
-    onContentReady={onContentReady}
     rtlEnabled={rtlEnabled}
     tabIndex={tabIndex}
     visible={visible}
@@ -566,7 +564,10 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     const element = this.widgetElementRef?.current as HTMLElement;
     // TODO Vitik: Not only optionChanged should be rewrited.
     // All other events should be re-raised by renovated grid.
-    const { onOptionChanged, ...restProps } = this.props as unknown as Record<string, unknown>;
+    const { onOptionChanged, ...restProps } = {
+      ...this.props,
+      onContentReady: this.restAttributes.onContentReady,
+    } as unknown as Record<string, unknown>;
     const instance: GridInstance = new DataGridComponent(
       element,
       this.normalizeProps(restProps),

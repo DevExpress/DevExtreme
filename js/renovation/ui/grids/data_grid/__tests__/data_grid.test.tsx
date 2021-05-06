@@ -43,7 +43,6 @@ describe('DataGrid', () => {
         height: 400,
         hint: 'hint',
         hoverStateEnabled: false,
-        onContentReady: jest.fn(),
         rtlEnabled: false,
         tabIndex: 0,
         visible: true,

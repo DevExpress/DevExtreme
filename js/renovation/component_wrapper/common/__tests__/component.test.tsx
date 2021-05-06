@@ -867,3 +867,63 @@ describe('registerKeyHandler', () => {
       { originalEvent: defaultEvent, keyName: KEY.enter, which: KEY.enter });
   });
 });
+
+describe('onContentReady', () => {
+  it('should be raised on first render', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({
+      onContentReady: contentReadyHandler,
+    });
+    const instance = $('#component').dxTestWidget('instance');
+
+    expect(contentReadyHandler).toHaveBeenCalledTimes(1);
+    expect(contentReadyHandler)
+      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+  });
+
+  it('should be raised on appropriate option change on endUpdate', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({
+      onContentReady: contentReadyHandler,
+    });
+    const instance = $('#component').dxTestWidget('instance');
+    contentReadyHandler.mockReset();
+
+    instance.beginUpdate();
+    instance.option('width', 100);
+    instance.option('height', 100);
+    instance.endUpdate();
+
+    expect(contentReadyHandler).toHaveBeenCalledTimes(1);
+    expect(contentReadyHandler)
+      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+  });
+
+  it('should not be raised on option change if it is not specified in getContentReadyOptions', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({
+      onContentReady: contentReadyHandler,
+    });
+    const instance = $('#component').dxTestWidget('instance');
+    contentReadyHandler.mockReset();
+
+    instance.option('text', 'text');
+
+    expect(contentReadyHandler).not.toHaveBeenCalled();
+  });
+
+  it('should be raised on repaint', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({
+      onContentReady: contentReadyHandler,
+    });
+    const instance = $('#component').dxTestWidget('instance');
+    contentReadyHandler.mockReset();
+
+    instance.repaint();
+
+    expect(contentReadyHandler).toHaveBeenCalledTimes(1);
+    expect(contentReadyHandler)
+      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+  });
+});
