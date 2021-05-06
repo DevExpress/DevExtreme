@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      dataSource: generateAppointments(),
+      dataSource: generateAppointments(new Date(2021, 1, 1), new Date(2021, 1, 28), 8, 20),
       currentDate: new Date(2021, 1, 2),
       views: [
         {

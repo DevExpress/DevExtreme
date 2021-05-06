@@ -1,5 +1,11 @@
 $(function () {
-    var appointments = generateAppointments();
+    var startDay = new Date(2021, 1, 1);
+    var endDay = new Date(2021, 1, 28);
+  
+    var startDayHour = 8
+    var endDayHour = 20
+
+    var appointments = generateAppointments(startDay, endDay, startDayHour, endDayHour);
 
     $('#scheduler').dxScheduler({
         height: 600,
@@ -22,8 +28,8 @@ $(function () {
         ],
         currentView: "Timeline",
         firstDayOfWeek: 0,
-        startDayHour: 8,
-        endDayHour: 20,
+        startDayHour: startDayHour,
+        endDayHour: endDayHour,
         cellDuration: 60,
         scrolling: {
             mode: "virtual"

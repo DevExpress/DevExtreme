@@ -1,7 +1,9 @@
-::ng-deep .dx-scheduler-timeline .dx-scheduler-date-table .dx-scheduler-cell-sizes-vertical {
+::ng-deep .dx-scheduler-timeline .dx-scheduler-date-table .dx-scheduler-cell-sizes-vertical,
+::ng-deep .dx-scheduler-date-table .dx-scheduler-cell-sizes-vertical {
     height: 100px;
 }
 
-::ng-deep .dx-scheduler-timeline .dx-scheduler-date-table .dx-scheduler-cell-sizes-horizontal {
+::ng-deep .dx-scheduler-timeline .dx-scheduler-date-table .dx-scheduler-cell-sizes-horizontal,
+::ng-deep .dx-scheduler-date-table .dx-scheduler-cell-sizes-horizontal {
     width: 150px;
 }

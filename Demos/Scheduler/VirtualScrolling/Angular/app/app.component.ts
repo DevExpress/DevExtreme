@@ -20,7 +20,13 @@ export class AppComponent {
     currentDate: Date = new Date(2021, 1, 2);
 
     constructor(service: Service) {
-        this.appointments = service.generateAppointments();
+        const startDay = new Date(2021, 1, 1);
+        const endDay = new Date(2021, 1, 28);
+        const startDayHour = 8;
+        const endDayHour = 20;
+
+        this.appointments = service.generateAppointments(startDay, endDay, startDayHour, endDayHour);
+
         this.resources = service.resources;
     }
 }

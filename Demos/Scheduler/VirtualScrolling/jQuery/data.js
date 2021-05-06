@@ -120,313 +120,120 @@ var resources = [{
   color: '#4ddcca'
 }];
 
-var dataSet = [{
-  text: 'Google AdWords Strategy',
-  startDate: new Date('2021-02-01T05:00:00.000Z'),
-  endDate: new Date('2021-02-01T06:30:00.000Z'),
-  humanId: 0
-}, {
-  text: 'New Brochures',
-  startDate: new Date('2021-02-01T07:30:00.000Z'),
-  endDate: new Date('2021-02-01T10:15:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Brochure Design Review',
-  startDate: new Date('2021-02-01T09:15:00.000Z'),
-  endDate: new Date('2021-02-01T12:15:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Website Re-Design Plan',
-  startDate: new Date('2021-02-01T12:45:00.000Z'),
-  endDate: new Date('2021-02-02T07:15:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Rollout of New Website and Marketing Brochures',
-  startDate: new Date('2021-02-02T04:15:00.000Z'),
-  endDate: new Date('2021-02-02T06:45:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Update Sales Strategy Documents',
-  startDate: new Date('2021-02-02T08:00:00.000Z'),
-  endDate: new Date('2021-02-02T09:45:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Non-Compete Agreements',
-  startDate: new Date('2021-02-03T05:15:00.000Z'),
-  endDate: new Date('2021-02-03T06:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Approve Hiring of John Jeffers',
-  startDate: new Date('2021-02-03T06:00:00.000Z'),
-  endDate: new Date('2021-02-03T07:15:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Update NDA Agreement',
-  startDate: new Date('2021-02-03T07:45:00.000Z'),
-  endDate: new Date('2021-02-03T09:45:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Update Employee Files with New NDA',
-  startDate: new Date('2021-02-03T10:00:00.000Z'),
-  endDate: new Date('2021-02-03T12:45:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Submit Questions Regarding New NDA',
-  startDate: new Date('2021-02-04T14:00:00.000Z'),
-  endDate: new Date('2021-02-04T05:30:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Submit Signed NDA',
-  startDate: new Date('2021-02-04T08:45:00.000Z'),
-  endDate: new Date('2021-02-04T10:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Review Revenue Projections',
-  startDate: new Date('2021-02-04T13:15:00.000Z'),
-  endDate: new Date('2021-02-04T04:00:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Comment on Revenue Projections',
-  startDate: new Date('2021-02-05T05:15:00.000Z'),
-  endDate: new Date('2021-02-05T07:15:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Provide New Health Insurance Docs',
-  startDate: new Date('2021-02-05T08:45:00.000Z'),
-  endDate: new Date('2021-02-05T10:15:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Review Changes to Health Insurance Coverage',
-  startDate: new Date('2021-02-05T10:15:00.000Z'),
-  endDate: new Date('2021-02-05T11:30:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Review Training Course for any Ommissions',
-  startDate: new Date('2021-02-08T10:00:00.000Z'),
-  endDate: new Date('2021-02-09T08:00:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Recall Rebate Form',
-  startDate: new Date('2021-02-08T08:45:00.000Z'),
-  endDate: new Date('2021-02-08T09:15:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Create Report on Customer Feedback',
-  startDate: new Date('2021-02-09T11:15:00.000Z'),
-  endDate: new Date('2021-02-09T13:30:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Review Customer Feedback Report',
-  startDate: new Date('2021-02-09T12:15:00.000Z'),
-  endDate: new Date('2021-02-09T14:30:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Customer Feedback Report Analysis',
-  startDate: new Date('2021-02-10T05:30:00.000Z'),
-  endDate: new Date('2021-02-10T06:30:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Prepare Shipping Cost Analysis Report',
-  startDate: new Date('2021-02-10T08:30:00.000Z'),
-  endDate: new Date('2021-02-10T09:30:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Provide Feedback on Shippers',
-  startDate: new Date('2021-02-10T10:15:00.000Z'),
-  endDate: new Date('2021-02-10T12:00:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Select Preferred Shipper',
-  startDate: new Date('2021-02-10T13:30:00.000Z'),
-  endDate: new Date('2021-02-10T16:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Complete Shipper Selection Form',
-  startDate: new Date('2021-02-11T04:30:00.000Z'),
-  endDate: new Date('2021-02-11T06:00:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Upgrade Server Hardware',
-  startDate: new Date('2021-02-11T08:00:00.000Z'),
-  endDate: new Date('2021-02-11T10:15:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Upgrade Personal Computers',
-  startDate: new Date('2021-02-11T10:45:00.000Z'),
-  endDate: new Date('2021-02-11T12:30:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Upgrade Apps to Windows RT or stay with WinForms',
-  startDate: new Date('2021-02-12T06:30:00.000Z'),
-  endDate: new Date('2021-02-12T09:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Estimate Time Required to Touch-Enable Apps',
-  startDate: new Date('2021-02-12T10:45:00.000Z'),
-  endDate: new Date('2021-02-12T12:30:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Report on Tranistion to Touch-Based Apps',
-  startDate: new Date('2021-02-12T14:30:00.000Z'),
-  endDate: new Date('2021-02-12T15:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Submit New Website Design',
-  startDate: new Date('2021-02-15T04:00:00.000Z'),
-  endDate: new Date('2021-02-15T06:00:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Create Icons for Website',
-  startDate: new Date('2021-02-15T07:30:00.000Z'),
-  endDate: new Date('2021-02-15T09:15:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Create New Product Pages',
-  startDate: new Date('2021-02-16T05:45:00.000Z'),
-  endDate: new Date('2021-02-16T07:45:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Approve Website Launch',
-  startDate: new Date('2021-02-16T08:00:00.000Z'),
-  endDate: new Date('2021-02-16T11:15:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Update Customer Shipping Profiles',
-  startDate: new Date('2021-02-17T05:30:00.000Z'),
-  endDate: new Date('2021-02-17T07:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Create New Shipping Return Labels',
-  startDate: new Date('2021-02-17T08:45:00.000Z'),
-  endDate: new Date('2021-02-17T10:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Get Design for Shipping Return Labels',
-  startDate: new Date('2021-02-17T11:00:00.000Z'),
-  endDate: new Date('2021-02-17T12:30:00.000Z'),
-  humanId: 0
-}, {
-  text: 'PSD needed for Shipping Return Labels',
-  startDate: new Date('2021-02-18T04:30:00.000Z'),
-  endDate: new Date('2021-02-18T05:15:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Contact ISP and Discuss Payment Options',
-  startDate: new Date('2021-02-18T07:30:00.000Z'),
-  endDate: new Date('2021-02-18T12:00:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Prepare Year-End Support Summary Report',
-  startDate: new Date('2021-02-18T13:00:00.000Z'),
-  endDate: new Date('2021-02-18T16:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Review New Training Material',
-  startDate: new Date('2021-02-19T04:00:00.000Z'),
-  endDate: new Date('2021-02-19T05:15:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Distribute Training Material to Support Staff',
-  startDate: new Date('2021-02-19T08:45:00.000Z'),
-  endDate: new Date('2021-02-19T10:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Training Material Distribution Schedule',
-  startDate: new Date('2021-02-19T10:15:00.000Z'),
-  endDate: new Date('2021-02-19T12:15:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Approval on Converting to New HDMI Specification',
-  startDate: new Date('2021-02-22T05:30:00.000Z'),
-  endDate: new Date('2021-02-22T06:15:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Create New Spike for Automation Server',
-  startDate: new Date('2021-02-22T06:00:00.000Z'),
-  endDate: new Date('2021-02-22T08:30:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Code Review - New Automation Server',
-  startDate: new Date('2021-02-22T09:00:00.000Z'),
-  endDate: new Date('2021-02-22T11:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Confirm Availability for Sales Meeting',
-  startDate: new Date('2021-02-23T06:15:00.000Z'),
-  endDate: new Date('2021-02-23T11:15:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Reschedule Sales Team Meeting',
-  startDate: new Date('2021-02-23T12:15:00.000Z'),
-  endDate: new Date('2021-02-23T14:00:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Send 2 Remotes for Giveaways',
-  startDate: new Date('2021-02-24T05:30:00.000Z'),
-  endDate: new Date('2021-02-24T07:45:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Discuss Product Giveaways with Management',
-  startDate: new Date('2021-02-24T08:15:00.000Z'),
-  endDate: new Date('2021-02-24T12:45:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Replace Desktops on the 3rd Floor',
-  startDate: new Date('2021-02-25T05:30:00.000Z'),
-  endDate: new Date('2021-02-25T06:45:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Update Database with New Leads',
-  startDate: new Date('2021-02-25T08:00:00.000Z'),
-  endDate: new Date('2021-02-25T10:15:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Mail New Leads for Follow Up',
-  startDate: new Date('2021-02-25T10:45:00.000Z'),
-  endDate: new Date('2021-02-25T11:30:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Send Territory Sales Breakdown',
-  startDate: new Date('2021-02-25T14:00:00.000Z'),
-  endDate: new Date('2021-02-25T16:00:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Territory Sales Breakdown Report',
-  startDate: new Date('2021-02-26T04:45:00.000Z'),
-  endDate: new Date('2021-02-26T05:45:00.000Z'),
-  humanId: 0
-}, {
-  text: 'Report on the State of Engineering Dept',
-  startDate: new Date('2021-02-26T10:45:00.000Z'),
-  endDate: new Date('2021-02-26T11:30:00.000Z'),
-  humanId: 1
-}, {
-  text: 'Staff Productivity Report',
-  startDate: new Date('2021-02-26T12:15:00.000Z'),
-  endDate: new Date('2021-02-26T15:30:00.000Z'),
-  humanId: 1
-}];
+var appointmentsText = [
+   'Google AdWords Strategy',
+   'New Brochures',
+   'Brochure Design Review',
+   'Website Re-Design Plan',
+   'Rollout of New Website and Marketing Brochures',
+   'Update Sales Strategy Documents',
+   'Non-Compete Agreements',
+   'Approve Hiring of John Jeffers',
+   'Update NDA Agreement',
+   'Update Employee Files with New NDA',
+   'Submit Questions Regarding New NDA',
+   'Submit Signed NDA',
+   'Review Revenue Projections',
+   'Comment on Revenue Projections',
+   'Provide New Health Insurance Docs',
+   'Review Changes to Health Insurance Coverage',
+   'Review Training Course for any Ommissions',
+   'Recall Rebate Form',
+   'Create Report on Customer Feedback',
+   'Review Customer Feedback Report',
+   'Customer Feedback Report Analysis',
+   'Prepare Shipping Cost Analysis Report',
+   'Provide Feedback on Shippers',
+   'Select Preferred Shipper',
+   'Complete Shipper Selection Form',
+   'Upgrade Server Hardware',
+   'Upgrade Personal Computers',
+   'Upgrade Apps to Windows RT or stay with WinForms',
+   'Estimate Time Required to Touch-Enable Apps',
+   'Report on Tranistion to Touch-Based Apps',
+   'Submit New Website Design',
+   'Create Icons for Website',
+   'Create New Product Pages',
+   'Approve Website Launch',
+   'Update Customer Shipping Profiles',
+   'Create New Shipping Return Labels',
+   'Get Design for Shipping Return Labels',
+   'PSD needed for Shipping Return Labels',
+   'Contact ISP and Discuss Payment Options',
+   'Prepare Year-End Support Summary Report',
+   'Review New Training Material',
+   'Distribute Training Material to Support Staff',
+   'Training Material Distribution Schedule',
+   'Approval on Converting to New HDMI Specification',
+   'Create New Spike for Automation Server',
+   'Code Review - New Automation Server',
+   'Confirm Availability for Sales Meeting',
+   'Reschedule Sales Team Meeting',
+   'Send 2 Remotes for Giveaways',
+   'Discuss Product Giveaways with Management',
+   'Replace Desktops on the 3rd Floor',
+   'Update Database with New Leads',
+   'Mail New Leads for Follow Up',
+   'Send Territory Sales Breakdown',
+   'Territory Sales Breakdown Report',
+   'Report on the State of Engineering Dept',
+   'Staff Productivity Report'
+];
 
-function generateAppointments() {
-  var data = [];
-  var increment = 1;
-  var resourcesAmount = resources.length;
-  for (var resourceId = 0; resourceId < resourcesAmount; resourceId += increment) {
+function getRandomDuration(durationState) {
+  var durationMin = Math.floor((durationState % 23) / 3 + 5) * 15;
 
-    if (++increment === 3) {
-      increment = 1;
+  return durationMin * 60 * 1000;
+}
+
+function getAppointmentText(textIndex) {
+  return appointmentsText[textIndex % appointmentsText.length];
+}
+
+function filterAppointmentsByTime(appointments, startDayHour, endDayHour) {
+  var filteredAppointments = [];
+
+  for (var i = 0; i < appointments.length; i++) {
+    var startDate = appointments[i].startDate;
+    var endDate = appointments[i].endDate;
+
+    if (startDate.getDay() === endDate.getDay() &&
+        startDate.getHours() >= startDayHour - 1 &&
+        endDate.getHours() <= endDayHour - 1) {
+      filteredAppointments.push(appointments[i]);
     }
-
-    dataSet.forEach(function(item) {
-      var humanId = (item.humanId + resourceId + item.humanId) % resourcesAmount;
-      data.push({
-        text: item.text,
-        startDate: item.startDate,
-        endDate: item.endDate,
-        humanId
-      });
-    });
   }
 
-  return data;
+  return filteredAppointments;
+}
+
+function generateAppointments(startDay, endDay, startDayHour, endDayHour) {
+  var appointments = [];
+
+  var textIndex = 0;
+  var durationState = 1;
+  var durationIncrement = 19;
+
+  for (var i = 0; i < resources.length; i++) {
+    var startDate = startDay;
+
+    while (startDate.getTime() < endDay.getTime()) {
+      durationState += durationIncrement;
+      var endDate = new Date(startDate.getTime() + getRandomDuration(durationState));
+
+      appointments.push({
+        text: getAppointmentText(textIndex),
+        startDate: startDate,
+        endDate: endDate,
+        humanId: resources[i].id
+      });
+
+      textIndex++;
+
+      durationState += durationIncrement;
+      startDate = new Date(endDate.getTime() + getRandomDuration(durationState));
+    }
+  }
+
+  return filterAppointmentsByTime(appointments, startDayHour, endDayHour);
 }
