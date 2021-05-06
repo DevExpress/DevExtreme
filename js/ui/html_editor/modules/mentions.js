@@ -63,7 +63,6 @@ if(Quill) {
         constructor(quill, options) {
             super(quill, options);
             this._mentions = {};
-            this.editorInstance = options.editorInstance;
 
             options.mentions.forEach((item) => {
                 let marker = item.marker;
@@ -81,7 +80,7 @@ if(Quill) {
             });
 
             this._attachKeyboardHandlers();
-            this.editorInstance.addCleanCallback(this.clean.bind(this));
+            this.addCleanCallback(this.clean.bind(this));
             this.quill.on('text-change', this.onTextChange.bind(this));
         }
 

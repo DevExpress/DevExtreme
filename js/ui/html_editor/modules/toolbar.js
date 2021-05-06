@@ -2,6 +2,8 @@ import Quill from 'devextreme-quill';
 
 import $ from '../../../core/renderer';
 
+import BaseHtmlEditorModule from './base';
+
 import Toolbar from '../../toolbar';
 import '../../select_box';
 import '../../color_box/color_view';
@@ -21,8 +23,6 @@ import { addNamespace } from '../../../events/utils/index';
 let ToolbarModule = {};
 
 if(Quill) {
-    const BaseModule = Quill.import('core/module');
-
     const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
     const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
     const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
@@ -78,11 +78,10 @@ if(Quill) {
         return localize(value) || value;
     };
 
-    ToolbarModule = class ToolbarModule extends BaseModule {
+    ToolbarModule = class ToolbarModule extends BaseHtmlEditorModule {
         constructor(quill, options) {
             super(quill, options);
 
-            this._editorInstance = options.editorInstance;
             this._toolbarWidgets = new WidgetCollector();
             this._formatHandlers = this._getFormatHandlers();
 
@@ -99,13 +98,13 @@ if(Quill) {
         }
 
         _applyFormat(formatArgs, event) {
-            this._editorInstance._saveValueChangeEvent(event);
+            this.saveValueChangeEvent(event);
             this.quill.format(...formatArgs);
         }
 
         _addCallbacks() {
-            this._editorInstance.addCleanCallback(this.clean.bind(this));
-            this._editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
+            this.addCleanCallback(this.clean.bind(this));
+            this.editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
         }
 
         _updateToolbar(isSelectionChanged) {
@@ -150,7 +149,7 @@ if(Quill) {
                 clear: ({ event }) => {
                     const range = this.quill.getSelection();
                     if(range) {
-                        this._editorInstance._saveValueChangeEvent(event);
+                        this.saveValueChangeEvent(event);
                         this.quill.removeFormat(range);
                         this.updateFormatWidgets();
                     }
@@ -167,11 +166,11 @@ if(Quill) {
                 alignJustify: this._prepareShortcutHandler('align', 'justify'),
                 codeBlock: this._getDefaultClickHandler('code-block'),
                 undo: ({ event }) => {
-                    this._editorInstance._saveValueChangeEvent(event);
+                    this.saveValueChangeEvent(event);
                     this.quill.history.undo();
                 },
                 redo: ({ event }) => {
-                    this._editorInstance._saveValueChangeEvent(event);
+                    this.saveValueChangeEvent(event);
                     this.quill.history.redo();
                 },
                 increaseIndent: ({ event }) => {
@@ -215,9 +214,9 @@ if(Quill) {
                     text: selection && !hasEmbedContent ? this.quill.getText(selection) : '',
                     target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true
                 };
-                this._editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
+                this.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
 
-                const promise = this._editorInstance.showFormDialog({
+                const promise = this.editorInstance.showFormDialog({
                     formData: formData,
                     items: this._getLinkFormItems(selection)
                 });
@@ -228,7 +227,7 @@ if(Quill) {
                         const { index, length } = selection;
 
                         formData.text = undefined;
-                        this._editorInstance._saveValueChangeEvent(event);
+                        this.saveValueChangeEvent(event);
 
                         length && this.quill.deleteText(index, length, SILENT_ACTION);
                         this.quill.insertText(index, text, 'link', formData, USER_ACTION);
@@ -288,9 +287,9 @@ if(Quill) {
 
                 const formatIndex = this._embedFormatIndex;
 
-                this._editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
+                this.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
 
-                const promise = this._editorInstance.showFormDialog({
+                const promise = this.editorInstance.showFormDialog({
                     formData: formData,
                     items: this._imageFormItems
                 });
@@ -299,7 +298,7 @@ if(Quill) {
                     .done((formData, event) => {
                         let index = defaultIndex;
 
-                        this._editorInstance._saveValueChangeEvent(event);
+                        this._saveValueChangeEvent(event);
 
                         if(isUpdateDialog) {
                             index = formatIndex;
@@ -347,9 +346,9 @@ if(Quill) {
                     return;
                 }
 
-                this._editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
+                this.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
 
-                const promise = this._editorInstance.showFormDialog({
+                const promise = this.editorInstance.showFormDialog({
                     formData,
                     items: this._insertTableFormItems
                 });
@@ -360,7 +359,7 @@ if(Quill) {
 
                         const table = this.quill.getModule('table');
                         if(table) {
-                            this._editorInstance._saveValueChangeEvent(event);
+                            this.saveValueChangeEvent(event);
 
                             const { columns, rows } = formData;
                             table.insertTable(columns, rows);
@@ -421,13 +420,13 @@ if(Quill) {
                 .appendTo(container);
             this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
-            eventsEngine.on(this._$toolbarContainer, addNamespace('mousedown', this._editorInstance.NAME), (e) => {
+            eventsEngine.on(this._$toolbarContainer, addNamespace('mousedown', this.editorInstance.NAME), (e) => {
                 e.preventDefault();
             });
 
-            this.toolbarInstance = this._editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
+            this.toolbarInstance = this.editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
 
-            this._editorInstance.on('optionChanged', ({ name }) => {
+            this.editorInstance.on('optionChanged', ({ name }) => {
                 if(name === 'readOnly' || name === 'disabled') {
                     this.toolbarInstance.option('disabled', this.isInteractionDisabled);
                 }
@@ -444,7 +443,7 @@ if(Quill) {
         }
 
         get isInteractionDisabled() {
-            return this._editorInstance.option('readOnly') || this._editorInstance.option('disabled');
+            return this.editorInstance.option('readOnly') || this.editorInstance.option('disabled');
         }
 
         isMultilineMode() {
@@ -468,7 +467,7 @@ if(Quill) {
         _getContainer() {
             const $container = $('<div>');
 
-            this._editorInstance.$element().prepend($container);
+            this.editorInstance.$element().prepend($container);
 
             return $container;
         }
@@ -575,8 +574,8 @@ if(Quill) {
             return () => {
                 const formData = this.quill.getFormat();
                 const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
-                this._editorInstance.formDialogOption('title', localizationMessage.format(caption));
-                const promise = this._editorInstance.showFormDialog({
+                this.editorInstance.formDialogOption('title', localizationMessage.format(caption));
+                const promise = this.editorInstance.showFormDialog({
                     formData: formData,
                     items: [{
                         dataField: name,

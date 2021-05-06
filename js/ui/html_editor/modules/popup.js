@@ -3,6 +3,8 @@ import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';
 
+import BaseHtmlEditorModule from './base';
+
 import Popup from '../../popup';
 import List from '../../list';
 
@@ -11,11 +13,10 @@ let ListPopupModule = {};
 if(Quill) {
     const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
     const SUGGESTION_LIST_WRAPPER_CLASS = 'dx-suggestion-list-wrapper';
-    const BaseModule = Quill.import('core/module');
 
     const MIN_HEIGHT = 100;
 
-    ListPopupModule = class ListPopupModule extends BaseModule {
+    ListPopupModule = class ListPopupModule extends BaseHtmlEditorModule {
 
         _getDefaultOptions() {
             return {
