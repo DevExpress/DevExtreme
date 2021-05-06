@@ -1093,12 +1093,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         const minWidth = this.getWorkSpaceMinWidth();
-        const $headerCells = this._$headerPanel
-            .find('tr')
-            .last()
-            .find('th');
 
-        let width = cellWidth * $headerCells.length;
+        const groupCount = this._getGroupCount();
+        const totalCellCount = this._getTotalCellCount(groupCount);
+
+        let width = cellWidth * totalCellCount;
 
         if(width < minWidth) {
             width = minWidth;
@@ -1403,7 +1402,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.renovatedHeaderPanelComponent,
             'renovatedHeaderPanel',
             {
-                dateHeaderMap: this.viewDataProvider.dateHeaderMap,
+                dateHeaderData: this.viewDataProvider.dateHeaderData,
                 dateCellTemplate: this.option('dateCellTemplate'),
                 timeCellTemplate: this.option('timeCellTemplate'),
                 groups: this.option('groups'),
