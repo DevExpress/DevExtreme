@@ -53,7 +53,7 @@ export default class AppointmentDataSource {
     }
 
     appointmentTakesAllDay(appointment, startDayHour, endDayHour) {
-        this.strategy.appointmentTakesAllDay(appointment, startDayHour, endDayHour);
+        return this.strategy.appointmentTakesAllDay(appointment, startDayHour, endDayHour);
     }
 
     hasAllDayAppointments(appointments) {
@@ -70,11 +70,11 @@ export default class AppointmentDataSource {
     }
 
     calculateAppointmentEndDate(isAllDay, startDate) {
-        this.strategy.calculateAppointmentEndDate(isAllDay, startDate);
+        return this.strategy.calculateAppointmentEndDate(isAllDay, startDate);
     }
 
     appointmentTakesSeveralDays(appointment) {
-        this.strategy.appointmentTakesSeveralDays(appointment);
+        return this.strategy.appointmentTakesSeveralDays(appointment);
     }
 
     // Data operator mappings
