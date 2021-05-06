@@ -402,10 +402,10 @@ class VirtualScrollingBase {
             : -1;
     }
 
-    updateState(position, isForceUpdate) {
+    updateState(position, isForce) {
         position = this._correctPosition(position);
 
-        if(!this.needUpdateState(position) && !isForceUpdate) {
+        if(!this.needUpdateState(position) && !isForce) {
             return false;
         }
 
