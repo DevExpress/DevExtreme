@@ -606,7 +606,6 @@
           {
             "Title": "State Persistence",
             "Name": "StatePersistence",
-            "DocUrl": "ApiReference/UI_Components/dxDataGrid/Configuration/stateStoring/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/Order.cs",
@@ -1561,7 +1560,6 @@
           {
             "Title": "State Persistence",
             "Name": "StatePersistence",
-            "DocUrl": "ApiReference/UI_Components/dxTreeList/Configuration/stateStoring/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListEmployeesController.cs",
