@@ -1,4 +1,4 @@
-import { createScreenshotsComparer } from '../../../helpers/screenshot-comparer';
+import { createScreenshotsComparer, compareScreenshot } from '../../../helpers/screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
@@ -140,5 +140,20 @@ test('Virtual scrolling layout in scheduler views when grouping by date is enabl
   await createScheduler({
     views: groupedByDateViews,
     groups: ['resourceId'],
+  });
+});
+
+test('Header cells should be aligned with date-table cells in timeline-month when current date changes and virtual scrolling is used', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  scheduler.option('currentDate', new Date(2020, 11, 1));
+
+  await t.expect(
+    await compareScreenshot(t, 'virtual-scrolling-timeline-month-change-current-date-virtual.png'),
+  ).ok();
+}).before(async () => {
+  await createScheduler({
+    currentDate: new Date(2020, 10, 1),
+    currentView: 'timelineMonth',
   });
 });
