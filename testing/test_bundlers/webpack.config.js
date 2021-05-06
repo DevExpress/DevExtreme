@@ -7,6 +7,6 @@ module.exports = {
         hints: false
     },
     resolve: {
-        modules: ['~/artifacts/npm/', 'node_modules'],
+        modules: ['./artifacts/npm/', 'node_modules'],
     },
 };
