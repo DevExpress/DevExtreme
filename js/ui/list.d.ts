@@ -118,7 +118,7 @@ export type SelectAllValueChangedEvent = EventInfo<dxList> & {
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxList> & SelectionChangedInfo;
 
-export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
+export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true

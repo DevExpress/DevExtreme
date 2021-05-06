@@ -2,7 +2,7 @@ import {
     Properties as TextBoxProperties
 } from '../text_box';
 
-export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
+export interface SearchBoxMixinOptions {
     /**
      * @docid
      * @default {}
