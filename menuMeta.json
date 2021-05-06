@@ -1350,7 +1350,6 @@
           {
             "Title": "Form Editing",
             "Name": "FormEditing",
-            "DocUrl": "Guide/UI_Components/TreeList/Editing/#User_Interaction/Form_Mode",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListEmployeesController.cs",
