@@ -136,7 +136,7 @@ export default class ComponentWrapper extends DOMComponent {
       parentNode.$V = containerNode.$V;
       render(
         this._disposeMethodCalled ? createElement(
-          containerNode.tagName,
+          containerNode.tagName, 
           this.elementAttr
         ) : null,
         parentNode);
@@ -216,13 +216,13 @@ export default class ComponentWrapper extends DOMComponent {
 
   getProps() {
     const { elementAttr } = this.option();
-
+    
     const options = this._patchOptionValues({
       ...this._props,
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
     });
-    
+
     return {
       ...options,
       ...this.elementAttr,
