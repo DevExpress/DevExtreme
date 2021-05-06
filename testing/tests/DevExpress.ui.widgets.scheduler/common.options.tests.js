@@ -100,12 +100,12 @@ QUnit.module('Options', {
         }
     });
 
-    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentModel', function(assert) {
+    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentDataSource', function(assert) {
         const scheduler = createWrapper();
         const repaintStub = sinon.stub(scheduler.instance, 'repaint');
 
         try {
-            const appointmentModel = scheduler.instance.getAppointmentModel();
+            const appointmentDataSource = scheduler.instance.getAppointmentDataSource();
 
             scheduler.instance.option({
                 'startDateExpr': '_startDate',
@@ -121,9 +121,9 @@ QUnit.module('Options', {
 
             const dataAccessors = scheduler.instance._dataAccessors;
 
-            assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentModel._dataAccessors.getter, 'dataAccessors getters were passed to appointmentModel');
-            assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentModel._dataAccessors.setter, 'dataAccessors setters were passed to appointmentModel');
-            assert.deepEqual(dataAccessors.expr, appointmentModel._dataAccessors.expr, 'dataExpressions were passed to appointmentModel');
+            assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentDataSource.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataSource');
+            assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentDataSource.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataSource');
+            assert.deepEqual(dataAccessors.expr, appointmentDataSource.dataAccessors.expr, 'dataExpressions were passed to appointmentDataSource');
         } finally {
             repaintStub.restore();
         }

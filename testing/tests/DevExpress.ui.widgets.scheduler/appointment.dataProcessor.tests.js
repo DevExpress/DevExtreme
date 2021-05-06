@@ -1,4 +1,4 @@
-import AppointmentModel from 'ui/scheduler/appointment_model';
+import AppointmentDataSource from 'ui/scheduler/appointments/appointmentDataSource';
 import { compileGetter, compileSetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';
@@ -12,8 +12,12 @@ const {
     test
 } = QUnit;
 
+const schedulerMock = {
+    isVirtualScrolling: () => false
+};
+
 module('Server side filtering', () => {
-    test('Appointment model filterByDate should filter dataSource', function(assert) {
+    test('Appointment filterByDate should filter dataSource', function(assert) {
         const data = [
             {
                 text: 'Appointment 1',
@@ -30,21 +34,25 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentModel = new AppointmentModel(dataSource, {
-            expr: {
-                startDateExpr: 'startDate',
-                endDateExpr: 'endDate'
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                expr: {
+                    startDateExpr: 'startDate',
+                    endDateExpr: 'endDate'
+                },
             }
-        });
+        );
 
-        appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
 
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [data[1]], 'filterByDate work correctly');
     });
 
-    test('Appointment model filterByDate should filter dataSource correctly after changing user filter', function(assert) {
+    test('Appointment filterByDate should filter dataSource correctly after changing user filter', function(assert) {
         const data = [
             {
                 text: 'Appointment 1',
@@ -61,12 +69,16 @@ module('Server side filtering', () => {
             store: data,
             filter: ['text', '=', 'Appointment 2']
         });
-        const appointmentModel = new AppointmentModel(dataSource, {
-            expr: {
-                startDateExpr: 'startDate',
-                endDateExpr: 'endDate'
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                expr: {
+                    startDateExpr: 'startDate',
+                    endDateExpr: 'endDate'
+                }
             }
-        });
+        );
         const dateFilter = [
             [
                 ['endDate', '>', new Date(2015, 1, 9, 0)],
@@ -78,7 +90,7 @@ module('Server side filtering', () => {
                 ['startDate', new Date(2015, 1, 9)]
             ]
         ];
-        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
 
         let expectedFilter = [dateFilter, [
             'text',
@@ -86,20 +98,20 @@ module('Server side filtering', () => {
             'Appointment 2'
         ]];
         let actualFilter = dataSource.filter();
-        assert.deepEqual(expectedFilter, actualFilter, 'filter is right');
+        assert.deepEqual(expectedFilter, actualFilter, 'filter is correct');
 
         const changedDataSource = new DataSource({
             store: data
         });
-        appointmentModel.setDataSource(changedDataSource, true);
-        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+        appointmentDataSource.setDataSource(changedDataSource, true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
 
         expectedFilter = [dateFilter];
         actualFilter = changedDataSource.filter();
-        assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
+        assert.deepEqual(actualFilter, expectedFilter, 'filter is correct');
     });
 
-    test('Appointment model should clear the internal user filter after dataSource has been filtered (T866593)', function(assert) {
+    test('Appointment should clear the internal user filter after dataSource has been filtered (T866593)', function(assert) {
         const appointments = [
             { text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2 },
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
@@ -110,7 +122,7 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -136,23 +148,23 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
+        appointmentDataSource.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
 
         dataSource.load().done(() => {
             dataSource.filter('priorityId', '=', 1);
 
-            appointmentModel.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
+            appointmentDataSource.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
 
-            appointmentModel.filterLoadedAppointments({
+            appointmentDataSource.filterLoadedAppointments({
                 startDayHour: 3,
                 endDayHour: 4
             }, timeZoneCalculator);
 
-            assert.equal(appointmentModel._filterMaker._filterRegistry.user, undefined, 'Empty user filter');
+            assert.equal(appointmentDataSource.filterMaker._filterRegistry.user, undefined, 'Empty user filter');
         });
     });
 
-    test('Appointment model filterByDate should filter dataSource correctly without copying dateFilter', function(assert) {
+    test('Appointment filterByDate should filter dataSource correctly without copying dateFilter', function(assert) {
         const dateFilter = [
             [
                 ['endDate', '>', new Date(2015, 1, 9, 0)],
@@ -170,14 +182,18 @@ module('Server side filtering', () => {
             filter: [dateFilter, ['text', '=', 'Appointment 2']]
         });
 
-        const appointmentModel = new AppointmentModel(dataSource, {
-            expr: {
-                startDateExpr: 'startDate',
-                endDateExpr: 'endDate'
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                expr: {
+                    startDateExpr: 'startDate',
+                    endDateExpr: 'endDate'
+                }
             }
-        });
+        );
 
-        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
 
         const expectedFilter = [dateFilter, [
             'text',
@@ -188,7 +204,7 @@ module('Server side filtering', () => {
         assert.deepEqual(expectedFilter, actualFilter, 'filter is right');
     });
 
-    test('Appointment model filterByDate should return filter with dateSerializationFormat and without forceIsoDateParsing', function(assert) {
+    test('Appointment filterByDate should return filter with dateSerializationFormat and without forceIsoDateParsing', function(assert) {
         const defaultForceIsoDateParsing = config().forceIsoDateParsing;
         config().forceIsoDateParsing = false;
         try {
@@ -206,14 +222,18 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate'
+            const appointmentDataSource = new AppointmentDataSource(
+                schedulerMock,
+                dataSource,
+                {
+                    expr: {
+                        startDateExpr: 'startDate',
+                        endDateExpr: 'endDate'
+                    }
                 }
-            });
+            );
 
-            appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
+            appointmentDataSource.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
 
             const expectedFilter = [[
                 [
@@ -233,7 +253,7 @@ module('Server side filtering', () => {
         }
     });
 
-    test('Appointment model filterByDate should return filter with dateSerializationFormat and forceIsoDateParsing', function(assert) {
+    test('Appointment filterByDate should return filter with dateSerializationFormat and forceIsoDateParsing', function(assert) {
         const defaultForceIsoDateParsing = config().forceIsoDateParsing;
         config().forceIsoDateParsing = true;
         try {
@@ -251,14 +271,14 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentModel = new AppointmentModel(dataSource, {
+            const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
                 }
             });
 
-            appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
+            appointmentDataSource.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
 
             const expectedFilter = [[
                 [
@@ -294,20 +314,20 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate'
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [data[1]], 'filterByDate work correctly');
     });
 
-    test('Appointment model should be filtered correctly by custom startDate field', function(assert) {
+    test('Appointment should be filtered correctly by custom startDate field', function(assert) {
         const dataSource = new DataSource({
             store: [{
                 text: 'Appointment 1',
@@ -316,14 +336,14 @@ module('Server side filtering', () => {
             }]
         });
 
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'Start',
                 endDateExpr: 'End'
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
+        appointmentDataSource.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
         dataSource.load();
 
         assert.equal(dataSource.items().length, 1, 'filterByDate works correctly with custom dateField');
@@ -341,7 +361,7 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -349,7 +369,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [tasks[0]], 'filterByDate works correctly');
@@ -366,7 +386,7 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -374,13 +394,13 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
         dataSource.load();
 
         assert.equal(dataSource.items().length, 0, 'filterByDate works correctly');
     });
 
-    test('Appointment model filterByDate should correctly filter items with recurrenceRule, if recurrenceRuleExpr!=null', function(assert) {
+    test('Appointment filterByDate should correctly filter items with recurrenceRule, if recurrenceRuleExpr!=null', function(assert) {
         const recurrentAppts = [
             {
                 text: 'Appointment 1',
@@ -397,7 +417,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: recurrentAppts
         });
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -406,13 +426,13 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), recurrentAppts, 'filterByDate works correctly');
     });
 
-    test('Appointment model filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=null', function(assert) {
+    test('Appointment filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=null', function(assert) {
         const appts = [
             {
                 text: 'Appointment 1',
@@ -429,7 +449,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -438,14 +458,14 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
         assert.equal(dataSource.filter()[0].length, 3, 'filter is correct');
     });
 
-    test('Appointment model filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=\'\'', function(assert) {
+    test('Appointment filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=\'\'', function(assert) {
         const appts = [
             {
                 text: 'Appointment 1',
@@ -462,7 +482,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -471,7 +491,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
+        appointmentDataSource.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
@@ -488,7 +508,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -496,7 +516,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
+        appointmentDataSource.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [appts[0]], 'filterByDate works correctly');
@@ -513,7 +533,7 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -539,12 +559,12 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));
+        appointmentDataSource.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));
         dataSource.load();
 
         dataSource.filter('priorityId', '=', 1);
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1, 0),
@@ -566,7 +586,7 @@ module('Server side filtering', () => {
             filter: ['priorityId', '=', 1]
         });
 
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -583,7 +603,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
+        appointmentDataSource.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
         dataSource.load();
 
         const existingFilter = dataSource.filter();
@@ -591,7 +611,7 @@ module('Server side filtering', () => {
 
         existingFilter[1] = newUserFilter;
         dataSource.filter(existingFilter);
-        appointmentModel.filterByDate(new Date(2014, 11, 29, 0), new Date(2014, 11, 30), true);
+        appointmentDataSource.filterByDate(new Date(2014, 11, 29, 0), new Date(2014, 11, 30), true);
         dataSource.load();
 
 
@@ -602,7 +622,8 @@ module('Server side filtering', () => {
 
 module('Client side after filtering', () => {
     test('Loaded appointments should be filtered by start & end day hours', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -625,11 +646,11 @@ module('Client side after filtering', () => {
             }
         });
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6, 0).toString() });
-        appointmentModel.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6, 0).toString() });
+        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7
         }, timeZoneCalculator);
@@ -638,33 +659,38 @@ module('Client side after filtering', () => {
     });
 
     test('Loaded appointments on the borders should be filtered by start & end day hours', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecurrenceRule'),
-                recurrenceException: compileGetter('Exception'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            setter: {
-                startDate: compileSetter('StartDate'),
-                endDate: compileSetter('EndDate')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecurrenceRule'),
+                    recurrenceException: compileGetter('Exception'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecurrenceRule',
+                    recurrenceExceptionExpr: 'Exception'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7
         }, timeZoneCalculator);
@@ -673,34 +699,39 @@ module('Client side after filtering', () => {
     });
 
     test('Loaded appointments should be filtered by decimal start & end day hours', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecurrenceRule'),
-                recurrenceException: compileGetter('Exception'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            setter: {
-                startDate: compileSetter('StartDate'),
-                endDate: compileSetter('EndDate')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecurrenceRule'),
+                    recurrenceException: compileGetter('Exception'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecurrenceRule',
+                    recurrenceExceptionExpr: 'Exception'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() });
-        appointmentModel.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() });
+        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3.5,
             endDayHour: 7.5
         }, timeZoneCalculator);
@@ -709,36 +740,41 @@ module('Client side after filtering', () => {
     });
 
     test('Loaded appointments should be filtered by recurrence rule', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecRule'),
-                recurrenceException: compileGetter('RecException'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            setter: {
-                startDate: compileSetter('StartDate'),
-                endDate: compileSetter('EndDate')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecRule',
-                recurrenceExceptionExpr: 'RecException'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecRule'),
+                    recurrenceException: compileGetter('RecException'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecRule',
+                    recurrenceExceptionExpr: 'RecException'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-        appointmentModel.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentModel.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=WE' });
-        appointmentModel.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), RecRule: 'FREQ=WEEKLY,BYDAY=TH' });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
+        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataSource.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=WE' });
+        appointmentDataSource.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), RecRule: 'FREQ=WEEKLY,BYDAY=TH' });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2014, 11, 31).toString(),
@@ -752,33 +788,38 @@ module('Client side after filtering', () => {
     });
 
     test('Loaded appointments should be filtered by recurrence rule correctly, if appointment startDate.getHours < starDayHour', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecRule'),
-                recurrenceException: compileGetter('RecException'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            setter: {
-                startDate: compileSetter('StartDate'),
-                endDate: compileSetter('EndDate')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecRule',
-                recurrenceExceptionExpr: 'RecException'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecRule'),
+                    recurrenceException: compileGetter('RecException'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecRule',
+                    recurrenceExceptionExpr: 'RecException'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
@@ -792,33 +833,38 @@ module('Client side after filtering', () => {
     });
 
     test('Loaded appointments should be filtered by recurrence rule correctly for day interval', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecRule'),
-                recurrenceException: compileGetter('RecException'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            setter: {
-                startDate: compileSetter('StartDate'),
-                endDate: compileSetter('EndDate')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecRule',
-                recurrenceExceptionExpr: 'RecException'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecRule'),
+                    recurrenceException: compileGetter('RecException'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecRule',
+                    recurrenceExceptionExpr: 'RecException'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
@@ -832,33 +878,38 @@ module('Client side after filtering', () => {
     });
 
     test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = null', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            setter: {
-                startDate: compileSetter('StartDate'),
-                endDate: compileSetter('EndDate')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: null
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: null
+                }
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-        appointmentModel.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentModel.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
-        appointmentModel.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
+        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataSource.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
+        appointmentDataSource.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1).toString(),
@@ -872,34 +923,39 @@ module('Client side after filtering', () => {
         ], 'Appointments are OK');
     });
 
-    test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = \'\'', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            setter: {
-                startDate: compileSetter('StartDate'),
-                endDate: compileSetter('EndDate')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: ''
+    test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = ""', function(assert) {
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: ''
+                }
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-        appointmentModel.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentModel.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
-        appointmentModel.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
+        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataSource.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
+        appointmentDataSource.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1).toString(),
@@ -914,35 +970,40 @@ module('Client side after filtering', () => {
     });
 
     test('Loaded appointments should be filtered by resources', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecRule'),
-                recurrenceException: compileGetter('RecException'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone'),
-                resources: {
-                    ownerId: compileGetter('ownerId'),
-                    roomId: compileGetter('roomId')
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecRule'),
+                    recurrenceException: compileGetter('RecException'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone'),
+                    resources: {
+                        ownerId: compileGetter('ownerId'),
+                        roomId: compileGetter('roomId')
+                    }
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecRule',
+                    recurrenceExceptionExpr: 'RecException'
                 }
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecRule',
-                recurrenceExceptionExpr: 'RecException'
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2] });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4 });
-        appointmentModel.add({ text: 'c', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 3, roomId: [1, 2] });
-        appointmentModel.add({ text: 'd', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2, 3] });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2] });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4 });
+        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 3, roomId: [1, 2] });
+        appointmentDataSource.add({ text: 'd', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2, 3] });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 2,
             endDayHour: 5,
             min: new Date(2015, 2, 16),
@@ -966,31 +1027,36 @@ module('Client side after filtering', () => {
     });
 
     test('Loaded appointments should be filtered by allDay field', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecurrenceRule'),
-                recurrenceException: compileGetter('Exception'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecurrenceRule'),
+                    recurrenceException: compileGetter('Exception'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecurrenceRule',
+                    recurrenceExceptionExpr: 'Exception'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true });
-        appointmentModel.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false });
-        appointmentModel.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentModel.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true });
+        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false });
+        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataSource.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             allDay: false
@@ -1000,32 +1066,37 @@ module('Client side after filtering', () => {
     });
 
     test('Loaded recurrent allDay appointments should not be filtered by start/endDayHour', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecurrenceRule'),
-                recurrenceException: compileGetter('Exception'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            setter: {
-                startDate: compileSetter('StartDate'),
-                endDate: compileSetter('EndDate')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecurrenceRule'),
+                    recurrenceException: compileGetter('Exception'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecurrenceRule',
+                    recurrenceExceptionExpr: 'Exception'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' });
+        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 10,
             min: new Date(2015, 0, 1, 3),
@@ -1036,32 +1107,37 @@ module('Client side after filtering', () => {
     });
 
     test('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecurrenceRule'),
-                recurrenceException: compileGetter('Exception'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecurrenceRule'),
+                    recurrenceException: compileGetter('Exception'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecurrenceRule',
+                    recurrenceExceptionExpr: 'Exception'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({
+        appointmentDataSource.add({
             text: 'a',
             StartDate: new Date(2015, 2, 1, 10, 30),
             EndDate: new Date(2015, 2, 2, 5, 0)
         });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 1,
             endDayHour: 10,
             min: new Date(2015, 1, 23, 1, 0),
@@ -1072,32 +1148,37 @@ module('Client side after filtering', () => {
     });
 
     test('The part of long appointment should be filtered by start/endDayHour, with startDate < startDayHour(T339519)', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecurrenceRule'),
-                recurrenceException: compileGetter('Exception'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecurrenceRule'),
+                    recurrenceException: compileGetter('Exception'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecurrenceRule',
+                    recurrenceExceptionExpr: 'Exception'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({
+        appointmentDataSource.add({
             text: 'a',
             StartDate: new Date(2015, 2, 1, 7, 0),
             EndDate: new Date(2015, 2, 2, 0, 30)
         });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 1,
             endDayHour: 10,
             min: new Date(2015, 2, 2, 1, 0),
@@ -1108,32 +1189,37 @@ module('Client side after filtering', () => {
     });
 
     test('Appointment between days should be filtered by start/endDayHour (T339519)', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecurrenceRule'),
-                recurrenceException: compileGetter('Exception'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            schedulerMock,
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecurrenceRule'),
+                    recurrenceException: compileGetter('Exception'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecurrenceRule',
+                    recurrenceExceptionExpr: 'Exception'
+                }
             }
-        });
+        );
 
-        appointmentModel.add({
+        appointmentDataSource.add({
             text: 'a',
             StartDate: new Date(2015, 2, 1, 11, 0),
             EndDate: new Date(2015, 2, 2, 1, 0)
         });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 1,
             endDayHour: 10,
             min: new Date(2015, 2, 1, 1, 0),
@@ -1144,36 +1230,44 @@ module('Client side after filtering', () => {
     });
 
     test('Wrong endDate of appointment should be replaced before filtering', function(assert) {
-        const appointmentModel = new AppointmentModel(new DataSource({ store: [] }), {
-            getter: {
-                startDate: compileGetter('StartDate'),
-                endDate: compileGetter('EndDate'),
-                recurrenceRule: compileGetter('RecurrenceRule'),
-                recurrenceException: compileGetter('Exception'),
-                allDay: compileGetter('AllDay'),
-                startDateTimeZone: compileGetter('StartDateTimeZone'),
-                endDateTimeZone: compileGetter('EndDateTimeZone')
+        const dataSource = new DataSource({ store: [] });
+        const appointmentDataSource = new AppointmentDataSource(
+            {
+                ...schedulerMock,
+                getAppointmentDurationInMinutes: () => 60
             },
-            setter: {
-                startDate: compileSetter('StartDate'),
-                endDate: compileSetter('EndDate')
-            },
-            expr: {
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
+            dataSource,
+            {
+                getter: {
+                    startDate: compileGetter('StartDate'),
+                    endDate: compileGetter('EndDate'),
+                    recurrenceRule: compileGetter('RecurrenceRule'),
+                    recurrenceException: compileGetter('Exception'),
+                    allDay: compileGetter('AllDay'),
+                    startDateTimeZone: compileGetter('StartDateTimeZone'),
+                    endDateTimeZone: compileGetter('EndDateTimeZone')
+                },
+                setter: {
+                    startDate: compileSetter('StartDate'),
+                    endDate: compileSetter('EndDate')
+                },
+                expr: {
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecurrenceRule',
+                    recurrenceExceptionExpr: 'Exception'
+                }
             }
-        }, 60);
+        );
 
-        appointmentModel.add({
+        appointmentDataSource.add({
             text: 'a',
             StartDate: new Date(2015, 2, 1, 11, 0),
             EndDate: new Date(2015, 2, 1, 1, 0)
         });
 
-        const appts = appointmentModel.filterLoadedAppointments({
+        const appts = appointmentDataSource.filterLoadedAppointments({
             startDayHour: 0,
             endDayHour: 24,
             min: new Date(2015, 2, 1),
@@ -1185,7 +1279,7 @@ module('Client side after filtering', () => {
 });
 
 module('Virtual Scrolling', () => {
-    test('Appointment model should take into account current view startDayHour, endDayHour.', function(assert) {
+    test('Appointment model should take into account startDayHour, endDayHour of the current view', function(assert) {
         const appointments = [
             {
                 text: 'a',
@@ -1198,7 +1292,7 @@ module('Virtual Scrolling', () => {
             store: appointments
         });
 
-        const appointmentModel = new AppointmentModel(dataSource, {
+        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -1224,14 +1318,14 @@ module('Virtual Scrolling', () => {
             }
         });
 
-        appointmentModel.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
+        appointmentDataSource.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
 
         dataSource.load().done(() => {
             dataSource.filter('priorityId', '=', 1);
 
-            appointmentModel.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
+            appointmentDataSource.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
 
-            const result = appointmentModel.filterLoadedAppointments({
+            const result = appointmentDataSource.filterLoadedAppointments({
                 startDayHour: 9,
                 endDayHour: 11,
                 viewStartDayHour: 9,
