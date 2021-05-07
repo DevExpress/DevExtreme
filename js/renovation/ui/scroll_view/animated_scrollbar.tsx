@@ -40,7 +40,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       forceGeneratePockets, pullDownEnabled, reachBottomEnabled,
       scrollLocation, forceUpdateScrollbarLocation, contentTranslateOffsetChange,
       scrollLocationChange, isScrollableHovered, topPocketSize, bottomPocketSize,
-      onPullDown, onRelease, onReachBottom,
+      onPullDown, onRelease, onReachBottom, onScroll, onEnd,
       pocketState, pocketStateChange,
       rtlEnabled,
     },
@@ -63,6 +63,8 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
       forceUpdateScrollbarLocation={forceUpdateScrollbarLocation}
+      onScroll={onScroll}
+      onEnd={onEnd}
       // Horizontal
       rtlEnabled={rtlEnabled}
       // Vertical
