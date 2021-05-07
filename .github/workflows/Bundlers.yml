@@ -14,7 +14,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '15'
 
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund

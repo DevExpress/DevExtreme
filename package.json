@@ -56,7 +56,6 @@
     "@devextreme-generator/inferno": "1.1.1",
     "@devextreme-generator/react": "1.1.1",
     "@devextreme-generator/vue": "1.1.1",
-    "@rollup/plugin-commonjs": "^18.1.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^24.0.24",

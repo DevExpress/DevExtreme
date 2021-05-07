@@ -81,8 +81,8 @@ const dropDownEditorsList = {
     dxDropDownButton: require('ui/drop_down_button'),
     dxSelectBox: require('ui/select_box'),
     dxTagBox: require('ui/tag_box'),
-    dxDropDownEditor: require('ui/drop_down_editor/ui.drop_down_editor.js'),
-    dxDropDownList: require('ui/drop_down_editor/ui.drop_down_list.js'),
+    dxDropDownEditor: require('ui/drop_down_editor/ui.drop_down_editor'),
+    dxDropDownList: require('ui/drop_down_editor/ui.drop_down_list'),
 };
 
 exports.widgetsList = widgetsList;
