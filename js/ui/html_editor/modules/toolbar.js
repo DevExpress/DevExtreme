@@ -298,7 +298,7 @@ if(Quill) {
                     .done((formData, event) => {
                         let index = defaultIndex;
 
-                        this._saveValueChangeEvent(event);
+                        this.saveValueChangeEvent(event);
 
                         if(isUpdateDialog) {
                             index = formatIndex;
