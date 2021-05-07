@@ -125,7 +125,7 @@ QUnit.module('base z-index', () => {
         Tooltip.baseZIndex(10000);
 
         const tooltip = new Tooltip($('#tooltip'), { visible: true });
-        const $tooltipContent = tooltip.overlayContent();
+        const $tooltipContent = tooltip.$overlayContent();
 
         assert.equal($tooltipContent.css('zIndex'), 10001, 'tooltip\'s z-index is correct');
     });
