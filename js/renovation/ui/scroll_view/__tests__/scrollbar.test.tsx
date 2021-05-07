@@ -542,7 +542,7 @@ describe('Scrollbar', () => {
 
       each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
         each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
-          each([-100, 0, 100]).describe('boundaryOffset: %o', (boundaryOffset) => {
+          each([-100, 0, 85, 100]).describe('scrollLocation: %o', (scrollLocation) => {
             it('isPullDown()', () => {
               const topPocketSize = 85;
               const bottomPocketSize = 55;
@@ -553,15 +553,16 @@ describe('Scrollbar', () => {
                 pullDownEnabled,
                 topPocketSize,
                 bottomPocketSize,
+                scrollLocation,
               });
 
-              viewModel.boundaryOffset = boundaryOffset;
+              let expectedIsPullDown = false;
 
-              if (pullDownEnabled && bounceEnabled && boundaryOffset >= 0) {
-                expect(viewModel.isPullDown()).toBe(true);
-              } else {
-                expect(viewModel.isPullDown()).toBe(false);
+              if (pullDownEnabled && bounceEnabled && scrollLocation >= 85) {
+                expectedIsPullDown = true;
               }
+
+              expect(viewModel.isPullDown()).toBe(expectedIsPullDown);
             });
           });
         });
@@ -613,7 +614,7 @@ describe('Scrollbar', () => {
                 topPocketSize: 80,
               });
 
-              viewModel.boundLocation = jest.fn(() => -300);
+              viewModel.getLocationWithinRange = jest.fn(() => -300);
               Object.defineProperties(viewModel, {
                 bottomBoundaryOffset: { get() { return 300; } },
               });
@@ -641,27 +642,15 @@ describe('Scrollbar', () => {
                   scrollLocation,
                 });
 
-                viewModel.boundLocation = jest.fn(() => -300);
-                viewModel.boundaryOffset = 10;
-
                 viewModel.updateBoundaryOffset();
 
-                if (forceGeneratePockets) {
-                  if (pullDownEnabled) {
-                    expect(viewModel.boundaryOffset).toEqual(scrollLocation - 80);
-                  } else {
-                    expect(viewModel.boundaryOffset).toEqual(scrollLocation);
-                  }
+                let expectedMaxOffset = 0;
 
-                  if (scrollLocation === 100 && pullDownEnabled) {
-                    expect(viewModel.maxOffset).toEqual(80);
-                  } else {
-                    expect(viewModel.maxOffset).toEqual(0);
-                  }
-                } else {
-                  expect(viewModel.boundaryOffset).toEqual(10);
-                  expect(viewModel.maxOffset).toEqual(0);
+                if (forceGeneratePockets && scrollLocation === 100 && pullDownEnabled) {
+                  expectedMaxOffset = 80;
                 }
+
+                expect(viewModel.maxOffset).toEqual(expectedMaxOffset);
               });
             });
           });
@@ -713,7 +702,7 @@ describe('Scrollbar', () => {
               });
             });
 
-            each([true, false]).describe('inBounds: %o', (inBounds) => {
+            each([true, false]).describe('inRange: %o', (inRange) => {
               it('scrollComplete()', () => {
                 const pullDownHandler = jest.fn();
                 const reachBottomHandler = jest.fn();
@@ -729,13 +718,13 @@ describe('Scrollbar', () => {
                 } as any);
 
                 viewModel.scrollToBounds = jest.fn();
-                viewModel.inBounds = jest.fn(() => inBounds);
+                viewModel.inRange = jest.fn(() => inRange);
                 viewModel.isReachBottom = jest.fn(() => isReachBottom);
 
                 viewModel.scrollComplete();
 
                 if (forceGeneratePockets) {
-                  if (inBounds) {
+                  if (inRange) {
                     if (pocketState === TopPocketState.STATE_READY) {
                       if (pocketState !== TopPocketState.STATE_REFRESHING) {
                         expect(pocketStateChangeHandler).toHaveBeenCalledTimes(1);
@@ -1019,7 +1008,7 @@ describe('Scrollbar', () => {
         }
       });
 
-      test.each([true, false])('scrollByHandler(delta), inBounds: %o,', (inBounds) => {
+      test.each([true, false])('scrollByHandler(delta), inRange: %o,', (inRange) => {
         const onInertiaAnimatorStart = jest.fn();
         const delta = { x: 50, y: 70 };
         const viewModel = new Scrollbar({
@@ -1028,14 +1017,14 @@ describe('Scrollbar', () => {
         });
 
         viewModel.scrollBy = jest.fn();
-        viewModel.inBounds = () => inBounds;
+        viewModel.inRange = () => inRange;
 
         viewModel.scrollByHandler(delta);
 
         expect(viewModel.scrollBy).toBeCalledTimes(1);
         expect(viewModel.scrollBy).toHaveBeenCalledWith(delta);
 
-        if (inBounds) {
+        if (inRange) {
           expect(onInertiaAnimatorStart).toHaveBeenCalledTimes(0);
         } else {
           expect(onInertiaAnimatorStart).toHaveBeenCalledTimes(1);
@@ -1045,7 +1034,7 @@ describe('Scrollbar', () => {
 
       each([true, false]).describe('CrossThumbScrolling: %o', (crossThumbScrolling) => {
         each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
-          each([true, false]).describe('inBound: %o', (inBounds) => {
+          each([true, false]).describe('inBound: %o', (inRange) => {
             it('stopHandler()', () => {
               const onBounceAnimatorStartHandler = jest.fn();
 
@@ -1056,13 +1045,13 @@ describe('Scrollbar', () => {
 
               viewModel.thumbScrolling = thumbScrolling;
               viewModel.crossThumbScrolling = true;
-              viewModel.inBounds = () => inBounds;
+              viewModel.inRange = () => inRange;
               viewModel.stopHandler();
 
               expect(viewModel.thumbScrolling).toEqual(false);
               expect(viewModel.crossThumbScrolling).toEqual(false);
 
-              if (!inBounds) {
+              if (!inRange) {
                 expect(onBounceAnimatorStartHandler).toHaveBeenCalledTimes(1);
                 expect(onBounceAnimatorStartHandler).toHaveBeenCalledWith('bounce');
               }

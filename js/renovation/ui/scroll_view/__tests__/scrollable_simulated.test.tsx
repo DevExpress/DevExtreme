@@ -160,12 +160,12 @@ describe('Simulated > Render', () => {
 });
 
 describe('Simulated > Behavior', () => {
-  it('windowResizeHandler()', () => {
+  it('updateHandler()', () => {
     const helper = new ScrollableTestHelper({});
 
     helper.viewModel.update = jest.fn();
 
-    helper.viewModel.windowResizeHandler();
+    helper.viewModel.updateHandler();
 
     expect(helper.viewModel.update).toBeCalledTimes(1);
   });
@@ -894,27 +894,10 @@ describe('Simulated > Behavior', () => {
   });
 
   describe('Key down', () => {
-    it('should call onKeyDown callback by Widget key down', () => {
-      const onKeyDown = jest.fn(() => ({ cancel: true }));
-      const options = {};
-      const scrollable = new Scrollable({ onKeyDown });
-      scrollable.onWidgetKeyDown(options);
-      expect(onKeyDown).toHaveBeenCalledTimes(1);
-      expect(onKeyDown).toHaveBeenCalledWith(options);
-    });
-
-    it('should prevent key down event processing if onKeyDown event handler returns event.cancel="true"', () => {
-      const onKeyDown = jest.fn(() => ({ cancel: true }));
-      const options = { keyName: 'down' };
-      const scrollable = new Scrollable({ onKeyDown });
-      scrollable.onWidgetKeyDown(options);
-      expect(onKeyDown).toBeCalled();
-    });
-
     each(['vertical', 'horizontal', 'both']).describe('Direction: %o', (direction) => {
       each(['leftArrow', 'upArrow', 'rightArrow', 'downArrow']).describe('Key: %o', (keyName) => {
         it(`should prevent default key down event by key - ${keyName}`, () => {
-          const options = {
+          const e = {
             originalEvent: {
               key: keyName,
               preventDefault: jest.fn(),
@@ -924,17 +907,17 @@ describe('Simulated > Behavior', () => {
           const helper = new ScrollableTestHelper({ direction });
 
           helper.viewModel.scrollByLine = jest.fn();
-          helper.viewModel.onWidgetKeyDown(options);
+          helper.viewModel.handleKeyDown(e);
 
-          expect(options.originalEvent.preventDefault).toBeCalled();
-          expect(options.originalEvent.stopPropagation).toBeCalled();
+          expect(e.originalEvent.preventDefault).toBeCalled();
+          expect(e.originalEvent.stopPropagation).toBeCalled();
           expect(helper.viewModel.scrollByLine).toBeCalledTimes(1);
           expect(helper.viewModel.scrollByLine).toBeCalledWith({ [`${(keyName === 'upArrow' || keyName === 'downArrow') ? 'y' : 'x'}`]: (keyName === 'upArrow' || keyName === 'leftArrow') ? -1 : 1 });
         });
 
         each([1, 2, undefined]).describe('devicePixelRatio: %o', (pixelRatio) => {
           it(`should call scrollBy by ${keyName} key`, () => {
-            const options = {
+            const e = {
               originalEvent: {
                 key: keyName,
                 preventDefault: jest.fn(),
@@ -945,7 +928,7 @@ describe('Simulated > Behavior', () => {
 
             helper.viewModel.tryGetDevicePixelRatio = () => pixelRatio;
             helper.viewModel.scrollBy = jest.fn();
-            helper.viewModel.onWidgetKeyDown(options);
+            helper.viewModel.handleKeyDown(e);
 
             const expectedParams = { top: 0, left: 0 };
             if (keyName === 'leftArrow') {
@@ -969,7 +952,7 @@ describe('Simulated > Behavior', () => {
       each(['pageUp', 'pageDown']).describe('Key: %o', (keyName) => {
         it(`should prevent default key down event by key - ${keyName}`, () => {
           const scrollByPageHandler = jest.fn();
-          const options = {
+          const e = {
             originalEvent: {
               key: keyName,
               preventDefault: jest.fn(),
@@ -978,16 +961,16 @@ describe('Simulated > Behavior', () => {
           };
           const helper = new ScrollableTestHelper({ direction });
           helper.viewModel.scrollByPage = scrollByPageHandler;
-          helper.viewModel.onWidgetKeyDown(options);
-          expect(options.originalEvent.preventDefault).toBeCalled();
-          expect(options.originalEvent.stopPropagation).toBeCalled();
+          helper.viewModel.handleKeyDown(e);
+          expect(e.originalEvent.preventDefault).toBeCalled();
+          expect(e.originalEvent.stopPropagation).toBeCalled();
           expect(scrollByPageHandler).toBeCalledTimes(1);
           expect(scrollByPageHandler).toBeCalledWith(keyName === 'pageUp' ? -1 : 1);
         });
 
         it(`should call scrollBy by ${keyName} key`, () => {
           const scrollByHandler = jest.fn();
-          const options = {
+          const e = {
             originalEvent: {
               key: keyName,
               preventDefault: jest.fn(),
@@ -996,13 +979,13 @@ describe('Simulated > Behavior', () => {
           };
           const helper = new ScrollableTestHelper({ direction });
           helper.viewModel.scrollBy = scrollByHandler;
-          helper.viewModel.onWidgetKeyDown(options);
+          helper.viewModel.handleKeyDown(e);
           expect(scrollByHandler).toBeCalledTimes(1);
         });
       });
 
       it('should prevent default key down event by "home" key', () => {
-        const options = {
+        const e = {
           originalEvent: {
             key: 'home',
             preventDefault: jest.fn(),
@@ -1011,15 +994,15 @@ describe('Simulated > Behavior', () => {
         };
         const helper = new ScrollableTestHelper({ direction });
         helper.viewModel.scrollToHome = jest.fn();
-        helper.viewModel.onWidgetKeyDown(options);
+        helper.viewModel.handleKeyDown(e);
 
-        expect(options.originalEvent.preventDefault).toBeCalled();
-        expect(options.originalEvent.stopPropagation).toBeCalled();
+        expect(e.originalEvent.preventDefault).toBeCalled();
+        expect(e.originalEvent.stopPropagation).toBeCalled();
         expect(helper.viewModel.scrollToHome).toBeCalledTimes(1);
       });
 
       it('should scroll to start by "home" key', () => {
-        const options = {
+        const e = {
           originalEvent: {
             key: 'home',
             preventDefault: jest.fn(),
@@ -1028,14 +1011,14 @@ describe('Simulated > Behavior', () => {
         };
         const helper = new ScrollableTestHelper({ direction });
         helper.viewModel.scrollTo = jest.fn();
-        helper.viewModel.onWidgetKeyDown(options);
+        helper.viewModel.handleKeyDown(e);
 
         expect(helper.viewModel.scrollTo).toBeCalledTimes(1);
         expect(helper.viewModel.scrollTo).toBeCalledWith({ [`${direction === 'horizontal' ? 'left' : 'top'}`]: 0 });
       });
 
       it('should prevent default key down event by "end" key', () => {
-        const options = {
+        const e = {
           originalEvent: {
             key: 'end',
             preventDefault: jest.fn(),
@@ -1044,14 +1027,14 @@ describe('Simulated > Behavior', () => {
         };
         const helper = new ScrollableTestHelper({ direction });
         helper.viewModel.scrollToEnd = jest.fn();
-        helper.viewModel.onWidgetKeyDown(options);
-        expect(options.originalEvent.preventDefault).toBeCalled();
-        expect(options.originalEvent.stopPropagation).toBeCalled();
+        helper.viewModel.handleKeyDown(e);
+        expect(e.originalEvent.preventDefault).toBeCalled();
+        expect(e.originalEvent.stopPropagation).toBeCalled();
         expect(helper.viewModel.scrollToEnd).toBeCalledTimes(1);
       });
 
       it('should scroll to end by "end" key', () => {
-        const options = {
+        const e = {
           originalEvent: {
             key: 'end',
             preventDefault: jest.fn(),
@@ -1060,14 +1043,14 @@ describe('Simulated > Behavior', () => {
         };
         const helper = new ScrollableTestHelper({ direction });
         helper.viewModel.scrollTo = jest.fn();
-        helper.viewModel.onWidgetKeyDown(options);
+        helper.viewModel.handleKeyDown(e);
         expect(helper.viewModel.scrollTo).toBeCalledTimes(1);
       });
     });
 
-    it('should prevent default key down event by common keys down', () => {
+    it('should not prevent default key down event by common keys down', () => {
       const scrollFunc = jest.fn();
-      const options = {
+      const e = {
         originalEvent: {
           key: 'A',
           preventDefault: jest.fn(),
@@ -1079,11 +1062,114 @@ describe('Simulated > Behavior', () => {
       helper.viewModel.scrollToEnd = scrollFunc;
       helper.viewModel.scrollByLine = scrollFunc;
       helper.viewModel.scrollByPage = scrollFunc;
-      helper.viewModel.onWidgetKeyDown(options);
+      helper.viewModel.handleKeyDown(e);
 
-      expect(options.originalEvent.preventDefault).not.toBeCalled();
-      expect(options.originalEvent.stopPropagation).not.toBeCalled();
+      expect(e.originalEvent.preventDefault).not.toBeCalled();
+      expect(e.originalEvent.stopPropagation).not.toBeCalled();
       expect(scrollFunc).toBeCalledTimes(0);
+    });
+
+    it('should not prevent default key down event by tab key down', () => {
+      const e = {
+        originalEvent: {
+          key: 'tab',
+          preventDefault: jest.fn(),
+          stopPropagation: jest.fn(),
+        },
+      };
+      const helper = new ScrollableTestHelper({ });
+      helper.viewModel.tabWasPressed = false;
+
+      helper.viewModel.handleKeyDown(e);
+
+      expect(e.originalEvent.preventDefault).not.toBeCalled();
+      expect(e.originalEvent.stopPropagation).not.toBeCalled();
+      expect(helper.viewModel.tabWasPressed).toEqual(true);
+    });
+
+    it('keyboardEffect(), should subscribe container to keyboard event', () => {
+      const helper = new ScrollableTestHelper({ });
+      helper.viewModel.tabWasPressed = false;
+
+      helper.viewModel.keyboardEffect();
+
+      emit('keydown', { key: 'pageUp' } as any);
+      expect(helper.viewModel.tabWasPressed).toEqual(false);
+      emit('keydown', { key: 'tab' } as any);
+      expect(helper.viewModel.tabWasPressed).toEqual(true);
+    });
+
+    it('keyboardEffect(), should return unsubscribe callback', () => {
+      const helper = new ScrollableTestHelper({ });
+      const detach = helper.viewModel.keyboardEffect();
+      helper.viewModel.tabWasPressed = false;
+
+      emit('keydown', { key: 'tab' } as any);
+      expect(helper.viewModel.tabWasPressed).toEqual(true);
+
+      helper.viewModel.tabWasPressed = false;
+      detach();
+
+      emit('keydown', { key: 'tab' } as any);
+      expect(helper.viewModel.tabWasPressed).toEqual(false);
+    });
+
+    it('should not syncronize scrollbar location & container on "scroll" if tab key was not pressed', () => {
+      const helper = new ScrollableTestHelper({});
+
+      helper.viewModel.tabWasPressed = false;
+      helper.viewModel.vScrollLocation = -100;
+      helper.viewModel.hScrollLocation = -100;
+      helper.viewModel.scrollOffset = jest.fn(() => ({ top: 50, left: 50 }));
+
+      helper.viewModel.handleScroll();
+
+      expect(helper.viewModel.vScrollLocation).toEqual(-100);
+      expect(helper.viewModel.hScrollLocation).toEqual(-100);
+      expect(helper.viewModel.tabWasPressed).toEqual(false);
+    });
+
+    it('should syncronize scrollbar location & container on "scroll" if tab key was pressed', () => {
+      const helper = new ScrollableTestHelper({});
+
+      expect.extend({
+        toBeValid(received, expected) {
+          if (received === expected) {
+            return {
+              message: () => 'passed',
+              pass: true,
+            };
+          }
+          return {
+            message: () => `scrollLocation - actual: ${received}, expected: ${expected}`,
+            pass: false,
+          };
+        },
+      });
+
+      [100, 0, -50, -70, -100, -200].forEach((hScrollLocation) => {
+        [100, 0, -50, -70, -100, -200].forEach((vScrollLocation) => {
+          helper.viewModel.tabWasPressed = true;
+          helper.viewModel.vScrollLocation = vScrollLocation;
+          helper.viewModel.hScrollLocation = hScrollLocation;
+          helper.viewModel.scrollOffset = jest.fn(() => ({ top: 50, left: 50 }));
+
+          helper.viewModel.handleScroll();
+
+          let expectedVScrollLocation = vScrollLocation;
+          let expectedHScrollLocation = hScrollLocation;
+
+          if ((vScrollLocation <= 0 && vScrollLocation >= -100)
+          && (hScrollLocation <= 0 && hScrollLocation >= -100)) {
+            expectedVScrollLocation = -50;
+            expectedHScrollLocation = -50;
+          }
+
+          (expect(helper.viewModel.vScrollLocation) as any).toBeValid(expectedVScrollLocation);
+          (expect(helper.viewModel.hScrollLocation) as any).toBeValid(expectedHScrollLocation);
+          expect(helper.viewModel.tabWasPressed).toEqual(false);
+        });
+      });
     });
   });
 

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 // eslint-disable-next-line import/named
-import renderer, { dxElementWrapper } from '../../../core/renderer';
+import renderer, { dxElementWrapper } from '../../../../core/renderer';
 import './utils/test_components/empty_test_widget';
 import './utils/test_components/test_widget';
 import './utils/test_components/options_check_widget';
@@ -11,9 +11,9 @@ import {
   defaultEvent,
   emitKeyboard,
   KEY,
-} from '../../test_utils/events_mock';
-import { setPublicElementWrapper } from '../../../core/element';
-import * as Utils from '../utils';
+} from '../../../test_utils/events_mock';
+import { setPublicElementWrapper } from '../../../../core/element';
+import * as UpdatePropsImmutable from '../../utils/update-props-immutable';
 
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
@@ -55,6 +55,15 @@ describe('Misc cases', () => {
 
     expect(subscribeEffect).toHaveBeenCalledTimes(1);
     expect(unsubscribeEffect).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not throw error on disposing nested widget when call "empty()" on parent node', () => {
+    const $component = $('#component');
+
+    $('<div>').appendTo($component).dxTemplatedTestWidget({});
+    $component.dxTemplatedTestWidget({});
+
+    expect(() => $('#components').empty()).not.toThrowError();
   });
 
   it('should forward API calls to component', () => {
@@ -400,7 +409,7 @@ describe('option', () => {
     const component = $('#component').dxOptionsCheckWidget({}).dxOptionsCheckWidget('instance');
     expect(component.getLastReceivedProps().nestedObject.nestedProp).toBe('default value');
     const { nestedObject } = component.getLastReceivedProps();
-    const spyUpdatePropsImmutable = jest.spyOn(Utils, 'updatePropsImmutable');
+    const spyUpdatePropsImmutable = jest.spyOn(UpdatePropsImmutable, 'updatePropsImmutable');
 
     component.option('nestedObject.nestedProp', 'new value');
     expect(spyUpdatePropsImmutable).toBeCalledWith(

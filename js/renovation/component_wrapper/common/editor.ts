@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import Component from './component';
-import ValidationEngine from '../../ui/validation_engine';
-import { extend } from '../../core/utils/extend';
-import $ from '../../core/renderer';
-import { data } from '../../core/element_data';
-import Callbacks from '../../core/utils/callbacks';
-import OldEditor from '../../ui/editor/editor';
+import ValidationEngine from '../../../ui/validation_engine';
+import { extend } from '../../../core/utils/extend';
+import $ from '../../../core/renderer';
+import { data } from '../../../core/element_data';
+import Callbacks from '../../../core/utils/callbacks';
+import OldEditor from '../../../ui/editor/editor';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
@@ -44,6 +44,7 @@ export default class Editor extends Component {
     props.saveValueChangeEvent = (e: Event): void => {
       this._valueChangeEventInstance = e;
     };
+
     return props;
   }
 
@@ -93,6 +94,7 @@ export default class Editor extends Component {
             editor: this,
           });
         }
+        super._optionChanged(option);
         break;
       case 'isValid':
       case 'validationError':
@@ -100,6 +102,7 @@ export default class Editor extends Component {
       case 'validationStatus':
         this.option((ValidationEngine as unknown as ({ synchronizeValidationOptions }))
           .synchronizeValidationOptions(option, this.option()));
+        super._optionChanged(option);
         break;
       default:
         super._optionChanged(option);

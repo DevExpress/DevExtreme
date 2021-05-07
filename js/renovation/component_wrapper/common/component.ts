@@ -1,16 +1,16 @@
 /* eslint-disable */
 import { render, createRef, RefObject } from "inferno";
 import { createElement } from 'inferno-create-element';
-import $ from '../../core/renderer';
-import domAdapter from '../../core/dom_adapter';
-import DOMComponent from '../../core/dom_component';
-import { extend } from '../../core/utils/extend';
-import { getPublicElement } from '../../core/element';
-import { isDefined, isRenderer } from '../../core/utils/type';
+import $ from '../../../core/renderer';
+import domAdapter from '../../../core/dom_adapter';
+import DOMComponent from '../../../core/dom_component';
+import { extend } from '../../../core/utils/extend';
+import { getPublicElement } from '../../../core/element';
+import { isDefined, isRenderer } from '../../../core/utils/type';
 
 import { InfernoEffectHost, hydrate } from "@devextreme/vdom";
 import { TemplateWrapper } from "./template_wrapper";
-import { updatePropsImmutable } from './utils';
+import { updatePropsImmutable } from '../utils/update-props-immutable';
 
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
@@ -37,6 +37,7 @@ export default class ComponentWrapper extends DOMComponent {
   };
   _viewRef!: RefObject<unknown>;
   _viewComponent!: any;
+  _disposeMethodCalled = false;
 
   get _propsInfo(): {
     allowNull: string[];
@@ -122,13 +123,27 @@ export default class ComponentWrapper extends DOMComponent {
 
   _render() { } // NOTE: Inherited from DOM_Component
 
+  dispose() {
+    this._disposeMethodCalled = true;
+    super.dispose();
+  }
+
   _dispose() {
     const containerNode = this.$element()[0];
     const parentNode = containerNode.parentNode;
-    parentNode.$V = containerNode.$V;
-    containerNode.$V = null;
-    render(createElement(containerNode.tagName, this.elementAttr), parentNode);
-    delete parentNode.$V;
+
+    if (parentNode) {
+      parentNode.$V = containerNode.$V;
+      render(
+        this._disposeMethodCalled ? createElement(
+          containerNode.tagName, 
+          this.elementAttr
+        ) : null,
+        parentNode);
+      delete parentNode.$V;
+    }
+    delete containerNode.$V;
+
     super._dispose();
   }
 
@@ -201,6 +216,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   getProps() {
     const { elementAttr } = this.option();
+    
     const options = this._patchOptionValues({
       ...this._props,
       ref: this._viewRef,

@@ -33,6 +33,7 @@ import {
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 import { ScrollableProps } from './scrollable_props';
 import { BaseWidgetProps } from '../common/base_props';
+import { inRange } from '../../../core/utils/math';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const THUMB_MIN_SIZE = 15;
@@ -89,8 +90,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @InternalState() visibility = false;
 
-  @InternalState() boundaryOffset = 0;
-
   @InternalState() maxOffset = 0;
 
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
@@ -100,8 +99,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Effect()
   updateBoundaryOffset(): void {
     if (this.props.forceGeneratePockets) {
-      this.boundaryOffset = this.props.scrollLocation - this.topPocketSize;
-      this.maxOffset = this.boundaryOffset > 0 ? this.topPocketSize : 0;
+      const boundaryOffset = this.props.scrollLocation - this.topPocketSize;
+      this.maxOffset = boundaryOffset > 0 ? this.topPocketSize : 0;
     }
   }
 
@@ -157,16 +156,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return this.props.scrollLocation >= this.maxOffset;
   }
 
-  @Method()
-  inBounds(): boolean {
-    return this.boundLocation() === this.props.scrollLocation;
+  inRange(): boolean {
+    return inRange(this.props.scrollLocation, this.minOffset, this.maxOffset);
   }
 
   @Method()
-  boundLocation(value?: number): number {
-    const currentLocation = isDefined(value) ? value : this.props.scrollLocation;
-
-    return Math.max(Math.min(currentLocation, this.maxOffset), this.minOffset);
+  getLocationWithinRange(value: number): number {
+    return Math.max(Math.min(value, this.maxOffset), this.minOffset);
   }
 
   @Method()
@@ -271,7 +267,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   scrollComplete(): void {
     if (this.props.forceGeneratePockets) {
-      if (this.inBounds()) {
+      if (this.inRange()) {
         if (this.props.pocketState === TopPocketState.STATE_READY) {
           this.pullDownRefreshing();
           return;
@@ -303,7 +299,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   scrollToBounds(): void {
-    if (this.inBounds()) {
+    if (this.inRange()) {
       this.hide();
       return;
     }
@@ -323,7 +319,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   scrollBy(delta: { x: number; y: number }): void {
     let distance = delta[this.axis];
-    if (!this.inBounds()) {
+    if (!this.inRange()) {
       distance *= OUT_BOUNDS_ACCELERATION;
     }
     this.scrollStep(distance);
@@ -380,7 +376,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     if (this.props.bounceEnabled) {
       this.moveTo(this.props.scrollLocation + delta);
     } else {
-      this.moveTo(this.boundLocation(this.props.scrollLocation + delta));
+      this.moveTo(this.getLocationWithinRange(this.props.scrollLocation + delta));
     }
   }
 
@@ -388,7 +384,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   moveToBoundaryOnSizeChange(): void {
     if (this.props.forceUpdateScrollbarLocation) {
       if (this.props.scrollLocation <= this.maxOffset) {
-        let newScrollLocation = this.boundLocation();
+        let newScrollLocation = this.getLocationWithinRange(this.props.scrollLocation);
 
         if (this.isHorizontal && this.props.rtlEnabled) {
           newScrollLocation = this.minOffset - this.rightScrollLocation;
@@ -479,7 +475,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   isPullDown(): boolean {
-    return this.props.pullDownEnabled && this.props.bounceEnabled && this.boundaryOffset >= 0;
+    return this.props.pullDownEnabled
+      && this.props.bounceEnabled
+      && (this.props.scrollLocation - this.props.topPocketSize) >= 0;
   }
 
   isReachBottom(): boolean {

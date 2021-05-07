@@ -111,15 +111,25 @@ describe('ScrollView', () => {
     describe('Getters', () => {
       describe('cssClasses', () => {
         each([false, true]).describe('useNative: %o', (useNative) => {
-          it('Check strategy branch', () => {
-            const scrollView = mount(viewFunction({ props: { useNative } } as any) as JSX.Element);
+          it('strategy classes', () => {
+            const viewModel = mount(viewFunction({ props: { useNative, direction: 'vertical' } } as any) as JSX.Element);
+
+            const rootClasses = viewModel.getDOMNode().className;
+
+            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollview'));
+            expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
+            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
+            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
+            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
+            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
 
             if (useNative) {
-              expect(scrollView.find('.dx-scrollable-native').exists()).toBe(true);
-              expect(scrollView.find('.dx-scrollable-simulated').exists()).toBe(false);
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
             } else {
-              expect(scrollView.find('.dx-scrollable-native').exists()).toBe(false);
-              expect(scrollView.find('.dx-scrollable-simulated').exists()).toBe(true);
+              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
             }
           });
         });
@@ -148,8 +158,7 @@ describe('ScrollView', () => {
             scrollableRef: { get() { return { current: 'scrollableRef' }; } },
           });
 
-          expect(viewModel.scrollable)
-            .toEqual('scrollableRef');
+          expect(viewModel.scrollable).toEqual('scrollableRef');
         });
       });
     });

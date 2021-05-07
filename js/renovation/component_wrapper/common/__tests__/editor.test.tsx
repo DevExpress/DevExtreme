@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import Editor from '../editor';
-import OldEditor from '../../../ui/editor/editor';
+import OldEditor from '../../../../ui/editor/editor';
 
 const mockIsEditorMock = jest.fn().mockReturnValue(false);
 
-jest.mock('../../../ui/editor/editor', () => (
+jest.mock('../../../../ui/editor/editor', () => (
   { isEditor: (inst) => mockIsEditorMock(inst) }));
 jest.mock('../component');
 class TestEditor extends Editor {

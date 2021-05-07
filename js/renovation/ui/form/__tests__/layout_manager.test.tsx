@@ -2,13 +2,29 @@ import { mount } from 'enzyme';
 import React from 'react';
 import { LayoutManager } from '../layout_manager';
 import { LayoutManagerProps } from '../layout_manager_props';
+import { ResponsiveBox } from '../../responsive_box/responsive_box';
 
 describe('LayoutManager', () => {
   it('InitialProps', () => {
     const props = new LayoutManagerProps();
-    const form = mount<LayoutManager>(<LayoutManager {...props} />);
+    const layoutManager = mount<LayoutManager>(<LayoutManager {...props} />);
 
-    expect(form.props()).toEqual({});
+    expect(layoutManager.props()).toEqual({
+      screenByWidth: undefined,
+    });
+  });
+});
+
+describe('LayoutManager > Markup', () => {
+  it('ResponsiveBox is rendered', () => {
+    const props = new LayoutManagerProps();
+    const layoutManager = mount<LayoutManager>(<LayoutManager {...props} />);
+
+    const responsiveBox = layoutManager.find(ResponsiveBox);
+    expect(responsiveBox.exists()).toBe(true);
+    expect(responsiveBox.props()).toEqual({
+      screenByWidth: undefined,
+    });
   });
 });
 
