@@ -61,13 +61,13 @@ export class PdfGrid {
     }
 
     _trySplitColSpanArea(cells, splitIndex) {
-        const { startIndex, endIndex } = this._findColSpanArea(cells, splitIndex);
-        if(isDefined(startIndex) && isDefined(endIndex)) {
-            const leftAreaColSpan = splitIndex - startIndex - 1;
-            const rightAreaColSpan = endIndex - splitIndex;
+        const colSpanArea = this._findColSpanArea(cells, splitIndex);
+        if(isDefined(colSpanArea.startIndex) && isDefined(colSpanArea.endIndex)) {
+            const leftAreaColSpan = splitIndex - colSpanArea.startIndex - 1;
+            const rightAreaColSpan = colSpanArea.endIndex - splitIndex;
 
-            cells[splitIndex].text = cells[startIndex].text;
-            for(let index = startIndex; index <= endIndex; index++) {
+            cells[splitIndex].text = cells[colSpanArea.startIndex].text;
+            for(let index = colSpanArea.startIndex; index <= colSpanArea.endIndex; index++) {
                 const colSpan = (index < splitIndex) ? leftAreaColSpan : rightAreaColSpan;
                 if(colSpan > 0) {
                     cells[index].colSpan = colSpan;
@@ -105,6 +105,7 @@ export class PdfGrid {
         }
 
         return {
+            colSpan,
             startIndex,
             endIndex
         };
