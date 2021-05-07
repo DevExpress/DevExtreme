@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import {
   emit, getEventHandlers, clear as clearEventHandlers, EVENT,
 } from '../../../test_utils/events_mock';
-import { DraggableContainer, DraggableContainerProps, viewFunction as DraggableView } from '../container';
+import { DraggableContainer, DraggableContainerProps, viewFunction as DraggableContainerView } from '../container';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
 
 describe('DataGrid', () => {
@@ -19,7 +19,7 @@ describe('DataGrid', () => {
         restAttributes: { 'rest-attributes': 'true' },
         props,
       } as unknown as DraggableContainer;
-      const tree = mount(<DraggableView {...draggableProps as any} /> as any);
+      const tree = mount(<DraggableContainerView {...draggableProps as any} /> as any);
 
       expect(tree.find('div').props()).toMatchObject({
         ...props,
@@ -34,7 +34,7 @@ describe('DataGrid', () => {
       const props = {
         children: <div className="child" />,
       };
-      const widget = mount(DraggableView({
+      const widget = mount(DraggableContainerView({
         props,
       } as any) as any);
 
@@ -53,12 +53,6 @@ describe('DataGrid', () => {
           const draggable = new DraggableContainer({ className: 'custom-class' });
 
           expect(draggable.cssClasses).toEqual('custom-class dx-draggable');
-        });
-
-        it('should add rtl class', () => {
-          const draggable = new DraggableContainer({ rtlEnabled: true });
-
-          expect(draggable.cssClasses).toEqual('dx-draggable dx-rtl');
         });
 
         it('should add disabled class', () => {

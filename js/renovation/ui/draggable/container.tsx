@@ -11,7 +11,6 @@ import {
   Slot,
 } from '@devextreme-generator/declarations';
 import { EffectReturn } from '../../utils/effect_return';
-import type { DragStartEvent, DragMoveEvent, DragEndEvent } from '../../../ui/draggable';
 
 import {
   start,
@@ -20,20 +19,6 @@ import {
 } from '../../../events/drag';
 import eventsEngine from '../../../events/core/events_engine';
 import { combineClasses } from '../../utils/combine_classes';
-
-const getCssClasses = (model: DraggableContainerProps, isDragging: boolean): string => {
-  const { rtlEnabled, disabled, className } = model;
-
-  const classesMap = {
-    [String(className)]: !!className,
-    'dx-draggable': true,
-    'dx-draggable-dragging': isDragging,
-    'dx-state-disabled': !!disabled,
-    'dx-rtl': !!rtlEnabled,
-  };
-
-  return combineClasses(classesMap);
-};
 
 export const viewFunction = ({
   widgetRef,
@@ -49,30 +34,31 @@ export const viewFunction = ({
   </div>
 );
 
+interface DraggableContainerEvent {
+  event: Event;
+  data: unknown;
+  itemElement: HTMLDivElement;
+}
+
 @ComponentBindings()
 export class DraggableContainerProps {
-  @OneWay() data?: any;
-
-  @OneWay() rtlEnabled?: boolean;
+  @OneWay() data?: unknown;
 
   @OneWay() disabled?: boolean;
 
-  @OneWay() className?: string = '';
+  @OneWay() className = '';
 
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
-  @Event() onDragStart?: (e: DragStartEvent) => void;
+  @Event() onDragStart?: (e: DraggableContainerEvent) => void;
 
-  @Event() onDragMove?: (e: DragMoveEvent) => void;
+  @Event() onDragMove?: (e: DraggableContainerEvent) => void;
 
-  @Event() onDragEnd?: (e: DragEndEvent) => void;
+  @Event() onDragEnd?: (e: DraggableContainerEvent) => void;
 }
 
 @Component({
   defaultOptionRules: null,
-  jQuery: {
-    register: true,
-  },
   view: viewFunction,
 })
 
@@ -82,7 +68,16 @@ export class DraggableContainer extends JSXComponent(DraggableContainerProps) {
   @InternalState() isDragging = false;
 
   get cssClasses(): string {
-    return getCssClasses(this.props, this.isDragging);
+    const { disabled, className } = this.props;
+
+    const classesMap = {
+      [className]: !!className,
+      'dx-draggable': true,
+      'dx-draggable-dragging': this.isDragging,
+      'dx-state-disabled': !!disabled,
+    };
+
+    return combineClasses(classesMap);
   }
 
   @Effect()
@@ -104,14 +99,14 @@ export class DraggableContainer extends JSXComponent(DraggableContainerProps) {
 
   dragStartHandler(event: Event): void {
     this.isDragging = true;
-    const dragStartArgs = this.getEventArgs(event) as unknown as DragStartEvent;
+    const dragStartArgs = this.getEventArgs(event);
     const { onDragStart } = this.props;
 
     onDragStart?.(dragStartArgs);
   }
 
   dragMoveHandler(event: Event): void {
-    const dragMoveArgs = this.getEventArgs(event) as unknown as DragMoveEvent;
+    const dragMoveArgs = this.getEventArgs(event);
     const { onDragMove } = this.props;
 
     onDragMove?.(dragMoveArgs);
@@ -119,17 +114,18 @@ export class DraggableContainer extends JSXComponent(DraggableContainerProps) {
 
   dragEndHandler(event: Event): void {
     this.isDragging = false;
-    const dragEndArgs = this.getEventArgs(event) as unknown as DragEndEvent;
+    const dragEndArgs = this.getEventArgs(event);
     const { onDragEnd } = this.props;
 
     onDragEnd?.(dragEndArgs);
   }
 
-  getEventArgs(e: Event): Record<string, unknown> {
+  getEventArgs(e: Event): DraggableContainerEvent {
     return {
       event: e,
       data: this.props.data,
-      itemElement: this.widgetRef.current,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      itemElement: this.widgetRef.current!,
     };
   }
 }
