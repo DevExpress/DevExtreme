@@ -770,7 +770,9 @@ export const virtualScrollingModule = {
                 mode: 'standard',
                 preloadEnabled: false,
                 rowRenderingMode: 'standard',
-                loadTwoPagesOnStart: false
+                loadTwoPagesOnStart: false,
+                newMode: false,
+                minGap: 1
             }
         };
     },
