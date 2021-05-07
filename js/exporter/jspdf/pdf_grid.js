@@ -79,36 +79,26 @@ export class PdfGrid {
     }
 
     _findColSpanArea(cells, targetCellIndex) {
-        let colSpan;
-        let startIndex;
-        let endIndex;
-
+        let colSpanArea = {};
         for(let index = 0; index < cells.length; index++) {
-            if(cells[index].colSpan > 0 && !isDefined(startIndex)) {
-                colSpan = cells[index].colSpan;
-                startIndex = index;
-                endIndex = index;
+            if(cells[index].colSpan > 0 && !isDefined(colSpanArea.startIndex)) {
+                colSpanArea.colSpan = cells[index].colSpan;
+                colSpanArea.startIndex = index;
+                colSpanArea.endIndex = index;
             }
 
-            if(isDefined(startIndex)) {
-                endIndex = index;
-                if(endIndex - startIndex >= colSpan) {
-                    if(startIndex < targetCellIndex && targetCellIndex <= endIndex) {
+            if(isDefined(colSpanArea.startIndex)) {
+                colSpanArea.endIndex = index;
+                if(colSpanArea.endIndex - colSpanArea.startIndex >= colSpanArea.colSpan) {
+                    if(colSpanArea.startIndex < targetCellIndex && targetCellIndex <= colSpanArea.endIndex) {
                         break;
                     } else {
-                        colSpan = undefined;
-                        startIndex = undefined;
-                        endIndex = undefined;
+                        colSpanArea = {};
                     }
                 }
             }
         }
-
-        return {
-            colSpan,
-            startIndex,
-            endIndex
-        };
+        return colSpanArea;
     }
 
     mergeCellsBySpanAttributes() {
