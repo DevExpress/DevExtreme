@@ -90,8 +90,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @InternalState() visibility = false;
 
-  @InternalState() boundaryOffset = 0;
-
   @InternalState() maxOffset = 0;
 
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
@@ -101,8 +99,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Effect()
   updateBoundaryOffset(): void {
     if (this.props.forceGeneratePockets) {
-      this.boundaryOffset = this.props.scrollLocation - this.topPocketSize;
-      this.maxOffset = this.boundaryOffset > 0 ? this.topPocketSize : 0;
+      const boundaryOffset = this.props.scrollLocation - this.topPocketSize;
+      this.maxOffset = boundaryOffset > 0 ? this.topPocketSize : 0;
     }
   }
 
@@ -477,7 +475,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   isPullDown(): boolean {
-    return this.props.pullDownEnabled && this.props.bounceEnabled && this.boundaryOffset >= 0;
+    return this.props.pullDownEnabled
+      && this.props.bounceEnabled
+      && (this.props.scrollLocation - this.props.topPocketSize) >= 0;
   }
 
   isReachBottom(): boolean {
