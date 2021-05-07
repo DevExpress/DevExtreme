@@ -4,7 +4,7 @@ import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
 
 fixture`Scheduler: Layout Views: Timeline Month`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 test('Header cells should be aligned with date-table cells in timeline-month when current date changes', async (t) => {
   const scheduler = new Scheduler('#container');
