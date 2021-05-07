@@ -1687,6 +1687,43 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         // assert
         assert.ok(true, 'No exceptions');
     });
+
+    // T993300
+    QUnit.test('The focused row should not be changed after filtering', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: generateData(6),
+            paging: {
+                pageSize: 4
+            },
+            focusedRowEnabled: true,
+            focusedRowKey: 12,
+            columns: ['id']
+        });
+
+        this.clock.tick(100);
+
+        // act
+        treeList.searchByText(3);
+        this.clock.tick(100);
+
+        // assert
+        const visibleRows = treeList.getVisibleRows();
+        assert.strictEqual(visibleRows.length, 1, 'count node');
+        assert.strictEqual(visibleRows[0].key, 3, 'key node');
+        assert.strictEqual(treeList.option('focusedRowKey'), 12, 'focused row key');
+
+        // act
+        treeList.searchByText('');
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(treeList.pageIndex(), 1, 'page is changed');
+        assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'focus parent is expanded');
+        assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass('dx-row-focused'), 'focused row is visible');
+    });
 });
 
 QUnit.module('Scroll', defaultModuleConfig, () => {

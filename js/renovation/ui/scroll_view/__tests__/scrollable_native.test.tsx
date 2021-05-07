@@ -36,12 +36,17 @@ import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
 import { Scrollbar } from '../scrollbar';
 import { ScrollableTestHelper } from './scrollable_native_test_helper';
 
+interface Mock extends jest.Mock {}
+
 jest.mock('../../../../core/utils/scroll_rtl_behavior');
 jest.mock('../../../../core/utils/browser', () => ({ mozilla: false }));
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
+  const platform = actualDevices.real.bind(actualDevices);
+
   actualDevices.real = jest.fn(() => ({ platform: 'ios' }));
+  actualDevices.current = jest.fn(platform);
   return actualDevices;
 });
 
@@ -522,14 +527,14 @@ describe('Native > Effects', () => {
       expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(0);
     });
 
-  describe('windowResizeHandler', () => {
-    it('windowResizeHandler', () => {
+  describe('updateHandler', () => {
+    it('updateHandler', () => {
       const viewModel = new Scrollable({});
 
       viewModel.updateSizes = jest.fn();
       viewModel.onUpdated = jest.fn();
 
-      viewModel.windowResizeHandler();
+      viewModel.updateHandler();
 
       expect(viewModel.updateSizes).toBeCalledTimes(1);
       expect(viewModel.onUpdated).toBeCalledTimes(1);
@@ -1331,7 +1336,7 @@ describe('Scrollbar integration', () => {
     optionValues.platforms,
   ]))('cssClasses, direction: %o, useSimulatedScrollbar: %o, platform: %o',
     (direction, useSimulatedScrollbar, platform) => {
-      devices.real = () => ({ platform });
+      (devices.real as Mock).mockImplementation(() => ({ platform }));
 
       const viewModel = new Scrollable({
         direction,
@@ -1369,9 +1374,11 @@ describe('Scrollbar integration', () => {
     optionValues.direction,
     optionValues.useSimulatedScrollbar,
     optionValues.platforms,
-  ]))('Should assign swipeDown, pullDown strategy, direction: %o, useSimulatedScrollbar: %o, platform: %o',
-    (direction, useSimulatedScrollbar, platform) => {
-      devices.real = () => ({ platform });
+    ['desktop', 'phone', 'tablet'],
+  ]))('Should assign swipeDown, pullDown strategy, direction: %o, useSimulatedScrollbar: %o, platform: %o, deviceType: %o',
+    (direction, useSimulatedScrollbar, platform, deviceType) => {
+      (devices.real as Mock).mockImplementation(() => ({ platform, deviceType }));
+      (devices.current as Mock).mockImplementation(() => ({ platform }));
 
       const viewModel = new Scrollable({
         useSimulatedScrollbar,
