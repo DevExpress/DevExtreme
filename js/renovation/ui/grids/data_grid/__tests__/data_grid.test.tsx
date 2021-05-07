@@ -123,6 +123,18 @@ describe('DataGrid', () => {
       expect((component.instance as any).options.onOptionChanged).toBeUndefined();
     });
 
+    it('instance should subscribe on "onContentReady"', () => {
+      const props = {
+      } as DataGridProps;
+      const contentReadyHandler = jest.fn();
+      const component = new DataGrid(props);
+      component.restAttributes = { onContentReady: contentReadyHandler };
+
+      component.setupInstance();
+
+      expect((component.instance as any).options.onContentReady).toBe(contentReadyHandler);
+    });
+
     describe('Methods', () => {
       it('getComponentInstance', () => {
         const component = new DataGrid({});
