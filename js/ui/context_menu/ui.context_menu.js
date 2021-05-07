@@ -550,7 +550,7 @@ class ContextMenu extends MenuBase {
     }
 
     _getItemsContainers() {
-        return this._overlay._$content.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+        return this._overlay.$content().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
     }
 
     _searchActiveItem(target) {
