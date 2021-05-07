@@ -89,8 +89,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel,
-      showScrollbar, scrollByThumb, pullingDownText,
-      pulledDownText, refreshingText, reachBottomText,
+      pullingDownText, pulledDownText, refreshingText, reachBottomText,
       pullDownEnabled, reachBottomEnabled,
     },
     restAttributes,
@@ -157,22 +156,20 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           visible={isLoadPanelVisible}
         />
       )}
-      { showScrollbar && useSimulatedScrollbar && direction.isHorizontal && (
+      { useSimulatedScrollbar && direction.isHorizontal && (
         <Scrollbar
           direction="horizontal"
           ref={hScrollbarRef}
-          scrollByThumb={scrollByThumb}
           contentSize={contentClientWidth}
           containerSize={containerClientWidth}
           scrollLocation={hScrollLocation}
           forceVisibility={needForceScrollbarsVisibility}
         />
       )}
-      { showScrollbar && useSimulatedScrollbar && direction.isVertical && (
+      { useSimulatedScrollbar && direction.isVertical && (
         <Scrollbar
           direction="vertical"
           ref={vScrollbarRef}
-          scrollByThumb={scrollByThumb}
           contentSize={contentClientHeight}
           containerSize={containerClientHeight}
           scrollLocation={vScrollLocation}
@@ -930,7 +927,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       [`dx-scrollable dx-scrollable-native dx-scrollable-native-${this.platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
-      [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar && this.useSimulatedScrollbar,
+      [SCROLLABLE_SCROLLBAR_SIMULATED]: this.useSimulatedScrollbar,
       [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
       [`${classes}`]: !!classes,
     };
