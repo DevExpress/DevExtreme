@@ -347,7 +347,7 @@ const DateBox = DropDownEditor.inherit({
 
     _renderPopup: function() {
         this.callBase();
-        this._popup._wrapper().addClass(DATEBOX_WRAPPER_CLASS);
+        this._popup.$wrapper().addClass(DATEBOX_WRAPPER_CLASS);
         this._renderPopupWrapper();
     },
 
@@ -371,7 +371,7 @@ const DateBox = DropDownEditor.inherit({
             $element.removeClass(DATEBOX_WRAPPER_CLASS + '-' + item);
         }).bind(this));
 
-        this._popup._wrapper()
+        this._popup.$wrapper()
             .addClass(DATEBOX_WRAPPER_CLASS + '-' + this.option('type'))
             .addClass(DATEBOX_WRAPPER_CLASS + '-' + this._pickerType);
     },
