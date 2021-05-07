@@ -223,6 +223,55 @@ describe('CheckBox', () => {
     describe('Effects', () => {
       afterEach(clearEventHandlers);
 
+      describe('updateValidationMessageVisibility', () => {
+        it('should set showValidationMessage to true when isValid=false, validationStatus="invalid" and there are validation errors', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          checkBox.updateValidationMessageVisibility();
+
+          expect(checkBox.showValidationMessage).toBe(true);
+        });
+
+        it('should set showValidationMessage to false if there is no validation errors', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+          });
+
+          checkBox.updateValidationMessageVisibility();
+
+          expect(checkBox.showValidationMessage).toBe(false);
+        });
+
+        it('should set showValidationMessage to false if validationStatis not equal to "invalid"', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'pending',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          checkBox.updateValidationMessageVisibility();
+
+          expect(checkBox.showValidationMessage).toBe(false);
+        });
+
+        it('should set showValidationMessage to false if isValid is true', () => {
+          const checkBox = new CheckBox({
+            isValid: true,
+            validationStatus: 'invalid',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          checkBox.updateValidationMessageVisibility();
+
+          expect(checkBox.showValidationMessage).toBe(false);
+        });
+      });
+
       describe('Methods', () => {
         describe('focus', () => {
           it('should focus main element', () => {
