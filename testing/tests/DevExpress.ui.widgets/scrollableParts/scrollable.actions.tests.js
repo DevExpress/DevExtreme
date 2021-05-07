@@ -331,42 +331,10 @@ QUnit.test('changing action option does not cause render', function(assert) {
         assert.equal(location.top, -10, actionName + ' case scrollable rerendered');
     };
 
-    testAction('onStop');
     testAction('onStart');
     testAction('onEnd');
 
     testAction('onScroll');
     testAction('onBounce');
     testAction('onUpdated');
-});
-
-QUnit.test('onStop action is called on `scrollable` stop (T818446)', function(assert) {
-    assert.expect(1);
-
-    animationFrame.requestAnimationFrame = function(callback) {
-        setTimeout(callback, 0);
-    };
-
-    let stopCalled = false;
-    const $scrollable = $('#scrollable').dxScrollable({
-        useNative: false,
-        onStop: function(e) {
-            stopCalled = true;
-            assert.ok(stopCalled, 'onStop is called');
-        }
-    });
-
-    const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
-
-    mouse
-        .down()
-        .wait(10)
-        .move(0, -10)
-        .up();
-
-    mouse
-        .down()
-        .up();
-
-    this.clock.tick();
 });
