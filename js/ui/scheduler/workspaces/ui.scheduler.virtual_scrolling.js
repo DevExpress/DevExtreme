@@ -263,21 +263,21 @@ export default class VirtualScrollingDispatcher {
         }
     }
 
-    updateDimensions() {
+    updateDimensions(isForce) {
         const cellHeight = this.getCellHeight(false);
         const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
-        if(needUpdateVertical) {
+        if(needUpdateVertical || isForce) {
             this.rowHeight = cellHeight;
 
-            this.verticalVirtualScrolling.reinitState(cellHeight);
+            this.verticalVirtualScrolling?.reinitState(cellHeight, isForce);
         }
 
         const cellWidth = this.getCellWidth();
         const needUpdateHorizontal = this.horizontalScrollingAllowed && cellWidth !== this.cellWidth;
-        if(needUpdateHorizontal) {
+        if(needUpdateHorizontal || isForce) {
             this.cellWidth = cellWidth;
 
-            this.horizontalVirtualScrolling.reinitState(cellWidth);
+            this.horizontalVirtualScrolling?.reinitState(cellWidth, isForce);
         }
 
         if(needUpdateVertical || needUpdateHorizontal) {
@@ -391,10 +391,10 @@ class VirtualScrollingBase {
             : -1;
     }
 
-    updateState(position) {
+    updateState(position, isForce) {
         position = this._correctPosition(position);
 
-        if(!this.needUpdateState(position)) {
+        if(!this.needUpdateState(position) && !isForce) {
             return false;
         }
 
@@ -429,14 +429,14 @@ class VirtualScrollingBase {
         return true;
     }
 
-    reinitState(itemSize) {
+    reinitState(itemSize, isForceUpdate) {
         const { position } = this;
 
         this.itemSize = itemSize;
 
-        this.updateState(0);
+        this.updateState(0, isForceUpdate);
         if(position > 0) {
-            this.updateState(position);
+            this.updateState(position, isForceUpdate);
         }
     }
 
