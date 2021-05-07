@@ -4841,6 +4841,64 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'finally rendered item IDs');
     });
 
+    QUnit.test('New mode. View port items should not be changed on small scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const changedSpy = sinon.spy();
+
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(100),
+            pageSize: 10
+        });
+
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        this.dataController.setViewportPosition(0);
+        this.clock.tick();
+        this.dataController.changed.add(changedSpy);
+
+        let renderedItemIds = this.dataController.items().map(i => i.data.id);
+
+        // assert
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+
+        // act
+        this.dataController.setViewportPosition(20);
+        this.clock.tick();
+
+        renderedItemIds = this.dataController.items().map(i => i.data.id);
+        const change = changedSpy.args[0][0];
+        const changedItemIds = change.items.map(i => i.data.id);
+
+        // assert
+        assert.equal(changedSpy.callCount, 1, 'changed called');
+        assert.ok(change.repaintChangesOnly, 'repaint changes only');
+        assert.strictEqual(change.items.length, 0, 'items count');
+        assert.deepEqual(changedItemIds, [], 'change item IDs');
+        assert.deepEqual(change.changeTypes, [], 'change types');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'finally rendered item IDs');
+    });
+
     QUnit.test('New mode. DataSourceAdapter.viewportSize should not be called when viewPortSize is called', function(assert) {
         // arrange
         this.applyOptions({
