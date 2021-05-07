@@ -1469,6 +1469,45 @@ QUnit.module('regressions', {
         assert.strictEqual(selectionChangedStub.lastCall.args[0].selectedItem, null);
     });
 
+
+    QUnit.module('onSelectionChanged', {
+        beforeEach: function() {
+            this.selectionChangedStub = sinon.stub();
+            this.timeToWait = 300;
+            this.instance.option({
+                searchTimeout: this.timeToWait,
+                onSelectionChanged: this.selectionChangedStub
+            });
+        }
+    }, () => {
+        QUnit.test('onSelectionChanged event should trigger on item selection if its text is equal to input text (T991350)', function(assert) {
+            this.keyboard
+                .type('item 2');
+
+            this.clock.tick(this.timeToWait + 100);
+            const $listItems = $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
+            const $secondItem = $listItems.eq(0);
+            $secondItem.trigger('dxclick');
+
+            assert.strictEqual(this.selectionChangedStub.callCount, 1);
+            assert.strictEqual(this.instance.option('selectedItem'), 'item 2');
+        });
+
+        QUnit.test('onSelectionChanged event should trigger on item selection by keyboard if its text is equal to input text (T991350)', function(assert) {
+            this.keyboard
+                .type('item 2');
+
+            this.clock.tick(this.timeToWait + 100);
+
+            this.keyboard
+                .keyDown(KEY_DOWN)
+                .keyDown(KEY_ENTER);
+
+            assert.strictEqual(this.selectionChangedStub.callCount, 1);
+            assert.strictEqual(this.instance.option('selectedItem'), 'item 2');
+        });
+    });
+
     QUnit.test('item initialization scenario', function(assert) {
         const instance = $('#autocomplete').dxAutocomplete({
             items: ['a', 'b', 'c']
