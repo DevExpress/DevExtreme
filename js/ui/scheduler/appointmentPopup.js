@@ -403,7 +403,7 @@ export default class AppointmentPopup {
     }
 
     _showLoadPanel() {
-        const $overlayContent = this._popup.overlayContent();
+        const $overlayContent = this._popup.$overlayContent();
 
         showLoading({
             container: $overlayContent,

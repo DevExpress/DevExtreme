@@ -2502,7 +2502,7 @@ QUnit.module('keyboard navigation', {
             .focus()
             .press('tab');
 
-        const $applyButton = this.instance._popup._wrapper().find('.dx-button.dx-popup-done');
+        const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
         assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
 });
