@@ -566,7 +566,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     // All other events should be re-raised by renovated grid.
     const { onOptionChanged, ...restProps } = {
       ...this.props,
-      onContentReady: this.restAttributes.onContentReady,
+      onContentReady: this.restAttributes?.onContentReady,
     } as unknown as Record<string, unknown>;
     const instance: GridInstance = new DataGridComponent(
       element,
