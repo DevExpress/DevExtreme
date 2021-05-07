@@ -3428,12 +3428,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(loadSpy.callCount, 2, 'second call');
-        assert.equal(visibleRows.length, 9, 'visible rows on the second load');
-        assert.equal(visibleGroupRowCount, 2, 'group count on the second load');
-        assert.strictEqual(visibleRows[1].rowType, 'group', 'second group row on the second load');
-        assert.deepEqual(visibleRows[1].key, ['Category 19'], 'second group row key on the second load');
-        assert.strictEqual(visibleRows[7].rowType, 'group', 'seventh group row on the second load');
-        assert.deepEqual(visibleRows[7].key, ['Category 2'], 'seventh group row key on the second load');
+        assert.equal(visibleRows.length, 15, 'visible rows on the second load');
+        assert.equal(visibleGroupRowCount, 3, 'group count on the second load');
+        assert.strictEqual(visibleRows[2].rowType, 'group', 'third group row on the second load');
+        assert.deepEqual(visibleRows[2].key, ['Category 19'], 'third group row key on the second load');
+        assert.strictEqual(visibleRows[8].rowType, 'group', 'ninth group row on the second load');
+        assert.deepEqual(visibleRows[8].key, ['Category 2'], 'ninth group row key on the second load');
+        assert.strictEqual(visibleRows[14].rowType, 'group', 'fifteenth group row on the second load');
+        assert.deepEqual(visibleRows[14].key, ['Category 20'], 'fifteenth group row key on the second load');
 
 
         // act (scroll down bottom)
@@ -3444,10 +3446,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(loadSpy.callCount, 3, 'third call');
-        assert.equal(visibleRows.length, 8, 'visible rows on the third load');
+        assert.equal(visibleRows.length, 9, 'visible rows on the third load');
         assert.equal(visibleGroupRowCount, 1, 'group count on the third load');
-        assert.strictEqual(visibleRows[2].rowType, 'group', 'third group row on the third load');
-        assert.deepEqual(visibleRows[2].key, ['Category 9'], 'third group row key on the third load');
+        assert.strictEqual(visibleRows[3].rowType, 'group', 'fourth group row on the third load');
+        assert.deepEqual(visibleRows[3].key, ['Category 9'], 'fourth group row key on the third load');
 
 
         // act (scroll up middle)
@@ -3458,12 +3460,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(loadSpy.callCount, 3, 'call count is not changed on scrolling up to the middle');
-        assert.equal(visibleRows.length, 9, 'visible rows on the scrolling up to the middle');
-        assert.equal(visibleGroupRowCount, 2, 'group count on the scrolling up to the middle');
-        assert.strictEqual(visibleRows[1].rowType, 'group', 'second group row on the scrolling up to the middle');
-        assert.deepEqual(visibleRows[1].key, ['Category 19'], 'second group row key on the scrolling up to the middle');
-        assert.strictEqual(visibleRows[7].rowType, 'group', 'seventh group row on the scrolling up to the middle');
-        assert.deepEqual(visibleRows[7].key, ['Category 2'], 'seventh group row key on the scrolling up to the middle');
+        assert.equal(visibleRows.length, 15, 'visible rows on the scrolling up to the middle');
+        assert.equal(visibleGroupRowCount, 3, 'group count on the scrolling up to the middle');
+        assert.strictEqual(visibleRows[2].rowType, 'group', 'third group row on the scrolling up to the middle');
+        assert.deepEqual(visibleRows[2].key, ['Category 19'], 'third group row key on the scrolling up to the middle');
+        assert.strictEqual(visibleRows[8].rowType, 'group', 'ninth group row on the scrolling up to the middle');
+        assert.deepEqual(visibleRows[8].key, ['Category 2'], 'ninth group row key on the scrolling up to the middle');
+        assert.strictEqual(visibleRows[14].rowType, 'group', 'fifteenth group row on the second load');
+        assert.deepEqual(visibleRows[14].key, ['Category 20'], 'fifteenth group row key on the second load');
 
 
         // act (scroll up top)
@@ -3474,7 +3478,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(loadSpy.callCount, 3, 'call count is not changed on scrolling up to the top');
-        assert.equal(visibleRows.length, 9, 'visible rows on scrolling up to the top');
+        assert.equal(visibleRows.length, 10, 'visible rows on scrolling up to the top');
         assert.equal(visibleGroupRowCount, 2, 'group count on scrolling up to the top');
         assert.strictEqual(visibleRows[0].rowType, 'group', 'first group row on scrolling up to the top');
         assert.deepEqual(visibleRows[0].key, ['Category 1'], 'first group row key on scrolling up to the top');
