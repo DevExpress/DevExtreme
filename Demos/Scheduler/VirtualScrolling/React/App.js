@@ -48,7 +48,6 @@ function App() {
       views={views}
       defaultCurrentView="Timeline"
       defaultCurrentDate={currentDate}
-      firstDayOfWeek={0}
       startDayHour={startDayHour}
       endDayHour={endDayHour}
       cellDuration={60}

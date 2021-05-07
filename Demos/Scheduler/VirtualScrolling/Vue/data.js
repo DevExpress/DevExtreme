@@ -191,7 +191,7 @@ function getRandomText(textIndex) {
 }
 
 function filterAppointmentsByTime(appointments, startDayHour, endDayHour) {
-  const filteredAppointments = [];
+  const result = [];
 
   for (let i = 0; i < appointments.length; i++) {
     const startDate = appointments[i].startDate;
@@ -200,11 +200,11 @@ function filterAppointmentsByTime(appointments, startDayHour, endDayHour) {
     if (startDate.getDay() === endDate.getDay() &&
         startDate.getHours() >= startDayHour - 1 &&
         endDate.getHours() <= endDayHour - 1) {
-      filteredAppointments.push(appointments[i]);
+      result.push(appointments[i]);
     }
   }
 
-  return filteredAppointments;
+  return result;
 }
 
 export function generateAppointments(startDay, endDay, startDayHour, endDayHour) {

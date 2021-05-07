@@ -212,7 +212,7 @@ export class Service {
     }
 
     filterAppointmentsByTime(appointments, startDayHour, endDayHour): Appointment[] {
-        const filteredAppointments = [];
+        const result = [];
 
         for (let i = 0; i < appointments.length; i++) {
             const startDate = appointments[i].startDate;
@@ -221,11 +221,11 @@ export class Service {
             if (startDate.getDay() === endDate.getDay() &&
                 startDate.getHours() >= startDayHour - 1 &&
                 endDate.getHours() <= endDayHour - 1) {
-              filteredAppointments.push(appointments[i]);
+              result.push(appointments[i]);
             }
         }
 
-        return filteredAppointments;
+        return result;
     }
 
     generateAppointments(startDay, endDay, startDayHour, endDayHour): Appointment[] {

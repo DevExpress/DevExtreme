@@ -27,7 +27,6 @@ $(function () {
             }
         ],
         currentView: "Timeline",
-        firstDayOfWeek: 0,
         startDayHour: startDayHour,
         endDayHour: endDayHour,
         cellDuration: 60,

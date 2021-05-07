@@ -191,7 +191,7 @@ function getAppointmentText(textIndex) {
 }
 
 function filterAppointmentsByTime(appointments, startDayHour, endDayHour) {
-  var filteredAppointments = [];
+  var result = [];
 
   for (var i = 0; i < appointments.length; i++) {
     var startDate = appointments[i].startDate;
@@ -200,11 +200,11 @@ function filterAppointmentsByTime(appointments, startDayHour, endDayHour) {
     if (startDate.getDay() === endDate.getDay() &&
         startDate.getHours() >= startDayHour - 1 &&
         endDate.getHours() <= endDayHour - 1) {
-      filteredAppointments.push(appointments[i]);
+      result.push(appointments[i]);
     }
   }
 
-  return filteredAppointments;
+  return result;
 }
 
 function generateAppointments(startDay, endDay, startDayHour, endDayHour) {
