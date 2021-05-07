@@ -111,19 +111,6 @@ describe('Native > Effects', () => {
     expect(e.cancel).toEqual(locked ? true : undefined);
   });
 
-  // it('handleScroll, location not changed', () => {
-  //   const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() } as any;
-  //   const viewModel = new Scrollable({ });
-  //   viewModel.containerRef = { current: {} } as RefObject;
-  //   viewModel.lastLocation = { top: 1, left: 1 };
-  //   viewModel.scrollLocation = () => ({ top: 1, left: 1 });
-
-  //   viewModel.scrollEffect();
-  //   emit('scroll', e);
-
-  //   expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(1);
-  // });
-
   test.each(getPermutations([
     optionValues.forceGeneratePockets,
     optionValues.nativeRefreshStrategy,
