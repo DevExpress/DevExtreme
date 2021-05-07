@@ -4,6 +4,7 @@ import {
 import { Widget } from '../common/widget';
 import { ResponsiveBoxProps } from './responsive_box_props';
 import { combineClasses } from '../../utils/combine_classes';
+import { Box } from '../box/box';
 
 import { hasWindow } from '../../../core/utils/window';
 import domAdapter from '../../../core/dom_adapter';
@@ -30,7 +31,11 @@ export const viewFunction = (viewModel: ResponsiveBox): JSX.Element => {
     [SCREEN_SIZE_CLASS_PREFIX + screenSizeQualifier]: true,
   });
 
-  return (<Widget classes={cssClasses} />);
+  return (
+    <Widget classes={cssClasses}>
+      <Box />
+    </Widget>
+  );
 };
 
 @Component({
