@@ -30,7 +30,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     scrollableNativeRef,
     scrollableSimulatedRef,
     props: {
-      useNative, children,
+      useNative, children, classes,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, updateManually, pullDownEnabled,
@@ -47,6 +47,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       <ScrollableNative
         ref={scrollableNativeRef}
         aria={aria}
+        classes={classes}
         width={width}
         height={height}
         disabled={disabled}
@@ -81,6 +82,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       <ScrollableSimulated
         ref={scrollableSimulatedRef}
         aria={aria}
+        classes={classes}
         width={width}
         height={height}
         disabled={disabled}

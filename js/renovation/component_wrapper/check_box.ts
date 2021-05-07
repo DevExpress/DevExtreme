@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import Editor from './editor';
-import { addAttributes, getAriaName } from './utils';
+import Editor from './common/editor';
+import { addAttributes, getAriaName } from './utils/utils';
 
 export default class CheckBox extends Editor {
   // eslint-disable-next-line class-methods-use-this

@@ -13,7 +13,6 @@
   "repository": "https://github.com/DevExpress/DevExtreme",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "@types/clean-css": "^4.2.3",
     "autoprefixer": "^10.2.4",
     "bootstrap": "^4.6.0",
     "clean-css": "^5.1.0",
@@ -32,6 +31,7 @@
     "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
   },
   "devDependencies": {
+    "@types/clean-css": "^4.2.3",
     "@types/dependency-tree": "^7.2.0",
     "@types/filing-cabinet": "^2.5.0",
     "@types/fs-extra": "9.0.7",
