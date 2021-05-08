@@ -131,7 +131,7 @@ QUnit.module('Lookup', {
         this.togglePopup();
 
         assert.ok(this.popup instanceof Popup, 'popup is dxPopup');
-        assert.ok(this.popup._wrapper().hasClass('dx-lookup-popup-wrapper'));
+        assert.ok(this.popup.$wrapper().hasClass('dx-lookup-popup-wrapper'));
         assert.ok(this.list instanceof List, 'dxList in popup');
     });
 
@@ -178,7 +178,7 @@ QUnit.module('Lookup', {
         $($field).trigger('dxclick');
         assert.ok(popup.option('visible'));
 
-        $(popup._wrapper()).find('.dx-button').eq(0).trigger('dxclick');
+        $(popup.$wrapper()).find('.dx-button').eq(0).trigger('dxclick');
         assert.equal(popup.option('visible'), false);
     });
 
@@ -963,7 +963,7 @@ QUnit.module('Lookup', {
         assert.ok($list.find('.dx-list-item').eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'second item selected');
         assert.equal(lookup.option('value'), 1, 'value dont changed without Done click');
 
-        $(lookup._popup._wrapper()).find(`.${APPLY_BUTTON_CLASS}.dx-button`).eq(0).trigger('dxclick');
+        $(lookup._popup.$wrapper()).find(`.${APPLY_BUTTON_CLASS}.dx-button`).eq(0).trigger('dxclick');
 
         assert.ok(!lookup.option('opened'), 'popup hide after click by Done');
         assert.equal(lookup.option('value'), 2, 'value changed after Done click');
@@ -1116,7 +1116,7 @@ QUnit.module('Lookup', {
         this.togglePopup();
 
         $($('.dx-list-item', getList().$element()).eq(1)).trigger('dxclick');
-        $('.dx-popup-cancel.dx-button', $(lookup._popup._wrapper())).eq(0).trigger('dxclick');
+        $('.dx-popup-cancel.dx-button', $(lookup._popup.$wrapper())).eq(0).trigger('dxclick');
         $(lookup._$field).trigger('dxclick');
         $($('.dx-list-item', getList().$element()).eq(1)).trigger('dxclick');
 
@@ -1142,7 +1142,7 @@ QUnit.module('Lookup', {
 
         this.clock.tick(200);
 
-        $(lookup._popup._wrapper()).find('.dx-list-item').eq(0).trigger('dxclick');
+        $(lookup._popup.$wrapper()).find('.dx-list-item').eq(0).trigger('dxclick');
 
         assert.equal(lookup.option('value').id, dataSource[0].id);
         assert.equal(lookup._$field.text(), 'item 0');
@@ -1197,7 +1197,7 @@ QUnit.module('Lookup', {
         assert.ok(!$lookup.hasClass(LOOKUP_EMPTY_CLASS), 'Lookup with selected item has not empty class');
 
         openPopupWithList(lookup);
-        $(lookup._popup._wrapper()).find('.dx-button.dx-popup-clear').trigger('dxclick');
+        $(lookup._popup.$wrapper()).find('.dx-button.dx-popup-clear').trigger('dxclick');
 
         const $lookupField = $lookup.find('.dx-lookup-field');
 
@@ -1538,11 +1538,11 @@ QUnit.module('options', {
         const popup = instance._popup;
         const $search = instance._$searchBox;
 
-        assert.ok($(popup._wrapper()).hasClass('dx-lookup-popup-search'));
+        assert.ok($(popup.$wrapper()).hasClass('dx-lookup-popup-search'));
         assert.ok($search.is(':visible'), 'default value');
 
         instance.option('searchEnabled', false);
-        assert.ok(!$(popup._wrapper()).hasClass('dx-lookup-popup-search'));
+        assert.ok(!$(popup.$wrapper()).hasClass('dx-lookup-popup-search'));
         assert.ok($search.is(':hidden'), 'hidden');
     });
 
@@ -3177,7 +3177,7 @@ QUnit.module('device and theme specific tests', {
         $(instance._$field).trigger('dxclick');
         const popup = instance._popup;
 
-        const $popupTitle = $(popup._wrapper()).find('.dx-popup-title');
+        const $popupTitle = $(popup.$wrapper()).find('.dx-popup-title');
         assert.ok($popupTitle.height() > 0);
     });
 });

@@ -404,6 +404,7 @@ describe('Scrollbar', () => {
 
               it('moveTo(location) should pass to scrollable correct newScrollLocation with delta', () => {
                 const scrollLocationChange = jest.fn();
+                const onScrollHandler = jest.fn();
                 const topPocketSize = 85;
 
                 const viewModel = new Scrollbar({
@@ -412,11 +413,13 @@ describe('Scrollbar', () => {
                   forceGeneratePockets,
                   pullDownEnabled,
                   scrollLocationChange,
+                  onScroll: onScrollHandler,
                   topPocketSize,
                   scrollLocation: location,
                 });
 
                 viewModel.updateContent = jest.fn();
+                viewModel.updateMaxOffset = jest.fn();
                 const prevScrollLocation = Math.floor(Math.random() * 10) - 5;
                 viewModel.prevScrollLocation = prevScrollLocation;
 
@@ -426,10 +429,18 @@ describe('Scrollbar', () => {
                 expect(scrollLocationChange).toHaveBeenCalledWith(
                   viewModel.fullScrollProp,
                   location,
-                  Math.abs(prevScrollLocation - location),
                 );
                 expect(viewModel.updateContent).toHaveBeenCalledTimes(1);
                 expect(viewModel.updateContent).toHaveBeenCalledWith(location);
+                expect(viewModel.updateMaxOffset).toHaveBeenCalledTimes(1);
+                expect(viewModel.updateMaxOffset).toHaveBeenCalledWith();
+
+                if (Math.abs(prevScrollLocation - location) >= 1) {
+                  expect(onScrollHandler).toHaveBeenCalledTimes(1);
+                  expect(onScrollHandler).toHaveBeenCalledWith();
+                } else {
+                  expect(onScrollHandler).not.toBeCalled();
+                }
               });
             });
           });
@@ -631,7 +642,7 @@ describe('Scrollbar', () => {
         each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
           each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
             each([-50, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
-              it('updateBoundaryOffset()', () => {
+              it('updateMaxOffset()', () => {
                 const viewModel = new Scrollbar({
                   direction,
                   forceGeneratePockets,
@@ -642,7 +653,7 @@ describe('Scrollbar', () => {
                   scrollLocation,
                 });
 
-                viewModel.updateBoundaryOffset();
+                viewModel.updateMaxOffset();
 
                 let expectedMaxOffset = 0;
 
@@ -707,6 +718,7 @@ describe('Scrollbar', () => {
                 const pullDownHandler = jest.fn();
                 const reachBottomHandler = jest.fn();
                 const pocketStateChangeHandler = jest.fn();
+                const endHandler = jest.fn();
 
                 const viewModel = new Scrollbar({
                   direction,
@@ -715,9 +727,11 @@ describe('Scrollbar', () => {
                   onPullDown: pullDownHandler,
                   onReachBottom: reachBottomHandler,
                   pocketStateChange: pocketStateChangeHandler,
+                  onEnd: endHandler,
                 } as any);
 
                 viewModel.scrollToBounds = jest.fn();
+                viewModel.maxOffset = 80;
                 viewModel.inRange = jest.fn(() => inRange);
                 viewModel.isReachBottom = jest.fn(() => isReachBottom);
 
@@ -737,6 +751,7 @@ describe('Scrollbar', () => {
                         expect(pullDownHandler).not.toHaveBeenCalled();
                       }
 
+                      expect(viewModel.maxOffset).toEqual(0);
                       return;
                     }
                     if (pocketState === TopPocketState.STATE_LOADING) {
@@ -748,6 +763,12 @@ describe('Scrollbar', () => {
                   }
 
                   expect(viewModel.scrollToBounds).toHaveBeenCalledTimes(1);
+                }
+
+                if (inRange) {
+                  expect(endHandler).toHaveBeenCalledTimes(1);
+                } else {
+                  expect(endHandler).not.toBeCalled();
                 }
 
                 expect(pullDownHandler).not.toHaveBeenCalled();
