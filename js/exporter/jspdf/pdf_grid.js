@@ -62,7 +62,7 @@ export class PdfGrid {
 
     _trySplitColSpanArea(cells, splitIndex) {
         const colSpanArea = this._findColSpanArea(cells, splitIndex);
-        if(isDefined(colSpanArea.startIndex) && isDefined(colSpanArea.endIndex)) {
+        if(isDefined(colSpanArea)) {
             const leftAreaColSpan = splitIndex - colSpanArea.startIndex - 1;
             const rightAreaColSpan = colSpanArea.endIndex - splitIndex;
 
@@ -79,26 +79,20 @@ export class PdfGrid {
     }
 
     _findColSpanArea(cells, targetCellIndex) {
-        let colSpanArea = {};
         for(let index = 0; index < cells.length; index++) {
-            if(cells[index].colSpan > 0 && !isDefined(colSpanArea.startIndex)) {
-                colSpanArea.colSpan = cells[index].colSpan;
-                colSpanArea.startIndex = index;
-                colSpanArea.endIndex = index;
-            }
+            if(cells[index].colSpan > 0) {
+                const colSpan = cells[index].colSpan;
+                const startIndex = index;
+                const endIndex = startIndex + colSpan;
 
-            if(isDefined(colSpanArea.startIndex)) {
-                colSpanArea.endIndex = index;
-                if(colSpanArea.endIndex - colSpanArea.startIndex >= colSpanArea.colSpan) {
-                    if(colSpanArea.startIndex < targetCellIndex && targetCellIndex <= colSpanArea.endIndex) {
-                        break;
-                    } else {
-                        colSpanArea = {};
-                    }
+                if(startIndex < targetCellIndex && targetCellIndex <= endIndex) {
+                    return { colSpan, startIndex, endIndex };
+                } else {
+                    index = endIndex;
                 }
             }
         }
-        return colSpanArea;
+        return null;
     }
 
     mergeCellsBySpanAttributes() {
