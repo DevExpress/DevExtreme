@@ -312,7 +312,7 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
         rangeForCategories.addRange(translatorRange);
         translatorRange = rangeForCategories;
 
-        categories = seriesDataSource ? seriesDataSource.argCategories : (scaleOptions.categories || (!seriesDataSource) && startValue && endValue && [startValue, endValue]);
+        categories = seriesDataSource ? seriesDataSource.argCategories : (scaleOptions.categories || startValue && endValue && [startValue, endValue]);
         categories = categories || [];
         scaleOptions._categoriesInfo = categoriesInfo = getCategoriesInfo(categories, startValue, endValue);
     }
