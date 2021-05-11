@@ -295,6 +295,7 @@ const numberLocalization = dependencyInjector({
     },
 
     parse: function(text, format) {
+        // Current parser functionality provided as-is and is independent of the most of capabilities of formatter.
         if(!text) {
             return;
         }
