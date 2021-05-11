@@ -248,7 +248,6 @@ if(Globalize && Globalize.formatNumber) {
         },
 
         parse: function(text, format) {
-            // Current parser functionality provided as-is and is independent of the most of capabilities of formatter.
             if(!text) {
                 return;
             }
@@ -258,6 +257,7 @@ if(Globalize && Globalize.formatNumber) {
             }
 
             if(format) {
+                // Current parser functionality provided as-is and is independent of the most of capabilities of formatter.
                 errors.log('W0011');
             }
 
