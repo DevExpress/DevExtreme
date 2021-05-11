@@ -2355,6 +2355,45 @@ module('View Data Provider', {
 
                     assert.deepEqual(viewData, expectedViewData, 'View data is correct');
                 });
+
+                test('viewData should be generated correctly when virtual widths should not be passed', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: {
+                            ...horizontalGroupedWorkspaceMock,
+                            generateRenderOptions: () => ({
+                                ...horizontalGroupedWorkspaceMock.generateRenderOptions(),
+                                isProvideVirtualCellsWidth: false,
+                            }),
+                        },
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
+                    });
+
+                    const completeViewDataMap = horizontalDataMap;
+
+                    const expectedViewData = {
+                        groupedData: [{
+                            allDayPanel: [completeViewDataMap[0][1]],
+                            dateTable: [[completeViewDataMap[1][1]], [completeViewDataMap[2][1]]],
+                            groupIndex: 3,
+                            isGroupedAllDayPanel: false,
+                        }],
+                        bottomVirtualRowCount: 0,
+                        topVirtualRowCount: 0,
+                        leftVirtualCellCount: 1,
+                        rightVirtualCellCount: 1,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: undefined,
+                        rightVirtualCellWidth: undefined,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 1,
+                        isGroupedAllDayPanel: false,
+                    };
+
+                    const viewData = viewDataProvider.viewData;
+
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
+                });
             });
 
             module('viewDataMap', () => {
@@ -2528,6 +2567,36 @@ module('View Data Provider', {
                     leftVirtualCellWidth: 100,
                     rightVirtualCellCount: 1,
                     rightVirtualCellWidth: 100,
+                    weekDayLeftVirtualCellCount: undefined,
+                    weekDayLeftVirtualCellWidth: undefined,
+                    weekDayRightVirtualCellCount: undefined,
+                    weekDayRightVirtualCellWidth: undefined,
+                };
+
+                assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
+            });
+
+            test('dateHeaderMap should be generated correctly when width should not be provided', function(assert) {
+                const viewDataProvider = createViewDataProvider({
+                    workspaceMock: {
+                        ...horizontalGroupedWorkspaceMock,
+                        generateRenderOptions: () => ({
+                            ...horizontalGroupedWorkspaceMock.generateRenderOptions(),
+                            cellWidth: 100,
+                            isProvideVirtualCellsWidth: false,
+                        }),
+                    },
+                    completeViewDataMap: horizontalDataMap,
+                    completeDateHeaderMap: horizontalDateHeaderMap,
+                });
+
+                const dateHeaderMap = [[horizontalDateHeaderMap[0][1]]];
+                const dateHeaderData = {
+                    dataMap: dateHeaderMap,
+                    leftVirtualCellCount: 1,
+                    leftVirtualCellWidth: undefined,
+                    rightVirtualCellCount: 1,
+                    rightVirtualCellWidth: undefined,
                     weekDayLeftVirtualCellCount: undefined,
                     weekDayLeftVirtualCellWidth: undefined,
                     weekDayRightVirtualCellCount: undefined,
