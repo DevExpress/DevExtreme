@@ -97,14 +97,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
 
   @Effect()
-  updateBoundaryOffset(): void {
-    if (this.props.forceGeneratePockets) {
-      const boundaryOffset = this.props.scrollLocation - this.topPocketSize;
-      this.maxOffset = boundaryOffset > 0 ? this.topPocketSize : 0;
-    }
-  }
-
-  @Effect()
   pointerDownEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollbar';
 
@@ -270,12 +262,17 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       if (this.inRange()) {
         if (this.props.pocketState === TopPocketState.STATE_READY) {
           this.pullDownRefreshing();
+          this.maxOffset = 0;
           return;
         } if (this.props.pocketState === TopPocketState.STATE_LOADING) {
           this.reachBottomLoading();
           return;
         }
       }
+    }
+
+    if (this.inRange()) {
+      this.props.onEnd?.();
     }
 
     this.scrollToBounds();
@@ -427,12 +424,25 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
   }
 
+  updateMaxOffset(): void {
+    if (this.props.forceGeneratePockets) {
+      const topBoundaryOffset = this.props.scrollLocation - this.topPocketSize;
+      this.maxOffset = topBoundaryOffset > 0 ? this.topPocketSize : 0;
+    }
+  }
+
   @Method()
   moveTo(location: number): void {
+    this.updateMaxOffset();
+
     const scrollDelta = Math.abs(this.prevScrollLocation - location);
     // there is an issue https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
-    this.props.scrollLocationChange?.(this.fullScrollProp, location, scrollDelta);
+    this.props.scrollLocationChange?.(this.fullScrollProp, location);
     this.updateContent(location);
+    if (scrollDelta >= 1) {
+      this.props.onScroll?.();
+    }
+
     this.prevScrollLocation = location;
     this.rightScrollLocation = this.minOffset - location;
 
