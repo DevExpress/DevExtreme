@@ -6,6 +6,7 @@ import $ from '../../../core/renderer';
 import { data } from '../../../core/element_data';
 import Callbacks from '../../../core/utils/callbacks';
 import OldEditor from '../../../ui/editor/editor';
+import { Option } from './types.ts';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
@@ -79,7 +80,7 @@ export default class Editor extends Component {
     innerWidget.on('optionChanged', syncOptions);
   }
 
-  _optionChanged(option: { name?; value?; previousValue? } = {}): void {
+  _optionChanged(option: Option): void {
     const { name, value, previousValue } = option;
 
     if (name && this._getActionConfigs()[name]) {

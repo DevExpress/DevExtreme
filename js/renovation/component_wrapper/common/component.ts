@@ -13,7 +13,7 @@ import { isDefined, isRenderer } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update-props-immutable';
-import { AbstractFunction } from './types.ts';
+import { AbstractFunction, Option } from './types.ts';
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
   if (Object.prototype.hasOwnProperty.call(options, name) && options[name] === undefined) {
@@ -69,8 +69,8 @@ export default class ComponentWrapper extends DOMComponent {
     };
   }
 
-  get viewRef(): HTMLElement {
-    return this._viewRef?.current as HTMLElement;
+  get viewRef(): any {
+    return this._viewRef?.current;
   }
 
   _checkContentReadyOption(fullName: string): boolean {
@@ -323,7 +323,7 @@ export default class ComponentWrapper extends DOMComponent {
     this._actionsMap[event] = action;
   }
 
-  _optionChanged(option: { name: string; fullName: string; value: unknown }): void {
+  _optionChanged(option: Option): void {
     const { name, fullName } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);
     if (name && this._getActionConfigs()[name]) {
