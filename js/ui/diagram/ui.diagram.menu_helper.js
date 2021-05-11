@@ -41,7 +41,7 @@ const DiagramMenuHelper = {
         if(contextMenu) {
             indexPath = indexPath.slice();
             const parentItemOptionText = this._getParentItemOptionText(indexPath);
-            if(contextMenu && contextMenu._originalItemsInfo && contextMenu._originalItemsInfo[parentItemOptionText]) {
+            if(contextMenu._originalItemsInfo && contextMenu._originalItemsInfo[parentItemOptionText]) {
                 indexPath[indexPath.length - 1] += contextMenu._originalItemsInfo[parentItemOptionText].indexPathCorrection;
             }
         }

@@ -1492,6 +1492,9 @@ class Gantt extends Widget {
     exportToPdf(options) {
         this._exportHelper.reset();
         const fullOptions = extend({}, options);
+        if(fullOptions.createDocumentMethod) {
+            fullOptions.docCreateMethod = fullOptions.createDocumentMethod;
+        }
         fullOptions.docCreateMethod ??= window['jspdf']?.['jsPDF'] ?? window['jsPDF'];
         fullOptions.format ??= 'a4';
         return new Promise((resolve) => {
