@@ -6,12 +6,12 @@ import { each } from '../../../core/utils/iterator';
 import browser from '../../../core/utils/browser';
 import { getWindow } from '../../../core/utils/window';
 
-import BaseHtmlEditorModule from './base';
+import BaseModule from './base';
 
 let DropImageModule = class EmptyModule {};
 
 if(Quill) {
-    DropImageModule = class DropImageModule extends BaseHtmlEditorModule {
+    DropImageModule = class DropImageModule extends BaseModule {
         constructor(quill, options) {
             super(quill, options);
 

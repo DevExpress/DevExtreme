@@ -1,11 +1,11 @@
 import Quill from 'devextreme-quill';
 
-let BaseHtmlEditorModule = class EmptyModule {};
+let BaseModule = class EmptyModule {};
 
 if(Quill) {
-    const BaseModule = Quill.import('core/module');
+    const BaseQuillModule = Quill.import('core/module');
 
-    BaseHtmlEditorModule = class BaseHtmlEditorModule extends BaseModule {
+    BaseModule = class BaseHtmlEditorModule extends BaseQuillModule {
         constructor(quill, options) {
             super(quill, options);
 
@@ -22,4 +22,4 @@ if(Quill) {
     };
 }
 
-export default BaseHtmlEditorModule;
+export default BaseModule;

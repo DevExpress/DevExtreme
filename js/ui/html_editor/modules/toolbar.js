@@ -2,7 +2,7 @@ import Quill from 'devextreme-quill';
 
 import $ from '../../../core/renderer';
 
-import BaseHtmlEditorModule from './base';
+import BaseModule from './base';
 
 import Toolbar from '../../toolbar';
 import '../../select_box';
@@ -78,7 +78,7 @@ if(Quill) {
         return localize(value) || value;
     };
 
-    ToolbarModule = class ToolbarModule extends BaseHtmlEditorModule {
+    ToolbarModule = class ToolbarModule extends BaseModule {
         constructor(quill, options) {
             super(quill, options);
 

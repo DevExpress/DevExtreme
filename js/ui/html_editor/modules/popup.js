@@ -3,7 +3,7 @@ import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';
 
-import BaseHtmlEditorModule from './base';
+import BaseModule from './base';
 
 import Popup from '../../popup';
 import List from '../../list';
@@ -16,7 +16,7 @@ if(Quill) {
 
     const MIN_HEIGHT = 100;
 
-    ListPopupModule = class ListPopupModule extends BaseHtmlEditorModule {
+    ListPopupModule = class ListPopupModule extends BaseModule {
 
         _getDefaultOptions() {
             return {

@@ -7,7 +7,7 @@ import devices from '../../../core/devices';
 import Resizable from '../../resizable';
 import { getBoundingRect } from '../../../core/utils/position';
 import Quill from 'devextreme-quill';
-import BaseHtmlEditorModule from './base';
+import BaseModule from './base';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
 const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';
@@ -19,7 +19,7 @@ const MOUSEDOWN_EVENT = addNamespace('mousedown', MODULE_NAMESPACE);
 
 const FRAME_PADDING = 1;
 
-export default class ResizingModule extends BaseHtmlEditorModule {
+export default class ResizingModule extends BaseModule {
     constructor(quill, options) {
         super(quill, options);
         this.allowedTargets = options.allowedTargets || ['image'];
