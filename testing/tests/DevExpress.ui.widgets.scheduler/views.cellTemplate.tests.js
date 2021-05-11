@@ -215,16 +215,8 @@ module('CellTemplate tests', moduleConfig, () => {
             currentView: 'day',
             currentDate: new Date(2020, 10, 19),
             resources: [{
-                fieldExpr: 'priority',
-                allowMultiple: false,
-                dataSource: [{
-                    text: 'Low Priority',
-                    id: 1
-                }, {
-                    text: 'High Priority',
-                    id: 2
-                }],
-                label: 'Priority',
+                ...resources[0],
+                allowMultiple: false
             }],
             startDayHour: 10,
             endDayHour: 12,
@@ -390,15 +382,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         currentDate: new Date(2016, 8, 5),
                         firstDayOfWeek: 0,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dataCellTemplate: function(itemData, index, $container) {
                             if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell') && !templateOptions) {
                                 templateOptions = itemData;
@@ -885,19 +869,19 @@ module('CellTemplate tests', moduleConfig, () => {
         const data = [{
             startDate: new Date(2020, 10, 24, 10),
             endDate: new Date(2020, 10, 24, 11),
-            priorityId: 1,
+            ownerId: 1,
         }, {
             startDate: new Date(2020, 10, 25, 10),
             endDate: new Date(2020, 10, 25, 11),
-            priorityId: 1,
+            ownerId: 1,
         }, {
             startDate: new Date(2020, 10, 24, 10),
             endDate: new Date(2020, 10, 24, 11),
-            priorityId: 2,
+            ownerId: 2,
         }, {
             startDate: new Date(2020, 10, 25, 10),
             endDate: new Date(2020, 10, 25, 11),
-            priorityId: 2,
+            ownerId: 2,
         }];
 
         const basicOptions = {
@@ -906,17 +890,9 @@ module('CellTemplate tests', moduleConfig, () => {
             currentView: 'agenda',
             currentDate: new Date(2020, 10, 24),
             resources: [{
-                fieldExpr: 'priorityId',
-                allowMultiple: false,
-                dataSource: [{
-                    text: 'Low Priority',
-                    id: 1
-                }, {
-                    text: 'High Priority',
-                    id: 2
-                }],
-                label: 'Priority',
-            }],
+                ...resources[0],
+                allowMultiple: false
+            }]
         };
 
         test('Date cell template should have correct data without grouping', function(assert) {
@@ -948,22 +924,22 @@ module('CellTemplate tests', moduleConfig, () => {
             const rowsCount = 4;
             const expectedData = [{
                 date: new Date(2020, 10, 24),
-                groups: { priorityId: 1 },
+                groups: { ownerId: 1 },
                 groupIndex: 0,
                 text: '24 Tue',
             }, {
                 date: new Date(2020, 10, 25),
-                groups: { priorityId: 1 },
+                groups: { ownerId: 1 },
                 groupIndex: 0,
                 text: '25 Wed',
             }, {
                 date: new Date(2020, 10, 24),
-                groups: { priorityId: 2 },
+                groups: { ownerId: 2 },
                 groupIndex: 1,
                 text: '24 Tue',
             }, {
                 date: new Date(2020, 10, 25),
-                groups: { priorityId: 2 },
+                groups: { ownerId: 2 },
                 groupIndex: 1,
                 text: '25 Wed',
             }];
@@ -974,7 +950,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
                     currentTemplateIndex += 1;
                 },
-                groups: ['priorityId'],
+                groups: ['ownerId'],
             });
         });
 
@@ -1045,15 +1021,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         dataSource: [],
                         firstDayOfWeek: 0,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dateCellTemplate: function(itemData, index, container) {
                             if(index === 0) {
                                 $(container).addClass('custom-group-cell-class');
@@ -1079,15 +1047,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         endDayHour: 11,
                         cellDuration: 60,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dateCellTemplate: function(data, index, element) {
                             const d = data;
                             $('<div>').appendTo(element).dxButton({
@@ -1154,15 +1114,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         }],
                         firstDayOfWeek: 0,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dateCellTemplate: function(itemData, index, container) {
                             if(index === 0) {
                                 $(container).addClass('custom-group-cell-class');
@@ -1215,15 +1167,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         }],
                         firstDayOfWeek: 0,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dateCellTemplate: function(itemData, index, $container) {
                             if(index === 0) {
                                 templateOptions = itemData;
@@ -1291,7 +1235,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         ...baseConfig,
                         views,
                         dateCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.forEach(({ type }) => {
@@ -1312,7 +1256,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         ...baseConfig,
                         views,
                         dateCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.forEach(({ type }) => {
@@ -1336,12 +1280,12 @@ module('CellTemplate tests', moduleConfig, () => {
                         dateCellTemplate: ({ groups, groupIndex }) => {
                             const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
-                            assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
+                            assert.deepEqual(groups, { ownerId: currentGroupIndex + 1 }, 'Groups property is correct');
                             assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
 
                             currentCellIndex += 1;
                         },
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.forEach(({ type, dateCellCount }) => {
@@ -1659,12 +1603,12 @@ module('CellTemplate tests', moduleConfig, () => {
                         timeCellTemplate: ({ groups, groupIndex }) => {
                             const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
-                            assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
+                            assert.deepEqual(groups, { ownerId: currentGroupIndex + 1 }, 'Groups property is correct');
                             assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
 
                             currentCellIndex += 1;
                         },
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.slice(0, 3).forEach(({ type, timeCellCount }) => {
@@ -1688,7 +1632,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         ...baseConfig,
                         views,
                         timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                         currentView: 'timelineDay',
                     });
 
@@ -1711,7 +1655,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         ...baseConfig,
                         views,
                         timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.forEach(({ type }) => {
@@ -1732,7 +1676,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         ...baseConfig,
                         views,
                         timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.slice(0, 3).forEach(({ type }) => {
@@ -1758,12 +1702,12 @@ module('CellTemplate tests', moduleConfig, () => {
                         timeCellTemplate: ({ groups, groupIndex }) => {
                             const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
-                            assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
+                            assert.deepEqual(groups, { ownerId: currentGroupIndex + 1 }, 'Groups property is correct');
                             assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
 
                             currentCellIndex += 1;
                         },
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.slice(3, 6).forEach(({ type, timeCellCount }) => {
