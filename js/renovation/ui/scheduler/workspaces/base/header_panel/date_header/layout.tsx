@@ -31,9 +31,6 @@ export const viewFunction = ({
     rightVirtualCellCount,
     rightVirtualCellWidth,
   } = dateHeaderData;
-  console.log(leftVirtualCellCount);
-  console.log(rightVirtualCellCount);
-  console.log('/////');
 
   return (
     <Fragment>
