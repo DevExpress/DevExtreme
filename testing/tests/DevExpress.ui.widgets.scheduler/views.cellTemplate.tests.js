@@ -1572,17 +1572,63 @@ module('CellTemplate tests', moduleConfig, () => {
             const baseConfig = getBaseConfig(renovateRender);
 
             module(description, {}, () => {
-                test('"groups" and "groupIndex" shoud be correct in timeCellTemplate', function(assert) {
-                    assert.expect(totalTimeCells * 2);
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
+                [
+                    {
+                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate',
+                        expectedAsserts: totalTimeCells * 2,
                         views: viewsBase,
-                        timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                    });
+                    },
+                    {
+                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate '
+                        + 'when vertical grouping is used in timleine views',
+                        expectedAsserts: 72,
+                        views: viewsBase.slice(3, 6).map((view) => ({
+                            ...view,
+                            groupOrientation: 'vertical'
+                        })),
+                        groups: ['ownerId']
+                    },
+                    {
+                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate'
+                        + ' when grouping by date is used',
+                        expectedAsserts: totalTimeCells * 2,
+                        views: viewsBase.map((view) => ({
+                            ...view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true
+                        })),
+                        groups: ['ownerId']
+                    },
+                    {
+                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate'
+                        + ' when horizontal grouping is used in simple views',
+                        expectedAsserts: 16,
+                        views: viewsBase.slice(0, 3).map((view) => ({
+                            ...view,
+                            groupOrientation: 'horizontal'
+                        })),
+                        groups: ['ownerId']
+                    }
+                ].forEach(({ description, expectedAsserts, views, groups }) => {
+                    test(description, function(assert) {
+                        assert.expect(expectedAsserts);
 
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
+                        const schedulerConfig = {
+                            ...baseConfig,
+                            views,
+                            currentView: views[0].type,
+                            timeCellTemplate: checkIfGroupsAreUndefined(assert),
+                        };
+
+                        if(groups) {
+                            schedulerConfig.groups = groups;
+                        }
+
+                        const scheduler = createWrapper(schedulerConfig);
+
+                        views.slice(1).forEach(({ type }) => {
+                            scheduler.instance.option('currentView', type);
+                        });
                     });
                 });
 
@@ -1615,71 +1661,6 @@ module('CellTemplate tests', moduleConfig, () => {
                         cellCountPerGroup = timeCellCount;
                         currentCellIndex = 0;
 
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
-
-                test('"groups" and "groupIndex" shoud be correct in timeCellTemplate '
-                + 'when vertical grouping is used in timleine views', function(assert) {
-                    assert.expect(72);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'vertical',
-                    }));
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['ownerId'],
-                        currentView: 'timelineDay',
-                    });
-
-                    viewsBase.slice(3, 6).forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
-
-                test('"groups" and "groupIndex" shoud be correct in timeCellTemplate'
-                + ' when grouping by date is used', function(assert) {
-                    assert.expect(totalTimeCells * 2);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'horizontal',
-                        groupByDate: true,
-                    }));
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['ownerId'],
-                    });
-
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
-
-                test('"groups" and "groupIndex" shoud be correct in timeCellTemplate'
-                + ' when horizontal grouping is used in simple views', function(assert) {
-                    assert.expect(16);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'horizontal',
-                    }));
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['ownerId'],
-                    });
-
-                    viewsBase.slice(0, 3).forEach(({ type }) => {
                         scheduler.instance.option('currentView', type);
                     });
                 });
