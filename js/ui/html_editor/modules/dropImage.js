@@ -6,9 +6,10 @@ import { each } from '../../../core/utils/iterator';
 import browser from '../../../core/utils/browser';
 import { getWindow } from '../../../core/utils/window';
 
+import EmptyModule from './empty';
 import BaseModule from './base';
 
-let DropImageModule = class EmptyModule {};
+let DropImageModule = EmptyModule;
 
 if(Quill) {
     DropImageModule = class DropImageModule extends BaseModule {

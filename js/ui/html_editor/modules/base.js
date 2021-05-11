@@ -1,6 +1,7 @@
 import Quill from 'devextreme-quill';
+import EmptyModule from './empty';
 
-let BaseModule = class EmptyModule {};
+let BaseModule = EmptyModule;
 
 if(Quill) {
     const BaseQuillModule = Quill.import('core/module');

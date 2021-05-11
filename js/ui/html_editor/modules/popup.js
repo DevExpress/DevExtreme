@@ -3,12 +3,13 @@ import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';
 
+import EmptyModule from './empty';
 import BaseModule from './base';
 
 import Popup from '../../popup';
 import List from '../../list';
 
-let ListPopupModule = class EmptyModule {};
+let ListPopupModule = EmptyModule;
 
 if(Quill) {
     const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
