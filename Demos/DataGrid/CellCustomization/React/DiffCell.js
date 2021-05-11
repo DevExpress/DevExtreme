@@ -1,7 +1,6 @@
 import React from 'react';
 import 'devextreme/localization/globalize/currency';
-import localization from 'devextreme/localization';
-const { formatNumber } = localization;
+import { formatNumber } from 'devextreme/localization';
 
 function gridCellData(gridData) {
   return gridData.data[gridData.column.caption.toLowerCase()];

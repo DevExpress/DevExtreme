@@ -5,8 +5,7 @@ import { HttpClient, HttpClientModule, HttpHeaders, HttpParams } from '@angular/
 
 import { DxDataGridModule, DxSelectBoxModule, DxButtonModule } from 'devextreme-angular';
 import CustomStore from 'devextreme/data/custom_store';
-import localization from 'devextreme/localization';
-const { formatDate } = localization;
+import { formatDate } from 'devextreme/localization';
 
 if(!/localhost/.test(document.location.host)) {
     enableProdMode();

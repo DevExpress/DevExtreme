@@ -65,8 +65,7 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import deMessages from 'npm:devextreme/localization/messages/de.json!json';
 import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
 
-import localization from 'devextreme/localization';
-const { locale, loadMessages, formatMessage } = localization;
+import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 
 import service from './data.js';
 

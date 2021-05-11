@@ -10,8 +10,7 @@ import {
   DxSize,
   DxTooltip
 } from 'devextreme-vue/sparkline';
-import localization from 'devextreme/localization';
-const { formatNumber } = localization;
+import { formatNumber } from 'devextreme/localization';
 
 const gridCellData = function(value) {
   return value.data[value.column.caption.toLowerCase()];
