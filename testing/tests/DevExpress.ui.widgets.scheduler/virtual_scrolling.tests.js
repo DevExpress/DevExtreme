@@ -609,7 +609,7 @@ module('Virtual Scrolling', {
                     outlineSizeAfter: 0,
                     outlineSizeBefore: 0,
                     prevPosition: 400,
-                    startIndex: 0,
+                    startIndex: 196,
                     virtualItemCountAfter: 196,
                     virtualItemCountBefore: 0,
                     virtualItemSizeAfter: 0,

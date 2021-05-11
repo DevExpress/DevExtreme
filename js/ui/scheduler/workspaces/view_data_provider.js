@@ -319,6 +319,7 @@ class ViewDataGenerator {
             isGenerateWeekDaysHeaderData,
             cellCountInDay,
             cellWidth,
+            isProvideVirtualCellsWidth,
         } = options;
 
         const dataMap = [];
@@ -349,8 +350,8 @@ class ViewDataGenerator {
 
         return {
             dataMap,
-            leftVirtualCellWidth: datesRowConfig.leftVirtualCellWidth,
-            rightVirtualCellWidth: datesRowConfig.rightVirtualCellWidth,
+            leftVirtualCellWidth: isProvideVirtualCellsWidth ? datesRowConfig.leftVirtualCellWidth : undefined,
+            rightVirtualCellWidth: isProvideVirtualCellsWidth ? datesRowConfig.rightVirtualCellWidth : undefined,
             leftVirtualCellCount: datesRowConfig.leftVirtualCellCount,
             rightVirtualCellCount: datesRowConfig.rightVirtualCellCount,
             weekDayLeftVirtualCellWidth: weekDayRowConfig.leftVirtualCellWidth,
@@ -367,6 +368,7 @@ class ViewDataGenerator {
             startCellIndex,
             cellCount,
             totalCellCount,
+            isProvideVirtualCellsWidth,
         } = options;
 
         const colSpan = groupByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
@@ -383,9 +385,9 @@ class ViewDataGenerator {
         return {
             dateRow,
             leftVirtualCellCount: finalLeftVirtualCellCount,
-            leftVirtualCellWidth: finalLeftVirtualCellWidth,
+            leftVirtualCellWidth: isProvideVirtualCellsWidth ? finalLeftVirtualCellWidth : undefined,
             rightVirtualCellCount: finalRightVirtualCellCount,
-            rightVirtualCellWidth: finalRightVirtualCellWidth,
+            rightVirtualCellWidth: isProvideVirtualCellsWidth ? finalRightVirtualCellWidth : undefined,
         };
     }
 
@@ -459,6 +461,7 @@ class ViewDataGenerator {
             rowCount,
             startRowIndex,
             startCellIndex,
+            isProvideVirtualCellsWidth,
         } = options;
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
 
@@ -504,8 +507,8 @@ class ViewDataGenerator {
             groupedData,
             topVirtualRowHeight,
             bottomVirtualRowHeight,
-            leftVirtualCellWidth,
-            rightVirtualCellWidth,
+            leftVirtualCellWidth: isProvideVirtualCellsWidth ? leftVirtualCellWidth : undefined,
+            rightVirtualCellWidth: isProvideVirtualCellsWidth ? rightVirtualCellWidth : undefined,
             cellCountInGroupRow,
             isGroupedAllDayPanel,
             leftVirtualCellCount: startCellIndex,

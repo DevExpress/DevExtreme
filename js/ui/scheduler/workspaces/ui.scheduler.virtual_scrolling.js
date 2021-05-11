@@ -522,11 +522,11 @@ class VirtualScrollingBase {
 
         const needAddItems = this._itemSizeChanged || isAppend || isPrepend;
         if(needAddItems) {
-            this._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
+            this._updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter);
         }
     }
 
-    _updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter) {
+    _updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter) {
         const { state } = this;
 
         state.virtualItemSizeBefore = virtualItemSizeBefore;
@@ -588,14 +588,15 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
         };
     }
 
-    _updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter) {
+    _updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter) {
         if(!this.isRTL) {
-            super._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
+            super._updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter);
         } else {
             const { state } = this;
 
             state.virtualItemSizeAfter = virtualItemSizeBefore;
             state.virtualItemSizeBefore = virtualItemSizeAfter;
+            state.startIndex = this.getTotalItemCount() - this.startIndex - this.state.itemCount;
         }
     }
 }

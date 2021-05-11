@@ -633,7 +633,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     renderRTimeTable() {}
 
     generateRenderOptions() {
-        const options = super.generateRenderOptions();
+        const options = super.generateRenderOptions(true);
 
         const groupCount = this._getGroupCount();
         const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()

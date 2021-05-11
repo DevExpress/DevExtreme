@@ -1246,7 +1246,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isShowAllDayPanel() && this._isVerticalGroupedWorkSpace();
     }
 
-    generateRenderOptions() {
+    generateRenderOptions(isProvideVirtualCellsWidth) {
         const groupCount = this._getGroupCount();
         const verticalGroupCount = !this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
         const horizontalGroupCount = this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
@@ -1282,6 +1282,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupsList: this._getAllGroups(),
             isHorizontalGrouping: this._isHorizontalGroupedWorkSpace(),
             isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
+            isProvideVirtualCellsWidth,
         };
 
         if(this.isVirtualScrolling()) {
