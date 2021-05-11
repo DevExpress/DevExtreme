@@ -36,6 +36,7 @@ class FileManagerEditingControl extends Widget {
                 getDirectories: this._controller.getDirectories.bind(this._controller),
                 getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
             },
+            rtlEnabled: this.option('rtlEnabled'),
             onDialogClosed: this._onDialogClosed.bind(this)
         });
 
@@ -391,6 +392,10 @@ class FileManagerEditingControl extends Widget {
         } else {
             this._dialogDeferred.reject();
         }
+    }
+
+    updateDialogRtl(value) {
+        this._dialogManager.updateDialogRtl(value);
     }
 
     _getItemThumbnail(item) {

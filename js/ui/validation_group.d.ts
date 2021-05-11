@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import DOMComponent, {
@@ -7,7 +7,7 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -49,7 +49,7 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @public
  */
 export default class dxValidationGroup extends DOMComponent {
-    constructor(element: TElement, options?: dxValidationGroupOptions)
+    constructor(element: UserDefinedElement, options?: dxValidationGroupOptions)
     /**
      * @docid
      * @publicName reset()
@@ -84,7 +84,7 @@ export interface dxValidationGroupResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: TPromise<dxValidationGroupResult>;
+    complete?: DxPromise<dxValidationGroupResult>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -107,7 +107,10 @@ export interface dxValidationGroupResult {
 }
 
 /** @public */
+export type Properties = dxValidationGroupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidationGroupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxValidationGroupOptions;

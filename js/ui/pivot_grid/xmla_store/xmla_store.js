@@ -428,7 +428,7 @@ export const XmlaStore = Class.inherit((function() {
 
         createDrillDownAxisSlice(slice, rows, params.rowPath || []);
 
-        if(columns.length || columns.length || dataFields.length) {
+        if(columns.length || dataFields.length) {
             axisStrings.push([(dataFields[params.dataIndex] || dataFields[0]) + ' on 0']);
         }
 
@@ -512,7 +512,7 @@ export const XmlaStore = Class.inherit((function() {
     }
 
     function getNodeText(node) {
-        return node && node && (node.textContent || node.text || node.innerHTML) || '';
+        return node && (node.textContent || node.text || node.innerHTML) || '';
     }
 
     function parseCells(xml, axes, measureCount) {

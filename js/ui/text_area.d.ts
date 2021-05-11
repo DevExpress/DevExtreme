@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -105,11 +105,14 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
  * @public
  */
 export default class dxTextArea extends dxTextBox {
-    constructor(element: TElement, options?: dxTextAreaOptions)
+    constructor(element: UserDefinedElement, options?: dxTextAreaOptions)
 }
 
 /** @public */
+export type Properties = dxTextAreaOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTextAreaOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTextAreaOptions;

@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -128,11 +128,14 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
  * @public
  */
 export default class dxBullet extends BaseSparkline {
-    constructor(element: TElement, options?: dxBulletOptions)
+    constructor(element: UserDefinedElement, options?: dxBulletOptions)
 }
 
 /** @public */
+export type Properties = dxBulletOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxBulletOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxBulletOptions;

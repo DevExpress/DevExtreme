@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -492,7 +493,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyLink
@@ -507,7 +508,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyLink
      * @notUsedInTheme
@@ -521,7 +522,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyNode
@@ -536,7 +537,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxSankey
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:dxSankeyNode
      * @notUsedInTheme
@@ -636,26 +637,26 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field1 source:string
      * @type_function_param1_field2 target:string
      * @type_function_param1_field3 weight:Number
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: TElement) => string | TElement);
+    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
      * @type_function_param1 info:object
      * @type_function_param1_field1 label:string
      * @type_function_param1_field2 weightIn:Number
      * @type_function_param1_field3 weightOut:Number
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: TElement) => string | TElement);
+    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: DxElement) => string | UserDefinedElement);
 }
 /**
  * @docid
@@ -666,7 +667,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxSankey extends BaseWidget {
-    constructor(element: TElement, options?: dxSankeyOptions)
+    constructor(element: UserDefinedElement, options?: dxSankeyOptions)
     /**
      * @docid
      * @publicName getAllLinks()
@@ -825,7 +826,10 @@ export interface dxSankeyNode {
 }
 
 /** @public */
+export type Properties = dxSankeyOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSankeyOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSankeyOptions;

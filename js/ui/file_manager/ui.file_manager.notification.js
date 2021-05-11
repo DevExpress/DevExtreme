@@ -32,6 +32,7 @@ export default class FileManagerNotificationControl extends Widget {
 
         this._isInAdaptiveState = this._isSmallScreen();
         this._managerMap = {};
+        this._notificationManagerStubId = null;
 
         this._setNotificationManager();
         const $progressPanelContainer = this.option('progressPanelContainer');
@@ -228,7 +229,7 @@ export default class FileManagerNotificationControl extends Widget {
         if(this._isProgressDrawerOpened() || !this.option('showNotificationPopup')) {
             return;
         }
-        this._getNotificationPopup()._wrapper().toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);
+        this._getNotificationPopup().$wrapper().toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);
         this._getNotificationPopup().option('contentTemplate', content);
         if(!this._getNotificationPopup().option('visible')) {
             this._getNotificationPopup().show();

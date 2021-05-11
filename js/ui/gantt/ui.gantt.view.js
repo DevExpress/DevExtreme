@@ -54,7 +54,7 @@ export class GanttView extends Widget {
         return this._ganttViewCore.barManager;
     }
     executeCoreCommand(id) {
-        const command = this._ganttViewCore.commandManager.getCommand(id);
+        const command = this._ganttViewCore.getCommandByKey(id);
         if(command) {
             command.execute();
         }

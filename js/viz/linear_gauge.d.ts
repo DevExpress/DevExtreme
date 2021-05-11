@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -187,11 +187,14 @@ export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @public
  */
 export default class dxLinearGauge extends BaseGauge {
-    constructor(element: TElement, options?: dxLinearGaugeOptions)
+    constructor(element: UserDefinedElement, options?: dxLinearGaugeOptions)
 }
 
 /** @public */
+export type Properties = dxLinearGaugeOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxLinearGaugeOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxLinearGaugeOptions;

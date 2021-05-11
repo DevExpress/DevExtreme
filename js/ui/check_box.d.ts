@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -83,11 +83,14 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @public
  */
 export default class dxCheckBox extends Editor {
-    constructor(element: TElement, options?: dxCheckBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxCheckBoxOptions)
 }
 
 /** @public */
+export type Properties = dxCheckBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCheckBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxCheckBoxOptions;

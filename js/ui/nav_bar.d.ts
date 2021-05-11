@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -63,7 +63,7 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @public
  */
 export default class dxNavBar extends dxTabs {
-    constructor(element: TElement, options?: dxNavBarOptions)
+    constructor(element: UserDefinedElement, options?: dxNavBarOptions)
 }
 
 /**
@@ -81,7 +81,10 @@ export interface dxNavBarItem extends dxTabsItem {
 }
 
 /** @public */
+export type Properties = dxNavBarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxNavBarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxNavBarOptions;

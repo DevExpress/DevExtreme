@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import Editor, {
@@ -26,10 +26,8 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
  * @public
  */
 export default class dxRecurrenceEditor extends Editor {
-    constructor(element: TElement, options?: dxRecurrenceEditorOptions)
+    constructor(element: UserDefinedElement, options?: dxRecurrenceEditorOptions)
 }
 
 export type Options = dxRecurrenceEditorOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = dxRecurrenceEditorOptions;

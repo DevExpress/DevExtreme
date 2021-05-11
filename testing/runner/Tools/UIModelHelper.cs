@@ -53,7 +53,7 @@ namespace Runner.Tools
             return String.Format("~/testing/tests/{0}/{1}", catName, suiteName);
         }
 
-        public IEnumerable<Suite> GetAllSuites(bool deviceMode, string constellation, ISet<string> includeCategories, ISet<string> excludeCategories)
+        public IEnumerable<Suite> GetAllSuites(bool deviceMode, string constellation, ISet<string> includeCategories, ISet<string> excludeCategories, int partIndex, int partCount)
         {
             var includesSpecified = includeCategories != null && includeCategories.Any();
             var excludesSpecified = excludeCategories != null && excludeCategories.Any();
@@ -78,8 +78,14 @@ namespace Runner.Tools
                 if (excludesSpecified && excludeCategories.Contains(cat.Name))
                     continue;
 
-                foreach (var suite in ReadSuites(cat.Name))
-                    yield return suite;
+                int index = 0;
+                foreach (var suite in ReadSuites(cat.Name)) {
+                    if(partCount <= 1 || (index % partCount) == partIndex) {
+                        yield return suite;
+
+                    }
+                    index++;
+                }
             }
         }
 

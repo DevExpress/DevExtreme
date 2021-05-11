@@ -1,9 +1,9 @@
 import {
-    TElementsArray
+    UserDefinedElementsArray
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -27,7 +27,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    enter(elements: TElementsArray, animation: animationConfig | string): void;
+    enter(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName leave(elements, animation)
@@ -36,7 +36,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    leave(elements: TElementsArray, animation: animationConfig | string): void;
+    leave(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName reset()
@@ -51,7 +51,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    start(): TPromise<void>;
+    start(): DxPromise<void>;
     /**
      * @docid
      * @publicName stop()

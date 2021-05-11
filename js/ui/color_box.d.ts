@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -110,12 +111,12 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @docid
      * @default null
      * @type_function_param1 value:string
-     * @type_function_param2 fieldElement:dxElement
+     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: string, fieldElement: TElement) => string | TElement);
+    fieldTemplate?: template | ((value: string, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default 1
@@ -140,11 +141,14 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
  * @public
  */
 export default class dxColorBox extends dxDropDownEditor {
-    constructor(element: TElement, options?: dxColorBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxColorBoxOptions)
 }
 
 /** @public */
+export type Properties = dxColorBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxColorBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxColorBoxOptions;

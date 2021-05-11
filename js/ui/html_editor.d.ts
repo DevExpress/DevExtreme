@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -95,7 +96,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:dxHtmlEditor
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -108,7 +109,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:dxHtmlEditor
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -164,7 +165,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
  * @public
  */
 export default class dxHtmlEditor extends Editor {
-    constructor(element: TElement, options?: dxHtmlEditorOptions)
+    constructor(element: UserDefinedElement, options?: dxHtmlEditorOptions)
     /**
      * @docid
      * @publicName blur()
@@ -439,12 +440,12 @@ export interface dxHtmlEditorMention {
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default "@"
@@ -481,12 +482,12 @@ export interface dxHtmlEditorMention {
      * @type_function_param1_field1 marker:string
      * @type_function_param1_field2 id:string|number
      * @type_function_param1_field3 value:any
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((mentionData: MentionTemplateData, contentElement: TElement) => string | TElement);
+    template?: template | ((mentionData: MentionTemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default "this"
@@ -506,7 +507,7 @@ export interface dxHtmlEditorToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | TElement;
+    container?: string | UserDefinedElement;
     /**
      * @docid
      * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
@@ -573,7 +574,10 @@ export interface dxHtmlEditorVariables {
 }
 
 /** @public */
+export type Properties = dxHtmlEditorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxHtmlEditorOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxHtmlEditorOptions;

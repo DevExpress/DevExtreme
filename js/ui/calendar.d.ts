@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -54,12 +55,12 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @type_function_param1_field2 view:string
      * @type_function_param1_field3 text:string
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((itemData: CellTemplateData, itemIndex: number, itemElement: TElement) => string | TElement);
+    cellTemplate?: template | ((itemData: CellTemplateData, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default undefined
@@ -172,11 +173,14 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @public
  */
 export default class dxCalendar extends Editor {
-    constructor(element: TElement, options?: dxCalendarOptions)
+    constructor(element: UserDefinedElement, options?: dxCalendarOptions)
 }
 
 /** @public */
+export type Properties = dxCalendarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCalendarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxCalendarOptions;

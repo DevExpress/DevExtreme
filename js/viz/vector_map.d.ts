@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -570,7 +571,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 center:Array<number>
      * @notUsedInTheme
@@ -584,7 +585,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:MapLayerElement
@@ -599,7 +600,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement
      * @notUsedInTheme
@@ -613,7 +614,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -627,7 +628,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -641,7 +642,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxVectorMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 zoomFactor:number
      * @notUsedInTheme
@@ -774,17 +775,17 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: TElement) => string | TElement);
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 
 export interface dxVectorMapLegends extends BaseLegend {
@@ -862,7 +863,7 @@ export interface dxVectorMapLegends extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxVectorMapOptions.legends.source
      * @notUsedInTheme
@@ -888,13 +889,13 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
      * @type_function_param1 info:MapLayerElement
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: MapLayerElement, element: TElement) => string | TElement);
+    contentTemplate?: template | ((info: MapLayerElement, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
      * @type_function_param1 info:MapLayerElement
@@ -921,7 +922,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxVectorMap extends BaseWidget {
-    constructor(element: TElement, options?: dxVectorMapOptions)
+    constructor(element: UserDefinedElement, options?: dxVectorMapOptions)
     /**
      * @docid
      * @publicName center()
@@ -1037,7 +1038,10 @@ export default class dxVectorMap extends BaseWidget {
 }
 
 /** @public */
+export type Properties = dxVectorMapOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxVectorMapOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxVectorMapOptions;

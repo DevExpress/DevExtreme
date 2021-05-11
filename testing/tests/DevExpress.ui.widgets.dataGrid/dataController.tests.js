@@ -125,9 +125,9 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     });
 
     QUnit.test('Initialize array with keyExpr option', function(assert) {
-    // act
-        this.applyOptions({ keyExpr: 'id', dataSource: [] });
-        this.dataController.optionChanged({ name: 'keyExpr' });
+        // act
+        this.option('dataSource', []);
+        this.option('keyExpr', 'id');
 
         // assert
         assert.equal(this.getDataSource().store().key(), 'id', 'keyExpr is assigned to store');
@@ -235,19 +235,12 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     QUnit.test('events rising on second initialize shared dataSource', function(assert) {
         let changedCount = 0;
         const dataSource = createDataSource([]);
-
-        this.applyOptions({
-            dataSource: dataSource
-        });
-
-        this.dataController.optionChanged({ name: 'dataSource' });
-
         this.dataController.changed.add(function(args) {
             changedCount++;
         });
 
         // act
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', dataSource);
 
         // assert
         assert.strictEqual(changedCount, 1, 'changed called');
@@ -257,11 +250,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     QUnit.test('events rising on second initialize not shared dataSource', function(assert) {
         let changedCount = 0;
 
-        this.applyOptions({
-            dataSource: []
-        });
-
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', []);
 
         const dataSource = this.dataController.dataSource()._dataSource;
 
@@ -270,7 +259,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', []);
 
         // assert
         assert.ok(dataSource, 'dataSource created');
@@ -1820,73 +1809,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(foundRowCount, 9, 'Found row count');
     });
 
-    QUnit.test('Get row index if group by two columns, simple key and virtual scrolling', function(assert) {
-    // arrange
-        let foundRowCount = 0;
-        const dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
-            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
-            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
-            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
-            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
-            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
-            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
-            { team: 'public', name: 'Alice', age: 19, g0: 3 },
-            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-        { key: 'name' },
-        { group: ['team', 'g0'], sort: 'name', pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
-
-        this.applyOptions({
-            commonColumnSettings: { autoExpandGroup: true },
-            scrolling: { mode: 'virtual' },
-            dataSource: dataSource
-        });
-
-        // act
-        const dataController = this.dataController;
-        dataController._refreshDataSource();
-        // assert
-        dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 2, 'Alex');
-        });
-        dataController.getGlobalRowIndexByKey('Bob').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 4, 'Bob');
-        });
-        dataController.getGlobalRowIndexByKey('Mark').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 5, 'Mark');
-        });
-        dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 6, 'Sad');
-        });
-        dataController.getGlobalRowIndexByKey('Dan').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 9, 'Dan');
-        });
-        dataController.getGlobalRowIndexByKey('Den').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 10, 'Den');
-        });
-        dataController.getGlobalRowIndexByKey('Clark').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 13, 'Clark');
-        });
-        dataController.getGlobalRowIndexByKey('Alice').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 18, 'Alice');
-        });
-        dataController.getGlobalRowIndexByKey('Zeb').done(function(globalRowIndex) {
-            ++foundRowCount;
-            assert.equal(globalRowIndex, 16, 'Zeb');
-        });
-
-        assert.equal(foundRowCount, 9, 'Found row count');
-    });
-
     // B254274
     QUnit.test('sortOrder in column options and group parameters in dataSource', function(assert) {
     // arrange
@@ -2632,13 +2554,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         dataSource.load();
 
-        this.applyOptions({ dataSource: dataSource });
-
         // act
-        this.dataController.optionChanged({
-            name: 'dataSource',
-            value: dataSource
-        });
+        this.option('dataSource', dataSource);
 
         // assert
         assert.equal(this.dataController.items().length, 3);
@@ -2661,13 +2578,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         dataSource.load();
 
-        this.applyOptions({ dataSource: dataSource });
-
         // act
-        this.dataController.optionChanged({
-            name: 'dataSource',
-            value: dataSource
-        });
+        this.option('dataSource', dataSource);
 
         this.clock.tick();
 
@@ -3884,9 +3796,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     QUnit.test('disabled row render virtualization', function(assert) {
-        this.options.scrolling.rowRenderingMode = 'standard';
-
-        this.dataController.optionChanged({ name: 'scrolling', fullName: 'scrolling.rowRenderingMode' });
+        this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
         this.dataController.viewportSize(9);
         this.clock.tick(0);
@@ -3935,8 +3845,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     QUnit.test('scroll to to the next page after expand', function(assert) {
-        this.options.scrolling.rowRenderingMode = 'standard';
-        this.dataController.optionChanged({ name: 'scrolling' });
+        this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
         this.dataController.viewportSize(9);
         this.clock.tick();
@@ -3967,8 +3876,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     // T641290
     QUnit.test('Search should work correctly when rowRenderingMode is set to \'virtual\'', function(assert) {
     // arrange, act
-        this.options.searchPanel = { text: 'test' };
-        this.dataController.optionChanged({ fullName: 'searchPanel.text', value: 'test' });
+        this.option('searchPanel.text', 'test');
         this.clock.tick();
 
         // assert
@@ -3976,8 +3884,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.pageCount(), 1, 'page count');
 
         // act
-        this.options.searchPanel = { text: '' };
-        this.dataController.optionChanged({ fullName: 'searchPanel.text', value: '' });
+        this.option('searchPanel.text', '');
         this.clock.tick();
 
         // assert
@@ -4931,6 +4838,125 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.deepEqual(change.changeTypes, ['remove', 'remove', 'insert', 'insert'], 'change types');
         assert.deepEqual(renderedItemIds, [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 'finally rendered item IDs');
     });
+
+    QUnit.test('New mode. DataSourceAdapter.viewportSize should not be called when viewPortSize is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const viewportSizeSpy = sinon.spy(this.dataController.dataSource(), 'viewportSize');
+
+        try {
+            this.dataController.viewportSize();
+
+            assert.notOk(viewportSizeSpy.called, 'not called');
+        } finally {
+            viewportSizeSpy.restore();
+        }
+    });
+
+    QUnit.test('New mode. DataSourceAdapter.viewportItemSize should not be called when viewportItemSize is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const viewportItemSizeSpy = sinon.spy(this.dataController.dataSource(), 'viewportItemSize');
+
+        try {
+            this.dataController.viewportItemSize();
+
+            assert.notOk(viewportItemSizeSpy.called, 'not called');
+        } finally {
+            viewportItemSizeSpy.restore();
+        }
+    });
+
+    QUnit.test('New mode. DataSourceAdapter.setContentItemSizes should not be called when setContentItemSizes is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const setContentItemSizesSpy = sinon.spy(this.dataController.dataSource(), 'setContentItemSizes');
+
+        try {
+            this.dataController.setContentItemSizes([30]);
+
+            assert.notOk(setContentItemSizesSpy.called, 'not called');
+        } finally {
+            setContentItemSizesSpy.restore();
+        }
+    });
+
+    QUnit.test('New mode. updateItems should not be called on data loading when loadViewport method is called', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const updateItemsSpy = sinon.spy(this.dataController, 'updateItems');
+
+        try {
+            // act
+            this.dataController._isLoading = true;
+            this.dataController.loadViewport();
+
+            // assert
+            assert.notOk(updateItemsSpy.called, 'not called');
+
+            // act
+            this.dataController._isLoading = false;
+            this.dataController.loadViewport();
+
+            // assert
+            assert.ok(updateItemsSpy.called, 'called');
+        } finally {
+            updateItemsSpy.restore();
+        }
+    });
+
 });
 
 QUnit.module('Infinite scrolling', {
@@ -5321,18 +5347,6 @@ QUnit.module('Filtering', {
                 text: ''
             }
         });
-
-        const originalOption = this.option;
-
-        this.option = function(options, value) {
-            const result = originalOption.apply(this, arguments);
-
-            if(options === 'searchPanel.text' && typeUtils.isDefined(value)) {
-                this.dataController.optionChanged({ fullName: options });
-            }
-
-            return result;
-        };
 
         this.setupFilterableData = function() {
             this.dataSource = createDataSource([
@@ -10123,44 +10137,6 @@ QUnit.module('Summary', {
         }]]);
     });
 
-    QUnit.test('Several total summary items in different column', function(assert) {
-        this.options = {
-            dataSource: [
-                { name: 'Alex', age: 19 },
-                { name: 'Dan', age: 25 }
-            ],
-            summary: {
-                totalItems: [{
-                    column: 'name',
-                    summaryType: 'count'
-                },
-                {
-                    column: 'age',
-                    summaryType: 'max'
-                }]
-            }
-        };
-
-        // act
-        this.setupDataGridModules();
-        this.clock.tick();
-
-        // assert
-        assert.deepEqual(this.dataController.footerItems(), [{
-            rowType: 'totalFooter', summaryCells: [[{
-                value: 2,
-                column: 'name',
-                summaryType: 'count'
-            }], [{
-                value: 25,
-                column: 'age',
-                summaryType: 'max'
-            }]
-            ]
-        }]);
-        assert.ok(!this.dataController.isLoading());
-    });
-
     QUnit.test('Changing total summary items', function(assert) {
         this.options = {
             dataSource: [
@@ -10463,11 +10439,7 @@ QUnit.module('Summary', {
         this.clock.tick();
 
         // act
-        this.options.sortByGroupSummaryInfo = [{
-            summaryItem: 'count'
-        }];
-
-        this.dataController.optionChanged({ name: 'sortByGroupSummaryInfo' });
+        this.option('sortByGroupSummaryInfo', [{ summaryItem: 'count' }]);
         this.clock.tick();
 
 
@@ -12009,8 +11981,7 @@ QUnit.module('Master Detail', {
         // act
         this.dataController.changeRowExpand(1);
 
-        this.options.masterDetail.enabled = false;
-        this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail.enabled' });
+        this.option('masterDetail.enabled', false);
 
         // assert
         const items = this.dataController.items();
@@ -12028,11 +11999,7 @@ QUnit.module('Master Detail', {
         // act
         this.dataController.changeRowExpand(1);
 
-        const oldMasterDetail = this.options.masterDetail;
-
-        this.options.masterDetail = { enabled: true, autoExpandAll: false };
-
-        this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail', previousValue: oldMasterDetail, value: this.options.masterDetail });
+        this.option('masterDetail', { enabled: true, autoExpandAll: false });
 
         // assert
         assert.ok(this.dataController.isRowExpanded(1), 'row 1 is expanded');
@@ -12044,11 +12011,7 @@ QUnit.module('Master Detail', {
         // act
         this.dataController.changeRowExpand(1);
 
-        const oldMasterDetail = this.options.masterDetail;
-
-        this.options.masterDetail = { enabled: true, autoExpandAll: true };
-
-        this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail', previousValue: oldMasterDetail, value: this.options.masterDetail });
+        this.option('masterDetail', { enabled: true, autoExpandAll: true });
 
         // assert
         assert.ok(this.dataController.isRowExpanded(1), 'row 1 is not expanded');
@@ -12854,7 +12817,6 @@ QUnit.module('Refresh changesOnly', {
 
         // act
         this.option('searchPanel.text', 'Bob');
-        this.dataController.optionChanged({ name: 'searchPanel', fullName: 'searchPanel.text' });
 
         // assert
         const items = this.dataController.items();
@@ -13164,9 +13126,8 @@ QUnit.module('Refresh changesOnly', {
         this.options.repaintChangesOnly = true;
 
         // act
-        this.options.dataSource = createDataSource(this.array.slice(1), { key: 'id' });
 
-        this.dataController.optionChanged({ name: 'dataSource', fullName: 'dataSource', previousValue: this.array, value: this.options.dataSource });
+        this.option('dataSource', createDataSource(this.array.slice(1), { key: 'id' }));
 
         // assert
         const items = this.dataController.items();
@@ -13609,7 +13570,6 @@ QUnit.module('Using DataSource instance', {
 
         // act
         this.option('grouping.autoExpandAll', false);
-        this.dataController.optionChanged({ name: 'grouping' });
 
         this.clock.tick();
 

@@ -1,5 +1,5 @@
 import {
-  TElement
+    UserDefinedElement
 } from '../core/element';
 
 import DataSource, {
@@ -162,7 +162,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
  * @public
  */
 export default class dxResponsiveBox extends CollectionWidget {
-    constructor(element: TElement, options?: dxResponsiveBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxResponsiveBoxOptions)
 }
 
 /**
@@ -209,7 +209,10 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxResponsiveBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxResponsiveBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxResponsiveBoxOptions;

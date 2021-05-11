@@ -16,9 +16,9 @@ export declare function isExponential<T>(object: T): object is Extract<T, number
 
 export declare function isDefined<T>(object: T): object is NonNullable<T>;
 
-export declare function isObject<T>(object: T): object is Extract<T, object>;
+export declare function isObject<T = {}>(object: unknown): object is Extract<T, object>;
 
-export declare function isEmptyObject<T>(object: T): object is Extract<T, object>;
+export declare function isEmptyObject<T = {}>(object: T): boolean;
 
 export declare function isPlainObject<T>(object: T): object is Extract<T, object>;
 

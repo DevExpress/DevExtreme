@@ -524,7 +524,6 @@ const DropDownEditor = TextBox.inherit({
         }
 
         this._$popup = $('<div>').addClass(DROP_DOWN_EDITOR_OVERLAY)
-            .addClass(this.option('customOverlayCssClass'))
             .appendTo(this.$element());
 
         this._renderPopup();
@@ -607,7 +606,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupPositionedHandler: function(e) {
-        e.position && this._popup.overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
+        e.position && this._popup.$overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
     },
 
     _popupShowingHandler: noop,
@@ -679,11 +678,11 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getFirstPopupElement: function() {
-        return this._popup._wrapper().find('.dx-popup-done.dx-button');
+        return this._popup.$wrapper().find('.dx-popup-done.dx-button');
     },
 
     _getLastPopupElement: function() {
-        return this._popup._wrapper().find('.dx-popup-cancel.dx-button');
+        return this._popup.$wrapper().find('.dx-popup-cancel.dx-button');
     },
 
     _popupElementTabHandler: function(e) {

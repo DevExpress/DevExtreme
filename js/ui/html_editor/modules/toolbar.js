@@ -539,7 +539,7 @@ if(Quill) {
                 name,
                 options: {
                     hint: localize(buttonText),
-                    text: buttonText,
+                    text: localize(buttonText),
                     icon: iconName.toLowerCase(),
                     onClick: this._formatHandlers[name] || this._getDefaultClickHandler(name),
                     stylingMode: 'text'

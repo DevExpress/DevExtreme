@@ -507,7 +507,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         assert.ok(dataGridWrapper.rowsView.isRowVisible(29, 1), 'navigated row in viewport');
 
-        dataGrid.option('columns[0].sortOrder', 'desc');
+        dataGrid.columnOption(0, 'sortOrder', 'desc');
         this.clock.tick();
 
         assert.ok(dataGridWrapper.rowsView.isRowVisible(0, 1), 'navigated row in viewport');
@@ -1457,6 +1457,49 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok($filterRowEditor.hasClass('dx-focused'), 'dx-focused');
         assert.ok($filterRowEditor.find('.dx-editor-outlined').hasClass('dx-state-focused'), 'dx-state-focused');
         assert.ok($filterRowEditor.find('.dx-texteditor-input').is(':focus'), 'focus');
+    });
+
+    // T993300
+    QUnit.test('The focused row should not be changed after filtering', function(assert) {
+        // arrange
+        const generateData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({ id: i + 1 });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: generateData(6),
+            paging: {
+                pageSize: 2
+            },
+            focusedRowEnabled: true,
+            focusedRowKey: 6,
+            columns: ['id']
+        });
+
+        this.clock.tick(100);
+
+        // act
+        dataGrid.searchByText(3);
+        this.clock.tick(100);
+
+        // assert
+        const visibleRows = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRows.length, 1, 'count row');
+        assert.strictEqual(visibleRows[0].key, 3, 'key row');
+        assert.strictEqual(dataGrid.option('focusedRowKey'), 6, 'focused row key');
+
+        // act
+        dataGrid.searchByText('');
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(dataGrid.pageIndex(), 2, 'page is changed');
+        assert.ok($(dataGrid.getRowElement(dataGrid.getRowIndexByKey(6))).hasClass('dx-row-focused'), 'focused row is visible');
     });
 });
 

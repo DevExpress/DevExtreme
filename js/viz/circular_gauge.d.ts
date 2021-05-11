@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -164,11 +164,14 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @public
  */
 export default class dxCircularGauge extends BaseGauge {
-    constructor(element: TElement, options?: dxCircularGaugeOptions)
+    constructor(element: UserDefinedElement, options?: dxCircularGaugeOptions)
 }
 
 /** @public */
+export type Properties = dxCircularGaugeOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCircularGaugeOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxCircularGaugeOptions;

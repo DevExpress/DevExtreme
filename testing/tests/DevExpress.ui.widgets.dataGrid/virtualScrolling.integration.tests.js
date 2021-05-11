@@ -524,7 +524,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         this.clock.tick(300);
 
-        const rowsView = dataGrid._views.rowsView;
+        const rowsView = dataGrid.getView('rowsView');
         row = rowsView.element().find('.dx-data-row').eq(0);
 
         // assert
@@ -3515,11 +3515,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // act
         this.clock.tick();
         dataGrid.getDataSource().on('customizeLoadResult', customizeLoadResultSpy);
-        dataGrid.getScrollable().scrollTo({ top: 75 });
+        dataGrid.getScrollable().scrollTo({ top: 600 });
         this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 85 });
+        dataGrid.getScrollable().scrollTo({ top: 1300 });
         this.clock.tick();
-        dataGrid.getScrollable().scrollTo({ top: 100 });
+        dataGrid.getScrollable().scrollTo({ top: 3200 });
         this.clock.tick();
 
         // assert
@@ -3527,6 +3527,114 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         for(let i = 0; i < customizeLoadResultSpy.callCount; i++) {
             assert.notOk(customizeLoadResultSpy.args[i][0].delay, `${i} call without a delay`);
         }
+    });
+
+    QUnit.test('New mode. Rows should be rendered according to the viewport size', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(100),
+            keyExpr: 'id',
+            height: 500,
+            remoteOperations: true,
+            paging: {
+                pageSize: 10
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            }
+        });
+
+        // act
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'rendered row count');
+    });
+
+    QUnit.test('New mode. Load panel should not be shown on scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData(100)
+        });
+
+
+        const dataGrid = createDataGrid({
+            dataSource: {
+                key: 'id',
+                load: function(loadOptions) {
+                    const d = $.Deferred();
+                    setTimeout(() => {
+                        store.load(loadOptions).done(function() {
+                            d.resolve.apply(d, arguments);
+                        });
+                    }, 100);
+                    return d.promise();
+                },
+                totalCount: function(loadOptions) {
+                    const d = $.Deferred();
+                    setTimeout(() => {
+                        store.totalCount(loadOptions).done(function() {
+                            d.resolve.apply(d, arguments);
+                        });
+                    }, 100);
+                    return d.promise();
+                }
+            },
+            height: 300,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            },
+            loadPanel: {
+                enabled: true
+            }
+        });
+
+        // act
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.element()).find('.dx-loadpanel-content').first().is(':visible'), 'load panel is shown');
+
+        // act
+        this.clock.tick(500);
+
+        // assert
+        assert.notOk($(dataGrid.element()).find('.dx-loadpanel-content').first().is(':visible'), 'load panel is hidden');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1900 });
+
+        // assert
+        assert.notOk($(dataGrid.element()).find('.dx-loadpanel-content').first().is(':visible'), 'load panel is hidden after scroll');
     });
 });
 

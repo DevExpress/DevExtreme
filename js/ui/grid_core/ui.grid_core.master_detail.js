@@ -180,6 +180,10 @@ export const masterDetailModule = {
                                     isAutoExpandAllChanged = value.autoExpandAll !== previousValue.autoExpandAll;
                                     break;
                                 }
+                                case 'masterDetail.template': {
+                                    initMasterDetail(that);
+                                    break;
+                                }
                                 case 'masterDetail.enabled':
                                     isEnabledChanged = true;
                                     break;

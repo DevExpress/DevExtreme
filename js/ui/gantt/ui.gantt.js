@@ -192,8 +192,14 @@ class Gantt extends Widget {
     }
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
+        this._updateGanttRowHeights();
+    }
+    _updateGanttRowHeights() {
         const rowHeight = this._getTreeListRowHeight();
-        this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
+        if(this._getGanttViewOption('rowHeight') !== rowHeight) {
+            this._setGanttViewOption('rowHeight', rowHeight);
+            this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
+        }
     }
     _onTreeListContentReady(e) {
         if(e.component.getDataSource()) {
@@ -226,7 +232,7 @@ class Gantt extends Widget {
     }
     _onTreeListRowDblClick(e) {
         if(this._raiseTaskDblClickAction(e.key, e.event)) {
-            this._ganttView._ganttViewCore.commandManager.showTaskEditDialog.execute();
+            this._ganttView._ganttViewCore.showTaskEditDialog();
         }
     }
     _onTreeListSelectionChanged(e) {
@@ -373,6 +379,9 @@ class Gantt extends Widget {
     _setGanttViewOption(optionName, value) {
         this._ganttView && this._ganttView.option(optionName, value);
     }
+    _getGanttViewOption(optionName, value) {
+        return this._ganttView?.option(optionName);
+    }
     _setTreeListOption(optionName, value) {
         this._treeList && this._treeList.option(optionName, value);
     }
@@ -497,6 +506,7 @@ class Gantt extends Widget {
             NotifyTaskUpdating: (args) => { this._raiseUpdatingAction(GANTT_TASKS, args); },
             NotifyTaskMoving: (args) => { this._raiseUpdatingAction(GANTT_TASKS, args, this._getTaskMovingAction()); },
             NotifyTaskEditDialogShowing: (args) => { this._raiseTaskEditDialogShowingAction(args); },
+            NotifyResourceManagerDialogShowing: (args) => { this._raiseResourceManagerDialogShowingAction(args); },
             NotifyDependencyInserting: (args) => { this._raiseInsertingAction(GANTT_DEPENDENCIES, args); },
             NotifyDependencyRemoving: (args) => { this._raiseDeletingAction(GANTT_DEPENDENCIES, args); },
             NotifyResourceCreating: (args) => { this._raiseInsertingAction(GANTT_RESOURCES, args); },
@@ -530,6 +540,9 @@ class Gantt extends Widget {
                     }
                     this._selectTreeListRows(this._getArrayFromOneElement(insertedId));
                     this._setTreeListOption('focusedRowKey', insertedId);
+                    setTimeout(() => {
+                        this._updateGanttRowHeights();
+                    }, 300);
                 }
                 this._raiseInsertedAction(optionName, data, insertedId);
             });
@@ -619,7 +632,7 @@ class Gantt extends Widget {
         return this.option('validation.autoUpdateParentTasks');
     }
     _selectTreeListRows(keys) {
-        this._treeList?.selectRows(keys);
+        this._setTreeListOption('selectedRowKeys', keys);
     }
     // custom fields cache updating
     _addCustomFieldsDataFromCache(key, data) {
@@ -634,6 +647,8 @@ class Gantt extends Widget {
                     dataOption.update(key, data, () => {
                         this._updateTreeListDataSource();
                         dataOption._refreshDataSource();
+                        const selectedRowKey = this.option('selectedRowKey');
+                        this._ganttView._selectTask(selectedRowKey);
                     });
                 }
             };
@@ -764,6 +779,19 @@ class Gantt extends Widget {
             coreArgs.values = this._convertMappedToCoreData(GANTT_TASKS, args.values);
             coreArgs.readOnlyFields = this._convertMappedToCoreFields(GANTT_TASKS, args.readOnlyFields);
             coreArgs.hiddenFields = this._convertMappedToCoreFields(GANTT_TASKS, args.hiddenFields);
+        }
+    }
+    _raiseResourceManagerDialogShowingAction(coreArgs) {
+        const action = this._getResourceManagerDialogShowingAction();
+        if(action) {
+            const mappedResources = coreArgs.values.resources.items.map(r => this._convertMappedToCoreData(GANTT_RESOURCES, r));
+            const args = {
+                cancel: false,
+                key: coreArgs.key,
+                values: mappedResources
+            };
+            action(args);
+            coreArgs.cancel = args.cancel;
         }
     }
     _raiseTaskClickAction(key, event) {
@@ -906,6 +934,12 @@ class Gantt extends Widget {
         }
         return this._taskEditDialogShowingAction;
     }
+    _getResourceManagerDialogShowingAction() {
+        if(!this._resourceManagerDialogShowingAction) {
+            this._createResourceManagerDialogShowingAction();
+        }
+        return this._resourceManagerDialogShowingAction;
+    }
     _getDependencyInsertingAction() {
         if(!this._dependencyInsertingAction) {
             this._createDependencyInsertingAction();
@@ -1010,6 +1044,9 @@ class Gantt extends Widget {
     }
     _createTaskEditDialogShowingAction() {
         this._taskEditDialogShowingAction = this._createActionByOption('onTaskEditDialogShowing');
+    }
+    _createResourceManagerDialogShowingAction() {
+        this._resourceManagerDialogShowingAction = this._createActionByOption('onResourceManagerDialogShowing');
     }
     _createDependencyInsertingAction() {
         this._dependencyInsertingAction = this._createActionByOption('onDependencyInserting');
@@ -1447,11 +1484,17 @@ class Gantt extends Widget {
     scrollToDate(date) {
         this._ganttView._ganttViewCore.scrollToDate(date);
     }
+    showResourceManagerDialog() {
+        this._ganttView._ganttViewCore.showResourcesDialog();
+    }
 
     // export
     exportToPdf(options) {
         this._exportHelper.reset();
         const fullOptions = extend({}, options);
+        if(fullOptions.createDocumentMethod) {
+            fullOptions.docCreateMethod = fullOptions.createDocumentMethod;
+        }
         fullOptions.docCreateMethod ??= window['jspdf']?.['jsPDF'] ?? window['jsPDF'];
         fullOptions.format ??= 'a4';
         return new Promise((resolve) => {
@@ -1528,6 +1571,9 @@ class Gantt extends Widget {
                 break;
             case 'onTaskEditDialogShowing':
                 this._createTaskEditDialogShowingAction();
+                break;
+            case 'onResourceManagerDialogShowing':
+                this._createResourceManagerDialogShowingAction();
                 break;
             case 'onDependencyInserting':
                 this._createDependencyInsertingAction();

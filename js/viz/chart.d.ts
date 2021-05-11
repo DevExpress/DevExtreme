@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -1025,7 +1026,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 argument:Date|Number|string
@@ -1040,7 +1041,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
@@ -1055,7 +1056,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:chartSeriesObject
@@ -1070,7 +1071,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
@@ -1084,7 +1085,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:chartSeriesObject
      * @notUsedInTheme
@@ -1098,7 +1099,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
@@ -1121,7 +1122,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
@@ -2116,7 +2117,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((data: object, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((data: object, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxChartOptions.commonAxisSettings.label.alignment
      * @type Enums.HorizontalAlignment
@@ -2974,7 +2975,7 @@ export interface dxChartValueAxisTitle extends dxChartCommonAxisSettingsTitle {
  * @public
  */
 export default class dxChart extends BaseChart {
-    constructor(element: TElement, options?: dxChartOptions)
+    constructor(element: UserDefinedElement, options?: dxChartOptions)
     /**
      * @docid
      * @publicName getArgumentAxis()
@@ -3065,17 +3066,17 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxChartAnnotationConfig|any
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: TElement) => string | TElement);
+    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 
 /**
@@ -5844,7 +5845,10 @@ export interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCo
 }
 
 /** @public */
+export type Properties = dxChartOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxChartOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxChartOptions;

@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import DataSource, {
@@ -130,7 +130,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
  * @public
  */
 export default class dxTabs extends CollectionWidget {
-    constructor(element: TElement, options?: dxTabsOptions)
+    constructor(element: UserDefinedElement, options?: dxTabsOptions)
 }
 
 /**
@@ -154,7 +154,10 @@ export interface dxTabsItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxTabsOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTabsOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTabsOptions;

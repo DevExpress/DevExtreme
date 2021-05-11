@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import DOMComponent, {
@@ -7,7 +7,7 @@ import DOMComponent, {
 } from '../core/dom_component';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -125,7 +125,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @public
  */
 export default class dxValidator extends DOMComponent {
-    constructor(element: TElement, options?: dxValidatorOptions)
+    constructor(element: UserDefinedElement, options?: dxValidatorOptions)
     /**
      * @docid
      * @publicName focus()
@@ -175,7 +175,7 @@ export interface dxValidatorResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: TPromise<dxValidatorResult>;
+    complete?: DxPromise<dxValidatorResult>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -211,7 +211,10 @@ export interface dxValidatorResult {
 }
 
 /** @public */
+export type Properties = dxValidatorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidatorOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxValidatorOptions;

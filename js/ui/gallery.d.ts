@@ -1,9 +1,9 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -173,7 +173,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
  * @public
  */
 export default class dxGallery extends CollectionWidget {
-    constructor(element: TElement, options?: dxGalleryOptions)
+    constructor(element: UserDefinedElement, options?: dxGalleryOptions)
     /**
      * @docid
      * @publicName goToItem(itemIndex, animation)
@@ -183,7 +183,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    goToItem(itemIndex: number, animation: boolean): TPromise<void>;
+    goToItem(itemIndex: number, animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName nextItem(animation)
@@ -192,7 +192,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    nextItem(animation: boolean): TPromise<void>;
+    nextItem(animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName prevItem(animation)
@@ -201,7 +201,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    prevItem(animation: boolean): TPromise<void>;
+    prevItem(animation: boolean): DxPromise<void>;
 }
 
 /**
@@ -225,7 +225,10 @@ export interface dxGalleryItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxGalleryOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxGalleryOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxGalleryOptions;

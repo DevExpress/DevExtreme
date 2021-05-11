@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -47,11 +47,14 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
  * @public
  */
 export default class dxValidationSummary extends CollectionWidget {
-    constructor(element: TElement, options?: dxValidationSummaryOptions)
+    constructor(element: UserDefinedElement, options?: dxValidationSummaryOptions)
 }
 
 /** @public */
+export type Properties = dxValidationSummaryOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidationSummaryOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxValidationSummaryOptions;

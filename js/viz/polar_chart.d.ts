@@ -1,9 +1,10 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -303,13 +304,13 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: TElement, model?: any, event?: TEvent, argument?: Date | number | string }) => void) | string;
+    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: DxElement, model?: any, event?: DxEvent, argument?: Date | number | string }) => void) | string;
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
@@ -324,7 +325,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
@@ -339,7 +340,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -353,7 +354,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -367,7 +368,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
@@ -388,7 +389,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
@@ -1459,7 +1460,7 @@ export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSetting
  * @public
  */
 export default class dxPolarChart extends BaseChart {
-    constructor(element: TElement, options?: dxPolarChartOptions)
+    constructor(element: UserDefinedElement, options?: dxPolarChartOptions)
     /**
      * @docid dxPolarChart.getValueAxis
      * @publicName getValueAxis()
@@ -1531,17 +1532,17 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: TElement) => string | TElement);
+    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 
 /**
@@ -2522,7 +2523,10 @@ export interface polarChartSeriesObject extends baseSeriesObject {
 }
 
 /** @public */
+export type Properties = dxPolarChartOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxPolarChartOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxPolarChartOptions;

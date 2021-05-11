@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -176,7 +177,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | TElement<SVGElement>);
+    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
@@ -220,7 +221,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPieChart
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:String|Number
@@ -395,17 +396,17 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
+    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: TElement) => string | TElement);
+    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
@@ -465,7 +466,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
 }
 /**
  * @docid
@@ -476,7 +477,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
  * @public
  */
 export default class dxPieChart extends BaseChart {
-    constructor(element: TElement, options?: dxPieChartOptions)
+    constructor(element: UserDefinedElement, options?: dxPieChartOptions)
     /**
      * @docid
      * @publicName getInnerRadius()
@@ -999,7 +1000,10 @@ export interface pieChartSeriesObject extends baseSeriesObject {
 }
 
 /** @public */
+export type Properties = dxPieChartOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxPieChartOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxPieChartOptions;

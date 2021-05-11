@@ -3,11 +3,12 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -15,7 +16,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent,
+    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -86,7 +87,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -105,7 +106,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -118,7 +119,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -132,7 +133,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 position:positionConfig
      * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -145,7 +146,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -157,7 +158,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxContextMenu
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -206,7 +207,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | TElement;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default false
@@ -226,7 +227,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
  * @public
  */
 export default class dxContextMenu extends dxMenuBase {
-    constructor(element: TElement, options?: dxContextMenuOptions)
+    constructor(element: UserDefinedElement, options?: dxContextMenuOptions)
     /**
      * @docid
      * @publicName hide()
@@ -234,7 +235,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<void>;
+    hide(): DxPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -242,7 +243,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<void>;
+    show(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -251,7 +252,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): TPromise<void>;
+    toggle(showing: boolean): DxPromise<void>;
 }
 
 /**
@@ -269,7 +270,10 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
 }
 
 /** @public */
+export type Properties = dxContextMenuOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxContextMenuOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxContextMenuOptions;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { VirtualRow, viewFunction as RowView } from '../virtual-row';
+import { VirtualRow, viewFunction as RowView } from '../virtual_row';
 import { addHeightToStyle } from '../../utils';
-import { VirtualCell } from '../virtual-cell';
+import { VirtualCell } from '../virtual_cell';
 
 jest.mock('../../utils', () => ({
   addHeightToStyle: jest.fn(() => 'style'),

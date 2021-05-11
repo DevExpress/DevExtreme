@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
 
@@ -39,7 +39,7 @@ const moduleConfig = {
 const getScrollOffset = function($scrollable) {
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const location = translator.locate($content);
+    const location = getTranslateValues($content.get(0));
 
     return {
         top: location.top - $container.scrollTop(),
@@ -263,7 +263,7 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
     $scrollable.dxScrollable('scrollTo', 2 * distance);
     $container.trigger('scroll');
 
-    const location = translator.locate($scroll);
+    const location = getTranslateValues($scroll.get(0));
     assert.equal(location.top, 2 * scrollbarDistance, 'scrollbar follows pointer everytime');
 });
 

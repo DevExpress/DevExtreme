@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -67,12 +68,12 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @default "menuItem"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @deprecated
@@ -92,7 +93,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @public
  */
 export default class dxToolbar extends CollectionWidget {
-    constructor(element: TElement, options?: dxToolbarOptions)
+    constructor(element: UserDefinedElement, options?: dxToolbarOptions)
 }
 
 /**
@@ -130,7 +131,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | (() => string | TElement);
+    menuItemTemplate?: template | (() => string | UserDefinedElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -155,7 +156,10 @@ export interface dxToolbarItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxToolbarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxToolbarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxToolbarOptions;

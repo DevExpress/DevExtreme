@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -360,7 +361,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 node:dxTreeMapNode
@@ -375,7 +376,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -389,7 +390,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -403,7 +404,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 root:dxTreeMapNode
      * @notUsedInTheme
@@ -417,7 +418,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -431,7 +432,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -601,13 +602,13 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
      * @type_function_param1_field3 node:dxTreeMapNode
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }, element: TElement) => string | TElement);
+    contentTemplate?: template | ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
@@ -630,7 +631,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxTreeMap extends BaseWidget {
-    constructor(element: TElement, options?: dxTreeMapOptions)
+    constructor(element: UserDefinedElement, options?: dxTreeMapOptions)
     /**
      * @docid
      * @publicName clearSelection()
@@ -838,7 +839,10 @@ export interface dxTreeMapNode {
 }
 
 /** @public */
+export type Properties = dxTreeMapOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTreeMapOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxTreeMapOptions;

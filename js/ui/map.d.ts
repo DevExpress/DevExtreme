@@ -1,9 +1,9 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -222,7 +222,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1_field4 location:object
      * @type_function_param1_field5 event:event
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -236,7 +236,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalMarker:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -249,7 +249,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -262,7 +262,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 originalMap:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -276,7 +276,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalRoute:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -289,7 +289,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field1 component:dxMap
-     * @type_function_param1_field2 element:TElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -380,7 +380,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
  * @public
  */
 export default class dxMap extends Widget {
-    constructor(element: TElement, options?: dxMapOptions)
+    constructor(element: UserDefinedElement, options?: dxMapOptions)
     /**
      * @docid
      * @publicName addMarker(markerOptions)
@@ -389,7 +389,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addMarker(markerOptions: any | Array<any>): TPromise<any>;
+    addMarker(markerOptions: any | Array<any>): DxPromise<any>;
     /**
      * @docid
      * @publicName addRoute(routeOptions)
@@ -398,7 +398,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRoute(options: any | Array<any>): TPromise<any>;
+    addRoute(options: any | Array<any>): DxPromise<any>;
     /**
      * @docid
      * @publicName removeMarker(marker)
@@ -407,7 +407,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    removeMarker(marker: any | number | Array<any>): TPromise<void>;
+    removeMarker(marker: any | number | Array<any>): DxPromise<void>;
     /**
      * @docid
      * @publicName removeRoute(route)
@@ -416,11 +416,14 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    removeRoute(route: any | number | Array<any>): TPromise<void>;
+    removeRoute(route: any | number | Array<any>): DxPromise<void>;
 }
 
 /** @public */
+export type Properties = dxMapOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxMapOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxMapOptions;

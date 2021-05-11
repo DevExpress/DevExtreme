@@ -1,5 +1,5 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
@@ -90,11 +90,14 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @public
  */
 export default class dxSwitch extends Editor {
-    constructor(element: TElement, options?: dxSwitchOptions)
+    constructor(element: UserDefinedElement, options?: dxSwitchOptions)
 }
 
 /** @public */
+export type Properties = dxSwitchOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSwitchOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSwitchOptions;

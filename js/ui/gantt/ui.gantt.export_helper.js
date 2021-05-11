@@ -46,6 +46,10 @@ export class GanttExportHelper {
         const styleForExport = {
             color: style.color,
             padding: style.padding,
+            paddingLeft: style.paddingLeft,
+            paddingTop: style.paddingTop,
+            paddingRight: style.paddingRight,
+            paddingBottom: style.paddingBottom,
             verticalAlign: style.verticalAlign,
             width: this._getColumnWidth(colIndex)
         };
@@ -62,6 +66,10 @@ export class GanttExportHelper {
         const styleForExport = {
             color: style.color,
             padding: style.padding,
+            paddingLeft: style.paddingLeft,
+            paddingTop: style.paddingTop,
+            paddingRight: style.paddingRight,
+            paddingBottom: style.paddingBottom,
             width: this._getColumnWidth(colIndex)
         };
         if(colIndex === 0) {
@@ -112,7 +120,7 @@ export class GanttExportHelper {
     _getDataCell(rowIndex, colIndex) {
         const treeList = this._treeList;
         const cellElement = treeList.getCellElement(rowIndex, colIndex);
-        return cellElement && cellElement[0];
+        return cellElement && cellElement.length ? cellElement[0] : cellElement;
     }
     _getHeaderElement(index) {
         return this._getHeaderView().getHeaderElement(index).get(0);
