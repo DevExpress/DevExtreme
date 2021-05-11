@@ -1826,7 +1826,7 @@ QUnit.module('Editing', {
         });
 
         popupInstance.show();
-        const $popupContent = popupInstance.overlayContent();
+        const $popupContent = popupInstance.$overlayContent();
         $($popupContent.find('td').first()).trigger('dxclick');
         that.clock.tick();
 
