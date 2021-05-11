@@ -387,8 +387,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         this._$dateTable.height(height);
 
         super._setTableSizes();
-
-        this.virtualScrollingDispatcher?.updateDimensions();
     }
 
     _getWorkSpaceMinHeight() {
