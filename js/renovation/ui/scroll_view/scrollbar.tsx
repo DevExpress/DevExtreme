@@ -296,6 +296,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   scrollToBounds(): void {
+    this.updateMaxOffset();
+
     if (this.inRange()) {
       this.hide();
       return;
