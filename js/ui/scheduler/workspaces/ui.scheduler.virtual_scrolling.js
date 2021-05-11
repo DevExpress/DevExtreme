@@ -132,7 +132,7 @@ export default class VirtualScrollingDispatcher {
             ? cellHeight
             : DEFAULT_CELL_HEIGHT;
 
-        return Math.round(result);
+        return Math.floor(result);
     }
 
     getCellWidth() {
@@ -142,7 +142,7 @@ export default class VirtualScrollingDispatcher {
             ? cellWidth
             : MIN_CELL_WIDTH;
 
-        return Math.round(result);
+        return Math.floor(result);
     }
 
     calculateCoordinatesByDataAndPosition(cellData, position, date, isCalculateTime, isVerticalDirectionView) {
