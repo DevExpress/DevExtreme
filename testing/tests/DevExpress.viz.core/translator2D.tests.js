@@ -1426,6 +1426,15 @@ QUnit.module('Discrete translator', {
     }
 });
 
+QUnit.test('Translate null/undefined values (T801302)', function(assert) {
+    const translator = this.createTranslator({});
+
+    assert.equal(translator.translate(null), null);
+    assert.equal(translator.translate(undefined), null);
+    assert.deepEqual(translator.to(null), NaN);
+    assert.deepEqual(translator.to(undefined), NaN);
+});
+
 QUnit.test('Translate. Invert = false. Stick = false.', function(assert) {
     const translator = this.createTranslator({});
 
