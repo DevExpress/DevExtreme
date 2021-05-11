@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { render, createRef, RefObject, Fragment } from "inferno";
+import { render, createRef, RefObject } from "inferno";
 import { createElement } from 'inferno-create-element';
 import { hydrate } from 'inferno-hydrate';
 import $ from '../../core/renderer';
