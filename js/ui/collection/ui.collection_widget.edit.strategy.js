@@ -95,7 +95,8 @@ const EditStrategy = Class.inherit({
     },
 
     _isNode: (el) => {
-        return domAdapter.isNode((el && el.get) ? el.get(0) : el);
+        const isJquery = (el && (el.__proto__.dxRenderer || el.__proto__.jquery));
+        return domAdapter.isNode(isJquery ? el.get(0) : el);
     },
 
     deleteItemAtIndex: abstract,

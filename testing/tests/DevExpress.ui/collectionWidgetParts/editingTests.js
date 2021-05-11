@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
+import EditStrategy from 'ui/collection/ui.collection_widget.edit.strategy';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
@@ -2277,5 +2278,15 @@ module('reordering with dataSource', () => {
         }));
 
         assert.equal(widget.option('items')[0].text, 'item 2', 'items wew changed');
+    });
+});
+
+module('editing strategy', () => {
+    test('"_isNode" method should call "get" method only from "$" objects', function(assert) {
+        const editStrategy = new EditStrategy();
+        const getCallSpy = sinon.spy();
+        assert.ok(editStrategy._isNode($(document.createElement('div'))));
+        assert.ok(!editStrategy._isNode({ get: getCallSpy }));
+        assert.strictEqual(getCallSpy.callCount, 0);
     });
 });
