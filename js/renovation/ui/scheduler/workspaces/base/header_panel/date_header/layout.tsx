@@ -19,6 +19,8 @@ import { DateHeaderCell } from './cell';
 
 export const viewFunction = ({
   isHorizontalGrouping,
+  leftVirtualCellWidth,
+  rightVirtualCellWidth,
   props: {
     dateHeaderData,
     dateCellTemplate,
@@ -27,9 +29,7 @@ export const viewFunction = ({
   const {
     dataMap,
     leftVirtualCellCount,
-    leftVirtualCellWidth,
     rightVirtualCellCount,
-    rightVirtualCellWidth,
   } = dateHeaderData;
 
   return (

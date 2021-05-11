@@ -655,6 +655,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _getRDateTableProps() {
         return super._getRDateTableProps(true);
     }
+
+    _getRHeaderPanelProps(isRenderDateHeader) {
+        return {
+            ...super._getRHeaderPanelProps(isRenderDateHeader),
+            isProvideVirtualCellWidth: true,
+        };
+    }
 }
 
 registerComponent('dxSchedulerTimeline', SchedulerTimeline);

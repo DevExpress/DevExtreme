@@ -30,6 +30,7 @@ export const viewFunction = ({
     dateCellTemplate,
     timeCellTemplate,
     dateHeaderTemplate: DateHeader,
+    isProvideVirtualCellWidth,
   },
 }: HeaderPanelLayout): JSX.Element => (
   <thead>
@@ -51,6 +52,7 @@ export const viewFunction = ({
         groups={groups}
         dateCellTemplate={dateCellTemplate}
         timeCellTemplate={timeCellTemplate}
+        isProvideVirtualCellWidth={isProvideVirtualCellWidth}
       />
     )}
     {groupByDate && (
@@ -73,6 +75,8 @@ export class HeaderPanelLayoutProps extends GroupPanelProps {
   @OneWay() isRenderDateHeader = true;
 
   @OneWay() groupPanelCellBaseColSpan = 1;
+
+  @OneWay() isProvideVirtualCellWidth = false;
 
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 

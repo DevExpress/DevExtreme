@@ -1407,22 +1407,26 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$thead,
             this.renovatedHeaderPanelComponent,
             'renovatedHeaderPanel',
-            {
-                dateHeaderData: this.viewDataProvider.dateHeaderData,
-                dateCellTemplate: this.option('dateCellTemplate'),
-                timeCellTemplate: this.option('timeCellTemplate'),
-                groups: this.option('groups'),
-                groupByDate: this.isGroupedByDate(),
-                groupOrientation: this.option('groupOrientation'),
-                resourceCellTemplate: this.option('resourceCellTemplate'),
-                className: this.verticalGroupTableClass,
-                groupPanelCellBaseColSpan: this.isGroupedByDate()
-                    ? 1
-                    : this._getCellCount(),
-                columnCountPerGroup: this._getCellCount(),
-                isRenderDateHeader,
-            }
+            this._getRHeaderPanelProps(isRenderDateHeader),
         );
+    }
+
+    _getRHeaderPanelProps(isRenderDateHeader) {
+        return {
+            dateHeaderData: this.viewDataProvider.dateHeaderData,
+            dateCellTemplate: this.option('dateCellTemplate'),
+            timeCellTemplate: this.option('timeCellTemplate'),
+            groups: this.option('groups'),
+            groupByDate: this.isGroupedByDate(),
+            groupOrientation: this.option('groupOrientation'),
+            resourceCellTemplate: this.option('resourceCellTemplate'),
+            className: this.verticalGroupTableClass,
+            groupPanelCellBaseColSpan: this.isGroupedByDate()
+                ? 1
+                : this._getCellCount(),
+            columnCountPerGroup: this._getCellCount(),
+            isRenderDateHeader,
+        };
     }
 
     renderRComponent(parentElement, componentClass, componentName, viewModel) {

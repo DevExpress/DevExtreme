@@ -18,6 +18,7 @@ export const viewFunction = ({
     resourceCellTemplate,
     dateCellTemplate,
     timeCellTemplate,
+    isProvideVirtualCellWidth,
   },
 }: TimelineHeaderPanelLayout): JSX.Element => (
   <HeaderPanelLayout
@@ -32,6 +33,7 @@ export const viewFunction = ({
     resourceCellTemplate={resourceCellTemplate}
     dateCellTemplate={dateCellTemplate}
     timeCellTemplate={timeCellTemplate}
+    isProvideVirtualCellWidth={isProvideVirtualCellWidth}
   />
 );
 
