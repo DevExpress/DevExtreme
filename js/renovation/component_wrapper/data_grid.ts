@@ -7,6 +7,8 @@ import { updatePropsImmutable } from "./utils/update-props-immutable";
 export default class DataGridWrapper extends Component {
     _onInitialized!: Function;
 
+    _fireContentReady() {}
+
     static registerModule = gridCore.registerModule.bind(gridCore);
 
     beginUpdate() {

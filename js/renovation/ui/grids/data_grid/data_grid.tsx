@@ -23,6 +23,27 @@ const aria = { role: 'presentation' };
 
 const rowSelector = '.dx-row';
 
+// TODO without normalization all nested props defaults overwrite by undefined
+// https://trello.com/c/36qTw0cH/2560-a-nested-prop-has-an-undefined-value-if-it-not-used-in-component
+// For example, instance.option('editing') return undefined instead of editing default values
+// Specifically for React
+// result[key] = {
+//   ...props,
+//   columns: __getNestedColumns(),
+//   editing: __getNestedEditing()
+//   ...
+// }
+function normalizeProps(props: Record<string, unknown>): Record<string, unknown> {
+  const result = {};
+
+  Object.keys(props).forEach((key) => {
+    if (props[key] !== undefined) {
+      result[key] = props[key];
+    }
+  });
+  return result;
+}
+
 export const viewFunction = ({
   instance,
   widgetElementRef,
@@ -37,7 +58,6 @@ export const viewFunction = ({
     height,
     hint,
     hoverStateEnabled,
-    onContentReady,
     rtlEnabled,
     tabIndex,
     visible,
@@ -57,7 +77,6 @@ export const viewFunction = ({
     height={height}
     hint={hint}
     hoverStateEnabled={hoverStateEnabled}
-    onContentReady={onContentReady}
     rtlEnabled={rtlEnabled}
     tabIndex={tabIndex}
     visible={visible}
@@ -540,36 +559,18 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     this.instance?.updateDimensions(true);
   }
 
-  // TODO without normalization all nested props defaults overwrite by undefined
-  // https://trello.com/c/36qTw0cH/2560-a-nested-prop-has-an-undefined-value-if-it-not-used-in-component
-  // For example, instance.option('editing') return undefined instead of editing default values
-  // Specifically for React
-  // result[key] = {
-  //   ...props,
-  //   columns: __getNestedColumns(),
-  //   editing: __getNestedEditing()
-  //   ...
-  // }
-  normalizeProps(props: Record<string, unknown>): Record<string, unknown> {
-    const result = {};
-
-    Object.keys(props).forEach((key) => {
-      if (this.props[key] !== undefined) {
-        result[key] = props[key];
-      }
-    });
-    return result;
-  }
-
   @Effect({ run: 'once' })
   setupInstance(): void {
     const element = this.widgetElementRef?.current as HTMLElement;
     // TODO Vitik: Not only optionChanged should be rewrited.
     // All other events should be re-raised by renovated grid.
-    const { onOptionChanged, ...restProps } = this.props as unknown as Record<string, unknown>;
+    const { onOptionChanged, ...restProps } = {
+      ...this.props,
+      onContentReady: (this.restAttributes as unknown as Record<string, unknown>).onContentReady,
+    } as unknown as Record<string, unknown>;
     const instance: GridInstance = new DataGridComponent(
       element,
-      this.normalizeProps(restProps),
+      normalizeProps(restProps),
     ) as unknown as GridInstance;
     instance.getController('resizing').updateSize(element);
     instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
