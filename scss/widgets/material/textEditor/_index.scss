@@ -356,6 +356,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   font-size: $material-texteditor-label-font-size;
   color: $texteditor-label-color;
   left: 0;
+  white-space: nowrap;
 
   .dx-invalid & {
     color: $base-invalid-color;
@@ -375,15 +376,24 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     left: $material-filled-texteditor-input-horizontal-padding;
   }
 
+  &.dx-rtl {
+    .dx-texteditor-label {
+      right: $material-filled-texteditor-input-horizontal-padding;
+    }
+  }
+
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
-    .dx-texteditor-input {
+    .dx-texteditor-input,
+    &.dx-lookup .dx-lookup-field {
       padding-top: $material-filled-texteditor-input-top-padding + $input-vertical-diff;
       padding-bottom: $material-filled-texteditor-input-bottom-padding - $input-vertical-diff;
     }
 
     .dx-texteditor-label {
       font-size: $material-texteditor-label-font-size;
+      height: $material-texteditor-label-font-size;
+      line-height: $material-texteditor-label-font-size;
       top: $label-position-top;
       margin-top: 0;
     }
@@ -407,6 +417,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         font-size: $material-texteditor-font-size;
         top: 50%;
         margin-top: -($material-texteditor-font-size / 2);
+        height: $material-texteditor-font-size;
         line-height: $material-texteditor-font-size;
       }
 
@@ -431,6 +442,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
       .dx-texteditor-label {
         font-size: $material-texteditor-label-font-size;
+        height: $material-texteditor-label-font-size;
+        line-height: $material-texteditor-label-font-size;
         top: $label-position-top;
         margin-top: 0;
       }
@@ -452,6 +465,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       top: 0;
       margin-top: 0;
       left: 0;
+      height: $material-texteditor-label-font-size;
+      line-height: $material-texteditor-label-font-size;
 
       span {
         transform: translate(0, -$label-offset-y);
@@ -468,6 +483,46 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       .dx-texteditor-buttons-container {
         box-shadow: inset 0 #{$shadowOffset}px $borderColor;
       }
+    }
+  }
+
+  @mixin dx-state-empty($borderColor, $shadowOffset) {
+    box-shadow: inset 0 0 0 #{$shadowOffset}px $borderColor;
+    outline: none;
+
+    .dx-texteditor-label {
+      top: 50%;
+      margin-top: -($material-texteditor-font-size / 2);
+      height: $material-texteditor-font-size;
+      line-height: $material-texteditor-font-size;
+
+      span {
+        transition: $material-editor-label-transition;
+        transform: $label-default-transform;
+        font-size: $material-texteditor-font-size;
+      }
+
+      &::before,
+      &::after {
+        box-shadow: inset 0 #{$shadowOffset}px transparent;
+      }
+    }
+
+    &.dx-texteditor-with-custom-buttons {
+      .dx-texteditor-buttons-container {
+        box-shadow: inset 0 #{$shadowOffset}px transparent;
+      }
+    }
+
+    &.dx-textarea {
+      .dx-texteditor-label {
+        top: $material-filled-texteditor-input-top-padding;
+        margin-top: 0;
+      }
+    }
+
+    .dx-placeholder {
+      display: none;
     }
   }
 
@@ -495,6 +550,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     max-height: 2px;
     top: 0;
     margin-top: 0;
+    height: $material-texteditor-label-font-size;
+    line-height: $material-texteditor-label-font-size;
 
     span {
       position: relative;
@@ -524,12 +581,13 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   }
 
   &.dx-texteditor-with-label {
-    &.dx-state-readonly {
-      @include dx-state($texteditor-border-color, 1);
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover,
+    &.dx-state-disabled {
+      @include dx-state(color.change($texteditor-color, $alpha: 0.5), 1);
     }
 
-    &.dx-state-hover,
-    &.dx-state-hover.dx-state-readonly {
+    &.dx-state-hover {
       @include dx-state($texteditor-hover-border-color, 1);
 
       &.dx-invalid {
@@ -541,134 +599,34 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   &.dx-texteditor-with-floating-label {
     &.dx-texteditor-empty,
     &.dx-lookup-empty {
-      box-shadow: inset 0 0 0 1px $texteditor-border-color;
+      @include dx-state-empty($texteditor-border-color, 1);
 
       &.dx-invalid {
-        box-shadow: inset 0 0 0 1px $base-invalid-faded-border-color;
-
-        .dx-texteditor-label {
-          &::before,
-          &::after {
-            box-shadow: inset 0 2px transparent;
-          }
-        }
-
-        &.dx-texteditor-with-custom-buttons {
-          .dx-texteditor-buttons-container {
-            box-shadow: inset 0 2px transparent;
-          }
-        }
+        @include dx-state-empty($texteditor-invalid-faded-border-color, 1);
       }
 
-      &.dx-state-readonly {
+      &.dx-state-readonly,
+      &.dx-state-readonly.dx-state-hover,
+      &.dx-state-disabled {
+        @include dx-state-empty(color.change($texteditor-color, $alpha: 0.5), 1);
+
         &.dx-state-focused,
         &.dx-state-focused.dx-state-hover,
+        &.dx-textarea.dx-state-focused.dx-state-hover,
         &.dx-textarea.dx-state-focused {
-          .dx-texteditor-label {
-            top: 50%;
-            margin-top: -($material-texteditor-font-size / 2);
-            line-height: $material-texteditor-font-size;
-
-            span {
-              transform: $label-default-transform;
-              font-size: $material-texteditor-font-size;
-            }
-
-            &::before,
-            &::after {
-              box-shadow: inset 0 2px transparent;
-            }
-          }
-
-          &.dx-texteditor-with-custom-buttons {
-            .dx-texteditor-buttons-container {
-              box-shadow: inset 0 2px transparent;
-            }
-          }
-
-          .dx-placeholder {
-            display: none;
-          }
-
-          &.dx-textarea {
-            .dx-texteditor-label {
-              top: $material-filled-texteditor-input-top-padding;
-              margin-top: 0;
-            }
-          }
+          @include dx-state-empty($texteditor-focused-border-color, 2);
 
           &.dx-invalid {
-            box-shadow: inset 0 0 0 2px $texteditor-invalid-focused-border-color;
-          }
-
-          box-shadow: inset 0 0 0 2px $texteditor-focused-border-color;
-        }
-
-        &.dx-texteditor-with-custom-buttons {
-          .dx-texteditor-buttons-container {
-            box-shadow: inset 0 2px transparent;
+            @include dx-state-empty($texteditor-invalid-focused-border-color, 2);
           }
         }
-      }
-
-      &.dx-texteditor-with-custom-buttons {
-        .dx-texteditor-buttons-container {
-          box-shadow: inset 0 2px transparent;
-        }
-      }
-
-      .dx-placeholder {
-        display: none;
       }
 
       &.dx-state-hover {
-        box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
-
-        .dx-texteditor-label {
-          span {
-            transform: $label-default-transform;
-            font-size: $material-texteditor-font-size;
-          }
-        }
+        @include dx-state-empty($texteditor-hover-border-color, 1);
 
         &.dx-invalid {
-          box-shadow: inset 0 0 0 1px $texteditor-invalid-focused-border-color;
-        }
-      }
-
-      .dx-texteditor-label {
-        width: auto;
-        height: 100%;
-        top: 50%;
-        margin-top: -($material-texteditor-font-size / 2);
-        line-height: $material-texteditor-font-size;
-
-        span {
-          transition: $material-editor-label-transition;
-          transform: $label-default-transform;
-          font-size: $material-texteditor-font-size;
-        }
-
-        &::before,
-        &::after {
-          box-shadow: inset 0 2px transparent;
-        }
-      }
-
-      &.dx-textarea {
-        .dx-texteditor-label {
-          top: $material-filled-texteditor-input-top-padding;
-          margin-top: 0;
-        }
-      }
-    }
-
-    &.dx-state-hover {
-      &:not(.dx-texteditor-empty):not(.dx-lookup-empty) {
-        @include dx-state($texteditor-hover-border-color, 1);
-
-        &.dx-invalid {
-          @include dx-state($texteditor-invalid-focused-border-color, 1);
+          @include dx-state-empty($texteditor-invalid-focused-border-color, 1);
         }
       }
     }
@@ -676,12 +634,18 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
-    border-top-color: transparent;
+    border: none;
     box-shadow:
       inset 1px 0 $texteditor-border-color,
       inset -1px 0 $texteditor-border-color,
       inset 0 -1px $texteditor-border-color;
     outline: none;
+
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover,
+    &.dx-state-disabled {
+      @include dx-state(color.change($texteditor-color, $alpha: 0.5), 1);
+    }
 
     &.dx-invalid {
       box-shadow:
@@ -726,6 +690,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       width: 100%;
       top: 0;
       margin-top: 0;
+      height: $material-texteditor-label-font-size;
+      line-height: $material-texteditor-label-font-size;
 
       span {
         transform: translate(0, -$label-offset-y);
@@ -738,7 +704,16 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       }
     }
 
+    &.dx-state-hover {
+      @include dx-state($texteditor-hover-border-color, 1);
+
+      &.dx-invalid {
+        @include dx-state($texteditor-invalid-focused-border-color, 1);
+      }
+    }
+
     &.dx-textarea.dx-state-focused,
+    &.dx-textarea.dx-state-focused.dx-state-hover,
     &.dx-state-focused,
     &.dx-state-focused.dx-state-hover {
       @include dx-state($texteditor-focused-border-color, 2);
@@ -765,9 +740,12 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       transform: $label-transform;
       top: 0;
       margin-top: 0;
+      height: $material-texteditor-label-font-size;
+      line-height: $material-texteditor-label-font-size;
     }
 
-    .dx-texteditor-input {
+    .dx-texteditor-input,
+    &.dx-lookup .dx-lookup-field {
       padding-top: $input-top-padding;
       padding-bottom: $material-standard-texteditor-input-bottom-padding - $input-vertical-diff;
     }
@@ -788,6 +766,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         font-size: $material-texteditor-font-size;
         top: 50%;
         margin-top: -($material-texteditor-font-size / 2);
+        height: $material-texteditor-font-size;
         line-height: $material-texteditor-font-size;
       }
 
@@ -797,6 +776,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
           margin-top: 0;
           transform: translate(0, 0);
           font-size: $material-texteditor-font-size;
+          line-height: $material-texteditor-font-size;
         }
 
         .dx-placeholder {
@@ -810,12 +790,14 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       .dx-texteditor-label {
         transform: $label-transform;
         font-size: $material-texteditor-label-font-size;
+        height: $material-texteditor-label-font-size;
+        line-height: $material-texteditor-label-font-size;
         top: 0;
         margin-top: 0;
       }
 
       .dx-placeholder {
-        top: $input-vertical-diff;
+        top: $input-top-padding;
         display: block;
       }
     }

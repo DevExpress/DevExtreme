@@ -36,6 +36,17 @@ $colorbox-input-left-padding: 40px;
     }
   }
 
+
+  &.dx-editor-outlined {
+    .dx-texteditor-label {
+      left: 0;
+
+      &::before {
+        min-width: $colorbox-input-left-padding;
+      }
+    }
+  }
+
   .dx-texteditor-label {
     left: $colorbox-input-left-padding;
   }
@@ -83,6 +94,16 @@ $colorbox-input-left-padding: 40px;
   &.dx-colorbox {
     .dx-placeholder {
       right: 32px;
+    }
+
+    &.dx-editor-outlined {
+      .dx-texteditor-label {
+        right: 0;
+
+        &::before {
+          min-width: $colorbox-input-left-padding;
+        }
+      }
     }
 
     .dx-texteditor-label {
