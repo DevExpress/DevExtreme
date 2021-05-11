@@ -244,7 +244,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     dataSource: [{ id: 1 }, { id: 2 }]
                 }],
                 recurrenceEditMode: 'series',
-                width: 600
+                width: 1000
             });
 
             const updatedItem = {
@@ -340,7 +340,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     dataSource: [{ id: 1 }, { id: 2 }]
                 }],
                 recurrenceEditMode: 'occurrence',
-                width: 600
+                width: 900
             });
 
             const updatedItem = {

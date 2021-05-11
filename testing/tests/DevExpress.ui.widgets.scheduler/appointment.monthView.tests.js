@@ -267,7 +267,7 @@ module('Integration: Appointments in Month view', {
                             ]
                         }
                     ],
-                    width: 600
+                    width: 900
                 }, this.clock);
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
