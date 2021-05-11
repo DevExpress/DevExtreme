@@ -245,12 +245,8 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _wrapper: function() {
+    $wrapper: function() {
         return this._$wrapper;
-    },
-
-    _container: function() {
-        return this._$content;
     },
 
     _eventBindingTarget: function() {
@@ -945,7 +941,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderScrollTerminator: function() {
-        const $scrollTerminator = this._wrapper();
+        const $scrollTerminator = this._$wrapper;
         const terminatorEventName = addNamespace(dragEventMove, this.NAME);
 
         eventsEngine.off($scrollTerminator, terminatorEventName);
