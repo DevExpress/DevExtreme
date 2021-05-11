@@ -2,7 +2,6 @@ import {
   OneWay,
   ComponentBindings,
   Slot,
-  Event,
   TwoWay,
 } from '@devextreme-generator/declarations';
 import {
@@ -28,10 +27,6 @@ export class BaseWidgetProps {
   @OneWay() className = '';
 
   @OneWay() defaultCanvas?: ClientRect;
-
-  @Event({
-    actionConfig: { excludeValidators: ['disabled'] },
-  }) onContentReady?: (e: any) => any;
 
   @TwoWay()
   canvas: ClientRect = {

@@ -20,7 +20,6 @@ export default class CheckBox extends Editor {
           event: this._valueChangeEventInstance,
         });
         this._valueChangeEventInstance = undefined;
-        super._optionChanged(option);
         break;
       case 'onValueChanged':
         this._valueChangeAction = this._createActionByOption('onValueChanged', {
@@ -28,10 +27,10 @@ export default class CheckBox extends Editor {
         });
         break;
       default:
-        super._optionChanged(option);
+        break;
     }
 
-    this._invalidate();
+    super._optionChanged(option);
   }
 
   setAria(name: string, value: string): void {

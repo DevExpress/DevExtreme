@@ -160,7 +160,6 @@ describe('Button', () => {
         height: 100,
         hint: 'hint',
         hoverStateEnabled: true,
-        onContentReady: () => null,
         rtlEnabled: true,
         tabIndex: -2,
         visible: true,
@@ -192,23 +191,6 @@ describe('Button', () => {
   describe('Behavior', () => {
     describe('Effects', () => {
       afterEach(clearEventHandlers);
-
-      describe('contentReadyEffect', () => {
-        it('should call "onContentReady" callback with the content node\'s parent', () => {
-          const onContentReady = jest.fn();
-          const button = new Button({ onContentReady });
-          const parentNode = {};
-          button.contentRef = { current: { parentNode } } as any;
-          button.contentReadyEffect();
-          expect(onContentReady).toHaveBeenCalledTimes(1);
-          expect(onContentReady).toHaveBeenCalledWith({ element: parentNode });
-        });
-
-        it('should not raise any error if "onContentReady" is not defined', () => {
-          const button = new Button({ onContentReady: undefined });
-          expect(button.contentReadyEffect.bind(button)).not.toThrow();
-        });
-      });
 
       describe('submitEffect', () => {
         it('should be ignored if the "useSubmitBehavior" is false', () => {
