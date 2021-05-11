@@ -599,6 +599,12 @@ $generic-texteditor-label-transition:
       padding-top: $input-top-padding;
       padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
     }
+
+    &.dx-texteditor-with-custom-buttons {
+      .dx-texteditor-label {
+        left: $generic-base-inline-borderedwidget-horizontal-padding;
+      }
+    }
   }
 
   &.dx-texteditor-with-floating-label {
@@ -622,7 +628,7 @@ $generic-texteditor-label-transition:
 
       &.dx-textarea {
         .dx-texteditor-label {
-          top: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
+          top: $input-top-padding;
           margin-top: 0;
           transform: translate(0, 0);
           font-size: $generic-base-font-size;
@@ -649,6 +655,10 @@ $generic-texteditor-label-transition:
       .dx-placeholder {
         top: $input-top-padding;
         display: block;
+
+        &::before {
+          padding-top: 0;
+        }
       }
     }
   }
