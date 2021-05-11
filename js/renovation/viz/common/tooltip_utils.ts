@@ -306,12 +306,14 @@ export function getCloudAngle(
         || (anchorX >= xl && anchorX <= xr && anchorY < yt) // 2
   ) {
     angle = 270;
-  } if (
+  }
+  if (
     (anchorX > xr && anchorY > yb) // 5
         || (anchorX >= xl && anchorX <= xr && anchorY > yb) // 6
   ) {
     angle = 90;
-  } if (
+  }
+  if (
     (anchorX < xl && anchorY > yb) // 7
         || (anchorX < xl && anchorY >= yt && anchorY <= yb) // 8
   ) {

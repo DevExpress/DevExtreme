@@ -80,7 +80,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
         }
 
         const viewElement = rowIndex >= 0 || !that._columnHeadersView.isVisible() ? that._rowsView : that._columnHeadersView;
-        const $tableElements = $popupContent || viewElement.getTableElements();
+        const $tableElements = viewElement.getTableElements();
 
         each($tableElements, function(_, tableElement) {
             $errorMessageElement = that._createErrorRow(error, $tableElements);
@@ -102,10 +102,10 @@ const ErrorHandlingController = modules.ViewController.inherit({
                 }
             }
         });
-        if(!$popupContent) {
-            const resizingController = that.getController('resizing');
-            resizingController && resizingController.fireContentReadyAction();
-        }
+
+        const resizingController = that.getController('resizing');
+        resizingController && resizingController.fireContentReadyAction();
+
         return $firstErrorRow;
     },
 
