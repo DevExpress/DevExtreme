@@ -1109,4 +1109,29 @@ QUnit.module('Options', {
         assert.ok(initMarkupSpy.calledTwice, 'Init markup was called on the second and third option change');
         assert.ok(reloadDataSourceSpy.calledOnce, '_reloadDataSource was not called on init mark up');
     });
+
+    QUnit.test('It should be possible to change views option when view names are specified (T995794)', function(assert) {
+        const baseViews = [{
+            type: 'day',
+            name: 'Custom Day',
+        }, {
+            type: 'week',
+            name: 'Custom Week',
+        }];
+        const timelineViews = [{
+            type: 'timelineDay',
+            name: 'Custom Timeline Day',
+        }, {
+            type: 'timelineWeek',
+            name: 'Custom Timeline Week',
+        }];
+        const scheduler = createWrapper({
+            views: baseViews,
+            currentView: 'Custom Week',
+        });
+
+        scheduler.instance.option('views', timelineViews);
+
+        assert.equal(scheduler.workSpace.getCells().length, 48, 'Everything is correct');
+    });
 });
