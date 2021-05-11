@@ -9,7 +9,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import PopupModule from './popup';
 import Mention from '../formats/mention';
 
-let MentionModule = {};
+let MentionModule = class EmptyModule {};
 
 if(Quill) {
     const USER_ACTION = 'user';

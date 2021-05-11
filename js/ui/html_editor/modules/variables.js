@@ -7,7 +7,7 @@ import Variable from '../formats/variable';
 
 import { extend } from '../../../core/utils/extend';
 
-let VariableModule = {};
+let VariableModule = class EmptyModule {};
 
 if(Quill) {
     const VARIABLE_FORMAT_CLASS = 'dx-variable-format';

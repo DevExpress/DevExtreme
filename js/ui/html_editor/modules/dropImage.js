@@ -8,7 +8,7 @@ import { getWindow } from '../../../core/utils/window';
 
 import BaseHtmlEditorModule from './base';
 
-let DropImageModule = {};
+let DropImageModule = class EmptyModule {};
 
 if(Quill) {
     DropImageModule = class DropImageModule extends BaseHtmlEditorModule {

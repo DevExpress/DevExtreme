@@ -20,7 +20,7 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
-let ToolbarModule = {};
+let ToolbarModule = class EmptyModule {};
 
 if(Quill) {
     const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';

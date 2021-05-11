@@ -1,6 +1,6 @@
 import Quill from 'devextreme-quill';
 
-let BaseHtmlEditorModule = {};
+let BaseHtmlEditorModule = class EmptyModule {};
 
 if(Quill) {
     const BaseModule = Quill.import('core/module');

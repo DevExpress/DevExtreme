@@ -8,7 +8,7 @@ import BaseHtmlEditorModule from './base';
 import Popup from '../../popup';
 import List from '../../list';
 
-let ListPopupModule = {};
+let ListPopupModule = class EmptyModule {};
 
 if(Quill) {
     const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
