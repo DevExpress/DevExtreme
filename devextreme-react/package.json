@@ -1,7 +1,7 @@
 {
   "author": "Developer Express Inc.",
   "name": "devextreme-react",
-  "version": "20.2.4",
+  "version": "21.1.2-beta",
   "description": "DevExtreme React UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "~20.2.4",
+    "devextreme": "~21.1.2-beta",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },
@@ -36,7 +36,7 @@
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.0.9",
     "del": "^3.0.0",
-    "devextreme": "~20.2.4",
+    "devextreme": "~21.1.2-beta",
     "devextreme-react-generator": "^1.0.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
