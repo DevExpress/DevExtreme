@@ -173,7 +173,10 @@ export default class dxDropDownBox extends dxDropDownEditor {
 }
 
 /** @public */
+export type Properties = dxDropDownBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDropDownBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDropDownBoxOptions;

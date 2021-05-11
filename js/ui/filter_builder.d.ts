@@ -549,7 +549,10 @@ export interface dxFilterBuilderField {
 }
 
 /** @public */
+export type Properties = dxFilterBuilderOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxFilterBuilderOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxFilterBuilderOptions;

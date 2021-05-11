@@ -1,6 +1,6 @@
 import { ComponentBindings } from '@devextreme-generator/declarations';
 
 @ComponentBindings()
-export class FormLayoutManagerProps {
+export class LayoutManagerProps {
 
 }

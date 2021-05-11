@@ -229,7 +229,10 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxSlideOutOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSlideOutOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSlideOutOptions;

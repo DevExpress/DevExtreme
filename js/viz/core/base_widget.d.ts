@@ -12,10 +12,6 @@ import {
 } from '../../core/element';
 
 import {
-    DxPromise
-} from '../../core/utils/deferred';
-
-import {
     EventInfo
 } from '../../events/index';
 
@@ -275,7 +271,7 @@ export interface BaseWidgetExport {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => DxPromise<void>);
+    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>);
 }
 export interface BaseWidgetLoadingIndicator {
     /**

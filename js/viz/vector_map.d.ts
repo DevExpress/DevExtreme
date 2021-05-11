@@ -1038,7 +1038,10 @@ export default class dxVectorMap extends BaseWidget {
 }
 
 /** @public */
+export type Properties = dxVectorMapOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxVectorMapOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxVectorMapOptions;

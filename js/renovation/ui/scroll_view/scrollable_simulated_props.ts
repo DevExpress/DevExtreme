@@ -16,6 +16,8 @@ import { WidgetProps } from '../common/widget';
 export class ScrollableSimulatedProps extends ScrollableProps {
   @OneWay() inertiaEnabled = true;
 
+  @OneWay() useKeyboard = true;
+
   @Event() onStart?: EventCallback<ScrollEventArgs>;
 
   @Event() onEnd?: EventCallback<ScrollEventArgs>;
@@ -25,10 +27,10 @@ export class ScrollableSimulatedProps extends ScrollableProps {
   @Event() onStop?: EventCallback<ScrollEventArgs>;
 
   @Event()
-  contentTranslateOffsetChange?: EventCallback<{ left?: number; top?: number }>;
+  contentTranslateOffsetChange?: (scrollProp: 'left' | 'top', translateOffset: number) => void;
 
   @Event()
-  scrollLocationChange?: (scrollProp: 'scrollLeft' | 'scrollTop', location: number) => void;
+  scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number) => void;
 }
 
 export type ScrollableSimulatedPropsType = ScrollableSimulatedProps

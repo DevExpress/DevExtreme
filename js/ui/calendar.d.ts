@@ -177,7 +177,10 @@ export default class dxCalendar extends Editor {
 }
 
 /** @public */
+export type Properties = dxCalendarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCalendarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxCalendarOptions;

@@ -14,7 +14,7 @@ const PRIVATE_JQUERY_WIDGETS = [
     'DateTableLayoutBase', 'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
     'GridPager', 'Scrollable'
 ];
-const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet', 'Form', 'FormLayoutManager'];
+const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet', 'Form', 'LayoutManager'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
 
 const widgetsInBundle = publicWidgets.map(widget => widget.name);

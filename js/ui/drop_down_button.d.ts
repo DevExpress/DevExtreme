@@ -341,7 +341,10 @@ export interface dxDropDownButtonItem extends dxListItem {
 }
 
 /** @public */
+export type Properties = dxDropDownButtonOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDropDownButtonOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDropDownButtonOptions;

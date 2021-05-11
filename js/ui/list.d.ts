@@ -78,7 +78,7 @@ export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
 
 /** @public */
 export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
-    cancel?: boolean | DxPromise<void>;
+    cancel?: boolean | PromiseLike<void>;
 }
 
 /** @public */
@@ -803,7 +803,10 @@ export interface dxListItem extends CollectionWidgetItem {
 }
 
 /** @public */
+export type Properties = dxListOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxListOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxListOptions;

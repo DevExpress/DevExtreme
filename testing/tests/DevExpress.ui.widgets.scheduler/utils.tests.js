@@ -10,33 +10,34 @@ module('Time zone data utils', {}, () => {
         const spyGetUtcOffset = sinon.spy(timeZoneDataUtils, 'getUtcOffset');
         const spyGetTimeZoneDeclarationTupleCore = sinon.spy(timeZoneDataUtils, 'getTimeZoneDeclarationTupleCore');
 
+        const checkCache = (timeZoneId, dateTimeStamp, expectedCacheSize) => {
+            timeZoneDataUtils.getTimeZoneOffsetById(timeZoneId, dateTimeStamp);
+            let lastCallIndex = spyGetUtcOffset.args.length - 1;
+            const offsetByIdCallArgument = spyGetUtcOffset.args[lastCallIndex][0];
+
+            const cachedValue = timeZoneDataUtils._tzCache.tryGet(timeZoneId);
+
+            timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneId, dateTimeStamp);
+            lastCallIndex = spyGetTimeZoneDeclarationTupleCore.args.length - 1;
+            const declarationTupleCallArgument = spyGetTimeZoneDeclarationTupleCore.args[lastCallIndex][0];
+
+            assert.equal(timeZoneDataUtils._tzCache.map.size, expectedCacheSize, 'Cache size should be correct');
+            assert.equal(cachedValue, offsetByIdCallArgument, 'Function call argument of `getUtcOffset` should be cached');
+            assert.equal(cachedValue, declarationTupleCallArgument, 'Function call argument of `getTimeZoneDeclarationTupleCore` should be cached');
+        };
+
         try {
-            assert.equal(timeZoneDataUtils._tzCache.map.size, 0, '');
+            assert.equal(timeZoneDataUtils._tzCache.map.size, 0, 'Timezone cache should be empty');
 
-            timeZoneDataUtils.getTimeZoneOffsetById('America/Los_Angeles', new Date(2021, 3, 3));
-            assert.ok(Array.isArray(spyGetUtcOffset.args[0][2]));
+            checkCache('America/Los_Angeles', new Date(2021, 3, 3), 1);
 
-            assert.equal(timeZoneDataUtils._tzCache.map.size, 1);
+            checkCache('America/Los_Angeles', new Date(2021, 3, 3), 1);
 
-            timeZoneDataUtils.getTimeZoneOffsetById('America/Los_Angeles', new Date(2021, 3, 3));
-            assert.ok(Array.isArray(spyGetUtcOffset.args[1][2]));
+            checkCache('Europe/Berlin', new Date(2021, 3, 3), 2);
 
-            assert.equal(timeZoneDataUtils._tzCache.map.size, 1);
+            checkCache('Europe/Berlin', new Date(2021, 3, 3), 2);
 
-            timeZoneDataUtils.getTimeZoneOffsetById('Europe/Berlin', new Date(2021, 3, 3));
-            assert.ok(Array.isArray(spyGetUtcOffset.args[2][2]));
-
-            assert.equal(timeZoneDataUtils._tzCache.map.size, 2);
-
-            timeZoneDataUtils.getTimeZoneOffsetById('Europe/Berlin', new Date(2021, 3, 3));
-            assert.ok(Array.isArray(spyGetUtcOffset.args[3][2]));
-
-            assert.equal(timeZoneDataUtils._tzCache.map.size, 2);
-
-            timeZoneDataUtils.getTimeZoneDeclarationTuple('Europe/Berlin', 2021);
-            assert.ok(Array.isArray(spyGetTimeZoneDeclarationTupleCore.args[0][2]));
-
-            assert.equal(timeZoneDataUtils._tzCache.map.size, 2);
+            checkCache('Africa/Addis_Ababa', 2021, 3);
         } catch(error) {
             spyGetUtcOffset.restore();
             spyGetTimeZoneDeclarationTupleCore.restore();

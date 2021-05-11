@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay, Slot,
 } from '@devextreme-generator/declarations';
 import { addHeightToStyle } from '../utils';
-import { VirtualRow } from './virtual-row';
+import { VirtualRow } from './virtual_row';
 
 export const viewFunction = ({
   hasBottomVirtualRow,

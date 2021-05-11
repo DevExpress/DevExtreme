@@ -19,6 +19,7 @@ const TREELIST_HEADER_ROW_SELECTOR = '.dx-header-row';
 const GANTT_VIEW_SELECTOR = '.dx-gantt-view';
 const GANTT_VIEW_ROW_SELECTOR = '.dx-gantt-altRow';
 const TASK_WRAPPER_SELECTOR = '.dx-gantt-taskWrapper';
+const TASK_SELECTED_SELECTOR = '.dx-gantt-selectedTask';
 const TASK_RESOURCES_SELECTOR = '.dx-gantt-taskRes';
 const TASK_ARROW_SELECTOR = '.dx-gantt-arrow';
 const TASK_TITLE_IN_SELECTOR = '.dx-gantt-titleIn';
@@ -183,6 +184,84 @@ QUnit.module('Markup', moduleConfig, () => {
 
         assert.equal(this.instance.getVisibleTaskKeys().length, 2, 'task keys');
         assert.equal(this.instance.getVisibleDependencyKeys().length, 1, 'dependencies keys');
+    });
+    test('add task to empty gantt - row height', function(assert) {
+        const testTasks = [];
+        this.createInstance({
+            tasks: { dataSource: testTasks }
+        });
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+        const data = {
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '0'
+        };
+
+        this.instance.insertTask(data);
+        this.clock.tick();
+        $('.dx-gantt .dx-row').css({ height: '63px' });
+        this.instance._updateGanttRowHeights();
+        assert.equal(testTasks.length, 1, 'first new task was created in ds');
+        let rowHeight = this.instance._getGanttViewOption('rowHeight');
+        let treeListRowElement = this.$element.find(TREELIST_DATA_ROW_SELECTOR).last().get(0);
+        let treeListRowElementHeight = treeListRowElement.getBoundingClientRect().height;
+        assert.roughEqual(treeListRowElementHeight, rowHeight, 1.1, 'row heights are equal');
+        this.instance.insertTask(data);
+        this.clock.tick();
+        $('.dx-gantt .dx-row').css({ height: '63px' });
+        this.instance._updateGanttRowHeights();
+        this.clock.tick();
+        assert.equal(testTasks.length, 2, 'second new task was created in ds');
+        rowHeight = this.instance._getGanttViewOption('rowHeight');
+        treeListRowElement = this.$element.find(TREELIST_DATA_ROW_SELECTOR).last().get(0);
+        treeListRowElementHeight = treeListRowElement.getBoundingClientRect().height;
+        assert.roughEqual(treeListRowElementHeight, rowHeight, 0.1, 'row heights are equal');
+    });
+    test('new added task should be selected', function(assert) {
+        const testTasks = [{
+            id: 1,
+            start: new Date('2021-04-21'),
+            end: new Date('2021-04-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '0'
+        },
+        {
+            id: 2,
+            start: new Date('2021-04-21'),
+            end: new Date('2021-04-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '0'
+        }];
+        this.createInstance({
+            tasks: { dataSource: testTasks }
+        });
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+        const data = {
+            start: new Date('2021-04-21'),
+            end: new Date('2021-04-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '0'
+        };
+
+        this.instance.insertTask(data);
+        this.clock.tick();
+        assert.equal(testTasks.length, 3, 'first new task was created in ds');
+        let selectedTask = this.$element.find(TASK_SELECTED_SELECTOR);
+        let selectedTaskIndex = selectedTask.eq(0).attr('task-index');
+        assert.equal(selectedTaskIndex, 2, 'first new added task is selected');
+        this.instance.insertTask(data);
+        this.clock.tick();
+        selectedTask = this.$element.find(TASK_SELECTED_SELECTOR);
+        selectedTaskIndex = selectedTask.eq(0).attr('task-index');
+        assert.equal(selectedTaskIndex, 3, 'second new added task is selected');
+
     });
 });
 

@@ -1,15 +1,18 @@
 import {
   Component, ComponentBindings, JSXComponent, Slot, OneWay, CSSAttributes,
 } from '@devextreme-generator/declarations';
-import { VirtualCell } from './virtual-cell';
+import { VirtualCell } from './virtual_cell';
 
 export const viewFunction = ({
   props: {
     className,
     leftVirtualCellWidth,
     rightVirtualCellWidth,
+    leftVirtualCellCount,
+    rightVirtualCellCount,
     children,
     styles,
+    isHeaderRow,
   },
   hasLeftVirtualCell,
   hasRightVirtualCell,
@@ -19,13 +22,21 @@ export const viewFunction = ({
     style={styles}
   >
     {hasLeftVirtualCell && (
-      <VirtualCell width={leftVirtualCellWidth} />
+      <VirtualCell
+        width={leftVirtualCellWidth}
+        colSpan={leftVirtualCellCount}
+        isHeaderCell={isHeaderRow}
+      />
     )}
 
     {children}
 
     {hasRightVirtualCell && (
-      <VirtualCell width={rightVirtualCellWidth} />
+      <VirtualCell
+        width={rightVirtualCellWidth}
+        colSpan={rightVirtualCellCount}
+        isHeaderCell={isHeaderRow}
+      />
     )}
   </tr>
 );
@@ -38,7 +49,13 @@ export class RowProps {
 
   @OneWay() rightVirtualCellWidth = 0;
 
+  @OneWay() leftVirtualCellCount?: number;
+
+  @OneWay() rightVirtualCellCount?: number;
+
   @OneWay() styles?: CSSAttributes;
+
+  @OneWay() isHeaderRow = false;
 
   @Slot() children?: JSX.Element | JSX.Element[];
 }

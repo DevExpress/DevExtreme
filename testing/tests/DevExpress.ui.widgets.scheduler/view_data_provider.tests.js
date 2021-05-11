@@ -170,6 +170,7 @@ const horizontalWorkSpaceMock = {
         startCellIndex: 0,
         rowCount: 2,
         cellCount: 4,
+        totalCellCount: 4,
         topVirtualRowHeight: undefined,
         bottomVirtualRowHeight: undefined,
         cellCountInGroupRow: undefined,
@@ -1433,12 +1434,23 @@ module('View Data Provider', {
                 assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
             });
 
-            test('dateHeaderMap shoul be generated correctly', function(assert) {
+            test('dateHeaderMap should be generated correctly', function(assert) {
                 const viewDataProvider = this.init('horizontal');
 
                 const dateHeaderMap = testHeaderDataMap.horizontalGrouping;
+                const dateHeaderData = {
+                    dataMap: dateHeaderMap,
+                    leftVirtualCellCount: 0,
+                    leftVirtualCellWidth: 0,
+                    rightVirtualCellCount: 0,
+                    rightVirtualCellWidth: 0,
+                    weekDayLeftVirtualCellCount: undefined,
+                    weekDayLeftVirtualCellWidth: undefined,
+                    weekDayRightVirtualCellCount: undefined,
+                    weekDayRightVirtualCellWidth: undefined,
+                };
 
-                assert.deepEqual(viewDataProvider.dateHeaderMap, dateHeaderMap, 'Correct dateHeaderMap');
+                assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
             });
 
             test('completeTimePanelMap should be generated correctly', function(assert) {
@@ -2224,6 +2236,52 @@ module('View Data Provider', {
                 },
             ]];
             const horizontalDateHeaderMap = [horizontalDataMap[0]];
+            const timelineCompleteDateHeaderMap = [[{
+                startDate: new Date(2021, 0, 1),
+                endDate: new Date(2021, 0, 2),
+            }, {
+                startDate: new Date(2021, 0, 2),
+                endDate: new Date(2021, 0, 3),
+            }, {
+                startDate: new Date(2021, 0, 3),
+                endDate: new Date(2021, 0, 4),
+            }], [{
+                startDate: new Date(2021, 0, 1, 0, 0),
+                endDate: new Date(2021, 0, 1, 0, 30),
+            }, {
+                startDate: new Date(2021, 0, 1, 0, 30),
+                endDate: new Date(2021, 0, 1, 1, 0),
+            }, {
+                startDate: new Date(2021, 0, 1, 1, 0),
+                endDate: new Date(2021, 0, 1, 1, 30),
+            }, {
+                startDate: new Date(2021, 0, 1, 1, 30),
+                endDate: new Date(2021, 0, 1, 2, 0),
+            }, {
+                startDate: new Date(2021, 0, 2, 0, 0),
+                endDate: new Date(2021, 0, 2, 0, 30),
+            }, {
+                startDate: new Date(2021, 0, 2, 0, 30),
+                endDate: new Date(2021, 0, 2, 1, 0),
+            }, {
+                startDate: new Date(2021, 0, 2, 1, 0),
+                endDate: new Date(2021, 0, 2, 1, 30),
+            }, {
+                startDate: new Date(2021, 0, 2, 1, 30),
+                endDate: new Date(2021, 0, 2, 2, 0),
+            }, {
+                startDate: new Date(2021, 0, 3, 0, 0),
+                endDate: new Date(2021, 0, 3, 0, 30),
+            }, {
+                startDate: new Date(2021, 0, 3, 0, 30),
+                endDate: new Date(2021, 0, 3, 1, 0),
+            }, {
+                startDate: new Date(2021, 0, 3, 1, 0),
+                endDate: new Date(2021, 0, 3, 1, 30),
+            }, {
+                startDate: new Date(2021, 0, 3, 1, 30),
+                endDate: new Date(2021, 0, 3, 2, 0),
+            }]];
 
             module('viewData', () => {
                 test('viewData should be generated correctly if vertical grouping', function(assert) {
@@ -2442,6 +2500,183 @@ module('View Data Provider', {
                         'View data map is correct'
                     );
                 });
+            });
+
+            test('dateHeaderMap should be generated correctly', function(assert) {
+                const viewDataProvider = createViewDataProvider({
+                    workspaceMock: {
+                        ...horizontalGroupedWorkspaceMock,
+                        generateRenderOptions: () => ({
+                            ...horizontalGroupedWorkspaceMock.generateRenderOptions(),
+                            cellWidth: 100,
+                        }),
+                    },
+                    completeViewDataMap: horizontalDataMap,
+                    completeDateHeaderMap: horizontalDateHeaderMap,
+                });
+
+                const dateHeaderMap = [[horizontalDateHeaderMap[0][1]]];
+                const dateHeaderData = {
+                    dataMap: dateHeaderMap,
+                    leftVirtualCellCount: 1,
+                    leftVirtualCellWidth: 100,
+                    rightVirtualCellCount: 1,
+                    rightVirtualCellWidth: 100,
+                    weekDayLeftVirtualCellCount: undefined,
+                    weekDayLeftVirtualCellWidth: undefined,
+                    weekDayRightVirtualCellCount: undefined,
+                    weekDayRightVirtualCellWidth: undefined,
+                };
+
+                assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
+            });
+
+            test('dateHeaderMap should be generated correctly in timelines when one week-day cell is visible', function(assert) {
+                const completeViewDataMap = [timelineCompleteDateHeaderMap[1], timelineCompleteDateHeaderMap[1]];
+
+                const viewDataProvider = createViewDataProvider({
+                    workspaceMock: {
+                        ...horizontalGroupedWorkspaceMock,
+                        generateRenderOptions: () => ({
+                            ...horizontalGroupedWorkspaceMock.generateRenderOptions(),
+                            isGenerateWeekDaysHeaderData: true,
+                            startCellIndex: 2,
+                            cellCount: 2,
+                            startRowIndex: 0,
+                            rowCount: 1,
+                            leftVirtualCellWidth: 200,
+                            rightVirtualCellWidth: 800,
+                            cellCountInGroupRow: 12,
+                            totalCellCount: 12,
+                            horizontalGroupCount: 1,
+                            cellCountInDay: 4,
+                            groupByDate: false,
+                            cellWidth: 100,
+                        }),
+                    },
+                    completeViewDataMap,
+                    completeDateHeaderMap: timelineCompleteDateHeaderMap,
+                });
+
+                const dateHeaderMap = [
+                    [timelineCompleteDateHeaderMap[0][0]],
+                    [timelineCompleteDateHeaderMap[1][2], timelineCompleteDateHeaderMap[1][3]],
+                ];
+                const dateHeaderData = {
+                    dataMap: dateHeaderMap,
+                    leftVirtualCellCount: 2,
+                    leftVirtualCellWidth: 200,
+                    rightVirtualCellCount: 8,
+                    rightVirtualCellWidth: 800,
+                    weekDayLeftVirtualCellCount: 0,
+                    weekDayLeftVirtualCellWidth: 0,
+                    weekDayRightVirtualCellCount: 8,
+                    weekDayRightVirtualCellWidth: 800,
+                };
+
+                assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
+            });
+
+            test('dateHeaderMap should be generated correctly in timelines when several week-day cells фку visible', function(assert) {
+                const completeViewDataMap = [timelineCompleteDateHeaderMap[1], timelineCompleteDateHeaderMap[1]];
+
+                const viewDataProvider = createViewDataProvider({
+                    workspaceMock: {
+                        ...horizontalGroupedWorkspaceMock,
+                        generateRenderOptions: () => ({
+                            ...horizontalGroupedWorkspaceMock.generateRenderOptions(),
+                            isGenerateWeekDaysHeaderData: true,
+                            startCellIndex: 2,
+                            cellCount: 4,
+                            startRowIndex: 0,
+                            rowCount: 1,
+                            leftVirtualCellWidth: 200,
+                            rightVirtualCellWidth: 600,
+                            cellCountInGroupRow: 12,
+                            totalCellCount: 12,
+                            horizontalGroupCount: 1,
+                            cellCountInDay: 4,
+                            groupByDate: false,
+                            cellWidth: 100,
+                        }),
+                    },
+                    completeViewDataMap,
+                    completeDateHeaderMap: timelineCompleteDateHeaderMap,
+                });
+
+                const dateHeaderMap = [
+                    [timelineCompleteDateHeaderMap[0][0], timelineCompleteDateHeaderMap[0][1]],
+                    [
+                        timelineCompleteDateHeaderMap[1][2], timelineCompleteDateHeaderMap[1][3],
+                        timelineCompleteDateHeaderMap[1][4], timelineCompleteDateHeaderMap[1][5],
+                    ],
+                ];
+                const dateHeaderData = {
+                    dataMap: dateHeaderMap,
+                    leftVirtualCellCount: 2,
+                    leftVirtualCellWidth: 200,
+                    rightVirtualCellCount: 6,
+                    rightVirtualCellWidth: 600,
+                    weekDayLeftVirtualCellCount: 0,
+                    weekDayLeftVirtualCellWidth: 0,
+                    weekDayRightVirtualCellCount: 4,
+                    weekDayRightVirtualCellWidth: 400,
+                };
+
+                assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
+            });
+
+            test('dateHeaderMap should be generated correctly in timelines when grouping by date is used', function(assert) {
+                const completeViewDataMap = [
+                    timelineCompleteDateHeaderMap[1],
+                    timelineCompleteDateHeaderMap[1],
+                ];
+
+                const viewDataProvider = createViewDataProvider({
+                    workspaceMock: {
+                        ...horizontalGroupedWorkspaceMock,
+                        generateRenderOptions: () => ({
+                            ...horizontalGroupedWorkspaceMock.generateRenderOptions(),
+                            isGenerateWeekDaysHeaderData: true,
+                            startCellIndex: 5,
+                            cellCount: 10,
+                            startRowIndex: 0,
+                            rowCount: 1,
+                            leftVirtualCellWidth: 500,
+                            rightVirtualCellWidth: 900,
+                            cellCountInGroupRow: 12,
+                            totalCellCount: 24,
+                            horizontalGroupCount: 2,
+                            cellCountInDay: 4,
+                            groupByDate: true,
+                            cellWidth: 100,
+                        }),
+                    },
+                    completeViewDataMap,
+                    completeDateHeaderMap: timelineCompleteDateHeaderMap,
+                });
+
+                const dateHeaderMap = [
+                    [timelineCompleteDateHeaderMap[0][0], timelineCompleteDateHeaderMap[0][1]],
+                    [
+                        timelineCompleteDateHeaderMap[1][2], timelineCompleteDateHeaderMap[1][3],
+                        timelineCompleteDateHeaderMap[1][4], timelineCompleteDateHeaderMap[1][5],
+                        timelineCompleteDateHeaderMap[1][6], timelineCompleteDateHeaderMap[1][7],
+                    ],
+                ];
+                const dateHeaderData = {
+                    dataMap: dateHeaderMap,
+                    leftVirtualCellCount: 4,
+                    leftVirtualCellWidth: 400,
+                    rightVirtualCellCount: 8,
+                    rightVirtualCellWidth: 800,
+                    weekDayLeftVirtualCellCount: 0,
+                    weekDayLeftVirtualCellWidth: 0,
+                    weekDayRightVirtualCellCount: 8,
+                    weekDayRightVirtualCellWidth: 800,
+                };
+
+                assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
             });
         });
     });

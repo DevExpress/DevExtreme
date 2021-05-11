@@ -12,7 +12,7 @@ import {
 } from './number_box.caret';
 import { getFormat as getLDMLFormat } from '../../localization/ldml/number';
 import NumberBoxBase from './number_box.base';
-import { addNamespace, getChar, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, getChar, normalizeKeyName, isCommandKeyPressed } from '../../events/utils/index';
 import { ensureDefined, escapeRegExp } from '../../core/utils/common';
 import { getRealSeparatorIndex, getNthOccurrence, splitByIndex } from './utils';
 
@@ -515,7 +515,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _shouldHandleKey: function(e) {
         const keyName = normalizeKeyName(e);
-        const isSpecialChar = e.ctrlKey || e.shiftKey || e.altKey || !this._isChar(keyName);
+        const isSpecialChar = isCommandKeyPressed(e) || e.altKey || e.shiftKey || !this._isChar(keyName);
         const isMinusKey = keyName === MINUS_KEY;
         const useMaskBehavior = this._useMaskBehavior();
 
