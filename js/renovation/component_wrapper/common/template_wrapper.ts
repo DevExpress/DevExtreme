@@ -9,9 +9,14 @@ import Number from '../../../core/polyfills/number';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import { EffectReturn } from '../../utils/effect_return';
 
+export interface TemplateModel {
+  data: Record<string, unknown>;
+  index: number;
+}
+
 interface TemplateWrapperProps {
   template: FunctionTemplate;
-  model?: { data: Record<string, unknown>; index: number };
+  model?: TemplateModel;
   transclude?: boolean;
 }
 
