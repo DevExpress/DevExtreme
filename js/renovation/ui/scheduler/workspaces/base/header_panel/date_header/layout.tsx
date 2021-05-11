@@ -89,6 +89,8 @@ export class DateHeaderLayoutProps {
 
   @OneWay() groups: Group[] = [];
 
+  @OneWay() isProvideVirtualCellWidth = false;
+
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
@@ -103,5 +105,17 @@ export class DateHeaderLayout extends JSXComponent<DateHeaderLayoutProps, 'dateH
     const { groupOrientation, groups, groupByDate } = this.props;
 
     return isHorizontalGroupOrientation(groups, groupOrientation) && !groupByDate;
+  }
+
+  get leftVirtualCellWidth(): number | undefined {
+    const { dateHeaderData, isProvideVirtualCellWidth } = this.props;
+
+    return isProvideVirtualCellWidth ? dateHeaderData.leftVirtualCellWidth : undefined;
+  }
+
+  get rightVirtualCellWidth(): number | undefined {
+    const { dateHeaderData, isProvideVirtualCellWidth } = this.props;
+
+    return isProvideVirtualCellWidth ? dateHeaderData.rightVirtualCellWidth : undefined;
   }
 }

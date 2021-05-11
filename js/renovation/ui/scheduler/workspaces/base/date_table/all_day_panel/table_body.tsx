@@ -16,9 +16,9 @@ import { combineClasses } from '../../../../../../utils/combine_classes';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
   <Row
-    leftVirtualCellWidth={viewModel.props.leftVirtualCellWidth}
-    rightVirtualCellWidth={viewModel.props.rightVirtualCellWidth}
     className={viewModel.classes}
+    leftVirtualCellCount={viewModel.props.leftVirtualCellCount}
+    rightVirtualCellCount={viewModel.props.rightVirtualCellCount}
   >
     {viewModel.props.viewData.map(({
       startDate,
@@ -53,9 +53,9 @@ export class AllDayPanelTableBodyProps {
 
   @OneWay() className?: string = '';
 
-  @OneWay() leftVirtualCellWidth = 0;
+  @OneWay() leftVirtualCellCount = 0;
 
-  @OneWay() rightVirtualCellWidth = 0;
+  @OneWay() rightVirtualCellCount = 0;
 
   @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }

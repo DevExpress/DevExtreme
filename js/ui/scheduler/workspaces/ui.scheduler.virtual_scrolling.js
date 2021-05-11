@@ -274,6 +274,8 @@ export default class VirtualScrollingDispatcher {
 
         const cellWidth = this.getCellWidth();
         const needUpdateHorizontal = this.horizontalScrollingAllowed && cellWidth !== this.cellWidth;
+
+        // debugger;
         if(needUpdateHorizontal) {
             this.cellWidth = cellWidth;
 

@@ -8,7 +8,9 @@ import { VirtualCell } from './virtual_cell';
 export const viewFunction = ({
   props: {
     leftVirtualCellWidth,
+    leftVirtualCellCount,
     rightVirtualCellWidth,
+    rightVirtualCellCount,
   },
   classes,
   style,
@@ -19,6 +21,8 @@ export const viewFunction = ({
     className={classes}
     leftVirtualCellWidth={leftVirtualCellWidth}
     rightVirtualCellWidth={rightVirtualCellWidth}
+    leftVirtualCellCount={leftVirtualCellCount}
+    rightVirtualCellCount={rightVirtualCellCount}
   >
     {virtualCells.map((_, index) => (
       <VirtualCell key={index.toString()} />

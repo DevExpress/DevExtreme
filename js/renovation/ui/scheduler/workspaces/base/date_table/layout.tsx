@@ -14,6 +14,7 @@ export const viewFunction = ({
     groupOrientation,
     cellTemplate,
     dataCellTemplate,
+    isProvideVirtualCellWidth,
   },
   topVirtualRowHeight,
   bottomVirtualRowHeight,
@@ -40,6 +41,7 @@ export const viewFunction = ({
       leftVirtualCellWidth={leftVirtualCellWidth}
       rightVirtualCellWidth={rightVirtualCellWidth}
       groupOrientation={groupOrientation}
+      isProvideVirtualCellWidth={isProvideVirtualCellWidth}
     />
   </Table>
 );

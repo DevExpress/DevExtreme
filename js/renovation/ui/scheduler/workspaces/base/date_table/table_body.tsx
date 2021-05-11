@@ -19,6 +19,8 @@ export const viewFunction = ({
     dataCellTemplate,
     cellTemplate: Cell,
   },
+  leftVirtualCellWidth,
+  rightVirtualCellWidth,
 }: DateTableBody): JSX.Element => (
   <Fragment>
     {viewData
@@ -29,16 +31,18 @@ export const viewFunction = ({
               viewData={allDayPanel}
               dataCellTemplate={dataCellTemplate}
               isVerticalGroupOrientation
-              leftVirtualCellWidth={viewData.leftVirtualCellWidth}
-              rightVirtualCellWidth={viewData.rightVirtualCellWidth}
+              leftVirtualCellCount={viewData.leftVirtualCellCount}
+              rightVirtualCellCount={viewData.rightVirtualCellCount}
             />
           )}
           {dateTable.map((cellsRow) => (
             <Row
               className="dx-scheduler-date-table-row"
               key={cellsRow[0].key - viewData.leftVirtualCellCount}
-              leftVirtualCellWidth={viewData.leftVirtualCellWidth}
-              rightVirtualCellWidth={viewData.rightVirtualCellWidth}
+              leftVirtualCellWidth={leftVirtualCellWidth}
+              rightVirtualCellWidth={rightVirtualCellWidth}
+              leftVirtualCellCount={viewData.leftVirtualCellCount}
+              rightVirtualCellCount={viewData.rightVirtualCellCount}
             >
               {cellsRow.map(({
                 startDate,
@@ -81,4 +85,16 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {}
+export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {
+  get leftVirtualCellWidth(): number | undefined {
+    const { viewData, isProvideVirtualCellWidth } = this.props;
+
+    return isProvideVirtualCellWidth ? viewData.leftVirtualCellWidth : undefined;
+  }
+
+  get rightVirtualCellWidth(): number | undefined {
+    const { viewData, isProvideVirtualCellWidth } = this.props;
+
+    return isProvideVirtualCellWidth ? viewData.rightVirtualCellWidth : undefined;
+  }
+}

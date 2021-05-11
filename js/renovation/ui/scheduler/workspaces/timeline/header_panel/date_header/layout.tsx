@@ -1,7 +1,9 @@
 import {
   Component,
+  ComponentBindings,
   Fragment,
   JSXComponent,
+  OneWay,
 } from '@devextreme-generator/declarations';
 import { Row } from '../../../base/row';
 import { isHorizontalGroupOrientation } from '../../../utils';
@@ -96,11 +98,16 @@ export const viewFunction = ({
   );
 };
 
+@ComponentBindings()
+export class TimelineDateHeaderLayoutProps extends DateHeaderLayoutProps {
+  @OneWay() isProvideVirtualCellWidth = true;
+}
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class TimelineDateHeaderLayout extends JSXComponent<DateHeaderLayoutProps, 'dateHeaderData'>() {
+export class TimelineDateHeaderLayout extends JSXComponent<TimelineDateHeaderLayoutProps, 'dateHeaderData'>() {
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups, groupByDate } = this.props;
 

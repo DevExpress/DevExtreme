@@ -1090,6 +1090,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(cellWidth < this.getCellMinWidth()) {
             cellWidth = this.getCellMinWidth();
+            this.cache.clear();
         }
 
         const minWidth = this.getWorkSpaceMinWidth();
@@ -1110,6 +1111,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachHeaderTableClasses();
 
         this._updateGroupTableHeight();
+
+        this.virtualScrollingDispatcher?.updateDimensions();
     }
 
     getWorkSpaceMinWidth() {
@@ -3566,12 +3569,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
     }
 
-    _getRDateTableProps() {
+    _getRDateTableProps(isProvideVirtualCellWidth) {
         return ({
             viewData: this.viewDataProvider.viewData,
             dataCellTemplate: this.option('dataCellTemplate'),
             addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
             groupOrientation: this.option('groupOrientation'),
+            isProvideVirtualCellWidth,
         });
     }
 

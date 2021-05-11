@@ -651,6 +651,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             cellCountInDay: this._getCellCountInDay(),
         };
     }
+
+    _getRDateTableProps() {
+        return super._getRDateTableProps(true);
+    }
 }
 
 registerComponent('dxSchedulerTimeline', SchedulerTimeline);

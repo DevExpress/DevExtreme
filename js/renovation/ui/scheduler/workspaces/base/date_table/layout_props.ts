@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, JSXTemplate, Template,
+  ComponentBindings, JSXTemplate, OneWay, Template,
 } from '@devextreme-generator/declarations';
 import { DataCellTemplateProps, ViewCellData } from '../../types.d';
 import { LayoutProps } from '../layout_props';
@@ -11,5 +11,7 @@ export interface CellTemplateProps extends ViewCellData {
 
 @ComponentBindings()
 export class DateTableLayoutProps extends LayoutProps {
+  @OneWay() isProvideVirtualCellWidth = false;
+
   @Template() cellTemplate: JSXTemplate<CellTemplateProps> = DateTableCellBase;
 }

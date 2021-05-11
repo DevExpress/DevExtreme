@@ -20,6 +20,7 @@ export const viewFunction = ({
     isLastGroupCell,
     isFirstGroupCell,
     text,
+    colSpan,
   },
   contentTemplateProps,
   classes,
@@ -36,6 +37,7 @@ export const viewFunction = ({
     isFirstGroupCell={isFirstGroupCell}
     isLastGroupCell={isLastGroupCell}
     contentTemplateProps={contentTemplateProps}
+    colSpan={colSpan}
   >
     <div className="dx-scheduler-date-table-cell-text">
       {text}
