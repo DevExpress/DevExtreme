@@ -578,23 +578,23 @@ describe('Native > Effects', () => {
       });
 
       test.each([true, false])('refresh(), loadingIndicatorEnabled: %o', (loadingIndicatorEnabled) => {
-        const viewModel = new Scrollable({
+        const helper = new ScrollableTestHelper({
           onPullDown: actionHandler,
         });
 
-        viewModel.loadingIndicatorEnabled = loadingIndicatorEnabled;
+        helper.viewModel.loadingIndicatorEnabled = loadingIndicatorEnabled;
 
-        viewModel.refresh();
+        helper.viewModel.refresh();
 
         if (actionHandler) {
           expect(actionHandler).toHaveBeenCalledTimes(1);
           expect(actionHandler).toHaveBeenCalledWith({});
         }
 
-        expect(viewModel.topPocketState).toEqual(TopPocketState.STATE_READY);
-        expect(viewModel.loadingIndicatorEnabled).toEqual(loadingIndicatorEnabled);
-        expect(viewModel.isLoadPanelVisible).toEqual(loadingIndicatorEnabled);
-        expect(viewModel.locked).toEqual(true);
+        expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_READY);
+        expect(helper.viewModel.loadingIndicatorEnabled).toEqual(loadingIndicatorEnabled);
+        expect(helper.viewModel.isLoadPanelVisible).toEqual(loadingIndicatorEnabled);
+        expect(helper.viewModel.locked).toEqual(true);
       });
 
       test.each(getPermutations([

@@ -189,12 +189,14 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   // TODO: avoid using this method in List
+  /* istanbul ignore next */
   isFull(): boolean {
     return this.content().clientHeight > this.clientHeight();
     // TODO: this.clientHeight() should be containerRef.current.clientHeight
   }
 
   get reachBottomEnabled(): boolean {
+    /* istanbul ignore next */
     if (isDefined(this.forceReachBottom)) {
       return this.forceReachBottom;
     }
