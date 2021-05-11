@@ -853,12 +853,15 @@ QUnit.module('VirtualScrollingController. New mode', {
         moduleConfig.beforeEach.call(this);
         mockComponent.option.withArgs('scrolling.rowRenderingMode').returns('virtual');
         mockComponent.option.withArgs('scrolling.newMode').returns(true);
+        mockComponent.option.withArgs('scrolling.minGap').returns(1);
+        mockDataSource.pageSize.returns(5);
     },
     afterEach: function() {
+        mockDataSource.pageSize.returns(20);
         moduleConfig.afterEach.call(this);
     }
 }, () => {
-    QUnit.test('virtualItemsCount does not call data source methods', function(assert) {
+    QUnit.test('virtualItemsCount does not call data source pageIndex method', function(assert) {
         // arrange
         const pageIndex = sinon.stub(mockDataSource, 'pageIndex');
 
@@ -867,7 +870,6 @@ QUnit.module('VirtualScrollingController. New mode', {
 
         // assert
         assert.notOk(pageIndex.called, 'pageIndex not called');
-        assert.notOk(mockDataSource.pageSize.called, 'pageSize not called');
 
         pageIndex.restore();
     });
@@ -905,12 +907,13 @@ QUnit.module('VirtualScrollingController. New mode', {
     QUnit.test('Viewport params at the top', function(assert) {
         const viewportSize = 25;
         this.scrollController.viewportSize(viewportSize);
+
         const viewportParams = this.scrollController.getViewportParams();
         const virtualItemsCount = this.scrollController.virtualItemsCount();
 
         // assert
-        assert.deepEqual(virtualItemsCount, { begin: 0, end: DEFAULT_TOTAL_ITEMS_COUNT - 26 }, 'virtual items');
-        assert.deepEqual(viewportParams, { skip: 0, take: viewportSize + 1 }, 'viewport params');
+        assert.deepEqual(virtualItemsCount, { begin: 0, end: DEFAULT_TOTAL_ITEMS_COUNT - 30 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: 0, take: 30 }, 'viewport params');
     });
 
     QUnit.test('Viewport params at the middle', function(assert) {
@@ -922,8 +925,8 @@ QUnit.module('VirtualScrollingController. New mode', {
         const virtualItemsCount = this.scrollController.virtualItemsCount();
 
         // assert
-        assert.deepEqual(virtualItemsCount, { begin: Math.floor(viewportItemIndex), end: 9974 }, 'virtual items');
-        assert.deepEqual(viewportParams, { skip: Math.floor(viewportItemIndex), take: viewportSize + 1 }, 'viewport params');
+        assert.deepEqual(virtualItemsCount, { begin: Math.floor(viewportItemIndex) - 5, end: 9970 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: Math.floor(viewportItemIndex) - 5, take: viewportSize + 10 }, 'viewport params');
     });
 
     QUnit.test('Viewport params at the bottom', function(assert) {
@@ -935,7 +938,7 @@ QUnit.module('VirtualScrollingController. New mode', {
         const virtualItemsCount = this.scrollController.virtualItemsCount();
 
         // assert
-        assert.deepEqual(virtualItemsCount, { begin: viewportItemIndex, end: 0 }, 'virtual items');
-        assert.deepEqual(viewportParams, { skip: viewportItemIndex, take: DEFAULT_TOTAL_ITEMS_COUNT - viewportItemIndex }, 'viewport params');
+        assert.deepEqual(virtualItemsCount, { begin: viewportItemIndex - 5, end: 0 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: viewportItemIndex - 5, take: DEFAULT_TOTAL_ITEMS_COUNT - viewportItemIndex + 5 }, 'viewport params');
     });
 });
