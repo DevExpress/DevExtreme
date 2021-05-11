@@ -531,8 +531,8 @@ const intervalsOverlap = function(options) {
     } = options;
 
     return (firstMin <= secondMin && secondMin <= firstMax) ||
-        (firstMin < secondMax && secondMax < firstMax) ||
-        (secondMin < firstMin && firstMax < secondMax);
+        (firstMin > secondMin && firstMin < secondMax) ||
+        (firstMin < secondMax && firstMax > secondMax);
 };
 
 const dateTimeFromDecimal = function(number) {
