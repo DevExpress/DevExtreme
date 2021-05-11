@@ -6,11 +6,11 @@ import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import eventsEngine from '../../../events/core/events_engine';
 
-import EmptyModule from './empty';
+import BaseModule from './base';
 import PopupModule from './popup';
 import Mention from '../formats/mention';
 
-let MentionModule = EmptyModule;
+let MentionModule = BaseModule;
 
 if(Quill) {
     const USER_ACTION = 'user';

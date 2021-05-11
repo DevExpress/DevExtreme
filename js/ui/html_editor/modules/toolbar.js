@@ -2,7 +2,6 @@ import Quill from 'devextreme-quill';
 
 import $ from '../../../core/renderer';
 
-import EmptyModule from './empty';
 import BaseModule from './base';
 
 import Toolbar from '../../toolbar';
@@ -21,7 +20,7 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
-let ToolbarModule = EmptyModule;
+let ToolbarModule = BaseModule;
 
 if(Quill) {
     const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';

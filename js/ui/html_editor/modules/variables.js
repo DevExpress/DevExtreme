@@ -3,12 +3,12 @@ import Quill from 'devextreme-quill';
 import $ from '../../../core/renderer';
 import { getBoundingRect } from '../../../core/utils/position';
 import PopupModule from './popup';
-import EmptyModule from './empty';
+import BaseModule from './base';
 import Variable from '../formats/variable';
 
 import { extend } from '../../../core/utils/extend';
 
-let VariableModule = EmptyModule;
+let VariableModule = BaseModule;
 
 if(Quill) {
     const VARIABLE_FORMAT_CLASS = 'dx-variable-format';
