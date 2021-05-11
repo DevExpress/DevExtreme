@@ -1,50 +1,61 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/vdom';
-import { createElement } from 'inferno-create-element';
-import { createRef } from 'inferno';
+// eslint-disable-next-line spellcheck/spell-checker
+import { findDOMfromVNode } from 'inferno';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
 import { removeDifferentElements } from './utils';
 import Number from '../../core/polyfills/number';
+import { FunctionTemplate } from '../../core/templates/function_template';
+import { EffectReturn } from '../utils/effect_return';
 
-interface TemplateProps { template: any; model: { data: any; index: number } }
+interface TemplateWrapperProps {
+  template: FunctionTemplate;
+  model?: { data: Record<string, unknown>; index: number };
+  transclude?: boolean;
+}
 
-export class TemplateWrapper extends InfernoComponent<TemplateProps> {
-  constructor(props) {
+export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
+  constructor(props: TemplateWrapperProps) {
     super(props);
     this.renderTemplate = this.renderTemplate.bind(this);
   }
 
-  dummyDivRef = createRef<any>();
+  renderTemplate(): EffectReturn {
+    // eslint-disable-next-line spellcheck/spell-checker
+    const node = findDOMfromVNode(this.$LI, true);
+    if (node) {
+      const { parentNode } = node;
+      if (parentNode) {
+        parentNode.removeChild(node);
+        const $parent = $(parentNode as Element);
+        const $children = $parent.contents();
 
-  renderTemplate(): () => void {
-    const { parentNode } = this.dummyDivRef.current;
-    parentNode?.removeChild(this.dummyDivRef.current);
-    const $parent = $(parentNode);
-    const $children = $parent.contents();
+        const { data, index } = this.props.model ?? { data: {} };
 
-    const { data, index } = this.props.model;
+        Object.keys(data).forEach((name) => {
+          if (data[name] && domAdapter.isNode(data[name])) {
+            data[name] = getPublicElement($(data[name] as Element));
+          }
+        });
 
-    Object.keys(data).forEach((name) => {
-      if (data[name] && domAdapter.isNode(data[name])) {
-        data[name] = getPublicElement($(data[name]));
+        this.props.template.render({
+          container: getPublicElement($parent),
+          transclude: this.props.transclude,
+          ...(!this.props.transclude ? { model: data } : {}),
+          ...(!this.props.transclude && Number.isFinite(index) ? { index } : {}),
+        });
+
+        return (): void => {
+          // NOTE: order is important
+          removeDifferentElements($children, $parent.contents());
+          parentNode.appendChild(node);
+        };
       }
-    });
+    }
 
-    this.props.template.render({
-      container: getPublicElement($parent),
-      model: data,
-      ...(Number.isFinite(index) ? { index } : {}),
-    });
-
-    return (): void => {
-      // NOTE: order is important
-      removeDifferentElements($children, $parent.contents());
-      parentNode.appendChild(this.dummyDivRef.current);
-    };
+    return undefined;
   }
-
-  component;
 
   createEffects(): InfernoEffect[] {
     return [new InfernoEffect(this.renderTemplate, [this.props.template])];
@@ -55,10 +66,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateProps> {
     this._effects[0].update([this.props.template]);
   }
 
-  render(): JSX.Element {
-    return createElement('div', {
-      style: { display: 'none' },
-      ref: this.dummyDivRef,
-    });
+  render(): JSX.Element | null {
+    return null;
   }
 }

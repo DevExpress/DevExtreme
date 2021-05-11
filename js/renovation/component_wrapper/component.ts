@@ -295,29 +295,10 @@ export default class ComponentWrapper extends DOMComponent {
 
   _extractDefaultSlot() {
     if (this.option('_hasAnonymousTemplateContent')) {
-      const dummyDivRefCallback: (ref: any) => void = (dummyDivRef) => {
-        if (dummyDivRef) {
-          const { parentNode } = dummyDivRef;
-          if (parentNode) {
-            parentNode.removeChild(dummyDivRef);
-            this._getTemplate(this._templateManager.anonymousTemplateName).render(
-              {
-                container: getPublicElement($(parentNode)),
-                transclude: true,
-              }
-            );
-          }
-        }
-      };
-
-      return createElement(
-        Fragment,
-        {},
-        createElement('div', {
-          style: { display: 'none' },
-          ref: dummyDivRefCallback,
-        })
-      );
+      return createElement(TemplateWrapper, {
+        template: this._getTemplate(this._templateManager.anonymousTemplateName),
+        transclude: true,
+      });
     }
     return null;
   }
