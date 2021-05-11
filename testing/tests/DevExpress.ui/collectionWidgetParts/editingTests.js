@@ -2282,7 +2282,7 @@ module('reordering with dataSource', () => {
 });
 
 module('editing strategy', () => {
-    test('"_isNode" method should call "get" method only from "$" objects', function(assert) {
+    test('_isNode method should correctly detect jQuery objects', function(assert) {
         const editStrategy = new EditStrategy();
         const getCallSpy = sinon.spy();
         assert.ok(editStrategy._isNode($(document.createElement('div'))));
