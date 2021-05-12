@@ -491,6 +491,7 @@ class Gantt extends Widget {
             NotifyTaskEndChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
             NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
             NotifyTaskColorChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'color', newValue); },
+            NotifyParentTaskUpdated: (task, errorCallback) => { this._onParentTaskUpdated(task); },
             NotifyDependencyInserted: (dependency, callback, errorCallback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
             NotifyDependencyRemoved: (dependencyId, errorCallback, dependency) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId, dependency); },
 
@@ -583,6 +584,10 @@ class Gantt extends Widget {
             });
         }
     }
+    _onParentTaskUpdated(data) {
+        const mappedData = this.getTaskDataByCoreData(data);
+        this._raiseUpdatedAction(GANTT_TASKS, mappedData, data.id);
+    }
     _onParentTasksRecalculated(data) {
         const setters = this._compileSettersByOption(GANTT_TASKS);
         const treeDataSource = this._appendCustomFields(data.map(this._prepareSetterMapHandler(setters)));
@@ -644,11 +649,14 @@ class Gantt extends Widget {
             const updateCallback = (key, data) => {
                 const dataOption = this[`_${GANTT_TASKS}Option`];
                 if(dataOption && data) {
-                    dataOption.update(key, data, () => {
+                    dataOption.update(key, data, (data, key) => {
+                        const updatedCustomFields = {};
+                        this._addCustomFieldsData(key, updatedCustomFields);
                         this._updateTreeListDataSource();
                         dataOption._refreshDataSource();
                         const selectedRowKey = this.option('selectedRowKey');
                         this._ganttView._selectTask(selectedRowKey);
+                        this._raiseUpdatedAction(GANTT_TASKS, updatedCustomFields, key);
                     });
                 }
             };
@@ -787,7 +795,6 @@ class Gantt extends Widget {
             const mappedResources = coreArgs.values.resources.items.map(r => this._convertMappedToCoreData(GANTT_RESOURCES, r));
             const args = {
                 cancel: false,
-                key: coreArgs.key,
                 values: mappedResources
             };
             action(args);
