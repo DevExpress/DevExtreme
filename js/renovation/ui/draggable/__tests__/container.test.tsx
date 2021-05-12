@@ -7,7 +7,7 @@ import {
 import { DraggableContainer, DraggableContainerProps, viewFunction as DraggableContainerView } from '../container';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
 
-describe('DataGrid', () => {
+describe('DraggableContainer', () => {
   describe('View', () => {
     it('default render', () => {
       const mockRef = createRef();
