@@ -44,7 +44,7 @@ const getCssClasses = (model: ButtonProps): string => {
 };
 export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
-    children, icon, iconPosition, template: ButtonTemplate, text,
+    children, icon, iconPosition, template: ButtonTemplate, text, templateData,
   } = viewModel.props;
   const renderText = !ButtonTemplate && !children && text;
   const isIconLeft = iconPosition === 'left';
@@ -74,7 +74,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className="dx-button-content" ref={viewModel.contentRef}>
-        {ButtonTemplate && (<ButtonTemplate data={{ icon, text }} />)}
+        {ButtonTemplate && (<ButtonTemplate data={{ icon, text, ...templateData }} />)}
         {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
         {renderText && (<span className="dx-button-text">{text}</span>)}
@@ -127,6 +127,8 @@ export class ButtonProps extends BaseWidgetProps {
   @OneWay() useSubmitBehavior?: boolean = false;
 
   @OneWay() validationGroup?: string = undefined;
+
+  @OneWay() templateData?: Record<string, unknown> = {};
 }
 
 export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
