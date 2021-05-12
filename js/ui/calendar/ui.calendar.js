@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop } from '../../core/utils/common';
-import { isNumeric, isString, isFunction, isDefined, isDate } from '../../core/utils/type';
+import { isNumeric, isString, isFunction, isDefined } from '../../core/utils/type';
 import { inRange } from '../../core/utils/math';
 import { extend } from '../../core/utils/extend';
 import Button from '../button';
@@ -11,7 +11,6 @@ import Swipeable from '../../events/gesture/swipeable';
 import Navigator from './ui.calendar.navigator';
 import Views from './ui.calendar.views';
 import { move } from '../../animation/translator';
-import browser from '../../core/utils/browser';
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
 import devices from '../../core/devices';
@@ -53,8 +52,6 @@ const ZOOM_LEVEL = {
     DECADE: 'decade',
     CENTURY: 'century'
 };
-
-const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
@@ -686,7 +683,7 @@ const Calendar = Editor.inherit({
     },
 
     _getViewPosition: function(coefficient) {
-        const rtlCorrection = this.option('rtlEnabled') && !browser.msie ? -1 : 1;
+        const rtlCorrection = this.option('rtlEnabled') ? -1 : 1;
         return (coefficient * 100 * rtlCorrection) + '%';
     },
 
@@ -1007,9 +1004,6 @@ const Calendar = Editor.inherit({
 
     _getDate(value) {
         const result = dateUtils.createDate(value);
-        if(isIE11 && isDate(value)) {
-            result.setMilliseconds(0);
-        }
 
         return result;
     },
