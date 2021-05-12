@@ -24,12 +24,16 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return Math.ceil(rawFullChunksWidth / weekWidth);
     }
 
-    _getChunkWidths(geometry) {
+    _getChunkWidths(geometry, settings, weekWidth) {
         const firstChunkWidth = geometry.reducedWidth;
         const fullChunksWidth = Math.floor(geometry.sourceAppointmentWidth);
         const widthWithoutFirstChunk = fullChunksWidth - firstChunkWidth;
 
-        return [geometry.reducedWidth, fullChunksWidth, widthWithoutFirstChunk];
+        const virtualPart = weekWidth - settings.hMax % weekWidth;
+        const correctedFirstChunkWidth = firstChunkWidth + virtualPart;
+        const correctedWithoutFirstChunkWidth = widthWithoutFirstChunk - virtualPart;
+
+        return [correctedFirstChunkWidth, fullChunksWidth, correctedWithoutFirstChunkWidth];
     }
 
     _getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition) {
@@ -43,9 +47,9 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     _getAppointmentParts(geometry, settings) {
         const result = [];
 
-        const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry);
-        const leftPosition = this._getLeftPosition(settings);
         const weekWidth = Math.round(this._getFullWeekAppointmentWidth(settings.groupIndex));
+        const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry, settings, weekWidth);
+        const leftPosition = this._getLeftPosition(settings);
 
         const hasTailChunk = this.instance.fire('getEndViewDate') > settings.info.appointment.endDate;
         const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth);
