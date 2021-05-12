@@ -265,10 +265,15 @@ const DropDownEditor = TextBox.inherit({
     _renderInput: function() {
         this.callBase();
 
-        this.$element().wrapInner($('<div>').addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER));
-        this._$container = this.$element().children().eq(0);
-
+        this._wrapInput();
         this._setDefaultAria();
+    },
+
+    _wrapInput: function() {
+        this._$container = this.$element()
+            .wrapInner($('<div>').addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER))
+            .children()
+            .eq(0);
     },
 
     _setDefaultAria: function() {
@@ -332,13 +337,7 @@ const DropDownEditor = TextBox.inherit({
 
         this._detachKeyboardEvents();
         this._refreshButtonsContainer();
-
-        // NOTE: to prevent buttons disposition
-        const beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;
-        const afterButtonsContainerParent = this._$afterButtonsContainer && this._$afterButtonsContainer[0].parentNode;
-        beforeButtonsContainerParent && beforeButtonsContainerParent.removeChild(this._$beforeButtonsContainer[0]);
-        afterButtonsContainerParent && afterButtonsContainerParent.removeChild(this._$afterButtonsContainer[0]);
-
+        this._detachWrapperContent();
         this._detachFocusEvents();
         $container.empty();
 
@@ -359,7 +358,26 @@ const DropDownEditor = TextBox.inherit({
             }
         });
 
+        this._attachWrapperContent($container);
+    },
+
+    _detachWrapperContent() {
+        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
+
+        useHiddenSubmitElement && this._$submitElement?.detach();
+
+        // NOTE: to prevent buttons disposition
+        const beforeButtonsContainerParent = this._$beforeButtonsContainer?.[0].parentNode;
+        const afterButtonsContainerParent = this._$afterButtonsContainer?.[0].parentNode;
+        beforeButtonsContainerParent?.removeChild(this._$beforeButtonsContainer[0]);
+        afterButtonsContainerParent?.removeChild(this._$afterButtonsContainer[0]);
+    },
+
+    _attachWrapperContent($container) {
+        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
+
         $container.prepend(this._$beforeButtonsContainer);
+        useHiddenSubmitElement && this._$submitElement?.appendTo($container);
         $container.append(this._$afterButtonsContainer);
 
         this._renderLabel($container);
@@ -509,7 +527,6 @@ const DropDownEditor = TextBox.inherit({
         }
 
         this._$popup = $('<div>').addClass(DROP_DOWN_EDITOR_OVERLAY)
-            .addClass(this.option('customOverlayCssClass'))
             .appendTo(this.$element());
 
         this._renderPopup();
@@ -592,7 +609,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupPositionedHandler: function(e) {
-        e.position && this._popup.overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
+        e.position && this._popup.$overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
     },
 
     _popupShowingHandler: noop,
@@ -673,11 +690,11 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getFirstPopupElement: function() {
-        return this._popup._wrapper().find('.dx-popup-done.dx-button');
+        return this._popup.$wrapper().find('.dx-popup-done.dx-button');
     },
 
     _getLastPopupElement: function() {
-        return this._popup._wrapper().find('.dx-popup-cancel.dx-button');
+        return this._popup.$wrapper().find('.dx-popup-cancel.dx-button');
     },
 
     _popupElementTabHandler: function(e) {

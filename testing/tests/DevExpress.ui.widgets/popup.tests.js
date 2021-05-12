@@ -657,7 +657,7 @@ QUnit.module('options changed callbacks', {
             minHeight: minHeight
         }).dxPopup('instance');
 
-        const $popup = $(popup.content()).parent(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
+        const $popup = popup.$content().parent(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
         const popupHeight = $popup.height();
 
         $('<div>').height(50).appendTo($content);
@@ -769,7 +769,6 @@ QUnit.module('options changed callbacks', {
             assert.ok($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), 'has POPUP_CONTENT_FLEX_HEIGHT_CLASS with fixed width');
             assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width');
         }
-
 
         popup.option('width', 'auto');
 
@@ -1003,11 +1002,10 @@ QUnit.module('options changed callbacks', {
             visible: true
         });
 
-        const $overlayContent = this.instance.$content().parent();
-        const $wrapper = $overlayContent.parent().get(0);
+        const wrapper = this.instance.$wrapper().get(0);
 
-        assert.equal(parseInt(getComputedStyle($wrapper).width), $(window).width(), 'wrappers width specified');
-        assert.equal(parseInt(getComputedStyle($wrapper).height), $(window).height(), 'wrappers height specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).width), $(window).width(), 'wrappers width specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).height), $(window).height(), 'wrappers height specified');
     });
 
     QUnit.test('title', function(assert) {
@@ -1330,7 +1328,7 @@ QUnit.module('resize', {
             onResizeEnd: onResizeEndStub
         }).dxPopup('instance');
 
-        const $content = instance.overlayContent();
+        const $content = instance.$overlayContent();
         const $handle = $content.find('.dx-resizable-handle-top');
         const pointer = pointerMock($handle);
 
@@ -1355,7 +1353,7 @@ QUnit.module('resize', {
         instance.on('resizeEnd', onResizeEndStub);
         instance.show();
 
-        const $content = instance.overlayContent();
+        const $content = instance.$overlayContent();
         const $handle = $content.find('.dx-resizable-handle-top');
         const pointer = pointerMock($handle);
 
@@ -1518,10 +1516,10 @@ QUnit.module('rendering', {
     QUnit.test('dx-popup-fullscreen-width class should be attached when width is equal to screen width', function(assert) {
         this.instance.option('width', function() { return $(window).width(); });
         this.instance.show();
-        assert.ok(this.instance.overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is attached');
+        assert.ok(this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is attached');
 
         this.instance.option('width', function() { return $(window).width() - 1; });
-        assert.ok(!this.instance.overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is detached');
+        assert.ok(!this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is detached');
     });
 
     QUnit.test('popup with toolbar should have compactMode option for the bottom toolbar', function(assert) {

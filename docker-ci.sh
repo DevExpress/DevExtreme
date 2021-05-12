@@ -42,6 +42,7 @@ function run_test {
     local runner_pid
     local runner_result=0
 
+    [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
@@ -58,29 +59,31 @@ function run_test {
         x11vnc -display :99 2>/dev/null &
     fi
 
-    if [ "$GITHUBACTION" != "true" ]; then
-    npm i
-    npm run build
+    if [ "$LOCAL" != "true" ]; then
+        if [ "$GITHUBACTION" != "true" ]; then
+        npm i
+        npm run build
+        fi
+
+        dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
+
+        for i in {15..0}; do
+            if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
+                echo "Runner exited unexpectedly"
+                exit 1
+            fi
+
+            httping -qsc1 "$url" && break
+
+            if [ $i -eq 0 ]; then
+                echo "Runner not reached"
+                exit 1
+            fi
+
+            sleep 1
+            echo "Waiting for runner..."
+        done
     fi
-
-    dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
-
-    for i in {15..0}; do
-        if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
-            echo "Runner exited unexpectedly"
-            exit 1
-        fi
-
-        httping -qsc1 "$url" && break
-
-        if [ $i -eq 0 ]; then
-            echo "Runner not reached"
-            exit 1
-        fi
-
-        sleep 1
-        echo "Waiting for runner..."
-    done
 
     echo "URL: $url"
 
@@ -152,7 +155,7 @@ function run_test {
                     --enable-features=OverlayScrollbar
                 )
             fi
-            if [ $GITHUBACTION == "true" ]; then
+            if [ "$GITHUBACTION" == "true" ]; then
                 echo "$chrome_command"
                 printf '  %s\n' "${chrome_args[@]}"
             else
@@ -176,12 +179,6 @@ function run_test_jest {
     npm i
     npx gulp localization
     npm run test-jest
-}
-
-function run_native_components {
-    npm i
-    npx gulp localization
-    npx gulp native-components-compilation-check
 }
 
 function run_test_styles {

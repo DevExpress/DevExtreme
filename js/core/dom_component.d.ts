@@ -7,7 +7,8 @@ import {
 } from './devices';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from './element';
 
 import { TemplateManager } from './template_manager';
@@ -43,7 +44,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onDisposing?: ((e: { component?: T, element?: DxElement, model?: any }) => void);
     /**
      * @docid
      * @action
@@ -51,7 +52,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: TElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
+    onOptionChanged?: ((e: { component?: T, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
     /**
      * @docid
      * @default false
@@ -79,7 +80,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @prevFileNamespace DevExpress.core
  */
 export default class DOMComponent extends Component {
-    constructor(element: TElement, options?: DOMComponentOptions);
+    constructor(element: UserDefinedElement, options?: DOMComponentOptions);
     /**
      * @docid
      * @static
@@ -102,11 +103,11 @@ export default class DOMComponent extends Component {
     /**
      * @docid
      * @publicName element()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    element(): TElement;
+    element(): DxElement;
     /**
      * @docid
      * @static
@@ -117,9 +118,9 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    static getInstance(element: TElement<Element>): DOMComponent;
+    static getInstance(element: UserDefinedElement): DOMComponent;
 
-    $element(): TElement;
+    $element(): UserDefinedElement;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
@@ -127,6 +128,4 @@ export default class DOMComponent extends Component {
 }
 
 export type Options = DOMComponentOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = DOMComponentOptions;

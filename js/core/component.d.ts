@@ -1,5 +1,5 @@
 import {
-  TElement
+  DxElement
 } from './element';
 
 export interface ComponentOptions<T = Component> {
@@ -12,16 +12,24 @@ export interface ComponentOptions<T = Component> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onDisposing?: ((e: { component?: T }) => void);
+  onDisposing?: ((e: { component: T }) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
+   * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 element:DxElement
    * @default null
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onInitialized?: ((e: { component?: T, element?: TElement }) => void);
+  onInitialized?: ((e: { component?: T, element?: DxElement }) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
+   * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 name:string
+   * @type_function_param1_field3 fullName:string
+   * @type_function_param1_field4 value:any
    * @default null
    * @action
    * @prevFileNamespace DevExpress.core
@@ -30,14 +38,14 @@ export interface ComponentOptions<T = Component> {
   onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => void);
 }
 /**
-* @docid
-* @module core/component
-* @export default
-* @namespace DevExpress
-* @hidden
-* @wrappable
-* @prevFileNamespace DevExpress.core
-*/
+ * @docid
+ * @module core/component
+ * @export default
+ * @namespace DevExpress
+ * @hidden
+ * @wrappable
+ * @prevFileNamespace DevExpress.core
+ */
 export default class Component {
   constructor(options?: ComponentOptions);
   /**
@@ -143,9 +151,16 @@ export default class Component {
    */
   resetOption(optionName: string): void;
 
+  _options: { silent(path, value): void };
   _createActionByOption(optionName: string, config: object): Function;
   _dispose(): void;
   _getDefaultOptions(): object;
   _init(): void;
+  _initializeComponent(): void;
+  _optionChanging(name: string, value: unknown, prevValue: unknown): void;
   _optionChanged(args: { name: string; value: unknown }): void;
+  _setOptionsByReference(): void;
+  _optionsByReference: object;
+  _setDeprecatedOptions(): void;
+  _deprecatedOptions: object;
 }

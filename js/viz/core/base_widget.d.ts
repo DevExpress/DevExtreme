@@ -7,12 +7,13 @@ import {
 } from '../../core/devices';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
-    TPromise
-} from '../../core/utils/deferred';
+    EventInfo
+} from '../../events/index';
 
 import {
     format
@@ -24,6 +25,23 @@ import {
 
 export type WordWrapType = 'normal' | 'breakWord' | 'none';
 export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
+
+export interface ExportInfo {
+  readonly fileName: string;
+  readonly format: string;
+}
+
+export interface IncidentInfo {
+  readonly target: any;
+}
+
+export interface FileSavingEventInfo<T> {
+  readonly component: T;
+  readonly element: DxElement;
+  readonly fileName: string;
+  readonly format: string;
+  readonly data: Blob;
+}
 
 export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
     /**
@@ -65,23 +83,34 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrawn?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onDrawn?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExported?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onExported?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 format:string
@@ -90,10 +119,12 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExporting?: ((e: { component?: T, element?: TElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => void);
+    onExporting?: ((e: EventInfo<T> & ExportInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 fileName:string
      * @type_function_param1_field4 format:string
      * @type_function_param1_field5 data:BLOB
@@ -103,17 +134,20 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onFileSaving?: ((e: { component?: T, element?: TElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => void);
+    onFileSaving?: ((e: FileSavingEventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:any
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onIncidentOccurred?: ((e: { component?: T, element?: TElement, model?: any, target?: any }) => void);
+    onIncidentOccurred?: ((e: EventInfo<T> & IncidentInfo) => void);
     /**
      * @docid
      * @default false
@@ -237,7 +271,7 @@ export interface BaseWidgetExport {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => TPromise<void>);
+    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>);
 }
 export interface BaseWidgetLoadingIndicator {
     /**
@@ -514,7 +548,7 @@ export interface BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    container?: string | TElement;
+    container?: string | UserDefinedElement;
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0
@@ -617,7 +651,7 @@ export interface BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseWidget extends DOMComponent {
-    constructor(element: TElement, options?: BaseWidgetOptions)
+    constructor(element: UserDefinedElement, options?: BaseWidgetOptions)
     /**
      * @docid
      * @static
@@ -727,9 +761,9 @@ export interface Font {
 }
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface BaseWidgetAnnotationConfig {
     /**
      * @docid
@@ -759,42 +793,42 @@ export interface BaseWidgetAnnotationConfig {
      */
     border?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#dddddd'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#dddddd'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      * @default 4 [for](Material)
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       * @default 4 [for](Material)
+       */
       cornerRadius?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.DashStyle
-      * @default 'solid'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.DashStyle
+       * @default 'solid'
+       */
       dashStyle?: DashStyleType,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       opacity?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       visible?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       width?: number
     };
     /**
@@ -838,22 +872,22 @@ export interface BaseWidgetAnnotationConfig {
      */
     image?: string | {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 30
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 30
+       */
       height?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       url?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 30
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 30
+       */
       width?: number
     };
     /**
@@ -898,34 +932,34 @@ export interface BaseWidgetAnnotationConfig {
      */
     shadow?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 4
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 4
+       */
       blur?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#000000'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default '#000000'
+       */
       color?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       */
       offsetX?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
       offsetY?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.15
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 0.15
+       */
       opacity?: number
     };
     /**

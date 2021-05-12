@@ -7,31 +7,36 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
-  ScrollableLocation, ScrollOffset,
+  ScrollableDirection,
+  ScrollOffset,
 } from './types.d';
 
-import { BaseWidgetProps } from '../../utils/base_props';
+import { BaseWidgetProps } from '../common/base_props';
 import {
   ScrollableProps,
 } from './scrollable_props';
 
-import { ScrollableNative } from './scrollable_native';
+import { ScrollableNative, ScrollableNativeProps } from './scrollable_native';
 import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
 import { nativeScrolling, touch } from '../../../core/utils/support';
+import { WidgetProps } from '../common/widget';
+import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     scrollableNativeRef,
     scrollableSimulatedRef,
     props: {
-      useNative,
-      pulledDownText,
-      pullingDownText,
-      refreshingText,
-      reachBottomText,
-      ...scrollableProps
+      useNative, children,
+      aria, disabled, width, height, visible, rtlEnabled,
+      direction, showScrollbar, scrollByThumb, bounceEnabled,
+      scrollByContent, useKeyboard, updateManually, pullDownEnabled,
+      reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
+      needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
+      pulledDownText, pullingDownText, refreshingText, reachBottomText,
+      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onStop,
     },
     restAttributes,
   } = viewModel;
@@ -40,33 +45,86 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     ? (
       <ScrollableNative
         ref={scrollableNativeRef}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...scrollableProps}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...restAttributes}
+        aria={aria}
+        width={width}
+        height={height}
+        disabled={disabled}
+        visible={visible}
+        rtlEnabled={rtlEnabled}
+        direction={direction}
+        showScrollbar={showScrollbar} // TODO: https://trello.com/c/ztUBYg5y/
+        scrollByThumb={scrollByThumb} // TODO: https://trello.com/c/Qtod4mcE/
+        updateManually={updateManually}
+        pullDownEnabled={pullDownEnabled}
+        reachBottomEnabled={reachBottomEnabled}
+        forceGeneratePockets={forceGeneratePockets}
+        needScrollViewContentWrapper={needScrollViewContentWrapper}
+        needScrollViewLoadPanel={needScrollViewLoadPanel}
+        onScroll={onScroll}
+        onUpdated={onUpdated}
+        onPullDown={onPullDown}
+        onReachBottom={onReachBottom}
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
-      />
+
+        useSimulatedScrollbar={useSimulatedScrollbar}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...restAttributes}
+      >
+        {children}
+      </ScrollableNative>
     )
     : (
       <ScrollableSimulated
         ref={scrollableSimulatedRef}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...scrollableProps}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...restAttributes}
+        aria={aria}
+        width={width}
+        height={height}
+        disabled={disabled}
+        visible={visible}
+        rtlEnabled={rtlEnabled}
+        direction={direction}
+        showScrollbar={showScrollbar}
+        scrollByThumb={scrollByThumb}
+        updateManually={updateManually}
+        pullDownEnabled={pullDownEnabled}
+        reachBottomEnabled={reachBottomEnabled}
+        forceGeneratePockets={forceGeneratePockets}
+        needScrollViewContentWrapper={needScrollViewContentWrapper}
+        needScrollViewLoadPanel={needScrollViewLoadPanel}
+        onScroll={onScroll}
+        onUpdated={onUpdated}
+        onPullDown={onPullDown}
+        onReachBottom={onReachBottom}
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
-      />
+
+        inertiaEnabled={inertiaEnabled}
+        bounceEnabled={bounceEnabled}
+        scrollByContent={scrollByContent}
+        useKeyboard={useKeyboard}
+        onStart={onStart}
+        onEnd={onEnd}
+        onBounce={onBounce}
+        onStop={onStop}
+         // eslint-disable-next-line react/jsx-props-no-spreading
+        {...restAttributes}
+      >
+        {children}
+      </ScrollableSimulated>
     )
   );
 };
 
-type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+export type ScrollablePropsType = ScrollableProps
+& Pick<WidgetProps, 'aria'>
+& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
+& Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce' | 'onStop'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
   device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
@@ -100,7 +158,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  scrollBy(distance: number | Partial<ScrollableLocation>): void {
+  scrollBy(distance: number | Partial<ScrollOffset>): void {
     this.scrollableRef.scrollBy(distance);
   }
 
@@ -120,13 +178,13 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
+  scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
     this.scrollableRef.scrollTo(targetLocation);
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-    this.scrollableRef.scrollToElement(element, offset);
+  scrollToElement(element: HTMLElement): void {
+    this.scrollableRef.scrollToElement(element);
   }
 
   @Method()
@@ -140,7 +198,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  scrollOffset(): ScrollableLocation {
+  scrollOffset(): ScrollOffset {
     return this.scrollableRef.scrollOffset();
   }
 
@@ -164,9 +222,13 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.clientWidth();
   }
 
-  @Method()
   validate(e: Event): boolean {
     return this.scrollableRef.validate(e);
+  }
+
+  @Method()
+  getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
+    return this.scrollableRef.getElementLocation(element, direction);
   }
 
   get scrollableRef(): any {

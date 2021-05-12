@@ -19,6 +19,7 @@ const TREELIST_HEADER_ROW_SELECTOR = '.dx-header-row';
 const GANTT_VIEW_SELECTOR = '.dx-gantt-view';
 const GANTT_VIEW_ROW_SELECTOR = '.dx-gantt-altRow';
 const TASK_WRAPPER_SELECTOR = '.dx-gantt-taskWrapper';
+const TASK_SELECTED_SELECTOR = '.dx-gantt-selectedTask';
 const TASK_RESOURCES_SELECTOR = '.dx-gantt-taskRes';
 const TASK_ARROW_SELECTOR = '.dx-gantt-arrow';
 const TASK_TITLE_IN_SELECTOR = '.dx-gantt-titleIn';
@@ -183,6 +184,84 @@ QUnit.module('Markup', moduleConfig, () => {
 
         assert.equal(this.instance.getVisibleTaskKeys().length, 2, 'task keys');
         assert.equal(this.instance.getVisibleDependencyKeys().length, 1, 'dependencies keys');
+    });
+    test('add task to empty gantt - row height', function(assert) {
+        const testTasks = [];
+        this.createInstance({
+            tasks: { dataSource: testTasks }
+        });
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+        const data = {
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '0'
+        };
+
+        this.instance.insertTask(data);
+        this.clock.tick();
+        $('.dx-gantt .dx-row').css({ height: '63px' });
+        this.instance._updateGanttRowHeights();
+        assert.equal(testTasks.length, 1, 'first new task was created in ds');
+        let rowHeight = this.instance._getGanttViewOption('rowHeight');
+        let treeListRowElement = this.$element.find(TREELIST_DATA_ROW_SELECTOR).last().get(0);
+        let treeListRowElementHeight = treeListRowElement.getBoundingClientRect().height;
+        assert.roughEqual(treeListRowElementHeight, rowHeight, 1.1, 'row heights are equal');
+        this.instance.insertTask(data);
+        this.clock.tick();
+        $('.dx-gantt .dx-row').css({ height: '63px' });
+        this.instance._updateGanttRowHeights();
+        this.clock.tick();
+        assert.equal(testTasks.length, 2, 'second new task was created in ds');
+        rowHeight = this.instance._getGanttViewOption('rowHeight');
+        treeListRowElement = this.$element.find(TREELIST_DATA_ROW_SELECTOR).last().get(0);
+        treeListRowElementHeight = treeListRowElement.getBoundingClientRect().height;
+        assert.roughEqual(treeListRowElementHeight, rowHeight, 0.1, 'row heights are equal');
+    });
+    test('new added task should be selected', function(assert) {
+        const testTasks = [{
+            id: 1,
+            start: new Date('2021-04-21'),
+            end: new Date('2021-04-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '0'
+        },
+        {
+            id: 2,
+            start: new Date('2021-04-21'),
+            end: new Date('2021-04-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '0'
+        }];
+        this.createInstance({
+            tasks: { dataSource: testTasks }
+        });
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+        const data = {
+            start: new Date('2021-04-21'),
+            end: new Date('2021-04-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '0'
+        };
+
+        this.instance.insertTask(data);
+        this.clock.tick();
+        assert.equal(testTasks.length, 3, 'first new task was created in ds');
+        let selectedTask = this.$element.find(TASK_SELECTED_SELECTOR);
+        let selectedTaskIndex = selectedTask.eq(0).attr('task-index');
+        assert.equal(selectedTaskIndex, 2, 'first new added task is selected');
+        this.instance.insertTask(data);
+        this.clock.tick();
+        selectedTask = this.$element.find(TASK_SELECTED_SELECTOR);
+        selectedTaskIndex = selectedTask.eq(0).attr('task-index');
+        assert.equal(selectedTaskIndex, 3, 'second new added task is selected');
+
     });
 });
 
@@ -534,7 +613,14 @@ QUnit.module('Actions', moduleConfig, () => {
         const newStart = new Date('2019-02-21');
         const newEnd = new Date('2019-02-22');
         const newTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '2');
+        const data = {
+            start: newStart,
+            end: newEnd,
+            title: newTitle,
+            progress: 0,
+            parentId: '2'
+        };
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
 
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
@@ -564,7 +650,14 @@ QUnit.module('Actions', moduleConfig, () => {
         const newStart = new Date('2019-02-21');
         const newEnd = new Date('2019-02-22');
         const newTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '2');
+        const data = {
+            start: newStart,
+            end: newEnd,
+            title: newTitle,
+            progress: 0,
+            parentId: '2'
+        };
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
 
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
@@ -837,6 +930,9 @@ QUnit.module('Toolbar', moduleConfig, () => {
             'separator',
             'zoomIn',
             'zoomOut',
+            'fullScreen',
+            'taskDetails',
+            'resourceManager',
             'separator',
             {
                 widget: 'dxButton',
@@ -938,16 +1034,20 @@ QUnit.module('DataSources', moduleConfig, () => {
         this.clock.tick();
 
         const tasksCount = tasks.length;
-        const newStart = new Date('2019-02-21');
-        const newEnd = new Date('2019-02-22');
-        const newTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '1');
+        const data = {
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '1'
+        };
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = tasks[tasks.length - 1];
-        assert.equal(createdTask.title, newTitle, 'new task title is right');
-        assert.equal(createdTask.start, newStart, 'new task start is right');
-        assert.equal(createdTask.end, newEnd, 'new task end is right');
+        assert.equal(createdTask.title, data.title, 'new task title is right');
+        assert.equal(createdTask.start, data.start, 'new task start is right');
+        assert.equal(createdTask.end, data.end, 'new task end is right');
     });
     test('updating', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1001,14 +1101,11 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         this.clock.tick();
 
         const tasksCount = tasks.length;
-        const newStart = new Date('2019-02-21');
-        const newEnd = new Date('2019-02-22');
-        const newTitle = 'New';
         this.instance.option('onTaskInserting', (e) => {
             e.cancel = true;
         });
 
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '1');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(null);
         this.clock.tick();
         assert.equal(tasks.length, tasksCount, 'new task was not created in ds');
     });
@@ -1020,6 +1117,13 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const tasksCount = tasks.length;
         const newStart = new Date('2019-02-23');
         const newEnd = new Date('2019-02-24');
+        const data = {
+            start: '2019-02-21',
+            end: '2019-02-22',
+            title: 'New',
+            progress: 0,
+            parentId: '1'
+        };
         this.instance.option('onTaskInserting', (e) => {
             e.values['title'] = 'My text';
             e.values['start'] = newStart;
@@ -1027,8 +1131,9 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             e.values['color'] = 'red';
         });
 
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute('2019-02-21', '2019-02-22', 'New', 0, '1');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
+
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = tasks[tasks.length - 1];
         assert.equal(createdTask.title, 'My text', 'new task title is right');
@@ -1044,13 +1149,20 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const text = 'My text';
         const newStart = new Date('2019-02-23');
         const newEnd = new Date('2019-02-24');
+        const data = {
+            start: newStart,
+            end: newEnd,
+            title: text,
+            progress: 0,
+            parentId: '1'
+        };
         let values;
         let keyExists = false;
         this.instance.option('onTaskInserted', (e) => {
             values = e.values;
             keyExists = !!e.key;
         });
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, text, 0, '1');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(data);
         this.clock.tick();
 
         assert.ok(keyExists, 'key created');
@@ -1105,6 +1217,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         this.clock.tick();
         assert.equal(tasks[1].CustomText, 'new custom text', 'task cust field  is updated');
         assert.equal(tasks[1].ItemName, 'new item text', 'task cust field  is updated');
+        assert.equal(tasks[1].TaskColor, 'red', 'task color field  is updated');
     });
     test('task deleting - canceling', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1556,6 +1669,28 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         getGanttViewCore(this.instance).commandManager.deassignResourceCommand.execute(toDelete.id.toString());
         this.clock.tick();
         assert.equal(resourceAssignments.length, count, 'resource was not deassigned');
+    });
+    test('resource manager showing', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+        this.instance.showResourceManagerDialog();
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+        const expectedResourceTitleText = messageLocalization.format('dxGantt-dialogResourceManagerTitle');
+        const popupTitleText = $dialog.find('.dx-popup-title').text();
+        assert.equal(expectedResourceTitleText, popupTitleText, 'ResourceManager dialog is shown');
+    });
+    test('resource manager showing - cancel', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceManagerDialogShowing', (e) => { e.cancel = true; });
+        this.clock.tick();
+        this.instance.showResourceManagerDialog();
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 0, 'dialog is not shown');
     });
 });
 
@@ -2931,44 +3066,84 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         ganttCore.taskEditController.showTaskInfo(0, 0);
 
         this.clock.tick();
-        const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
+        const tooltip = this.$element.find(TOOLTIP_SELECTOR);
+        let tooltipText = tooltip.text();
         const taskTitle = tasks[0].title;
-        assert.equal(tooltipText.indexOf(taskTitle), 0, 'Default template works correctly');
+        assert.equal(tooltipText.indexOf(taskTitle), 0, 'Default tooltip works correctly');
+        ganttCore.taskEditController.tooltip.showProgress(10, 10);
+        tooltipText = tooltip.text();
+        assert.notEqual(tooltipText.indexOf(10), -1, 'Default progress tooltip works correctly');
+        ganttCore.taskEditController.tooltip.showTime(tasks[0].start, tasks[0].end);
+        tooltipText = tooltip.text();
+        assert.notEqual(tooltipText.indexOf('Start'), -1, 'Default time tooltip works correctly 1');
+        assert.notEqual(tooltipText.indexOf('End'), -1, 'Default time tooltip works correctly 2');
+
+
     });
     test('custom text', function(assert) {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
-        const customTooltipFunction = (task, container) => {
+        const customTooltipFunction = (item, container) => {
             return customTooltipText;
+        };
+        const customTimeTooltipText = 'TestTimeTooltipText';
+        const customTimeTooltipFunction = (item, container) => {
+            return customTimeTooltipText;
+        };
+        const customProgressTooltipText = 'TestProgressTooltipText';
+        const customProgressTooltipFunction = (item, container) => {
+            return customProgressTooltipText;
         };
         this.clock.tick();
         this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
+        this.instance.option('taskTimeTooltipContentTemplate', customTimeTooltipFunction);
+        this.instance.option('taskProgressTooltipContentTemplate', customProgressTooltipFunction);
         this.clock.tick();
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
         ganttCore.taskEditController.showTaskInfo(0, 0);
 
         this.clock.tick();
-        const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
+        const tooltip = this.$element.find(TOOLTIP_SELECTOR);
+        let tooltipText = tooltip.text();
         assert.equal(tooltipText, customTooltipText, 'Custom template text works correctly');
+        ganttCore.taskEditController.tooltip.showProgress(10, 10);
+        tooltipText = tooltip.text();
+        assert.equal(tooltipText, customProgressTooltipText, 'Custom progress template text works correctly');
+        ganttCore.taskEditController.tooltip.showTime(tasks[0].start, tasks[0].end);
+        tooltipText = tooltip.text();
+        assert.equal(tooltipText, customTimeTooltipText, 'Custom time template text works correctly');
     });
     test('custom jQuery', function(assert) {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const customTooltipText = 'TestCustomTooltipJQuery';
-        const customTooltipJQuery = $('<div>TestCustomTooltipJQuery</div>');
-        const customTooltipFunction = customTooltipJQuery;
+        const customTooltipJQuery = $('<div>' + customTooltipText + '</div>');
+        const customTimeTooltipText = 'TestCustomTimeTooltipJQuery';
+        const customTimeTooltipJQuery = $('<div>' + customTimeTooltipText + '</div>');
+        const customProgressTooltipText = 'TestCustomProgressTooltipJQuery';
+        const customProgressTooltipJQuery = $('<div>' + customProgressTooltipText + '</div>');
         this.clock.tick();
-        this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
+        this.instance.option('taskTooltipContentTemplate', customTooltipJQuery);
+        this.instance.option('taskTimeTooltipContentTemplate', customTimeTooltipJQuery);
+        this.instance.option('taskProgressTooltipContentTemplate', customProgressTooltipJQuery);
+
         this.clock.tick();
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
         ganttCore.taskEditController.showTaskInfo(0, 0);
 
         this.clock.tick();
-        const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
+        const tooltip = this.$element.find(TOOLTIP_SELECTOR);
+        let tooltipText = tooltip.text();
         assert.equal(tooltipText, customTooltipText, 'Custom template with jQuery works correctly');
+        ganttCore.taskEditController.tooltip.showProgress(10, 10);
+        tooltipText = tooltip.text();
+        assert.equal(tooltipText, customProgressTooltipText, 'Custom progress template text works correctly');
+        ganttCore.taskEditController.tooltip.showTime(tasks[0].start, tasks[0].end);
+        tooltipText = tooltip.text();
+        assert.equal(tooltipText, customTimeTooltipText, 'Custom time template text works correctly');
     });
     test('different tooltips for tasks', function(assert) {
         this.createInstance(tasksOnlyOptions);

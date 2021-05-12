@@ -222,7 +222,7 @@ const SelectBox = DropDownList.inherit({
     _createPopup: function() {
         this.callBase();
         this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
-        this._popup.overlayContent().attr('tabindex', -1);
+        this._popup.$overlayContent().attr('tabindex', -1);
     },
 
     _popupWrapperClass: function() {
@@ -484,6 +484,11 @@ const SelectBox = DropDownList.inherit({
 
     _isValueEqualInputText: function() {
         const initialSelectedItem = this.option('selectedItem');
+
+        if(initialSelectedItem === null) {
+            return false;
+        }
+
         const value = this._displayGetter(initialSelectedItem);
         const displayValue = value ? String(value) : '';
         const inputText = this._searchValue();

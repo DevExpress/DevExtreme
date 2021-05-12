@@ -18,7 +18,7 @@ import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { isMaterial, current } from '../../ui/themes';
 import BaseComponent from '../component_wrapper/check_box';
-import { BaseWidgetProps } from '../utils/base_props';
+import { BaseWidgetProps } from './common/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
 import { ValidationMessage } from './validation_message';
@@ -93,9 +93,9 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
                   mode={viewModel.props.validationMessageMode}
                   positionRequest="below"
                   rtlEnabled={viewModel.props.rtlEnabled}
-                  target={viewModel.target?.current}
-                  boundary={viewModel.target?.current}
-                  container={viewModel.target?.current}
+                  target={viewModel.targetCurrent}
+                  boundary={viewModel.targetCurrent}
+                  container={viewModel.targetCurrent}
                 />
                 )}
     </Widget>
@@ -137,9 +137,10 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: { focusStateEnabled: true },
 }, {
+  // NOTE: it's disabled until styles fix: see https://trello.com/c/5Pbm18YA
   // eslint-disable-next-line import/no-named-as-default-member
   device: (): boolean => isMaterial(current()),
-  options: { useInkRipple: true },
+  options: { useInkRipple: false },
 }]);
 
 @Component({
@@ -264,6 +265,10 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       allValidationErrors = [validationError];
     }
     return allValidationErrors;
+  }
+
+  get targetCurrent(): HTMLDivElement | null | undefined {
+    return this.target?.current;
   }
 
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {

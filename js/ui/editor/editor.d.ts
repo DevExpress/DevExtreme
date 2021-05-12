@@ -1,14 +1,19 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../../core/element';
 
 import {
-    TEvent
+    NativeEventInfo
 } from '../../events/index';
 
 import Widget, {
     WidgetOptions
 } from '../widget/ui.widget';
+
+export interface ValueChangedInfo {
+    readonly previousValue?: any;
+    readonly value?: any;
+}
 
 export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     /**
@@ -25,11 +30,14 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
      * @type_function_param1_field6 event:event
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => void);
+    onValueChanged?: ((e: NativeEventInfo<T> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
@@ -94,7 +102,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class Editor extends Widget {
-    constructor(element: TElement, options?: EditorOptions)
+    constructor(element: UserDefinedElement, options?: EditorOptions)
     /**
      * @docid
      * @publicName reset()

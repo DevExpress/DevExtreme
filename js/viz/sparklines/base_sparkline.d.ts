@@ -1,10 +1,15 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
     template
 } from '../../core/templates/template';
+
+import {
+    EventInfo
+} from '../../events/index';
 
 import BaseWidget, {
     BaseWidgetExport,
@@ -32,21 +37,29 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onTooltipHidden?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onTooltipShown?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz
@@ -72,13 +85,13 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseSparklineOptions.tooltip.contentTemplate
      * @type_function_param1 pointsInfo:object
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointsInfo: any, element: TElement) => string | TElement);
+    contentTemplate?: template | ((pointsInfo: any, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseSparklineOptions.tooltip.customizeTooltip
      * @type_function_param1 pointsInfo:object
@@ -111,7 +124,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseSparkline extends BaseWidget {
-    constructor(element: TElement, options?: BaseSparklineOptions)
+    constructor(element: UserDefinedElement, options?: BaseSparklineOptions)
 
     /**
      * @docid

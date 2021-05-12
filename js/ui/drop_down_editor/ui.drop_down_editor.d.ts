@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
@@ -7,7 +8,8 @@ import {
 } from '../../core/templates/template';
 
 import dxTextBox, {
-    dxTextBoxOptions
+    dxTextBoxOptions,
+
 } from '../text_box';
 
 import {
@@ -17,6 +19,15 @@ import {
 import {
     dxPopupOptions
 } from '../popup';
+
+import {
+    EventInfo
+} from '../../events/index';
+
+export interface DropDownButtonTemplateDataModel {
+    readonly text?: string;
+    readonly icon?: string;
+}
 
 export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
     /**
@@ -69,28 +80,36 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
      * @type_function_param1_field2 icon:string
-     * @type_function_param2 contentElement:dxElement
+     * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | TElement);
+    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onClosed?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onOpened?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default false
@@ -131,7 +150,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxDropDownEditor extends dxTextBox {
-    constructor(element: TElement, options?: dxDropDownEditorOptions)
+    constructor(element: UserDefinedElement, options?: dxDropDownEditorOptions)
     /**
      * @docid
      * @publicName close()
@@ -142,19 +161,19 @@ export default class dxDropDownEditor extends dxTextBox {
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): TElement;
+    content(): DxElement;
     /**
      * @docid
      * @publicName field()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    field(): TElement;
+    field(): DxElement;
     /**
      * @docid
      * @publicName open()
@@ -165,6 +184,4 @@ export default class dxDropDownEditor extends dxTextBox {
 }
 
 export type Options = dxDropDownEditorOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = dxDropDownEditorOptions;

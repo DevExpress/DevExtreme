@@ -776,8 +776,8 @@ QUnit.module('option change', {}, () => {
             return;
         }
 
-        const popupContent = getPopup(dropDownButton).content();
-        assert.strictEqual($(popupContent).text(), 'Custom template', 'option has been changed');
+        const popupContent = getPopup(dropDownButton).$content();
+        assert.strictEqual(popupContent.text(), 'Custom template', 'option has been changed');
     });
 
     QUnit.test('items option change', function(assert) {
@@ -929,7 +929,7 @@ QUnit.module('option change', {}, () => {
         }
 
         const dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
-        const popupContentElementRect = getPopup(instance)._$content.get(0).getBoundingClientRect();
+        const popupContentElementRect = getPopup(instance).$overlayContent().get(0).getBoundingClientRect();
 
         assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, 'popup position is correct, rtlEnabled = true');
     });

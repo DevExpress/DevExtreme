@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -7,7 +8,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -15,13 +16,48 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxAccordion>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxAccordion>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxAccordion>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type ItemTitleClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
 
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**
@@ -80,23 +116,23 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default "title"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires dxAccordionOptions.onOptionChanged
@@ -116,14 +152,17 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
+     * @type_function_param1_field1 component:dxAccordion
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemTitleClick?: ((e: { component?: dxAccordion, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void) | string;
+    onItemTitleClick?: ((e: ItemTitleClickEvent) => void) | string;
     /**
      * @docid
      * @default false
@@ -148,7 +187,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @public
  */
 export default class dxAccordion extends CollectionWidget {
-    constructor(element: TElement, options?: dxAccordionOptions)
+    constructor(element: UserDefinedElement, options?: dxAccordionOptions)
     /**
      * @docid
      * @publicName collapseItem(index)
@@ -157,7 +196,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(index: number): TPromise<void>;
+    collapseItem(index: number): DxPromise<void>;
     /**
      * @docid
      * @publicName expandItem(index)
@@ -166,7 +205,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(index: number): TPromise<void>;
+    expandItem(index: number): DxPromise<void>;
     /**
      * @docid
      * @publicName updateDimensions()
@@ -174,7 +213,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): TPromise<void>;
+    updateDimensions(): DxPromise<void>;
 }
 
 /**
@@ -197,7 +236,11 @@ export interface dxAccordionItem extends CollectionWidgetItem {
     title?: string;
 }
 
+/** @public */
+export type Properties = dxAccordionOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxAccordionOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxAccordionOptions;

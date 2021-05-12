@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -7,17 +8,59 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
+
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxSlideOut>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSlideOut>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSlideOut>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+
+/** @public */
+export type ItemHoldEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+
+/** @public */
+export type MenuGroupRenderedEvent = EventInfo<dxSlideOut>;
+
+/** @public */
+export type MenuItemRenderedEvent = EventInfo<dxSlideOut>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSlideOut> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxSlideOut> & SelectionChangedInfo;
 
 export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     /**
@@ -30,12 +73,12 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     /**
      * @docid
      * @default "content"
-     * @type_function_param1 container:dxElement
+     * @type_function_param1 container:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((container: TElement) => string | TElement);
+    contentTemplate?: template | ((container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default null
@@ -60,7 +103,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | TElement);
+    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
@@ -73,12 +116,12 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @default "menuItem"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type Enums.SlideOutMenuPosition
@@ -96,20 +139,28 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     menuVisible?: boolean;
     /**
      * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSlideOut
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => void);
+    onMenuGroupRendered?: ((e: MenuGroupRenderedEvent) => void);
     /**
      * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxSlideOut
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => void);
+    onMenuItemRendered?: ((e: MenuItemRenderedEvent) => void);
     /**
      * @docid
      * @default 0
@@ -134,7 +185,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
  * @public
  */
 export default class dxSlideOut extends CollectionWidget {
-    constructor(element: TElement, options?: dxSlideOutOptions)
+    constructor(element: UserDefinedElement, options?: dxSlideOutOptions)
     /**
      * @docid
      * @publicName hideMenu()
@@ -142,7 +193,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hideMenu(): TPromise<void>;
+    hideMenu(): DxPromise<void>;
     /**
      * @docid
      * @publicName showMenu()
@@ -150,7 +201,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showMenu(): TPromise<void>;
+    showMenu(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggleMenuVisibility(showing)
@@ -159,7 +210,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(showing: boolean): TPromise<void>;
+    toggleMenuVisibility(showing: boolean): DxPromise<void>;
 }
 
 /**
@@ -174,10 +225,14 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuTemplate?: template | (() => string | TElement);
+    menuTemplate?: template | (() => string | UserDefinedElement);
 }
 
+/** @public */
+export type Properties = dxSlideOutOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSlideOutOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSlideOutOptions;

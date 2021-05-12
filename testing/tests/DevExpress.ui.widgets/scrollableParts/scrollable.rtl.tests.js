@@ -110,6 +110,6 @@ QUnit.test('rtlEnabled scrolls to very right position when a width was changing 
     const scrollable = $scrollable.dxScrollable('instance');
     scrollable.option('width', 50);
 
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });

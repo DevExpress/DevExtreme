@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -7,28 +8,51 @@ import {
 } from '../core/templates/template';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
 } from '../events/index';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
+    SelectionChangedInfo
 } from './collection/ui.collection_widget.base';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxButtonGroup>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxButtonGroup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxButtonGroup>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxButtonGroup> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
+
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid
      * @default "content"
      * @type_function_param1 buttonData:object
-     * @type_function_param2 buttonContent:dxElement
+     * @type_function_param2 buttonContent:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    buttonTemplate?: template | ((buttonData: any, buttonContent: TElement) => string | TElement);
+    buttonTemplate?: template | ((buttonData: any, buttonContent: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -60,26 +84,33 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxButtonGroup
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field5 itemElement:DxElement
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, itemData?: any, itemElement?: TElement, itemIndex?: number, event?: TEvent }) => void);
+    onItemClick?: ((e: ItemClickEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxButtonGroup
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 value:any
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: TElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
@@ -120,7 +151,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
  * @public
  */
 export default class dxButtonGroup extends Widget {
-    constructor(element: TElement, options?: dxButtonGroupOptions)
+    constructor(element: UserDefinedElement, options?: dxButtonGroupOptions)
 }
 
 /**
@@ -151,7 +182,11 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
+/** @public */
+export type Properties = dxButtonGroupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxButtonGroupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxButtonGroupOptions;

@@ -132,7 +132,7 @@ export default class VirtualScrollingDispatcher {
             ? cellHeight
             : DEFAULT_CELL_HEIGHT;
 
-        return Math.round(result);
+        return Math.floor(result);
     }
 
     getCellWidth() {
@@ -142,7 +142,7 @@ export default class VirtualScrollingDispatcher {
             ? cellWidth
             : MIN_CELL_WIDTH;
 
-        return Math.round(result);
+        return Math.floor(result);
     }
 
     calculateCoordinatesByDataAndPosition(cellData, position, date, isCalculateTime, isVerticalDirectionView) {
@@ -263,21 +263,21 @@ export default class VirtualScrollingDispatcher {
         }
     }
 
-    updateDimensions() {
+    updateDimensions(isForce) {
         const cellHeight = this.getCellHeight(false);
         const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
-        if(needUpdateVertical) {
+        if(needUpdateVertical || isForce) {
             this.rowHeight = cellHeight;
 
-            this.verticalVirtualScrolling.reinitState(cellHeight);
+            this.verticalVirtualScrolling?.reinitState(cellHeight, isForce);
         }
 
         const cellWidth = this.getCellWidth();
         const needUpdateHorizontal = this.horizontalScrollingAllowed && cellWidth !== this.cellWidth;
-        if(needUpdateHorizontal) {
+        if(needUpdateHorizontal || isForce) {
             this.cellWidth = cellWidth;
 
-            this.horizontalVirtualScrolling.reinitState(cellWidth);
+            this.horizontalVirtualScrolling?.reinitState(cellWidth, isForce);
         }
 
         if(needUpdateVertical || needUpdateHorizontal) {
@@ -293,13 +293,17 @@ class VirtualScrollingBase {
         this._viewportSize = options.viewportSize;
         this._itemSize = options.itemSize;
         this._position = -1;
+        this._itemSizeChanged = false;
 
         this.updateState(0);
     }
 
     get viewportSize() { return this._viewportSize; }
     get itemSize() { return this._itemSize; }
-    set itemSize(value) { this._itemSize = value; }
+    set itemSize(value) {
+        this._itemSizeChanged = this._itemSize !== value;
+        this._itemSize = value;
+    }
     get state() { return this._state; }
     set state(value) { this._state = value; }
 
@@ -387,10 +391,10 @@ class VirtualScrollingBase {
             : -1;
     }
 
-    updateState(position) {
+    updateState(position, isForce) {
         position = this._correctPosition(position);
 
-        if(!this.needUpdateState(position)) {
+        if(!this.needUpdateState(position) && !isForce) {
             return false;
         }
 
@@ -425,14 +429,14 @@ class VirtualScrollingBase {
         return true;
     }
 
-    reinitState(itemSize) {
+    reinitState(itemSize, isForceUpdate) {
         const { position } = this;
 
         this.itemSize = itemSize;
 
-        this.updateState(0);
+        this.updateState(0, isForceUpdate);
         if(position > 0) {
-            this.updateState(position);
+            this.updateState(position, isForceUpdate);
         }
     }
 
@@ -515,8 +519,8 @@ class VirtualScrollingBase {
 
         const isAppend = prevVirtualSizeBefore < virtualSizeBefore;
         const isPrepend = prevVirtualSizeAfter < virtualSizeAfter;
-        const needAddItems = isAppend || isPrepend;
 
+        const needAddItems = this._itemSizeChanged || isAppend || isPrepend;
         if(needAddItems) {
             this._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
         }
@@ -580,7 +584,7 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
             rightVirtualCellWidth: this.state.virtualItemSizeAfter,
             startCellIndex: this.state.startIndex,
             cellCount: this.state.itemCount,
-            cellWidth: this.state.itemSize
+            cellWidth: this.itemSize
         };
     }
 

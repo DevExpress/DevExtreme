@@ -1,10 +1,33 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
+} from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetOptions
 } from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxValidationSummary>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxValidationSummary>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxValidationSummary>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxValidationSummary> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxValidationSummary> & ChangedOptionInfo;
 
 export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
     /**
@@ -24,10 +47,14 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
  * @public
  */
 export default class dxValidationSummary extends CollectionWidget {
-    constructor(element: TElement, options?: dxValidationSummaryOptions)
+    constructor(element: UserDefinedElement, options?: dxValidationSummaryOptions)
 }
 
+/** @public */
+export type Properties = dxValidationSummaryOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidationSummaryOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxValidationSummaryOptions;

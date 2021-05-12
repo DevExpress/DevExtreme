@@ -2134,6 +2134,100 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.equal(scrollView._loading, false, 'scrollView loading not indicated');
     });
 
+    QUnit.test('list should indicate loading during second dataSource loading (T985917)', function(assert) {
+        const dataSourceLoadTime = 100;
+        const dataSource = new DataSource({
+            load() {
+                const deferred = $.Deferred();
+
+                setTimeout(() => {
+                    deferred.resolve([]);
+                }, dataSourceLoadTime);
+
+                return deferred.promise();
+            }
+        });
+        const element = this.element;
+        element.dxList({
+            height: 300,
+            pageLoadMode: 'scrollBottom',
+            showSelectionControls: true,
+            dataSource
+        });
+
+        this.clock.tick(2 * dataSourceLoadTime);
+
+        dataSource.load();
+        this.clock.tick(dataSourceLoadTime / 2);
+        const scrollView = element.dxScrollView('instance');
+
+        assert.equal(scrollView._loading, true, 'scrollView is in loading state');
+    });
+
+    QUnit.test('list should indicate loading during second dataSource loading after dataSource changing (T985917)', function(assert) {
+        const dataSourceLoadTime = 100;
+        const dataSourceConfig = {
+            paginate: true,
+            load() {
+                const deferred = $.Deferred();
+
+                setTimeout(() => {
+                    deferred.resolve([]);
+                }, dataSourceLoadTime);
+
+                return deferred.promise();
+            }
+        };
+
+        const element = this.element;
+
+        const listInstance = element.dxList({
+            height: 300,
+            pageLoadMode: 'scrollBottom',
+            showSelectionControls: true,
+            dataSource: new DataSource(dataSourceConfig)
+        }).dxList('instance');
+
+        this.clock.tick(2 * dataSourceLoadTime);
+
+        listInstance.option('dataSource', new DataSource(dataSourceConfig));
+        this.clock.tick(dataSourceLoadTime / 2);
+        const scrollView = element.dxScrollView('instance');
+
+        assert.equal(scrollView._loading, false, 'scrollView doesn\'t in loading state');
+    });
+
+    QUnit.test('list should indicate loading during dataSource reload (T985917)', function(assert) {
+        const dataSourceLoadTime = 100;
+        const dataSource = new DataSource({
+            paginate: true,
+            load() {
+                const deferred = $.Deferred();
+
+                setTimeout(() => {
+                    deferred.resolve([]);
+                }, dataSourceLoadTime);
+
+                return deferred.promise();
+            }
+        });
+        const element = this.element;
+        const listConfig = {
+            height: 300,
+            pageLoadMode: 'scrollBottom',
+            showSelectionControls: true,
+            dataSource
+        };
+        element.dxList(listConfig).dxList('instance');
+        this.clock.tick(2 * dataSourceLoadTime);
+
+        dataSource.reload();
+        this.clock.tick(dataSourceLoadTime / 2);
+        const scrollView = element.dxScrollView('instance');
+
+        assert.equal(scrollView._loading, true, 'scrollView doesn\'t in loading state');
+    });
+
     QUnit.test('setting indicateLoading to false hides load panel at once', function(assert) {
         const dataSourceLoadTime = 100;
 

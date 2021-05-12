@@ -1,11 +1,22 @@
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
     dxButtonOptions
 } from './button';
 
+/**
+ * @public
+ */
+export interface CustomDialogOptions {
+    title?: string,
+    messageHtml?: string,
+    buttons?: Array<dxButtonOptions>,
+    showTitle?: boolean,
+    message?: string,
+    dragEnabled?: boolean
+}
 /**
  * @docid ui.dialog.alert
  * @publicName alert(messageHtml,title)
@@ -19,7 +30,7 @@ import {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function alert(messageHtml: string, title: string): TPromise<void>;
+export function alert(messageHtml: string, title: string): DxPromise<void>;
 
 /**
  * @docid ui.dialog.confirm
@@ -34,7 +45,7 @@ export function alert(messageHtml: string, title: string): TPromise<void>;
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function confirm(messageHtml: string, title: string): TPromise<boolean>;
+export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
 
 /**
  * @docid ui.dialog.custom
@@ -54,6 +65,6 @@ export function confirm(messageHtml: string, title: string): TPromise<boolean>;
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
+export function custom(options: CustomDialogOptions): any;
 
 

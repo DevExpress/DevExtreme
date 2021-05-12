@@ -1,14 +1,43 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
+
+import {
+    EventInfo,
+    NativeEventInfo
+} from '../events/index';
 
 import {
     template
 } from '../core/templates/template';
 
 import Editor, {
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
+
+export interface ComponentDisabledDate<T> {
+    component: T;
+    readonly date: Date;
+    readonly view: string;
+}
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxCalendar>;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxCalendar> & ValueChangedInfo;
+
+/** @public */
+export type CellTemplateData = {
+    readonly date: Date,
+    readonly view: string,
+    readonly text?: string
+}
+
+/** @public */
+export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
@@ -26,12 +55,12 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @type_function_param1_field2 view:string
      * @type_function_param1_field3 text:string
      * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
+     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((itemData: { date?: Date, view?: string, text?: string }, itemIndex: number, itemElement: TElement) => string | TElement);
+    cellTemplate?: template | ((itemData: CellTemplateData, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default undefined
@@ -50,7 +79,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    disabledDates?: Array<Date> | ((data: { component?: any, date?: Date, view?: string }) => boolean);
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
     /**
      * @docid
      * @type Enums.FirstDayOfWeek
@@ -144,10 +173,14 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @public
  */
 export default class dxCalendar extends Editor {
-    constructor(element: TElement, options?: dxCalendarOptions)
+    constructor(element: UserDefinedElement, options?: dxCalendarOptions)
 }
 
+/** @public */
+export type Properties = dxCalendarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCalendarOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxCalendarOptions;

@@ -1,25 +1,25 @@
 import {
-    TElement
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 /**
-* @docid
-* @namespace DevExpress
-* @type object
-*/
+ * @docid
+ * @namespace DevExpress
+ * @type object
+ */
 export interface animationConfig {
     /**
      * @docid
-     * @type_function_param1 $element:dxElement
+     * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    complete?: (($element: TElement, config: any) => void);
+    complete?: (($element: DxElement, config: any) => void);
     /**
      * @docid
      * @default 0
@@ -65,12 +65,12 @@ export interface animationConfig {
     staggerDelay?: number;
     /**
      * @docid
-     * @type_function_param1 $element:dxElement
+     * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    start?: (($element: TElement, config: any) => void);
+    start?: (($element: DxElement, config: any) => void);
     /**
      * @docid
      * @default {}
@@ -89,12 +89,12 @@ export interface animationConfig {
 }
 
 /**
-* @docid
-* @section utils
-* @module animation/fx
-* @namespace DevExpress
-* @export default
-*/
+ * @docid
+ * @section utils
+ * @module animation/fx
+ * @namespace DevExpress
+ * @export default
+ */
 declare const fx: {
     /**
      * @docid
@@ -106,7 +106,7 @@ declare const fx: {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    animate(element: Element, config: animationConfig): TPromise<void>;
+    animate(element: Element, config: animationConfig): DxPromise<void>;
 
     /**
      * @docid

@@ -991,8 +991,11 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                             const previousValue = result[path[i]];
                             result[path[i]] = value;
 
-                            if(path[0] === 'editing' && that.needFireOptionChange) {
-                                that.editingController.optionChanged({ name: path[0], fullName: options, value, previousValue });
+                            if(that.needFireOptionChange && that._initialized && !that.preventOptionChanged) {
+                                const controllersAndViews = { ...that._controllers, ...that._views };
+                                Object.keys(controllersAndViews).forEach((key) => {
+                                    controllersAndViews[key].optionChanged?.({ name: path[0], fullName: options, value, previousValue });
+                                });
                             }
 
                             if(that._optionCache) {
@@ -1127,6 +1130,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 this.init && this.init();
             });
         }
+
+        that._initialized = true;
     };
 
     exports.generateItems = function(itemCount) {

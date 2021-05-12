@@ -2578,10 +2578,8 @@ QUnit.module('Export menu', {
         this.headerPanel._$element = $container;
 
         this.headerPanel.option('export.enabled', false);
-        this.headerPanel.optionChanged({ name: 'export', fullName: 'export.enabled', value: false });
 
         this.headerPanel.option('export.enabled', true);
-        this.headerPanel.optionChanged({ name: 'export', fullName: 'export.enabled', value: true });
 
 
         assert.ok(this.headerPanel.isVisible(), 'is visible');
@@ -2844,7 +2842,7 @@ QUnit.module('Real dataGrid ExportController tests', {
                     }
                 }
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },
                 { 'TestField1': 1, 'TestField2': 2, 'TestField3': 3, 'TestField4': 4 },

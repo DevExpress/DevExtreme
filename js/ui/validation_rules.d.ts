@@ -1,6 +1,14 @@
-import {
-    TPromise
-} from '../core/utils/deferred';
+/**
+ * @public
+ */
+export interface ValidationCallbackData {
+    value?: string | number,
+    rule: any,
+    validator: any,
+    data?: any,
+    column?: any,
+    formItem?: any
+}
 
 /**
  * @docid
@@ -49,7 +57,7 @@ export interface AsyncRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => TPromise<any>);
+    validationCallback?: ((options: ValidationCallbackData) => PromiseLike<any>);
 }
 
 /**
@@ -150,7 +158,7 @@ export interface CustomRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => boolean);
+    validationCallback?: ((options: ValidationCallbackData) => boolean);
 }
 
 /**
@@ -371,3 +379,5 @@ export interface StringLengthRule {
      */
     type: 'stringLength';
 }
+
+export type ValidationRule = AsyncRule | CompareRule | CustomRule | EmailRule | NumericRule | PatternRule | RangeRule | RequiredRule | StringLengthRule;

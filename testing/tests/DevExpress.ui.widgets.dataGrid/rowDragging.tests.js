@@ -318,11 +318,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         // arrange
         pointer.up();
 
-        this.options.rowDragging = {
-            allowReordering: true
-        };
-
-        rowsView.optionChanged({ name: 'rowDragging' });
+        rowsView.option('rowDragging', { allowReordering: true });
 
         // act
         pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
@@ -354,11 +350,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         // arrange
         pointer.up();
 
-        this.options.rowDragging = {
-            allowReordering: false
-        };
-
-        rowsView.optionChanged({ name: 'rowDragging' });
+        rowsView.option('rowDragging', { allowReordering: false });
 
         // act
         pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
@@ -878,11 +870,10 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        this.options.rowDragging = {
+        rowsView.option('rowDragging', {
             dropFeedbackMode: 'push',
             allowReordering: true
-        };
-        rowsView.optionChanged({ name: 'rowDragging' });
+        });
 
         const dropFeedbackMode = rowsView._sortable.option('dropFeedbackMode');
 
@@ -957,11 +948,10 @@ QUnit.module('Handle', $.extend({}, moduleConfig, {
         assert.strictEqual($handleElement.find('.dx-datagrid-drag-icon').length, 0, 'no handle icon');
 
         // act
-        this.options.rowDragging = {
+        rowsView.option('rowDragging', {
             showDragIcons: true,
             allowReordering: true
-        };
-        rowsView.optionChanged({ name: 'rowDragging' });
+        });
 
         // assert
         $handleElement = $(rowsView.getRowElement(0)).children().first();

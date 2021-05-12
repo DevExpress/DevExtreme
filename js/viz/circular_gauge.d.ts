@@ -1,6 +1,19 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
+
+import {
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
+import {
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo
+} from './core/base_widget';
 
 import {
     BaseGauge,
@@ -8,8 +21,39 @@ import {
     BaseGaugeRangeContainer,
     BaseGaugeScale,
     BaseGaugeScaleLabel,
-    GaugeIndicator
+    GaugeIndicator,
+    TooltipInfo
 } from './gauges/base_gauge';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxCircularGauge>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxCircularGauge>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxCircularGauge>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxCircularGauge> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxCircularGauge>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxCircularGauge> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxCircularGauge>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxCircularGauge> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
@@ -120,10 +164,14 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @public
  */
 export default class dxCircularGauge extends BaseGauge {
-    constructor(element: TElement, options?: dxCircularGaugeOptions)
+    constructor(element: UserDefinedElement, options?: dxCircularGaugeOptions)
 }
 
+/** @public */
+export type Properties = dxCircularGaugeOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCircularGaugeOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxCircularGaugeOptions;

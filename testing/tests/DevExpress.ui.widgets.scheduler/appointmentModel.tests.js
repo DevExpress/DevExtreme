@@ -12,26 +12,186 @@ const {
     test
 } = QUnit;
 
-module('Server side filtering',
-    {
-        before: function() {
-            this.appointments = [
-                {
-                    text: 'Appointment 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0),
-                    recurrenceRule: 'FREQ=DAILY'
-                },
-                {
-                    text: 'Appointment 2',
-                    startDate: new Date(2015, 1, 10, 11, 0),
-                    endDate: new Date(2015, 1, 10, 13, 0)
-                }
-            ];
-        }
-    },
-    () => {
-        test('Appointment model filterByDate should filter dataSource', function(assert) {
+module('Server side filtering', () => {
+    test('Appointment model filterByDate should filter dataSource', function(assert) {
+        const data = [
+            {
+                text: 'Appointment 1',
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: 'Appointment 2',
+                startDate: new Date(2015, 1, 10, 11, 0),
+                endDate: new Date(2015, 1, 10, 13, 0)
+            }
+        ];
+
+        const dataSource = new DataSource({
+            store: data,
+        });
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate'
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
+
+        dataSource.load();
+
+        assert.deepEqual(dataSource.items(), [data[1]], 'filterByDate work correctly');
+    });
+
+    test('Appointment model filterByDate should filter dataSource correctly after changing user filter', function(assert) {
+        const data = [
+            {
+                text: 'Appointment 1',
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: 'Appointment 2',
+                startDate: new Date(2015, 1, 10, 11, 0),
+                endDate: new Date(2015, 1, 10, 13, 0)
+            }
+        ];
+        const dataSource = new DataSource({
+            store: data,
+            filter: ['text', '=', 'Appointment 2']
+        });
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate'
+            }
+        });
+        const dateFilter = [
+            [
+                ['endDate', '>', new Date(2015, 1, 9, 0)],
+                ['startDate', '<', new Date(2015, 1, 11)]
+            ],
+            'or',
+            [
+                ['endDate', new Date(2015, 1, 9)],
+                ['startDate', new Date(2015, 1, 9)]
+            ]
+        ];
+        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+
+        let expectedFilter = [dateFilter, [
+            'text',
+            '=',
+            'Appointment 2'
+        ]];
+        let actualFilter = dataSource.filter();
+        assert.deepEqual(expectedFilter, actualFilter, 'filter is right');
+
+        const changedDataSource = new DataSource({
+            store: data
+        });
+        appointmentModel.setDataSource(changedDataSource, true);
+        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+
+        expectedFilter = [dateFilter];
+        actualFilter = changedDataSource.filter();
+        assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
+    });
+
+    test('Appointment model should clear the internal user filter after dataSource has been filtered (T866593)', function(assert) {
+        const appointments = [
+            { text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2 },
+            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
+            { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
+        ];
+
+        const dataSource = new DataSource({
+            store: appointments
+        });
+
+        const appointmentModel = new AppointmentModel(dataSource, {
+            getter: {
+                startDate: compileGetter('StartDate'),
+                endDate: compileGetter('EndDate'),
+                recurrenceRule: compileGetter('RecurrenceRule'),
+                recurrenceException: compileGetter('Exception'),
+                allDay: compileGetter('AllDay'),
+                startDateTimeZone: compileGetter('StartDateTimeZone'),
+                endDateTimeZone: compileGetter('EndDateTimeZone')
+            },
+            setter: {
+                startDate: compileSetter('StartDate'),
+                endDate: compileSetter('EndDate'),
+                recurrenceRule: compileSetter('RecurrenceRule'),
+                recurrenceException: compileSetter('Exception'),
+                allDay: compileSetter('AllDay')
+            },
+            expr: {
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
+
+        dataSource.load().done(() => {
+            dataSource.filter('priorityId', '=', 1);
+
+            appointmentModel.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
+
+            appointmentModel.filterLoadedAppointments({
+                startDayHour: 3,
+                endDayHour: 4
+            }, timeZoneCalculator);
+
+            assert.equal(appointmentModel._filterMaker._filterRegistry.user, undefined, 'Empty user filter');
+        });
+    });
+
+    test('Appointment model filterByDate should filter dataSource correctly without copying dateFilter', function(assert) {
+        const dateFilter = [
+            [
+                ['endDate', '>', new Date(2015, 1, 9, 0)],
+                ['startDate', '<', new Date(2015, 1, 11)]
+            ],
+            'or',
+            [
+                ['endDate', new Date(2015, 1, 9)],
+                ['startDate', new Date(2015, 1, 9)]
+            ]
+        ];
+
+        const dataSource = new DataSource({
+            store: [],
+            filter: [dateFilter, ['text', '=', 'Appointment 2']]
+        });
+
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate'
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+
+        const expectedFilter = [dateFilter, [
+            'text',
+            '=',
+            'Appointment 2'
+        ]];
+        const actualFilter = dataSource.filter();
+        assert.deepEqual(expectedFilter, actualFilter, 'filter is right');
+    });
+
+    test('Appointment model filterByDate should return filter with dateSerializationFormat and without forceIsoDateParsing', function(assert) {
+        const defaultForceIsoDateParsing = config().forceIsoDateParsing;
+        config().forceIsoDateParsing = false;
+        try {
             const dataSource = new DataSource({
                 store: [
                     {
@@ -53,260 +213,43 @@ module('Server side filtering',
                 }
             });
 
-            appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
+            appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
 
-            dataSource.load();
-
-            assert.deepEqual(dataSource.items(), [this.appointments[1]], 'filterByDate work correctly');
-        });
-
-        test('Appointment model filterByDate should filter dataSource correctly after changing user filter', function(assert) {
-            const data = [
-                {
-                    text: 'Appointment 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0)
-                },
-                {
-                    text: 'Appointment 2',
-                    startDate: new Date(2015, 1, 10, 11, 0),
-                    endDate: new Date(2015, 1, 10, 13, 0)
-                }
-            ];
-            const dataSource = new DataSource({
-                store: data,
-                filter: ['text', '=', 'Appointment 2']
-            });
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate'
-                }
-            });
-            const dateFilter = [
+            const expectedFilter = [[
                 [
-                    ['endDate', '>', new Date(2015, 1, 9, 0)],
+                    ['endDate', '>', new Date(2015, 1, 10)],
                     ['startDate', '<', new Date(2015, 1, 11)]
                 ],
                 'or',
                 [
-                    ['endDate', new Date(2015, 1, 9)],
-                    ['startDate', new Date(2015, 1, 9)]
+                    ['endDate', new Date(2015, 1, 10)],
+                    ['startDate', new Date(2015, 1, 10)]
                 ]
-            ];
-            appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
-
-            let expectedFilter = [dateFilter, [
-                'text',
-                '=',
-                'Appointment 2'
-            ]];
-            let actualFilter = dataSource.filter();
-            assert.deepEqual(expectedFilter, actualFilter, 'filter is right');
-
-            const changedDataSource = new DataSource({
-                store: data
-            });
-            appointmentModel.setDataSource(changedDataSource, true);
-            appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
-
-            expectedFilter = [dateFilter];
-            actualFilter = changedDataSource.filter();
-            assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
-        });
-
-        test('Appointment model should clear the internal user filter after dataSource has been filtered (T866593)', function(assert) {
-            const appointments = [
-                { text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2 },
-                { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
-                { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
-            ];
-
-            const dataSource = new DataSource({
-                store: appointments
-            });
-
-            const appointmentModel = new AppointmentModel(dataSource, {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate'),
-                    recurrenceRule: compileSetter('RecurrenceRule'),
-                    recurrenceException: compileSetter('Exception'),
-                    allDay: compileSetter('AllDay')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            });
-
-            appointmentModel.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
-
-            dataSource.load().done(() => {
-                dataSource.filter('priorityId', '=', 1);
-
-                appointmentModel.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
-
-                appointmentModel.filterLoadedAppointments({
-                    startDayHour: 3,
-                    endDayHour: 4
-                }, timeZoneCalculator);
-
-                assert.equal(appointmentModel._filterMaker._filterRegistry.user, undefined, 'Empty user filter');
-            });
-        });
-
-        test('Appointment model filterByDate should filter dataSource correctly without copying dateFilter', function(assert) {
-            const dateFilter = [
-                [
-                    ['endDate', '>', new Date(2015, 1, 9, 0)],
-                    ['startDate', '<', new Date(2015, 1, 11)]
-                ],
-                'or',
-                [
-                    ['endDate', new Date(2015, 1, 9)],
-                    ['startDate', new Date(2015, 1, 9)]
-                ]
-            ];
-
-            const dataSource = new DataSource({
-                store: [],
-                filter: [dateFilter, ['text', '=', 'Appointment 2']]
-            });
-
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate'
-                }
-            });
-
-            appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
-
-            const expectedFilter = [dateFilter, [
-                'text',
-                '=',
-                'Appointment 2'
             ]];
             const actualFilter = dataSource.filter();
-            assert.deepEqual(expectedFilter, actualFilter, 'filter is right');
-        });
+            assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
+        } finally {
+            config().forceIsoDateParsing = defaultForceIsoDateParsing;
+        }
+    });
 
-        test('Appointment model filterByDate should return filter with dateSerializationFormat and without forceIsoDateParsing', function(assert) {
-            const defaultForceIsoDateParsing = config().forceIsoDateParsing;
-            config().forceIsoDateParsing = false;
-            try {
-                const dataSource = new DataSource({
-                    store: [
-                        {
-                            text: 'Appointment 1',
-                            startDate: new Date(2015, 1, 9, 1, 0),
-                            endDate: new Date(2015, 1, 9, 2, 0)
-                        },
-                        {
-                            text: 'Appointment 2',
-                            startDate: new Date(2015, 1, 10, 11, 0),
-                            endDate: new Date(2015, 1, 10, 13, 0)
-                        }
-                    ]
-                });
-                const appointmentModel = new AppointmentModel(dataSource, {
-                    expr: {
-                        startDateExpr: 'startDate',
-                        endDateExpr: 'endDate'
-                    }
-                });
-
-                appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
-
-                const expectedFilter = [[
-                    [
-                        ['endDate', '>', new Date(2015, 1, 10)],
-                        ['startDate', '<', new Date(2015, 1, 11)]
-                    ],
-                    'or',
-                    [
-                        ['endDate', new Date(2015, 1, 10)],
-                        ['startDate', new Date(2015, 1, 10)]
-                    ]
-                ]];
-                const actualFilter = dataSource.filter();
-                assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
-            } finally {
-                config().forceIsoDateParsing = defaultForceIsoDateParsing;
-            }
-        });
-
-        test('Appointment model filterByDate should return filter with dateSerializationFormat and forceIsoDateParsing', function(assert) {
-            const defaultForceIsoDateParsing = config().forceIsoDateParsing;
-            config().forceIsoDateParsing = true;
-            try {
-                const dataSource = new DataSource({
-                    store: [
-                        {
-                            text: 'Appointment 1',
-                            startDate: new Date(2015, 1, 9, 1, 0),
-                            endDate: new Date(2015, 1, 9, 2, 0)
-                        },
-                        {
-                            text: 'Appointment 2',
-                            startDate: new Date(2015, 1, 10, 11, 0),
-                            endDate: new Date(2015, 1, 10, 13, 0)
-                        }
-                    ]
-                });
-                const appointmentModel = new AppointmentModel(dataSource, {
-                    expr: {
-                        startDateExpr: 'startDate',
-                        endDateExpr: 'endDate'
-                    }
-                });
-
-                appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
-
-                const expectedFilter = [[
-                    [
-                        ['endDate', '>', '2015-02-10T00:00:00'],
-                        ['startDate', '<', '2015-02-11T00:00:00']
-                    ],
-                    'or',
-                    [
-                        ['endDate', '2015-02-10T00:00:00'],
-                        ['startDate', '2015-02-10T00:00:00']
-                    ]
-                ]];
-                const actualFilter = dataSource.filter();
-                assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
-            } finally {
-                config().forceIsoDateParsing = defaultForceIsoDateParsing;
-            }
-        });
-
-
-        test('Start date of appt lower than first filter date & end appt date higher than second filter date', function(assert) {
+    test('Appointment model filterByDate should return filter with dateSerializationFormat and forceIsoDateParsing', function(assert) {
+        const defaultForceIsoDateParsing = config().forceIsoDateParsing;
+        config().forceIsoDateParsing = true;
+        try {
             const dataSource = new DataSource({
-                store: [{
-                    text: 'Appointment 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0)
-                },
-                {
-                    text: 'Appointment 2',
-                    startDate: new Date(2015, 1, 10, 11, 0),
-                    endDate: new Date(2015, 1, 10, 13, 0)
-                }]
+                store: [
+                    {
+                        text: 'Appointment 1',
+                        startDate: new Date(2015, 1, 9, 1, 0),
+                        endDate: new Date(2015, 1, 9, 2, 0)
+                    },
+                    {
+                        text: 'Appointment 2',
+                        startDate: new Date(2015, 1, 10, 11, 0),
+                        endDate: new Date(2015, 1, 10, 13, 0)
+                    }
+                ]
             });
             const appointmentModel = new AppointmentModel(dataSource, {
                 expr: {
@@ -315,303 +258,346 @@ module('Server side filtering',
                 }
             });
 
-            appointmentModel.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
-            dataSource.load();
+            appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
 
-            assert.deepEqual(dataSource.items(), [this.appointments[1]], 'filterByDate work correctly');
+            const expectedFilter = [[
+                [
+                    ['endDate', '>', '2015-02-10T00:00:00'],
+                    ['startDate', '<', '2015-02-11T00:00:00']
+                ],
+                'or',
+                [
+                    ['endDate', '2015-02-10T00:00:00'],
+                    ['startDate', '2015-02-10T00:00:00']
+                ]
+            ]];
+            const actualFilter = dataSource.filter();
+            assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
+        } finally {
+            config().forceIsoDateParsing = defaultForceIsoDateParsing;
+        }
+    });
+
+
+    test('Start date of appt lower than first filter date & end appt date higher than second filter date', function(assert) {
+        const data = [{
+            text: 'Appointment 1',
+            startDate: new Date(2015, 1, 9, 1, 0),
+            endDate: new Date(2015, 1, 9, 2, 0)
+        },
+        {
+            text: 'Appointment 2',
+            startDate: new Date(2015, 1, 10, 11, 0),
+            endDate: new Date(2015, 1, 10, 13, 0)
+        }];
+
+        const dataSource = new DataSource({
+            store: data,
+        });
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate'
+            }
         });
 
-        test('Appointment model should be filtered correctly by custom startDate field', function(assert) {
-            const dataSource = new DataSource({
-                store: [{
-                    text: 'Appointment 1',
-                    Start: new Date(2015, 1, 12, 5),
-                    End: new Date(2015, 1, 12, 5, 30)
-                }]
-            });
+        appointmentModel.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
+        dataSource.load();
 
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'Start',
-                    endDateExpr: 'End'
-                }
-            });
+        assert.deepEqual(dataSource.items(), [data[1]], 'filterByDate work correctly');
+    });
 
-            appointmentModel.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
-            dataSource.load();
-
-            assert.equal(dataSource.items().length, 1, 'filterByDate works correctly with custom dateField');
-        });
-
-        test('AllDay appointment should not be filtered by min date in range', function(assert) {
-            const tasks = [{
-                text: 'Appointment 2',
-                startDate: new Date(2015, 1, 10, 11, 0),
-                endDate: new Date(2015, 1, 10, 11, 30),
-                AllDay: true
-            }];
-
-            const dataSource = new DataSource({
-                store: tasks
-            });
-
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'AllDay'
-                }
-            });
-
-            appointmentModel.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
-            dataSource.load();
-
-            assert.deepEqual(dataSource.items(), [tasks[0]], 'filterByDate works correctly');
-        });
-
-        test('AllDay appointment should be filtered when its endDate is equal to filter min', function(assert) {
-            const tasks = [{
+    test('Appointment model should be filtered correctly by custom startDate field', function(assert) {
+        const dataSource = new DataSource({
+            store: [{
                 text: 'Appointment 1',
-                startDate: new Date(2015, 1, 10),
-                endDate: new Date(2015, 1, 11),
-                allDay: true
-            }];
-            const dataSource = new DataSource({
-                store: tasks
-            });
-
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'AllDay'
-                }
-            });
-
-            appointmentModel.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
-            dataSource.load();
-
-            assert.equal(dataSource.items().length, 0, 'filterByDate works correctly');
+                Start: new Date(2015, 1, 12, 5),
+                End: new Date(2015, 1, 12, 5, 30)
+            }]
         });
 
-        test('Appointment model filterByDate should correctly filter items with recurrenceRule, if recurrenceRuleExpr!=null', function(assert) {
-            const recurrentAppts = [
-                {
-                    text: 'Appointment 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0),
-                    _recurrenceRule: 'FREQ=DAILY'
-                },
-                {
-                    text: 'Appointment 2',
-                    startDate: new Date(2015, 1, 10, 11, 0),
-                    endDate: new Date(2015, 1, 10, 13, 0)
-                }];
-
-            const dataSource = new DataSource({
-                store: recurrentAppts
-            });
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: '_recurrenceRule'
-                }
-            });
-
-            appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
-            dataSource.load();
-
-            assert.deepEqual(dataSource.items(), recurrentAppts, 'filterByDate works correctly');
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'Start',
+                endDateExpr: 'End'
+            }
         });
 
-        test('Appointment model filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=null', function(assert) {
-            const appts = [
-                {
-                    text: 'Appointment 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0),
-                    recurrenceRule: 'FREQ=DAILY'
-                },
-                {
-                    text: 'Appointment 2',
-                    startDate: new Date(2015, 1, 10, 11, 0),
-                    endDate: new Date(2015, 1, 10, 13, 0)
-                }];
+        appointmentModel.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
+        dataSource.load();
 
-            const dataSource = new DataSource({
-                store: appts
-            });
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'allDay',
-                    recurrenceRuleExpr: null
-                }
-            });
+        assert.equal(dataSource.items().length, 1, 'filterByDate works correctly with custom dateField');
+    });
 
-            appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
-            dataSource.load();
+    test('AllDay appointment should not be filtered by min date in range', function(assert) {
+        const tasks = [{
+            text: 'Appointment 2',
+            startDate: new Date(2015, 1, 10, 11, 0),
+            endDate: new Date(2015, 1, 10, 11, 30),
+            AllDay: true
+        }];
 
-            assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
-            assert.equal(dataSource.filter()[0].length, 3, 'filter is correct');
+        const dataSource = new DataSource({
+            store: tasks
         });
 
-        test('Appointment model filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=\'\'', function(assert) {
-            const appts = [
-                {
-                    text: 'Appointment 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0),
-                    _recurrenceRule: 'FREQ=DAILY'
-                },
-                {
-                    text: 'Appointment 2',
-                    startDate: new Date(2015, 1, 10, 11, 0),
-                    endDate: new Date(2015, 1, 10, 13, 0)
-                }];
-
-            const dataSource = new DataSource({
-                store: appts
-            });
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'allDay',
-                    recurrenceRuleExpr: ''
-                }
-            });
-
-            appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
-            dataSource.load();
-
-            assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
-            assert.equal(dataSource.filter()[0].length, 3, 'filter is correct');
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'AllDay'
+            }
         });
 
-        test('Appointment should be loaded if date range equals to 24 hours', function(assert) {
-            const appts = [{
+        appointmentModel.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
+        dataSource.load();
+
+        assert.deepEqual(dataSource.items(), [tasks[0]], 'filterByDate works correctly');
+    });
+
+    test('AllDay appointment should be filtered when its endDate is equal to filter min', function(assert) {
+        const tasks = [{
+            text: 'Appointment 1',
+            startDate: new Date(2015, 1, 10),
+            endDate: new Date(2015, 1, 11),
+            allDay: true
+        }];
+        const dataSource = new DataSource({
+            store: tasks
+        });
+
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'AllDay'
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
+        dataSource.load();
+
+        assert.equal(dataSource.items().length, 0, 'filterByDate works correctly');
+    });
+
+    test('Appointment model filterByDate should correctly filter items with recurrenceRule, if recurrenceRuleExpr!=null', function(assert) {
+        const recurrentAppts = [
+            {
                 text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
+                endDate: new Date(2015, 1, 9, 2, 0),
+                _recurrenceRule: 'FREQ=DAILY'
+            },
+            {
+                text: 'Appointment 2',
+                startDate: new Date(2015, 1, 10, 11, 0),
+                endDate: new Date(2015, 1, 10, 13, 0)
             }];
 
-            const dataSource = new DataSource({
-                store: appts
-            });
-            const appointmentModel = new AppointmentModel(dataSource, {
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'allDay'
-                }
-            });
-
-            appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
-            dataSource.load();
-
-            assert.deepEqual(dataSource.items(), [appts[0]], 'filterByDate works correctly');
+        const dataSource = new DataSource({
+            store: recurrentAppts
+        });
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: '_recurrenceRule'
+            }
         });
 
-        test('Scheduler filter expression must be saved, after a user override the filter', function(assert) {
-            const appointments = [
-                { text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2 },
-                { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
-                { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
-            ];
+        appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
+        dataSource.load();
 
-            const dataSource = new DataSource({
-                store: appointments
-            });
+        assert.deepEqual(dataSource.items(), recurrentAppts, 'filterByDate works correctly');
+    });
 
-            const appointmentModel = new AppointmentModel(dataSource, {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate'),
-                    recurrenceRule: compileSetter('RecurrenceRule'),
-                    recurrenceException: compileSetter('Exception'),
-                    allDay: compileSetter('AllDay')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            });
+    test('Appointment model filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=null', function(assert) {
+        const appts = [
+            {
+                text: 'Appointment 1',
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0),
+                recurrenceRule: 'FREQ=DAILY'
+            },
+            {
+                text: 'Appointment 2',
+                startDate: new Date(2015, 1, 10, 11, 0),
+                endDate: new Date(2015, 1, 10, 13, 0)
+            }];
 
-            appointmentModel.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));
-            dataSource.load();
-
-            dataSource.filter('priorityId', '=', 1);
-
-            const appts = appointmentModel.filterLoadedAppointments({
-                startDayHour: 3,
-                endDayHour: 7,
-                min: new Date(2015, 0, 1, 0),
-                max: new Date(2015, 0, 3)
-            }, timeZoneCalculator);
-
-            assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1 }], 'Appointments are OK');
+        const dataSource = new DataSource({
+            store: appts
+        });
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'allDay',
+                recurrenceRuleExpr: null
+            }
         });
 
-        test('User filter must be constantly overwritten', function(assert) {
-            const appointments = [
-                { text: 'a', StartDate: new Date(2014, 11, 29, 1), EndDate: new Date(2014, 11, 29, 2), priorityId: 2 },
-                { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
-                { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
-            ];
+        appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
+        dataSource.load();
 
-            const dataSource = new DataSource({
-                store: appointments,
-                filter: ['priorityId', '=', 1]
-            });
+        assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
+        assert.equal(dataSource.filter()[0].length, 3, 'filter is correct');
+    });
 
-            const appointmentModel = new AppointmentModel(dataSource, {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            });
+    test('Appointment model filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=\'\'', function(assert) {
+        const appts = [
+            {
+                text: 'Appointment 1',
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0),
+                _recurrenceRule: 'FREQ=DAILY'
+            },
+            {
+                text: 'Appointment 2',
+                startDate: new Date(2015, 1, 10, 11, 0),
+                endDate: new Date(2015, 1, 10, 13, 0)
+            }];
 
-            appointmentModel.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
-            dataSource.load();
-
-            const existingFilter = dataSource.filter();
-            const newUserFilter = ['priorityId', '=', 2];
-
-            existingFilter[1] = newUserFilter;
-            dataSource.filter(existingFilter);
-            appointmentModel.filterByDate(new Date(2014, 11, 29, 0), new Date(2014, 11, 30), true);
-            dataSource.load();
-
-
-            assert.deepEqual(dataSource.items(), [{ text: 'a', StartDate: new Date(2014, 11, 29, 1), EndDate: new Date(2014, 11, 29, 2), priorityId: 2 }], 'Appointments are OK');
+        const dataSource = new DataSource({
+            store: appts
         });
-    }
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'allDay',
+                recurrenceRuleExpr: ''
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
+        dataSource.load();
+
+        assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
+        assert.equal(dataSource.filter()[0].length, 3, 'filter is correct');
+    });
+
+    test('Appointment should be loaded if date range equals to 24 hours', function(assert) {
+        const appts = [{
+            text: 'Appointment 1',
+            startDate: new Date(2015, 1, 9, 1, 0),
+            endDate: new Date(2015, 1, 9, 2, 0)
+        }];
+
+        const dataSource = new DataSource({
+            store: appts
+        });
+        const appointmentModel = new AppointmentModel(dataSource, {
+            expr: {
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'allDay'
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
+        dataSource.load();
+
+        assert.deepEqual(dataSource.items(), [appts[0]], 'filterByDate works correctly');
+    });
+
+    test('Scheduler filter expression must be saved, after a user override the filter', function(assert) {
+        const appointments = [
+            { text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2 },
+            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
+            { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
+        ];
+
+        const dataSource = new DataSource({
+            store: appointments
+        });
+
+        const appointmentModel = new AppointmentModel(dataSource, {
+            getter: {
+                startDate: compileGetter('StartDate'),
+                endDate: compileGetter('EndDate'),
+                recurrenceRule: compileGetter('RecurrenceRule'),
+                recurrenceException: compileGetter('Exception'),
+                allDay: compileGetter('AllDay'),
+                startDateTimeZone: compileGetter('StartDateTimeZone'),
+                endDateTimeZone: compileGetter('EndDateTimeZone')
+            },
+            setter: {
+                startDate: compileSetter('StartDate'),
+                endDate: compileSetter('EndDate'),
+                recurrenceRule: compileSetter('RecurrenceRule'),
+                recurrenceException: compileSetter('Exception'),
+                allDay: compileSetter('AllDay')
+            },
+            expr: {
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));
+        dataSource.load();
+
+        dataSource.filter('priorityId', '=', 1);
+
+        const appts = appointmentModel.filterLoadedAppointments({
+            startDayHour: 3,
+            endDayHour: 7,
+            min: new Date(2015, 0, 1, 0),
+            max: new Date(2015, 0, 3)
+        }, timeZoneCalculator);
+
+        assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1 }], 'Appointments are OK');
+    });
+
+    test('User filter must be constantly overwritten', function(assert) {
+        const appointments = [
+            { text: 'a', StartDate: new Date(2014, 11, 29, 1), EndDate: new Date(2014, 11, 29, 2), priorityId: 2 },
+            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
+            { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
+        ];
+
+        const dataSource = new DataSource({
+            store: appointments,
+            filter: ['priorityId', '=', 1]
+        });
+
+        const appointmentModel = new AppointmentModel(dataSource, {
+            getter: {
+                startDate: compileGetter('StartDate'),
+                endDate: compileGetter('EndDate'),
+                recurrenceRule: compileGetter('RecurrenceRule'),
+                recurrenceException: compileGetter('Exception'),
+                allDay: compileGetter('AllDay')
+            },
+            expr: {
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
+        dataSource.load();
+
+        const existingFilter = dataSource.filter();
+        const newUserFilter = ['priorityId', '=', 2];
+
+        existingFilter[1] = newUserFilter;
+        dataSource.filter(existingFilter);
+        appointmentModel.filterByDate(new Date(2014, 11, 29, 0), new Date(2014, 11, 30), true);
+        dataSource.load();
+
+
+        assert.deepEqual(dataSource.items(), [{ text: 'a', StartDate: new Date(2014, 11, 29, 1), EndDate: new Date(2014, 11, 29, 2), priorityId: 2 }], 'Appointments are OK');
+    });
+}
 );
 
 module('Client side after filtering', () => {

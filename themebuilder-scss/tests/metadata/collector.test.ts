@@ -9,6 +9,7 @@ const scssDir = join(rootDir, 'tests', 'data', 'scss');
 describe('MetadataCollector', () => {
   const expectedFileList: string[] = [
     join('bundles', 'dx.light.scss'),
+    join('bundles', 'dx.material.blue.light.scss'),
     join('widgets', 'generic', 'accordion', '_colors.scss'),
     join('widgets', 'generic', 'accordion', '_index.scss'),
     join('widgets', 'generic', 'accordion', '_sizes.scss'),
@@ -17,6 +18,7 @@ describe('MetadataCollector', () => {
     join('widgets', 'generic', '_index.scss'),
     join('widgets', 'generic', '_sizes.scss'),
     join('widgets', 'generic', '_variables.scss'),
+    join('widgets', 'material', '_index.scss'),
   ];
 
   promises.mkdir = jest.fn();

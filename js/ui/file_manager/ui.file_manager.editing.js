@@ -36,10 +36,15 @@ class FileManagerEditingControl extends Widget {
                 getDirectories: this._controller.getDirectories.bind(this._controller),
                 getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
             },
+            rtlEnabled: this.option('rtlEnabled'),
             onDialogClosed: this._onDialogClosed.bind(this)
         });
 
         this._fileUploader = this._createFileUploader();
+        const notificationControl = this.option('notificationControl');
+        if(notificationControl) {
+            this._initNotificationControl(notificationControl);
+        }
 
         this._createMetadataMap();
     }
@@ -387,6 +392,10 @@ class FileManagerEditingControl extends Widget {
         } else {
             this._dialogDeferred.reject();
         }
+    }
+
+    updateDialogRtl(value) {
+        this._dialogManager.updateDialogRtl(value);
     }
 
     _getItemThumbnail(item) {

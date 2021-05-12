@@ -1,14 +1,37 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type ClickEvent = NativeEventInfo<dxSpeedDialAction> & {
+    actionElement?: DxElement
+}
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxSpeedDialAction> & {
+    actionElement?: DxElement
+};
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSpeedDialAction>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSpeedDialAction>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSpeedDialAction> & ChangedOptionInfo;
 
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
@@ -37,23 +60,26 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @type_function_param1 e:object
      * @type_function_param1_field1 event:event
      * @type_function_param1_field2 component:this
-     * @type_function_param1_field3 element:dxElement
-     * @type_function_param1_field4 actionElement:dxElement
+     * @type_function_param1_field3 element:DxElement
+     * @type_function_param1_field4 actionElement:DxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { event?: TEvent, component?: dxSpeedDialAction, element?: TElement, actionElement?: TElement }) => void);
+    onClick?: ((e: ClickEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 actionElement:dxElement
+     * @type_function_param1_field1 component:dxSpeedDialAction
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 actionElement:DxElement
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: TElement, model?: any, actionElement?: TElement }) => void);
+    onContentReady?: ((e: ContentReadyEvent) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -70,10 +96,14 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @public
  */
 export default class dxSpeedDialAction extends Widget {
-    constructor(element: TElement, options?: dxSpeedDialActionOptions)
+    constructor(element: UserDefinedElement, options?: dxSpeedDialActionOptions)
 }
 
+/** @public */
+export type Properties = dxSpeedDialActionOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSpeedDialActionOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSpeedDialActionOptions;

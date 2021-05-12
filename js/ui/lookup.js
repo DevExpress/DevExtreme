@@ -581,10 +581,10 @@ const Lookup = DropDownList.inherit({
     _setPopupPosition: function() {
         if(!this.option('dropDownCentered')) return;
 
-        const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
+        const flipped = this._popup.$wrapper().hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(flipped) return;
 
-        const popupContentParent = $(this._popup.content()).parent();
+        const popupContentParent = $(this._popup.$content()).parent();
         const popupOffset = this._getPopupOffset();
 
         const position = locate(popupContentParent);
@@ -664,7 +664,7 @@ const Lookup = DropDownList.inherit({
         }
 
         this._$popup.addClass(LOOKUP_POPUP_CLASS);
-        this._popup._wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
+        this._popup.$wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
     },
 
     _renderPopover: function() {
@@ -912,7 +912,7 @@ const Lookup = DropDownList.inherit({
 
     _toggleSearchClass: function(isSearchEnabled) {
         if(this._popup) {
-            this._popup._wrapper().toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
+            this._popup.$wrapper().toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
         }
     },
 

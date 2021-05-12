@@ -1,10 +1,11 @@
 import {
-  TElement,
-  TElementsArray
+  UserDefinedElement,
+  DxElement,
+  UserDefinedElementsArray
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
@@ -18,7 +19,12 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    DxEvent,
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import {
@@ -69,7 +75,406 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
-export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
+export interface AdaptiveDetailRowPreparingInfo {
+  readonly formOptions: any;
+}
+
+export interface DataErrorOccurredInfo {
+  readonly error?: Error;
+}
+
+export interface DataChangeInfo {
+  readonly changes: Array<DataChange>;
+}
+
+export interface NewRowInfo {
+  data: any;
+  promise?: PromiseLike<void>;
+}
+
+export interface KeyDownInfo {
+  handled: boolean;
+}
+
+export interface RowKeyInfo {
+  readonly key: any;
+}
+
+export interface RowInsertedInfo {
+  readonly data: any;
+  readonly key: any;
+  readonly error: Error;
+}
+
+export interface RowInsertingInfo {
+  data: any;
+  cancel: boolean | PromiseLike<void>;
+}
+
+export interface RowRemovedInfo {
+  readonly data: any;
+  readonly key: any;
+  readonly error: Error;
+}
+
+export interface RowRemovingInfo {
+  readonly data: any;
+  readonly key: any;
+  cancel: boolean | PromiseLike<void>;
+}
+
+export interface RowUpdatedInfo {
+  readonly data: any;
+  readonly key: any;
+  readonly error: Error;
+}
+
+export interface RowUpdatingInfo {
+  readonly oldData: any;
+  newData: any;
+  readonly key: any;
+  cancel: boolean | PromiseLike<void>;
+}
+
+export interface RowValidatingInfo {
+  readonly brokenRules: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+  isValid: boolean;
+  readonly key: any;
+  readonly newData: any;
+  readonly oldData: any;
+  errorText: string;
+  promise?: PromiseLike<void>;
+}
+
+export interface SavingInfo {
+  changes: Array<DataChange>;
+  promise?: PromiseLike<void>;
+  cancel: boolean;
+}
+
+export interface SelectionChangedInfo {
+  readonly currentSelectedRowKeys: Array<any>;
+  readonly currentDeselectedRowKeys: Array<any>;
+  readonly selectedRowKeys: Array<any>;
+  readonly selectedRowsData: Array<any>;
+}
+
+export interface ToolbarPreparingInfo {
+  toolbarOptions: dxToolbarOptions;
+}
+
+export interface RowDraggingEventInfo<T extends GridBase> {
+  readonly component: T;
+  readonly event: DxEvent;
+  readonly itemData?: any;
+  readonly itemElement: DxElement;
+  readonly fromIndex: number;
+  readonly toIndex: number;
+  readonly fromComponent: dxSortable | dxDraggable;
+  readonly toComponent: dxSortable | dxDraggable;
+  readonly fromData?: any;
+  readonly toData?: any;
+}
+
+export interface DragStartEventInfo<T extends GridBase> {
+  readonly component: T;
+  readonly event: DxEvent;
+  itemData?: any;
+  readonly itemElement: DxElement;
+  readonly fromIndex: number;
+  readonly fromData?: any;
+}
+
+export interface DragDropInfo {
+  readonly dropInsideItem: boolean;
+}
+
+export interface DragReorderInfo {
+  readonly dropInsideItem: boolean;
+  promise?: PromiseLike<void>;
+}
+
+export interface RowDraggingTemplateDataModel {
+  readonly itemData: any;
+  readonly itemElement: DxElement;
+}
+
+export interface FilterPanelCustomizeTextArg<T> { 
+  readonly component: T,
+  readonly filterValue: any,
+  readonly text: string
+}
+
+export interface FilterPanel<T extends GridBase> {
+  /**
+   * @docid GridBaseOptions.filterPanel.customizeText
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 e:object
+   * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 filterValue:object
+   * @type_function_param1_field3 text:string
+   * @type_function_return string
+   */
+  customizeText?: ((e: FilterPanelCustomizeTextArg<T>) => string),
+  /**
+   * @docid GridBaseOptions.filterPanel.filterEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   * @fires GridBaseOptions.onOptionChanged
+   */
+  filterEnabled?: boolean,
+  /**
+   * @docid GridBaseOptions.filterPanel.texts
+   * @type object
+   * @prevFileNamespace DevExpress.ui
+   * @default {}
+   */
+  texts?: FilterPanelTexts,
+  /**
+   * @docid GridBaseOptions.filterPanel.visible
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  visible?: boolean
+}
+
+export interface RowDragging<T extends GridBase> {
+    /**
+     * @docid GridBaseOptions.rowDragging.allowDropInsideItem
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    allowDropInsideItem?: boolean,
+    /**
+     * @docid GridBaseOptions.rowDragging.allowReordering
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    allowReordering?: boolean,
+    /**
+     * @docid GridBaseOptions.rowDragging.autoScroll
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
+    autoScroll?: boolean,
+    /**
+     * @docid GridBaseOptions.rowDragging.boundary
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    boundary?: string | UserDefinedElement,
+    /**
+     * @docid GridBaseOptions.rowDragging.container
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    container?: string | UserDefinedElement,
+    /**
+     * @docid GridBaseOptions.rowDragging.cursorOffset
+     * @prevFileNamespace DevExpress.ui
+     */
+    cursorOffset?: string | {
+      /**
+       * @docid GridBaseOptions.rowDragging.cursorOffset.x
+       * @prevFileNamespace DevExpress.ui
+       * @default 0
+       */
+      x?: number,
+      /**
+       * @docid GridBaseOptions.rowDragging.cursorOffset.y
+       * @prevFileNamespace DevExpress.ui
+       * @default 0
+       */
+      y?: number
+    },
+    /**
+     * @docid GridBaseOptions.rowDragging.data
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    data?: any,
+    /**
+     * @docid GridBaseOptions.rowDragging.dragDirection
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.DragDirection
+     * @default "both"
+     */
+    dragDirection?: 'both' | 'horizontal' | 'vertical',
+    /**
+     * @docid GridBaseOptions.rowDragging.dragTemplate
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 dragInfo:object
+     * @type_function_param1_field1 itemData:any
+     * @type_function_param1_field2 itemElement:DxElement
+     * @type_function_param2 containerElement:DxElement
+     * @type_function_return string|Element|jQuery
+     * @default undefined
+     */
+    dragTemplate?: template | ((dragInfo: RowDraggingTemplateData, containerElement: DxElement) => string | UserDefinedElement),
+    /**
+     * @docid GridBaseOptions.rowDragging.dropFeedbackMode
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.DropFeedbackMode
+     * @default "indicate"
+     */
+    dropFeedbackMode?: 'push' | 'indicate',
+    /**
+     * @docid GridBaseOptions.rowDragging.filter
+     * @prevFileNamespace DevExpress.ui
+     * @default "> *"
+     */
+    filter?: string,
+    /**
+     * @docid GridBaseOptions.rowDragging.group
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    group?: string,
+    /**
+     * @docid GridBaseOptions.rowDragging.handle
+     * @prevFileNamespace DevExpress.ui
+     * @default ""
+     */
+    handle?: string,
+    /**
+     * @docid GridBaseOptions.rowDragging.onAdd
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 itemData:any
+     * @type_function_param1_field4 itemElement:DxElement
+     * @type_function_param1_field5 fromIndex:number
+     * @type_function_param1_field6 toIndex:number
+     * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 fromData:any
+     * @type_function_param1_field10 toData:any
+     * @type_function_param1_field11 dropInsideItem:boolean
+     */
+    onAdd?: ((e: RowDraggingEventInfo<T> & DragDropInfo) => void),
+    /**
+     * @docid GridBaseOptions.rowDragging.onDragChange
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 itemData:any
+     * @type_function_param1_field5 itemElement:DxElement
+     * @type_function_param1_field6 fromIndex:number
+     * @type_function_param1_field7 toIndex:number
+     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field10 fromData:any
+     * @type_function_param1_field11 toData:any
+     * @type_function_param1_field12 dropInsideItem:boolean
+     */
+    onDragChange?: ((e: Cancelable & RowDraggingEventInfo<T> & DragDropInfo) => void),
+    /**
+     * @docid GridBaseOptions.rowDragging.onDragEnd
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 itemData:any
+     * @type_function_param1_field5 itemElement:DxElement
+     * @type_function_param1_field6 fromIndex:number
+     * @type_function_param1_field7 toIndex:number
+     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field10 fromData:any
+     * @type_function_param1_field11 toData:any
+     * @type_function_param1_field12 dropInsideItem:boolean
+     */
+    onDragEnd?: ((e: Cancelable & RowDraggingEventInfo<T> & DragDropInfo) => void),
+    /**
+     * @docid GridBaseOptions.rowDragging.onDragMove
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 itemData:any
+     * @type_function_param1_field5 itemElement:DxElement
+     * @type_function_param1_field6 fromIndex:number
+     * @type_function_param1_field7 toIndex:number
+     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field10 fromData:any
+     * @type_function_param1_field11 toData:any
+     * @type_function_param1_field12 dropInsideItem:boolean
+     */
+    onDragMove?: ((e: Cancelable & RowDraggingEventInfo<T> & DragDropInfo) => void),
+    /**
+     * @docid GridBaseOptions.rowDragging.onDragStart
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 itemData:any
+     * @type_function_param1_field5 itemElement:DxElement
+     * @type_function_param1_field6 fromIndex:number
+     * @type_function_param1_field7 fromData:any
+     */
+    onDragStart?: ((e: Cancelable & DragStartEventInfo<T>) => void),
+    /**
+     * @docid GridBaseOptions.rowDragging.onRemove
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 itemData:any
+     * @type_function_param1_field4 itemElement:DxElement
+     * @type_function_param1_field5 fromIndex:number
+     * @type_function_param1_field6 toIndex:number
+     * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 fromData:any
+     * @type_function_param1_field10 toData:any
+     */
+    onRemove?: ((e: RowDraggingEventInfo<T>) => void),
+    /**
+     * @docid GridBaseOptions.rowDragging.onReorder
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 event:event
+     * @type_function_param1_field3 itemData:any
+     * @type_function_param1_field4 itemElement:DxElement
+     * @type_function_param1_field5 fromIndex:number
+     * @type_function_param1_field6 toIndex:number
+     * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+     * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field9 fromData:any
+     * @type_function_param1_field10 toData:any
+     * @type_function_param1_field11 dropInsideItem:boolean
+     * @type_function_param1_field12 promise:Promise<void>
+     */
+    onReorder?: ((e: RowDraggingEventInfo<dxDataGrid> & DragReorderInfo) => void),
+    /**
+     * @docid GridBaseOptions.rowDragging.scrollSensitivity
+     * @prevFileNamespace DevExpress.ui
+     * @default 60
+     */
+    scrollSensitivity?: number,
+    /**
+     * @docid GridBaseOptions.rowDragging.scrollSpeed
+     * @prevFileNamespace DevExpress.ui
+     * @default 30
+     */
+    scrollSpeed?: number,
+    /**
+     * @docid GridBaseOptions.rowDragging.showDragIcons
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
+    showDragIcons?: boolean
+}
+
+export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
     /**
      * @docid
      * @default false
@@ -114,103 +519,18 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     columnAutoWidth?: boolean;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    columnChooser?: {
-    /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      allowSearch?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Drag a column here to hide it"
-       */
-      emptyPanelText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      enabled?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 260
-       */
-      height?: number,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.GridColumnChooserMode
-       * @default "dragAndDrop"
-       */
-      mode?: 'dragAndDrop' | 'select',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 500
-       */
-      searchTimeout?: number,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Column Chooser"
-       */
-      title?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 250
-       */
-      width?: number
-    };
+    columnChooser?: ColumnChooser;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    columnFixing?: {
-    /**
-      * @docid
-       * @prevFileNamespace DevExpress.ui
-     * @default false
-      */
-      enabled?: boolean,
-      /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       */
-      texts?: {
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Fix"
-         */
-        fix?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "To the left"
-         */
-        leftPosition?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "To the right"
-         */
-        rightPosition?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Unfix"
-         */
-        unfix?: string
-      }
-    };
+    columnFixing?: ColumnFixing;
     /**
      * @docid
      * @default false
@@ -242,12 +562,13 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     columnWidth?: number;
     /**
      * @docid
+     * @type Array<GridBaseColumn|string>
      * @fires GridBaseOptions.onOptionChanged
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    columns?: Array<GridBaseColumn | string>;
+    columns?: Array<ColumnBase | string>;
     /**
      * @docid
      * @default null
@@ -267,7 +588,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @public
      * @type object
      */
-    editing?: GridBaseEditing;
+    editing?: EditingBase;
     /**
      * @docid
      * @default true
@@ -291,188 +612,19 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     filterBuilderPopup?: dxPopupOptions;
     /**
      * @docid
+     * @type object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    filterPanel?: {
-    /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 component:this
-       * @type_function_param1_field2 filterValue:object
-       * @type_function_param1_field3 text:string
-       * @type_function_return string
-       */
-      customizeText?: ((e: { component?: T, filterValue?: any, text?: string }) => string),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default true
-       * @fires GridBaseOptions.onOptionChanged
-       */
-      filterEnabled?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default {}
-       */
-      texts?: {
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Clear"
-         */
-        clearFilter?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Create Filter"
-         */
-        createFilter?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Enable the filter"
-         */
-        filterEnabledHint?: string
-      },
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      visible?: boolean
-    };
+    filterPanel?: FilterPanel<T>;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    filterRow?: {
-    /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.GridApplyFilterMode
-       * @default "auto"
-       */
-      applyFilter?: 'auto' | 'onClick',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Apply filter"
-       */
-      applyFilterText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "End"
-       */
-      betweenEndText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Start"
-       */
-      betweenStartText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       */
-      operationDescriptions?: {
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Between"
-         */
-        between?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Contains"
-         */
-        contains?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Ends with"
-         */
-        endsWith?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Equals"
-         */
-        equal?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Greater than"
-         */
-        greaterThan?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Greater than or equal to"
-         */
-        greaterThanOrEqual?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Less than"
-         */
-        lessThan?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Less than or equal to"
-         */
-        lessThanOrEqual?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Does not contain"
-         */
-        notContains?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Does not equal"
-         */
-        notEqual?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Starts with"
-         */
-        startsWith?: string
-      },
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "Reset"
-      */
-      resetOperationText?: string,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default "(All)"
-      */
-      showAllText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default true
-       */
-      showOperationChooser?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      visible?: boolean
-    };
+    filterRow?: FilterRow;
     /**
      * @docid
      * @type boolean|Enums.Mode
@@ -523,66 +675,11 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     focusedRowKey?: any;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerFilter?: {
-    /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-     * @default false
-       */
-      allowSearch?: boolean,
-      /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @default 315 [for](Material)
-       * @default 325
-       */
-      height?: number,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 500
-       */
-      searchTimeout?: number,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       */
-      texts?: {
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Cancel"
-         */
-        cancel?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "(Blanks)"
-         */
-        emptyValue?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Ok"
-         */
-        ok?: string
-      },
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      visible?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 252
-       */
-      width?: number
-    };
+    headerFilter?: HeaderFilter;
     /**
      * @docid
      * @default false
@@ -592,99 +689,18 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     highlightChanges?: boolean;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    keyboardNavigation?: {
-    /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      editOnKeyPress?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default true
-       */
-      enabled?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.GridEnterKeyAction
-       * @default "startEdit"
-       */
-      enterKeyAction?: 'startEdit' | 'moveFocus',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.GridEnterKeyDirection
-       * @default "none"
-       */
-      enterKeyDirection?: 'none' | 'column' | 'row'
-    };
+    keyboardNavigation?: KeyboardNavigation;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadPanel?: {
-    /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type boolean|Enums.Mode
-       * @default "auto"
-       */
-      enabled?: boolean | 'auto',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 90
-       */
-      height?: number,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default ""
-      */
-      indicatorSrc?: string,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default false
-      */
-      shading?: boolean,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default ''
-      */
-      shadingColor?: string,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
-      showIndicator?: boolean,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
-      showPane?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Loading..."
-       */
-      text?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 200
-       */
-      width?: number
-    };
+    loadPanel?: LoadPanel;
     /**
      * @docid
      * @default "No data"
@@ -696,44 +712,59 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 formOptions:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAdaptiveDetailRowPreparing?: ((e: { component?: T, element?: TElement, model?: any, formOptions?: any }) => void);
+    onAdaptiveDetailRowPreparing?: ((e: EventInfo<T> & AdaptiveDetailRowPreparingInfo) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 error:Error
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDataErrorOccurred?: ((e: { component?: T, element?: TElement, model?: any, error?: Error }) => void);
+    onDataErrorOccurred?: ((e: EventInfo<T> & DataErrorOccurredInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
      * @public
      */
-    onEditCanceled?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => void);
+    onEditCanceled?: ((e: EventInfo<T> & DataChangeInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @type_function_param1_field5 cancel:boolean
      * @default null
      * @action
      * @public
      */
-    onEditCanceling?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange>, cancel?: boolean }) => void);
+    onEditCanceling?: ((e: Cancelable & EventInfo<T> & DataChangeInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 promise:Promise<void>
      * @default null
@@ -741,10 +772,13 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onInitNewRow?: ((e: { component?: T, element?: TElement, model?: any, data?: any, promise?: TPromise<void> }) => void);
+    onInitNewRow?: ((e: EventInfo<T> & NewRowInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 handled:boolean
      * @default null
@@ -752,41 +786,26 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, handled?: boolean }) => void);
+    onKeyDown?: ((e: NativeEventInfo<T> & KeyDownInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 key:any
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowCollapsed?: ((e: { component?: T, element?: TElement, model?: any, key?: any }) => void);
+    onRowCollapsed?: ((e: EventInfo<T> & RowKeyInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 key:any
-     * @type_function_param1_field5 cancel:boolean
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onRowCollapsing?: ((e: { component?: T, element?: TElement, model?: any, key?: any, cancel?: boolean }) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 key:any
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onRowExpanded?: ((e: { component?: T, element?: TElement, model?: any, key?: any }) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 key:any
      * @type_function_param1_field5 cancel:boolean
      * @default null
@@ -794,10 +813,40 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowExpanding?: ((e: { component?: T, element?: TElement, model?: any, key?: any, cancel?: boolean }) => void);
+    onRowCollapsing?: ((e: Cancelable & EventInfo<T> & RowKeyInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 key:any
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRowExpanded?: ((e: EventInfo<T> & RowKeyInfo) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 key:any
+     * @type_function_param1_field5 cancel:boolean
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onRowExpanding?: ((e: Cancelable & EventInfo<T> & RowKeyInfo) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 error:Error
@@ -806,10 +855,13 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowInserted?: ((e: { component?: T, element?: TElement, model?: any, data?: any, key?: any, error?: Error }) => void);
+    onRowInserted?: ((e: EventInfo<T> & RowInsertedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 cancel:boolean|Promise<void>
      * @default null
@@ -817,10 +869,13 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowInserting?: ((e: { component?: T, element?: TElement, model?: any, data?: any, cancel?: boolean | TPromise<void> }) => void);
+    onRowInserting?: ((e: EventInfo<T> & RowInsertingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 error:Error
@@ -829,10 +884,13 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowRemoved?: ((e: { component?: T, element?: TElement, model?: any, data?: any, key?: any, error?: Error }) => void);
+    onRowRemoved?: ((e: EventInfo<T> & RowRemovedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 cancel:boolean|Promise<void>
@@ -841,10 +899,13 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowRemoving?: ((e: { component?: T, element?: TElement, model?: any, data?: any, key?: any, cancel?: boolean | TPromise<void> }) => void);
+    onRowRemoving?: ((e: EventInfo<T> & RowRemovingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 error:Error
@@ -853,10 +914,13 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowUpdated?: ((e: { component?: T, element?: TElement, model?: any, data?: any, key?: any, error?: Error }) => void);
+    onRowUpdated?: ((e: EventInfo<T> & RowUpdatedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 oldData:object
      * @type_function_param1_field5 newData:object
      * @type_function_param1_field6 key:any
@@ -866,10 +930,13 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowUpdating?: ((e: { component?: T, element?: TElement, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | TPromise<void> }) => void);
+    onRowUpdating?: ((e: EventInfo<T> & RowUpdatingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @type_function_param1_field5 isValid:boolean
      * @type_function_param1_field6 key:any
@@ -882,30 +949,39 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowValidating?: ((e: { component?: T, element?: TElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string, promise?: TPromise<void> }) => void);
+    onRowValidating?: ((e: EventInfo<T> & RowValidatingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @default null
      * @action
      * @public
      */
-    onSaved?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange> }) => void);
+    onSaved?: ((e: EventInfo<T> & DataChangeInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 changes:Array<GridBaseEditingChange>
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 changes:Array<DataChange>
      * @type_function_param1_field5 promise:Promise<void>
      * @type_function_param1_field6 cancel:boolean
      * @default null
      * @action
      * @public
      */
-    onSaving?: ((e: { component?: T, element?: TElement, model?: any, changes?: Array<GridBaseEditingChange>, promise?: TPromise<void>, cancel?: boolean }) => void);
+    onSaving?: ((e: EventInfo<T> & SavingInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 currentSelectedRowKeys:Array<any>
      * @type_function_param1_field5 currentDeselectedRowKeys:Array<any>
      * @type_function_param1_field6 selectedRowKeys:Array<any>
@@ -915,76 +991,34 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: TElement, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => void);
+    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 toolbarOptions:dxToolbarOptions
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onToolbarPreparing?: ((e: { component?: T, element?: TElement, model?: any, toolbarOptions?: dxToolbarOptions }) => void);
+    onToolbarPreparing?: ((e: EventInfo<T> & ToolbarPreparingInfo) => void);
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    pager?: {
-    /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Array<number, Enums.GridPagerPageSize>|Enums.Mode
-       * @default "auto"
-       */
-      allowedPageSizes?: Array<(number | 'all')> | 'auto',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.GridPagerDisplayMode
-       * @default "adaptive"
-       */
-      displayMode?: 'adaptive' | 'compact' | 'full',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Page {0} of {1} ({2} items)"
-       */
-      infoText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      showInfo?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      showNavigationButtons?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-      */
-      showPageSizeSelector?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type boolean|Enums.Mode
-       * @default "auto"
-       */
-      visible?: boolean | 'auto'
-    };
+    pager?: Pager;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
-    paging?: GridBasePaging;
+    paging?: PagingBase;
     /**
      * @docid
      * @default false
@@ -1008,301 +1042,25 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     rowAlternationEnabled?: boolean;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowDragging?: {
-    /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      allowDropInsideItem?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      allowReordering?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default true
-       */
-      autoScroll?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      boundary?: string | TElement,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      container?: string | TElement,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       */
-      cursorOffset?: string | {
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default 0
-         */
-        x?: number,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default 0
-         */
-        y?: number
-      },
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      data?: any,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.DragDirection
-       * @default "both"
-       */
-      dragDirection?: 'both' | 'horizontal' | 'vertical',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 dragInfo:object
-       * @type_function_param1_field1 itemData:any
-       * @type_function_param1_field2 itemElement:dxElement
-       * @type_function_param2 containerElement:dxElement
-       * @type_function_return string|Element|jQuery
-       * @default undefined
-       */
-      dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement }, containerElement: TElement) => string | TElement),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.DropFeedbackMode
-       * @default "indicate"
-       */
-      dropFeedbackMode?: 'push' | 'indicate',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "> *"
-       */
-      filter?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      group?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default ""
-       */
-      handle?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 component:this
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
-       * @type_function_param1_field5 fromIndex:number
-       * @type_function_param1_field6 toIndex:number
-       * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field9 fromData:any
-       * @type_function_param1_field10 toData:any
-       * @type_function_param1_field11 dropInsideItem:boolean
-       */
-      onAdd?: ((e: { component?: T, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 component:this
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 cancel:boolean
-       * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
-       * @type_function_param1_field6 fromIndex:number
-       * @type_function_param1_field7 toIndex:number
-       * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field10 fromData:any
-       * @type_function_param1_field11 toData:any
-       * @type_function_param1_field12 dropInsideItem:boolean
-       */
-      onDragChange?: ((e: { component?: T, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 component:this
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 cancel:boolean
-       * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
-       * @type_function_param1_field6 fromIndex:number
-       * @type_function_param1_field7 toIndex:number
-       * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field10 fromData:any
-       * @type_function_param1_field11 toData:any
-       * @type_function_param1_field12 dropInsideItem:boolean
-       */
-      onDragEnd?: ((e: { component?: T, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 component:this
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 cancel:boolean
-       * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
-       * @type_function_param1_field6 fromIndex:number
-       * @type_function_param1_field7 toIndex:number
-       * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field10 fromData:any
-       * @type_function_param1_field11 toData:any
-       * @type_function_param1_field12 dropInsideItem:boolean
-       */
-      onDragMove?: ((e: { component?: T, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => void),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 component:this
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 cancel:boolean
-       * @type_function_param1_field4 itemData:any
-       * @type_function_param1_field5 itemElement:dxElement
-       * @type_function_param1_field6 fromIndex:number
-       * @type_function_param1_field7 fromData:any
-       */
-      onDragStart?: ((e: { component?: T, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: TElement, fromIndex?: number, fromData?: any }) => void),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 component:this
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
-       * @type_function_param1_field5 fromIndex:number
-       * @type_function_param1_field6 toIndex:number
-       * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field9 fromData:any
-       * @type_function_param1_field10 toData:any
-       */
-      onRemove?: ((e: { component?: T, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => void),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 component:this
-       * @type_function_param1_field2 event:event
-       * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
-       * @type_function_param1_field5 fromIndex:number
-       * @type_function_param1_field6 toIndex:number
-       * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field9 fromData:any
-       * @type_function_param1_field10 toData:any
-       * @type_function_param1_field11 dropInsideItem:boolean
-       * @type_function_param1_field12 promise:Promise<void>
-       */
-      onReorder?: ((e: { component?: T, event?: TEvent, itemData?: any, itemElement?: TElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: TPromise<void> }) => void),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 60
-       */
-      scrollSensitivity?: number,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 30
-       */
-      scrollSpeed?: number,
-      /**
-      * @docid
-       * @prevFileNamespace DevExpress.ui
-      * @default true
-      */
-      showDragIcons?: boolean
-    };
+    rowDragging?: RowDragging<T>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
-    scrolling?: GridBaseScrolling;
+    scrolling?: ScrollingBase;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    searchPanel?: {
-    /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      highlightCaseSensitive?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default true
-       */
-      highlightSearchText?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Search..."
-       */
-      placeholder?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      searchVisibleColumnsOnly?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default ""
-       * @fires GridBaseOptions.onOptionChanged
-       */
-      text?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      visible?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 160
-       */
-      width?: number
-    };
+    searchPanel?: SearchPanel;
     /**
      * @docid
      * @fires GridBaseOptions.onSelectionChanged
@@ -1316,7 +1074,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @public
      * @type object
      */
-    selection?: GridBaseSelection;
+    selection?: SelectionBase;
     /**
      * @docid
      * @default false
@@ -1350,86 +1108,18 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
     showRowLines?: boolean;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    sorting?: {
-    /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @default "Sort Ascending"
-       */
-      ascendingText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Clear Sorting"
-       */
-      clearText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Sort Descending"
-       */
-      descendingText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.GridSortingMode
-       * @default "single"
-       */
-      mode?: 'multiple' | 'none' | 'single',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default true
-       */
-      showSortIndexes?: boolean
-    };
+    sorting?: Sorting;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    stateStoring?: {
-    /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_return Promise<Object>
-       */
-      customLoad?: (() => TPromise<any>),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 gridState:object
-       */
-      customSave?: ((gridState: any) => any),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      enabled?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 2000
-       */
-      savingTimeout?: number,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default null
-       */
-      storageKey?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.StateStoringType
-       * @default "localStorage"
-       */
-      type?: 'custom' | 'localStorage' | 'sessionStorage'
-    };
+    stateStoring?: StateStoring;
     /**
      * @docid
      * @default true
@@ -1445,7 +1135,567 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      */
     wordWrapEnabled?: boolean;
 }
-export interface GridBaseEditing {
+
+export interface ColumnChooser {
+    /**
+     * @docid GridBaseOptions.columnChooser.allowSearch
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    allowSearch?: boolean,
+    /**
+     * @docid GridBaseOptions.columnChooser.emptyPanelText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Drag a column here to hide it"
+     */
+    emptyPanelText?: string,
+    /**
+     * @docid GridBaseOptions.columnChooser.enabled
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    enabled?: boolean,
+    /**
+     * @docid GridBaseOptions.columnChooser.height
+     * @prevFileNamespace DevExpress.ui
+     * @default 260
+     */
+    height?: number,
+    /**
+     * @docid GridBaseOptions.columnChooser.mode
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.GridColumnChooserMode
+     * @default "dragAndDrop"
+     */
+    mode?: 'dragAndDrop' | 'select',
+    /**
+     * @docid GridBaseOptions.columnChooser.searchTimeout
+     * @prevFileNamespace DevExpress.ui
+     * @default 500
+     */
+    searchTimeout?: number,
+    /**
+     * @docid GridBaseOptions.columnChooser.title
+     * @prevFileNamespace DevExpress.ui
+     * @default "Column Chooser"
+     */
+    title?: string,
+    /**
+     * @docid GridBaseOptions.columnChooser.width
+     * @prevFileNamespace DevExpress.ui
+     * @default 250
+     */
+    width?: number
+}
+
+export interface ColumnFixing {
+    /**
+     * @docid GridBaseOptions.columnFixing.enabled
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    enabled?: boolean,
+    /**
+     * @docid GridBaseOptions.columnFixing.texts
+     * @type object
+     * @prevFileNamespace DevExpress.ui
+     */
+    texts?: ColumnFixingTexts
+}
+
+export interface ColumnFixingTexts {
+    /**
+     * @docid GridBaseOptions.columnFixing.texts.fix
+     * @prevFileNamespace DevExpress.ui
+     * @default "Fix"
+     */
+    fix?: string,
+    /**
+     * @docid GridBaseOptions.columnFixing.texts.leftPosition
+     * @prevFileNamespace DevExpress.ui
+     * @default "To the left"
+     */
+    leftPosition?: string,
+    /**
+     * @docid GridBaseOptions.columnFixing.texts.rightPosition
+     * @prevFileNamespace DevExpress.ui
+     * @default "To the right"
+     */
+    rightPosition?: string,
+    /**
+     * @docid GridBaseOptions.columnFixing.texts.unfix
+     * @prevFileNamespace DevExpress.ui
+     * @default "Unfix"
+     */
+    unfix?: string
+}
+
+export interface FilterPanelTexts {
+    /**
+     * @docid GridBaseOptions.filterPanel.texts.clearFilter
+     * @prevFileNamespace DevExpress.ui
+     * @default "Clear"
+     */
+    clearFilter?: string,
+    /**
+     * @docid GridBaseOptions.filterPanel.texts.createFilter
+     * @prevFileNamespace DevExpress.ui
+     * @default "Create Filter"
+     */
+    createFilter?: string,
+    /**
+     * @docid GridBaseOptions.filterPanel.texts.filterEnabledHint
+     * @prevFileNamespace DevExpress.ui
+     * @default "Enable the filter"
+     */
+    filterEnabledHint?: string
+}
+
+export interface FilterRow {
+    /**
+     * @docid GridBaseOptions.filterRow.applyFilter
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.GridApplyFilterMode
+     * @default "auto"
+     */
+    applyFilter?: 'auto' | 'onClick',
+    /**
+     * @docid GridBaseOptions.filterRow.applyFilterText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Apply filter"
+     */
+    applyFilterText?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.betweenEndText
+     * @prevFileNamespace DevExpress.ui
+     * @default "End"
+     */
+    betweenEndText?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.betweenStartText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Start"
+     */
+    betweenStartText?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions
+     * @type object
+     * @prevFileNamespace DevExpress.ui
+     */
+    operationDescriptions?: FilterRowOperationDescriptions,
+    /**
+     * @docid GridBaseOptions.filterRow.resetOperationText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Reset"
+     */
+    resetOperationText?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.showAllText
+     * @prevFileNamespace DevExpress.ui
+     * @default "(All)"
+     */
+    showAllText?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.showOperationChooser
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
+    showOperationChooser?: boolean,
+    /**
+     * @docid GridBaseOptions.filterRow.visible
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    visible?: boolean
+}
+
+export interface FilterRowOperationDescriptions {
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.between
+     * @prevFileNamespace DevExpress.ui
+     * @default "Between"
+     */
+    between?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.contains
+     * @prevFileNamespace DevExpress.ui
+     * @default "Contains"
+     */
+    contains?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.endsWith
+     * @prevFileNamespace DevExpress.ui
+     * @default "Ends with"
+     */
+    endsWith?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.equal
+     * @prevFileNamespace DevExpress.ui
+     * @default "Equals"
+     */
+    equal?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.greaterThan
+     * @prevFileNamespace DevExpress.ui
+     * @default "Greater than"
+     */
+    greaterThan?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual
+     * @prevFileNamespace DevExpress.ui
+     * @default "Greater than or equal to"
+     */
+    greaterThanOrEqual?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.lessThan
+     * @prevFileNamespace DevExpress.ui
+     * @default "Less than"
+     */
+    lessThan?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual
+     * @prevFileNamespace DevExpress.ui
+     * @default "Less than or equal to"
+     */
+    lessThanOrEqual?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.notContains
+     * @prevFileNamespace DevExpress.ui
+     * @default "Does not contain"
+     */
+    notContains?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.notEqual
+     * @prevFileNamespace DevExpress.ui
+     * @default "Does not equal"
+     */
+    notEqual?: string,
+    /**
+     * @docid GridBaseOptions.filterRow.operationDescriptions.startsWith
+     * @prevFileNamespace DevExpress.ui
+     * @default "Starts with"
+     */
+    startsWith?: string
+}
+
+export interface HeaderFilter {
+    /**
+     * @docid GridBaseOptions.headerFilter.allowSearch
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    allowSearch?: boolean,
+    /**
+     * @docid GridBaseOptions.headerFilter.height
+     * @prevFileNamespace DevExpress.ui
+     * @default 315 [for](Material)
+     * @default 325
+     */
+    height?: number,
+    /**
+     * @docid GridBaseOptions.headerFilter.searchTimeout
+     * @prevFileNamespace DevExpress.ui
+     * @default 500
+     */
+    searchTimeout?: number,
+    /**
+     * @docid GridBaseOptions.headerFilter.texts
+     * @type object
+     * @prevFileNamespace DevExpress.ui
+     */
+    texts?: HeaderFilterTexts,
+    /**
+     * @docid GridBaseOptions.headerFilter.visible
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    visible?: boolean,
+    /**
+     * @docid GridBaseOptions.headerFilter.width
+     * @prevFileNamespace DevExpress.ui
+     * @default 252
+     */
+    width?: number
+}
+
+export interface HeaderFilterTexts {
+    /**
+     * @docid GridBaseOptions.headerFilter.texts.cancel
+     * @prevFileNamespace DevExpress.ui
+     * @default "Cancel"
+     */
+    cancel?: string,
+    /**
+     * @docid GridBaseOptions.headerFilter.texts.emptyValue
+     * @prevFileNamespace DevExpress.ui
+     * @default "(Blanks)"
+     */
+    emptyValue?: string,
+    /**
+     * @docid GridBaseOptions.headerFilter.texts.ok
+     * @prevFileNamespace DevExpress.ui
+     * @default "Ok"
+     */
+    ok?: string
+}
+
+export interface KeyboardNavigation {
+    /**
+     * @docid GridBaseOptions.keyboardNavigation.editOnKeyPress
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    editOnKeyPress?: boolean,
+    /**
+     * @docid GridBaseOptions.keyboardNavigation.enabled
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
+    enabled?: boolean,
+    /**
+     * @docid GridBaseOptions.keyboardNavigation.enterKeyAction
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.GridEnterKeyAction
+     * @default "startEdit"
+     */
+    enterKeyAction?: 'startEdit' | 'moveFocus',
+    /**
+     * @docid GridBaseOptions.keyboardNavigation.enterKeyDirection
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.GridEnterKeyDirection
+     * @default "none"
+     */
+    enterKeyDirection?: 'none' | 'column' | 'row'
+}
+
+export interface LoadPanel {
+    /**
+     * @docid GridBaseOptions.loadPanel.enabled
+     * @prevFileNamespace DevExpress.ui
+     * @type boolean|Enums.Mode
+     * @default "auto"
+     */
+    enabled?: boolean | 'auto',
+    /**
+     * @docid GridBaseOptions.loadPanel.height
+     * @prevFileNamespace DevExpress.ui
+     * @default 90
+     */
+    height?: number,
+    /**
+     * @docid GridBaseOptions.loadPanel.indicatorSrc
+     * @prevFileNamespace DevExpress.ui
+     * @default ""
+     */
+    indicatorSrc?: string,
+    /**
+     * @docid GridBaseOptions.loadPanel.shading
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    shading?: boolean,
+    /**
+     * @docid GridBaseOptions.loadPanel.shadingColor
+     * @prevFileNamespace DevExpress.ui
+     * @default ''
+     */
+    shadingColor?: string,
+    /**
+     * @docid GridBaseOptions.loadPanel.showIndicator
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
+    showIndicator?: boolean,
+    /**
+     * @docid GridBaseOptions.loadPanel.showPane
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
+    showPane?: boolean,
+    /**
+     * @docid GridBaseOptions.loadPanel.text
+     * @prevFileNamespace DevExpress.ui
+     * @default "Loading..."
+     */
+    text?: string,
+    /**
+     * @docid GridBaseOptions.loadPanel.width
+     * @prevFileNamespace DevExpress.ui
+     * @default 200
+     */
+    width?: number
+}
+
+export interface Pager {
+    /**
+     * @docid GridBaseOptions.pager.allowedPageSizes
+     * @prevFileNamespace DevExpress.ui
+     * @type Array<number, Enums.GridPagerPageSize>|Enums.Mode
+     * @default "auto"
+     */
+    allowedPageSizes?: Array<(number | 'all')> | 'auto',
+    /**
+     * @docid GridBaseOptions.pager.displayMode
+     * @prevFileNamespace DevExpress.ui
+     * @default "adaptive"
+     * @type Enums.GridPagerDisplayMode
+     */
+    displayMode?: 'adaptive' | 'compact' | 'full',
+    /**
+     * @docid GridBaseOptions.pager.infoText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Page {0} of {1} ({2} items)"
+     */
+    infoText?: string,
+    /**
+     * @docid GridBaseOptions.pager.showInfo
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    showInfo?: boolean,
+    /**
+     * @docid GridBaseOptions.pager.showNavigationButtons
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    showNavigationButtons?: boolean,
+    /**
+     * @docid GridBaseOptions.pager.showPageSizeSelector
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    showPageSizeSelector?: boolean,
+    /**
+     * @docid GridBaseOptions.pager.visible
+     * @prevFileNamespace DevExpress.ui
+     * @type boolean|Enums.Mode
+     * @default "auto"
+     */
+    visible?: boolean | 'auto'
+}
+
+export interface SearchPanel {
+    /**
+     * @docid GridBaseOptions.searchPanel.highlightCaseSensitive
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    highlightCaseSensitive?: boolean,
+    /**
+     * @docid GridBaseOptions.searchPanel.highlightSearchText
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
+    highlightSearchText?: boolean,
+    /**
+     * @docid GridBaseOptions.searchPanel.placeholder
+     * @prevFileNamespace DevExpress.ui
+     * @default "Search..."
+     */
+    placeholder?: string,
+    /**
+     * @docid GridBaseOptions.searchPanel.searchVisibleColumnsOnly
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    searchVisibleColumnsOnly?: boolean,
+    /**
+     * @docid GridBaseOptions.searchPanel.text
+     * @prevFileNamespace DevExpress.ui
+     * @default ""
+     * @fires GridBaseOptions.onOptionChanged
+     */
+    text?: string,
+    /**
+     * @docid GridBaseOptions.searchPanel.visible
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    visible?: boolean,
+    /**
+     * @docid GridBaseOptions.searchPanel.width
+     * @prevFileNamespace DevExpress.ui
+     * @default 160
+     */
+    width?: number
+}
+
+export interface Sorting {
+    /**
+     * @docid GridBaseOptions.sorting.ascendingText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Sort Ascending"
+     */
+    ascendingText?: string,
+    /**
+     * @docid GridBaseOptions.sorting.clearText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Clear Sorting"
+     */
+    clearText?: string,
+    /**
+     * @docid GridBaseOptions.sorting.descendingText
+     * @prevFileNamespace DevExpress.ui
+     * @default "Sort Descending"
+     */
+    descendingText?: string,
+    /**
+     * @docid GridBaseOptions.sorting.mode
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.GridSortingMode
+     * @default "single"
+     */
+    mode?: 'multiple' | 'none' | 'single',
+    /**
+     * @docid GridBaseOptions.sorting.showSortIndexes
+     * @prevFileNamespace DevExpress.ui
+     * @default true
+     */
+    showSortIndexes?: boolean
+}
+
+export interface StateStoring {
+    /**
+     * @docid GridBaseOptions.stateStoring.customLoad
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_return Promise<Object>
+     */
+    customLoad?: (() => PromiseLike<any>),
+    /**
+     * @docid GridBaseOptions.stateStoring.customSave
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 gridState:object
+     */
+    customSave?: ((gridState: any) => any),
+    /**
+     * @docid GridBaseOptions.stateStoring.enabled
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    enabled?: boolean,
+    /**
+     * @docid GridBaseOptions.stateStoring.savingTimeout
+     * @prevFileNamespace DevExpress.ui
+     * @default 2000
+     */
+    savingTimeout?: number,
+    /**
+     * @docid GridBaseOptions.stateStoring.storageKey
+     * @prevFileNamespace DevExpress.ui
+     * @default null
+     */
+    storageKey?: string,
+    /**
+     * @docid GridBaseOptions.stateStoring.type
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.StateStoringType
+     * @default "localStorage"
+     */
+    type?: 'custom' | 'localStorage' | 'sessionStorage'
+}
+
+export type GridBaseEditing = EditingBase;
+export interface EditingBase {
     /**
      * @docid GridBaseOptions.editing.confirmDelete
      * @default true
@@ -1459,20 +1709,20 @@ export interface GridBaseEditing {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    changes?: Array<GridBaseEditingChange>;
+    changes?: Array<DataChange>;
     /**
      * @docid GridBaseOptions.editing.editColumnName
      * @default null
      * @fires GridBaseOptions.onOptionChanged
      * @public
-    */
+     */
     editColumnName?: string;
     /**
      * @docid GridBaseOptions.editing.editRowKey
      * @default null
      * @fires GridBaseOptions.onOptionChanged
      * @public
-    */
+     */
     editRowKey?: any;
     /**
      * @docid GridBaseOptions.editing.form
@@ -1523,7 +1773,7 @@ export interface GridBaseEditing {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    texts?: GridBaseEditingTexts;
+    texts?: EditingTextsBase;
     /**
      * @docid GridBaseOptions.editing.useIcons
      * @default true [for](Material)
@@ -1535,34 +1785,35 @@ export interface GridBaseEditing {
 }
 
 /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  */
- export interface GridBaseEditingChange {
-  /**
-   * @docid
-   */
-  key: any;
-  /**
-   * @docid
-   * @type Enums.GridDataChangeType
-   */
-  type: 'insert' | 'update' | 'remove';
-  /**
-   * @docid
-   */
-  data: object;
-  /**
-   * @docid
-   */
-  index?: number;
-  /**
-   * @docid
-   */
-  pageIndex?: number;
+ * @docid
+ * @prevFileNamespace DevExpress.ui
+ */
+export interface DataChange {
+    /**
+     * @docid
+     */
+    key: any;
+    /**
+     * @docid
+     * @type Enums.GridDataChangeType
+     */
+    type: 'insert' | 'update' | 'remove';
+    /**
+     * @docid
+     */
+    data: object;
+    /**
+     * @docid
+     */
+    index?: number;
+    /**
+     * @docid
+     */
+    pageIndex?: number;
 }
 
-export interface GridBaseEditingTexts {
+export type GridBaseEditingTexts = EditingTextsBase;
+export interface EditingTextsBase {
     /**
      * @docid GridBaseOptions.editing.texts.addRow
      * @default "Add a row"
@@ -1641,7 +1892,9 @@ export interface GridBaseEditingTexts {
      */
     validationCancelChanges?: string;
 }
-export interface GridBasePaging {
+
+export type GridBasePaging = PagingBase;
+export interface PagingBase {
     /**
      * @docid GridBaseOptions.paging.enabled
      * @default true
@@ -1666,7 +1919,9 @@ export interface GridBasePaging {
      */
     pageSize?: number;
 }
-export interface GridBaseScrolling {
+
+export type GridBaseScrolling = ScrollingBase;
+export interface ScrollingBase {
     /**
      * @docid GridBaseOptions.scrolling.columnRenderingMode
      * @type Enums.GridColumnRenderingMode
@@ -1722,7 +1977,9 @@ export interface GridBaseScrolling {
      */
     useNative?: boolean | 'auto';
 }
-export interface GridBaseSelection {
+
+export type GridBaseSelection = SelectionBase;
+export interface SelectionBase {
     /**
      * @docid GridBaseOptions.selection.allowSelectAll
      * @default true
@@ -1739,6 +1996,7 @@ export interface GridBaseSelection {
      */
     mode?: 'multiple' | 'none' | 'single';
 }
+
 /**
  * @docid
  * @inherits Widget, DataHelperMixin
@@ -1764,7 +2022,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     /**
      * @docid
      * @publicName cancelEditData()
@@ -1924,7 +2182,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deselectAll(): TPromise<void>;
+    deselectAll(): DxPromise<void>;
     /**
      * @docid
      * @publicName deselectRows(keys)
@@ -1933,7 +2191,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deselectRows(keys: Array<any>): TPromise<any>;
+    deselectRows(keys: Array<any>): DxPromise<any>;
     /**
      * @docid
      * @publicName editCell(rowIndex, dataField)
@@ -1999,27 +2257,27 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    focus(element: TElement): void;
+    focus(element: UserDefinedElement): void;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, dataField)
      * @param1 rowIndex:number
      * @param2 dataField:string
-     * @return dxElement|undefined
+     * @return DxElement|undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getCellElement(rowIndex: number, dataField: string): TElement | undefined;
+    getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
      * @param1 rowIndex:number
      * @param2 visibleColumnIndex:number
-     * @return dxElement|undefined
+     * @return DxElement|undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
+    getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     /**
      * @docid
      * @publicName getCombinedFilter()
@@ -2055,7 +2313,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getRowElement(rowIndex: number): TElementsArray | undefined;
+    getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     /**
      * @docid
      * @publicName getRowIndexByKey(key)
@@ -2165,7 +2423,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    pageIndex(newIndex: number): TPromise<void>;
+    pageIndex(newIndex: number): DxPromise<void>;
     /**
      * @docid
      * @publicName pageSize()
@@ -2189,7 +2447,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(): TPromise<void>;
+    refresh(): DxPromise<void>;
     /**
      * @docid
      * @publicName refresh(changesOnly)
@@ -2198,7 +2456,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(changesOnly: boolean): TPromise<void>;
+    refresh(changesOnly: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName repaintRows(rowIndexes)
@@ -2214,7 +2472,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    saveEditData(): TPromise<void>;
+    saveEditData(): DxPromise<void>;
     /**
      * @docid
      * @publicName searchByText(text)
@@ -2230,7 +2488,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectAll(): TPromise<void>;
+    selectAll(): DxPromise<void>;
     /**
      * @docid
      * @publicName selectRows(keys, preserve)
@@ -2240,7 +2498,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
+    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
     /**
      * @docid
      * @publicName selectRowsByIndexes(indexes)
@@ -2249,7 +2507,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     /**
      * @docid
      * @publicName showColumnChooser()
@@ -2290,85 +2548,93 @@ export interface GridBase {
     updateDimensions(): void;
 }
 
+export interface ColumnCustomizeTextArg {
+  value?: string | number | Date;
+  valueText?: string;
+  target?: string;
+  groupInterval?: string | number;
+}
+
+export type GridBaseColumn = ColumnBase;
 /**
- * @docid
+ * @docid GridBaseColumn
  * @type object
  */
-export interface GridBaseColumn {
+export interface ColumnBase {
     /**
-     * @docid
+     * @docid GridBaseColumn.alignment
      * @type Enums.HorizontalAlignment
      * @default undefined
      * @acceptValues undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    alignment?: 'center' | 'left' | 'right' | undefined;
+    alignment?: 'center' | 'left' | 'right';
     /**
-     * @docid
+     * @docid GridBaseColumn.allowEditing
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowEditing?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.allowFiltering
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowFiltering?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.allowFixing
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowFixing?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.allowHeaderFiltering
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowHeaderFiltering?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.allowHiding
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowHiding?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.allowReordering
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowReordering?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.allowResizing
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowResizing?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.allowSearch
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowSearch?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.allowSorting
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowSorting?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.calculateCellValue
      * @type_function_param1 rowData:object
      * @type_function_return any
      * @prevFileNamespace DevExpress.ui
@@ -2376,7 +2642,7 @@ export interface GridBaseColumn {
      */
     calculateCellValue?: ((rowData: any) => any);
     /**
-     * @docid
+     * @docid GridBaseColumn.calculateDisplayValue
      * @type_function_param1 rowData:object
      * @type_function_return any
      * @prevFileNamespace DevExpress.ui
@@ -2384,7 +2650,7 @@ export interface GridBaseColumn {
      */
     calculateDisplayValue?: string | ((rowData: any) => any);
     /**
-     * @docid
+     * @docid GridBaseColumn.calculateFilterExpression
      * @type_function_param1 filterValue:any
      * @type_function_param2 selectedFilterOperation:string
      * @type_function_param3 target:string
@@ -2394,7 +2660,7 @@ export interface GridBaseColumn {
      */
     calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
     /**
-     * @docid
+     * @docid GridBaseColumn.calculateSortValue
      * @type_function_param1 rowData:object
      * @type_function_return any
      * @prevFileNamespace DevExpress.ui
@@ -2402,21 +2668,21 @@ export interface GridBaseColumn {
      */
     calculateSortValue?: string | ((rowData: any) => any);
     /**
-     * @docid
+     * @docid GridBaseColumn.caption
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     caption?: string;
     /**
-     * @docid
+     * @docid GridBaseColumn.cssClass
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cssClass?: string;
     /**
-     * @docid
+     * @docid GridBaseColumn.customizeText
      * @type_function_param1 cellInfo:object
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 valueText:string
@@ -2426,16 +2692,16 @@ export interface GridBaseColumn {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string, target?: string, groupInterval?: string | number }) => string);
+    customizeText?: ((cellInfo: ColumnCustomizeTextArg) => string);
     /**
-     * @docid
+     * @docid GridBaseColumn.dataField
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataField?: string;
     /**
-     * @docid
+     * @docid GridBaseColumn.dataType
      * @type Enums.GridColumnDataType
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -2443,27 +2709,27 @@ export interface GridBaseColumn {
      */
     dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
     /**
-     * @docid
+     * @docid GridBaseColumn.editorOptions
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     editorOptions?: any;
     /**
-     * @docid
+     * @docid GridBaseColumn.encodeHtml
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     encodeHtml?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.falseText
      * @default "false"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     falseText?: string;
     /**
-     * @docid
+     * @docid GridBaseColumn.filterOperations
      * @type Array<Enums.GridFilterOperations, string>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -2471,7 +2737,7 @@ export interface GridBaseColumn {
      */
     filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof'>;
     /**
-     * @docid
+     * @docid GridBaseColumn.filterType
      * @type Enums.FilterType
      * @default "include"
      * @prevFileNamespace DevExpress.ui
@@ -2479,7 +2745,7 @@ export interface GridBaseColumn {
      */
     filterType?: 'exclude' | 'include';
     /**
-     * @docid
+     * @docid GridBaseColumn.filterValue
      * @default undefined
      * @fires GridBaseOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -2487,7 +2753,7 @@ export interface GridBaseColumn {
      */
     filterValue?: any;
     /**
-     * @docid
+     * @docid GridBaseColumn.filterValues
      * @default undefined
      * @fires GridBaseOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -2495,14 +2761,14 @@ export interface GridBaseColumn {
      */
     filterValues?: Array<any>;
     /**
-     * @docid
+     * @docid GridBaseColumn.fixed
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     fixed?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.fixedPosition
      * @type Enums.HorizontalEdge
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -2510,149 +2776,78 @@ export interface GridBaseColumn {
      */
     fixedPosition?: 'left' | 'right';
     /**
-     * @docid
+     * @docid GridBaseColumn.formItem
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     formItem?: dxFormSimpleItem;
     /**
-     * @docid
+     * @docid GridBaseColumn.format
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     format?: format;
     /**
-     * @docid
+     * @docid GridBaseColumn.headerFilter
+     * @type object
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerFilter?: {
+    headerFilter?: ColumnHeaderFilter;
     /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      allowSearch?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 options:object
-       * @type_function_param1_field1 component:object
-       * @type_function_param1_field2 dataSource:DataSourceOptions
-     * @default undefined
-       */
-      dataSource?: Array<any> | ((options: { component?: any, dataSource?: DataSourceOptions }) => any) | DataSourceOptions,
-      /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @type Enums.HeaderFilterGroupInterval|number
-       * @default undefined
-       */
-      groupInterval?: 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year' | number,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      height?: number,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.CollectionSearchMode
-       * @default 'contains'
-       */
-      searchMode?: 'contains' | 'startswith' | 'equals',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      width?: number
-    };
-    /**
-     * @docid
+     * @docid GridBaseColumn.hidingPriority
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hidingPriority?: number;
     /**
-     * @docid
+     * @docid GridBaseColumn.isBand
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isBand?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.lookup
+     * @type object
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    lookup?: {
+    lookup?: ColumnLookup;
     /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      allowClearing?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 options:object
-       * @type_function_param1_field1 data:object
-       * @type_function_param1_field2 key:any
-       * @type_function_return Array<any>|DataSourceOptions|Store
-     * @default undefined
-       */
-      dataSource?: Array<any> | DataSourceOptions | Store | ((options: { data?: any, key?: any }) => Array<any> | DataSourceOptions | Store),
-      /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       * @type_function_param1 data:object
-       * @type_function_return string
-       */
-      displayExpr?: string | ((data: any) => string),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      valueExpr?: string
-    };
-    /**
-     * @docid
+     * @docid GridBaseColumn.minWidth
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     minWidth?: number;
     /**
-     * @docid
+     * @docid GridBaseColumn.name
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid
+     * @docid GridBaseColumn.ownerBand
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ownerBand?: number;
     /**
-     * @docid
+     * @docid GridBaseColumn.renderAsync
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     renderAsync?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.selectedFilterOperation
      * @type Enums.FilterOperations
      * @default undefined
      * @fires GridBaseOptions.onOptionChanged
@@ -2661,7 +2856,7 @@ export interface GridBaseColumn {
      */
     selectedFilterOperation?: '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
     /**
-     * @docid
+     * @docid GridBaseColumn.setCellValue
      * @type_function_param1 newData:object
      * @type_function_param2 value:any
      * @type_function_param3 currentRowData:object
@@ -2669,23 +2864,23 @@ export interface GridBaseColumn {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | TPromise<void>);
+    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | PromiseLike<void>);
     /**
-     * @docid
+     * @docid GridBaseColumn.showEditorAlways
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showEditorAlways?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.showInColumnChooser
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showInColumnChooser?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.sortIndex
      * @default undefined
      * @fires GridBaseOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -2693,7 +2888,7 @@ export interface GridBaseColumn {
      */
     sortIndex?: number;
     /**
-     * @docid
+     * @docid GridBaseColumn.sortOrder
      * @type Enums.SortOrder
      * @default undefined
      * @acceptValues undefined
@@ -2701,9 +2896,9 @@ export interface GridBaseColumn {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    sortOrder?: 'asc' | 'desc' | undefined;
+    sortOrder?: 'asc' | 'desc';
     /**
-     * @docid
+     * @docid GridBaseColumn.sortingMethod
      * @type_function_param1 value1:any
      * @type_function_param2 value2:any
      * @type_function_return number
@@ -2713,20 +2908,20 @@ export interface GridBaseColumn {
      */
     sortingMethod?: ((value1: any, value2: any) => number);
     /**
-     * @docid
+     * @docid GridBaseColumn.trueText
      * @default "true"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     trueText?: string;
     /**
-     * @docid
+     * @docid GridBaseColumn.validationRules
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
-     * @docid
+     * @docid GridBaseColumn.visible
      * @default true
      * @fires GridBaseOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -2734,7 +2929,7 @@ export interface GridBaseColumn {
      */
     visible?: boolean;
     /**
-     * @docid
+     * @docid GridBaseColumn.visibleIndex
      * @default undefined
      * @fires GridBaseOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -2742,7 +2937,7 @@ export interface GridBaseColumn {
      */
     visibleIndex?: number;
     /**
-     * @docid
+     * @docid GridBaseColumn.width
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -2750,52 +2945,541 @@ export interface GridBaseColumn {
     width?: number | string;
 }
 
+export interface ColumnHeaderFilter {
+  /**
+   * @docid GridBaseColumn.headerFilter.allowSearch
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  allowSearch?: boolean,
+  /**
+   * @docid GridBaseColumn.headerFilter.dataSource
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 options:object
+   * @type_function_param1_field1 component:object
+   * @type_function_param1_field2 dataSource:DataSourceOptions
+   * @default undefined
+   */
+  dataSource?: Array<any> | ((options: { component?: any, dataSource?: DataSourceOptions }) => any) | DataSourceOptions,
+  /**
+   * @docid GridBaseColumn.headerFilter.groupInterval
+   * @prevFileNamespace DevExpress.ui
+   * @type Enums.HeaderFilterGroupInterval|number
+   * @default undefined
+   */
+  groupInterval?: 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year' | number,
+  /**
+   * @docid GridBaseColumn.headerFilter.height
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  height?: number,
+  /**
+   * @docid GridBaseColumn.headerFilter.searchMode
+   * @prevFileNamespace DevExpress.ui
+   * @type Enums.CollectionSearchMode
+   * @default 'contains'
+   */
+  searchMode?: 'contains' | 'startswith' | 'equals',
+  /**
+   * @docid GridBaseColumn.headerFilter.width
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  width?: number
+}
+
+export interface ColumnLookup {
+  /**
+   * @docid GridBaseColumn.lookup.allowClearing
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  allowClearing?: boolean,
+  /**
+   * @docid GridBaseColumn.lookup.dataSource
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 options:object
+   * @type_function_param1_field1 data:object
+   * @type_function_param1_field2 key:any
+   * @type_function_return Array<any>|DataSourceOptions|Store
+   * @default undefined
+   */
+  dataSource?: Array<any> | DataSourceOptions | Store | ((options: { data?: any, key?: any }) => Array<any> | DataSourceOptions | Store),
+  /**
+   * @docid GridBaseColumn.lookup.displayExpr
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   * @type_function_param1 data:object
+   * @type_function_return string
+   */
+  displayExpr?: string | ((data: any) => string),
+  /**
+   * @docid GridBaseColumn.lookup.valueExpr
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  valueExpr?: string
+}
+
+export type GridBaseColumnButton = ColumnButtonBase;
 /**
- * @docid
+ * @docid GridBaseColumnButton
  * @type object
  */
-export interface GridBaseColumnButton {
+export interface ColumnButtonBase {
     /**
-     * @docid
+     * @docid GridBaseColumnButton.cssClass
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cssClass?: string;
     /**
-     * @docid
+     * @docid GridBaseColumnButton.hint
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hint?: string;
     /**
-     * @docid
+     * @docid GridBaseColumnButton.icon
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid
+     * @docid GridBaseColumnButton.text
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
 }
 
+/** @public */
+export type AdaptiveDetailRowPreparingEvent = EventInfo<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
+
+/** @public */
+export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
+  readonly data: any;
+  readonly key: any;
+  readonly value?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly column: any;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly cellElement: DxElement;
+  readonly row: RowObject;
+}
+
+/** @public */
+export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
+  readonly data: any;
+  readonly key: any;
+  readonly value?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly column: Column;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly cellElement: DxElement;
+  readonly row: RowObject;
+}
+
+/** @public */
+export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
+  readonly eventType: string;
+  readonly data: any;
+  readonly key: any;
+  readonly value?: any;
+  readonly text: string;
+  readonly displayValue?: any;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly rowType: string;
+  readonly cellElement: DxElement;
+  readonly row: RowObject;
+}
+
+/** @public */
+export type CellPreparedEvent = EventInfo<dxDataGrid> & {
+  readonly data: any;
+  readonly key: any;
+  readonly value?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly column: Column;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly row: RowObject;
+  readonly isSelected?: boolean;
+  readonly isExpanded?: boolean;
+  readonly isNewRow?: boolean;
+  readonly cellElement: DxElement;
+  readonly watch?: Function;
+  readonly oldValue?: any;
+}
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxDataGrid>;
+
+/** @public */
+export type ContextMenuPreparingEvent = EventInfo<dxDataGrid> & {
+  items?: Array<any>;
+  readonly target: string;
+  readonly targetElement: DxElement;
+  readonly columnIndex: number;
+  readonly column?: Column;
+  readonly rowIndex: number;
+  readonly row?: RowObject;
+}
+
+/** @public */
+export type DataErrorOccurredEvent = EventInfo<dxDataGrid> & DataErrorOccurredInfo;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxDataGrid>;
+
+/** @public */
+export type EditCanceledEvent = EventInfo<dxDataGrid> & DataChangeInfo;
+
+/** @public */
+export type EditCancelingEvent = Cancelable & EventInfo<dxDataGrid> & DataChangeInfo;
+
+/** @public */
+export type EditingStartEvent = Cancelable & EventInfo<dxDataGrid> & {
+  readonly data: any;
+  readonly key: any;
+  readonly column?: any;
+}
+
+/** @public */
+export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
+  readonly parentType: string;
+  readonly value?: any;
+  readonly setValue?: any;
+  readonly updateValueTimeout?: number;
+  readonly width?: number;
+  readonly disabled: boolean;
+  readonly rtlEnabled: boolean;
+  readonly editorElement: DxElement;
+  readonly readOnly: boolean;
+  readonly dataField?: string;
+  readonly row?: RowObject;
+}
+
+/** @public */
+export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
+  readonly parentType: string;
+  readonly value?: any;
+  readonly setValue?: any;
+  readonly updateValueTimeout?: number;
+  readonly width?: number;
+  readonly disabled: boolean;
+  readonly rtlEnabled: boolean;
+  cancel: boolean;
+  readonly editorElement: DxElement;
+  readonly readOnly: boolean;
+  editorName: string;
+  editorOptions: any;
+  readonly dataField?: string;
+  readonly row?: RowObject;
+}
+
+/** @public */
+export type ExportedEvent  = EventInfo<dxDataGrid>;
+
+/** @public */
+export type ExportingEvent = Cancelable & EventInfo<dxDataGrid> & {
+  fileName?: string;
+}
+
+/** @public */
+export type FileSavingEvent = Cancelable & {
+  readonly component: dxDataGrid;
+  readonly element: DxElement;
+  fileName?: string;
+  format?: string;
+  readonly data: Blob;
+}
+
+/** @public */
+export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
+  readonly cellElement: DxElement;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly row?: RowObject;
+  readonly column?: Column;
+}
+
+/** @public */
+export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
+  readonly cellElement: DxElement;
+  readonly prevColumnIndex: number;
+  readonly prevRowIndex: number;
+  newColumnIndex: number;
+  newRowIndex: number;
+  readonly rows: Array<RowObject>;
+  readonly columns: Array<Column>;
+  isHighlighted: boolean;
+}
+
+/** @public */
+export type FocusedRowChangedEvent = EventInfo<dxDataGrid> & {
+  readonly rowElement: DxElement;
+  readonly rowIndex: number;
+  readonly row?: RowObject;
+}
+
+/** @public */
+export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
+  readonly rowElement: DxElement;
+  readonly prevRowIndex: number;
+  newRowIndex: number;
+  readonly rows: Array<RowObject>;
+}
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxDataGrid>;
+
+/** @public */
+export type InitNewRowEvent = EventInfo<dxDataGrid> & NewRowInfo;
+
+/** @public */
+export type KeyDownEvent = NativeEventInfo<dxDataGrid> & KeyDownInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxDataGrid> & ChangedOptionInfo;
+
+/** @public */
+export type RowClickEvent = NativeEventInfo<dxDataGrid> & {
+  readonly data: any;
+  readonly key: any;
+  readonly values: Array<any>;
+  readonly columns: Array<any>;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly isSelected?: boolean;
+  readonly isExpanded?: boolean;
+  readonly isNewRow?: boolean;
+  readonly groupIndex?: number;
+  readonly rowElement: DxElement;
+  readonly handled: boolean;
+}
+
+/** @public */
+export type RowCollapsedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
+
+/** @public */
+export type RowCollapsingEvent = Cancelable & EventInfo<dxDataGrid> & RowKeyInfo;
+
+/** @public */
+export type RowDblClickEvent = NativeEventInfo<dxDataGrid> & {
+  readonly data: any;
+  readonly key: any;
+  readonly values: Array<any>;
+  readonly columns: Array<Column>;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly isSelected?: boolean;
+  readonly isExpanded?: boolean;
+  readonly isNewRow?: boolean;
+  readonly groupIndex?: number;
+  readonly rowElement: DxElement;
+}
+
+/** @public */
+export type RowExpandedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
+
+/** @public */
+export type RowExpandingEvent = Cancelable & EventInfo<dxDataGrid> & RowKeyInfo;
+
+/** @public */
+export type RowInsertedEvent = EventInfo<dxDataGrid> & RowInsertedInfo;
+
+/** @public */
+export type RowInsertingEvent = EventInfo<dxDataGrid> & RowInsertingInfo;
+
+/** @public */
+export type RowPreparedEvent = EventInfo<dxDataGrid> & {
+  readonly data: any;
+  readonly key: any;
+  readonly values: Array<any>;
+  readonly columns: Array<Column>;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly groupIndex?: number;
+  readonly isSelected?: boolean;
+  readonly isExpanded?: boolean;
+  readonly isNewRow?: boolean;
+  readonly rowElement: DxElement;
+}
+
+/** @public */
+export type RowRemovedEvent = EventInfo<dxDataGrid> & RowRemovedInfo;
+
+/** @public */
+export type RowRemovingEvent = EventInfo<dxDataGrid> & RowRemovingInfo;
+
+/** @public */
+export type RowUpdatedEvent = EventInfo<dxDataGrid> & RowUpdatedInfo;
+
+/** @public */
+export type RowUpdatingEvent = EventInfo<dxDataGrid> & RowUpdatingInfo;
+
+/** @public */
+export type RowValidatingEvent = EventInfo<dxDataGrid> & RowValidatingInfo;
+
+/** @public */
+export type SavedEvent = EventInfo<dxDataGrid> & DataChangeInfo;
+
+/** @public */
+export type SavingEvent = EventInfo<dxDataGrid> & SavingInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxDataGrid> & SelectionChangedInfo;
+
+/** @public */
+export type ToolbarPreparingEvent = EventInfo<dxDataGrid> & ToolbarPreparingInfo;
+
+
+/** @public */
+export type RowDraggingAddEvent = RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
+
+/** @public */
+export type RowDraggingChangeEvent = Cancelable & RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
+
+/** @public */
+export type RowDraggingEndEvent = Cancelable & RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
+
+/** @public */
+export type RowDraggingMoveEvent = Cancelable & RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
+
+/** @public */
+export type RowDraggingStartEvent = Cancelable & DragStartEventInfo<dxDataGrid>;
+
+/** @public */
+export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxDataGrid>;
+
+/** @public */
+export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReorderInfo;
+
+/** @public */ 
+export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
+  row?: RowObject;
+  column?: Column;
+}
+
+/** @public */
+export type ColumnButtonTemplateData = {
+  readonly component: dxDataGrid;
+  readonly data?: any;
+  readonly key?: any;
+  readonly columnIndex: number;
+  readonly column: Column;
+  readonly rowIndex: number;
+  readonly rowType: string;
+  readonly row: RowObject;
+}
+
+/** @public */
+export type ColumnCellTemplateData = {
+  readonly data?: any;
+  readonly component: dxDataGrid;
+  readonly value?: any;
+  readonly oldValue?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly row: RowObject;
+  readonly rowType: string;
+  readonly watch?: Function;
+}
+
+/** @public */
+export type ColumnEditCellTemplateData = {
+  readonly setValue?: any;
+  readonly data?: any;
+  readonly component: dxDataGrid;
+  readonly value?: any;
+  readonly displayValue?: any;
+  readonly text: string;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly row: RowObject;
+  readonly rowType: string;
+  readonly watch?: Function;
+}
+
+/** @public */
+export type ColumnGroupCellTemplateData = {
+  readonly data?: any;
+  readonly component: dxDataGrid;
+  readonly value?: any;
+  readonly text: string;
+  readonly displayValue?: any;
+  readonly columnIndex: number;
+  readonly rowIndex: number;
+  readonly column: Column;
+  readonly row: RowObject;
+  readonly summaryItems: Array<any>;
+  readonly groupContinuesMessage?: string;
+  readonly groupContinuedMessage?: string;
+}
+
+/** @public */
+export type ColumnHeaderCellTemplateData = {
+  readonly component: dxDataGrid;
+  readonly columnIndex: number;
+  readonly column: Column;
+}
+
+/** @public */
+export type MasterDetailTemplateData = {
+  readonly key: any;
+  readonly data: any;
+  readonly watch?: Function;
+}
+
+/** @public */
+export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
+
+/** @public */
+export type RowTemplateData = {
+  readonly key: any;
+  readonly data: any;
+  readonly component: dxDataGrid;
+  readonly values: Array<any>;
+  readonly rowIndex: number;
+  readonly columns: Array<Column>;
+  readonly isSelected?: boolean;
+  readonly rowType: string;
+  readonly groupIndex?: number;
+  readonly isExpanded?: boolean;
+}
+
 export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     /**
      * @docid
+     * @type Array<dxDataGridColumn|string>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    columns?: Array<dxDataGridColumn | string>;
+    columns?: Array<Column | string>;
     /**
      * @docid
      * @type_function_param1 columns:Array<dxDataGridColumn>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeColumns?: ((columns: Array<dxDataGridColumn>) => void);
+    customizeColumns?: ((columns: Array<Column>) => void);
     /**
      * @docid
      * @deprecated
@@ -2804,205 +3488,35 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => void);
+    customizeExportData?: ((columns: Array<Column>, rows: Array<RowObject>) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
-    editing?: dxDataGridEditing;
+    editing?: Editing;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    export?: {
-    /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      allowExportSelectedData?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @deprecated
-       * @type_function_param1 options:object
-       * @type_function_param1_field1 component:dxDataGrid
-       * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
-       * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
-       * @type_function_param1_field4 wrapTextEnabled:boolean
-       * @type_function_param1_field5 backgroundColor:string
-       * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
-       * @type_function_param1_field7 fillPatternColor:string
-       * @type_function_param1_field8 font:ExcelFont
-       * @type_function_param1_field9 value:string|number|date
-       * @type_function_param1_field10 numberFormat:string
-       * @type_function_param1_field11 gridCell:ExcelDataGridCell
-       */
-      customizeExcelCell?: ((options: { component?: dxDataGrid, horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: ExcelDataGridCell }) => void),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      enabled?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       * @deprecated
-       */
-      excelFilterEnabled?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       * @deprecated
-       */
-      excelWrapTextEnabled?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "DataGrid"
-       * @deprecated
-       */
-      fileName?: string,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default true
-      * @deprecated
-      */
-      ignoreExcelErrors?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       * @deprecated
-       */
-      proxyUrl?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       */
-      texts?: {
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Export all data"
-         */
-        exportAll?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Export selected rows"
-         */
-        exportSelectedRows?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Export"
-         */
-        exportTo?: string
-      }
-    };
+    export?: Export;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupPanel?: {
-    /**
-       * @docid
-     * @prevFileNamespace DevExpress.ui
-       * @default true
-       */
-      allowColumnDragging?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default "Drag a column header here to group by that column"
-       */
-      emptyPanelText?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type boolean|Enums.Mode
-       * @default false
-       */
-      visible?: boolean | 'auto'
-    };
+    groupPanel?: GroupPanel;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    grouping?: {
-    /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default true
-       */
-      allowCollapsing?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default true
-       */
-      autoExpandAll?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      contextMenuEnabled?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default 'rowClick' [for](mobile_devices)
-       * @type Enums.GridGroupingExpandMode
-       * @default "buttonClick"
-       */
-      expandMode?: 'buttonClick' | 'rowClick',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       */
-      texts?: {
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Group by This Column"
-        */
-        groupByThisColumn?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Continued from the previous page"
-         */
-        groupContinuedMessage?: string,
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Continues on the next page"
-        */
-        groupContinuesMessage?: string,
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Ungroup"
-        */
-        ungroup?: string,
-        /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default "Ungroup All"
-        */
-        ungroupAll?: string
-      }
-    };
+    grouping?: Grouping;
     /**
      * @docid
      * @default undefined
@@ -3013,35 +3527,16 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
+     * @type object
      * @public
      */
-    masterDetail?: {
-    /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      autoExpandAll?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      enabled?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 detailElement:dxElement
-       * @type_function_param2 detailInfo:object
-       * @type_function_param2_field1 key:any
-       * @type_function_param2_field2 data:object
-       * @type_function_param2_field3 watch:function
-       */
-      template?: template | ((detailElement: TElement, detailInfo: { key?: any, data?: any, watch?: Function }) => any)
-    };
+    masterDetail?: MasterDetail;
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
      * @type_function_param1_field6 key:any
@@ -3052,17 +3547,20 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field11 column:object
      * @type_function_param1_field12 rowIndex:number
      * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:dxElement
+     * @type_function_param1_field14 cellElement:DxElement
      * @type_function_param1_field15 row:dxDataGridRowObject
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, event?: TEvent, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: TElement, row?: dxDataGridRowObject }) => void) | string;
+    onCellClick?: ((e: CellClickEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
      * @type_function_param1_field6 key:any
@@ -3073,17 +3571,20 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field11 column:dxDataGridColumn
      * @type_function_param1_field12 rowIndex:number
      * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:dxElement
+     * @type_function_param1_field14 cellElement:DxElement
      * @type_function_param1_field15 row:dxDataGridRowObject
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellDblClick?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, event?: TEvent, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, cellElement?: TElement, row?: dxDataGridRowObject }) => void);
+    onCellDblClick?: ((e: CellDblClickEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 eventType:string
      * @type_function_param1_field5 data:object
      * @type_function_param1_field6 key:any
@@ -3094,17 +3595,20 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field11 rowIndex:number
      * @type_function_param1_field12 column:dxDataGridColumn
      * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:dxElement
+     * @type_function_param1_field14 cellElement:DxElement
      * @type_function_param1_field15 row:dxDataGridRowObject
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellHoverChanged?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: TElement, row?: dxDataGridRowObject }) => void);
+    onCellHoverChanged?: ((e: CellHoverChangedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 value:any
@@ -3118,7 +3622,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field14 isSelected:boolean
      * @type_function_param1_field15 isExpanded:boolean
      * @type_function_param1_field16 isNewRow:boolean
-     * @type_function_param1_field17 cellElement:dxElement
+     * @type_function_param1_field17 cellElement:DxElement
      * @type_function_param1_field18 watch:function
      * @type_function_param1_field19 oldValue:any
      * @default null
@@ -3126,13 +3630,16 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellPrepared?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: TElement, watch?: Function, oldValue?: any }) => void);
+    onCellPrepared?: ((e: CellPreparedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:Object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 items:Array<Object>
      * @type_function_param1_field5 target:string
-     * @type_function_param1_field6 targetElement:dxElement
+     * @type_function_param1_field6 targetElement:DxElement
      * @type_function_param1_field7 columnIndex:number
      * @type_function_param1_field8 column:dxDataGridColumn
      * @type_function_param1_field9 rowIndex:number
@@ -3142,10 +3649,13 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, items?: Array<any>, target?: string, targetElement?: TElement, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, row?: dxDataGridRowObject }) => void);
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 cancel:boolean
@@ -3155,10 +3665,13 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditingStart?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => void);
+    onEditingStart?: ((e: EditingStartEvent) => void);
     /**
      * @docid
      * @type_function_param1 options:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 parentType:string
      * @type_function_param1_field5 value:any
      * @type_function_param1_field6 setValue(newValue, newText):any
@@ -3166,7 +3679,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field8 width:number
      * @type_function_param1_field9 disabled:boolean
      * @type_function_param1_field10 rtlEnabled:boolean
-     * @type_function_param1_field11 editorElement:dxElement
+     * @type_function_param1_field11 editorElement:DxElement
      * @type_function_param1_field12 readOnly:boolean
      * @type_function_param1_field13 dataField:string
      * @type_function_param1_field14 row:dxDataGridRowObject
@@ -3175,10 +3688,13 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPrepared?: ((options: { component?: dxDataGrid, element?: TElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: TElement, readOnly?: boolean, dataField?: string, row?: dxDataGridRowObject }) => void);
+    onEditorPrepared?: ((options: EditorPreparedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 parentType:string
      * @type_function_param1_field5 value:any
      * @type_function_param1_field6 setValue(newValue, newText):any
@@ -3187,7 +3703,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field9 disabled:boolean
      * @type_function_param1_field10 rtlEnabled:boolean
      * @type_function_param1_field11 cancel:boolean
-     * @type_function_param1_field12 editorElement:dxElement
+     * @type_function_param1_field12 editorElement:DxElement
      * @type_function_param1_field13 readOnly:boolean
      * @type_function_param1_field14 editorName:string
      * @type_function_param1_field15 editorOptions:object
@@ -3198,19 +3714,26 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPreparing?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: TElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxDataGridRowObject }) => void);
+    onEditorPreparing?: ((e: EditorPreparingEvent) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated
      */
-    onExported?: ((e: { component?: dxDataGrid, element?: TElement, model?: any }) => void);
+    onExported?: ((e: ExportedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
      * @default null
@@ -3218,10 +3741,12 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onExporting?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, fileName?: string, cancel?: boolean }) => void);
+    onExporting?: ((e: ExportingEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 fileName:string
      * @type_function_param1_field4 format:string
      * @type_function_param1_field5 data:BLOB
@@ -3232,11 +3757,14 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @public
      * @deprecated
      */
-    onFileSaving?: ((e: { component?: dxDataGrid, element?: TElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => void);
+    onFileSaving?: ((e: FileSavingEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cellElement:dxElement
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 cellElement:DxElement
      * @type_function_param1_field5 columnIndex:number
      * @type_function_param1_field6 rowIndex:number
      * @type_function_param1_field7 row:dxDataGridRowObject
@@ -3246,11 +3774,14 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedCellChanged?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, cellElement?: TElement, columnIndex?: number, rowIndex?: number, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => void);
+    onFocusedCellChanged?: ((e: FocusedCellChangedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cellElement:dxElement
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 cellElement:DxElement
      * @type_function_param1_field5 prevColumnIndex:number
      * @type_function_param1_field6 prevRowIndex:number
      * @type_function_param1_field7 newColumnIndex:number
@@ -3265,11 +3796,14 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedCellChanging?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, cellElement?: TElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: TEvent, rows?: Array<dxDataGridRowObject>, columns?: Array<dxDataGridColumn>, cancel?: boolean, isHighlighted?: boolean }) => void);
+    onFocusedCellChanging?: ((e: FocusedCellChangingEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rowElement:dxElement
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 rowElement:DxElement
      * @type_function_param1_field5 rowIndex:number
      * @type_function_param1_field6 row:dxDataGridRowObject
      * @default null
@@ -3277,11 +3811,14 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedRowChanged?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, rowElement?: TElement, rowIndex?: number, row?: dxDataGridRowObject }) => void);
+    onFocusedRowChanged?: ((e: FocusedRowChangedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rowElement:dxElement
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 rowElement:DxElement
      * @type_function_param1_field5 prevRowIndex:number
      * @type_function_param1_field6 newRowIndex:number
      * @type_function_param1_field7 event:event
@@ -3292,10 +3829,13 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedRowChanging?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, rowElement?: TElement, prevRowIndex?: number, newRowIndex?: number, event?: TEvent, rows?: Array<dxDataGridRowObject>, cancel?: boolean }) => void);
+    onFocusedRowChanging?: ((e: FocusedRowChangingEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
      * @type_function_param1_field6 key:any
@@ -3307,17 +3847,20 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
      * @type_function_param1_field14 groupIndex:number
-     * @type_function_param1_field15 rowElement:dxElement
+     * @type_function_param1_field15 rowElement:DxElement
      * @type_function_param1_field16 handled:boolean
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowClick?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, event?: TEvent, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: TElement, handled?: boolean }) => void) | string;
+    onRowClick?: ((e: RowClickEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
      * @type_function_param1_field6 key:any
@@ -3329,16 +3872,19 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
      * @type_function_param1_field14 groupIndex:number
-     * @type_function_param1_field15 rowElement:dxElement
+     * @type_function_param1_field15 rowElement:DxElement
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowDblClick?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, event?: TEvent, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: TElement }) => void);
+    onRowDblClick?: ((e: RowDblClickEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
      * @type_function_param1_field6 values:Array<any>
@@ -3349,13 +3895,13 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param1_field11 isSelected:boolean
      * @type_function_param1_field12 isExpanded:boolean
      * @type_function_param1_field13 isNewRow:boolean
-     * @type_function_param1_field14 rowElement:dxElement
+     * @type_function_param1_field14 rowElement:DxElement
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowPrepared?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: TElement }) => void);
+    onRowPrepared?: ((e: RowPreparedEvent) => void);
     /**
      * @docid
      * @type boolean|object|Enums.Mode
@@ -3364,7 +3910,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @public
      */
     remoteOperations?: boolean | {
-    /**
+      /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default false
@@ -3403,7 +3949,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     } | 'auto';
     /**
      * @docid
-     * @type_function_param1 rowElement:dxElement
+     * @type_function_param1 rowElement:DxElement
      * @type_function_param2 rowInfo:object
      * @type_function_param2_field1 key:any
      * @type_function_param2_field2 data:any
@@ -3418,21 +3964,21 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowTemplate?: template | ((rowElement: TElement, rowInfo: { key?: any, data?: any, component?: dxDataGrid, values?: Array<any>, rowIndex?: number, columns?: Array<dxDataGridColumn>, isSelected?: boolean, rowType?: string, groupIndex?: number, isExpanded?: boolean }) => any);
+    rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
-    scrolling?: dxDataGridScrolling;
+    scrolling?: Scrolling;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
-    selection?: dxDataGridSelection;
+    selection?: Selection;
     /**
      * @docid
      * @type Filter expression
@@ -3444,268 +3990,522 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     selectionFilter?: string | Array<any> | Function;
     /**
      * @docid
+     * @type Array<object>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    sortByGroupSummaryInfo?: Array<{
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      groupColumn?: string,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type Enums.SortOrder
-       * @default undefined
-       * @acceptValues undefined
-       */
-      sortOrder?: 'asc' | 'desc',
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      summaryItem?: string | number
-    }>;
+    sortByGroupSummaryInfo?: Array<dxDataGridSortByGroupSummaryInfoItem>;
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    summary?: {
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 options:object
-       * @type_function_param1_field1 component:dxDataGrid
-       * @type_function_param1_field2 name:string
-       * @type_function_param1_field3 summaryProcess:string
-       * @type_function_param1_field4 value:any
-       * @type_function_param1_field5 totalValue:any
-       * @type_function_param1_field6 groupIndex:number
-       */
-      calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any, groupIndex?: number }) => void),
-      /**
-       * @docid
-       * @type Array<object>
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      groupItems?: Array<{
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default false
-         */
-        alignByColumn?: boolean,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        column?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 itemInfo:object
-         * @type_function_param1_field1 value:string|number|date
-         * @type_function_param1_field2 valueText:string
-         * @type_function_return string
-         */
-        customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        displayFormat?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        name?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        showInColumn?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default false
-         */
-        showInGroupFooter?: boolean,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         */
-        skipEmptyValues?: boolean,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type Enums.SummaryType|string
-         * @default undefined
-         */
-        summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        valueFormat?: format
-      }>,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      recalculateWhileEditing?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default true
-       */
-      skipEmptyValues?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       */
-      texts?: {
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Avg={0}"
-         */
-        avg?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Avg of {1} is {0}"
-         */
-        avgOtherColumn?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Count={0}"
-         */
-        count?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Max={0}"
-         */
-        max?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Max of {1} is {0}"
-         */
-        maxOtherColumn?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Min={0}"
-         */
-        min?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Min of {1} is {0}"
-         */
-        minOtherColumn?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Sum={0}"
-         */
-        sum?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default "Sum of {1} is {0}"
-         */
-        sumOtherColumn?: string
-      },
-      /**
-       * @docid
-       * @type Array<object>
-       * @prevFileNamespace DevExpress.ui
-       * @default undefined
-       */
-      totalItems?: Array<{
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type Enums.HorizontalAlignment
-         * @default undefined
-         */
-        alignment?: 'center' | 'left' | 'right',
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        column?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        cssClass?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type_function_param1 itemInfo:object
-         * @type_function_param1_field1 value:string|number|date
-         * @type_function_param1_field2 valueText:string
-         * @type_function_return string
-         */
-        customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string),
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        displayFormat?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        name?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        showInColumn?: string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         */
-        skipEmptyValues?: boolean,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @type Enums.SummaryType|string
-         * @default undefined
-         */
-        summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string,
-        /**
-         * @docid
-         * @prevFileNamespace DevExpress.ui
-         * @default undefined
-         */
-        valueFormat?: format
-      }>
-    };
+    summary?: Summary;
 }
-export interface dxDataGridEditing extends GridBaseEditing {
+
+export interface ExcelCellInfo {
+  readonly component: dxDataGrid;
+  horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
+  verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
+  wrapTextEnabled?: boolean;
+  backgroundColor?: string;
+  fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid';
+  fillPatternColor?: string;
+  font?: ExcelFont;
+  readonly value?: string | number | Date;
+  numberFormat?: string;
+  gridCell?: ExcelDataGridCell;
+}
+
+export interface Export {
+  /**
+   * @docid dxDataGridOptions.export.allowExportSelectedData
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  allowExportSelectedData?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.customizeExcelCell
+   * @prevFileNamespace DevExpress.ui
+   * @deprecated
+   * @type_function_param1 options:object
+   * @type_function_param1_field1 component:dxDataGrid
+   * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
+   * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
+   * @type_function_param1_field4 wrapTextEnabled:boolean
+   * @type_function_param1_field5 backgroundColor:string
+   * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
+   * @type_function_param1_field7 fillPatternColor:string
+   * @type_function_param1_field8 font:ExcelFont
+   * @type_function_param1_field9 value:string|number|date
+   * @type_function_param1_field10 numberFormat:string
+   * @type_function_param1_field11 gridCell:ExcelDataGridCell
+   */
+  customizeExcelCell?: ((options: ExcelCellInfo) => void),
+  /**
+   * @docid dxDataGridOptions.export.enabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  enabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.excelFilterEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   * @deprecated
+   */
+  excelFilterEnabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.excelWrapTextEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   * @deprecated
+   */
+  excelWrapTextEnabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.fileName
+   * @prevFileNamespace DevExpress.ui
+   * @default "DataGrid"
+   * @deprecated
+   */
+  fileName?: string,
+  /**
+   * @docid dxDataGridOptions.export.ignoreExcelErrors
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   * @deprecated
+   */
+  ignoreExcelErrors?: boolean,
+  /**
+   * @docid dxDataGridOptions.export.proxyUrl
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   * @deprecated
+   */
+  proxyUrl?: string,
+  /**
+   * @docid dxDataGridOptions.export.texts
+   * @type object
+   * @prevFileNamespace DevExpress.ui
+   */
+  texts?: ExportTexts
+}
+
+export interface ExportTexts {
+  /**
+   * @docid dxDataGridOptions.export.texts.exportAll
+   * @prevFileNamespace DevExpress.ui
+   * @default "Export all data"
+   */
+  exportAll?: string,
+  /**
+   * @docid dxDataGridOptions.export.texts.exportSelectedRows
+   * @prevFileNamespace DevExpress.ui
+   * @default "Export selected rows"
+   */
+  exportSelectedRows?: string,
+  /**
+   * @docid dxDataGridOptions.export.texts.exportTo
+   * @prevFileNamespace DevExpress.ui
+   * @default "Export"
+   */
+  exportTo?: string
+}
+
+export interface GroupPanel {
+  /**
+   * @docid dxDataGridOptions.groupPanel.allowColumnDragging
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  allowColumnDragging?: boolean,
+  /**
+   * @docid dxDataGridOptions.groupPanel.emptyPanelText
+   * @prevFileNamespace DevExpress.ui
+   * @default "Drag a column header here to group by that column"
+   */
+  emptyPanelText?: string,
+  /**
+   * @docid dxDataGridOptions.groupPanel.visible
+   * @prevFileNamespace DevExpress.ui
+   * @type boolean|Enums.Mode
+   * @default false
+   */
+  visible?: boolean | 'auto'
+}
+
+export interface Grouping {
+  /**
+   * @docid dxDataGridOptions.grouping.allowCollapsing
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  allowCollapsing?: boolean,
+  /**
+   * @docid dxDataGridOptions.grouping.autoExpandAll
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  autoExpandAll?: boolean,
+  /**
+   * @docid dxDataGridOptions.grouping.contextMenuEnabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  contextMenuEnabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.grouping.expandMode
+   * @prevFileNamespace DevExpress.ui
+   * @default 'rowClick' [for](mobile_devices)
+   * @type Enums.GridGroupingExpandMode
+   * @default "buttonClick"
+   */
+  expandMode?: 'buttonClick' | 'rowClick',
+  /**
+   * @docid dxDataGridOptions.grouping.texts
+   * @type object
+   * @prevFileNamespace DevExpress.ui
+   */
+  texts?: GroupingTexts
+}
+
+export interface GroupingTexts {
+  /**
+   * @docid dxDataGridOptions.grouping.texts.groupByThisColumn
+   * @prevFileNamespace DevExpress.ui
+   * @default "Group by This Column"
+   */
+  groupByThisColumn?: string,
+  /**
+   * @docid dxDataGridOptions.grouping.texts.groupContinuedMessage
+   * @prevFileNamespace DevExpress.ui
+   * @default "Continued from the previous page"
+   */
+  groupContinuedMessage?: string,
+  /**
+   * @docid dxDataGridOptions.grouping.texts.groupContinuesMessage
+   * @prevFileNamespace DevExpress.ui
+   * @default "Continues on the next page"
+   */
+  groupContinuesMessage?: string,
+  /**
+   * @docid dxDataGridOptions.grouping.texts.ungroup
+   * @prevFileNamespace DevExpress.ui
+   * @default "Ungroup"
+   */
+  ungroup?: string,
+  /**
+   * @docid dxDataGridOptions.grouping.texts.ungroupAll
+   * @prevFileNamespace DevExpress.ui
+   * @default "Ungroup All"
+   */
+  ungroupAll?: string
+}
+
+export interface MasterDetail {
+  /**
+   * @docid dxDataGridOptions.masterDetail.autoExpandAll
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  autoExpandAll?: boolean,
+  /**
+   * @docid dxDataGridOptions.masterDetail.enabled
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  enabled?: boolean,
+  /**
+   * @docid dxDataGridOptions.masterDetail.template
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 detailElement:DxElement
+   * @type_function_param2 detailInfo:object
+   * @type_function_param2_field1 key:any
+   * @type_function_param2_field2 data:object
+   * @type_function_param2_field3 watch:function
+   */
+  template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData) => any)
+}
+
+export interface dxDataGridSortByGroupSummaryInfoItem {
+    /**
+     * @docid dxDataGridOptions.sortByGroupSummaryInfo.groupColumn
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    groupColumn?: string,
+    /**
+     * @docid dxDataGridOptions.sortByGroupSummaryInfo.sortOrder
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.SortOrder
+     * @default undefined
+     * @acceptValues undefined
+     */
+    sortOrder?: 'asc' | 'desc',
+    /**
+     * @docid dxDataGridOptions.sortByGroupSummaryInfo.summaryItem
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    summaryItem?: string | number
+}
+
+export interface CustomSummaryInfo {
+  readonly component: dxDataGrid;
+  readonly name?: string;
+  readonly summaryProcess: string;
+  readonly value?: any;
+  totalValue?: any;
+  readonly groupIndex?: number;
+}
+
+export interface Summary {
+  /**
+   * @docid dxDataGridOptions.summary.calculateCustomSummary
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 options:object
+   * @type_function_param1_field1 component:dxDataGrid
+   * @type_function_param1_field2 name:string
+   * @type_function_param1_field3 summaryProcess:string
+   * @type_function_param1_field4 value:any
+   * @type_function_param1_field5 totalValue:any
+   * @type_function_param1_field6 groupIndex:number
+   */
+  calculateCustomSummary?: ((options: CustomSummaryInfo) => void),
+  /**
+   * @docid dxDataGridOptions.summary.groupItems
+   * @type Array<object>
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  groupItems?: Array<SummaryGroupItem>,
+  /**
+   * @docid dxDataGridOptions.summary.recalculateWhileEditing
+   * @prevFileNamespace DevExpress.ui
+   * @default false
+   */
+  recalculateWhileEditing?: boolean,
+  /**
+   * @docid dxDataGridOptions.summary.skipEmptyValues
+   * @prevFileNamespace DevExpress.ui
+   * @default true
+   */
+  skipEmptyValues?: boolean,
+  /**
+   * @docid dxDataGridOptions.summary.texts
+   * @type object
+   * @prevFileNamespace DevExpress.ui
+   */
+  texts?: SummaryTexts,
+  /**
+   * @docid dxDataGridOptions.summary.totalItems
+   * @type Array<object>
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  totalItems?: Array<SummaryTotalItem>
+}
+
+export interface SummaryItemTextInfo {
+  readonly value?: string | number | Date;
+  readonly valueText: string;
+}
+
+export interface SummaryGroupItem {
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.alignByColumn
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    alignByColumn?: boolean,
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.column
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    column?: string,
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.customizeText
+     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 itemInfo:object
+     * @type_function_param1_field1 value:string|number|date
+     * @type_function_param1_field2 valueText:string
+     * @type_function_return string
+     */
+    customizeText?: ((itemInfo: SummaryItemTextInfo) => string),
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.displayFormat
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    displayFormat?: string,
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.name
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    name?: string,
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.showInColumn
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    showInColumn?: string,
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.showInGroupFooter
+     * @prevFileNamespace DevExpress.ui
+     * @default false
+     */
+    showInGroupFooter?: boolean,
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.skipEmptyValues
+     * @prevFileNamespace DevExpress.ui
+     */
+    skipEmptyValues?: boolean,
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.summaryType
+     * @prevFileNamespace DevExpress.ui
+     * @type Enums.SummaryType|string
+     * @default undefined
+     */
+    summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string,
+    /**
+     * @docid dxDataGridOptions.summary.groupItems.valueFormat
+     * @prevFileNamespace DevExpress.ui
+     * @default undefined
+     */
+    valueFormat?: format
+}
+
+export interface SummaryTotalItem {
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.alignment
+   * @prevFileNamespace DevExpress.ui
+   * @type Enums.HorizontalAlignment
+   * @default undefined
+   */
+  alignment?: 'center' | 'left' | 'right',
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.column
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  column?: string,
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.cssClass
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  cssClass?: string,
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.customizeText
+   * @prevFileNamespace DevExpress.ui
+   * @type_function_param1 itemInfo:object
+   * @type_function_param1_field1 value:string|number|date
+   * @type_function_param1_field2 valueText:string
+   * @type_function_return string
+   */
+  customizeText?: ((itemInfo: SummaryItemTextInfo) => string),
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.displayFormat
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  displayFormat?: string,
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.name
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  name?: string,
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.showInColumn
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  showInColumn?: string,
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.skipEmptyValues
+   * @prevFileNamespace DevExpress.ui
+   */
+  skipEmptyValues?: boolean,
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.summaryType
+   * @prevFileNamespace DevExpress.ui
+   * @type Enums.SummaryType|string
+   * @default undefined
+   */
+  summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string,
+  /**
+   * @docid dxDataGridOptions.summary.totalItems.valueFormat
+   * @prevFileNamespace DevExpress.ui
+   * @default undefined
+   */
+  valueFormat?: format
+}
+
+export interface SummaryTexts {
+    /**
+     * @docid dxDataGridOptions.summary.texts.avg
+     * @prevFileNamespace DevExpress.ui
+     * @default "Avg={0}"
+     */
+    avg?: string,
+    /**
+     * @docid dxDataGridOptions.summary.texts.avgOtherColumn
+     * @prevFileNamespace DevExpress.ui
+     * @default "Avg of {1} is {0}"
+     */
+    avgOtherColumn?: string,
+    /**
+     * @docid dxDataGridOptions.summary.texts.count
+     * @prevFileNamespace DevExpress.ui
+     * @default "Count={0}"
+     */
+    count?: string,
+    /**
+     * @docid dxDataGridOptions.summary.texts.max
+     * @prevFileNamespace DevExpress.ui
+     * @default "Max={0}"
+     */
+    max?: string,
+    /**
+     * @docid dxDataGridOptions.summary.texts.maxOtherColumn
+     * @prevFileNamespace DevExpress.ui
+     * @default "Max of {1} is {0}"
+     */
+    maxOtherColumn?: string,
+    /**
+     * @docid dxDataGridOptions.summary.texts.min
+     * @prevFileNamespace DevExpress.ui
+     * @default "Min={0}"
+     */
+    min?: string,
+    /**
+     * @docid dxDataGridOptions.summary.texts.minOtherColumn
+     * @prevFileNamespace DevExpress.ui
+     * @default "Min of {1} is {0}"
+     */
+    minOtherColumn?: string,
+    /**
+     * @docid dxDataGridOptions.summary.texts.sum
+     * @prevFileNamespace DevExpress.ui
+     * @default "Sum={0}"
+     */
+    sum?: string,
+    /**
+     * @docid dxDataGridOptions.summary.texts.sumOtherColumn
+     * @prevFileNamespace DevExpress.ui
+     * @default "Sum of {1} is {0}"
+     */
+    sumOtherColumn?: string
+}
+
+export type dxDataGridEditing = Editing;
+
+export interface Editing extends EditingBase {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
      * @default false
@@ -3723,7 +4523,7 @@ export interface dxDataGridEditing extends GridBaseEditing {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    allowDeleting?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
+    allowDeleting?: boolean | ((options: { component?: dxDataGrid, row?: RowObject }) => boolean);
     /**
      * @docid dxDataGridOptions.editing.allowUpdating
      * @default false
@@ -3734,7 +4534,7 @@ export interface dxDataGridEditing extends GridBaseEditing {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    allowUpdating?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
+    allowUpdating?: boolean | ((options: { component?: dxDataGrid, row?: RowObject }) => boolean);
     /**
      * @docid dxDataGridOptions.editing.texts
      * @prevFileNamespace DevExpress.ui
@@ -3742,7 +4542,10 @@ export interface dxDataGridEditing extends GridBaseEditing {
      */
     texts?: any;
 }
-export interface dxDataGridScrolling extends GridBaseScrolling {
+
+export type dxDataGridScrolling = Scrolling;
+
+export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxDataGridOptions.scrolling.mode
      * @type Enums.GridScrollingMode
@@ -3752,7 +4555,10 @@ export interface dxDataGridScrolling extends GridBaseScrolling {
      */
     mode?: 'infinite' | 'standard' | 'virtual';
 }
-export interface dxDataGridSelection extends GridBaseSelection {
+
+export type dxDataGridSelection = Selection;
+
+export interface Selection extends SelectionBase {
     /**
      * @docid dxDataGridOptions.selection.deferred
      * @default false
@@ -3786,7 +4592,7 @@ export interface dxDataGridSelection extends GridBaseSelection {
  * @public
  */
 declare class dxDataGrid extends Widget implements GridBase {
-    constructor(element: TElement, options?: dxDataGridOptions)
+    constructor(element: UserDefinedElement, options?: dxDataGridOptions)
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -3802,7 +4608,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): TPromise<void>;
+    addRow(): DxPromise<void>;
     /**
      * @docid
      * @publicName clearGrouping()
@@ -3826,7 +4632,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseRow(key: any): TPromise<void>;
+    collapseRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName expandAll(groupIndex)
@@ -3843,7 +4649,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandRow(key: any): TPromise<void>;
+    expandRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName exportToExcel(selectionOnly)
@@ -3860,7 +4666,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowKeys(): Array<any> & TPromise<any>;
+    getSelectedRowKeys(): Array<any> & DxPromise<any>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
@@ -3868,7 +4674,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowsData(): Array<any> & TPromise<any>;
+    getSelectedRowsData(): Array<any> & DxPromise<any>;
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
@@ -3885,7 +4691,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getVisibleColumns(): Array<dxDataGridColumn>;
+    getVisibleColumns(): Array<Column>;
     /**
      * @docid
      * @publicName getVisibleColumns(headerLevel)
@@ -3894,7 +4700,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getVisibleColumns(headerLevel: number): Array<dxDataGridColumn>;
+    getVisibleColumns(headerLevel: number): Array<Column>;
     /**
      * @docid
      * @publicName getVisibleRows()
@@ -3902,7 +4708,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getVisibleRows(): Array<dxDataGridRowObject>;
+    getVisibleRows(): Array<RowObject>;
     /**
      * @docid
      * @publicName isRowExpanded(key)
@@ -3932,7 +4738,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     totalCount(): number;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -3951,8 +4757,8 @@ declare class dxDataGrid extends Widget implements GridBase {
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
-    deselectAll(): TPromise<void>;
-    deselectRows(keys: Array<any>): TPromise<any>;
+    deselectAll(): DxPromise<void>;
+    deselectRows(keys: Array<any>): DxPromise<any>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
@@ -3961,14 +4767,14 @@ declare class dxDataGrid extends Widget implements GridBase {
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: TElement): void;
-    getCellElement(rowIndex: number, dataField: string): TElement | undefined;
-    getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
+    focus(element: UserDefinedElement): void;
+    getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
+    getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
     getKeyByRowIndex(rowIndex: number): any;
-    getRowElement(rowIndex: number): TElementsArray | undefined;
+    getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
@@ -3981,17 +4787,17 @@ declare class dxDataGrid extends Widget implements GridBase {
     navigateToRow(key: any): void;
     pageCount(): number;
     pageIndex(): number;
-    pageIndex(newIndex: number): TPromise<void>;
+    pageIndex(newIndex: number): DxPromise<void>;
     pageSize(): number;
     pageSize(value: number): void;
-    refresh(): TPromise<void>;
-    refresh(changesOnly: boolean): TPromise<void>;
+    refresh(): DxPromise<void>;
+    refresh(changesOnly: boolean): DxPromise<void>;
     repaintRows(rowIndexes: Array<number>): void;
-    saveEditData(): TPromise<void>;
+    saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
-    selectAll(): TPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
+    selectAll(): DxPromise<void>;
+    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;
@@ -3999,42 +4805,44 @@ declare class dxDataGrid extends Widget implements GridBase {
     updateDimensions(): void;
 }
 
+export type dxDataGridColumn = Column;
+
 /**
- * @docid
+ * @docid dxDataGridColumn
  * @inherits GridBaseColumn
  * @type object
  */
-export interface dxDataGridColumn extends GridBaseColumn {
+export interface Column extends ColumnBase {
     /**
-     * @docid
+     * @docid dxDataGridColumn.allowExporting
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowExporting?: boolean;
     /**
-     * @docid
+     * @docid dxDataGridColumn.allowGrouping
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowGrouping?: boolean;
     /**
-     * @docid
+     * @docid dxDataGridColumn.autoExpandGroup
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoExpandGroup?: boolean;
     /**
-     * @docid
+     * @docid dxDataGridColumn.buttons
      * @type Array<Enums.GridColumnButtonName,dxDataGridColumnButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxDataGridColumnButton>;
+    buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton>;
     /**
-     * @docid
+     * @docid dxDataGridColumn.calculateGroupValue
      * @type_function_param1 rowData:object
      * @type_function_return any
      * @prevFileNamespace DevExpress.ui
@@ -4042,8 +4850,8 @@ export interface dxDataGridColumn extends GridBaseColumn {
      */
     calculateGroupValue?: string | ((rowData: any) => any);
     /**
-     * @docid
-     * @type_function_param1 cellElement:dxElement
+     * @docid dxDataGridColumn.cellTemplate
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 data:object
      * @type_function_param2_field2 component:dxDataGrid
@@ -4060,17 +4868,18 @@ export interface dxDataGridColumn extends GridBaseColumn {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((cellElement: TElement, cellInfo: { data?: any, component?: dxDataGrid, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, row?: dxDataGridRowObject, rowType?: string, watch?: Function }) => any);
+    cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData) => any);
     /**
-     * @docid
+     * @docid dxDataGridColumn.columns
+     * @type Array<dxDataGridColumn|string>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    columns?: Array<dxDataGridColumn | string>;
+    columns?: Array<Column | string>;
     /**
-     * @docid
-     * @type_function_param1 cellElement:dxElement
+     * @docid dxDataGridColumn.editCellTemplate
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 setValue(newValue, newText):any
      * @type_function_param2_field2 data:object
@@ -4087,10 +4896,10 @@ export interface dxDataGridColumn extends GridBaseColumn {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editCellTemplate?: template | ((cellElement: TElement, cellInfo: { setValue?: any, data?: any, component?: dxDataGrid, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, row?: dxDataGridRowObject, rowType?: string, watch?: Function }) => any);
+    editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
-     * @docid
-     * @type_function_param1 cellElement:dxElement
+     * @docid dxDataGridColumn.groupCellTemplate
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 data:object
      * @type_function_param2_field2 component:dxDataGrid
@@ -4107,9 +4916,9 @@ export interface dxDataGridColumn extends GridBaseColumn {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupCellTemplate?: template | ((cellElement: TElement, cellInfo: { data?: any, component?: dxDataGrid, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, row?: dxDataGridRowObject, summaryItems?: Array<any>, groupContinuesMessage?: string, groupContinuedMessage?: string }) => any);
+    groupCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnGroupCellTemplateData) => any);
     /**
-     * @docid
+     * @docid dxDataGridColumn.groupIndex
      * @default undefined
      * @fires dxDataGridOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -4117,8 +4926,8 @@ export interface dxDataGridColumn extends GridBaseColumn {
      */
     groupIndex?: number;
     /**
-     * @docid
-     * @type_function_param1 columnHeader:dxElement
+     * @docid dxDataGridColumn.headerCellTemplate
+     * @type_function_param1 columnHeader:DxElement
      * @type_function_param2 headerInfo:object
      * @type_function_param2_field1 component:dxDataGrid
      * @type_function_param2_field2 columnIndex:number
@@ -4126,16 +4935,16 @@ export interface dxDataGridColumn extends GridBaseColumn {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: TElement, headerInfo: { component?: dxDataGrid, columnIndex?: number, column?: dxDataGridColumn }) => any);
+    headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData) => any);
     /**
-     * @docid
+     * @docid dxDataGridColumn.showWhenGrouped
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showWhenGrouped?: boolean;
     /**
-     * @docid
+     * @docid dxDataGridColumn.type
      * @publicName type
      * @type Enums.GridCommandColumnType
      * @prevFileNamespace DevExpress.ui
@@ -4144,24 +4953,25 @@ export interface dxDataGridColumn extends GridBaseColumn {
     type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
 }
 
+export type dxDataGridColumnButton = ColumnButton;
 /**
- * @docid
+ * @docid dxDataGridColumnButton
  * @inherits GridBaseColumnButton
  * @type object
  */
-export interface dxDataGridColumnButton extends GridBaseColumnButton {
+export interface ColumnButton extends ColumnButtonBase {
     /**
-     * @docid
+     * @docid dxDataGridColumnButton.name
      * @type Enums.GridColumnButtonName|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
     /**
-     * @docid
+     * @docid dxDataGridColumnButton.onClick
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDataGrid
-     * @type_function_param1_field2 element:dxElement
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 row:dxDataGridRowObject
@@ -4169,10 +4979,10 @@ export interface dxDataGridColumnButton extends GridBaseColumnButton {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDataGrid, element?: TElement, model?: any, event?: TEvent, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => void) | string;
+    onClick?: ((e: ColumnButtonClickEvent) => void);
     /**
-     * @docid
-     * @type_function_param1 cellElement:dxElement
+     * @docid dxDataGridColumnButton.template
+     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 component:dxDataGrid
      * @type_function_param2_field2 data:object
@@ -4186,9 +4996,9 @@ export interface dxDataGridColumnButton extends GridBaseColumnButton {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: { component?: dxDataGrid, data?: any, key?: any, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject }) => string | TElement);
+    template?: template | ((cellElement: DxElement, cellInfo: ColumnButtonTemplateData) => string | UserDefinedElement);
     /**
-     * @docid
+     * @docid dxDataGridColumnButton.visible
      * @default true
      * @type_function_param1 options:object
      * @type_function_param1_field1 component:dxDataGrid
@@ -4198,80 +5008,85 @@ export interface dxDataGridColumnButton extends GridBaseColumnButton {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    visible?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => boolean);
+    visible?: boolean | ((options: { component?: dxDataGrid, row?: RowObject, column?: Column }) => boolean);
 }
+
+export type dxDataGridRowObject = RowObject;
 
 /**
- * @docid
+ * @docid dxDataGridRowObject
  * @type object
  */
-export interface dxDataGridRowObject {
+export interface RowObject {
     /**
-     * @docid
+     * @docid dxDataGridRowObject.data
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    data?: any;
+    readonly data: any;
     /**
-     * @docid
+     * @docid dxDataGridRowObject.groupIndex
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupIndex?: number;
+    readonly groupIndex?: number;
     /**
-     * @docid
+     * @docid dxDataGridRowObject.isEditing
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    isEditing?: boolean;
+    readonly isEditing?: boolean;
     /**
-     * @docid
+     * @docid dxDataGridRowObject.isExpanded
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    isExpanded?: boolean;
+    readonly isExpanded?: boolean;
     /**
-     * @docid
+     * @docid dxDataGridRowObject.isNewRow
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    isNewRow?: boolean;
+    readonly isNewRow?: boolean;
     /**
-     * @docid
+     * @docid dxDataGridRowObject.isSelected
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    isSelected?: boolean;
+    readonly isSelected?: boolean;
     /**
-     * @docid
+     * @docid dxDataGridRowObject.key
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    key?: any;
+    readonly key: any;
     /**
-     * @docid
+     * @docid dxDataGridRowObject.rowIndex
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowIndex?: number;
+    readonly rowIndex: number;
     /**
-     * @docid
+     * @docid dxDataGridRowObject.rowType
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowType?: string;
+    readonly rowType: string;
     /**
-     * @docid
+     * @docid dxDataGridRowObject.values
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    values?: Array<any>;
+    readonly values: Array<any>;
 }
 
+/** @public */
+export type Properties = dxDataGridOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDataGridOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxDataGridOptions;
-export type Column = dxDataGridColumn;
 
 export default dxDataGrid;

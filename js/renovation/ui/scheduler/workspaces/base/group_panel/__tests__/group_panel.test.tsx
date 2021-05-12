@@ -32,6 +32,7 @@ describe('GroupPanel Vertical Layout', () => {
     const render = (viewModel) => mount(GroupPanelView({
       layout: GroupPanelVerticalLayout,
       ...viewModel,
+      restAttributes: { style: { height: 724 } },
       props: {
         groups,
         groupOrientation,
@@ -54,6 +55,7 @@ describe('GroupPanel Vertical Layout', () => {
           resourceCellTemplate,
           groupByDate: false,
           className: 'custom-class',
+          styles: { height: 724 },
         });
     });
   });

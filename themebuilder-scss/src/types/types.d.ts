@@ -32,6 +32,7 @@ interface ConfigSettings {
   data?: string;
   widgets?: string[];
   noClean?: boolean;
+  removeExternalResources?: boolean;
 
   fileFormat?: string;
   baseTheme?: string;

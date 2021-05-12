@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import widgetsMeta from './widgets.json!';
-import publicWidgets from 'bundles/modules/parts/renovation';
+import publicWidgets from 'renovation/components';
 import Button from 'ui/button';
 import 'ui/check_box';
 import 'ui/pager';
@@ -12,9 +12,9 @@ const PRIVATE_JQUERY_WIDGETS = [
     'Widget',
     'TimePanelTableLayout', 'GroupPanel', 'HeaderPanelLayout', 'TimelineHeaderPanelLayout',
     'DateTableLayoutBase', 'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
-    'GridPager', 'Scrollable',
+    'GridPager', 'Scrollable'
 ];
-const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet'];
+const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet', 'Form', 'LayoutManager'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
 
 const widgetsInBundle = publicWidgets.map(widget => widget.name);

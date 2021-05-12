@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -40,7 +40,7 @@ const moduleConfig = {
 const getScrollOffset = function($scrollable) {
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const location = translator.locate($content);
+    const location = getTranslateValues($content.get(0));
 
     return {
         top: location.top - $container.scrollTop(),
@@ -191,17 +191,17 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\'', function
     });
 
     const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
-    const scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
-    assert.equal(scrollbar.option('visible'), false, 'thumb is hidden after scrollable creation');
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden after scrollable creation');
 
     $container.trigger('mouseenter');
 
-    assert.equal(scrollbar.option('visible'), true, 'thumb is visible after mouse enter');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after mouse enter');
 
     $container.trigger('mouseleave');
 
-    assert.equal(scrollbar.option('visible'), false, 'thumb is hidden after mouse leave');
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden after mouse leave');
 });
 
 QUnit.test('thumb is visible after update when content became more then container', function(assert) {
@@ -213,38 +213,42 @@ QUnit.test('thumb is visible after update when content became more then containe
         useNative: false
     });
 
-    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS));
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     $container.trigger('mouseenter');
 
-    assert.equal(scrollbar.option('visible'), false, 'thumb is hidden when content less then container');
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden when content less then container');
 
     $innerWrapper.height(200);
     $scrollable.dxScrollable('update');
 
-    assert.equal(scrollbar.option('visible'), true, 'thumb is visible after update');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after update');
 });
 
 QUnit.test('showScrollbar: onHover, useNative: false, direction: vertical -> scaleRatio should be recalculated on mouseenter before scrollbar has been shown', function(assert) {
     const $scrollable = $('#scrollable').height(100);
     $scrollable.wrapInner('<div>').children().height(200);
 
-    const scrollable = $scrollable.dxScrollable({
+    $scrollable.dxScrollable({
         showScrollbar: 'onHover',
         useNative: false,
-        direction: 'vertical'
-    }).dxScrollable('instance');
+        direction: 'vertical',
+    });
 
-    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS));
-    scrollable._strategy._scrollers['vertical']._scaleRatio = 0.5;
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
     const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
-    assert.equal(scrollbar.option('visible'), false, 'thumb is hidden');
+    assert.equal($scroll.get(0).getBoundingClientRect().height, 50, 'real thumb size');
+    assert.equal($scroll.height(), 46, 'thumb size');
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden');
+
+    $scrollable.css('transform', 'scale(0.50)');
     $container.trigger('mouseenter');
 
-    assert.equal(scrollable._strategy._scrollers['vertical']._scaleRatio, 1, 'scaleRatio recalculated');
-    assert.equal(scrollbar.option('visible'), true, 'thumb is visible after mouseenter');
+    assert.equal($scroll.get(0).getBoundingClientRect().height, 25, 'real thumb size');
+    assert.equal($scroll.height(), 46, 'thumb size');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after mouseenter');
 });
 
 QUnit.test('thumb hide after scroll when showScrollbar = onScroll', function(assert) {
@@ -256,12 +260,14 @@ QUnit.test('thumb hide after scroll when showScrollbar = onScroll', function(ass
 
     const $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
     const $scrollbar = $('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable);
-    const scrollbar = Scrollbar.getInstance($scrollbar);
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
     $scrollbar.trigger('mouseenter');
     pointerMock($content).start().wheel(1);
 
-    assert.equal(scrollbar.option('visible'), false, 'thumb is visible after scroll');
+    this.clock.tick(500);
+
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden');
 });
 
 QUnit.test('thumb stays visible after scroll when mouseEnter on scrollbar and scroll stopped', function(assert) {
@@ -272,12 +278,12 @@ QUnit.test('thumb stays visible after scroll when mouseEnter on scrollbar and sc
     });
 
     const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
-    const scrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable));
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
     $container.trigger('mouseenter');
     pointerMock($container).start().wheel(1);
 
-    assert.equal(scrollbar.option('visible'), true, 'thumb is visible after mouse enter');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after mouse enter');
 });
 
 QUnit.test('thumb always visible when showScroll = always', function(assert) {
@@ -290,14 +296,13 @@ QUnit.test('thumb always visible when showScroll = always', function(assert) {
         useNative: false
     });
 
-    const $scrollbar = $('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable);
-    const scrollbar = Scrollbar.getInstance($scrollbar);
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
-    assert.equal(scrollbar.option('visible'), true, 'thumb is visible always');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible always');
 
     pointerMock($('.' + SCROLLABLE_CONTENT_CLASS, $scrollable)).start().wheel(1);
 
-    assert.equal(scrollbar.option('visible'), true, 'thumb is visible always');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible always');
 });
 
 QUnit.test('always visible class should be added when showScrollbar = always', function(assert) {
@@ -323,10 +328,11 @@ QUnit.test('showScrollbar option change', function(assert) {
     $scrollable.dxScrollable('option', 'showScrollbar', 'never');
 
     const $scrollbar = $('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable);
-    const scrollbar = Scrollbar.getInstance($scrollbar);
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
 
     assert.equal($scrollbar.is(':hidden'), true);
-    assert.equal(scrollbar.option('visible'), false);
+    assert.equal($scrollbar.css('display'), 'none');
+    assert.equal($scroll.hasClass('dx-state-invisible'), true);
 });
 
 QUnit.test('scrolling by thumb does not cause inertia', function(assert) {
@@ -381,15 +387,14 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for s
 
     const $scrollableContainer = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
     const $wrapScrollableContainer = $('.' + SCROLLABLE_CONTAINER_CLASS, $wrapScrollable).not($scrollableContainer);
-    const $scrollableScrollbar = $('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable);
-    const scrollableScrollbar = Scrollbar.getInstance($scrollableScrollbar);
-    const wrapScrollableScrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $wrapScrollable).not($scrollableScrollbar));
+    const $scrollableScroll = $scrollableContainer.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
+    const $wrapScrollableScroll = $wrapScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
 
     $wrapScrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
     $scrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
 
-    assert.equal(scrollableScrollbar.option('visible'), true, 'scrollbar is visible for inner scrollable');
-    assert.equal(wrapScrollableScrollbar.option('visible'), false, 'scrollbar is hidden for outer scrollable');
+    assert.equal($scrollableScroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible for inner scrollable');
+    assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden for outer scrollable');
 });
 
 QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of scrollable', function(assert) {
@@ -399,8 +404,7 @@ QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of s
         scrollByContent: true
     });
 
-    const $scrollbar = $('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable);
-    const scrollbar = Scrollbar.getInstance($scrollbar);
+    const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
     const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
     $container.trigger($.Event('mouseenter', { originalEvent: {} }));
@@ -411,11 +415,11 @@ QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of s
         .move(0, -1);
 
 
-    assert.equal(scrollbar.option('visible'), true, 'scrollbar is visible');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible');
 
     $container.trigger($.Event('mouseleave', { originalEvent: {} }));
 
-    assert.equal(scrollbar.option('visible'), true, 'scrollbar is visible after mouseleave');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible after mouseleave');
 });
 
 QUnit.test('leaving inner scroller and releasing in outer scroller should hide inner scrollbar and show outer scrollbar', function(assert) {
@@ -437,9 +441,9 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
 
     const $scrollableContainer = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
     const $wrapScrollableContainer = $('.' + SCROLLABLE_CONTAINER_CLASS, $wrapScrollable).not($scrollableContainer);
-    const $scrollableScrollbar = $('.' + SCROLLABLE_SCROLLBAR_CLASS, $scrollable);
-    const scrollableScrollbar = Scrollbar.getInstance($scrollableScrollbar);
-    const wrapScrollableScrollbar = Scrollbar.getInstance($('.' + SCROLLABLE_SCROLLBAR_CLASS, $wrapScrollable).not($scrollableScrollbar));
+
+    const $scrollableScroll = $scrollableContainer.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
+    const $wrapScrollableScroll = $wrapScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
 
     // enter outer
     $wrapScrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
@@ -453,8 +457,8 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
     // up on outer
     pointerMock($wrapScrollableContainer).up();
 
-    assert.equal(scrollableScrollbar.option('visible'), false, 'scrollbar is hidden for inner scrollable');
-    assert.equal(wrapScrollableScrollbar.option('visible'), true, 'scrollbar is visible for outer scrollable');
+    assert.equal($scrollableScroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden for inner scrollable');
+    assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible for outer scrollable');
 });
 
 QUnit.test('scrollbar is visible for parent scrollable after mouse leave for children scrollable', function(assert) {
@@ -479,16 +483,16 @@ QUnit.test('scrollbar is visible for parent scrollable after mouse leave for chi
     $parentContainer.trigger($.Event('mouseenter', { originalEvent: { target: $parentContainer.get(0) } }));
     $childrenContainer.trigger($.Event('mouseenter', { originalEvent: { target: $childrenContainer.get(0) } }));
 
-    const childrenScrollbar = Scrollbar.getInstance($childScrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS));
-    const parentScrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.$element()));
+    const $childrenScroll = $childScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
+    const $parentScroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($childrenScroll);
 
-    assert.equal(parentScrollbar.option('visible'), false, 'parent scrollbar is hidden');
-    assert.equal(childrenScrollbar.option('visible'), true, 'children scrollbar is visible');
+    assert.equal($parentScroll.hasClass('dx-state-invisible'), true, 'parent scrollbar is hidden');
+    assert.equal($childrenScroll.hasClass('dx-state-invisible'), false, 'children scrollbar is visible');
 
     $childScrollable.triggerHandler($.Event('mouseleave', { relatedTarget: $parentContainer.get(0) }));
 
-    assert.equal(parentScrollbar.option('visible'), true, 'parent scrollbar is visible');
-    assert.equal(childrenScrollbar.option('visible'), false, 'children scrollbar is hidden');
+    assert.equal($parentScroll.hasClass('dx-state-invisible'), false, 'parent scrollbar is visible');
+    assert.equal($childrenScroll.hasClass('dx-state-invisible'), true, 'children scrollbar is hidden');
 });
 
 QUnit.test('scrollbar is visible for parent scrollable after start', function(assert) {
@@ -515,11 +519,11 @@ QUnit.test('scrollbar is visible for parent scrollable after start', function(as
     pointerMock($childrenContainer).start().down().move(0, 10);
     $childrenContainer.trigger($.Event('mouseleave', { originalEvent: { target: $childrenContainer.get(0) } }));
 
-    const childrenScrollbar = Scrollbar.getInstance($childScrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS));
-    const parentScrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.$element()));
+    const $childrenScroll = $childScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
+    const $parentScroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($childrenScroll);
 
-    assert.equal(parentScrollbar.option('visible'), false, 'parent scrollbar is hidden');
-    assert.equal(childrenScrollbar.option('visible'), true, 'children scrollbar is visible');
+    assert.equal($parentScroll.hasClass('dx-state-invisible'), true, 'parent scrollbar is hidden');
+    assert.equal($childrenScroll.hasClass('dx-state-invisible'), false, 'children scrollbar is visible');
 });
 
 QUnit.test('scrollbar set active state only for one scrollable when direction of parentScrollable is horizontal and direction of innerScrollable is vertical', function(assert) {

@@ -20,9 +20,6 @@ module.exports = {
     ],
     coveragePathIgnorePatterns: [
         './js/renovation/ui/grids/data_grid/datagrid_component.ts',
-        './js/renovation/ui/grids/data_grid/common/data_grid_view_props.ts',
-        './js/renovation/ui/grids/grid_base/common/grid_base_view_props.ts',
-        './js/renovation/ui/grids/data_grid/utils/get_updated_options.ts',
         './js/renovation/ui/scheduler/workspaces/utils.ts',
         './js/renovation/ui/scroll_view/utils/get_element_offset.ts',
         './js/renovation/ui/scroll_view/utils/get_element_style.ts',

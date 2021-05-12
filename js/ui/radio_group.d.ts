@@ -1,16 +1,39 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import DataSource from '../data/data_source';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import Editor, {
+    ValueChangedInfo,
     EditorOptions
 } from './editor/editor';
 
 import {
     DataExpressionMixinOptions
 } from './editor/ui.data_expression';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxRadioGroup>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxRadioGroup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxRadioGroup>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxRadioGroup> & ValueChangedInfo;
 
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
@@ -68,11 +91,15 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
  * @public
  */
 export default class dxRadioGroup extends Editor {
-    constructor(element: TElement, options?: dxRadioGroupOptions)
+    constructor(element: UserDefinedElement, options?: dxRadioGroupOptions)
     getDataSource(): DataSource;
 }
 
+/** @public */
+export type Properties = dxRadioGroupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxRadioGroupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxRadioGroupOptions;

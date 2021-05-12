@@ -3,11 +3,12 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import DataSource, {
@@ -15,7 +16,13 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    TEvent
+    DxEvent,
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo
 } from '../events/index';
 
 import dxMenuBase, {
@@ -26,6 +33,51 @@ import {
     dxMenuBaseItem
 } from './menu';
 
+import {
+    SelectionChangedInfo
+} from './collection/ui.collection_widget.base';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxContextMenu>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxContextMenu>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxContextMenu>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxContextMenu>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxContextMenu>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+
+/** @public */
+export type ItemContextMenuEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+
+/** @public */
+export type ItemRenderedEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
+
+/** @public */
+export type PositioningEvent = NativeEventInfo<dxContextMenu> & {
+    readonly position: positionConfig;
+}
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxContextMenu> & SelectionChangedInfo;
+
+/** @public */
+export type ShowingEvent = Cancelable & EventInfo<dxContextMenu>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxContextMenu>;
+
 export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid
@@ -35,7 +87,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -52,50 +104,67 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => void);
+    onHidden?: ((e: HiddenEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
+    onHiding?: ((e: HidingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 position:positionConfig
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPositioning?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, event?: TEvent, position?: positionConfig }) => void);
+    onPositioning?: ((e: PositioningEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => void);
+    onShowing?: ((e: ShowingEvent) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxContextMenu
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => void);
+    onShown?: ((e: ShownEvent) => void);
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }
@@ -112,16 +181,16 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     showEvent?: {
       /**
-      * @docid
-      * @default undefined
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @default undefined
+       * @prevFileNamespace DevExpress.ui
+       */
       delay?: number,
       /**
-      * @docid
-      * @default undefined
-      * @prevFileNamespace DevExpress.ui
-      */
+       * @docid
+       * @default undefined
+       * @prevFileNamespace DevExpress.ui
+       */
       name?: string
     } | string;
     /**
@@ -138,7 +207,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | TElement;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default false
@@ -158,7 +227,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
  * @public
  */
 export default class dxContextMenu extends dxMenuBase {
-    constructor(element: TElement, options?: dxContextMenuOptions)
+    constructor(element: UserDefinedElement, options?: dxContextMenuOptions)
     /**
      * @docid
      * @publicName hide()
@@ -166,7 +235,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<void>;
+    hide(): DxPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -174,7 +243,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<void>;
+    show(): DxPromise<void>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -183,7 +252,7 @@ export default class dxContextMenu extends dxMenuBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): TPromise<void>;
+    toggle(showing: boolean): DxPromise<void>;
 }
 
 /**
@@ -200,7 +269,11 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
     items?: Array<dxContextMenuItem>;
 }
 
+/** @public */
+export type Properties = dxContextMenuOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxContextMenuOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxContextMenuOptions;

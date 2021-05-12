@@ -3477,6 +3477,44 @@ QUnit.module('Remote group paging', {
         assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, 'take for second level');
     });
 
+    // T990766
+    QUnit.test('Reload dataSource when two expanded group and two group levels exist', function(assert) {
+        const dataSource = this.createDataSource({
+            group: ['field1', 'field2'],
+            pageSize: 3
+        });
+        const loadingChanged = sinon.stub();
+
+        dataSource.load();
+
+        dataSource.changeRowExpand([2]);
+        dataSource.load();
+        dataSource.changeRowExpand([2, 4]);
+        dataSource.load();
+
+        dataSource.store().on('loading', loadingChanged);
+
+        // act
+        dataSource.reload(true);
+
+        assert.deepEqual(dataSource.items(), [
+            {
+                key: 1,
+                items: null
+            },
+            {
+                key: 2,
+                items: [{
+                    isContinuationOnNextPage: true,
+                    key: 4,
+                    items: []
+                }]
+            }], 'items');
+
+        assert.equal(dataSource.totalItemsCount(), 9, 'total items count');
+        assert.strictEqual(loadingChanged.callCount, 6, 'loading count');
+    });
+
     QUnit.test('Error on change grouping when one expanded group and two group levels exist', function(assert) {
         const brokeOptions = {};
         const dataSource = this.createDataSource({
@@ -6460,6 +6498,56 @@ QUnit.module('Cache', {
         assert.equal(this.loadingCount, 3, 'third load');
         assert.deepEqual(dataSource.items(), [1, 2], 'new loaded items for the first page');
     });
+
+    QUnit.test('New mode. Data should be loaded without the cache', function(assert) {
+        const dataSource = this.createDataSource({
+            remoteOperations: {
+                paging: true,
+                sorting: true
+            },
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+            cacheEnabled: false,
+        });
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 1, 'first load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 2, 'second load');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items on the second load');
+
+        // act
+        dataSource.pageIndex(2);
+        dataSource.loadPageCount(1);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 3, 'third load');
+        assert.deepEqual(dataSource.items(), [7, 8, 9], 'items on the third load');
+
+        // act
+        dataSource.pageIndex(1);
+        dataSource.loadPageCount(2);
+        dataSource.load();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.loadingCount, 4, 'fourth load');
+        assert.deepEqual(dataSource.items(), [4, 5, 6, 7, 8, 9], 'items on the fourth load');
+    });
 });
 
 QUnit.module('Custom Load', {
@@ -7051,6 +7139,155 @@ QUnit.module('New virtual scrolling mode', {
         } finally {
             dataSource._dataSource.off('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
             dataSource._dataSource.on('customizeStoreLoadOptions', dataLoadingHandler);
+        }
+    });
+
+    // TODO the following tests can be removed when newMode is enabled by default
+    QUnit.test('startLoadTime was not initialized when loadingChanged is raised', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const loadingChangeHandler = dataSource._loadingChangedHandler;
+        const startLoadTimeValues = [];
+
+        dataSource._loadingChangedHandler = function() {
+            loadingChangeHandler.apply(dataSource, arguments);
+            startLoadTimeValues.push(dataSource._startLoadTime);
+        };
+        dataSource._dataSource.off('loadingChanged', loadingChangeHandler);
+        dataSource._dataSource.on('loadingChanged', dataSource._loadingChangedHandler);
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.strictEqual(startLoadTimeValues.length, 2, 'change handler call count');
+            assert.notOk(startLoadTimeValues[0], 'not initizlized on the first call');
+            assert.notOk(startLoadTimeValues[1], 'not initizlized on the second call');
+        } finally {
+            dataSource._dataSource.off('loadingChanged', dataSource._loadingChangedHandler);
+            dataSource._dataSource.on('loadingChanged', loadingChangeHandler);
+        }
+    });
+
+    QUnit.test('VirtualScrollController.handleDataChanged is not called when data is loaded', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const handleDataChangedSpy = sinon.spy(dataSource._virtualScrollController, 'handleDataChanged');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.notOk(handleDataChangedSpy.called, 'not called');
+        } finally {
+            handleDataChangedSpy.restore();
+        }
+    });
+
+    QUnit.test('VirtualScrollController.load is not called when data is loaded', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const loadSpy = sinon.spy(dataSource._virtualScrollController, 'load');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.notOk(loadSpy.called, 'not called');
+        } finally {
+            loadSpy.restore();
+        }
+    });
+
+    QUnit.test('resetPagesCache is not called when row is expanded', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3,
+            group: 't'
+        });
+        const resetPagesCacheSpy = sinon.spy(dataSource, 'resetPagesCache');
+
+        try {
+            // act
+            dataSource.changeRowExpand([1]);
+
+            // assert
+            assert.notOk(resetPagesCacheSpy.called, 'not called');
+        } finally {
+            resetPagesCacheSpy.restore();
+        }
+    });
+
+    QUnit.test('VirtualScrollController.getDelayDeferred is not called on reload', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const getDelayDeferredSpy = sinon.spy(dataSource._virtualScrollController, 'getDelayDeferred');
+
+        try {
+            // act
+            dataSource.reload();
+
+            // assert
+            assert.notOk(getDelayDeferredSpy.called, 'not called');
+        } finally {
+            getDelayDeferredSpy.restore();
+        }
+    });
+
+    QUnit.test('VirtualScrollController.reset is not called on refresh', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const resetSpy = sinon.spy(dataSource._virtualScrollController, 'reset');
+
+        try {
+            // act
+            dataSource.refresh({ storeLoadOptions: {} }, { reload: true });
+
+            // assert
+            assert.notOk(resetSpy.called, 'not called');
+        } finally {
+            resetSpy.restore();
+        }
+    });
+
+    QUnit.test('loadingChanged should not fire when loading is failed', function(assert) {
+        // arrange
+        const dataSource = createDataSource({
+            store: new CustomStore({
+                key: 'id',
+                load: function() {
+                    return $.Deferred().reject().promise();
+                }
+            }),
+            scrolling: {
+                newMode: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+        });
+        const fireSpy = sinon.spy(dataSource.loadingChanged, 'fire');
+
+        try {
+            // act
+            dataSource.load();
+
+            // assert
+            assert.equal(fireSpy.callCount, 2, 'called twice');
+        } finally {
+            fireSpy.restore();
         }
     });
 });

@@ -1,10 +1,33 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import Editor, {
-    EditorOptions
+    EditorOptions,
+    ValueChangedInfo
 } from './editor/editor';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxCheckBox>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxCheckBox>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxCheckBox>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxCheckBox> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;
 
 export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     /**
@@ -60,10 +83,14 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @public
  */
 export default class dxCheckBox extends Editor {
-    constructor(element: TElement, options?: dxCheckBoxOptions)
+    constructor(element: UserDefinedElement, options?: dxCheckBoxOptions)
 }
 
+/** @public */
+export type Properties = dxCheckBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCheckBoxOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxCheckBoxOptions;

@@ -7,17 +7,45 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TEvent
+    DxEvent,
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions
 } from './overlay';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxToast>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxToast>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxToast>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxToast>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxToast>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxToast> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = EventInfo<dxToast>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxToast>;
 
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
@@ -44,7 +72,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default true
@@ -151,10 +179,14 @@ export interface dxToastAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxToast extends dxOverlay {
-    constructor(element: TElement, options?: dxToastOptions)
+    constructor(element: UserDefinedElement, options?: dxToastOptions)
 }
 
+/** @public */
+export type Properties = dxToastOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxToastOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxToastOptions;

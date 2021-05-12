@@ -1,18 +1,12 @@
-import {
-  isNumeric, isPlainObject,
-} from '../../../core/utils/type';
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
 import { titleize } from '../../../core/utils/inflector';
-import { ensureDefined } from '../../../core/utils/common';
 
 import {
-  ScrollableLocation,
-  ScrollOffset, ScrollableBoundary, ScrollableDirection,
+  ScrollableDirection,
   AllowedDirection,
 } from './types.d';
 
 import {
-  SCROLLABLE_CONTENT_CLASS,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   DIRECTION_BOTH,
@@ -22,123 +16,37 @@ import {
   ScrollDirection,
 } from './utils/scroll_direction';
 
-export function ensureLocation(
-  location: number | Partial<ScrollableLocation>,
-): ScrollableLocation {
-  if (isNumeric(location)) {
-    return {
-      left: location,
-      top: location,
-    };
-  }
-  return { top: 0, left: 0, ...location };
+function isScrollInverted(rtlEnabled: boolean): boolean {
+  // const { rtlEnabled, useNative } = this.option();
+
+  const { decreasing, positive } = getScrollRtlBehavior();
+
+  // eslint-disable-next-line no-bitwise
+  return rtlEnabled && !!(decreasing ^ positive); // useNative &&
 }
 
-function getRelativeLocation(element: HTMLElement): ScrollableLocation {
-  const result = { top: 0, left: 0 };
-  let targetElement = element;
-  while (!targetElement.matches(`.${SCROLLABLE_CONTENT_CLASS}`)) {
-    result.top += targetElement.offsetTop;
-    result.left += targetElement.offsetLeft;
-    targetElement = targetElement.offsetParent as HTMLElement;
-  }
-  return result;
+export function getScrollSign(rtlEnabled: boolean): number {
+  return isScrollInverted(rtlEnabled) && getScrollRtlBehavior().positive ? -1 : 1;
 }
 
-function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): number {
-  return containerRef[`scroll${titleize(dimension)}`] - containerRef[`client${titleize(dimension)}`];
-}
-
-export function getBoundaryProps(
-  direction: ScrollableDirection,
-  scrollOffset: ScrollableLocation,
-  element: HTMLDivElement,
-): Partial<ScrollableBoundary> {
-  const { left, top } = scrollOffset;
-  const boundaryProps: Partial<ScrollableBoundary> = {};
-  const { isHorizontal, isVertical } = new ScrollDirection(direction);
-
-  if (isHorizontal) {
-    boundaryProps.reachedLeft = left <= 0;
-    boundaryProps.reachedRight = Math.round(left) >= getMaxScrollOffset('width', element);
-  }
-  if (isVertical) {
-    boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element);
-  }
-  return boundaryProps;
-}
-
-export function getContainerOffsetInternal(element: HTMLDivElement): ScrollableLocation {
-  return {
-    left: element.scrollLeft,
-    top: element.scrollTop,
-  };
-}
-
-function getScrollBarSize(dimension: string, containerRef: HTMLDivElement): number {
-  return containerRef[`offset${dimension}`] - containerRef[`client${dimension}`];
-}
-
-function needNormalizeCoordinate(prop: keyof ScrollOffset, rtlEnabled?: boolean): boolean {
-  return rtlEnabled === true && prop === 'left';
-}
-
-export function normalizeCoordinate(
-  prop: keyof ScrollOffset, coordinate: number, rtlEnabled?: boolean,
-): number {
-  return needNormalizeCoordinate(prop, rtlEnabled) && getScrollRtlBehavior().positive
-    ? -1 * coordinate
-    : coordinate;
-}
-
-export function getPublicCoordinate(
-  prop: keyof ScrollOffset, coordinate: number, containerRef: HTMLDivElement, rtlEnabled?: boolean,
-): number {
-  return needNormalizeCoordinate(prop, rtlEnabled)
-    ? getMaxScrollOffset('width', containerRef) + normalizeCoordinate(prop, coordinate, rtlEnabled)
-    : coordinate;
-}
-
-export function normalizeLocation(
-  location: number | Partial<{ x: number; y: number; top: number; left: number }>,
-  direction?: ScrollableDirection,
-): Partial<ScrollableLocation> {
-  if (isPlainObject(location)) {
-    return {
-      left: -ensureDefined(location.left, location.x),
-      top: -ensureDefined(location.top, location.y),
-    };
-  }
-
-  const { isVertical, isHorizontal } = new ScrollDirection(direction);
-  return {
-    left: isHorizontal ? -location : undefined,
-    top: isVertical ? -location : undefined,
-  };
-}
-
+/* istanbul ignore next */
 function getElementLocationInternal(
   element: HTMLElement,
-  prop: keyof ScrollOffset,
-  offset: ScrollOffset,
+  offset: Omit<ClientRect, 'width' | 'height'>,
   direction: ScrollableDirection,
-  containerRef: HTMLDivElement,
-  rtlEnabled?: boolean,
+  containerElement: HTMLDivElement,
 ): number {
+  const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
   const dimension = direction === DIRECTION_VERTICAL ? 'Height' : 'Width';
-  const relativeLocation = getRelativeLocation(element)[prop];
-  const scrollBarSize = getScrollBarSize(dimension, containerRef);
-  const containerSize = containerRef[`offset${dimension}`];
+  // let relativeLocation = getRelativePosition(element, `.${SCROLLABLE_CONTENT_CLASS}`)[prop];
+  const relativeLocation = containerElement[`scroll${titleize(prop)}`] + element.getBoundingClientRect()[prop] - containerElement.getBoundingClientRect()[prop];
+  const containerLocation = containerElement[`scroll${titleize(prop)}`];
+
+  const scrollBarSize = containerElement[`offset${dimension}`] - containerElement[`client${dimension}`];
+  const containerSize = containerElement[`offset${dimension}`];
   const elementOffset = element[`offset${dimension}`];
   const offsetStart = offset[prop];
   const offsetEnd = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'] || 0;
-
-  const containerLocation = normalizeCoordinate(
-    prop,
-    getContainerOffsetInternal(containerRef)[prop],
-    rtlEnabled,
-  );
 
   if (relativeLocation < containerLocation + offsetStart) {
     if (elementOffset < containerSize - offsetStart - offsetEnd) {
@@ -156,21 +64,36 @@ function getElementLocationInternal(
   return containerLocation;
 }
 
-export function getElementLocation(
-  element: HTMLElement,
-  offset: ScrollOffset,
-  direction: ScrollableDirection,
-  containerRef: HTMLDivElement,
-  rtlEnabled?: boolean,
+export function normalizeOffsetLeft(
+  scrollLeft: number, maxLeftOffset: number, rtlEnabled: boolean,
 ): number {
-  const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
-  const location = normalizeCoordinate(
-    prop,
-    getElementLocationInternal(element, prop, offset, direction, containerRef, rtlEnabled),
-    rtlEnabled,
+  if (isScrollInverted(rtlEnabled)) {
+    if (getScrollRtlBehavior().positive) {
+      // for ie11 support
+      return maxLeftOffset - scrollLeft;
+    }
+
+    return maxLeftOffset + scrollLeft;
+  }
+
+  return scrollLeft;
+}
+
+/* istanbul ignore next */
+export function getLocation(
+  element: HTMLElement,
+  offset: Omit<ClientRect, 'width' | 'height'>,
+  direction: ScrollableDirection,
+  containerElement: HTMLDivElement,
+): number {
+  const location = getElementLocationInternal(
+    element,
+    offset,
+    direction,
+    containerElement,
   );
 
-  return getPublicCoordinate(prop, location, containerRef, rtlEnabled);
+  return location;
 }
 
 export function updateAllowedDirection(

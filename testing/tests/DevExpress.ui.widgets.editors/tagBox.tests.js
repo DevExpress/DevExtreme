@@ -2502,7 +2502,7 @@ QUnit.module('keyboard navigation', {
             .focus()
             .press('tab');
 
-        const $applyButton = this.instance._popup._wrapper().find('.dx-button.dx-popup-done');
+        const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
         assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
 });
@@ -2765,6 +2765,39 @@ QUnit.module('keyboard navigation through tags', {
 
         const value = this.instance.option('value');
         assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
+    });
+
+    ['readOnly', 'disabled'].forEach((optionName) => {
+        ['backspace', 'del'].forEach((keyName) => {
+            QUnit.test(`the focused tag should be removed after pressing the '${keyName}' key after ${optionName} state (T986220)`, function(assert) {
+                const items = [1, 2, 3, 4];
+                this.reinit({
+                    items,
+                    value: items,
+                    focusStateEnabled: true,
+                    searchEnabled: true
+                });
+
+                this.instance.option(optionName, true);
+                this.instance.option(optionName, false);
+
+                this.keyboard
+                    .focus()
+                    .press('left')
+                    .press('left')
+                    .press('left');
+
+                const expectedValue = this.instance.option('value').slice();
+                const focusedTagIndex = this.getFocusedTag().index();
+                expectedValue.splice(focusedTagIndex, 1);
+
+                this.keyboard
+                    .press(keyName);
+
+                const value = this.instance.option('value');
+                assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
+            });
+        });
     });
 
     QUnit.test('backspace should remove selected search text but not tag if any text is selected', function(assert) {
@@ -3700,6 +3733,48 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         keyboardMock($input).type('American Samo');
 
         assert.ok(handlerStub.called, 'repaint was fired');
+    });
+
+    QUnit.test('popup should update position after change height of input on dataSource "Loaded" event', function(assert) {
+        const $element = $('#tagBox').dxTagBox({
+            focusStateEnabled: true,
+            opened: true,
+            dataSource: {
+                store: new CustomStore({
+                    loadMode: 'raw',
+                    load: function() {
+                        const deferred = $.Deferred();
+
+                        setTimeout(() => {
+                            deferred.resolve(['testvalue1', 'testvalue2', 'testvalue3']);
+                        }, TIME_TO_WAIT);
+
+                        return deferred.promise();
+                    }
+                })
+            },
+            width: 170,
+            value: ['testvalue1', 'testvalue2'],
+            searchEnabled: true,
+            searchTimeout: 0
+        });
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $element.dxTagBox('instance');
+        const popupContent = $(instance.content());
+        const { top: initialTop } = popupContent.offset();
+
+        $element
+            .find(`.${TEXTBOX_CLASS}`)
+            .val('testtesttesttest')
+            .trigger('input');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const { top: updatedTop } = popupContent.offset();
+
+        assert.ok(updatedTop > initialTop, 'Popup update position');
     });
 
     QUnit.test('the input size should change if autocompletion is Enabled (T378411)', function(assert) {
@@ -4854,6 +4929,24 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), [], 'value was cleared');
         assert.equal($field.text(), '', 'text was cleared after the deselect');
+    });
+});
+
+QUnit.module('options changing', moduleSetup, () => {
+    ['readOnly', 'disabled'].forEach((optionName) => {
+        QUnit.test(`Typing events should be rerendered after ${optionName} option enabled (T986220)`, function(assert) {
+            const tagBox = $('#tagBox').dxTagBox({
+                items: [1, 2],
+                value: [1],
+                searchEnabled: true
+            }).dxTagBox('instance');
+            const typingEventsRenderSpy = sinon.spy(tagBox, '_renderTypingEvent');
+
+            tagBox.option(optionName, true);
+            tagBox.option(optionName, false);
+
+            assert.strictEqual(typingEventsRenderSpy.callCount, 1);
+        });
     });
 });
 

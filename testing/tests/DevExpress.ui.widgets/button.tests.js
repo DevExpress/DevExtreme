@@ -385,6 +385,10 @@ QUnit.module('Button', function() {
             assert.strictEqual(this.$element.find('input[type=submit]').length, 1);
         });
 
+        QUnit.test('input with submit type should not have display:none (T983803)', function(assert) {
+            assert.notStrictEqual(this.$element.find('input[type=submit]').css('display'), 'none');
+        });
+
         QUnit.test('submit input has .dx-button-submit-input CSS class', function(assert) {
             assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1);
         });

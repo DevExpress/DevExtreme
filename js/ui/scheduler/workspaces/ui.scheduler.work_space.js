@@ -732,7 +732,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._cleanView();
         this._toggleGroupedClass();
         this._toggleWorkSpaceWithOddCells();
+
+        this.virtualScrollingDispatcher?.updateDimensions(true);
         this._renderView();
+        this.option('crossScrollingEnabled') && this._setTableSizes();
     }
 
     _init() {
@@ -1052,8 +1055,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     _visibilityChanged(visible) {
         this.cache.clear();
 
-        if(visible && this._isVerticalGroupedWorkSpace()) {
-            this._setHorizontalGroupHeaderCellsHeight();
+        if(visible) {
+            this._updateGroupTableHeight();
         }
 
         if(visible && this._needCreateCrossScrolling()) {
@@ -1093,12 +1096,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         const minWidth = this.getWorkSpaceMinWidth();
-        const $headerCells = this._$headerPanel
-            .find('tr')
-            .last()
-            .find('th');
 
-        let width = cellWidth * $headerCells.length;
+        const groupCount = this._getGroupCount();
+        const totalCellCount = this._getTotalCellCount(groupCount);
+
+        let width = cellWidth * totalCellCount;
 
         if(width < minWidth) {
             width = minWidth;
@@ -1110,9 +1112,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._attachHeaderTableClasses();
 
-        if(this._isVerticalGroupedWorkSpace()) {
-            this._setHorizontalGroupHeaderCellsHeight();
-        }
+        this._updateGroupTableHeight();
     }
 
     getWorkSpaceMinWidth() {
@@ -1405,7 +1405,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.renovatedHeaderPanelComponent,
             'renovatedHeaderPanel',
             {
-                dateHeaderMap: this.viewDataProvider.dateHeaderMap,
+                dateHeaderData: this.viewDataProvider.dateHeaderData,
                 dateCellTemplate: this.option('dateCellTemplate'),
                 timeCellTemplate: this.option('timeCellTemplate'),
                 groups: this.option('groups'),
@@ -1539,8 +1539,18 @@ class SchedulerWorkSpace extends WidgetObserver {
         }, 0);
     }
 
+    _getCalculatedFirstDayOfWeek() {
+        const firstDayOfWeekOption = this._firstDayOfWeek();
+
+        const firstDayOfWeek = isDefined(firstDayOfWeekOption)
+            ? firstDayOfWeekOption
+            : dateLocalization.firstDayOfWeekIndex();
+
+        return firstDayOfWeek;
+    }
+
     _setFirstViewDate() {
-        const firstDayOfWeek = isDefined(this._firstDayOfWeek()) ? this._firstDayOfWeek() : dateLocalization.firstDayOfWeekIndex();
+        const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
 
         this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), firstDayOfWeek);
         this._setStartDayHour(this._firstViewDate);
@@ -2318,6 +2328,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _cleanView() {
         this.cache.clear();
+        this._cleanTableWidths();
         this._cleanAllowedPositions();
         this.virtualSelectionState?.releaseSelectedAndFocusedCells();
         if(!this.isRenovatedRender()) {
@@ -2341,6 +2352,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._disposeRenovatedComponents();
 
         super._clean();
+    }
+
+    _cleanTableWidths() {
+        this._$headerPanel.css('width', '');
+        this._$dateTable.css('width', '');
+        this._$allDayTable && this._$allDayTable.css('width', '');
     }
 
     _disposeRenovatedComponents() {
@@ -3203,7 +3220,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellCount = this._getCellCount();
         const $cells = this._getCells();
         const cellWidth = this.getCellWidth();
-        const result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+
+        let result;
+        if(this.isVirtualScrolling()) {
+            const groupedDataMap = this.viewDataProvider.groupedDataMap;
+
+            result = this._groupedStrategy.getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
+        } else {
+            result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
+        }
 
         if(this._isRTL()) {
             const startOffset = result.left;
@@ -3658,7 +3683,7 @@ const createDragBehaviorConfig = (
             getElementsFromPoint(newX, newY) :
             getElementsFromPoint(newX + appointmentWidth / 2, newY);
 
-        const droppableCell = elements.find(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1);
+        const droppableCell = elements.filter(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1)[0];
 
         if(droppableCell) {
             const oldDroppableCell = getDroppableCell();

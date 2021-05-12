@@ -1,5 +1,5 @@
 import {
-    TPromise
+    DxPromise
 } from '../../core/utils/deferred';
 
 import Store, {
@@ -116,7 +116,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
  */
 export default class ODataStore extends Store {
     constructor(options?: ODataStoreOptions)
-    byKey(key: any | string | number): TPromise<any>;
+    byKey(key: any | string | number): DxPromise<any>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
@@ -128,7 +128,7 @@ export default class ODataStore extends Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): TPromise<any>;
+    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): DxPromise<any>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
@@ -147,5 +147,5 @@ export default class ODataStore extends Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert(values: any): TPromise<any> & PromiseExtension<any>;
+    insert(values: any): DxPromise<any> & PromiseExtension<any>;
 }

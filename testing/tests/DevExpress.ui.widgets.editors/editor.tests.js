@@ -30,7 +30,7 @@ const Fixture = Class.inherit({
 });
 
 const getValidationMessageWrapper = (editor) => {
-    return editor._validationMessage._wrapper();
+    return editor._validationMessage.$wrapper();
 };
 
 QUnit.module('Editor', {
@@ -925,6 +925,35 @@ QUnit.module('Validation overlay options', {
 
         const message = $(`.${INVALID_MESSAGE_CONTENT_CLASS}`).text();
         assert.strictEqual(message, 'New error message');
+    });
+
+    QUnit.test('editor should clear validation message cache on dispose (T968422)', function(assert) {
+        assert.expect(0);
+
+        class TestEditor extends Editor {
+            repaintValidationMessage() {
+                this._validationMessage && this._validationMessage.repaint();
+                this._$validationMessage
+                    && this._$validationMessage.dxValidationMessage('instance').repaint();
+            }
+        }
+
+        const $element = this.fixture.createOnlyElement();
+        const instance = new TestEditor($element, {
+            validationMessageMode: 'always',
+            validationError: {
+                message: 'Error message'
+            },
+            isValid: false
+        });
+
+        instance.dispose();
+
+        try {
+            instance.repaintValidationMessage();
+        } catch(e) {
+            assert.ok(false, 'cache is not cleared on editor dispose');
+        }
     });
 });
 

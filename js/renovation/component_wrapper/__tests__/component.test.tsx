@@ -13,6 +13,7 @@ import {
   KEY,
 } from '../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../core/element';
+import * as Utils from '../utils';
 
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
@@ -110,7 +111,7 @@ describe('Misc cases', () => {
 });
 
 describe('Widget\'s container manipulations', () => {
-  it('repaint redraws component 2 times', () => {
+  it('repaint redraws component only one time', () => {
     $('#component').css('width', '123px');
     $('#component').css('height', '456px');
     $('#component').addClass('custom-css-class');
@@ -122,14 +123,9 @@ describe('Widget\'s container manipulations', () => {
 
     $('#component').dxTestWidget('repaint');
 
-    expect(subscribeEffect).toHaveBeenCalledTimes(3);
+    expect(subscribeEffect).toHaveBeenCalledTimes(2);
 
     expect(subscribeEffect.mock.calls[1][0]).toMatchObject({
-      className: '',
-      style: '',
-    });
-
-    expect(subscribeEffect.mock.calls[2][0]).toMatchObject({
       className: 'custom-css-class',
       style: { width: '123px', height: '456px' },
     });
@@ -370,6 +366,25 @@ describe('option', () => {
     expect(objectProp1).not.toBe(objectProp2);
   });
 
+  it('nested option changed', () => {
+    const component = $('#component').dxOptionsCheckWidget({}).dxOptionsCheckWidget('instance');
+    expect(component.getLastReceivedProps().nestedObject.nestedProp).toBe('default value');
+    const { nestedObject } = component.getLastReceivedProps();
+    const spyUpdatePropsImmutable = jest.spyOn(Utils, 'updatePropsImmutable');
+
+    component.option('nestedObject.nestedProp', 'new value');
+    expect(spyUpdatePropsImmutable).toBeCalledWith(
+      // eslint-disable-next-line no-underscore-dangle
+      component._props,
+      component.option(),
+      'nestedObject',
+      'nestedObject.nestedProp',
+    );
+
+    expect(component.getLastReceivedProps().nestedObject).not.toBe(nestedObject);
+    expect(component.getLastReceivedProps().nestedObject.nestedProp).toBe('new value');
+  });
+
   it('should return default value of TwoWay prop', () => {
     $('#component').dxOptionsCheckWidget({});
 
@@ -462,6 +477,42 @@ describe('option', () => {
     const widget = $('#component').dxOptionsCheckWidget({}).dxOptionsCheckWidget('instance');
 
     expect(widget.option('contentTemplate')).toBe(null);
+  });
+
+  it('should not pass excessive options to props', () => {
+    const mockFunction = () => {};
+    const options = {
+      text: 'some text',
+      twoWayProp: 15,
+      twoWayPropChange: mockFunction,
+      excessiveOption: { isExcessive: true },
+    };
+    const { excessiveOption, ...props } = options;
+
+    $('#component').dxOptionsCheckWidget(options);
+
+    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject(props);
+    expect($('#component').dxOptionsCheckWidget('option')).toMatchObject(options);
+  });
+
+  it('should still pass elementAttr to props', () => {
+    const mockFunction = () => {};
+    const elementStyle = { backgroundColor: 'red' };
+    const options = {
+      text: 'some text',
+      twoWayProp: 15,
+      twoWayPropChange: mockFunction,
+      elementAttr: { style: elementStyle },
+    };
+    const { elementAttr, ...props } = options;
+
+    $('#component').dxOptionsCheckWidget(options);
+
+    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject({
+      ...props,
+      style: elementStyle,
+    });
+    expect($('#component').dxOptionsCheckWidget('option')).toMatchObject(options);
   });
 });
 

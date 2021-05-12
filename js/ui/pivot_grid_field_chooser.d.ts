@@ -1,9 +1,12 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
 
 import {
-    TEvent
+    DxEvent,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
 } from '../events/index';
 
 import PivotGridDataSource, {
@@ -13,6 +16,26 @@ import PivotGridDataSource, {
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
+
+/** @public */
+export type ContextMenuPreparingEvent = EventInfo<dxPivotGridFieldChooser> & {
+    readonly area?: string;
+    readonly field?: PivotGridDataSourceField;
+    readonly event?: DxEvent;
+    items?: Array<any>;
+}
+
+/** @public */
+export type DisposingEvent = EventInfo<dxPivotGridFieldChooser>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxPivotGridFieldChooser>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxPivotGridFieldChooser> & ChangedOptionInfo;
 
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**
@@ -123,11 +146,14 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @type_function_param1_field6 field:PivotGridDataSourceOptions.fields
      * @type_function_param1_field7 event:event
      * @default null
+     * @type_function_param1_field1 component:dxPivotGridFieldChooser
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: TElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: TEvent }) => void);
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
     /**
      * @docid
      * @default 500
@@ -189,7 +215,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
  * @public
  */
 export default class dxPivotGridFieldChooser extends Widget {
-    constructor(element: TElement, options?: dxPivotGridFieldChooserOptions)
+    constructor(element: UserDefinedElement, options?: dxPivotGridFieldChooserOptions)
     /**
      * @docid
      * @publicName applyChanges()
@@ -221,7 +247,11 @@ export default class dxPivotGridFieldChooser extends Widget {
     updateDimensions(): void;
 }
 
+/** @public */
+export type Properties = dxPivotGridFieldChooserOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxPivotGridFieldChooserOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxPivotGridFieldChooserOptions;

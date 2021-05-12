@@ -824,7 +824,7 @@ export const DataController = Class.inherit((function() {
             const rowsScrollController = this._rowsScrollController;
 
             if(this._dataSource.paginate() && rowsScrollController) {
-                const rowPageSize = rowsScrollController._dataSource.pageSize();
+                const rowPageSize = rowsScrollController.pageSize();
 
                 if(options.headerName === 'rows') {
                     options.rowSkip = 0;
@@ -840,7 +840,7 @@ export const DataController = Class.inherit((function() {
             const columnsScrollController = this._columnsScrollController;
 
             if(this._dataSource.paginate() && columnsScrollController) {
-                const columnPageSize = columnsScrollController._dataSource.pageSize();
+                const columnPageSize = columnsScrollController.pageSize();
                 storeLoadOptions.forEach((options, index) => {
                     if(options.headerName === 'columns') {
                         options.columnSkip = 0;
@@ -1056,9 +1056,6 @@ export const DataController = Class.inherit((function() {
                 that._rowsInfo = rowsInfo;
 
                 if(that._rowsScrollController && that._columnsScrollController && that.changed && !that._dataSource.paginate()) {
-                    that._rowsScrollController.reset();
-                    that._columnsScrollController.reset();
-
                     that._lockChanged = true;
                     that._rowsScrollController.load();
                     that._columnsScrollController.load();

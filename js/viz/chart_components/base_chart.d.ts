@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../../core/element';
 
 import {
@@ -16,7 +17,8 @@ import DataSource, {
 } from '../../data/data_source';
 
 import {
-    TEvent
+    EventInfo,
+    NativeEventInfo
 } from '../../events/index';
 
 import {
@@ -43,6 +45,14 @@ import BaseWidget, {
     BaseWidgetAnnotationConfig
 } from '../core/base_widget';
 
+export interface PointInteractionInfo {
+    readonly target: basePointObject;
+}
+
+export interface TooltipInfo {
+    target?: basePointObject | dxChartAnnotationConfig | any;
+}
+
 export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     /**
      * @docid
@@ -58,29 +68,29 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      */
     animation?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1000
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 1000
+       */
       duration?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.VizAnimationEasing
-      * @default 'easeOutCubic'
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.VizAnimationEasing
+       * @default 'easeOutCubic'
+       */
       easing?: 'easeOutCubic' | 'linear',
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       enabled?: boolean,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 300
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 300
+       */
       maxPointCountSupported?: number
     } | boolean;
     /**
@@ -117,16 +127,23 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDone?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onDone?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:basePointObject
      * @notUsedInTheme
@@ -134,7 +151,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, target?: basePointObject }) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<T> & PointInteractionInfo) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -146,7 +163,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointHoverChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => void);
+    onPointHoverChanged?: ((e: EventInfo<T> & PointInteractionInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -158,29 +175,35 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointSelectionChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => void);
+    onPointSelectionChanged?: ((e: EventInfo<T> & PointInteractionInfo) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => void);
+    onTooltipHidden?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => void);
+    onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
     /**
      * @docid
      * @extends CommonVizPalette
@@ -263,7 +286,7 @@ export interface BaseChartLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
 }
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
@@ -276,13 +299,13 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.contentTemplate
      * @type_function_param1 pointInfo:object
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointInfo: any, element: TElement) => string | TElement);
+    contentTemplate?: template | ((pointInfo: any, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
      * @type_function_param1 pointInfo:object
@@ -315,7 +338,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export class BaseChart extends BaseWidget {
-    constructor(element: TElement, options?: BaseChartOptions)
+    constructor(element: UserDefinedElement, options?: BaseChartOptions)
     /**
      * @docid
      * @publicName clearSelection()
@@ -376,10 +399,10 @@ export class BaseChart extends BaseWidget {
 }
 
 /**
-* @docid
-* @type object
-* @inherits BaseLegendItem
-*/
+ * @docid
+ * @type object
+ * @inherits BaseLegendItem
+ */
 export interface BaseChartLegendItem extends BaseLegendItem {
     /**
      * @docid
@@ -390,10 +413,10 @@ export interface BaseChartLegendItem extends BaseLegendItem {
 }
 
 /**
-* @docid
-* @type object
-* @inherits BaseWidgetAnnotationConfig
-*/
+ * @docid
+ * @type object
+ * @inherits BaseWidgetAnnotationConfig
+ */
 export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * @docid

@@ -1,14 +1,59 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
+
+import {
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
 
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+
+import {
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo
+} from './core/base_widget';
+
 import BaseSparkline, {
     BaseSparklineOptions
 } from './sparklines/base_sparkline';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSparkline>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxSparkline>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxSparkline>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxSparkline> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxSparkline>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxSparkline> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSparkline>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSparkline> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = EventInfo<dxSparkline>;
+
+/** @public */
+export type TooltipShownEvent = EventInfo<dxSparkline>;
+
 
 export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     /**
@@ -177,11 +222,15 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
  * @public
  */
 export default class dxSparkline extends BaseSparkline {
-    constructor(element: TElement, options?: dxSparklineOptions)
+    constructor(element: UserDefinedElement, options?: dxSparklineOptions)
     getDataSource(): DataSource;
 }
 
+/** @public */
+export type Properties = dxSparklineOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSparklineOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxSparklineOptions;

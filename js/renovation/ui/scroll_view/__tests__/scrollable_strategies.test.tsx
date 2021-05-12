@@ -1,3 +1,4 @@
+/* eslint-disable jest/expect-expect */
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
@@ -10,58 +11,56 @@ import {
 } from '../../../test_utils/events_mock';
 
 import {
-  createContainerRef,
+  optionValues,
 } from './utils';
-
-import {
-  ensureLocation,
-} from '../scrollable_utils';
 
 import {
   SCROLLABLE_DISABLED_CLASS,
 } from '../common/consts';
 
+import { titleize } from '../../../../core/utils/inflector';
+
 import { Widget } from '../../common/widget';
 
-const testBehavior = { positive: false };
-jest.mock('../../../../ui/themes', () => ({
-  isMaterial: jest.fn(() => false),
-  isGeneric: jest.fn(() => true),
-  current: jest.fn(() => 'generic'),
-}));
-jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
-jest.mock('../../../../core/devices', () => ({
-  ...jest.requireActual('../../../../core/devices'),
-  real: jest.fn(() => ({ platform: 'generic' })),
-}));
-
-// eslint-disable-next-line import/first
 import {
   ScrollableNative,
   viewFunction as viewFunctionNative,
 } from '../scrollable_native';
 
-// eslint-disable-next-line import/first
 import {
   ScrollableSimulated,
   viewFunction as viewFunctionSimulated,
 } from '../scrollable_simulated';
 
+import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
+
+import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './scrollable_simulated_test_helper';
+import { ScrollableTestHelper as ScrollableNativeTestHelper } from './scrollable_native_test_helper';
+
+jest.mock('../../../../core/utils/scroll_rtl_behavior');
+jest.mock('../../../../ui/themes', () => ({
+  isMaterial: jest.fn(() => false),
+  isGeneric: jest.fn(() => true),
+  current: jest.fn(() => 'generic'),
+}));
+
 each([{
   viewFunction: viewFunctionNative,
   Scrollable: ScrollableNative,
+  ScrollableTestHelper: ScrollableNativeTestHelper,
 }, {
   viewFunction: viewFunctionSimulated,
   Scrollable: ScrollableSimulated,
-}]).describe('Scrollable', ({ viewFunction, Scrollable }) => {
+  ScrollableTestHelper: ScrollableSimulatedTestHelper,
+}]).describe('Scrollable ', ({ viewFunction, Scrollable, ScrollableTestHelper }) => {
   describe(`${Scrollable === ScrollableNative ? 'Native' : 'Simulated'}`, () => {
     describe('Render', () => {
       it('should render scrollable content', () => {
         const viewModel = new Scrollable({ });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
@@ -74,8 +73,8 @@ each([{
           const viewModel = new Scrollable({ needScrollViewContentWrapper });
           viewModel.contentRef = React.createRef();
           viewModel.containerRef = React.createRef();
-          viewModel.horizontalScrollbarRef = React.createRef();
-          viewModel.verticalScrollbarRef = React.createRef();
+          viewModel.hScrollbarRef = React.createRef();
+          viewModel.vScrollbarRef = React.createRef();
 
           const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
@@ -88,8 +87,8 @@ each([{
         const viewModel = new Scrollable({ });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
@@ -102,8 +101,8 @@ each([{
         const viewModel = new Scrollable({ forceGeneratePockets: true });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
@@ -116,8 +115,8 @@ each([{
         const viewModel = new Scrollable({ forceGeneratePockets: true });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
@@ -135,8 +134,8 @@ each([{
         const viewModel = new Scrollable({ forceGeneratePockets: true });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const reachBottom = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom');
@@ -151,14 +150,14 @@ each([{
         const viewModel = new Scrollable({ children: <div className="content" /> });
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = shallow(viewFunction(viewModel) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-content .content').exists()).toBe(true);
       });
 
-      it('should pass all necessary properties to the Widget', () => {
+      it('should pass all necessary properties to the Widget', () => { // TODO: all props
         const cssClasses = 'dx-scrollview';
 
         const config = {
@@ -171,8 +170,8 @@ each([{
         const viewModel = new Scrollable(config);
         viewModel.contentRef = React.createRef();
         viewModel.containerRef = React.createRef();
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         Object.defineProperties(viewModel, {
           cssClasses: {
@@ -192,8 +191,8 @@ each([{
         const contentRef = React.createRef();
         const viewModel = new Scrollable({});
         viewModel.contentRef = contentRef;
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         Object.defineProperties(viewModel, {
           contentWidth: { get() { return 0; } },
@@ -209,8 +208,8 @@ each([{
         const containerRef = React.createRef();
         const viewModel = new Scrollable({});
         viewModel.containerRef = containerRef;
-        viewModel.horizontalScrollbarRef = React.createRef();
-        viewModel.verticalScrollbarRef = React.createRef();
+        viewModel.hScrollbarRef = React.createRef();
+        viewModel.vScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
@@ -240,8 +239,8 @@ each([{
             const viewModel = new Scrollable({ direction, useSimulatedScrollbar: true, showScrollbar: 'always' });
             viewModel.contentRef = React.createRef();
             viewModel.containerRef = React.createRef();
-            viewModel.horizontalScrollbarRef = React.createRef();
-            viewModel.verticalScrollbarRef = React.createRef();
+            viewModel.hScrollbarRef = React.createRef();
+            viewModel.vScrollbarRef = React.createRef();
 
             const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
 
@@ -262,74 +261,51 @@ each([{
       describe('Effects', () => {
         beforeEach(clearEventHandlers);
 
-        each(['vertical', 'horizontal', 'both']).describe('ScrollEffect params. Direction: %o', (direction) => {
-          const checkScrollParams = (
-            actualParams,
-            expectedParams,
-          ) => {
-            const checkedParams = expectedParams;
+        each([optionValues.direction]).describe('ScrollEffect params. Direction: %o', (direction) => {
+          each([
+            { eventName: 'dxscrollinit', effectName: 'init', passEvent: true },
+            { eventName: 'dxscroll', effectName: 'move', passEvent: true },
+            { eventName: 'dxscrollstop', effectName: 'stop' },
+            { eventName: 'dxscrollend', effectName: 'end' },
+          ]).describe('Event: %o', (eventInfo) => {
+            it(`should subscribe to ${eventInfo.eventName} event`, () => {
+              const e = { ...defaultEvent };
+              const viewModel = new Scrollable({ direction });
 
-            if (direction === 'vertical') {
-              delete checkedParams.reachedLeft;
-              delete checkedParams.reachedRight;
-            } else if (direction === 'horizontal') {
-              delete checkedParams.reachedTop;
-              delete checkedParams.reachedBottom;
-            }
+              const { eventName, effectName, passEvent } = eventInfo;
+              const eventHandlerName = `handle${titleize(effectName)}`;
+              viewModel[eventHandlerName] = jest.fn();
+              viewModel.wrapperRef = React.createRef();
+              viewModel.containerRef = React.createRef();
 
-            expect(actualParams).toMatchObject(checkedParams);
-          };
+              viewModel[`${effectName}Effect`]();
+              emit(eventName, e);
 
-          it('scrollEffect should return unsubscribe callback', () => {
-            const scrollable = new Scrollable({ direction });
-            scrollable.containerRef = React.createRef();
-            scrollable.containerRef.current = {};
+              expect(viewModel[eventHandlerName]).toHaveBeenCalledTimes(1);
 
-            const detach = scrollable.scrollEffect() as DisposeEffectReturn;
-
-            expect(getEventHandlers('scroll').length).toBe(1);
-            detach();
-            expect(getEventHandlers('scroll').length).toBe(0);
+              if (passEvent) {
+                expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(e);
+              }
+            });
           });
 
-          it('should subscribe to scrollinit event', () => {
-            const e = { ...defaultEvent };
-            const scrollable = new Scrollable({ direction });
-            const handleInit = jest.fn();
-            scrollable.handleInit = handleInit;
-            scrollable.wrapperRef = React.createRef();
-            scrollable.containerRef = React.createRef();
+          each([
+            { eventName: 'scroll', effectName: 'scroll' },
+            { eventName: 'dxscrollinit', effectName: 'init' },
+            { eventName: 'dxscrollstop', effectName: 'stop' },
+            { eventName: 'dxscrollend', effectName: 'end' },
+            { eventName: 'dxscroll', effectName: 'move' },
+          ]).describe('Event: %o', (eventInfo) => {
+            it(`${eventInfo.effectName}Effect should return unsubscribe callback`, () => {
+              const viewModel = new Scrollable({ direction });
+              viewModel.wrapperRef = { current: {} };
+              viewModel.containerRef = { current: {} };
 
-            scrollable.initEffect();
-            emit('dxscrollinit', e);
+              const { eventName, effectName } = eventInfo;
+              viewModel[`handle${titleize(effectName)}`] = jest.fn();
 
-            expect(handleInit).toHaveBeenCalledTimes(1);
-            expect(handleInit).toHaveBeenCalledWith(e);
-          });
+              const detach = viewModel[`${effectName}Effect`]() as DisposeEffectReturn;
 
-          it('should subscribe to dxscroll event', () => {
-            const e = { ...defaultEvent };
-            const scrollable = new Scrollable({ direction });
-            const handleMove = jest.fn();
-            scrollable.handleMove = handleMove;
-            scrollable.wrapperRef = React.createRef();
-
-            scrollable.moveEffect();
-            emit('dxscroll', e);
-
-            expect(handleMove).toHaveBeenCalledTimes(1);
-            expect(handleMove).toHaveBeenCalledWith(e);
-          });
-
-          each(['init']).describe('EventName: %o', (shortEventName) => {
-            it('Effect should return unsubscribe callback', () => {
-              const scrollable = new Scrollable({ direction });
-              scrollable.wrapperRef = React.createRef();
-              scrollable.containerRef = React.createRef();
-
-              const detach = scrollable[`${shortEventName}Effect`]() as DisposeEffectReturn;
-
-              const eventName = `dxscroll${shortEventName}`;
               expect(getEventHandlers(eventName).length).toBe(1);
               detach();
               expect(getEventHandlers(eventName).length).toBe(0);
@@ -337,43 +313,45 @@ each([{
           });
 
           if (Scrollable === ScrollableSimulated) {
-            it('should subscribe to scrollstart event', () => {
-              const e = { ...defaultEvent };
-              const scrollable = new Scrollable({ direction });
-              const handleStart = jest.fn();
-              scrollable.handleStart = handleStart;
-              scrollable.wrapperRef = React.createRef();
+            each([
+              { eventName: 'dxscrollstart', effectName: 'start', passEvent: true },
+              { eventName: 'dxscrollcancel', effectName: 'cancel', passEvent: true },
+            ]).describe('Event: %o', (eventInfo) => {
+              it(`should subscribe to ${eventInfo.eventName} event`, () => {
+                const e = { ...defaultEvent };
+                const viewModel = new Scrollable({ direction });
 
-              scrollable.startEffect();
-              emit('dxscrollstart', e);
+                const { eventName, effectName, passEvent } = eventInfo;
+                const eventHandlerName = `handle${titleize(effectName)}`;
+                viewModel[eventHandlerName] = jest.fn();
+                viewModel.wrapperRef = React.createRef();
+                viewModel.containerRef = React.createRef();
 
-              expect(handleStart).toHaveBeenCalledTimes(1);
-              expect(handleStart).toHaveBeenCalledWith(e);
+                viewModel[`${effectName}Effect`]();
+                emit(eventName, e);
+
+                expect(viewModel[eventHandlerName]).toHaveBeenCalledTimes(1);
+
+                if (passEvent) {
+                  expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(e);
+                }
+              });
             });
 
-            it('should subscribe to scrollend event', () => {
-              const e = { ...defaultEvent };
-              const scrollable = new Scrollable({ direction });
-              const handleEnd = jest.fn();
-              scrollable.handleEnd = handleEnd;
-              scrollable.wrapperRef = React.createRef();
+            each([
+              { eventName: 'dxscrollstart', effectName: 'start' },
+              { eventName: 'dxscrollcancel', effectName: 'cancel' },
+            ]).describe('Event: %o', (eventInfo) => {
+              it(`${eventInfo.effectName}Effect should return unsubscribe callback`, () => {
+                const viewModel = new Scrollable({ direction });
+                viewModel.wrapperRef = { current: {} };
+                viewModel.containerRef = { current: {} };
 
-              scrollable.endEffect();
-              emit('dxscrollend', e);
+                const { eventName, effectName } = eventInfo;
+                viewModel[`handle${titleize(effectName)}`] = jest.fn();
 
-              expect(handleEnd).toHaveBeenCalledTimes(1);
-              expect(handleEnd).toHaveBeenCalledWith(e);
-            });
+                const detach = viewModel[`${effectName}Effect`]() as DisposeEffectReturn;
 
-            each(['start', 'end', 'stop', 'cancel']).describe('EventName: %o', (shortEventName) => {
-              it(`${shortEventName}Effect should return unsubscribe callback`, () => {
-                const scrollable = new Scrollable({ direction });
-                scrollable.wrapperRef = React.createRef();
-                scrollable.containerRef = React.createRef();
-
-                const detach = scrollable[`${shortEventName}Effect`]() as DisposeEffectReturn;
-
-                const eventName = `dxscroll${shortEventName}`;
                 expect(getEventHandlers(eventName).length).toBe(1);
                 detach();
                 expect(getEventHandlers(eventName).length).toBe(0);
@@ -381,120 +359,144 @@ each([{
             });
           }
 
-          it('moveEffect should return unsubscribe callback', () => {
-            const scrollable = new Scrollable({ direction });
-            scrollable.wrapperRef = React.createRef();
+          each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
+            each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+              each([true, false]).describe('PullDownEnabled: %o', (pullDownEnabled) => {
+                each([true, false]).describe('ReachBottomEnabled: %o', (reachBottomEnabled) => {
+                  each([{ decreasing: true, positive: false }, { decreasing: true, positive: true }, { decreasing: false, positive: true }]).describe('rtlBehavior: %o', (rtlBehavior) => {
+                    const isNativeINChrome86 = Scrollable === ScrollableNative && rtlEnabled
+                      && rtlBehavior.decreasing && !rtlBehavior.positive;
+                    const isNativeINIE11 = Scrollable === ScrollableNative && rtlEnabled
+                      && !rtlBehavior.decreasing && rtlBehavior.positive;
 
-            const detach = scrollable.moveEffect() as DisposeEffectReturn;
+                    const getRequiredOffsetLeft = (value) => {
+                      const maxLeftOffset = 100;
 
-            expect(getEventHandlers('dxscroll').length).toBe(1);
-            detach();
-            expect(getEventHandlers('dxscroll').length).toBe(0);
+                      if (isNativeINChrome86) {
+                        return value - maxLeftOffset;
+                      }
+
+                      if (isNativeINIE11) {
+                        return -value + maxLeftOffset;
+                      }
+
+                      return value;
+                    };
+
+                    each([
+                      [{ top: -81, left: getRequiredOffsetLeft(-81) }, {
+                        scrollOffset: { top: -81, left: -81 },
+                        reachedTop: true,
+                        reachedBottom: false,
+                        reachedLeft: true,
+                        reachedRight: false,
+                      }],
+                      [{ top: -1, left: getRequiredOffsetLeft(-1) }, {
+                        scrollOffset: { top: -1, left: -1 },
+                        reachedTop: true,
+                        reachedBottom: false,
+                        reachedLeft: true,
+                        reachedRight: false,
+                      }],
+                      [{ top: 0, left: getRequiredOffsetLeft(0) }, {
+                        scrollOffset: { top: 0, left: 0 },
+                        reachedTop: true,
+                        reachedBottom: false,
+                        reachedLeft: true,
+                        reachedRight: false,
+                      }],
+                      [{ top: 1, left: getRequiredOffsetLeft(1) }, {
+                        scrollOffset: { top: 1, left: 1 },
+                        reachedTop: false,
+                        reachedBottom: false,
+                        reachedLeft: false,
+                        reachedRight: false,
+                      }],
+                      [{ top: 99, left: getRequiredOffsetLeft(99) }, {
+                        scrollOffset: { top: 99, left: 99 },
+                        reachedTop: false,
+                        reachedBottom: false,
+                        reachedLeft: false,
+                        reachedRight: false,
+                      }],
+                      [{ top: 100, left: getRequiredOffsetLeft(100) }, {
+                        scrollOffset: { top: 100, left: 100 },
+                        reachedTop: false,
+                        reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
+                        reachedLeft: false,
+                        reachedRight: true,
+                      }],
+                      [{ top: 101, left: getRequiredOffsetLeft(101) }, {
+                        scrollOffset: { top: 101, left: 101 },
+                        reachedTop: false,
+                        reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
+                        reachedLeft: false,
+                        reachedRight: true,
+                      }],
+                      [{ top: 154, left: getRequiredOffsetLeft(154) }, {
+                        scrollOffset: { top: 154, left: 154 },
+                        reachedTop: false,
+                        reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
+                        reachedLeft: false,
+                        reachedRight: true,
+                      }],
+                      [{ top: 155, left: getRequiredOffsetLeft(155) }, {
+                        scrollOffset: { top: 155, left: 155 },
+                        reachedTop: false,
+                        reachedBottom: true,
+                        reachedLeft: false,
+                        reachedRight: true,
+                      }],
+                      [{ top: 156, left: getRequiredOffsetLeft(156) }, {
+                        scrollOffset: { top: 156, left: 156 },
+                        reachedTop: false,
+                        reachedBottom: true,
+                        reachedLeft: false,
+                        reachedRight: true,
+                      }],
+                    ]).describe('ScrollOffset: %o', (scrollOffset, expected) => {
+                      it('emit "dxscroll" event, should be called with correct arguments', () => {
+                        // chrome 86 - true {decreasing: true, positive: false} - [-max, 0]
+                        // chrome 84 - false {decreasing: true, positive: true} - [0 -> max]
+                        // ie11 - true [max -> 0] - {decreasing: false, positive: true}
+                        (getScrollRtlBehavior as jest.Mock)
+                          .mockReturnValue(rtlBehavior);
+
+                        const e = { ...defaultEvent };
+                        const helper = new ScrollableTestHelper({
+                          direction,
+                          pullDownEnabled,
+                          reachBottomEnabled,
+                          forceGeneratePockets,
+                          rtlEnabled,
+                        });
+
+                        helper.viewModel.eventForUserAction = e;
+                        helper.initContainerPosition(scrollOffset);
+                        helper.viewModel.handlePocketState = jest.fn();
+
+                        helper.viewModel.scrollEffect();
+                        emit('scroll');
+
+                        const expectedArgs = expected;
+                        expectedArgs.event = { ...defaultEvent };
+
+                        if (helper.options.direction === 'vertical') {
+                          delete expectedArgs.reachedLeft;
+                          delete expectedArgs.reachedRight;
+                        } else if (helper.options.direction === 'horizontal') {
+                          delete expectedArgs.reachedTop;
+                          delete expectedArgs.reachedBottom;
+                        }
+
+                        helper.checkActionHandlerCalls(expect, ['onScroll'], [[expectedArgs]]);
+                      });
+                    });
+                  });
+                });
+              });
+            });
           });
-
-          if (Scrollable === ScrollableNative) {
-            it('scrollEffect', () => {
-              const scrollOffset = { top: 150, left: 150 };
-              const containerRef = createContainerRef(scrollOffset);
-              const onScroll = jest.fn();
-              const scrollable = new Scrollable({ onScroll, direction });
-              scrollable.containerRef = containerRef;
-
-              scrollable.scrollEffect();
-              emit('scroll');
-
-              expect(onScroll).toHaveBeenCalledTimes(1);
-              checkScrollParams(onScroll.mock.calls[0][0], {
-                scrollOffset,
-                reachedTop: false,
-                reachedBottom: false,
-                reachedLeft: false,
-                reachedRight: false,
-              });
-            });
-
-            // it doesn't work when position of container was not changed
-            // it('ScrollPosition: { top: 0, left: 0 }', () => {
-            //   const scrollOffset = { top: 0, left: 0 };
-            //   const containerRef = createContainerRef(scrollOffset);
-
-            //   const onScroll = jest.fn();
-            //   const scrollable = new Scrollable({ onScroll, direction });
-            //   scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
-
-            //   scrollable.scrollEffect();
-            //   emit('scroll');
-
-            //   expect(onScroll).toHaveBeenCalledTimes(1);
-            //   checkScrollParams(onScroll.mock.calls[0][0], {
-            //     scrollOffset,
-            //     reachedTop: true,
-            //     reachedBottom: false,
-            //     reachedLeft: true,
-            //     reachedRight: false,
-            //   });
-            // });
-
-            it('ScrollPosition: { top: maxOffset, left: maxOffset }', () => {
-              const scrollOffset = { top: 300, left: 300 };
-              const containerRef = createContainerRef(scrollOffset, 'both');
-
-              const onScroll = jest.fn();
-              const scrollable = new Scrollable({ onScroll, direction });
-              scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
-              scrollable.scrollEffect();
-              emit('scroll');
-
-              expect(onScroll).toHaveBeenCalledTimes(1);
-              checkScrollParams(onScroll.mock.calls[0][0], {
-                scrollOffset,
-                reachedTop: false,
-                reachedBottom: true,
-                reachedLeft: false,
-                reachedRight: true,
-              });
-            });
-
-            it('ScrollPosition: { top: maxOffset - 1, left: maxOffset - 1 }', () => {
-              const scrollOffset = { top: 199, left: 199 };
-              const containerRef = createContainerRef(scrollOffset);
-
-              const onScroll = jest.fn();
-              const scrollable = new Scrollable({ onScroll, direction });
-              scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
-              scrollable.scrollEffect();
-              emit('scroll');
-
-              expect(onScroll).toHaveBeenCalledTimes(1);
-              checkScrollParams(onScroll.mock.calls[0][0], {
-                scrollOffset,
-                reachedTop: false,
-                reachedBottom: false,
-                reachedLeft: false,
-                reachedRight: false,
-              });
-            });
-
-            it('ScrollPosition: { top: 1, left: 1 }', () => {
-              const scrollOffset = { top: 1, left: 1 };
-              const containerRef = createContainerRef(scrollOffset, 'both');
-
-              const onScroll = jest.fn();
-              const scrollable = new Scrollable({ onScroll, direction });
-              scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
-              scrollable.scrollEffect();
-              emit('scroll');
-
-              expect(onScroll).toHaveBeenCalledTimes(1);
-              checkScrollParams(onScroll.mock.calls[0][0], {
-                scrollOffset,
-                reachedTop: false,
-                reachedBottom: false,
-                reachedLeft: false,
-                reachedRight: false,
-              });
-            });
-          }
         });
 
         it('should not raise any error if onScroll is not defined', () => {
@@ -510,56 +512,120 @@ each([{
       });
     });
 
-    describe('Logic', () => {
-      describe('Getters', () => {
-        describe('cssClasses', () => {
-          it('should add vertical direction class', () => {
-            const { cssClasses } = new Scrollable({ direction: 'vertical' });
-            expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
-            expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-horizontal'));
-            expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-both'));
-          });
+    describe('Public methods', () => {
+      test.each([true, false])('Content(), needScrollViewContentWrapper: %o', (needScrollViewContentWrapper) => {
+        const viewModel = new Scrollable({ needScrollViewContentWrapper });
 
-          it('should add horizontal direction class', () => {
-            const { cssClasses } = new Scrollable({ direction: 'horizontal' });
-            expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-horizontal'));
-            expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-vertical'));
-            expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-both'));
-          });
+        const contentEl = { clientHeight: 100 };
+        const scrollViewContentEl = { clientHeight: 100 };
 
-          it('should add both direction class', () => {
-            const { cssClasses } = new Scrollable({ direction: 'both' });
-            expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
-            expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-vertical'));
-            expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-horizontal'));
-          });
+        viewModel.contentRef = { current: contentEl } as RefObject<HTMLDivElement>;
+        viewModel.scrollViewContentRef = {
+          current: scrollViewContentEl,
+        } as RefObject<HTMLDivElement>;
 
-          each([true, false]).describe('Disabled: %o', (isDisabled) => {
-            it('Scrollable should have dx-scrollable-disabled if disabled', () => {
-              const instance = new Scrollable({ disabled: isDisabled });
+        const expectedContentEl = needScrollViewContentWrapper ? scrollViewContentEl : contentEl;
 
-              expect(instance.cssClasses).toEqual(isDisabled
-                ? expect.stringMatching(SCROLLABLE_DISABLED_CLASS)
-                : expect.not.stringMatching(SCROLLABLE_DISABLED_CLASS));
-            });
-          });
-        });
+        expect(viewModel.content()).toEqual(expectedContentEl);
       });
 
-      describe('Ensure location', () => {
-        it('should convert number type to Location type', () => {
-          expect(ensureLocation(350)).toMatchObject({ top: 350, left: 350 });
+      describe('ScrollOffset', () => {
+        it('scrollOffset()', () => {
+          const helper = new ScrollableTestHelper({});
+
+          const scrollLocation = { left: 130, top: 560 };
+          helper.initContainerPosition(scrollLocation);
+
+          expect(helper.viewModel.scrollOffset()).toEqual({
+            left: scrollLocation.left,
+            top: scrollLocation.top,
+          });
         });
 
-        it('should return Location type if input type is Location', () => {
-          const location = { top: 345, left: 10 };
-          expect(ensureLocation(location)).toMatchObject(location);
+        it('scrollTop()', () => {
+          const helper = new ScrollableTestHelper({});
+
+          const scrollLocation = { left: 130, top: 560 };
+          helper.initContainerPosition(scrollLocation);
+
+          expect(helper.viewModel.scrollTop()).toEqual(560);
         });
 
-        it('should fill undefined value with value by default', () => {
-          expect(ensureLocation({ top: 100 })).toMatchObject({ top: 100, left: 0 });
-          expect(ensureLocation({ left: 100 })).toMatchObject({ left: 100, top: 0 });
-          expect(ensureLocation({})).toMatchObject({ top: 0, left: 0 });
+        it('scrollLeft()', () => {
+          const helper = new ScrollableTestHelper({});
+
+          const scrollLocation = { left: 130, top: 560 };
+          helper.initContainerPosition(scrollLocation);
+
+          expect(helper.viewModel.scrollLeft()).toEqual(130);
+        });
+
+        it('scrollLeft(), scrollTop()', () => {
+          const helper = new ScrollableTestHelper({});
+
+          helper.viewModel.scrollOffset = jest.fn(() => ({ left: 25, top: 30 }));
+
+          expect(helper.viewModel.scrollLeft()).toEqual(25);
+          expect(helper.viewModel.scrollTop()).toEqual(30);
+        });
+      });
+    });
+
+    describe('Methods', () => {
+      it('validate(e), locked: false, disabled: true', () => {
+        const e = { ...defaultEvent } as any;
+        const viewModel = new Scrollable({ disabled: true });
+
+        viewModel.locked = false;
+        viewModel.update = jest.fn();
+
+        expect((viewModel as any).validate(e)).toEqual(false);
+        expect(viewModel.update).toHaveBeenCalledTimes(1);
+      });
+
+      it('validate(e), locked: true, disabled: false', () => {
+        const e = { ...defaultEvent } as any;
+        const viewModel = new Scrollable({});
+
+        viewModel.locked = true;
+        viewModel.update = jest.fn();
+
+        expect((viewModel as any).validate(e)).toEqual(false);
+        expect(viewModel.update).toHaveBeenCalledTimes(0);
+      });
+    });
+
+    describe('Getters', () => {
+      describe('cssClasses', () => {
+        it('should add vertical direction class', () => {
+          const { cssClasses } = new Scrollable({ direction: 'vertical' });
+          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
+          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-horizontal'));
+          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-both'));
+        });
+
+        it('should add horizontal direction class', () => {
+          const { cssClasses } = new Scrollable({ direction: 'horizontal' });
+          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-horizontal'));
+          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-vertical'));
+          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-both'));
+        });
+
+        it('should add both direction class', () => {
+          const { cssClasses } = new Scrollable({ direction: 'both' });
+          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
+          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-vertical'));
+          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-horizontal'));
+        });
+
+        each([true, false]).describe('Disabled: %o', (isDisabled) => {
+          it('Scrollable should have dx-scrollable-disabled if disabled', () => {
+            const instance = new Scrollable({ disabled: isDisabled });
+
+            expect(instance.cssClasses).toEqual(isDisabled
+              ? expect.stringMatching(SCROLLABLE_DISABLED_CLASS)
+              : expect.not.stringMatching(SCROLLABLE_DISABLED_CLASS));
+          });
         });
       });
     });

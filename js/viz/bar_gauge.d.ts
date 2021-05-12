@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -10,6 +11,13 @@ import {
 import {
     template
 } from '../core/templates/template';
+
+import {
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
 
 import {
     format
@@ -24,13 +32,16 @@ import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo
 } from './core/base_widget';
 
 /**
-* @docid
-* @type object
-*/
+ * @docid
+ * @type object
+ */
 export interface BarGaugeBarInfo {
     /**
      * @docid
@@ -53,10 +64,10 @@ export interface BarGaugeBarInfo {
 }
 
 /**
-* @docid
-* @inherits BaseLegendItem
-* @type object
-*/
+ * @docid
+ * @inherits BaseLegendItem
+ * @type object
+ */
 export interface BarGaugeLegendItem extends BaseLegendItem {
     /**
      * @docid
@@ -65,6 +76,40 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
      */
     item?: BarGaugeBarInfo;
 }
+
+export interface TooltipInfo {
+    target?: any;
+}
+
+/** @public */
+export type DisposingEvent = EventInfo<dxBarGauge>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxBarGauge>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxBarGauge>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxBarGauge> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxBarGauge>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxBarGauge> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxBarGauge>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxBarGauge> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
@@ -111,16 +156,16 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     geometry?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 315
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 315
+       */
       endAngle?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 225
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 225
+       */
       startAngle?: number
     };
     /**
@@ -130,50 +175,50 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     label?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
       connectorColor?: string,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 2
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 2
+       */
       connectorWidth?: number,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 barValue:object
-      * @type_function_param1_field1 value:Number
-      * @type_function_param1_field2 valueText:string
-      * @type_function_return string
-      * @notUsedInTheme
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 barValue:object
+       * @type_function_param1_field1 value:Number
+       * @type_function_param1_field2 valueText:string
+       * @type_function_return string
+       * @notUsedInTheme
+       */
       customizeText?: ((barValue: { value?: number, valueText?: string }) => string),
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 16 [prop](size)
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 16 [prop](size)
+       */
       font?: Font,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizFormat
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @extends CommonVizFormat
+       */
       format?: format,
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 20
-      */
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 20
+       */
       indent?: number,
-    /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
       visible?: boolean
     };
     /**
@@ -195,24 +240,30 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxBarGauge
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
+    onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxBarGauge
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxBarGauge, element?: TElement, model?: any, target?: any }) => void);
+    onTooltipShown?: ((e: TooltipShownEvent) => void);
     /**
      * @docid
      * @extends CommonVizPalette
@@ -315,7 +366,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxBarGaugeOptions.legend.visible
      * @default false
@@ -326,10 +377,10 @@ export interface dxBarGaugeLegend extends BaseLegend {
 }
 export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     /**
-    * @docid dxBarGaugeOptions.loadingIndicator.enabled
-    * @prevFileNamespace DevExpress.viz
-    * @hidden
-    */
+     * @docid dxBarGaugeOptions.loadingIndicator.enabled
+     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
     enabled?: boolean
 }
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
@@ -339,13 +390,13 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
      * @type_function_param1_field3 index:number
-     * @type_function_param2 element:dxElement
+     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: TElement) => string | TElement);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -375,7 +426,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxBarGauge extends BaseWidget {
-    constructor(element: TElement, options?: dxBarGaugeOptions)
+    constructor(element: UserDefinedElement, options?: dxBarGaugeOptions)
     /**
      * @docid
      * @publicName values()
@@ -394,7 +445,11 @@ export default class dxBarGauge extends BaseWidget {
     values(values: Array<number>): void;
 }
 
+/** @public */
+export type Properties = dxBarGaugeOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxBarGaugeOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxBarGaugeOptions;

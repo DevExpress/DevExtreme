@@ -1,5 +1,6 @@
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -12,10 +13,81 @@ import {
     DataSourceOptions
 } from '../data/data_source';
 
+import {
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import Widget, {
     format,
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxFilterBuilder>;
+
+/** @public */
+export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
+    readonly value?: any;
+    readonly setValue: any;
+    readonly editorElement: DxElement;
+    readonly editorName: string;
+    readonly dataField?: string;
+    readonly filterOperation?: string;
+    readonly updateValueTimeout?: number;
+    readonly width?: number;
+    readonly readOnly: boolean;
+    readonly disabled: boolean;
+    readonly rtlEnabled: boolean;
+}
+
+/** @public */
+export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
+    readonly value?: any;
+    readonly setValue: any;
+    readonly editorElement?: DxElement;
+    editorName: string;
+    editorOptions?: any;
+    readonly dataField?: string;
+    readonly filterOperation?: string;
+    updateValueTimeout?: number;
+    readonly width?: number;
+    readonly readOnly: boolean;
+    readonly disabled: boolean;
+    readonly rtlEnabled: boolean;
+}
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxFilterBuilder>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxFilterBuilder> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
+    readonly value?: any;
+    readonly previousValue?: any;
+}
+
+/** @public */
+export type CustomOperationEditorTemplate = {
+    readonly value?: string | number | Date;
+    readonly field: dxFilterBuilderField;
+    readonly setValue: Function;
+}
+
+/** @public */
+export type FieldEditorTemplate = {
+    readonly value?: string | number | Date;
+    readonly filterOperation?: string;
+    readonly field: dxFilterBuilderField;
+    readonly setValue: Function;
+}
 
 export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
@@ -173,9 +245,12 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFilterBuilder
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:any
      * @type_function_param1_field5 setValue(newValue):any
-     * @type_function_param1_field6 editorElement:dxElement
+     * @type_function_param1_field6 editorElement:DxElement
      * @type_function_param1_field7 editorName:string
      * @type_function_param1_field8 dataField:string
      * @type_function_param1_field9 filterOperation:string
@@ -189,14 +264,17 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, editorElement?: TElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => void);
+    onEditorPrepared?: ((e: EditorPreparedEvent) => void);
     /**
      * @docid
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFilterBuilder
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:any
      * @type_function_param1_field5 setValue(newValue):any
      * @type_function_param1_field6 cancel:boolean
-     * @type_function_param1_field7 editorElement:dxElement
+     * @type_function_param1_field7 editorElement:DxElement
      * @type_function_param1_field8 editorName:string
      * @type_function_param1_field9 editorOptions:object
      * @type_function_param1_field10 dataField:string
@@ -211,18 +289,21 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPreparing?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: TElement, editorName?: string, editorOptions?: any, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => void);
+    onEditorPreparing?: ((e: EditorPreparingEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxFilterBuilder
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxFilterBuilder, element?: TElement, model?: any, value?: any, previousValue?: any }) => void);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @type Filter expression
@@ -242,7 +323,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
  * @public
  */
 export default class dxFilterBuilder extends Widget {
-    constructor(element: TElement, options?: dxFilterBuilderOptions)
+    constructor(element: UserDefinedElement, options?: dxFilterBuilderOptions)
     /**
      * @docid
      * @publicName getFilterExpression()
@@ -299,12 +380,12 @@ export interface dxFilterBuilderCustomOperation {
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 field:dxFilterBuilderField
      * @type_function_param1_field3 setValue:function
-     * @type_function_param2 container:dxElement
+     * @type_function_param2 container:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, field?: dxFilterBuilderField, setValue?: Function }, container: TElement) => string | TElement);
+    editorTemplate?: template | ((conditionInfo: CustomOperationEditorTemplate, container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -387,12 +468,12 @@ export interface dxFilterBuilderField {
      * @type_function_param1_field2 filterOperation:string
      * @type_function_param1_field3 field:dxFilterBuilderField
      * @type_function_param1_field4 setValue:function
-     * @type_function_param2 container:dxElement
+     * @type_function_param2 container:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, filterOperation?: string, field?: dxFilterBuilderField, setValue?: Function }, container: TElement) => string | TElement);
+    editorTemplate?: template | ((conditionInfo: FieldEditorTemplate, container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default "false"
@@ -467,7 +548,11 @@ export interface dxFilterBuilderField {
     trueText?: string;
 }
 
+/** @public */
+export type Properties = dxFilterBuilderOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxFilterBuilderOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxFilterBuilderOptions;

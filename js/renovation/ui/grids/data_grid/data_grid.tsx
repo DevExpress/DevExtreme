@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  JSXComponent, Component, Method, Effect, Mutable,
+  JSXComponent, Component, Method, Effect, Mutable, RefObject, Ref, InternalState,
 } from '@devextreme-generator/declarations';
 import {
   DataGridProps,
@@ -13,15 +13,22 @@ import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
-import { TPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
-import { TElement, TElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
+import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
+import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
+import type { OptionChangedEvent } from '../../../../ui/data_grid';
 
 const aria = { role: 'presentation' };
 
+const rowSelector = '.dx-row';
+
 export const viewFunction = ({
   instance,
+  widgetElementRef,
+  onHoverStart,
+  onHoverEnd,
+  onDimensionChanged,
   props: {
     accessKey,
     activeStateEnabled,
@@ -35,12 +42,15 @@ export const viewFunction = ({
     tabIndex,
     visible,
     width,
+    showBorders,
   },
   restAttributes,
 }: DataGrid): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
+    rootElementRef={widgetElementRef as any}
     accessKey={accessKey}
     activeStateEnabled={activeStateEnabled}
+    activeStateUnit={rowSelector}
     aria={aria}
     disabled={disabled}
     focusStateEnabled={focusStateEnabled}
@@ -52,10 +62,13 @@ export const viewFunction = ({
     tabIndex={tabIndex}
     visible={visible}
     width={width}
+    onHoverStart={onHoverStart}
+    onHoverEnd={onHoverEnd}
+    onDimensionChanged={onDimensionChanged}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
-    <DataGridViews instance={instance} />
+    <DataGridViews instance={instance} showBorders={showBorders} />
   </Widget>
 );
 
@@ -65,7 +78,11 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class DataGrid extends JSXComponent(DataGridProps) {
-  @Mutable() componentInstance!: GridInstance;
+  @Ref() widgetElementRef?: RefObject<HTMLDivElement>;
+
+  @InternalState() instance!: GridInstance;
+
+  @Mutable() isTwoWayPropUpdating = false;
 
   @Mutable() prevProps!: DataGridProps;
 
@@ -81,7 +98,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  byKey(key: any | string | number): TPromise<any> {
+  byKey(key: any | string | number): DxPromise<any> {
     return this.instance?.byKey(key);
   }
 
@@ -125,9 +142,18 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return this.instance?.columnCount();
   }
 
+  // TODO remove this after fix https://trello.com/c/I8ManehQ/2674-renovation-generated-jquery-methods-pass-all-aguments-even-it-is-optional
+  callMethod(funcName: string, args: unknown): void {
+    const normalizedArgs = [...args as unknown[]].filter((arg) => arg !== undefined);
+
+    return this.instance?.[funcName](...normalizedArgs);
+  }
+
   @Method()
-  columnOption(id: number | string, optionName: any, optionValue: any): void {
-    return this.instance?.columnOption(id, optionName, optionValue);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  columnOption(id: number | string, optionName: any, optionValue?: any): void {
+    // eslint-disable-next-line prefer-rest-params
+    return this.callMethod('columnOption', arguments);
   }
 
   @Method()
@@ -141,12 +167,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  deselectAll(): TPromise {
+  deselectAll(): DxPromise {
     return this.instance?.deselectAll();
   }
 
   @Method()
-  deselectRows(keys: any[]): TPromise<any> {
+  deselectRows(keys: any[]): DxPromise<any> {
     return this.instance?.deselectRows(keys);
   }
 
@@ -176,14 +202,14 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  focus(element?: TElement): void {
+  focus(element?: UserDefinedElement): void {
     return this.instance?.focus(element as HTMLElement);
   }
 
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
-  ): any/* dxElement | undefined */ {
+  ): any/* DxElement | undefined */ {
     return this.instance?.getCellElement(rowIndex, dataField as string);
   }
 
@@ -203,7 +229,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getRowElement(rowIndex: number): TElementsArray | undefined {
+  getRowElement(rowIndex: number): UserDefinedElementsArray | undefined {
     return this.instance?.getRowElement(rowIndex);
   }
 
@@ -265,7 +291,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   pageIndex(
     newIndex?: number,
-  ): TPromise | number {
+  ): DxPromise | number {
     return this.instance?.pageIndex(newIndex as number);
   }
 
@@ -277,7 +303,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   refresh(
     changesOnly?: boolean,
-  ): TPromise {
+  ): DxPromise {
     return this.instance?.refresh(changesOnly as boolean);
   }
 
@@ -287,7 +313,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  saveEditData(): TPromise {
+  saveEditData(): DxPromise {
     return this.instance?.saveEditData();
   }
 
@@ -297,19 +323,19 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  selectAll(): TPromise {
+  selectAll(): DxPromise {
     return this.instance?.selectAll();
   }
 
   @Method()
   selectRows(
     keys: any[], preserve: boolean,
-  ): TPromise<any> {
+  ): DxPromise<any> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
-  selectRowsByIndexes(indexes: number[]): TPromise<any> {
+  selectRowsByIndexes(indexes: number[]): DxPromise<any> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
 
@@ -335,12 +361,17 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
+  resize(): void {
+    return this.instance?.resize();
+  }
+
+  @Method()
   addColumn(columnOptions: any | string): void {
     return this.instance?.addColumn(columnOptions);
   }
 
   @Method()
-  addRow(): TPromise {
+  addRow(): DxPromise {
     return this.instance?.addRow();
   }
 
@@ -355,7 +386,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  collapseRow(key: any): TPromise {
+  collapseRow(key: any): DxPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -365,7 +396,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  expandRow(key: any): TPromise {
+  expandRow(key: any): DxPromise {
     return this.instance?.expandRow(key);
   }
 
@@ -375,12 +406,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getSelectedRowKeys(): any[] & TPromise<any> {
+  getSelectedRowKeys(): any[] & DxPromise<any> {
     return this.instance?.getSelectedRowKeys();
   }
 
   @Method()
-  getSelectedRowsData(): any[] & TPromise<any> {
+  getSelectedRowsData(): any[] & DxPromise<any> {
     return this.instance?.getSelectedRowsData();
   }
 
@@ -410,27 +441,36 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getController(name: string): any {
-    return this.instance?.getController(name);
+  isScrollbarVisible(): boolean {
+    return this.instance?.isScrollbarVisible();
   }
+
+  @Method()
+  getTopVisibleRowData(): any {
+    return this.instance?.getTopVisibleRowData();
+  }
+
+  @Method()
+  getScrollbarWidth(isHorizontal: boolean): number {
+    return this.instance?.getScrollbarWidth(isHorizontal);
+  }
+
   // #endregion
 
-  // It's impossible to define constructor use lazy creation instead
-  get instance(): GridInstance {
-    if (!this.componentInstance) {
-      this.componentInstance = this.createInstance();
-    }
-    return this.componentInstance;
-  }
-
   @Effect() updateOptions(): void {
-    if (this.instance && this.prevProps) {
+    if (this.instance && this.prevProps && !this.isTwoWayPropUpdating) {
       const updatedOptions = getUpdatedOptions(this.prevProps, this.props);
       this.instance.beginUpdate();
-      updatedOptions.forEach(({ path, value }) => this.instance.option(path, value));
+      updatedOptions.forEach(({ path, value, previousValue }) => {
+        // eslint-disable-next-line no-underscore-dangle
+        this.instance._options.silent(path, previousValue);
+        this.instance.option(path, value);
+      });
+      this.prevProps = this.props;
       this.instance.endUpdate();
+    } else {
+      this.prevProps = this.props;
     }
-    this.prevProps = this.props;
   }
 
   @Effect({ run: 'once' })
@@ -438,7 +478,80 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return () => { this.instance.dispose(); };
   }
 
+  @Effect({ run: 'once' })
+  initInstanceElement(): void {
+    this.instance = this.createInstance();
+  }
+
+  @Effect()
+  subscribeOptionChanged(): void {
+    this.instance?.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+  }
+
+  instanceOptionChangedHandler(e: OptionChangedEvent): void {
+    try {
+      this.isTwoWayPropUpdating = true;
+      this.updateTwoWayValue(e);
+    } finally {
+      this.isTwoWayPropUpdating = false;
+    }
+  }
+
+  updateTwoWayValue(e: OptionChangedEvent): void {
+    // T867777
+    const isValueCorrect = e.value === e.component.option(e.fullName);
+    if (e.value !== e.previousValue && isValueCorrect) {
+      if (e.name === 'editing' && this.props.editing) {
+        if (e.fullName === 'editing.changes') {
+          this.props.editing.changes = e.value as [];
+        }
+        if (e.fullName === 'editing.editRowKey') {
+          this.props.editing.editRowKey = e.value;
+        }
+        if (e.fullName === 'editing.editColumnName') {
+          this.props.editing.editColumnName = e.value as string;
+        }
+      }
+      if (e.fullName === 'searchPanel.text' && this.props.searchPanel) {
+        this.props.searchPanel.text = e.value as string;
+      }
+      if (e.fullName === 'focusedRowKey') {
+        this.props.focusedRowKey = e.value;
+      }
+      if (e.fullName === 'focusedRowIndex') {
+        this.props.focusedRowIndex = e.value as number;
+      }
+      if (e.fullName === 'focusedColumnIndex') {
+        this.props.focusedColumnIndex = e.value as number;
+      }
+      if (e.fullName === 'filterValue') {
+        this.props.filterValue = e.value as string;
+      }
+      if (e.fullName === 'selectedRowKeys') {
+        this.props.selectedRowKeys = e.value as [];
+      }
+      if (e.fullName === 'selectionFilter') {
+        this.props.selectionFilter = e.value as string;
+      }
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  onHoverStart(event: Event): void {
+    (event.currentTarget as HTMLElement).classList.add('dx-state-hover');
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  onHoverEnd(event: Event): void {
+    (event.currentTarget as HTMLElement).classList.remove('dx-state-hover');
+  }
+
+  onDimensionChanged(): void {
+    this.instance?.updateDimensions(true);
+  }
+
   // TODO without normalization all nested props defaults overwrite by undefined
+  // https://trello.com/c/36qTw0cH/2560-a-nested-prop-has-an-undefined-value-if-it-not-used-in-component
   // For example, instance.option('editing') return undefined instead of editing default values
   // Specifically for React
   // result[key] = {
@@ -447,19 +560,27 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   //   editing: __getNestedEditing()
   //   ...
   // }
-  normalizeProps(): Record<string, unknown> {
+  normalizeProps(props: Record<string, unknown>): Record<string, unknown> {
     const result = {};
-    Object.keys(this.props).forEach((key) => {
+
+    Object.keys(props).forEach((key) => {
       if (this.props[key] !== undefined) {
-        result[key] = this.props[key];
+        result[key] = props[key];
       }
     });
     return result;
   }
 
   createInstance(): GridInstance {
-    const instance: unknown = new DataGridComponent(this.normalizeProps());
-
+    const element = this.widgetElementRef?.current as HTMLElement;
+    // TODO Vitik: Not only optionChanged should be rewrited.
+    // All other events should be re-raised by renovated grid.
+    const { onOptionChanged, ...restProps } = this.props as unknown as Record<string, unknown>;
+    const instance: GridInstance = new DataGridComponent(
+      element,
+      this.normalizeProps(restProps),
+    ) as unknown as GridInstance;
+    instance.getController('resizing').updateSize(element);
     return instance as GridInstance;
   }
 }

@@ -7,17 +7,70 @@ import {
 } from '../animation/position';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
     template
 } from '../core/templates/template';
 
+import {
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
+
 import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions
 } from './overlay';
+
+import {
+    ResizeInfo
+} from './resizable';
+
+export interface TitleRenderedInfo {
+    readonly titleElement: DxElement
+}
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxPopup>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxPopup>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxPopup>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxPopup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxPopup>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxPopup>;
+
+/** @public */
+export type ResizeEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+
+/** @public */
+export type ResizeStartEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+
+/** @public */
+export type ResizeEndEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = EventInfo<dxPopup>;
+
+/** @public */
+export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
@@ -34,7 +87,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | TElement;
+    container?: string | UserDefinedElement;
     /**
      * @docid
      * @default false
@@ -68,37 +121,52 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: T, element?: TElement, model?: any }) => void);
-    /**
-     * @docid
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => void);
-    /**
-     * @docid
-     * @default null
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onResize?: ((e: ResizeEvent) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 titleElement:dxElement
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: T, element?: TElement, model?: any, titleElement?: TElement }) => void);
+    onResizeEnd?: ((e: ResizeEndEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onResizeStart?: ((e: ResizeStartEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 titleElement:DxElement
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function
@@ -138,12 +206,12 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:dxElement
+     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    titleTemplate?: template | ((titleElement: TElement) => string | TElement);
+    titleTemplate?: template | ((titleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type Array<Object>
@@ -249,11 +317,15 @@ export interface dxPopupToolbarItem {
  * @public
  */
 export default class dxPopup extends dxOverlay {
-    constructor(element: TElement, options?: dxPopupOptions)
+    constructor(element: UserDefinedElement, options?: dxPopupOptions)
 }
 
+/** @public */
+export type Properties = dxPopupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxPopupOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxPopupOptions;
 export type ToolbarItem = dxPopupToolbarItem;

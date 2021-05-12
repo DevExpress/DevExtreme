@@ -1,10 +1,28 @@
 import {
-    TElement
+    UserDefinedElement
 } from '../core/element';
+
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo
+} from '../events/index';
 
 import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxLoadIndicator>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxLoadIndicator>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxLoadIndicator>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
@@ -24,10 +42,14 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
  * @public
  */
 export default class dxLoadIndicator extends Widget {
-    constructor(element: TElement, options?: dxLoadIndicatorOptions)
+    constructor(element: UserDefinedElement, options?: dxLoadIndicatorOptions)
 }
 
+/** @public */
+export type Properties = dxLoadIndicatorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxLoadIndicatorOptions;
 
-/** @deprecated use Options instead */
+/** @deprecated use Properties instead */
 export type IOptions = dxLoadIndicatorOptions;

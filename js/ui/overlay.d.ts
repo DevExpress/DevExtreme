@@ -3,7 +3,8 @@ import {
 } from '../animation/fx';
 
 import {
-    TElement
+    UserDefinedElement,
+    DxElement
 } from '../core/element';
 
 import {
@@ -11,11 +12,13 @@ import {
 } from '../core/templates/template';
 
 import {
-    TPromise
+    DxPromise
 } from '../core/utils/deferred';
 
 import {
-    TEvent
+    DxEvent,
+    Cancelable,
+    EventInfo
 } from '../events/index';
 
 import Widget, {
@@ -41,16 +44,16 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default "content"
-     * @type_function_param1 contentElement:dxElement
+     * @type_function_param1 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: TElement) => string | TElement);
+    contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -108,37 +111,52 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onHidden?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: T, element?: TElement, model?: any, cancel?: boolean }) => void);
+    onHiding?: ((e: Cancelable & EventInfo<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onShowing?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: T, element?: TElement, model?: any }) => void);
+    onShown?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }
@@ -203,15 +221,15 @@ export interface dxOverlayAnimation {
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxOverlay extends Widget {
-    constructor(element: TElement, options?: dxOverlayOptions)
+    constructor(element: UserDefinedElement, options?: dxOverlayOptions)
     /**
      * @docid
      * @publicName content()
-     * @return dxElement
+     * @return DxElement
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): TElement;
+    content(): DxElement;
     /**
      * @docid
      * @publicName hide()
@@ -219,7 +237,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): TPromise<boolean>;
+    hide(): DxPromise<boolean>;
     /**
      * @docid
      * @publicName repaint()
@@ -234,7 +252,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): TPromise<boolean>;
+    show(): DxPromise<boolean>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -243,7 +261,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): TPromise<boolean>;
+    toggle(showing: boolean): DxPromise<boolean>;
 }
 
 /**
@@ -260,6 +278,4 @@ export default class dxOverlay extends Widget {
 export function baseZIndex(zIndex: number): void;
 
 export type Options = dxOverlayOptions;
-
-/** @deprecated use Options instead */
 export type IOptions = dxOverlayOptions;

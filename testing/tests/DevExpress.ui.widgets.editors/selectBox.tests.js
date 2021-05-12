@@ -1426,7 +1426,7 @@ QUnit.module('widget options', moduleSetup, () => {
             opened: true
         }).dxSelectBox('instance');
 
-        assert.strictEqual(instance._popup.overlayContent().attr('tabindex'), '-1', 'tabindex is correct in the markup');
+        assert.strictEqual(instance._popup.$overlayContent().attr('tabindex'), '-1', 'tabindex is correct in the markup');
     });
 
     QUnit.testInActiveWindow('don\'t rise valueChange event on focusout in readonly state with searchEnabled', function(assert) {
@@ -5171,7 +5171,7 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
             opened: true
         });
         const instance = $element.dxSelectBox('instance');
-        const $applyButton = instance._popup._wrapper().find('.dx-popup-done.dx-button');
+        const $applyButton = instance._popup.$wrapper().find('.dx-popup-done.dx-button');
 
         keyboardMock($element.find(toSelector(TEXTEDITOR_INPUT_CLASS)), true)
             .focus()
@@ -5803,6 +5803,28 @@ QUnit.module('valueChanged handler should receive correct event', {
 
             this.checkEvent(assert, 'keydown', this.$input, key);
             this.testProgramChange(assert);
+        });
+    });
+});
+
+QUnit.module('displayExpr', moduleSetup, () => {
+    [false, true].forEach((deferRendering) => {
+        QUnit.test(`displayExpr should not recalculated on closing dropDown window in case the widget has no actual value(deferRendering is ${deferRendering})`, function(assert) {
+            const displayExprSpy = sinon.spy((itemData) => itemData || 'test');
+            const $element = $('#selectBox').dxSelectBox({
+                items: [1, 2, 3],
+                displayExpr: displayExprSpy,
+                deferRendering
+            });
+            const instance = $element.dxSelectBox('instance');
+
+            assert.strictEqual(displayExprSpy.callCount, deferRendering ? 1 : 4, `Render field value'${ deferRendering ? ' + render 3 items' : ''}`);
+
+            instance.open();
+            assert.strictEqual(displayExprSpy.callCount, 4, `${deferRendering ? 'Render 3 items' : 'It was not called more times on DropDown showing'}`);
+
+            instance.close();
+            assert.strictEqual(displayExprSpy.callCount, 4, 'It was not called more times on DropDown hiding');
         });
     });
 });

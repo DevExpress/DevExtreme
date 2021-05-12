@@ -12,6 +12,7 @@ import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
 import holdEvent from '../../events/hold';
 import Selection from '../selection/selection';
 import { Deferred } from '../../core/utils/deferred';
+import errors from '../widget/ui.errors';
 
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
 const ROW_CLASS = 'dx-row';
@@ -98,8 +99,13 @@ const SelectionController = gridCore.Controller.inherit((function() {
 
     return {
         init: function() {
+            const { deferred, selectAllMode, mode } = this.option('selection') || {};
+            if(this.option('scrolling.mode') === 'infinite' && !deferred && mode === 'multiple' && selectAllMode === 'allPages') {
+                errors.log('W1018');
+            }
+
             this._dataController = this.getController('data');
-            this._selectionMode = this.option(SELECTION_MODE);
+            this._selectionMode = mode;
             this._isSelectionWithCheckboxes = false;
 
             this._selection = this._createSelection();
@@ -108,27 +114,26 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         _getSelectionConfig: function() {
-            const that = this;
-            const dataController = that._dataController;
-            const selectionOptions = that.option('selection') || {};
+            const dataController = this._dataController;
+            const selectionOptions = this.option('selection') || {};
 
             return {
-                selectedKeys: that.option('selectedRowKeys'),
-                mode: that._selectionMode,
+                selectedKeys: this.option('selectedRowKeys'),
+                mode: this._selectionMode,
                 deferred: selectionOptions.deferred,
                 maxFilterLengthInRequest: selectionOptions.maxFilterLengthInRequest,
-                selectionFilter: that.option('selectionFilter'),
+                selectionFilter: this.option('selectionFilter'),
                 key: function() {
-                    return dataController && dataController.key();
+                    return dataController?.key();
                 },
                 keyOf: function(item) {
-                    return dataController && dataController.keyOf(item);
+                    return dataController?.keyOf(item);
                 },
                 dataFields: function() {
-                    return dataController.dataSource() && dataController.dataSource().select();
+                    return dataController.dataSource()?.select();
                 },
                 load: function(options) {
-                    return dataController.dataSource() && dataController.dataSource().load(options) || new Deferred().resolve([]);
+                    return dataController.dataSource()?.load(options) || new Deferred().resolve([]);
                 },
                 plainItems: function() {
                     return dataController.items(true);
@@ -137,18 +142,18 @@ const SelectionController = gridCore.Controller.inherit((function() {
                     return item.selected;
                 },
                 isSelectableItem: function(item) {
-                    return item && item.rowType === 'data' && !item.isNewRow;
+                    return item?.rowType === 'data' && !item.isNewRow;
                 },
                 getItemData: function(item) {
-                    return item && (item.oldData || item.data || item);
+                    return item?.oldData || item?.data || item;
                 },
                 filter: function() {
-                    return dataController.getCombinedFilter();
+                    return dataController.getCombinedFilter(true);
                 },
-                totalCount: function() {
+                totalCount: () => {
                     return dataController.totalCount();
                 },
-                onSelectionChanged: that._updateSelectedItems.bind(this)
+                onSelectionChanged: this._updateSelectedItems.bind(this)
             };
         },
 

@@ -17,7 +17,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('column should be draggable if grid contains this column and column with allowHiding: false', function(assert) {
         // act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1', allowHiding: false }, { dataField: 'field2' }],
             dataSource: []
         });
@@ -36,7 +36,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('Correct runtime changing of a columnChooser mode (string)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2' }],
             dataSource: []
         });
@@ -44,14 +44,14 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // act
         dataGrid.showColumnChooser();
 
-        let $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer._wrapper();
+        let $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
 
         assert.ok($overlayWrapper.hasClass('dx-datagrid-column-chooser-mode-drag'), 'has dragAndDrop mode class');
         assert.ok(!$overlayWrapper.hasClass('dx-datagrid-column-chooser-mode-select'), 'hasn\'t select mode class');
 
         dataGrid.option('columnChooser.mode', 'select');
 
-        $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer._wrapper();
+        $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
 
         // assert
         assert.ok(!$overlayWrapper.hasClass('dx-datagrid-column-chooser-mode-drag'), 'hasn\'t dragAndDrop mode class');
@@ -61,7 +61,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('Correct runtime changing of a columnChooser mode (object)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2' }],
             dataSource: []
         });
@@ -69,14 +69,14 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // act
         dataGrid.showColumnChooser();
 
-        let $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer._wrapper();
+        let $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
 
         assert.ok($overlayWrapper.hasClass('dx-datagrid-column-chooser-mode-drag'), 'has dragAndDrop mode class');
         assert.ok(!$overlayWrapper.hasClass('dx-datagrid-column-chooser-mode-select'), 'hasn\'t select mode class');
 
         dataGrid.option({ columnChooser: { mode: 'select' } });
 
-        $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer._wrapper();
+        $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
 
         // assert
         assert.ok(!$overlayWrapper.hasClass('dx-datagrid-column-chooser-mode-drag'), 'hasn\'t dragAndDrop mode class');
@@ -86,7 +86,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
     QUnit.test('ColumnChooser\'s treeView get correct default config (without checkboxes)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnChooser: { mode: 'select' },
             columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2', visible: false }],
             dataSource: []
@@ -95,13 +95,13 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // act
         dataGrid.showColumnChooser();
 
-        let $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer._wrapper();
+        let $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
 
         assert.ok($overlayWrapper.find('.dx-checkbox').length, 'There are checkboxes in columnChooser');
 
         dataGrid.option({ columnChooser: { mode: 'dragAndDrop' } });
 
-        $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer._wrapper();
+        $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
 
         // assert
         assert.ok(!$overlayWrapper.find('.dx-checkbox').length, 'There aren\'t checkboxes in columnChooser');

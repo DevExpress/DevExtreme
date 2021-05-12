@@ -7,18 +7,19 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 import {
-  DateHeaderCellData,
+  DateHeaderData,
   DateTimeCellTemplateProps,
 } from '../../types.d';
 import { isHorizontalGroupOrientation } from '../../utils';
 import { GroupPanel } from '../group_panel/group_panel';
 import { GroupPanelProps } from '../group_panel/group_panel_props';
 import { DateHeaderLayout, DateHeaderLayoutProps } from './date_header/layout';
+import HeaderPanel from '../../../../../component_wrapper/scheduler_header_panel';
 
 export const viewFunction = ({
   isHorizontalGrouping,
   props: {
-    dateHeaderMap,
+    dateHeaderData,
     groupByDate,
     groups,
     groupOrientation,
@@ -45,7 +46,7 @@ export const viewFunction = ({
     {isRenderDateHeader && (
       <DateHeader
         groupByDate={groupByDate}
-        dateHeaderMap={dateHeaderMap}
+        dateHeaderData={dateHeaderData}
         groupOrientation={groupOrientation}
         groups={groups}
         dateCellTemplate={dateCellTemplate}
@@ -67,7 +68,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class HeaderPanelLayoutProps extends GroupPanelProps {
-  @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
+  @OneWay() dateHeaderData!: DateHeaderData;
 
   @OneWay() isRenderDateHeader = true;
 
@@ -77,15 +78,15 @@ export class HeaderPanelLayoutProps extends GroupPanelProps {
 
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
-  @Template() dateHeaderTemplate: JSXTemplate<DateHeaderLayoutProps> = DateHeaderLayout;
+  @Template() dateHeaderTemplate: JSXTemplate<DateHeaderLayoutProps, 'dateHeaderData'> = DateHeaderLayout;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: { register: true },
+  jQuery: { register: true, component: HeaderPanel },
 })
-export class HeaderPanelLayout extends JSXComponent(HeaderPanelLayoutProps) {
+export class HeaderPanelLayout extends JSXComponent<HeaderPanelLayoutProps, 'dateHeaderData'>() {
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups } = this.props;
 
