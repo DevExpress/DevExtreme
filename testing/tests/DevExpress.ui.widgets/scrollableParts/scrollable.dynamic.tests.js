@@ -3,6 +3,7 @@ import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translat
 import animationFrame from 'animation/frame';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -47,6 +48,8 @@ const getScrollOffset = function($scrollable) {
         left: location.left - $container.scrollLeft()
     };
 };
+
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('dynamic', moduleConfig);
 
@@ -309,6 +312,7 @@ QUnit.test('stop bounce on click', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
+            assert.ok(isRenovation ? true : false, 'shouldn\'t fire end action');
         }
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
@@ -329,6 +333,7 @@ QUnit.test('stop bounce on click', function(assert) {
 });
 
 QUnit.test('stop inertia bounce on after mouse up', function(assert) {
+    assert.expect(1);
 
     animationFrame.requestAnimationFrame = function(callback) {
         setTimeout(callback, 0);
@@ -340,6 +345,7 @@ QUnit.test('stop inertia bounce on after mouse up', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
+            assert.ok(isRenovation ? true : false, 'scroll complete shouldn`t be fired');
         }
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
@@ -530,7 +536,7 @@ QUnit.test('velocity calculated correctly when content height less than containe
 });
 
 QUnit.test('window resize should call update', function(assert) {
-    assert.expect(2);
+    assert.expect(isRenovation ? 1 : 2);
 
     const $scrollable = $('#scrollable');
 
@@ -553,13 +559,16 @@ QUnit.test('scrollable should have correct scrollPosition when content is not cr
         scrollByContent: true
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
-    $content.children().eq(0).css({
+    // https://trello.com/c/OGZIjBfC/2584-renovation-react-wrapper-in-some-cases-brokes-children-render
+    const $contentChildren = isRenovation ? $content.children().eq(0) : $content.eq(0);
+
+    $contentChildren.children().eq(0).css({
         width: '100px',
         height: '100px'
     });
-    $content.children().eq(1).css({
+    $contentChildren.children().eq(1).css({
         width: '300px',
         height: '300px',
         position: 'absolute',
@@ -589,13 +598,16 @@ QUnit.test('scrollable should have correct scrollPosition when content is croppe
         scrollByContent: true
     });
 
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
-    $content.children().eq(0).css({
+    // https://trello.com/c/OGZIjBfC/2584-renovation-react-wrapper-in-some-cases-brokes-children-render
+    const $contentChildren = isRenovation ? $content.children().eq(0) : $content.eq(0);
+
+    $contentChildren.children().eq(0).css({
         width: '100px',
         height: '100px'
     });
-    $content.children().eq(1).css({
+    $contentChildren.children().eq(0).css({
         width: '300px',
         height: '300px',
         position: 'absolute',

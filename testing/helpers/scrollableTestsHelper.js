@@ -1,9 +1,11 @@
 import $ from 'jquery';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 const SCROLLABLE_CONTAINER = 'dx-scrollable-container';
 const SCROLLABLE_CONTENT = 'dx-scrollable-content';
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 const $tempVScrollBar = $('<div id="getVScrollBarWidth" style="width: 75px; height: 100px"><div style="width: 125px; height: 150px"></div></div>');
 $('#qunit').append($tempVScrollBar);
@@ -62,8 +64,8 @@ export function checkScrollableSizes(assert, $rootContainer, { id, width, height
     } else {
         assert.strictEqual($container[0].scrollHeight, expectedContainerScrollHeight, `${id}: container.scrollHeigh`);
     }
-
-    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT}`).children();
+    // https://trello.com/c/OGZIjBfC/2584-renovation-react-wrapper-in-some-cases-brokes-children-render
+    const $content = isRenovation ? $scrollable.find(`.${SCROLLABLE_CONTENT}`).children().children() : $scrollable.find(`.${SCROLLABLE_CONTENT}`).children();
     assert.equal($content[0].clientWidth, nestedElementWidth, `${id}: content.clientWidth`);
     if(Array.isArray(nestedElementHeight)) {
         assert.ok($content[0].clientHeight > nestedElementHeight[0] && $content[0].clientHeight < nestedElementHeight[1], `${id}: content.clientHeight(${$content[0].clientHeight})`);

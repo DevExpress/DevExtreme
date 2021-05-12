@@ -2,8 +2,12 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import { value as viewPort } from 'core/utils/view_port';
 
+import Scrollable from 'renovation/ui/scroll_view/scrollable';
+
 viewPort($('#qunit-fixture').addClass('dx-viewport'));
 devices.current('iPhone');
+
+Scrollable.defaultOptions({});
 
 import './scrollableParts/scrollable.main.tests.js';
 import './scrollableParts/scrollable.actions.tests.js';
