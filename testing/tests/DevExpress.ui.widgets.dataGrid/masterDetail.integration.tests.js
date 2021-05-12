@@ -612,6 +612,61 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), 'nested row heights are synchronized after collapse');
     });
 
+    QUnit.test('Columns should be synchronized after expand master detail row in second nested DataGrid with fixed columns (T995035)', function(assert) {
+        // arrange
+        let nestedDataGrid;
+
+        const firstColumnWidth = 100;
+
+        const dataGridConfig = {
+            dataSource: [{ id: 1, text: 'text' }],
+            onInitialized(e) {
+                nestedDataGrid = e.component;
+            },
+            keyExpr: 'id',
+            columnAutoWidth: true,
+            columns: [{
+                dataField: 'id',
+                width: firstColumnWidth,
+                cssClass: 'first-column',
+                fixed: true
+            }, 'text'],
+            masterDetail: {
+                enabled: true,
+                template: masterDetailTemplate
+            }
+        };
+
+        function masterDetailTemplate() {
+            return $('<div>').dxDataGrid(dataGridConfig);
+        }
+
+        const dataGrid = createDataGrid({
+            width: 500,
+            ...dataGridConfig
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(1);
+        this.clock.tick();
+
+        nestedDataGrid.expandRow(1);
+        this.clock.tick();
+
+        nestedDataGrid.expandRow(1);
+        this.clock.tick();
+
+        // assert
+        const $firstHeaderCells = $('.dx-header-row > .first-column');
+
+        assert.equal($firstHeaderCells.length, 8, 'first-column header cell count');
+        for(let i = 0; i < $firstHeaderCells.length; i++) {
+            assert.equal($firstHeaderCells.eq(i).outerWidth(), firstColumnWidth, 'first column width');
+        }
+    });
+
     // T607490
     QUnit.test('Scrollable should be updated after expand master detail row with nested DataGrid', function(assert) {
         // arrange
