@@ -1158,4 +1158,22 @@ export default class ViewDataProvider {
             && time < cellEndTime)
             || (allDay && trimmedTime === cellStartTime);
     }
+
+    getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {
+        const { dateTableGroupedMap } = this._groupedDataMapProvider.groupedDataMap;
+        const groupedData = dateTableGroupedMap[groupIndex];
+        let includedDays = 0;
+
+        for(let rowIndex = 0; rowIndex < groupedData.length; rowIndex += 1) {
+            for(let columnIndex = 0; columnIndex < groupedData[rowIndex].length; columnIndex += 1) {
+                const cell = groupedData[rowIndex][columnIndex].cellData;
+                if(startDate.getTime() < cell.endDate.getTime()
+                    && endDate.getTime() > cell.startDate.getTime()) {
+                    includedDays += 1;
+                }
+            }
+        }
+
+        return daysCount - includedDays;
+    }
 }
