@@ -621,7 +621,7 @@ const DropDownEditor = TextBox.inherit({
     _popupShownHandler: function() {
         this._openAction();
 
-        const $popupOverlayContent = this._popup.overlayContent();
+        const $popupOverlayContent = this._popup.$overlayContent();
         const position = locate($popupOverlayContent);
 
         if($popupOverlayContent.hasClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED)) {
