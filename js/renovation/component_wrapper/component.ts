@@ -39,6 +39,7 @@ export default class ComponentWrapper extends DOMComponent {
   _viewRef!: RefObject<unknown>;
   _viewComponent!: any;
   _disposeMethodCalled = false;
+  _componentTemplates!: Record<string, any>;
 
   get _propsInfo(): {
     allowNull: string[];
@@ -229,6 +230,9 @@ export default class ComponentWrapper extends DOMComponent {
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
     });
+    this._propsInfo.templates.forEach(template => {
+      options[template] = this._componentTemplates[template];
+    })
 
     return {
       ...options,
@@ -255,6 +259,11 @@ export default class ComponentWrapper extends DOMComponent {
     this._props = { ...this.option() };
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
+
+    this._componentTemplates = {};
+    this._propsInfo.templates.forEach(template => {
+      this._componentTemplates[template] = this._createTemplateComponent(this._props[template]);
+    })
 
     Object.keys(this._getActionConfigs()).forEach((name) =>
       this._addAction(name)
@@ -284,11 +293,17 @@ export default class ComponentWrapper extends DOMComponent {
   }
   
   _optionChanged(option) {
-    const { name, fullName } = option;
+    const { name, fullName, value } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);
+
+    if (this._propsInfo.templates.indexOf(name) > -1) {
+      this._componentTemplates[name] = this._createTemplateComponent(value);
+    }
+
     if (name && this._getActionConfigs()[name]) {
       this._addAction(name);
     }
+
     super._optionChanged(option);
     this._invalidate();
   }
@@ -303,7 +318,7 @@ export default class ComponentWrapper extends DOMComponent {
     return null;
   }
 
-  _createTemplateComponent(props, templateOption) {
+  _createTemplateComponent(templateOption) {
     if (!templateOption) {
       return;
     }
