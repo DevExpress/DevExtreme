@@ -291,7 +291,6 @@ export default class ComponentWrapper extends DOMComponent {
 
   _init(): void {
     super._init();
-    console.log(typeof this._props);
     this._props = { ...this.option() };
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
@@ -348,9 +347,9 @@ export default class ComponentWrapper extends DOMComponent {
   _createTemplateComponent(
     props: unknown,
     templateOption: unknown,
-  ): ((model: TemplateModel) => VNode) | null {
+  ): ((model: TemplateModel) => VNode) | undefined {
     if (!templateOption) {
-      return null;
+      return undefined;
     }
 
     const template = this._getTemplate(templateOption);
