@@ -3238,6 +3238,17 @@ QUnit.module('scrollView integration', {
             assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), 'changed text');
         });
     });
+
+    QUnit.test('List should not call "get" in users objects when scrolling to item (T996102)', function(assert) {
+        const getCallSpy = sinon.spy();
+        const items = [{ get: getCallSpy }];
+        const instance = $('#list').dxList({
+            items: items
+        }).dxList('instance');
+
+        instance.scrollToItem(items[0]);
+        assert.strictEqual(getCallSpy.callCount, 0);
+    });
 });
 
 QUnit.module('regressions', moduleSetup, () => {

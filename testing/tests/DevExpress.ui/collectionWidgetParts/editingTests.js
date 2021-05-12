@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
-import EditStrategy from 'ui/collection/ui.collection_widget.edit.strategy';
+// import EditStrategy from 'ui/collection/ui.collection_widget.edit.strategy';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
@@ -2281,12 +2281,40 @@ module('reordering with dataSource', () => {
     });
 });
 
-module('editing strategy', () => {
-    test('_isNode method should correctly detect jQuery objects', function(assert) {
-        const editStrategy = new EditStrategy();
+module('internal methods', () => {
+    test('getItemElement method should not call "get" in users objects (T996102)', function(assert) {
         const getCallSpy = sinon.spy();
-        assert.ok(editStrategy._isNode($(document.createElement('div'))));
-        assert.ok(!editStrategy._isNode({ get: getCallSpy }));
+        this.items = [{ get: getCallSpy }];
+        this.$element = $('#cmp');
+        this.instance = new TestComponent(this.$element, {
+            items: this.items,
+        });
+
+        this.instance._editStrategy.getItemElement(this.items[0]);
+        assert.strictEqual(getCallSpy.callCount, 0);
+    });
+
+    test('getNormalizedIndex method should not call "get" in users objects (T996102)', function(assert) {
+        const getCallSpy = sinon.spy();
+        this.items = [{ get: getCallSpy }];
+        this.$element = $('#cmp');
+        this.instance = new TestComponent(this.$element, {
+            items: this.items,
+        });
+
+        this.instance._editStrategy.getNormalizedIndex(this.items[0]);
+        assert.strictEqual(getCallSpy.callCount, 0);
+    });
+
+    test('getIndex method should not call "get" in users objects (T996102)', function(assert) {
+        const getCallSpy = sinon.spy();
+        this.items = [{ get: getCallSpy }];
+        this.$element = $('#cmp');
+        this.instance = new TestComponent(this.$element, {
+            items: this.items,
+        });
+
+        this.instance._editStrategy.getIndex(this.items[0]);
         assert.strictEqual(getCallSpy.callCount, 0);
     });
 });
