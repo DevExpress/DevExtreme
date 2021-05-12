@@ -23,58 +23,56 @@ export default class AppointmentDataSource {
         this.setDataSource(dataSource);
     }
 
-    get filterMaker() { return this.strategy.filterMaker; }
+    get filterMaker() { return this.getStrategy().filterMaker; }
     get keyName() { return this.dataOperator.keyName; }
 
-    initStrategy() {
-        this.strategy = this.scheduler.isVirtualScrolling()
+    getStrategy() {
+        return this.scheduler.isVirtualScrolling()
             ? new AppointmentFilterVirtualStrategy(this.scheduler, this.dataSource, this.dataAccessors)
             : new AppointmentFilterBaseStrategy(this.scheduler, this.dataSource, this.dataAccessors);
     }
 
     setDataSource(dataSource) {
         this.dataSource = dataSource;
-        this.initStrategy();
         this.dataOperator.setDataSource(this.dataSource);
     }
 
     setDataAccessors(dataAccessors) {
         this.dataAccessors = dataAccessors;
-        this.initStrategy();
     }
 
     // Filter mapping
     filter() {
-        return this.strategy.filter();
+        return this.getStrategy().filter();
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
-        this.strategy.filterByDate(min, max, remoteFiltering, dateSerializationFormat);
+        this.getStrategy().filterByDate(min, max, remoteFiltering, dateSerializationFormat);
     }
 
     appointmentTakesAllDay(appointment, startDayHour, endDayHour) {
-        return this.strategy.appointmentTakesAllDay(appointment, startDayHour, endDayHour);
+        return this.getStrategy().appointmentTakesAllDay(appointment, startDayHour, endDayHour);
     }
 
     hasAllDayAppointments(appointments) {
-        return this.strategy.hasAllDayAppointments(appointments);
+        return this.getStrategy().hasAllDayAppointments(appointments);
     }
 
     filterLoadedAppointments(filterOption, timeZoneCalculator) {
-        return this.strategy.filterLoadedAppointments(filterOption, timeZoneCalculator);
+        return this.getStrategy().filterLoadedAppointments(filterOption, timeZoneCalculator);
     }
 
     // From subscribe
     replaceWrongEndDate(appointment, startDate, endDate) {
-        this.strategy.replaceWrongEndDate(appointment, startDate, endDate);
+        this.getStrategy().replaceWrongEndDate(appointment, startDate, endDate);
     }
 
     calculateAppointmentEndDate(isAllDay, startDate) {
-        return this.strategy.calculateAppointmentEndDate(isAllDay, startDate);
+        return this.getStrategy().calculateAppointmentEndDate(isAllDay, startDate);
     }
 
     appointmentTakesSeveralDays(appointment) {
-        return this.strategy.appointmentTakesSeveralDays(appointment);
+        return this.getStrategy().appointmentTakesSeveralDays(appointment);
     }
 
     // Data operator mappings
