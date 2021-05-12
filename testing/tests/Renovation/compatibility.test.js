@@ -67,7 +67,7 @@ QUnit.module('Mandatory component setup', {
             + '<root {...viewModel.restAttributes} />';
 
             $('#component')[`dx${meta.name}`]({
-                'data-custom-option': 'custom-value',
+                elementAttr: { 'data-custom-option': 'custom-value' },
             });
 
             assert.equal($('#component').attr('data-custom-option'), 'custom-value', message);
