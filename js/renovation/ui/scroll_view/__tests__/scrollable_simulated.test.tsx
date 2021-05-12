@@ -399,7 +399,7 @@ describe('Simulated > Behavior', () => {
           expect(helper.viewModel.suppressDirections).toHaveBeenCalledTimes(1);
           expect(helper.viewModel.suppressDirections).toHaveBeenCalledWith(e);
           expect(helper.viewModel.eventForUserAction).toEqual(e);
-          helper.checkActionHandlerCalls(expect, ['onStop'], [[{ fakeEventArg: { value: 5 } }]]);
+          helper.checkActionHandlerCalls(expect, [], [[]]);
           helper.checkScrollbarEventHandlerCalls(expect, ['init'], [[e, expectedCrossThumbScrolling]]);
         });
 
@@ -1107,7 +1107,7 @@ describe('Simulated > Behavior', () => {
         }
       });
 
-      test.each(['onBounce', 'onStart', 'onStop', 'onEnd', 'onUpdated'])('actionName: %o', (action) => {
+      test.each(['onBounce', 'onStart', 'onEnd', 'onUpdated'])('actionName: %o', (action) => {
         const helper = new ScrollableTestHelper({
           [`${action}`]: actionHandler,
         });

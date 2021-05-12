@@ -80,6 +80,7 @@ import { restoreLocation } from './utils/restore_location';
 import { getScrollTopMax } from './utils/get_scroll_top_max';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
 import { inRange } from '../../../core/utils/math';
+import { isVisible } from './utils/is_element_visible';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -327,15 +328,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   refresh(): void {
-    this.topPocketState = TopPocketState.STATE_READY;
-
+    this.pocketStateChange(TopPocketState.STATE_READY);
     this.startLoading();
     this.props.onPullDown?.({});
   }
 
   startLoading(): void {
-    if (this.loadingIndicatorEnabled) {
-      // TODO: check visibility - && this.$element().is(':visible')
+    if (this.loadingIndicatorEnabled && isVisible(this.scrollableRef.current!)) {
       this.isLoadPanelVisible = true;
     }
     this.lock();
@@ -632,10 +631,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.props.onEnd?.(this.getEventArgs());
   }
 
-  onStop(): void {
-    this.props.onStop?.(this.getEventArgs());
-  }
-
   onUpdated(): void {
     this.props.onUpdated?.(this.getEventArgs());
   }
@@ -714,8 +709,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.eventHandler(
       (scrollbar) => scrollbar.initHandler(e, crossThumbScrolling),
     );
-
-    this.onStop();
   }
 
   handleStart(e: Event): void {

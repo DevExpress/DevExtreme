@@ -72,6 +72,7 @@ import {
   dxScrollStop,
 } from '../../../events/short';
 import { getOffsetDistance } from './utils/get_offset_distance';
+import { isVisible } from './utils/is_element_visible';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
 
@@ -279,7 +280,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   refresh(): void {
-    this.topPocketState = TopPocketState.STATE_READY;
+    this.setPocketState(TopPocketState.STATE_READY);
 
     this.startLoading();
     this.onPullDown();
@@ -291,7 +292,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
     if (this.isPullDownStrategy) {
       if (this.topPocketState === TopPocketState.STATE_LOADING) {
-        this.topPocketState = TopPocketState.STATE_RELEASED;
+        this.setPocketState(TopPocketState.STATE_RELEASED);
       }
     }
 
@@ -325,8 +326,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   startLoading(): void {
-    if (this.loadingIndicatorEnabled) {
-      // TODO: check visibility - && this.$element().is(':visible')
+    if (this.loadingIndicatorEnabled && isVisible(this.scrollableRef.current!)) {
       this.isLoadPanelVisible = true;
     }
     this.lock();
@@ -335,6 +335,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   finishLoading(): void {
     this.isLoadPanelVisible = false;
     this.unlock();
+  }
+
+  setPocketState(state: number): void {
+    this.topPocketState = state;
   }
 
   @Method()
@@ -497,7 +501,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
         if (scrollDelta > 0 && this.isReachBottom()) {
           if (this.topPocketState !== TopPocketState.STATE_LOADING) {
-            this.topPocketState = TopPocketState.STATE_LOADING;
+            this.setPocketState(TopPocketState.STATE_LOADING);
             this.onReachBottom();
           }
           return;
@@ -512,7 +516,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     if (this.topPocketState === TopPocketState.STATE_READY) {
       return;
     }
-    this.topPocketState = TopPocketState.STATE_READY;
+    this.setPocketState(TopPocketState.STATE_READY);
   }
 
   onReachBottom(): void {
@@ -695,7 +699,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       if (this.topPocketState === TopPocketState.STATE_RELEASED
         && this.scrollLocation().top === 0) {
         this.initPageY = e.originalEvent.pageY;
-        this.topPocketState = TopPocketState.STATE_TOUCHED;
+        this.setPocketState(TopPocketState.STATE_TOUCHED);
       }
     }
   }
@@ -715,7 +719,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
       if (this.topPocketState === TopPocketState.STATE_TOUCHED) {
         if (this.pullDownEnabled && this.deltaY > 0) {
-          this.topPocketState = TopPocketState.STATE_PULLED;
+          this.setPocketState(TopPocketState.STATE_PULLED);
         } else {
           this.complete();
         }
@@ -784,7 +788,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     if (this.topPocketState === TopPocketState.STATE_REFRESHING) {
       return;
     }
-    this.topPocketState = TopPocketState.STATE_REFRESHING;
+    this.setPocketState(TopPocketState.STATE_REFRESHING);
 
     if (this.isSwipeDownStrategy) {
       this.pullDownTranslateTop = this.getPullDownHeight();
@@ -819,11 +823,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   releaseState(): void {
-    this.topPocketState = TopPocketState.STATE_RELEASED;
+    this.setPocketState(TopPocketState.STATE_RELEASED);
     this.pullDownOpacity = 0;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get refreshStrategy(): RefreshStrategy {
     return this.platform === 'android' ? 'swipeDown' : 'pullDown';
   }
