@@ -29,7 +29,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         const fullChunksWidth = Math.floor(geometry.sourceAppointmentWidth);
         const widthWithoutFirstChunk = fullChunksWidth - firstChunkWidth;
 
-        const virtualPart = weekWidth - settings.hMax % weekWidth;
+        const deltaWidth = settings.hMax % weekWidth;
+        const virtualPart = deltaWidth === 0 ? 0 : weekWidth - deltaWidth;
         const correctedFirstChunkWidth = firstChunkWidth + virtualPart;
         const correctedWithoutFirstChunkWidth = widthWithoutFirstChunk - virtualPart;
 
