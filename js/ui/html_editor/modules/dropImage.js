@@ -22,12 +22,6 @@ if(Quill) {
             eventsEngine.on(this.quill.root, addNamespace('paste', widgetName), this._pasteHandler.bind(this));
         }
 
-        _dragOverHandler(e) {
-            if(browser.msie) {
-                e.preventDefault();
-            }
-        }
-
         _dropHandler(e) {
             const dataTransfer = e.originalEvent.dataTransfer;
             const hasFiles = dataTransfer?.files?.length;
@@ -57,11 +51,7 @@ if(Quill) {
                         return;
                     }
 
-                    if(browser.msie) {
-                        setTimeout(() => { this._addImage(imageData); });
-                    } else {
-                        this._addImage(imageData);
-                    }
+                    this._addImage(imageData);
                 });
             }
         }

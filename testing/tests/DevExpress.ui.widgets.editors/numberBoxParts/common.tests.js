@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import SpinButton from 'ui/number_box/number_box.spin';
-import browser from 'core/utils/browser';
 import config from 'core/config';
 import devices from 'core/devices';
 import eventsEngine from 'events/core/events_engine';
@@ -1502,11 +1501,6 @@ QUnit.module('regressions', {
     });
 
     QUnit.test('B235175 - add additional test cases for various numbers', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         assert.expect(10);
 
         const $input = this.element.find('.' + INPUT_CLASS);

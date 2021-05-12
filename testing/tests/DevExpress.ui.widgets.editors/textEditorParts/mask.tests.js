@@ -458,38 +458,6 @@ QUnit.module('typing', moduleConfig, () => {
         }
     });
 
-    QUnit.test('TextEditor with mask option should work correctly with autofill in Edge (T869537)', function(assert) {
-        if(!(browser.msie && browser.version > 11)) {
-            assert.expect(0);
-            return;
-        }
-
-        const clock = sinon.useFakeTimers();
-
-        try {
-            const testText = '555555';
-            const $textEditor = $('#texteditor').dxTextEditor({
-                mask: '+1 (X00) 000',
-                maskRules: { X: /[02-9]/ },
-                mode: 'tel',
-                useMaskedValue: true
-            });
-            const $input = $textEditor.find('.dx-texteditor-input');
-            const textEditor = $textEditor.dxTextEditor('instance');
-            const keyboard = keyboardMock($input, true);
-
-            $input.val(testText);
-            $input.addClass('edge-autofilled');
-            keyboard.input();
-
-            clock.tick();
-            assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
-            assert.equal(textEditor.option('isValid'), true, 'isValid is true');
-        } finally {
-            clock.restore();
-        }
-    });
-
     QUnit.test('"valueChanged" and "input" events should handle correctly when "valueChangeEvent" is "input"', function(assert) {
         assert.expect(2);
 

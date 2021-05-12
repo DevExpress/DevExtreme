@@ -3,7 +3,6 @@ import DropDownButton from 'ui/drop_down_button';
 import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import browser from 'core/utils/browser';
 import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 
@@ -819,11 +818,6 @@ QUnit.module('list integration', {}, () => {
     });
 
     QUnit.test('dropDownButton content should be centered vertically (T847072)', function(assert) {
-        if(browser.msie && browser.version <= 11) {
-            assert.ok(true, 'IE has some problems with getBoundingClientRect');
-            return;
-        }
-
         const $dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
                 'id': 1,

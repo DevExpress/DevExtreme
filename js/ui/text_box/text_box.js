@@ -2,7 +2,6 @@ import $ from '../../core/renderer';
 import { getNavigator, getWindow } from '../../core/utils/window';
 const window = getWindow();
 const navigator = getNavigator();
-import browser from '../../core/utils/browser';
 import eventsEngine from '../../events/core/events_engine';
 import devices from '../../core/devices';
 import { inArray } from '../../core/utils/array';
@@ -59,7 +58,7 @@ const TextBox = TextEditor.inherit({
     },
 
     _renderMaxLengthHandlers: function() {
-        if(this._isAndroidOrIE()) {
+        if(this._isAndroid()) {
             eventsEngine.on(this._input(), addNamespace('keydown', this.NAME), this._onKeyDownCutOffHandler.bind(this));
             eventsEngine.on(this._input(), addNamespace('change', this.NAME), this._onChangeCutOffHandler.bind(this));
         }
@@ -163,10 +162,10 @@ const TextBox = TextEditor.inherit({
         return isMaskSpecified ? null : this.option('maxLength');
     },
 
-    _isAndroidOrIE: function() {
+    _isAndroid: function() {
         const realDevice = devices.real();
         const version = realDevice.version.join('.');
-        return browser.msie || realDevice.platform === 'android' && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
+        return realDevice.platform === 'android' && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
     }
 });
 

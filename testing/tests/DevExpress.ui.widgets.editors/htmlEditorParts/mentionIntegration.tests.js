@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import browser from 'core/utils/browser';
 
 import 'ui/html_editor';
 
@@ -15,8 +14,6 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const MENTION_CLASS = 'dx-mention';
 
 const POPUP_TIMEOUT = 500;
-
-const IS_IE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const KEY_CODES = {
     ARROW_UP: 38,
@@ -58,13 +55,7 @@ module('Mentions integration', {
                 .dxHtmlEditor('instance');
         };
 
-        this.addText = (element, text, prevText) => {
-            if(IS_IE11) {
-                element.outerText = `${prevText}${text}`;
-            } else {
-                element.innerText += text;
-            }
-        };
+        this.addText = (element, text, prevText) => element.innerText += text;
 
         this.getItems = () => $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
     },

@@ -115,7 +115,6 @@ const NumberBoxBase = TextEditor.inherit({
         return (
             browser.chrome && version >= 66
             || browser.safari && version >= 12
-            || browser.msie && version >= 75
         );
     },
 

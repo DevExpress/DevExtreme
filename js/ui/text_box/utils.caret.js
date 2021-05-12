@@ -1,11 +1,10 @@
 import $ from '../../core/renderer';
 import { isDefined } from '../../core/utils/type';
-import browser from '../../core/utils/browser';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
 
 const { ios, mac } = devices.real();
-const isFocusingOnCaretChange = browser.msie || ios || mac;
+const isFocusingOnCaretChange = ios || mac;
 
 const getCaret = function(input) {
     let range;

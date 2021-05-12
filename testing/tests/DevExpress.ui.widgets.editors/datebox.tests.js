@@ -2,7 +2,6 @@ import $ from 'jquery';
 import Box from 'ui/box';
 import Calendar from 'ui/calendar';
 import DateBox from 'ui/date_box';
-import browser from 'core/utils/browser';
 import config from 'core/config';
 import dateLocalization from 'localization/date';
 import dateSerialization from 'core/utils/date_serialization';
@@ -454,25 +453,6 @@ QUnit.module('datebox tests', moduleConfig, () => {
         }).dxDateBox('instance');
 
         assert.equal(instance.option('displayFormat'), displayFormat, 'the displayFormat option is not changed');
-    });
-
-    QUnit.test('set maxWidth for time view when fallback strategy is used', function(assert) {
-        if(!browser.msie) {
-            assert.ok(true);
-            return;
-        }
-
-        const dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendarWithTime',
-            value: new Date()
-        }).dxDateBox('instance');
-
-        dateBox.option('opened', true);
-
-        const maxWidth = $('.' + TIMEVIEW_CLASS).css('maxWidth');
-        assert.ok(typeUtils.isDefined(maxWidth), 'maxWidth is defined');
-        assert.equal(maxWidth, $('.' + TIMEVIEW_CLOCK_CLASS).css('minWidth'), 'minWidth of time view clock should be equal maxWidth');
     });
 
     QUnit.test('the \'displayFormat\' option should accept format objects (T378753)', function(assert) {
