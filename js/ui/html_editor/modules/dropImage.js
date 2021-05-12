@@ -22,6 +22,8 @@ if(Quill) {
             eventsEngine.on(this.quill.root, addNamespace('paste', widgetName), this._pasteHandler.bind(this));
         }
 
+        _dragOverHandler() {}
+
         _dropHandler(e) {
             const dataTransfer = e.originalEvent.dataTransfer;
             const hasFiles = dataTransfer?.files?.length;
