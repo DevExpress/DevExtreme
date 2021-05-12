@@ -77,6 +77,7 @@ module('Virtual Scrolling', {
                     return false;
                 },
                 updateAppointments: () => {},
+                getCellMinWidth: () => 1,
             }, workspaceSettings);
 
             this.scrollableMock = {
