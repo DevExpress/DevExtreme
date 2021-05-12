@@ -736,6 +736,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.virtualScrollingDispatcher?.updateDimensions(true);
         this._renderView();
         this.option('crossScrollingEnabled') && this._setTableSizes();
+        this.cache.clear();
     }
 
     _init() {
