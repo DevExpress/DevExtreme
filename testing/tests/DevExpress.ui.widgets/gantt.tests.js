@@ -1692,6 +1692,38 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(createdTask.end, data.end, 'new task end is right');
         assert.equal(createdTask.parentId, data.parentId, 'new task parentId is right');
     });
+    test('task insert to root', function(assert) {
+        const myTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 4, 'parentId': 2, 'title': 'Secure project sponsorship', 'start': new Date('2019-02-21T10:00:00.000Z'), 'end': new Date('2019-02-22T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 5, 'parentId': 2, 'title': 'Define preliminary resources', 'start': new Date('2019-02-22T10:00:00.000Z'), 'end': new Date('2019-02-25T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 6, 'parentId': 2, 'title': 'Secure core resources', 'start': new Date('2019-02-25T10:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 },
+            { 'id': 7, 'parentId': 2, 'title': 'Scope complete', 'start': new Date('2019-02-26T09:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 }
+        ];
+        const options = {
+            tasks: { dataSource: myTasks },
+            editing: { enabled: true }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const data = {
+            title: 'My text',
+            start: new Date('2019-02-23'),
+            end: new Date('2019-02-23'),
+            parentId: 0
+        };
+
+        const tasksCount = myTasks.length;
+        this.instance.insertTask(data);
+        this.clock.tick();
+
+        assert.equal(myTasks.length, tasksCount + 1, 'new task was created in ds');
+        const createdTask = myTasks[myTasks.length - 1];
+        assert.equal(createdTask.parentId, data.parentId, 'new task parentId is right');
+    });
     test('task delete', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
@@ -1701,12 +1733,6 @@ QUnit.module('Edit api', moduleConfig, () => {
         const taskToDelete = tasks[tasksCount - 1];
         this.instance.deleteTask(taskToDelete.id);
         this.clock.tick();
-
-        const $confirmDialog = $('body').find(POPUP_SELECTOR);
-        const $yesButton = $confirmDialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
-        $yesButton.trigger('dxclick');
-        this.clock.tick();
-
 
         assert.equal(tasks.length, tasksCount - 1, 'new task was deleted');
         const removedTask = tasks.filter((t) => t.id === taskToDelete.id)[0];
@@ -1826,7 +1852,7 @@ QUnit.module('Edit api', moduleConfig, () => {
     test('taskUpdate with only custom field', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
-
+        let values;
         const task = {
             Id: 1,
             ParentId: 0,
@@ -1848,6 +1874,7 @@ QUnit.module('Edit api', moduleConfig, () => {
             progressExpr: 'TaskProgress'
         };
         this.instance.option('tasks', tasksMap);
+        this.instance.option('onTaskUpdated', (e) => { values = e.values; });
         this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
         this.clock.tick();
 
@@ -1859,6 +1886,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         this.clock.tick(300);
 
         assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
+        assert.equal(task.CustomText, values.CustomText, 'onTaskUpdated is triggrered');
     });
     test('insertDependency', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -2720,6 +2748,35 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         this.clock.tick();
         const firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
         assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
+    });
+    test('onTaskUpdated is triggered when auto update parents on', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        let values;
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 10 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 20 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 40 },
+            { 'my_id': 4, 'parentId': 2, 'title': 'Determine project scope 2', 'start': start, 'end': end, 'progress': 80 },
+
+        ];
+        const tasksCount = tasks.length;
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.instance.option('onTaskUpdated', (e) => { values = e.values; });
+        this.clock.tick();
+        this.instance.deleteTask(4);
+        this.clock.tick();
+
+        assert.equal(tasks.length, tasksCount - 1, 'task was deleted');
+        assert.equal(tasks[2].progress, values.progress, 'onTaskUpdated is triggrered');
     });
 });
 
