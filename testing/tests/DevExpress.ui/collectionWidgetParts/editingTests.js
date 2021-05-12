@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
-// import EditStrategy from 'ui/collection/ui.collection_widget.edit.strategy';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
