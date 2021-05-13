@@ -1209,58 +1209,50 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
                 });
 
-                test('\'"groups" and "groupIndex" shoud be correct in dateCellTemplate', function(assert) {
-                    assert.expect(totalDateCells * 2);
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
+                [
+                    {
+                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate',
+                        expectedAsserts: totalDateCells * 2,
                         views: viewsBase,
-                        dateCellTemplate: checkIfGroupsAreUndefined(assert),
-                    });
+                    },
+                    {
+                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate' +
+                        'when vertical grouping is used',
+                        expectedAsserts: totalDateCells * 2,
+                        views: viewsBase.map((view) => ({
+                            ...view,
+                            groupOrientation: 'vertical',
+                        })),
+                        groups: ['ownerId']
+                    },
+                    {
+                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate' +
+                        'when grouping by date is used',
+                        expectedAsserts: totalDateCells * 2,
+                        views: viewsBase.map((view) => ({
+                            ...view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true,
+                        })),
+                        groups: ['ownerId']
+                    }
+                ].forEach(({ description, expectedAsserts, views, groups }) => {
+                    test(description, function(assert) {
+                        assert.expect(expectedAsserts);
 
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
+                        const scheduler = createWrapper({
+                            ...baseConfig,
+                            views,
+                            dateCellTemplate: checkIfGroupsAreUndefined(assert),
+                        });
 
-                test('\'"groups" and "groupIndex" shoud be correct in dateCellTemplate when vertical grouping is used', function(assert) {
-                    assert.expect(totalDateCells * 2);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'vertical',
-                    }));
+                        if(groups) {
+                            scheduler.groups = groups;
+                        }
 
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        dateCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['ownerId'],
-                    });
-
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
-
-                test('\'"groups" and "groupIndex" shoud be correct in dateCellTemplate when grouping by date is used', function(assert) {
-                    assert.expect(totalDateCells * 2);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'horizontal',
-                        groupByDate: true,
-                    }));
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        dateCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['ownerId'],
-                    });
-
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
+                        views.slice(1).forEach(({ type }) => {
+                            scheduler.instance.option('currentView', type);
+                        });
                     });
                 });
 
