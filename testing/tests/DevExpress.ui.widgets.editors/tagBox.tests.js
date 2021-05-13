@@ -6,7 +6,8 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 import config from 'core/config';
 import dataQuery from 'data/query';
 import devices from 'core/devices';
-import errors from 'core/errors';
+import coreErrors from 'core/errors';
+import uiErrors from 'ui/widget/ui.errors';
 import { errors as dataErrors } from 'data/errors';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -1285,7 +1286,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         const $input = $tagBox.find('.dx-texteditor-input');
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
-        const logStub = sinon.stub(errors, 'log');
+        const logStub = sinon.stub(coreErrors, 'log');
 
         keyboard
             .type(customValue)
@@ -6527,8 +6528,8 @@ QUnit.module('maxFilterQueryLength', {
         };
 
         this.stubLogger = (assert) => {
-            this.stub = sinon.stub(errors, 'log', (warning) => {
-                assert.strictEqual(warning, 'W0017', 'warning is correct');
+            this.stub = sinon.stub(uiErrors, 'log', (warning) => {
+                assert.strictEqual(warning, 'W1019', 'warning is correct');
             });
         };
     },
@@ -6544,7 +6545,7 @@ QUnit.module('maxFilterQueryLength', {
         assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
     });
 
-    QUnit.test('W0017 warning should be logged after maxFilterQueryLength was changed at runtime and exceeded', function(assert) {
+    QUnit.test('W1019 warning should be logged after maxFilterQueryLength was changed at runtime and exceeded', function(assert) {
         assert.expect(1);
 
         this.stubLogger(assert);
@@ -6559,7 +6560,7 @@ QUnit.module('maxFilterQueryLength', {
         assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
     });
 
-    QUnit.test('W0017 warning should be logged if maxFilterQueryLength is exceeded', function(assert) {
+    QUnit.test('W1019 warning should be logged if maxFilterQueryLength is exceeded', function(assert) {
         assert.expect(1);
 
         this.stubLogger(assert);
