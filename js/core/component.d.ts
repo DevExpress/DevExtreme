@@ -124,7 +124,7 @@ export default class Component<TProperties> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-   option<TOptionName extends keyof TProperties>(optionName: TOptionName): TProperties[TOptionName];
+   option<TPropertyName extends string>(optionName: TPropertyName): TPropertyName extends (keyof TProperties) ? TProperties[TPropertyName] : unknown;
   /**
    * @docid
    * @publicName option(optionName, optionValue)
@@ -133,7 +133,7 @@ export default class Component<TProperties> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-   option<TOptionName extends keyof TProperties>(optionName: TOptionName, optionValue: TProperties[TOptionName]): void;
+   option<TPropertyName extends string>(optionName: TPropertyName, optionValue: TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : unknown): void;
   /**
    * @docid
    * @publicName option(options)
