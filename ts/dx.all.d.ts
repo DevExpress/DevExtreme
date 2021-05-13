@@ -8463,6 +8463,16 @@ declare module DevExpress.ui {
          */
         acceptedValues?: Array<string | number | boolean>;
         /**
+         * [descr:dxHtmlEditorToolbarItem.formatName]
+         * @deprecated [depNote:dxHtmlEditorToolbarItem.formatName]
+         */
+        formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
+        /**
+         * [descr:dxHtmlEditorToolbarItem.formatValues]
+         * @deprecated [depNote:dxHtmlEditorToolbarItem.formatValues]
+         */
+        formatValues?: Array<string | number | boolean>;
+        /**
          * [descr:dxHtmlEditorToolbarItem.location]
          */
         location?: 'after' | 'before' | 'center';
