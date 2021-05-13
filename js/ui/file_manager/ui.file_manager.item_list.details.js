@@ -339,6 +339,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
+    _resetFocus() {
+        this._setFocusedItemKey(undefined);
+    }
+
     _createThumbnailColumnCell(container, cellInfo) {
         this._getItemThumbnailContainer(cellInfo.data).appendTo(container);
     }
@@ -386,7 +390,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
             const selectedItems = [];
             const selectedKeys = [];
-            if(fileItemInfo) {
+            if(fileItemInfo && !this._isParentDirectoryItem(fileItemInfo)) {
                 selectedItems.push(fileItemInfo.fileItem);
                 selectedKeys.push(fileItemInfo.fileItem.key);
             }

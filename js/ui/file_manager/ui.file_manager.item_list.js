@@ -91,6 +91,9 @@ class FileManagerItemListBase extends Widget {
     _getItems() {
         return this._getItemsInternal().done(itemInfos => {
             this._itemCount = itemInfos.length;
+            if(this._itemCount === 0) {
+                this._resetFocus();
+            }
 
             const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
             this._hasParentDirectoryItem = !!parentDirectoryItem;
@@ -155,6 +158,10 @@ class FileManagerItemListBase extends Widget {
         this._lockFocusedItemProcessing = false;
 
         this._raiseFocusedItemChanged(args);
+    }
+
+    _resetFocus() {
+
     }
 
     _getItemThumbnail(fileInfo) {
