@@ -31,6 +31,8 @@ export const viewFunction = ({
               isVerticalGroupOrientation
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
+              leftVirtualCellCount={viewData.leftVirtualCellCount}
+              rightVirtualCellCount={viewData.rightVirtualCellCount}
             />
           )}
           {dateTable.map((cellsRow) => (
