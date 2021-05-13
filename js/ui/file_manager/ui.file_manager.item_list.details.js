@@ -353,6 +353,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
+    _resetFocus() {
+        this._setFocusedItemKey(undefined);
+    }
+
     _createThumbnailColumnCell(container, cellInfo) {
         this._getItemThumbnailContainer(cellInfo.data).appendTo(container);
     }
