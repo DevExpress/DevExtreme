@@ -120,7 +120,7 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() type?: string;
+  @OneWay() type?: string = 'normal';
 
   @OneWay() useInkRipple?: boolean = false;
 

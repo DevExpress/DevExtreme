@@ -26,6 +26,10 @@ export default class Button extends Component {
     return props;
   }
 
+  getDefaultTemplateNames() {
+    return ['content'];
+  }
+
   _patchOptionValues(options) {
     options.templateData = options._templateData;
     return super._patchOptionValues(options);
