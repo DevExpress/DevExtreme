@@ -1661,14 +1661,6 @@ class Scheduler extends Widget {
         return this._workSpace.getAllDayHeight();
     }
 
-    getWorkSpaceAllDayOffset() {
-        return this._workSpace.getAllDayOffset();
-    }
-
-    getWorkSpaceHeaderPanelHeight() {
-        return this._workSpace.getHeaderPanelHeight();
-    }
-
     getWorkSpaceDateTableOffset() {
         return !this.option('crossScrollingEnabled') || this.option('rtlEnabled') ? this._workSpace.getWorkSpaceLeftOffset() : 0;
     }
