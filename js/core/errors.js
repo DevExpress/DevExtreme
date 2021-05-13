@@ -242,9 +242,4 @@ export default errorUtils({
     * @name ErrorsCore.W0016
     */
     W0016: 'The "{0}" option does not accept the "{1}" value since v.{2}. {3}.',
-
-    /**
-    * @name ErrorsCore.W0017
-    */
-    W0017: 'Filter query string exceeds maximum length limit of {0} characters.'
 });
