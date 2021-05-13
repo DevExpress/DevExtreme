@@ -76,7 +76,7 @@ import type { UserDefinedElement, DxElement } from '../../../../../core/element'
 import type { template } from '../../../../../core/templates/template';
 import DataSource from '../../../../../data/data_source';
 import type { DataSourceOptions } from '../../../../../data/data_source';
-import type { dxPopupOptions } from '../../../../../ui/popup';
+import type { Properties as PopupProperties } from '../../../../../ui/popup';
 import type {
   RequiredRule,
   NumericRule,
@@ -475,7 +475,7 @@ export class DataGridEditing {
   mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
 
   @OneWay()
-  popup?: dxPopupOptions;
+  popup?: PopupProperties;
 
   @OneWay()
   refreshMode?: 'full' | 'reshape' | 'repaint';
@@ -1286,7 +1286,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() filterBuilder?: dxFilterBuilderOptions;
 
-  @OneWay() filterBuilderPopup?: dxPopupOptions;
+  @OneWay() filterBuilderPopup?: PopupProperties;
 
   @OneWay() filterSyncEnabled?: boolean | 'auto' = 'auto';
 

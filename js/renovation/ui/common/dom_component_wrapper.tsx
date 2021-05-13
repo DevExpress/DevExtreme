@@ -30,15 +30,16 @@ export const viewFunction = ({
   />
 );
 
-interface WidgetInstanceType { option: (properties: Record<string, unknown>) => void }
+interface ComponentConstructor<TProperties> {
+  new(element: HTMLDivElement, options?: TProperties): DomComponent<TProperties>;
+  getInstance: (widgetRef: HTMLDivElement) => DomComponent<TProperties>;
+}
 
 @ComponentBindings()
 export class DomComponentWrapperProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
-  @OneWay() componentType!: typeof DomComponent & {
-    getInstance: (widgetRef: HTMLDivElement) => WidgetInstanceType;
-  };
+  @OneWay() componentType!: ComponentConstructor<Record<string, any>>;
 
   @OneWay() componentProps!: {
     className?: string;
