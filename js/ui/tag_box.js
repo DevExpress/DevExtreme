@@ -23,7 +23,7 @@ import getScrollRtlBehavior from '../core/utils/scroll_rtl_behavior';
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { allowScroll } from './text_box/utils.scroll';
-import errors from '../core/errors';
+import errors from './widget/ui.errors';
 
 // STYLE tagBox
 
@@ -768,7 +768,7 @@ const TagBox = SelectBox.inherit({
             return filterExpr;
         }
 
-        errors.log('W0017', maxFilterQueryLength);
+        errors.log('W1019', maxFilterQueryLength);
     },
 
     _getFilteredItems: function(values) {
