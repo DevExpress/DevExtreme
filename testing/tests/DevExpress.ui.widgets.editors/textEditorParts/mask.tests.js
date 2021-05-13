@@ -328,12 +328,7 @@ QUnit.module('typing', moduleConfig, () => {
             'ArrowLeft',
             'ArrowUp',
             'ArrowRight',
-            'ArrowDown',
-            // IE9
-            'Left',
-            'Up',
-            'Right',
-            'Down'
+            'ArrowDown'
         ];
 
         let isKeyPressPrevented = false;

@@ -1801,21 +1801,6 @@ QUnit.module('keyboard navigation', {}, () => {
         });
     });
 
-    QUnit.test('Subtract key is not prevented', function(assert) {
-        const keyPressStub = sinon.stub();
-        const $numberBox = $('#numberbox').dxNumberBox({
-            focusStateEnabled: true
-        });
-
-        const $input = $numberBox.find('.' + INPUT_CLASS);
-        const keyboard = keyboardMock($input);
-
-        $input.on('keypress', keyPressStub);
-
-        keyboard.triggerEvent('keypress', { keyCode: 109, key: 'Subtract' });
-        assert.equal(keyPressStub.lastCall.args[0].isDefaultPrevented(), false, 'Subtract key is not prevented');
-    });
-
     [
         { key: 'ArrowUp', ctrlKey: true },
         { key: 'ArrowDown', ctrlKey: true },
