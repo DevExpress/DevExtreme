@@ -114,6 +114,7 @@ const dxPieChart = BaseChart.inherit({
     _disposeCore: function() {
         pieSizeEqualizer.remove(this);
         this.callBase();
+        this._centerTemplateGroup && this._centerTemplateGroup.linkOff().dispose();
     },
 
     _groupSeries: function() {
@@ -314,29 +315,34 @@ const dxPieChart = BaseChart.inherit({
         this._renderSeriesElements(drawOptions, isLegendInside);
     },
 
+    _createHtmlStructure() {
+        this.callBase();
+
+        if(this.option('centerTemplate')) {
+            this._centerTemplateGroup = this._renderer.g()
+                .attr({ class: 'dxc-hole-template' })
+                .linkOn(this._renderer.root, 'center-template')
+                .css(patchFontOptions(this._themeManager._font))
+                .linkAppend();
+        }
+    },
+
     _renderExtraElements() {
         let template = this.option('centerTemplate');
+        const centerTemplateGroup = this._centerTemplateGroup;
 
-        if(this._centerTemplateGroup) {
-            this._centerTemplateGroup.clear();
-        }
-
-        if(!template) {
+        if(!centerTemplateGroup) {
             return;
         }
-
-        if(!this._centerTemplateGroup) {
-            this._centerTemplateGroup = this._renderer.g().attr({ class: 'dxc-hole-template' }).css(patchFontOptions(this._themeManager._font));
-        }
-        this._centerTemplateGroup.attr({ visibility: 'hidden' }).append(this._renderer.root);
+        centerTemplateGroup.clear().attr({ visibility: 'hidden' });
 
         template = this._getTemplate(template);
 
         template.render({
             model: this,
-            container: this._centerTemplateGroup.element,
+            container: centerTemplateGroup.element,
             onRendered: ()=>{
-                const group = this._centerTemplateGroup;
+                const group = centerTemplateGroup;
                 const bBox = group.getBBox();
                 group.move(this._center.x - (bBox.x + bBox.width / 2), this._center.y - (bBox.y + bBox.height / 2));
                 group.attr({ visibility: 'visible' });
