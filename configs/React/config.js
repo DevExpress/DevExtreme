@@ -1,4 +1,4 @@
-System.config({
+window.config = {
   transpiler: 'plugin-babel',
   meta: {
     'devextreme/localization.js': {
@@ -158,4 +158,6 @@ System.config({
     stage0: true,
     react: true
   }
-});
+};
+
+System.config(window.config);

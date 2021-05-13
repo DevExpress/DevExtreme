@@ -1,4 +1,4 @@
-System.config({
+window.config = {
   transpiler: 'plugin-babel',
   meta: {
     '*.vue': {
@@ -159,4 +159,6 @@ System.config({
     sourceMaps: false,
     stage0: true
   }
-});
+};
+
+System.config(window.config);
