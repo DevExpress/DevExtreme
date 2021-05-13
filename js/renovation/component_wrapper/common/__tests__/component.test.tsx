@@ -556,6 +556,20 @@ describe('option', () => {
 });
 
 describe('templates and slots', () => {
+  it('should ignore default templates', () => {
+    $('#component').dxTemplatedTestWidget({ template: 'test' });
+    let $template = $('#component').find('.templates-root');
+    expect($template.text()).toBe('test');
+
+    $('#component').dxTemplatedTestWidget({ template: 'defaultTemplateName1' });
+    $template = $('#component').find('.templates-root');
+    expect($template.length).toBe(0);
+
+    $('#component').dxTemplatedTestWidget({ template: 'defaultTemplateName2' });
+    $template = $('#component').find('.templates-root');
+    expect($template.length).toBe(0);
+  });
+
   it('should render custom template with render function that returns dom node', () => {
     $('#component').dxTemplatedTestWidget({
       template: 'test',
