@@ -22,16 +22,17 @@ const FilterStrategies = {
 export default class AppointmentDataSource {
     constructor(scheduler, dataSource, dataAccessors) {
         this.scheduler = scheduler;
-        this.dataOperator = new DataOperator(dataSource);
+        this.dataSource = dataSource;
+        this.dataAccessors = dataAccessors;
 
-        this.setDataAccessors(dataAccessors);
-        this.setDataSource(dataSource);
+        this.dataOperator = new DataOperator(this.dataSource);
+        this.initStrategy();
     }
 
     get filterMaker() { return this.getStrategy().filterMaker; }
     get keyName() { return this.dataOperator.keyName; }
     get strategyName() {
-        return this.scheduler.option('scrolling.mode') === FilterStrategies.virtual
+        return this.scheduler.isVirtualScrolling()
             ? FilterStrategies.virtual
             : FilterStrategies.standard;
     }

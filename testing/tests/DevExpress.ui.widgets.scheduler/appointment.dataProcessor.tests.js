@@ -13,7 +13,15 @@ const {
 } = QUnit;
 
 const schedulerMock = {
-    isVirtualScrolling: () => false
+    isVirtualScrolling: () => false,
+    option: (name) => {
+
+    },
+    _options: {
+        scrolling: {
+            mode: 'standard'
+        }
+    }
 };
 
 module('Server side filtering', () => {

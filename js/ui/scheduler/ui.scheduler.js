@@ -1070,7 +1070,17 @@ class Scheduler extends Widget {
     }
 
     isVirtualScrolling() {
-        return this.getWorkSpace()?.isVirtualScrolling();
+        const workspace = this.getWorkSpace();
+
+        if(workspace) {
+            return workspace.isVirtualScrolling();
+        }
+
+        const currentViewOptions = this._getCurrentViewOptions();
+        const scrolling = this.option('scrolling');
+
+        return scrolling?.mode === 'virtual' ||
+            currentViewOptions?.scrolling?.mode === 'virtual';
     }
 
     _filterAppointments() {
