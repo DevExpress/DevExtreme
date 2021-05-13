@@ -404,7 +404,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
             const selectedItems = [];
             const selectedKeys = [];
-            if(fileItemInfo) {
+            if(fileItemInfo && !this._isParentDirectoryItem(fileItemInfo)) {
                 selectedItems.push(fileItemInfo.fileItem);
                 selectedKeys.push(fileItemInfo.fileItem.key);
             }
