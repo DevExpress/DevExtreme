@@ -1216,8 +1216,8 @@ module('CellTemplate tests', moduleConfig, () => {
                         views: viewsBase,
                     },
                     {
-                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate' +
-                        'when vertical grouping is used',
+                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate'
+                            + 'when vertical grouping is used',
                         expectedAsserts: totalDateCells * 2,
                         views: viewsBase.map((view) => ({
                             ...view,
@@ -1226,8 +1226,8 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId']
                     },
                     {
-                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate' +
-                        'when grouping by date is used',
+                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate'
+                            + 'when grouping by date is used',
                         expectedAsserts: totalDateCells * 2,
                         views: viewsBase.map((view) => ({
                             ...view,
@@ -1572,7 +1572,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     },
                     {
                         description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate '
-                        + 'when vertical grouping is used in timleine views',
+                            + 'when vertical grouping is used in timleine views',
                         expectedAsserts: 72,
                         views: viewsBase.slice(3, 6).map((view) => ({
                             ...view,
@@ -1582,7 +1582,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     },
                     {
                         description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate'
-                        + ' when grouping by date is used',
+                            + ' when grouping by date is used',
                         expectedAsserts: totalTimeCells * 2,
                         views: viewsBase.map((view) => ({
                             ...view,
@@ -1593,7 +1593,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     },
                     {
                         description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate'
-                        + ' when horizontal grouping is used in simple views',
+                            + ' when horizontal grouping is used in simple views',
                         expectedAsserts: 16,
                         views: viewsBase.slice(0, 3).map((view) => ({
                             ...view,
@@ -1625,7 +1625,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
 
                 test('"groups" and "groupIndex" shoud be correct in timeCellTemplate '
-                + 'when vertical grouping is used in simple views', function(assert) {
+                    + 'when vertical grouping is used in simple views', function(assert) {
                     assert.expect(32);
                     const views = viewsBase.map(({ type, intervalCount }) => ({
                         type,
@@ -1658,7 +1658,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
 
                 test('"groups" and "groupIndex" shoud be correct in timeCellTemplate'
-                + ' when horizontal grouping is used in timeline views', function(assert) {
+                    + ' when horizontal grouping is used in timeline views', function(assert) {
                     assert.expect((totalTimeCells - 8) * 4);
                     const views = viewsBase.map(({ type, intervalCount }) => ({
                         type,
