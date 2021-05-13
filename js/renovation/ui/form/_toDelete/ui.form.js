@@ -14,11 +14,10 @@ import { getPublicElement } from '../../core/element';
 import messageLocalization from '../../localization/message';
 import Widget from '../widget/ui.widget';
 import Editor from '../editor/editor';
-import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
+import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import ValidationEngine from '../validation_engine';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import TabPanel from '../tab_panel';
-import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
 import { isMaterial } from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
@@ -83,8 +82,6 @@ const Form = Widget.inherit({
             formID: 'dx-' + new Guid(),
             formData: {},
             colCount: 1,
-
-            screenByWidth: defaultScreenFactorFunc,
 
             /**
             * _pseudo ColCountResponsibleType
@@ -310,10 +307,6 @@ const Form = Widget.inherit({
 
         this.callBase();
 
-        if(this.option('scrollingEnabled')) {
-            this._renderScrollable();
-        }
-
         this._renderLayout();
         this._renderValidationSummary();
 
@@ -346,17 +339,6 @@ const Form = Widget.inherit({
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         this._lastMarkupScreenFactor = undefined;
-    },
-
-    _renderScrollable: function() {
-        const useNativeScrolling = this.option('useNativeScrolling');
-        this._scrollable = new Scrollable(this.$element(), {
-            useNative: !!useNativeScrolling,
-            useSimulatedScrollbar: !useNativeScrolling,
-            useKeyboard: false,
-            direction: 'both',
-            bounceEnabled: false
-        });
     },
 
     _getContent: function() {
@@ -456,7 +438,6 @@ const Form = Widget.inherit({
     _renderLayout: function() {
         const that = this;
         let items = that.option('items');
-        const $content = that._getContent();
 
         items = that._prepareItems(items);
 
@@ -464,11 +445,10 @@ const Form = Widget.inherit({
         that._testResultItems = items;
         //#ENDDEBUG
 
-        that._rootLayoutManager = that._renderLayoutManager(items, $content, {
+        that._rootLayoutManager = that._renderLayoutManager(items, {
             isRoot: true,
             colCount: that.option('colCount'),
             alignItemLabels: that.option('alignItemLabels'),
-            screenByWidth: this.option('screenByWidth'),
             colCountByScreen: this.option('colCountByScreen'),
             onLayoutChanged: function(inOneColumn) {
                 that._alignLabels.bind(that)(that._rootLayoutManager, inOneColumn);
@@ -592,7 +572,6 @@ const Form = Widget.inherit({
     },
 
     _renderLayoutManager: function(items, $rootElement, options) {
-        const $element = $('<div>');
         const that = this;
         const config = that._getLayoutManagerConfig(items, options);
         const baseColCountByScreen = {
@@ -603,9 +582,8 @@ const Form = Widget.inherit({
         };
 
         that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
-        $element.appendTo($rootElement);
 
-        const instance = that._createComponent($element, 'dxLayoutManager', config);
+        const instance = that._createComponent('dxLayoutManager', config);
         instance.on('autoColCountChanged', function() { that._refresh(); });
         that._cachedLayoutManagers.push(instance);
         return instance;

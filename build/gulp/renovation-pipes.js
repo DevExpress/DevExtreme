@@ -26,11 +26,15 @@ function loadConfig() {
         const oldComponentFileName = path.join('./js/', component.pathInJSFolder);
         fileToComponentMap[path.resolve(oldComponentFileName)] = {
             ...component,
+            pathToComponentRegistrator: path.relative(
+                path.dirname(oldComponentFileName),
+                './js/core/component_registrator'
+            ).replace(/\\/g, '/'),
             pathInRenovationFolder: path
                 .relative(
                     path.dirname(oldComponentFileName),
                     path.join('./js/renovation', component.pathInRenovationFolder)
-                ).replace(/\\/g, '/')
+                ).replace(/\\/g, '/'),
         };
     });
 }

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import ValidationEngine from '../../ui/validation_engine';
-import Component from './component';
+import Component from './common/component';
 
 export default class Button extends Component {
   _init() {

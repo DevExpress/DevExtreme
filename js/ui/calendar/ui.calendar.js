@@ -19,6 +19,7 @@ import fx from '../../animation/fx';
 import { hasWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
+import { isCommandKeyPressed } from '../../events/utils/index';
 
 // STYLE calendar
 
@@ -129,7 +130,7 @@ const Calendar = Editor.inherit({
         return extend(this.callBase(), {
             rightArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._waitRenderView(1);
                 } else {
                     this._moveCurrentDateByOffset(1 * this._getRtlCorrection());
@@ -137,7 +138,7 @@ const Calendar = Editor.inherit({
             },
             leftArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._waitRenderView(-1);
                 } else {
                     this._moveCurrentDateByOffset(-1 * this._getRtlCorrection());
@@ -145,7 +146,7 @@ const Calendar = Editor.inherit({
             },
             upArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._navigateUp();
                 } else {
                     if(fx.isAnimating(this._view.$element())) {
@@ -156,7 +157,7 @@ const Calendar = Editor.inherit({
             },
             downArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._navigateDown();
                 } else {
                     if(fx.isAnimating(this._view.$element())) {
@@ -292,7 +293,7 @@ const Calendar = Editor.inherit({
         const dateForward = new Date(currentDate);
 
         while(isDateForwardInRange) {
-            if(isDateForwardInRange && !this._view.isDateDisabled(dateForward)) {
+            if(!this._view.isDateDisabled(dateForward)) {
                 currentDate = dateForward;
                 break;
             }

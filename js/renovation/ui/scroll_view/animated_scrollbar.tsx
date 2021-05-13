@@ -10,7 +10,6 @@ import {
 } from '@devextreme-generator/declarations';
 import { BaseWidgetProps } from '../common/base_props';
 import { isDefined } from '../../../core/utils/type';
-import devices from '../../../core/devices';
 
 import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
@@ -18,19 +17,16 @@ import { ScrollbarProps } from './scrollbar_props';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 import { EventCallback } from '../common/event_callback.d';
 import { ScrollableProps } from './scrollable_props';
+import { inRange } from '../../../core/utils/math';
 
 export const OUT_BOUNDS_ACCELERATION = 0.5;
 
-// TODO: it does not work before. Devices.real is a function. Can we remove it?
-const isSluggishPlatform = devices.real().platform === 'android';
-/* istanbul ignore next */
-export const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
+export const ACCELERATION = 0.92;
 export const MIN_VELOCITY_LIMIT = 1;
 export const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
 
 const FRAME_DURATION = 17; // Math.round(1000 / 60)
-/* istanbul ignore next */
-const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
+const BOUNCE_DURATION = 400;
 const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
 export const BOUNCE_ACCELERATION_SUM = (1 - ACCELERATION ** BOUNCE_FRAMES) / (1 - ACCELERATION);
 
@@ -44,7 +40,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       forceGeneratePockets, pullDownEnabled, reachBottomEnabled,
       scrollLocation, forceUpdateScrollbarLocation, contentTranslateOffsetChange,
       scrollLocationChange, isScrollableHovered, topPocketSize, bottomPocketSize,
-      onPullDown, onRelease, onReachBottom,
+      onPullDown, onRelease, onReachBottom, onScroll, onEnd,
       pocketState, pocketStateChange,
       rtlEnabled,
     },
@@ -67,6 +63,8 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
       forceUpdateScrollbarLocation={forceUpdateScrollbarLocation}
+      onScroll={onScroll}
+      onEnd={onEnd}
       // Horizontal
       rtlEnabled={rtlEnabled}
       // Vertical
@@ -140,7 +138,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   stepCore(): void {
     if (this.stopped) {
-      this.stop();
       return;
     }
 
@@ -160,7 +157,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   step(): void {
-    if (!this.props.bounceEnabled && !this.inBounds()) {
+    if (!this.props.bounceEnabled
+      && !inRange(this.props.scrollLocation, this.getMinOffset(), this.getMaxOffset())) {
       this.velocity = 0;
     }
 
@@ -170,14 +168,15 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   setupBounce(): void {
-    const bounceDistance = this.boundLocation() - this.props.scrollLocation;
+    const { scrollLocation } = this.props;
+    const bounceDistance = this.getLocationWithinRange(scrollLocation) - scrollLocation;
 
     this.velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
   }
 
   complete(): void {
     if (this.isBounceAnimator) {
-      this.moveTo(this.boundLocation());
+      this.moveTo(this.getLocationWithinRange(this.props.scrollLocation));
     }
 
     this.scrollComplete();
@@ -205,13 +204,10 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       return 0;
     }
 
-    return this.inBounds() || this.isBounceAnimator
+    return this.isBounceAnimator
+    || inRange(this.props.scrollLocation, this.getMinOffset(), this.getMaxOffset())
       ? ACCELERATION
       : OUT_BOUNDS_ACCELERATION;
-  }
-
-  stop(): void {
-    this.stopComplete();
   }
 
   suppressInertia(thumbScrolling?: boolean): void {
@@ -232,10 +228,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       || (location > maxOffset && nextLocation <= maxOffset);
   }
 
-  inBounds(): boolean {
-    return this.scrollbar.inBounds();
-  }
-
   getMaxOffset(): number {
     return this.scrollbar.getMaxOffset();
   }
@@ -248,17 +240,13 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.moveTo(location);
   }
 
-  stopComplete(): void {
-    this.scrollbar.stopComplete();
-  }
-
   scrollComplete(): void {
     this.scrollbar.scrollComplete();
   }
 
   @Method()
-  boundLocation(value?: number): number {
-    return this.scrollbar.boundLocation(value);
+  getLocationWithinRange(value: number): number {
+    return this.scrollbar.getLocationWithinRange(value);
   }
 
   @Method()

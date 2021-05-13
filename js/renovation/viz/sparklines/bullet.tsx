@@ -101,7 +101,6 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
     size,
     margin,
     disabled,
-    onContentReady,
     color,
     targetColor,
     targetWidth,
@@ -122,7 +121,6 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
         defaultCanvas={viewModel.defaultCanvas}
         disabled={disabled}
         rtlEnabled={viewModel.rtlEnabled}
-        onContentReady={onContentReady}
         canvasChange={viewModel.onCanvasChange}
         pointerEvents="visible"
         // eslint-disable-next-line react/jsx-props-no-spreading

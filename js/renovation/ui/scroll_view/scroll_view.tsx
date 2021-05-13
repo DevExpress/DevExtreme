@@ -5,6 +5,7 @@ import {
   Method,
   RefObject,
   ComponentBindings,
+  InternalState,
 } from '@devextreme-generator/declarations';
 
 import { current, isMaterial } from '../../../ui/themes';
@@ -34,13 +35,14 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     pullingDownText,
     reachBottomText,
     scrollableRef,
+    reachBottomEnabled,
     props: {
       useNative, children,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, updateManually, pullDownEnabled,
-      reachBottomEnabled, useSimulatedScrollbar, inertiaEnabled,
-      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onStop,
+      useSimulatedScrollbar, inertiaEnabled,
+      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
     },
     restAttributes,
   } = viewModel;
@@ -83,7 +85,6 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       onStart={onStart}
       onEnd={onEnd}
       onBounce={onBounce}
-      onStop={onStop}
 
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
@@ -101,7 +102,7 @@ Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 
 & Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce' | 'onStop'>;
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
 
 @Component({
   defaultOptionRules,
@@ -111,6 +112,8 @@ Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 
 
 export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Ref() scrollableRef!: RefObject<Scrollable>;
+
+  @InternalState() forceReachBottom?: boolean;
 
   @Method()
   update(): void {
@@ -182,6 +185,29 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Method()
   clientWidth(): number {
     return this.scrollable.clientWidth();
+  }
+
+  @Method()
+  /* istanbul ignore next */
+  // TODO: avoid using this method in List
+  toggleLoading(showOrHide: boolean): void {
+    this.forceReachBottom = showOrHide;
+  }
+
+  @Method()
+  /* istanbul ignore next */
+  // TODO: avoid using this method in List
+  isFull(): boolean {
+    return this.content().clientHeight > this.clientHeight();
+    // TODO: this.clientHeight() should be containerRef.current.clientHeight
+  }
+
+  get reachBottomEnabled(): boolean {
+    /* istanbul ignore next */
+    if (isDefined(this.forceReachBottom)) {
+      return this.forceReachBottom;
+    }
+    return this.props.reachBottomEnabled;
   }
 
   get pullingDownText(): string | undefined {

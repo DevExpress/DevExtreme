@@ -8,16 +8,22 @@ import {
   MIN_VELOCITY_LIMIT,
   AnimatedScrollbar,
 } from '../animated_scrollbar';
+import { inRange } from '../../../../core/utils/math';
+
+interface Mock extends jest.Mock {}
+
+jest.mock('../../../../core/utils/math', () => ({
+  ...jest.requireActual('../../../../core/utils/math'),
+  inRange: jest.fn(() => true),
+}));
 
 describe('Public methods', () => {
   each([
-    { name: 'inBounds', calledWith: [] },
     { name: 'getMaxOffset', calledWith: [] },
     { name: 'scrollStep', calledWith: ['arg1'] },
     { name: 'moveTo', calledWith: ['arg1'] },
-    { name: 'stopComplete', calledWith: [] },
     { name: 'scrollComplete', calledWith: [] },
-    { name: 'boundLocation', calledWith: ['arg1'] },
+    { name: 'getLocationWithinRange', calledWith: ['arg1'] },
     { name: 'getMinOffset', calledWith: [] },
     { name: 'validateEvent', calledWith: ['arg1'] },
     { name: 'isThumb', calledWith: ['arg1'] },
@@ -43,17 +49,6 @@ describe('Public methods', () => {
     });
   });
 
-  it('animator should call stopComplete during step if was stopped', () => {
-    const stopCompleteHandler = jest.fn();
-    const viewModel = new AnimatedScrollbar({ });
-    (viewModel as any).scrollbarRef = { current: { stopComplete: stopCompleteHandler } };
-    viewModel.stopped = true;
-
-    viewModel.stepCore();
-
-    expect(stopCompleteHandler).toHaveBeenCalledTimes(1);
-  });
-
   each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
     it('animator should call scrollComplete during step if was finished', () => {
       const scrollCompleteHandler = jest.fn();
@@ -64,7 +59,7 @@ describe('Public methods', () => {
         current: {
           scrollComplete: scrollCompleteHandler,
           moveTo: scrollbarMoveToHandler,
-          boundLocation: () => -700,
+          getLocationWithinRange: () => -700,
         },
       };
       Object.defineProperties(viewModel, {
@@ -84,21 +79,32 @@ describe('Public methods', () => {
     });
   });
 
-  it('animator should do the next step if it was not stopped or finished', () => {
-    const viewModel = new AnimatedScrollbar({ }) as AnimatedScrollbar;
-    viewModel.stopped = false;
-    Object.defineProperties(viewModel, { isFinished: { get() { return false; } } });
-    viewModel.getStepAnimationFrame = jest.fn();
-    viewModel.step = jest.fn();
+  each([true, false]).describe('Stopped: %o', (stopped) => {
+    each([true, false]).describe('Finished: %o', (isFinished) => {
+      it('animator should do the next step if it was not stopped or finished', () => {
+        const viewModel = new AnimatedScrollbar({ }) as AnimatedScrollbar;
+        viewModel.stopped = stopped;
 
-    viewModel.stepCore();
+        Object.defineProperties(viewModel, { isFinished: { get() { return isFinished; } } });
+        viewModel.getStepAnimationFrame = jest.fn();
+        viewModel.step = jest.fn();
+        viewModel.complete = jest.fn();
 
-    expect(viewModel.step).toHaveBeenCalledTimes(1);
-    expect(viewModel.getStepAnimationFrame).toHaveBeenCalledTimes(1);
+        viewModel.stepCore();
+
+        if (isFinished || stopped) {
+          expect(viewModel.step).not.toBeCalled();
+          expect(viewModel.getStepAnimationFrame).not.toBeCalled();
+        } else {
+          expect(viewModel.step).toHaveBeenCalledTimes(1);
+          expect(viewModel.getStepAnimationFrame).toHaveBeenCalledTimes(1);
+        }
+      });
+    });
   });
 
   each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-    each([() => true, () => false]).describe('inBounds: %o', (inBounds) => {
+    each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
       it('animator on the step should scrolls scrollbar on correct value', () => {
         const viewModel = new AnimatedScrollbar({ bounceEnabled }) as AnimatedScrollbar;
         const scrollStepHandler = jest.fn();
@@ -106,12 +112,18 @@ describe('Public methods', () => {
         viewModel.velocity = -5;
         const acceleration = 0.5;
         Object.defineProperties(viewModel, { acceleration: { get() { return acceleration; } } });
-        (viewModel as any).scrollbarRef = { current: { inBounds, scrollStep: scrollStepHandler } };
-
+        (inRange as Mock).mockImplementation(inRangeFn);
+        (viewModel as any).scrollbarRef = {
+          current: {
+            scrollStep: scrollStepHandler,
+            getMinOffset: jest.fn(),
+            getMaxOffset: jest.fn(),
+          },
+        };
         viewModel.step();
 
         let expectedVelocity = -5;
-        if (!bounceEnabled && !inBounds()) {
+        if (!bounceEnabled && !inRange()) {
           expectedVelocity = 0;
         }
 
@@ -161,7 +173,7 @@ describe('Animator', () => {
       viewModel.stepCore = jest.fn();
       (viewModel as any).scrollbarRef = {
         current: {
-          boundLocation: () => -700,
+          getLocationWithinRange: () => -700,
         },
       };
 
@@ -198,12 +210,17 @@ describe('Animator', () => {
   });
 
   describe('Getters', () => {
-    each([() => true, () => false]).describe('inBounds: %o', (inBounds) => {
-      each([undefined, { current: inBounds }]).describe('ScrollbarRef: %o', (scrollbarRef) => {
+    each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
+      each([undefined, {
+        current: {
+          getMinOffset: jest.fn(),
+          getMaxOffset: jest.fn(),
+        },
+      }]).describe('ScrollbarRef: %o', (scrollbarRef) => {
         each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
           it('acceleration', () => {
             const viewModel = new AnimatedScrollbar({ });
-            (viewModel as any).inBounds = inBounds;
+            (inRange as Mock).mockImplementation(inRangeFn);
             (viewModel as any).scrollbarRef = scrollbarRef;
 
             Object.defineProperties(viewModel, {
@@ -212,7 +229,7 @@ describe('Animator', () => {
 
             if (scrollbarRef === undefined) {
               expect(viewModel.acceleration).toEqual(0);
-            } else if (inBounds() || isBounceAnimator) {
+            } else if (inRange() || isBounceAnimator) {
               expect(viewModel.acceleration).toEqual(ACCELERATION);
             } else {
               expect(viewModel.acceleration).toEqual(OUT_BOUNDS_ACCELERATION);

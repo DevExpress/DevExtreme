@@ -145,7 +145,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     showTitle?: boolean;
     /**
      * @docid
-     * @default Window
+     * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -45,4 +45,8 @@ export class ScrollbarProps {
   @Event() onReachBottom?: () => void = noop;
 
   @Event() onRelease?: () => void = noop;
+
+  @Event() onScroll?: () => void = noop;
+
+  @Event() onEnd?: (direction: string) => void = noop;
 }

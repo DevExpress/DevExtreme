@@ -1,11 +1,11 @@
 import CheckBox from '../check_box';
 
-import { addAttributes, getAriaName } from '../utils';
+import { addAttributes, getAriaName } from '../utils/utils';
 import Mock = jest.Mock;
 
-jest.mock('../utils');
+jest.mock('../utils/utils');
 jest.mock('../../../ui/editor/editor', () => ({ }));
-jest.mock('../component');
+jest.mock('../common/component');
 
 describe('Method', () => {
   it('setAria', () => {

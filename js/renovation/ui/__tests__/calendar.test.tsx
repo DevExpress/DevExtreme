@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
 import { createTestRef } from '../../test_utils/create_ref';
@@ -19,7 +18,7 @@ describe('Calendar', () => {
       const rootElementRef = createTestRef();
       const componentProps = new CalendarProps();
       const props = {
-        props: { rootElementRef, ...defaultProps },
+        props: { rootElementRef, addWidgetClass: true, ...defaultProps },
         componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Calendar>;

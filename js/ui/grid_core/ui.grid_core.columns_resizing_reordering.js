@@ -820,11 +820,11 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
                 }
 
                 if(adaptColumnWidthByRatio) {
-                    column && columnsController.columnOption(column.index, 'visibleWidth', columnWidth);
-                    column && columnsController.columnOption(column.index, 'width', (columnWidth / contentWidth * 100).toFixed(3) + '%');
+                    columnsController.columnOption(column.index, 'visibleWidth', columnWidth);
+                    columnsController.columnOption(column.index, 'width', (columnWidth / contentWidth * 100).toFixed(3) + '%');
                 } else {
-                    column && columnsController.columnOption(column.index, 'visibleWidth', null);
-                    column && columnsController.columnOption(column.index, 'width', columnWidth);
+                    columnsController.columnOption(column.index, 'visibleWidth', null);
+                    columnsController.columnOption(column.index, 'width', columnWidth);
                 }
             }
         }

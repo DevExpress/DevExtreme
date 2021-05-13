@@ -30,14 +30,14 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     scrollableNativeRef,
     scrollableSimulatedRef,
     props: {
-      useNative, children,
+      useNative, children, classes,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, updateManually, pullDownEnabled,
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
       pulledDownText, pullingDownText, refreshingText, reachBottomText,
-      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onStop,
+      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
     },
     restAttributes,
   } = viewModel;
@@ -47,6 +47,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       <ScrollableNative
         ref={scrollableNativeRef}
         aria={aria}
+        classes={classes}
         width={width}
         height={height}
         disabled={disabled}
@@ -54,7 +55,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         rtlEnabled={rtlEnabled}
         direction={direction}
         showScrollbar={showScrollbar} // TODO: https://trello.com/c/ztUBYg5y/
-        scrollByThumb={scrollByThumb} // TODO: https://trello.com/c/Qtod4mcE/
         updateManually={updateManually}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
@@ -81,6 +81,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       <ScrollableSimulated
         ref={scrollableSimulatedRef}
         aria={aria}
+        classes={classes}
         width={width}
         height={height}
         disabled={disabled}
@@ -111,7 +112,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         onStart={onStart}
         onEnd={onEnd}
         onBounce={onBounce}
-        onStop={onStop}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
       >
@@ -125,7 +125,7 @@ type ScrollablePropsType = ScrollableProps
 & Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce' | 'onStop'>;
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
   device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),

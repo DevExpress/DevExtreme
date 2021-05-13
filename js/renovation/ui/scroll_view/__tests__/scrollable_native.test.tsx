@@ -36,12 +36,17 @@ import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
 import { Scrollbar } from '../scrollbar';
 import { ScrollableTestHelper } from './scrollable_native_test_helper';
 
+interface Mock extends jest.Mock {}
+
 jest.mock('../../../../core/utils/scroll_rtl_behavior');
 jest.mock('../../../../core/utils/browser', () => ({ mozilla: false }));
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
+  const platform = actualDevices.real.bind(actualDevices);
+
   actualDevices.real = jest.fn(() => ({ platform: 'ios' }));
+  actualDevices.current = jest.fn(platform);
   return actualDevices;
 });
 
@@ -105,19 +110,6 @@ describe('Native > Effects', () => {
     }
     expect(e.cancel).toEqual(locked ? true : undefined);
   });
-
-  // it('handleScroll, location not changed', () => {
-  //   const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() } as any;
-  //   const viewModel = new Scrollable({ });
-  //   viewModel.containerRef = { current: {} } as RefObject;
-  //   viewModel.lastLocation = { top: 1, left: 1 };
-  //   viewModel.scrollLocation = () => ({ top: 1, left: 1 });
-
-  //   viewModel.scrollEffect();
-  //   emit('scroll', e);
-
-  //   expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(1);
-  // });
 
   test.each(getPermutations([
     optionValues.forceGeneratePockets,
@@ -504,10 +496,10 @@ describe('Native > Effects', () => {
             onPullDownCalled = true;
           }
 
-          expect(viewModel.refreshTimeout).not.toBe(undefined);
+          expect(viewModel.refreshTimer).not.toBe(undefined);
 
-          viewModel.disposeRefreshTimeout()();
-          expect(viewModel.refreshTimeout).toBe(undefined);
+          viewModel.disposeRefreshTimer()();
+          expect(viewModel.refreshTimer).toBe(undefined);
         }
       }
 
@@ -522,14 +514,14 @@ describe('Native > Effects', () => {
       expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(0);
     });
 
-  describe('windowResizeHandler', () => {
-    it('windowResizeHandler', () => {
+  describe('updateHandler', () => {
+    it('updateHandler', () => {
       const viewModel = new Scrollable({});
 
       viewModel.updateSizes = jest.fn();
       viewModel.onUpdated = jest.fn();
 
-      viewModel.windowResizeHandler();
+      viewModel.updateHandler();
 
       expect(viewModel.updateSizes).toBeCalledTimes(1);
       expect(viewModel.onUpdated).toBeCalledTimes(1);
@@ -586,23 +578,23 @@ describe('Native > Effects', () => {
       });
 
       test.each([true, false])('refresh(), loadingIndicatorEnabled: %o', (loadingIndicatorEnabled) => {
-        const viewModel = new Scrollable({
+        const helper = new ScrollableTestHelper({
           onPullDown: actionHandler,
         });
 
-        viewModel.loadingIndicatorEnabled = loadingIndicatorEnabled;
+        helper.viewModel.loadingIndicatorEnabled = loadingIndicatorEnabled;
 
-        viewModel.refresh();
+        helper.viewModel.refresh();
 
         if (actionHandler) {
           expect(actionHandler).toHaveBeenCalledTimes(1);
           expect(actionHandler).toHaveBeenCalledWith({});
         }
 
-        expect(viewModel.topPocketState).toEqual(TopPocketState.STATE_READY);
-        expect(viewModel.loadingIndicatorEnabled).toEqual(loadingIndicatorEnabled);
-        expect(viewModel.isLoadPanelVisible).toEqual(loadingIndicatorEnabled);
-        expect(viewModel.locked).toEqual(true);
+        expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_READY);
+        expect(helper.viewModel.loadingIndicatorEnabled).toEqual(loadingIndicatorEnabled);
+        expect(helper.viewModel.isLoadPanelVisible).toEqual(loadingIndicatorEnabled);
+        expect(helper.viewModel.locked).toEqual(true);
       });
 
       test.each(getPermutations([
@@ -614,7 +606,7 @@ describe('Native > Effects', () => {
 
         const viewModel = new Scrollable({});
 
-        viewModel.releaseTimeout = 10;
+        viewModel.releaseTimer = 10;
         viewModel.topPocketState = pocketState;
         Object.defineProperties(viewModel, {
           refreshStrategy: { get() { return refreshStrategy; } },
@@ -636,7 +628,7 @@ describe('Native > Effects', () => {
           }
         }
 
-        expect(viewModel.releaseTimeout).not.toBe(undefined);
+        expect(viewModel.releaseTimer).not.toBe(undefined);
         expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
         expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
 
@@ -660,8 +652,8 @@ describe('Native > Effects', () => {
         expect(viewModel.isLoadPanelVisible).toEqual(false);
         expect(viewModel.locked).toEqual(false);
 
-        viewModel.disposeReleaseTimeout()();
-        expect(viewModel.releaseTimeout).toBe(undefined);
+        viewModel.disposeReleaseTimer()();
+        expect(viewModel.releaseTimer).toBe(undefined);
       });
     });
 
@@ -1306,7 +1298,7 @@ describe('Methods', () => {
 
         expect(viewModel.needForceScrollbarsVisibility).toEqual(true);
 
-        expect(viewModel.hideScrollbarTimeout === undefined).toBe(false);
+        expect(viewModel.hideScrollbarTimer === undefined).toBe(false);
 
         expect(setTimeout).toHaveBeenCalledTimes(1);
         expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 500);
@@ -1317,8 +1309,8 @@ describe('Methods', () => {
 
         expect(viewModel.needForceScrollbarsVisibility).toEqual(false);
 
-        viewModel.disposeHideScrollbarTimeout()();
-        expect(viewModel.hideScrollbarTimeout).toBe(undefined);
+        viewModel.disposeHideScrollbarTimer()();
+        expect(viewModel.hideScrollbarTimer).toBe(undefined);
       });
     });
   });
@@ -1331,7 +1323,7 @@ describe('Scrollbar integration', () => {
     optionValues.platforms,
   ]))('cssClasses, direction: %o, useSimulatedScrollbar: %o, platform: %o',
     (direction, useSimulatedScrollbar, platform) => {
-      devices.real = () => ({ platform });
+      (devices.real as Mock).mockImplementation(() => ({ platform }));
 
       const viewModel = new Scrollable({
         direction,
@@ -1369,9 +1361,11 @@ describe('Scrollbar integration', () => {
     optionValues.direction,
     optionValues.useSimulatedScrollbar,
     optionValues.platforms,
-  ]))('Should assign swipeDown, pullDown strategy, direction: %o, useSimulatedScrollbar: %o, platform: %o',
-    (direction, useSimulatedScrollbar, platform) => {
-      devices.real = () => ({ platform });
+    ['desktop', 'phone', 'tablet'],
+  ]))('Should assign swipeDown, pullDown strategy, direction: %o, useSimulatedScrollbar: %o, platform: %o, deviceType: %o',
+    (direction, useSimulatedScrollbar, platform, deviceType) => {
+      (devices.real as Mock).mockImplementation(() => ({ platform, deviceType }));
+      (devices.current as Mock).mockImplementation(() => ({ platform }));
 
       const viewModel = new Scrollable({
         useSimulatedScrollbar,

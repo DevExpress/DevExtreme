@@ -1,11 +1,12 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, TwoWay,
+  Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Event,
 } from '@devextreme-generator/declarations';
 import { WidgetProps } from './common/widget';
 import LegacyCalendar from '../../ui/calendar';
 /* eslint-disable import/named */
 import { DxElement } from '../../core/element';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
+import { EventCallback } from './common/event_callback.d';
 
 export const viewFunction = ({
   props: { rootElementRef },
@@ -30,6 +31,8 @@ export class CalendarProps extends WidgetProps {
   @OneWay() firstDayOfWeek?: number;
 
   @TwoWay() value?: Date|number| string | null = null;
+
+  @Event() valueChange?: EventCallback<Date|number|string>;
 
   @OneWay() _todayDate: () => Date = () => new Date();
 

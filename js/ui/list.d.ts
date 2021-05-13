@@ -238,6 +238,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 itemElement:DxElement
        * @type_function_param2 itemData:object
+       * @return void
        */
       action?: ((itemElement: DxElement, itemData: any) => any),
       /**

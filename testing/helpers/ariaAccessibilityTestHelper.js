@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { isDefined } from 'core/utils/type';
+import CheckBox from 'ui/check_box';
 
 const { assert } = QUnit;
 
@@ -55,7 +56,7 @@ class ariaAccessibilityTestHelper {
         const skipAttributes = ['class', 'style', 'onclick'];
         const attributeNames = this._getAttributeNames(element).filter(name => skipAttributes.indexOf(name) === -1).map(name => name.toLowerCase());
 
-        assert.equal(attributeNames.length === Object.keys(expectedAttributes).length, true, `${prefix || ''}.attributes.count`);
+        assert.strictEqual(attributeNames.length, Object.keys(expectedAttributes).length, `${prefix || ''}.attributes.count`);
         attributeNames.forEach((attributeName) => {
             assert.strictEqual(element.getAttribute(attributeName), attributeName in expectedAttributes ? expectedAttributes[attributeName] : null, `${prefix || ''}.${attributeName}`);
         });
@@ -84,10 +85,15 @@ class ariaAccessibilityTestHelper {
     _checkCheckboxAttributes(options, index, defaultValue) {
         const $checkBox = this.getItems().eq(index).prev();
 
-        this.checkAttributes($checkBox, {
+        const expectedAttributes = {
             role: 'checkbox',
             'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue
-        }, `checkbox[${index}]`);
+        };
+        if(CheckBox.IS_RENOVATED_WIDGET) {
+            expectedAttributes['aria-invalid'] = 'false';
+            expectedAttributes['aria-readonly'] = 'false';
+        }
+        this.checkAttributes($checkBox, expectedAttributes, `checkbox[${index}]`);
     }
 
     _checkNodeAttributes(options, $node, index) {
