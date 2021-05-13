@@ -677,16 +677,16 @@ QUnit.module('Methods', {
         let scrollable = workSpace.getScrollable();
         scrollable.scrollTo({ left: 0, top: 400 });
 
-        assert.equal(workSpace.getGroupedScrollableScrollTop(), 400, 'Returned value is right for not allDay appt and horizontal grouping');
-        assert.equal(workSpace.getGroupedScrollableScrollTop(true), 0, 'Returned value is right for allDay appt and horizontal grouping');
+        assert.equal(scheduler.instance.getWorkSpace().getGroupedScrollableScrollTop(), 400, 'Returned value is right for not allDay appt and horizontal grouping');
+        assert.equal(scheduler.instance.getWorkSpace().getGroupedScrollableScrollTop(true), 0, 'Returned value is right for allDay appt and horizontal grouping');
 
         scheduler.instance.option('currentView', 'VWEEK');
 
-        scrollable = workSpace.getScrollable();
+        scrollable = scheduler.instance.getWorkSpace().getScrollable();
         scrollable.scrollTo({ left: 0, top: 400 });
 
-        assert.equal(workSpace.getGroupedScrollableScrollTop(), 400, 'Returned value is right for not allDay appt and vertical grouping');
-        assert.equal(workSpace.getGroupedScrollableScrollTop(true), 400, 'Returned value is right for allDay appt and vertical grouping');
+        assert.equal(scheduler.instance.getWorkSpace().getGroupedScrollableScrollTop(), 400, 'Returned value is right for not allDay appt and vertical grouping');
+        assert.equal(scheduler.instance.getWorkSpace().getGroupedScrollableScrollTop(true), 400, 'Returned value is right for allDay appt and vertical grouping');
     });
 
     QUnit.test('checkAndDeleteAppointment', function(assert) {
