@@ -56,7 +56,7 @@ const TileView = CollectionWidget.inherit({
 
             hoverStateEnabled: true,
 
-            showScrollbar: false,
+            showScrollbar: 'never',
 
             height: 500,
 
@@ -157,10 +157,9 @@ const TileView = CollectionWidget.inherit({
 
     _initScrollView: function() {
         this._scrollView = this._createComponent(this.$element(), ScrollView, {
-            direction: this.option('direction'),
+            ...this.option(),
             scrollByContent: true,
             useKeyboard: false,
-            showScrollbar: this.option('showScrollbar')
         });
 
         this._$container = $(this._scrollView.content());
@@ -477,6 +476,7 @@ const TileView = CollectionWidget.inherit({
                 break;
             case 'width':
             case 'height':
+                this._initScrollView();
                 this.callBase(args);
                 this._renderGeometry();
                 this._updateScrollView();

@@ -109,10 +109,11 @@ $.each(configs, function(direction, config) {
 
     QUnit.module('rendering ' + direction, {
         beforeEach: function() {
-            this.element = $('<div></div>').appendTo('body');
+            const $container = $('<div />').appendTo('body');
+            this.element = $('<div />').appendTo($container);
         },
         afterEach: function() {
-            this.element.remove();
+            this.element.parent().remove();
         }
     }, () => {
         QUnit.test('non standard item ratios should be handled correctly', function(assert) {
@@ -138,10 +139,11 @@ $.each(configs, function(direction, config) {
 
 QUnit.module('rendering', {
     beforeEach: function() {
-        this.element = $('<div></div>').appendTo('body');
+        const $container = $('<div />').appendTo('body');
+        this.element = $('<div />').appendTo($container);
     },
     afterEach: function() {
-        this.element.remove();
+        this.element.parent().remove();
     }
 }, () => {
     QUnit.test('Item collection changing should repaint widget (T686243)', function(assert) {
@@ -279,10 +281,11 @@ QUnit.module('rendering', {
 $.each(configs, function(direction, config) {
     QUnit.module('API ' + direction, {
         beforeEach: function() {
-            this.element = $('<div></div>').appendTo('body');
+            const $container = $('<div />').appendTo('body');
+            this.element = $('<div />').appendTo($container);
         },
         afterEach: function() {
-            this.element.remove();
+            this.element.parent().remove();
         }
     }, () => {
         QUnit.test('getting scroll position', function(assert) {
