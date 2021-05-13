@@ -42,7 +42,7 @@ export class Box extends JSXComponent<BoxProps>() {
   get cssStyles(): { [key: string]: string } {
     const tryGetFromMap = (prop, map): string => ((prop in map) ? map[prop] : prop);
     return {
-      direction: 'flex',
+      display: 'flex',
       flexDirection: DIRECTION_MAP[this.props.direction],
       justifyContent: tryGetFromMap(this.props.align, JUSTIFY_CONTENT_MAP),
       alignItems: tryGetFromMap(this.props.crossAlign, ALIGN_ITEMS_MAP),
