@@ -51,12 +51,6 @@ test('Virtual scrolling layout in scheduler views', async (t) => {
     await t.expect(
       await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-scaling.png`),
     ).ok();
-
-    await scrollTo(scrollConfig[i].lastDate);
-
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-scaling.png`),
-    ).ok();
   }
 
   await t.expect(compareResults.isValid())
@@ -88,12 +82,6 @@ test('Virtual scrolling layout in scheduler views when horizontal grouping is en
 
     await t.expect(
       await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-horizontal-grouping-scaling.png`),
-    ).ok();
-
-    await scrollTo(scrollConfig[i].lastDate, { resourceId: 0 });
-
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-horizontal-grouping-scaling.png`),
     ).ok();
   }
 
