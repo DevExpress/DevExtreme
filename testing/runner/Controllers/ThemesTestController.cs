@@ -17,9 +17,10 @@ namespace Runner.Controllers
 
         [Route("get-css-files-list")]
         public IActionResult GetCssFilesList() {
-            var fileNames =
+            var fileNames = from bundleDirectory
+                in Directory.EnumerateDirectories(_bundlesPath)
                 from fullFilename
-                in Directory.EnumerateFiles(_bundlesPath, "*.scss")
+                in Directory.EnumerateFiles(bundleDirectory, "*.scss")
                 select Path.GetFileNameWithoutExtension(fullFilename) + ".css";
 
             return Json(fileNames);
