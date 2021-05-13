@@ -56,21 +56,17 @@ export class PdfTable {
                 }
             }
 
-            if(!isDefined(cells[i]._rect)) {
-                const columnWidth = this.columnWidths[i];
-                if(!isDefined(columnWidth)) {
-                    throw 'column width is required'; // TODO
-                }
-
-                cells[i]._rect = {
-                    x: this.getCellX(i),
-                    y: this.getCellY(this.rows.length - 1),
-                    w: columnWidth,
-                    h: rowHeight
-                };
-            } else {
-                // TODO: Will be removed. Keep for BAND tests
+            const columnWidth = this.columnWidths[i];
+            if(!isDefined(columnWidth)) {
+                throw 'column width is required'; // TODO
             }
+
+            cells[i]._rect = {
+                x: this.getCellX(i),
+                y: this.getCellY(this.rows.length - 1),
+                w: columnWidth,
+                h: rowHeight
+            };
         }
     }
 
