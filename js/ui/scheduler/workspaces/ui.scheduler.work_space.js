@@ -3364,6 +3364,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getGroupWidth(groupIndex) {
         let result = this._getCellCount() * this.getCellWidth();
+        // TODO: refactor after deleting old render
+        if(this.isVirtualScrolling()) {
+            const groupedData = this.viewDataProvider.groupedDataMap.dateTableGroupedMap;
+            const groupLength = groupedData[groupIndex][0].length;
+
+            result = groupLength * this.getCellWidth();
+        }
+
         const position = this.getMaxAllowedPosition(groupIndex);
         const currentPosition = position[groupIndex];
 

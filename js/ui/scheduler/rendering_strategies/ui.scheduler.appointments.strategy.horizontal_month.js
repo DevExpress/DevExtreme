@@ -24,7 +24,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return Math.ceil(rawFullChunksWidth / weekWidth);
     }
 
-    _getChunkWidths(geometry, settings, weekWidth) {
+    _getChunkWidths(geometry) {
         const firstChunkWidth = geometry.reducedWidth;
         const fullChunksWidth = Math.floor(geometry.sourceAppointmentWidth);
         const widthWithoutFirstChunk = fullChunksWidth - firstChunkWidth;
@@ -67,11 +67,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
             } });
         }
 
-        const groupDeltaWidth = this._getGroupDeltaWidth(settings.groupIndex);
-        result.forEach(item => {
-            item.left = Math.max(item.left + groupDeltaWidth, 0);
-            item.width = Math.max(item.width - groupDeltaWidth, 0);
-        });
 
         return result;
     }
