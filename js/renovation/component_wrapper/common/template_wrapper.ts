@@ -70,12 +70,12 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   createEffects(): InfernoEffect[] {
-    return [new InfernoEffect(this.renderTemplate, [this.props.template])];
+    return [new InfernoEffect(this.renderTemplate, [this.props.template, this.props.model])];
   }
 
   updateEffects(): void {
     // eslint-disable-next-line no-underscore-dangle
-    this._effects[0].update([this.props.template]);
+    this._effects[0].update([this.props.template, this.props.model]);
   }
 
   render(): JSX.Element | null {
