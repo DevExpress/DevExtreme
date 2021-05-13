@@ -770,7 +770,7 @@ QUnit.module('Details View', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 0, 'no files');
-        assert.strictEqual(fileManager.option('focusedItemKey'), '', 'no focus (option)');
+        assert.strictEqual(fileManager.option('focusedItemKey'), undefined, 'no focus (option)');
         assert.deepEqual(fileManager.option('selectedItemKeys'), [], 'no selection (option)');
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection (method)');
     });
@@ -796,7 +796,7 @@ QUnit.module('Details View', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 0, 'no files');
-        assert.strictEqual(fileManager.option('focusedItemKey'), '', 'no focus (option)');
+        assert.strictEqual(fileManager.option('focusedItemKey'), undefined, 'no focus (option)');
         assert.deepEqual(fileManager.option('selectedItemKeys'), [], 'no selection (option)');
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection (method)');
     });
