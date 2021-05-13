@@ -51,12 +51,78 @@ export class PdfGrid {
             const isNewTableColumn = this._splitByColumns.filter((splitByColumn) => splitByColumn.columnIndex === cellIndex)[0];
             if(isNewTableColumn) {
                 this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
+                this._trySplitColSpanArea(cells, cellIndex);
                 currentTableIndex++;
                 currentTableCells = [];
             }
             currentTableCells.push(cells[cellIndex]);
         }
         this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
+    }
+
+    _trySplitColSpanArea(cells, splitIndex) {
+        const colSpanArea = this._findColSpanArea(cells, splitIndex);
+        if(isDefined(colSpanArea)) {
+            const leftAreaColSpan = splitIndex - colSpanArea.startIndex - 1;
+            const rightAreaColSpan = colSpanArea.endIndex - splitIndex;
+
+            cells[splitIndex].text = cells[colSpanArea.startIndex].text;
+            for(let index = colSpanArea.startIndex; index <= colSpanArea.endIndex; index++) {
+                const colSpan = (index < splitIndex) ? leftAreaColSpan : rightAreaColSpan;
+                if(colSpan > 0) {
+                    cells[index].colSpan = colSpan;
+                } else {
+                    delete cells[index].colSpan;
+                }
+            }
+        }
+    }
+
+    _findColSpanArea(cells, targetCellIndex) {
+        for(let index = 0; index < cells.length; index++) {
+            if(cells[index].colSpan > 0) {
+                const colSpan = cells[index].colSpan;
+                const startIndex = index;
+                const endIndex = startIndex + colSpan;
+
+                if(startIndex < targetCellIndex && targetCellIndex <= endIndex) {
+                    return { colSpan, startIndex, endIndex };
+                } else {
+                    index = endIndex;
+                }
+            }
+        }
+        return null;
+    }
+
+    mergeCellsBySpanAttributes() {
+        this._tables.forEach((table) => {
+            for(let rowIndex = 0; rowIndex < table.rows.length; rowIndex++) {
+                for(let cellIndex = 0; cellIndex < table.rows[rowIndex].length; cellIndex++) {
+                    const cell = table.rows[rowIndex][cellIndex];
+                    if(!cell.skip) {
+                        if(isDefined(cell.rowSpan)) {
+                            for(let i = 1; i <= cell.rowSpan; i++) {
+                                const mergedCell = table.rows[rowIndex + i][cellIndex];
+                                if(isDefined(mergedCell)) {
+                                    cell._rect.h += mergedCell._rect.h;
+                                    mergedCell.skip = true;
+                                }
+                            }
+                        }
+                        if(isDefined(cell.colSpan)) {
+                            for(let i = 1; i <= cell.colSpan; i++) {
+                                const mergedCell = table.rows[rowIndex][cellIndex + i];
+                                if(isDefined(mergedCell)) {
+                                    cell._rect.w += mergedCell._rect.w;
+                                    mergedCell.skip = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     drawTo(doc) {

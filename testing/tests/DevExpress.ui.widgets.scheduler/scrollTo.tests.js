@@ -294,10 +294,11 @@ module('ScrollTo', {
             const date = new Date(2020, 8, 7, 9);
 
             const scheduler = createScheduler({
-                currentView: {
+                views: [{
                     type: 'week',
                     groupOrientation: 'vertical',
-                },
+                }],
+                currentView: 'week',
                 groups: ['ownerId'],
                 showAllDayPanel: true,
             });
@@ -311,10 +312,11 @@ module('ScrollTo', {
             const date = new Date(2020, 8, 7, 9);
 
             const scheduler = createScheduler({
-                currentView: {
+                views: [{
                     type: 'week',
                     groupOrientation: 'vertical',
-                },
+                }],
+                currentView: 'week',
                 groups: ['ownerId'],
                 showAllDayPanel: true,
             });

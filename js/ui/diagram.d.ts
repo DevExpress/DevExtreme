@@ -172,6 +172,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_param2 data:object
      * @type_function_param2_field1 item:dxDiagramShape
      * @prevFileNamespace DevExpress.ui
+     * @return void
      * @public
      */
     customShapeTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any);
@@ -181,6 +182,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_param2 data:object
      * @type_function_param2_field1 item:dxDiagramShape
      * @prevFileNamespace DevExpress.ui
+     * @return void
      * @public
      */
     customShapeToolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
@@ -334,6 +336,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 container:dxSVGElement
        * @type_function_param2 data:object
        * @type_function_param2_field1 item:dxDiagramShape
+       * @return void
        */
       template?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any),
       /**
@@ -387,6 +390,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 container:dxSVGElement
        * @type_function_param2 data:object
        * @type_function_param2_field1 item:dxDiagramShape
+       * @return void
        */
       toolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any),
       /**
@@ -536,6 +540,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       customDataExpr?: string | ((data: any) => any),
@@ -549,6 +554,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default "from"
        */
       fromExpr?: string | ((data: any) => any),
@@ -556,6 +562,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       fromLineEndExpr?: string | ((data: any) => any),
@@ -563,6 +570,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       fromPointIndexExpr?: string | ((data: any) => any),
@@ -570,6 +578,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default "id"
        */
       keyExpr?: string | ((data: any) => any),
@@ -577,6 +586,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       lineTypeExpr?: string | ((data: any) => any),
@@ -584,6 +594,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       lockedExpr?: string | ((data: any) => any),
@@ -591,6 +602,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       pointsExpr?: string | ((data: any) => any),
@@ -598,6 +610,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       styleExpr?: string | ((data: any) => any),
@@ -605,6 +618,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       textExpr?: string | ((data: any) => any),
@@ -612,6 +626,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       textStyleExpr?: string | ((data: any) => any),
@@ -619,6 +634,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default "to"
        */
       toExpr?: string | ((data: any) => any),
@@ -626,6 +642,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       toLineEndExpr?: string | ((data: any) => any),
@@ -633,6 +650,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       toPointIndexExpr?: string | ((data: any) => any),
@@ -640,6 +658,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       zIndexExpr?: string | ((data: any) => any)
@@ -725,6 +744,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default "children"
        */
       containerChildrenExpr?: string | ((data: any) => any),
@@ -732,6 +752,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       containerKeyExpr?: string | ((data: any) => any),
@@ -739,6 +760,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       customDataExpr?: string | ((data: any) => any),
@@ -752,6 +774,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       heightExpr?: string | ((data: any) => any),
@@ -759,6 +782,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       imageUrlExpr?: string | ((data: any) => any),
@@ -766,6 +790,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       itemsExpr?: string | ((data: any) => any),
@@ -773,6 +798,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default "id"
        */
       keyExpr?: string | ((data: any) => any),
@@ -780,6 +806,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       leftExpr?: string | ((data: any) => any),
@@ -787,6 +814,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       lockedExpr?: string | ((data: any) => any),
@@ -794,6 +822,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       parentKeyExpr?: string | ((data: any) => any),
@@ -801,6 +830,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       styleExpr?: string | ((data: any) => any),
@@ -808,6 +838,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default "text"
        */
       textExpr?: string | ((data: any) => any),
@@ -815,6 +846,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       textStyleExpr?: string | ((data: any) => any),
@@ -822,6 +854,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       topExpr?: string | ((data: any) => any),
@@ -829,6 +862,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default "type"
        */
       typeExpr?: string | ((data: any) => any),
@@ -836,6 +870,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       widthExpr?: string | ((data: any) => any),
@@ -843,6 +878,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 data:object
+       * @return void
        * @default undefined
        */
       zIndexExpr?: string | ((data: any) => any)
