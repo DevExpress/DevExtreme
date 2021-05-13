@@ -519,7 +519,7 @@ describe('option', () => {
   });
 
   it('should not pass excessive options to props', () => {
-    const mockFunction = () => {};
+    const mockFunction = () => { };
     const options = {
       text: 'some text',
       twoWayProp: 15,
@@ -535,7 +535,7 @@ describe('option', () => {
   });
 
   it('should still pass elementAttr to props', () => {
-    const mockFunction = () => {};
+    const mockFunction = () => { };
     const elementStyle = { backgroundColor: 'red' };
     const options = {
       text: 'some text',
@@ -552,6 +552,21 @@ describe('option', () => {
       style: elementStyle,
     });
     expect($('#component').dxOptionsCheckWidget('option')).toMatchObject(options);
+  });
+
+  it('should remap "onKeyboardHandled" event to "onKeyDown"', () => {
+    const mockFunction = jest.fn();
+    const options = {
+      onKeyboardHandled: mockFunction,
+    };
+
+    $('#component').dxTestWidget(options);
+
+    emitKeyboard(KEY.space);
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+    expect(mockFunction).toHaveBeenCalledWith({
+      originalEvent: defaultEvent, keyName: KEY.space, which: KEY.space,
+    });
   });
 });
 

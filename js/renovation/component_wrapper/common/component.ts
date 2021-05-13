@@ -200,24 +200,27 @@ export default class ComponentWrapper extends DOMComponent {
     return this._elementAttr;
   }
 
-  _patchOptionValues(options: Record<string, unknown>) {
+  _patchOptionValues(options: Record<string, unknown> = {}) {
     const { allowNull, twoWay, elements, props } = this._propsInfo;
     const defaultProps = this._viewComponent.defaultProps;
-
-    const widgetProps = [...props, 'onContentReady'].reduce((acc, propName) => {
+    const { ref, children, onKeyboardHandled } = options;
+    const onKeyDown = onKeyboardHandled ? (_, event_options) => (onKeyboardHandled as (unknown) => void)(event_options) : undefined;
+    const widgetProps = {
+      ref,
+      children,
+      onKeyDown,
+    };
+    [...props, 'onContentReady'].forEach(propName => {
       if (options.hasOwnProperty(propName)) {
-        acc[propName] = options[propName];
+        widgetProps[propName] = options[propName];
       }
-      return acc;
-    }, {
-      ref: options.ref,
-      children: options.children,
+
     });
 
     allowNull.forEach(
       setDefaultOptionValue(widgetProps, () => null)
     );
-
+    
     Object.keys(defaultProps).forEach(
       setDefaultOptionValue(
         widgetProps,
