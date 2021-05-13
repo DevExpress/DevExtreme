@@ -748,4 +748,56 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.equal(columnHeader.attr('aria-sort'), 'none', 'sorting default');
     });
+
+    test('focus and selection in \'single\' mode must be reseted when the last item is removed (T972613)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            fileSystemProvider: createTestFileSystem(),
+            currentPath: 'Folder 2',
+            selectionMode: 'single',
+            permissions: { delete: true }
+        });
+        this.clock.tick(400);
+
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1), true);
+        this.clock.tick(400);
+
+        assert.deepEqual(getSelectedItemNames(fileManager), ['File 2-1.jpg'], 'File 2-1.jpg is selected');
+
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 0, 'no files');
+        assert.strictEqual(fileManager.option('focusedItemKey'), '', 'no focus (option)');
+        assert.deepEqual(fileManager.option('selectedItemKeys'), [], 'no selection (option)');
+        assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection (method)');
+    });
+
+    test('focus selection in \'multiple\' mode must be reseted when the last item is removed (T972613)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            fileSystemProvider: createTestFileSystem(),
+            currentPath: 'Folder 2',
+            selectionMode: 'multiple',
+            permissions: { delete: true }
+        });
+        this.clock.tick(400);
+
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
+        this.clock.tick(400);
+
+        assert.deepEqual(getSelectedItemNames(fileManager), ['File 2-1.jpg'], 'File 2-1.jpg is selected');
+
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 0, 'no files');
+        assert.strictEqual(fileManager.option('focusedItemKey'), '', 'no focus (option)');
+        assert.deepEqual(fileManager.option('selectedItemKeys'), [], 'no selection (option)');
+        assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection (method)');
+    });
 });
