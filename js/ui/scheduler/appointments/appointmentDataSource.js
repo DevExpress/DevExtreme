@@ -14,6 +14,11 @@ const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
 const USER_FILTER_POSITION = 1;
 
+const FilterStrategies = {
+    virtual: 'virtual',
+    standard: 'standard'
+};
+
 export default class AppointmentDataSource {
     constructor(scheduler, dataSource, dataAccessors) {
         this.scheduler = scheduler;
@@ -25,20 +30,34 @@ export default class AppointmentDataSource {
 
     get filterMaker() { return this.getStrategy().filterMaker; }
     get keyName() { return this.dataOperator.keyName; }
+    get strategyName() {
+        return this.scheduler.option('scrolling.mode') === FilterStrategies.virtual
+            ? FilterStrategies.virtual
+            : FilterStrategies.standard;
+    }
 
     getStrategy() {
-        return this.scheduler.isVirtualScrolling()
+        if(!this.strategy || this.strategy.strategyName !== this.strategyName) {
+            this.initStrategy();
+        }
+
+        return this.strategy;
+    }
+    initStrategy() {
+        this.strategy = this.strategyName === FilterStrategies.virtual
             ? new AppointmentFilterVirtualStrategy(this.scheduler, this.dataSource, this.dataAccessors)
             : new AppointmentFilterBaseStrategy(this.scheduler, this.dataSource, this.dataAccessors);
     }
 
     setDataSource(dataSource) {
         this.dataSource = dataSource;
+        this.initStrategy();
         this.dataOperator.setDataSource(this.dataSource);
     }
 
     setDataAccessors(dataAccessors) {
         this.dataAccessors = dataAccessors;
+        this.initStrategy();
     }
 
     // Filter mapping
@@ -322,6 +341,8 @@ class AppointmentFilterBaseStrategy {
 
         this._init();
     }
+
+    get strategyName() { return FilterStrategies.standard; }
 
     // TODO - Use DI to get appropriate services
     get workspace() { return this.scheduler.getWorkSpace(); }
@@ -839,6 +860,8 @@ class AppointmentFilterBaseStrategy {
     //
 }
 class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
+    get strategyName() { return FilterStrategies.virtual; }
+
     filter() {
         const hourMs = toMs('hour');
         const isCalculateStartAndEndDayHour = this.workspace.isDateAndTimeView;
