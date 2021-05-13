@@ -71,19 +71,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return result;
     }
 
-    _getGroupDeltaWidth(groupIndex) {
-        let result = 0;
-        const workspace = this.instance.getWorkSpace();
-        if(workspace.isRenovatedRender()) {
-            const { viewDataProvider } = workspace;
-
-            const cellCountDelta = viewDataProvider.getGroupCellCountDelta(groupIndex);
-            result = cellCountDelta * workspace.getCellWidth();
-        }
-
-        return result;
-    }
-
     _calculateMultiWeekAppointmentLeftOffset(max, width) {
         return this._isRtl() ? max : max - width;
     }

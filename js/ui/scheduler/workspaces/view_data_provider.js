@@ -1027,16 +1027,6 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getRowCountInGroup(groupIndex);
     }
 
-    getGroupCellCountDelta(groupIndex) {
-        const { dateTableGroupedMap } = this._groupedDataMapProvider.groupedDataMap;
-        const groupedData = dateTableGroupedMap[groupIndex];
-        const { cellCountInGroupRow: totalCellCountInGroupRow } = this.viewData;
-
-        const cellCountInGroupRow = groupedData[0].length;
-
-        return totalCellCountInGroupRow - cellCountInGroupRow;
-    }
-
     getCellData(rowIndex, cellIndex, isAllDay) {
         if(isAllDay && !this.isVerticalGroupedWorkspace) {
             return this._viewData.groupedData[0].allDayPanel[cellIndex];
