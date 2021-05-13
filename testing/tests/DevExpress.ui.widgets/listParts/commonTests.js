@@ -3239,7 +3239,7 @@ QUnit.module('scrollView integration', {
         });
     });
 
-    QUnit.test('List should not call "get" in users objects when scrolling to item (T996102)', function(assert) {
+    QUnit.test('List should not call "get" in item model when scrolling to item (T996102)', function(assert) {
         const getCallSpy = sinon.spy();
         const items = [{ get: getCallSpy }];
         const instance = $('#list').dxList({

@@ -2281,7 +2281,7 @@ module('reordering with dataSource', () => {
 });
 
 module('internal methods', () => {
-    test('getItemElement method should not call "get" in users objects (T996102)', function(assert) {
+    test('getItemElement, getNormalizedIndex and getIndex methods should not call "get" in item model (T996102)', function(assert) {
         const getCallSpy = sinon.spy();
         this.items = [{ get: getCallSpy }];
         this.$element = $('#cmp');
@@ -2290,29 +2290,7 @@ module('internal methods', () => {
         });
 
         this.instance._editStrategy.getItemElement(this.items[0]);
-        assert.strictEqual(getCallSpy.callCount, 0);
-    });
-
-    test('getNormalizedIndex method should not call "get" in users objects (T996102)', function(assert) {
-        const getCallSpy = sinon.spy();
-        this.items = [{ get: getCallSpy }];
-        this.$element = $('#cmp');
-        this.instance = new TestComponent(this.$element, {
-            items: this.items,
-        });
-
         this.instance._editStrategy.getNormalizedIndex(this.items[0]);
-        assert.strictEqual(getCallSpy.callCount, 0);
-    });
-
-    test('getIndex method should not call "get" in users objects (T996102)', function(assert) {
-        const getCallSpy = sinon.spy();
-        this.items = [{ get: getCallSpy }];
-        this.$element = $('#cmp');
-        this.instance = new TestComponent(this.$element, {
-            items: this.items,
-        });
-
         this.instance._editStrategy.getIndex(this.items[0]);
         assert.strictEqual(getCallSpy.callCount, 0);
     });
