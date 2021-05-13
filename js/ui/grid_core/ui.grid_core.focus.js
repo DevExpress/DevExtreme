@@ -307,6 +307,8 @@ const FocusController = core.ViewController.inherit((function() {
                     this._navigateToRow(focusedRowKey, true).done(focusedRowIndex => {
                         if(currentFocusedRowIndex >= 0 && focusedRowIndex < 0) {
                             this._focusRowByIndex();
+                        } else if(currentFocusedRowIndex < 0 && focusedRowIndex >= 0) {
+                            keyboardController.setFocusedRowIndex(focusedRowIndex);
                         }
                     });
                 }
