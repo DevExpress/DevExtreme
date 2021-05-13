@@ -892,13 +892,6 @@ class GroupedDataMapProvider {
         return groupRow[groupRow.length - 1].position;
     }
 
-    getFirstGroupCellPosition(groupIndex) {
-        const { dateTableGroupedMap } = this.groupedDataMap;
-        const groupedData = dateTableGroupedMap[groupIndex];
-
-        return groupedData[0][0].position;
-    }
-
     getRowCountInGroup(groupIndex) {
         const groupRow = this.getLastGroupRow(groupIndex);
         const cellAmount = groupRow.length;
