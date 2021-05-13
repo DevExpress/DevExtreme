@@ -49,17 +49,6 @@
     "@babel/plugin-transform-modules-commonjs": "^7.10.1",
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/preset-env": "^7.8.7",
-<<<<<<< HEAD
-    "@devextreme-generator/angular": "1.1.1",
-    "@devextreme-generator/build-helpers": "1.1.1",
-    "@devextreme-generator/core": "1.1.1",
-    "@devextreme-generator/declarations": "1.1.1",
-    "@devextreme-generator/inferno": "1.1.1",
-    "@devextreme-generator/react": "1.1.1",
-    "@devextreme-generator/vue": "1.1.1",
-    "@rollup/plugin-commonjs": "^19.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.0",
-=======
     "@devextreme-generator/angular": "1.2.1",
     "@devextreme-generator/build-helpers": "1.2.1",
     "@devextreme-generator/core": "1.2.1",
@@ -67,7 +56,8 @@
     "@devextreme-generator/inferno": "1.2.1",
     "@devextreme-generator/react": "1.2.1",
     "@devextreme-generator/vue": "1.2.1",
->>>>>>> 21_1
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^24.0.24",
     "@types/jquery": "^2.0.34",
