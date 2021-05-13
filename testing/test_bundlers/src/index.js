@@ -1,22 +1,25 @@
 /* global document */
 
-const modulesExportsList = require('../../helpers/widgetsList.js').modulesExportsList;
+const widgetsList = require('../../helpers/devExtremeModulesList.js').modulesExportsList.widgetsList;
 
-const myPopup = new modulesExportsList.widgetsList.Popup.default(document.getElementById('myPopUp'), {
+const myPopup = new widgetsList.Popup.default(document.getElementById('myPopUp'), {
     title: 'PopUp!'
 });
 
-new modulesExportsList.widgetsList.Button.default(document.getElementById('myButton'), {
+new widgetsList.Button.default(document.getElementById('myButton'), {
     text: 'Push!',
     onClick: function() {
         myPopup.show();
     }
 });
 
-Object.keys(modulesExportsList.widgetsList).forEach((widget) => {
+const widgets = Object.keys(widgetsList);
+
+for(const index in widgets) {
     const div = document.createElement('div');
-    modulesExportsList.widgetsList[widget].default(div, {
+    const widget = widgets[index];
+    new widgetsList[widget].default(div, {
         text: widget
     });
     document.body.appendChild(div);
-});
+}

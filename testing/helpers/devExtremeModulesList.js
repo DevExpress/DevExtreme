@@ -15,21 +15,21 @@ const modulesExportsList = {
         setTemplateEngine: require('core/set_template_engine')
     },
 
-    dataExportsList: {
-        applyChanges: require('data/apply_changes'),
-        ArrayStore: require('data/array_store'),
-        CustomStore: require('data/custom_store'),
-        DataSource: require('data/data_source'),
-        EndpointSelecror: require('data/endpoint_selector'),
-        errorHandler: require('data/errors').errorHandler,
-        LocalStore: require('data/local_store'),
-        ODataContext: require('data/odata/context'),
-        ODataStore: require('data/odata/store'),
-        EdmLiteral: require('data/odata/utils').EdmLiteral,
-        keyConverters: require('data/odata/utils').keyConverters,
-        Query: require('data/query'),
-        base64_encode: require('data/utils').base64_encode
-    },
+    // dataExportsList: {
+    //     applyChanges: require('data/apply_changes'),
+    //     ArrayStore: require('data/array_store'),
+    //     CustomStore: require('data/custom_store'),
+    //     DataSource: require('data/data_source'),
+    //     EndpointSelecror: require('data/endpoint_selector'),
+    //     errorHandler: require('data/errors').errorHandler,
+    //     LocalStore: require('data/local_store'),
+    //     ODataContext: require('data/odata/context'),
+    //     ODataStore: require('data/odata/store'),
+    //     EdmLiteral: require('data/odata/utils').EdmLiteral,
+    //     keyConverters: require('data/odata/utils').keyConverters,
+    //     Query: require('data/query'),
+    //     base64_encode: require('data/utils').base64_encode
+    // },
 
     eventsExportsList: {
         off: require('events').off,
@@ -43,7 +43,7 @@ const modulesExportsList = {
         hold: require('events/hold'),
         hover: require('events/hover'),
         pointer: require('events/pointer'),
-        remove: require('events/remove'),
+        // remove: require('events/remove'),
         swipe: require('events/swipe'),
         transform: require('events/transform')
     },
@@ -58,7 +58,7 @@ const modulesExportsList = {
         FileSystemItem: require('file_management/file_system_item'),
         ObjectFileSystemProvider: require('file_management/object_provider'),
         RemoteFileSystemProvider: require('file_management/remote_provider'),
-        UploadInfo: require('file_management/upload_info'),
+        // UploadInfo: require('file_management/upload_info'),
     },
 
     integrationExportsList: {
@@ -67,12 +67,12 @@ const modulesExportsList = {
         knockout: require('integration/knockout')
     },
 
-    localizationGlobalizeExportsList: {
-        currency: require('/localization/globalize/currency'),
-        date: require('/localization/globalize/date'),
-        message: require('/localization/globalize/message'),
-        number: require('/localization/globalize/number')
-    },
+    // localizationGlobalizeExportsList: {
+    //     currency: require('/localization/globalize/currency'),
+    //     date: require('/localization/globalize/date'),
+    //     message: require('/localization/globalize/message'),
+    //     number: require('/localization/globalize/number')
+    // },
 
     mobileExportsList: {
         hideTopOverlay: require('mobile/hide_top_overlay'),
@@ -207,4 +207,4 @@ const modulesExportsList = {
     }
 };
 
-exports.mobileExportsList = modulesExportsList;
+exports.modulesExportsList = modulesExportsList;
