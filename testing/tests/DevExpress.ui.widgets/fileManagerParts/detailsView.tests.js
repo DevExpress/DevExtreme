@@ -301,16 +301,14 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection');
 
-        this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.down);
-        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(2));
         this.clock.tick(400);
 
         assert.notOk(this.wrapper.isDetailsRowSelected(2), 'first directory selected');
         assert.ok(this.wrapper.isDetailsRowFocused(2), 'first directory focused');
         assert.deepEqual(getSelectedItemNames(fileManager), [ 'Folder 1.1' ], 'first directory in selection');
 
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down);
-        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
         this.clock.tick(400);
 
         assert.notOk(this.wrapper.isDetailsRowSelected(2), 'first directory is not selected');
@@ -318,7 +316,9 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.notOk(this.wrapper.isDetailsRowSelected(1), 'parent directory item is not selected');
         assert.ok(this.wrapper.isDetailsRowFocused(1), 'parent directory item is focused');
         assert.notOk(this.wrapper.getRowSelectCheckBox(1).length, 'parent directory item check box hidden');
-        assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection');
+        assert.notStrictEqual(fileManager.option('focusedItemKey'), '', 'some focus (option)');
+        assert.deepEqual(fileManager.option('selectedItemKeys'), [], 'no selection (option)');
+        assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection (method)');
     });
 
     test('selectionChanged event ignore parent direcotry item', function(assert) {
