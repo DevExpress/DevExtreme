@@ -1174,6 +1174,12 @@ export default class ViewDataProvider {
             }
         }
 
-        return daysCount - includedDays;
+        const lastCell = groupedData[groupedData.length - 1][groupedData[0].length - 1].cellData;
+        const lastCellStart = dateUtils.trimTime(lastCell.startDate);
+        const daysAfterView = Math.floor((endDate.getTime() - lastCellStart.getTime()) / dateUtils.dateToMilliseconds('day'));
+
+        const deltaDays = daysAfterView > 0 ? daysAfterView : 0;
+
+        return daysCount - includedDays - deltaDays;
     }
 }
