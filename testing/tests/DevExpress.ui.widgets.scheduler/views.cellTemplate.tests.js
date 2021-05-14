@@ -756,7 +756,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 expectedCells: setIndexes(twoTimelineMonthCells),
             },
         ].forEach(({ view, expectedCells }) => {
-            test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
+            test(`dataCellTemplate should provide correct options in ${view} view`
                     + ' with intervalCount: 2', function(assert) {
                 const displayedCells = [];
 
