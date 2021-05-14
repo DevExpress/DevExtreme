@@ -234,6 +234,7 @@ export type TimeTooltipTemplateData = {
     readonly end: Date;
 }
 
+/** @deprecated use Properties instead */
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid

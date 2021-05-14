@@ -24,6 +24,7 @@ export type InitializedEvent = InitializedEventInfo<dxLoadIndicator>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
      * @docid

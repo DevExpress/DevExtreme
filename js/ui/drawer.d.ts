@@ -31,6 +31,7 @@ export type InitializedEvent = InitializedEventInfo<dxDrawer>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxDrawer> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**
      * @docid

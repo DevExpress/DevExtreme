@@ -33,6 +33,7 @@ export type InitializedEvent = InitializedEventInfo<dxSpeedDialAction>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxSpeedDialAction> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
      * @docid
