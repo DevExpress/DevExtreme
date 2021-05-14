@@ -382,7 +382,7 @@ QUnit.module('focus policy', () => {
 
         instance.open();
 
-        const $buttons = instance._popup._wrapper().find('.dx-button');
+        const $buttons = instance._popup.$wrapper().find('.dx-button');
 
         $.each($buttons, function(index, button) {
             const $button = $(button);
@@ -773,7 +773,7 @@ QUnit.module('keyboard navigation inside popup', {
 
         this.$input = this.$element.find('.dx-texteditor-input');
 
-        const $popupWrapper = $(this.instance._popup._wrapper());
+        const $popupWrapper = $(this.instance._popup.$wrapper());
         this.$doneButton = $popupWrapper.find('.dx-popup-done.dx-button');
         this.$cancelButton = $popupWrapper.find('.dx-popup-cancel.dx-button');
 

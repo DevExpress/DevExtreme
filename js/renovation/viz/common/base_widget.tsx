@@ -143,12 +143,8 @@ export class BaseWidget extends JSXComponent<Props, 'rootElementRef'>() {
   }
 
   @Effect()
-  contentReadyEffect(): void {
-    const { onContentReady } = this.props;
-
+  setCanvasEffect(): void {
     this.setCanvas();
-
-    onContentReady?.({ element: this.svgElementRef.current });
   }
 
   @Method()

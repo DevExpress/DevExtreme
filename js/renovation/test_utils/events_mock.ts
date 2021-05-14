@@ -25,6 +25,9 @@ export const EVENT = {
   inactive: 'dxinactive',
   shown: 'dxshown',
   resize: 'dxresize',
+  dragStart: 'dxdragstart',
+  dragMove: 'dxdrag',
+  dragEnd: 'dxdragend',
 };
 
 export const defaultEvent = {

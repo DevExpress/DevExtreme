@@ -7,11 +7,11 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Jest Tests",
+      "name": "Jest Tests watch",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
         "--runInBand",
-        "--no-cache",
+        "--watch",
       ],
       "runtimeArgs": [
         "--harmony"
@@ -28,6 +28,21 @@
         "--runInBand",
         "--no-cache",
         "${fileBasenameNoExtension}",
+      ],
+      "runtimeArgs": [
+        "--harmony"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Tests",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand",
+        "--no-cache",
       ],
       "runtimeArgs": [
         "--harmony"

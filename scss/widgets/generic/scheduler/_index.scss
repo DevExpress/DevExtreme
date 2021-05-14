@@ -70,6 +70,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
 .dx-scheduler-time-panel-cell {
   height: $generic-scheduler-workspace-date-table-cell-height;
+
+  &::after {
+    content: '';
+  }
 }
 
 .dx-scheduler-date-table-cell {
@@ -526,10 +530,11 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     @include baseScheduler.dx-scheduler-group-mixin($header-scroll-bar-top-offset);
 
     &.dx-scheduler-work-space-day {
+      @include baseScheduler.dx-scheduler-group-mixin($header-scroll-bar-top-offset);
       @include baseScheduler.dx-scheduler-header-scrollable-mixin($header-scroll-bar-top-offset);
-      @include baseScheduler.dx-scheduler-group-mixin($header-scroll-bar-top-offset - $generic-scheduler-header-panel-table-cell-height);
 
       &:not(.dx-scheduler-work-space-count) {
+        @include baseScheduler.dx-scheduler-group-mixin($header-scroll-bar-top-offset - $generic-scheduler-header-panel-table-cell-height);
         @include baseScheduler.dx-scheduler-header-scrollable-mixin($header-scroll-bar-top-offset - $generic-scheduler-header-panel-table-cell-height);
       }
     }

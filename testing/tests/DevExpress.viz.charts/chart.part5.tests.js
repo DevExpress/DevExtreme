@@ -155,6 +155,21 @@ QUnit.test('chart with single value axis. Adjust on zoom = false', function(asse
     assert.ok(!series1.getValueAxis().adjust.called, 'value axis are not zoomed');
 });
 
+QUnit.test('Chart with aggregatio and adjustOnZoom = false (T996183)', function(assert) {
+    const series = new MockSeries({ aggregation: { enabled: true } });
+
+    chartMocks.seriesMockData.series.push(series);
+
+    const chart = this.createChart({
+        series: [{ type: 'line' }],
+        adjustOnZoom: false
+    });
+
+    chart.zoomArgument(10, 50);
+
+    assert.ok(!series.getValueAxis().adjust.called, 'value axis are not zoomed');
+});
+
 QUnit.test('MultiAxis chart', function(assert) {
     const series1 = new MockSeries({});
     const series2 = new MockSeries({});

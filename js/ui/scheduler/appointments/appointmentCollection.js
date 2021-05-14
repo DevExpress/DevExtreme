@@ -725,10 +725,6 @@ class SchedulerAppointments extends CollectionWidget {
         return result;
     }
 
-    _calculateBoundOffset() {
-        return this.invoke('getBoundOffset');
-    }
-
     _processVirtualAppointment(appointmentSetting, $appointment, appointmentData, color) {
         const virtualAppointment = appointmentSetting.virtual;
         const virtualGroupIndex = virtualAppointment.index;

@@ -43,7 +43,6 @@ describe('DataGrid', () => {
         height: 400,
         hint: 'hint',
         hoverStateEnabled: false,
-        onContentReady: jest.fn(),
         rtlEnabled: false,
         tabIndex: 0,
         visible: true,
@@ -122,6 +121,18 @@ describe('DataGrid', () => {
       const component = new DataGrid({ onOptionChanged: jest.fn() } as any);
       component.setupInstance() as any;
       expect((component.instance as any).options.onOptionChanged).toBeUndefined();
+    });
+
+    it('instance should subscribe on "onContentReady"', () => {
+      const props = {
+      } as DataGridProps;
+      const contentReadyHandler = jest.fn();
+      const component = new DataGrid(props);
+      component.restAttributes = { onContentReady: contentReadyHandler };
+
+      component.setupInstance();
+
+      expect((component.instance as any).options.onContentReady).toBe(contentReadyHandler);
     });
 
     describe('Methods', () => {

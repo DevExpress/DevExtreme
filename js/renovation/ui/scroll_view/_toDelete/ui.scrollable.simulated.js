@@ -45,10 +45,6 @@ export const SimulatedStrategy = Class.inherit({
         this._resetActive();
     },
 
-    handleScroll: function() {
-        this._component._updateRtlConfig();
-    },
-
     _cursorEnterHandler: function(e) {
         e = e || {};
         e.originalEvent = e.originalEvent || {};

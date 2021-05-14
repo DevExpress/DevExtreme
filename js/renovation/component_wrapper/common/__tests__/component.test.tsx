@@ -519,7 +519,7 @@ describe('option', () => {
   });
 
   it('should not pass excessive options to props', () => {
-    const mockFunction = () => {};
+    const mockFunction = () => { };
     const options = {
       text: 'some text',
       twoWayProp: 15,
@@ -535,7 +535,7 @@ describe('option', () => {
   });
 
   it('should still pass elementAttr to props', () => {
-    const mockFunction = () => {};
+    const mockFunction = () => { };
     const elementStyle = { backgroundColor: 'red' };
     const options = {
       text: 'some text',
@@ -552,6 +552,21 @@ describe('option', () => {
       style: elementStyle,
     });
     expect($('#component').dxOptionsCheckWidget('option')).toMatchObject(options);
+  });
+
+  it('should remap "onKeyboardHandled" event to "onKeyDown"', () => {
+    const mockFunction = jest.fn();
+    const options = {
+      onKeyboardHandled: mockFunction,
+    };
+
+    $('#component').dxTestWidget(options);
+
+    emitKeyboard(KEY.space);
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+    expect(mockFunction).toHaveBeenCalledWith({
+      originalEvent: defaultEvent, keyName: KEY.space, which: KEY.space,
+    });
   });
 });
 
@@ -865,5 +880,65 @@ describe('registerKeyHandler', () => {
     expect(propHandler).toHaveBeenCalledTimes(1);
     expect(propHandler).toHaveBeenCalledWith(defaultEvent,
       { originalEvent: defaultEvent, keyName: KEY.enter, which: KEY.enter });
+  });
+});
+
+describe('onContentReady', () => {
+  it('should be raised on first render', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({
+      onContentReady: contentReadyHandler,
+    });
+    const instance = $('#component').dxTestWidget('instance');
+
+    expect(contentReadyHandler).toHaveBeenCalledTimes(1);
+    expect(contentReadyHandler)
+      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+  });
+
+  it('should be raised on appropriate option change on endUpdate', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({
+      onContentReady: contentReadyHandler,
+    });
+    const instance = $('#component').dxTestWidget('instance');
+    contentReadyHandler.mockReset();
+
+    instance.beginUpdate();
+    instance.option('width', 100);
+    instance.option('height', 100);
+    instance.endUpdate();
+
+    expect(contentReadyHandler).toHaveBeenCalledTimes(1);
+    expect(contentReadyHandler)
+      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+  });
+
+  it('should not be raised on option change if it is not specified in getContentReadyOptions', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({
+      onContentReady: contentReadyHandler,
+    });
+    const instance = $('#component').dxTestWidget('instance');
+    contentReadyHandler.mockReset();
+
+    instance.option('text', 'text');
+
+    expect(contentReadyHandler).not.toHaveBeenCalled();
+  });
+
+  it('should be raised on repaint', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({
+      onContentReady: contentReadyHandler,
+    });
+    const instance = $('#component').dxTestWidget('instance');
+    contentReadyHandler.mockReset();
+
+    instance.repaint();
+
+    expect(contentReadyHandler).toHaveBeenCalledTimes(1);
+    expect(contentReadyHandler)
+      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
   });
 });

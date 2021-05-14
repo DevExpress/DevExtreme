@@ -38,6 +38,7 @@ export default class ComponentWrapper extends DOMComponent {
   _viewRef!: RefObject<unknown>;
   _viewComponent!: any;
   _disposeMethodCalled = false;
+  _shouldRaiseContentReady: boolean = false;
 
   get _propsInfo(): {
     allowNull: string[];
@@ -58,6 +59,27 @@ export default class ComponentWrapper extends DOMComponent {
   get viewRef() {
     return this._viewRef?.current;
   }
+
+  _checkContentReadyOption(fullName) {
+    const contentReadyOptions = this._getContentReadyOptions().reduce((acc, name) => {
+      acc[name] = true;
+      return acc;
+    }, {});
+
+    this._checkContentReadyOption = (fullName) => {
+      return !!contentReadyOptions[fullName];  
+    };
+    return this._checkContentReadyOption(fullName);
+  }
+
+  _getContentReadyOptions(): string[] {
+    return ['rtlEnabled'];
+  }
+
+  _fireContentReady() {
+    this.option('onContentReady')?.({ component: this, element: this.$element() });
+  }
+
   _getDefaultOptions() {
     return extend(
       true,
@@ -119,6 +141,11 @@ export default class ComponentWrapper extends DOMComponent {
         containerNode
       );
     }
+
+    if (this._shouldRaiseContentReady !== false) {
+      this._fireContentReady();
+      this._shouldRaiseContentReady = false;
+    }
   }
 
   _render() { } // NOTE: Inherited from DOM_Component
@@ -173,24 +200,27 @@ export default class ComponentWrapper extends DOMComponent {
     return this._elementAttr;
   }
 
-  _patchOptionValues(options: Record<string, unknown>) {
+  _patchOptionValues(options: Record<string, unknown> = {}) {
     const { allowNull, twoWay, elements, props } = this._propsInfo;
     const defaultProps = this._viewComponent.defaultProps;
-
-    const widgetProps = props.reduce((acc, propName) => {
+    const { ref, children, onKeyboardHandled } = options;
+    const onKeyDown = onKeyboardHandled ? (_, event_options) => (onKeyboardHandled as (unknown) => void)(event_options) : undefined;
+    const widgetProps = {
+      ref,
+      children,
+      onKeyDown,
+    };
+    [...props, 'onContentReady'].forEach(propName => {
       if (options.hasOwnProperty(propName)) {
-        acc[propName] = options[propName];
+        widgetProps[propName] = options[propName];
       }
-      return acc;
-    }, {
-      ref: options.ref,
-      children: options.children,
+
     });
 
     allowNull.forEach(
       setDefaultOptionValue(widgetProps, () => null)
     );
-
+    
     Object.keys(defaultProps).forEach(
       setDefaultOptionValue(
         widgetProps,
@@ -282,6 +312,8 @@ export default class ComponentWrapper extends DOMComponent {
     if (name && this._getActionConfigs()[name]) {
       this._addAction(name);
     }
+    this._shouldRaiseContentReady = this._shouldRaiseContentReady
+      || this._checkContentReadyOption(fullName);
     super._optionChanged(option);
     this._invalidate();
   }
@@ -357,6 +389,7 @@ export default class ComponentWrapper extends DOMComponent {
   // Public API
   repaint() {
     this._isNodeReplaced = false;
+    this._shouldRaiseContentReady = true;
     this._refresh();
   }
 

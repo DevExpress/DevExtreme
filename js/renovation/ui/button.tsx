@@ -64,7 +64,6 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       hint={viewModel.props.hint}
       hoverStateEnabled={viewModel.props.hoverStateEnabled}
       onActive={viewModel.onActive}
-      onContentReady={viewModel.props.onContentReady}
       onClick={viewModel.onWidgetClick}
       onInactive={viewModel.onInactive}
       onKeyDown={viewModel.onWidgetKeyDown}
@@ -155,16 +154,6 @@ export class Button extends JSXComponent(ButtonProps) {
   @Ref() submitInputRef!: RefObject<HTMLInputElement>;
 
   @Ref() widgetRef!: RefObject<Widget>;
-
-  @Effect()
-  contentReadyEffect(): EffectReturn {
-    // NOTE: we should trigger this effect on change each
-    //       property upon which onContentReady depends
-    //       (for example, text, icon, etc)
-    const { onContentReady } = this.props;
-
-    onContentReady?.({ element: this.contentRef.current!.parentNode });
-  }
 
   @Method()
   focus(): void {
