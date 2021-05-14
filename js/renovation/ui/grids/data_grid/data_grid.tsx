@@ -11,7 +11,7 @@ import '../../../../ui/data_grid/ui.data_grid';
 import { Widget } from '../../common/widget';
 import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
-import { GridInstance } from './common/types';
+import { GridInstance, IDataGrid } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
 import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
 import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
@@ -96,7 +96,7 @@ export const viewFunction = ({
   jQuery: { register: true, component: DataGridBaseComponent },
   view: viewFunction,
 })
-export class DataGrid extends JSXComponent(DataGridProps) {
+export class DataGrid extends JSXComponent(DataGridProps) implements IDataGrid {
   @Ref() widgetElementRef?: RefObject<HTMLDivElement>;
 
   @InternalState() instance!: GridInstance;

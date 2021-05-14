@@ -45,7 +45,11 @@ define(function(require) {
                     name === '_checkParentVisibility') {
                     return;
                 }
-                this.QUnitAssert.ok(false, 'Option \'' + name + '\' is not processed after runtime change');
+                // NOTE: workaround for inferno
+                // Internal renovated component call _optionChanged before QUnitAssert initialized
+                if(this.QUnitAssert) {
+                    this.QUnitAssert.ok(false, 'Option \'' + name + '\' is not processed after runtime change');
+                }
             };
 
             executeAsyncMock.setup();
