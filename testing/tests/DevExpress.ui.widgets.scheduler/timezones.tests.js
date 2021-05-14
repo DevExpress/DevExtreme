@@ -12,6 +12,7 @@ import dateLocalization from 'localization/date';
 import translator from 'animation/translator';
 import tooltip from 'ui/tooltip/ui.tooltip';
 import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'data/array_store';
 import dragEvents from 'events/drag';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
@@ -198,6 +199,62 @@ module('Common', moduleConfig, () => {
                         runTest(config, assert);
                     }
                 });
+            });
+
+            test('Appointments should be filtered correctly when remoteFiltering is enabled', function(assert) {
+                const dataSource = new DataSource({
+                    store: new ArrayStore({
+                        key: 'id',
+                        data: []
+                    }),
+                    pushAggregationTimeout: 0
+                });
+
+                const scheduler = createWrapper({
+                    dataSource,
+                    timeZone: 'America/Los_Angeles',
+                    remoteFiltering: true,
+                    dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
+                    views: ['day'],
+                    currentView: 'day',
+                    currentDate: new Date(2021, 4, 25),
+                    startDayHour: 9,
+                    endDayHour: 20,
+                    height: 1000
+                }, this.clock);
+
+                dataSource.store().push([
+                    {
+                        type: 'insert',
+                        data: {
+                            id: 0,
+                            text: 'At the start of the day',
+                            startDate: '2021-05-25T16:00:00Z',
+                            endDate: '2021-05-25T16:30:00Z'
+                        }
+                    },
+                    {
+                        type: 'insert',
+                        data: {
+                            id: 1,
+                            text: 'in the middle of the day',
+                            startDate: '2021-05-25T20:00:00Z',
+                            endDate: '2021-05-25T21:00:00Z'
+                        }
+                    },
+                    {
+                        type: 'insert',
+                        data: {
+                            id: 2,
+                            text: 'At the end of the day',
+                            startDate: '2021-05-26T02:30:00Z',
+                            endDate: '2021-05-26T03:00:00Z'
+                        }
+                    }
+                ]);
+
+                const appointments = scheduler.appointmentList;
+                assert.equal(appointments.length, 3, 'All appointments should be displayed');
             });
         });
 
