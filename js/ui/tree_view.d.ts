@@ -106,7 +106,10 @@ export type SelectAllValueChangedEvent = EventInfo<dxTreeView> & {
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTreeView>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
     /**
      * @docid
@@ -398,6 +401,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
  * @module ui/tree_view
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxTreeView extends HierarchicalCollectionWidget {
@@ -603,6 +607,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
@@ -650,6 +655,7 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxTreeViewNode {
     /**

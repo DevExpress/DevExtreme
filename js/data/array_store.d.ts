@@ -2,6 +2,7 @@ import Store, {
     StoreOptions
 } from './abstract_store';
 
+/** @namespace DevExpress.data */
 export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
     /**
      * @docid

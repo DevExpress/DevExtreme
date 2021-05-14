@@ -31,6 +31,7 @@ import {
     SelectionChangedInfo
 } from '../collection/ui.collection_widget.base';
 
+/** @namespace DevExpress.ui */
 export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
     /**
      * @docid
@@ -199,6 +200,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class dxDropDownList extends dxDropDownEditor {
     constructor(element: UserDefinedElement, options?: dxDropDownListOptions)
