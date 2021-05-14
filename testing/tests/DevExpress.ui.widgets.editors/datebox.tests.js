@@ -96,6 +96,7 @@ const moduleConfig = {
 const clearInput = (element, keyboard) => {
     while(element.val()) {
         keyboard.press('backspace');
+        keyboard.press('del');
     }
 };
 
