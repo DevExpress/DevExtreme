@@ -705,6 +705,93 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
+        function duplicateWithDateShift(cells, shift) {
+            const result = [...cells];
+
+            dayCells.forEach(({ startDate, endDate }) => {
+                result.push({
+                    startDate: new Date(startDate.getTime() + shift),
+                    endDate: new Date(endDate.getTime() + shift),
+                });
+            });
+
+            return result;
+        }
+
+        function setIndexes(cells) {
+            return cells.map(({ startDate, endDate }, index) => {
+                return {
+                    startDate,
+                    endDate,
+                    index,
+                };
+            });
+        }
+
+        const twoDayCells = getWeekCells(dayCells, 2);
+        const twoWeekCells = getWeekCells(dayCells, 14);
+        const twoMonthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 9, 9), 0, 4);
+        const twoTimelineDayCells = duplicateWithDateShift(dayCells, dayDurationInMS);
+        const twoTimelineWeekCells = getTimelineCells(dayCells, 14);
+        const twoTimelineMonthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 8, 30), 0, 4);
+
+        [
+            {
+                view: 'day',
+                expectedCells: setIndexes(twoDayCells),
+            }, {
+                view: 'week',
+                expectedCells: setIndexes(twoWeekCells),
+            }, {
+                view: 'month',
+                expectedCells: setIndexes(twoMonthCells),
+            }, {
+                view: 'timelineDay',
+                expectedCells: setIndexes(twoTimelineDayCells),
+            }, {
+                view: 'timelineWeek',
+                expectedCells: setIndexes(twoTimelineWeekCells),
+            }, {
+                view: 'timelineMonth',
+                expectedCells: setIndexes(twoTimelineMonthCells),
+            },
+        ].forEach(({ view, expectedCells }) => {
+            test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
+                    + ' with intervalCount: 2', function(assert) {
+                const startDatesOfRenderedCells = [];
+
+                const isGroupUndefined = checkIfGroupsAreUndefined(assert);
+
+                createWrapper({
+                    dataSource: [],
+                    views: [
+                        {
+                            type: view,
+                            intervalCount: 2,
+                        }
+                    ],
+                    currentView: view,
+                    showAllDayPanel: false,
+                    cellDuration: 60,
+                    startDayHour: 0,
+                    endDayHour: 4,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data, index) => {
+                        isGroupUndefined(data);
+                        startDatesOfRenderedCells.push(
+                            {
+                                startDate: data.startDate,
+                                endDate: data.endDate,
+                                index
+                            });
+                    },
+                });
+                assert.deepEqual(startDatesOfRenderedCells, expectedCells, 'cells options should be correct');
+            });
+        });
+
         [{
             viewType: 'day',
             expectedTemplateOptions: [dataCells[0]],
