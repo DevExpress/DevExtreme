@@ -42,6 +42,7 @@ export type ResizeStartEvent = NativeEventInfo<dxResizable> & ResizeInfo;
 /** @public */
 export type ResizeEndEvent = NativeEventInfo<dxResizable> & ResizeInfo;
 
+/** @deprecated use Properties instead */
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid

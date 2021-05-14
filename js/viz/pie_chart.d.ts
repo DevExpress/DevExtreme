@@ -160,6 +160,7 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
      */
     tag?: any;
 }
+/** @deprecated use Properties instead */
 export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid

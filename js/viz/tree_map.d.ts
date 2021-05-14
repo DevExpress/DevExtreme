@@ -91,6 +91,7 @@ export type OptionChangedEvent = EventInfo<dxTreeMap> & ChangedOptionInfo;
 export type SelectionChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
 
 
+/** @deprecated use Properties instead */
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid

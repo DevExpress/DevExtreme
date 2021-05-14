@@ -73,6 +73,7 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSelector> & {
   readonly previousValue: Array<number | string | Date>,
 }
 
+/** @deprecated use Properties instead */
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * @docid

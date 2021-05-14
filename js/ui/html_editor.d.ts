@@ -54,6 +54,7 @@ export interface MentionTemplateData {
     readonly id?: string | number;
     readonly value?: any;
 }
+/** @deprecated use Properties instead */
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid

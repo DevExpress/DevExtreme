@@ -167,6 +167,7 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
     type?: PolarChartSeriesType;
 }
 
+/** @deprecated use Properties instead */
 export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid

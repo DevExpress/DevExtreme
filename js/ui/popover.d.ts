@@ -56,6 +56,7 @@ export type ShownEvent = EventInfo<dxPopover>;
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
      * @docid

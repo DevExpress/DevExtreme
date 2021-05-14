@@ -59,6 +59,7 @@ export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**
      * @docid

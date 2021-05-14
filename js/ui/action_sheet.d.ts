@@ -53,6 +53,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxActionSheet> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**
      * @docid

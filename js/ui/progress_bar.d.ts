@@ -35,6 +35,7 @@ export type OptionChangedEvent = EventInfo<dxProgressBar> & ChangedOptionInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid
