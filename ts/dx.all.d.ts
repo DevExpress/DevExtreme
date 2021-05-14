@@ -33087,14 +33087,41 @@ declare module DevExpress.viz {
   export type VizTimeInterval =
     | number
     | {
+        /**
+         * [descr:VizTimeInterval.days]
+         */
         days?: number;
+        /**
+         * [descr:VizTimeInterval.hours]
+         */
         hours?: number;
+        /**
+         * [descr:VizTimeInterval.milliseconds]
+         */
         milliseconds?: number;
+        /**
+         * [descr:VizTimeInterval.minutes]
+         */
         minutes?: number;
+        /**
+         * [descr:VizTimeInterval.months]
+         */
         months?: number;
+        /**
+         * [descr:VizTimeInterval.quarters]
+         */
         quarters?: number;
+        /**
+         * [descr:VizTimeInterval.seconds]
+         */
         seconds?: number;
+        /**
+         * [descr:VizTimeInterval.weeks]
+         */
         weeks?: number;
+        /**
+         * [descr:VizTimeInterval.years]
+         */
         years?: number;
       }
     | TimeIntervalType;
