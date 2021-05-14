@@ -546,10 +546,23 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     name?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
     /**
      * @docid
+     * @type Enums.HtmlEditorToolbarItem|string
+     * @prevFileNamespace DevExpress.ui
+     * @deprecated
+     */
+    formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
+    /**
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     acceptedValues?: Array<string | number | boolean>;
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @deprecated
+     */
+    formatValues?: Array<string | number | boolean>;
     /**
      * @docid
      * @default "before"
