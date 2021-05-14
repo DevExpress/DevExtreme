@@ -55,8 +55,6 @@ module('Mentions integration', {
                 .dxHtmlEditor('instance');
         };
 
-        this.addText = (element, text, prevText) => element.innerText += text;
-
         this.getItems = () => $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
     },
     afterEach: function() {
@@ -362,7 +360,7 @@ module('Mentions integration', {
         const valueChangeSpy = sinon.spy(({ component }) => {
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
-                this.addText(element, 'F', '@');
+                element.innerText += 'F';
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
@@ -388,7 +386,7 @@ module('Mentions integration', {
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
 
-                this.addText(element, 'F', '@');
+                element.innerText += 'F';
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
@@ -415,7 +413,7 @@ module('Mentions integration', {
 
             switch(valueChangeSpy.callCount) {
                 case 1:
-                    this.addText(element, 'F', '@');
+                    element.innerText += 'F';
                     this.clock.tick();
                     break;
                 case 2:
@@ -445,7 +443,7 @@ module('Mentions integration', {
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
 
-                this.addText(element, 'F', '@');
+                element.innerText += 'F';
                 this.clock.tick();
                 assert.strictEqual(this.getItems().length, 4, 'dataSource isn\'t filtered');
             } else {
@@ -472,12 +470,12 @@ module('Mentions integration', {
         const valueChangeSpy = sinon.spy(({ component }) => {
             let $items;
             if(valueChangeSpy.calledOnce) {
-                this.addText(getParagraph(), 'F', '@');
+                getParagraph().innerText += 'F';
                 this.clock.tick();
                 const $items = this.getItems();
                 assert.strictEqual($items.length, 4, 'dataSource isn\'t filtered');
             } else if(valueChangeSpy.calledTwice) {
-                this.addText(getParagraph(), 'r', '@F');
+                getParagraph().innerText += 'r';
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
@@ -504,7 +502,7 @@ module('Mentions integration', {
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
 
-                this.addText(element, 'A', '@');
+                element.innerText += 'A';
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);

@@ -96,7 +96,6 @@ const moduleConfig = {
 const clearInput = (element, keyboard) => {
     while(element.val()) {
         keyboard.press('backspace');
-        keyboard.press('del'); // Temporary for IE (keyboardMock: caret setting does not work in IE now)
     }
 };
 
@@ -3216,7 +3215,7 @@ QUnit.module('datebox with time component', {
         dateBox.open();
     });
 
-    QUnit.test('DateBox with time should be rendered correctly in IE, templatesRenderAsynchronously=true', function(assert) {
+    QUnit.test('DateBox with time should be rendered correctly when templatesRenderAsynchronously=true', function(assert) {
         const clock = sinon.useFakeTimers();
         try {
             const dateBox = $('#dateBox').dxDateBox({

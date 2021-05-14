@@ -49,11 +49,7 @@ const simulateIMEInput = function(eventsData) {
         })
     }));
 
-    this.$input.trigger($.Event('compositionend', {
-        originalEvent: $.Event('compositionend', {
-            data: eventsData.compositionEndData // for msie
-        })
-    }));
+    this.$input.trigger($.Event('compositionend'));
 };
 
 const setupModule = {

@@ -440,6 +440,11 @@ QUnit.module('Mentions module', moduleConfig, () => {
             items.push(i);
         }
 
+        this.$element.css({
+            fontSize: '14px',
+            lineHeight: 1.35715
+        });
+
         this.options.mentions = [{
             dataSource: {
                 store: items,

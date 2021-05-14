@@ -1120,8 +1120,7 @@ QUnit.module('value', moduleConfig, () => {
 
         keyboard.type('x');
 
-        // NOTE: triggerHandler instead of trigger due to IE blur async firing
-        $input.triggerHandler('blur');
+        $input.trigger('blur');
 
         assert.equal(valueChangedFired, 1, 'change fired once on blur');
     });
@@ -1147,13 +1146,12 @@ QUnit.module('value', moduleConfig, () => {
 
         keyboard.press('del');
 
-        // NOTE: triggerHandler instead of trigger due to IE blur async firing
-        $input.triggerHandler('focusout');
+        $input.trigger('focusout');
 
         assert.equal(valueChangedHandler.callCount, 1, 'change fired once on blur');
     });
 
-    QUnit.test('valueChangeEvent=change should fire change on beforedeactivate (ie raises blur in wrong time)', function(assert) {
+    QUnit.test('valueChangeEvent=change should fire change on beforedeactivate', function(assert) {
         let valueChangedFired = 0;
 
         const $textEditor = $('#texteditor').dxTextEditor({
@@ -1174,7 +1172,7 @@ QUnit.module('value', moduleConfig, () => {
 
         keyboard.type('x');
 
-        $input.triggerHandler('beforedeactivate');
+        $input.trigger('beforedeactivate');
 
         assert.equal(valueChangedFired, 1, 'change fired once on beforedeactivate');
     });
@@ -1724,7 +1722,6 @@ QUnit.module('custom mask maskRules', moduleConfig, () => {
     });
 
     QUnit.test('fullText updated, if pasted text is accepted', function(assert) {
-        // Fix blinking on blur in MS Edge (https://trello.com/c/HyC0Shoz)
         assert.expect(1);
         let firstTimeCall = true;
 
