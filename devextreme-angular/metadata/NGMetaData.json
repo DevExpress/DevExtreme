@@ -568,11 +568,11 @@
         "target": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -2124,11 +2124,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -2781,11 +2781,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -6874,11 +6874,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -9160,11 +9160,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -10120,11 +10120,11 @@
         "target": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -10410,7 +10410,17 @@
             },
             "changes": {
               "ItemPrimitiveTypes": [
-                "any"
+                "DevExpress.ui.DataChange"
+              ],
+              "ItemComplexTypes": [
+                "DataChange"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "default",
+                  "Alias": "DevExpress",
+                  "Path": "bundles/dx.all"
+                }
               ],
               "IsCollection": true,
               "IsChangeable": true,
@@ -11228,8 +11238,7 @@
         },
         "onCellClick": {
           "PrimitiveTypes": [
-            "Function",
-            "string"
+            "Function"
           ],
           "IsFunc": true,
           "IsEvent": true,
@@ -11423,8 +11432,7 @@
         },
         "onRowClick": {
           "PrimitiveTypes": [
-            "Function",
-            "string"
+            "Function"
           ],
           "IsFunc": true,
           "IsEvent": true,
@@ -11732,11 +11740,11 @@
             "boundary": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -11745,11 +11753,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -13129,11 +13137,11 @@
         "renderWhen": {
           "PrimitiveTypes": [
             "boolean",
-            "TPromise"
+            "DxPromise"
           ],
           "TypeImports": [
             {
-              "Name": "TPromise",
+              "Name": "DxPromise",
               "Path": "core/utils/deferred"
             }
           ],
@@ -14527,11 +14535,11 @@
         "boundary": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -14546,11 +14554,11 @@
         "container": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -14839,11 +14847,11 @@
         "target": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -16171,11 +16179,11 @@
         "dialogTrigger": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -16190,11 +16198,11 @@
         "dropZone": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -18379,11 +18387,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -19188,6 +19196,14 @@
           "IsEvent": true,
           "DocID": "dxGantt.Options.onResourceInserting"
         },
+        "onResourceManagerDialogShowing": {
+          "PrimitiveTypes": [
+            "Function"
+          ],
+          "IsFunc": true,
+          "IsEvent": true,
+          "DocID": "dxGantt.Options.onResourceManagerDialogShowing"
+        },
         "onResourceUnassigned": {
           "PrimitiveTypes": [
             "Function"
@@ -19453,6 +19469,13 @@
           ],
           "DocID": "dxGantt.Options.taskListWidth"
         },
+        "taskProgressTooltipContentTemplate": {
+          "PrimitiveTypes": [
+            "any"
+          ],
+          "IsTemplate": true,
+          "DocID": "dxGantt.Options.taskProgressTooltipContentTemplate"
+        },
         "tasks": {
           "DocID": "dxGantt.Options.tasks",
           "Options": {
@@ -19531,6 +19554,13 @@
               "DocID": "dxGantt.Options.tasks.titleExpr"
             }
           }
+        },
+        "taskTimeTooltipContentTemplate": {
+          "PrimitiveTypes": [
+            "any"
+          ],
+          "IsTemplate": true,
+          "DocID": "dxGantt.Options.taskTimeTooltipContentTemplate"
         },
         "taskTitlePosition": {
           "PrimitiveTypes": [
@@ -20683,11 +20713,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -21576,11 +21606,11 @@
         "container": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -25369,11 +25399,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -28583,11 +28613,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -29555,11 +29585,11 @@
         "container": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -29811,11 +29841,11 @@
         "target": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -29975,11 +30005,11 @@
         "container": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -34130,11 +34160,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -36683,11 +36713,11 @@
         "boundary": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -36696,11 +36726,11 @@
         "container": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -37239,11 +37269,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -40608,11 +40638,11 @@
         "container": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -40844,11 +40874,11 @@
         "target": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -41141,7 +41171,17 @@
             },
             "changes": {
               "ItemPrimitiveTypes": [
-                "any"
+                "DevExpress.ui.DataChange"
+              ],
+              "ItemComplexTypes": [
+                "DataChange"
+              ],
+              "TypeImports": [
+                {
+                  "Name": "default",
+                  "Alias": "DevExpress",
+                  "Path": "bundles/dx.all"
+                }
               ],
               "IsCollection": true,
               "IsChangeable": true,
@@ -41804,8 +41844,7 @@
         },
         "onCellClick": {
           "PrimitiveTypes": [
-            "Function",
-            "string"
+            "Function"
           ],
           "IsFunc": true,
           "IsEvent": true,
@@ -41981,8 +42020,7 @@
         },
         "onRowClick": {
           "PrimitiveTypes": [
-            "Function",
-            "string"
+            "Function"
           ],
           "IsFunc": true,
           "IsEvent": true,
@@ -42285,11 +42323,11 @@
             "boundary": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -42298,11 +42336,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -43578,11 +43616,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -45688,11 +45726,11 @@
             "container": {
               "PrimitiveTypes": [
                 "string",
-                "TElement"
+                "UserDefinedElement"
               ],
               "TypeImports": [
                 {
-                  "Name": "TElement",
+                  "Name": "UserDefinedElement",
                   "Path": "core/element"
                 }
               ],
@@ -47929,6 +47967,41 @@
         }
       }
     },
+    "DataChange": {
+      "DocID": "DataChange",
+      "Options": {
+        "data": {
+          "PrimitiveTypes": [
+            "any"
+          ],
+          "DocID": "DataChange.data"
+        },
+        "index": {
+          "PrimitiveTypes": [
+            "number"
+          ],
+          "DocID": "DataChange.index"
+        },
+        "key": {
+          "PrimitiveTypes": [
+            "any"
+          ],
+          "DocID": "DataChange.key"
+        },
+        "pageIndex": {
+          "PrimitiveTypes": [
+            "number"
+          ],
+          "DocID": "DataChange.pageIndex"
+        },
+        "type": {
+          "PrimitiveTypes": [
+            "string"
+          ],
+          "DocID": "DataChange.type"
+        }
+      }
+    },
     "AccordionItem": {
       "DocID": "dxAccordionItem",
       "Options": {
@@ -49407,8 +49480,7 @@
         },
         "onClick": {
           "PrimitiveTypes": [
-            "Function",
-            "string"
+            "Function"
           ],
           "IsFunc": true,
           "IsEvent": true,
@@ -50963,11 +51035,11 @@
         "container": {
           "PrimitiveTypes": [
             "string",
-            "TElement"
+            "UserDefinedElement"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -53503,8 +53575,7 @@
         },
         "onClick": {
           "PrimitiveTypes": [
-            "Function",
-            "string"
+            "Function"
           ],
           "IsFunc": true,
           "IsEvent": true,
@@ -56758,12 +56829,12 @@
         "boundary": {
           "PrimitiveTypes": [
             "string",
-            "TElement",
+            "UserDefinedElement",
             "Window"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
@@ -56832,12 +56903,12 @@
         "of": {
           "PrimitiveTypes": [
             "string",
-            "TElement",
+            "UserDefinedElement",
             "Window"
           ],
           "TypeImports": [
             {
-              "Name": "TElement",
+              "Name": "UserDefinedElement",
               "Path": "core/element"
             }
           ],
