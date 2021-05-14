@@ -666,8 +666,7 @@ const ColorView = Editor.inherit({
                 'background-image: -webkit-linear-gradient(180deg, ' + startColor + ', ' + finishColor + ')',
                 'background-image: -moz-linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
                 'background-image: -o-linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
-                'filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=' + startColor + ', endColorstr=' + finishColor + ')'
+                'background-image: linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')'
             ].join(';');
         };
 

@@ -123,9 +123,7 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _isSingleCharKey({ originalEvent, alt }) {
-        const key = originalEvent.data || (
-            originalEvent === 'space' ? ' ' : originalEvent.key
-        );
+        const key = originalEvent.data || originalEvent.key;
         return typeof key === 'string' && key.length === 1 && !alt && !isCommandKeyPressed(originalEvent);
     },
 

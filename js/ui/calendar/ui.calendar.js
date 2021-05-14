@@ -1003,9 +1003,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDate(value) {
-        const result = dateUtils.createDate(value);
-
-        return result;
+        return dateUtils.createDate(value);
     },
 
     _toTodayView: function(args) {

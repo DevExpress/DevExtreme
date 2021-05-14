@@ -1,18 +1,14 @@
 import $ from '../../core/renderer';
-import { getNavigator, getWindow } from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 const window = getWindow();
-const navigator = getNavigator();
-import eventsEngine from '../../events/core/events_engine';
-import devices from '../../core/devices';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import TextEditor from './ui.text_editor';
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { normalizeKeyName } from '../../events/utils/index';
 
 // STYLE textBox
 
-let ua = navigator.userAgent;
 const ignoreKeys = ['backspace', 'tab', 'enter', 'pageUp', 'pageDown', 'end', 'home', 'leftArrow', 'rightArrow', 'downArrow', 'upArrow', 'del'];
 
 const TEXTBOX_CLASS = 'dx-textbox';
@@ -46,22 +42,10 @@ const TextBox = TextEditor.inherit({
         this.setAria('role', 'textbox');
     },
 
-    _renderContentImpl: function() {
-        this._renderMaxLengthHandlers();
-        this.callBase();
-    },
-
     _renderInputType: function() {
         this.callBase();
 
         this._renderSearchMode();
-    },
-
-    _renderMaxLengthHandlers: function() {
-        if(this._isAndroid()) {
-            eventsEngine.on(this._input(), addNamespace('keydown', this.NAME), this._onKeyDownCutOffHandler.bind(this));
-            eventsEngine.on(this._input(), addNamespace('change', this.NAME), this._onChangeCutOffHandler.bind(this));
-        }
     },
 
     _useTemplates: function() {
@@ -114,7 +98,6 @@ const TextBox = TextEditor.inherit({
         switch(args.name) {
             case 'maxLength':
                 this._toggleMaxLengthProp();
-                this._renderMaxLengthHandlers();
                 break;
             case 'mask':
                 this.callBase(args);
@@ -160,29 +143,9 @@ const TextBox = TextEditor.inherit({
     _getMaxLength: function() {
         const isMaskSpecified = !!this.option('mask');
         return isMaskSpecified ? null : this.option('maxLength');
-    },
-
-    _isAndroid: function() {
-        const realDevice = devices.real();
-        const version = realDevice.version.join('.');
-        return realDevice.platform === 'android' && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
     }
 });
 
-///#DEBUG
-
-TextBox.__internals = {
-    uaAccessor: function(value) {
-        if(!arguments.length) {
-            return window.DevExpress.ui;
-        }
-        ua = value;
-    },
-    SEARCHBOX_CLASS: SEARCHBOX_CLASS,
-    SEARCH_ICON_CLASS: SEARCH_ICON_CLASS
-};
-
-///#ENDDEBUG
 registerComponent('dxTextBox', TextBox);
 
 export default TextBox;

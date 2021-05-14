@@ -15,8 +15,6 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const internals = TextBox.__internals;
-
 const TEXTBOX_CLASS = 'dx-textbox';
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
@@ -36,41 +34,13 @@ QUnit.module('common', {}, () => {
     });
 
     QUnit.test('changing mode to \'search\' should render search icon', function(assert) {
-        const element = $('#textbox').dxTextBox();
-        const textBox = element.dxTextBox('instance');
+        const element = $('#textbox');
+        const textBox = new TextBox(element, {});
 
         textBox.option('mode', 'search');
 
         assert.ok(element.has(SEARCHBOX_CLASS));
         assert.equal(element.find('.' + SEARCH_ICON_CLASS).length, 1);
-    });
-
-    QUnit.test('\'maxLength\' option on android 2.3 and 4.1', function(assert) {
-        const originalDevices = devices.real();
-        devices.real({
-            platform: 'android',
-            version: ['2', '3']
-        });
-
-        const originalUA = internals.uaAccessor();
-        internals.uaAccessor('default android browser');
-
-        try {
-            const $element = $('#textbox').dxTextBox({ maxLength: 1 });
-            const $input = $element.find('.' + INPUT_CLASS);
-            let event = $.Event('keydown', { key: '1' });
-
-            $input.trigger(event);
-            $input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            $input.trigger(event);
-            assert.ok(event.isDefaultPrevented());
-        } finally {
-            devices.real(originalDevices);
-            internals.uaAccessor(originalUA);
-        }
     });
 
     QUnit.test('call focus() method', function(assert) {
@@ -171,39 +141,6 @@ QUnit.module('options changing', {
             assert.equal(this.input.attr('maxLength'), 3);
         } finally {
             devices.real(originalDevices);
-        }
-    });
-
-    QUnit.test('\'maxLength\' on android 2.3 and 4.1 ', function(assert) {
-        const originalDevices = devices.real();
-        devices.real({
-            platform: 'android',
-            version: ['4', '1']
-        });
-
-        const originalUA = internals.uaAccessor();
-        internals.uaAccessor('default android browser');
-
-        try {
-            this.instance.option('maxLength', 2);
-
-            let event = $.Event('keydown', { key: '1' });
-
-            this.input.trigger(event);
-            this.input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            this.input.trigger(event);
-            this.input.val('12');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '3' });
-            this.input.trigger(event);
-            assert.ok(event.isDefaultPrevented());
-        } finally {
-            devices.real(originalDevices);
-            internals.uaAccessor(originalUA);
         }
     });
 

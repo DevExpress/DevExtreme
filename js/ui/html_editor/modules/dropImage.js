@@ -17,12 +17,9 @@ if(Quill) {
 
             const widgetName = this.editorInstance.NAME;
 
-            eventsEngine.on(this.quill.root, addNamespace('dragover', widgetName), this._dragOverHandler.bind(this));
             eventsEngine.on(this.quill.root, addNamespace('drop', widgetName), this._dropHandler.bind(this));
             eventsEngine.on(this.quill.root, addNamespace('paste', widgetName), this._pasteHandler.bind(this));
         }
-
-        _dragOverHandler() {}
 
         _dropHandler(e) {
             const dataTransfer = e.originalEvent.dataTransfer;
