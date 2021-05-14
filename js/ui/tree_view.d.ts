@@ -106,6 +106,7 @@ export type SelectAllValueChangedEvent = EventInfo<dxTreeView> & {
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTreeView>;
 
+/** @deprecated use Properties instead */
 export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
     /**
      * @docid

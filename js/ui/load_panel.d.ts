@@ -47,6 +47,7 @@ export type ShowingEvent = EventInfo<dxLoadPanel>;
 /** @public */
 export type ShownEvent = EventInfo<dxLoadPanel>;
 
+/** @deprecated use Properties instead */
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid

@@ -69,6 +69,7 @@ export type SubmenuShownEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
 }
 
+/** @deprecated use Properties instead */
 export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     /**
      * @docid

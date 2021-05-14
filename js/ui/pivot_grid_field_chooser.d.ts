@@ -37,6 +37,7 @@ export type InitializedEvent = InitializedEventInfo<dxPivotGridFieldChooser>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPivotGridFieldChooser> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**
      * @docid

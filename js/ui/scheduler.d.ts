@@ -187,6 +187,7 @@ export type DateNavigatorTextInfo = {
   readonly text: string;
 }
 
+/** @deprecated use Properties instead */
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid

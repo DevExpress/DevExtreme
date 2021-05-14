@@ -35,6 +35,7 @@ export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxRadioGroup> & ValueChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
      * @docid

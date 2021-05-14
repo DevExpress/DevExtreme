@@ -86,6 +86,7 @@ export type InitializedEvent = InitializedEventInfo<dxPivotGrid>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPivotGrid> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid

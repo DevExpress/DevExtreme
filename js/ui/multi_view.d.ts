@@ -47,6 +47,7 @@ export type OptionChangedEvent = EventInfo<dxMultiView> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxMultiView> & SelectionChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
     /**
      * @docid

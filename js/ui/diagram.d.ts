@@ -81,6 +81,7 @@ export type CustomShapeToolboxTemplateData = {
     readonly item: dxDiagramShape;
 };
 
+/** @deprecated use Properties instead */
 export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
