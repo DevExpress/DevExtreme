@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import TextBox from 'ui/text_box';
+import 'ui/text_box';
 import devices from 'core/devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
@@ -34,8 +34,8 @@ QUnit.module('common', {}, () => {
     });
 
     QUnit.test('changing mode to \'search\' should render search icon', function(assert) {
-        const element = $('#textbox');
-        const textBox = new TextBox(element, {});
+        const element = $('#textbox').dxTextBox();
+        const textBox = element.dxTextBox('instance');
 
         textBox.option('mode', 'search');
 
