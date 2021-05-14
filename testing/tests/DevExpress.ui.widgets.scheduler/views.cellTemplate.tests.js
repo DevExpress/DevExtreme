@@ -758,7 +758,7 @@ module('CellTemplate tests', moduleConfig, () => {
         ].forEach(({ view, expectedCells }) => {
             test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
                     + ' with intervalCount: 2', function(assert) {
-                const startDatesOfRenderedCells = [];
+                const displayedCells = [];
 
                 const isGroupUndefined = checkIfGroupsAreUndefined(assert);
 
@@ -780,7 +780,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     renovateRender: true,
                     dataCellTemplate: (data, index) => {
                         isGroupUndefined(data);
-                        startDatesOfRenderedCells.push(
+                        displayedCells.push(
                             {
                                 startDate: data.startDate,
                                 endDate: data.endDate,
@@ -788,7 +788,7 @@ module('CellTemplate tests', moduleConfig, () => {
                             });
                     },
                 });
-                assert.deepEqual(startDatesOfRenderedCells, expectedCells, 'cells options should be correct');
+                assert.deepEqual(displayedCells, expectedCells, 'cells options should be correct');
             });
         });
 
