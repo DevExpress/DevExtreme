@@ -571,6 +571,38 @@ describe('option', () => {
 });
 
 describe('templates and slots', () => {
+  it('should ignore default templates', () => {
+    $('#component').dxTemplatedTestWidget({ template: 'test' });
+    let $template = $('#component').find('.templates-root');
+    expect($template.text()).toBe('test');
+
+    $('#component').dxTemplatedTestWidget({ template: 'defaultTemplateName1' });
+    $template = $('#component').find('.templates-root');
+    expect($template.length).toBe(0);
+
+    $('#component').dxTemplatedTestWidget({ template: 'defaultTemplateName2' });
+    $template = $('#component').find('.templates-root');
+    expect($template.length).toBe(0);
+  });
+
+  it('should render custom template with render function that returns dom node', () => {
+    $('#component').dxTemplatedTestWidget({
+      template: 'test',
+      integrationOptions: {
+        templates: {
+          test: {
+            render: () => $('<span>')
+              .addClass('dx-template-wrapper')
+              .text('template text')[0],
+          },
+        },
+      },
+    });
+
+    const $template = $('#component').find('.dx-template-wrapper');
+    expect($template.text()).toBe('template text');
+  });
+
   it('pass anonymous template content as children', () => {
     $('#component').html('<span>Default slot</span>');
 
