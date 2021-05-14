@@ -30,7 +30,7 @@ const createScheduler = async (
   }, true);
 };
 
-test('Virtual scrolling layout in scheduler views when horizontal grouping is enabled', async (t) => {
+test('Virtual scrolling layout in scheduler views when horizontal grouping is enabled and zooming is used', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
