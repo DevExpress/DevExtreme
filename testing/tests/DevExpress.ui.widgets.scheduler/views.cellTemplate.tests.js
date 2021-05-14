@@ -510,25 +510,6 @@ module('CellTemplate tests', moduleConfig, () => {
             return result;
         }
 
-        function getWorkWeekCells(dayCells, duration = 1) {
-            const result = [];
-
-            dayCells.forEach(({ startDate, endDate }) => {
-                for(let i = 1; i < duration * 7; i++) {
-                    if(i % 7 !== 0 && i % 7 !== 6) {
-                        result.push(
-                            {
-                                startDate: new Date(startDate.getTime() + i * dayDurationInMS),
-                                endDate: new Date(endDate.getTime() + i * dayDurationInMS),
-                            }
-                        );
-                    }
-                }
-            });
-
-            return result;
-        }
-
         function getTimelineCells(dayCells, duration) {
             const result = [];
 
@@ -550,7 +531,6 @@ module('CellTemplate tests', moduleConfig, () => {
 
         const weekCells = getWeekCells(dayCells);
         const monthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 8, 11), 0, 4);
-        const workWeekCells = getWorkWeekCells(dayCells);
         const timelineWeekCells = getTimelineCells(dayCells, 7);
         const timelineMonthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 7, 31), 0, 4);
 
@@ -579,14 +559,6 @@ module('CellTemplate tests', moduleConfig, () => {
                 view: 'month',
                 groupOrientation: 'vertical',
                 expectedCells: createVerticalGroupedCells(monthCells),
-            }, {
-                view: 'workWeek',
-                groupOrientation: 'horizontal',
-                expectedCells: createHorizontalGroupedCells(workWeekCells, 5),
-            }, {
-                view: 'workWeek',
-                groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(workWeekCells),
             }, {
                 view: 'timelineDay',
                 groupOrientation: 'horizontal',
@@ -647,83 +619,6 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
-        function duplicateWithDateShift(cells, shift) {
-            const result = [...cells];
-
-            dayCells.forEach(({ startDate, endDate }) => {
-                result.push({
-                    startDate: new Date(startDate.getTime() + shift),
-                    endDate: new Date(endDate.getTime() + shift),
-                });
-            });
-
-            return result;
-        }
-
-        const twoDayCells = getWeekCells(dayCells, 2);
-        const twoWeekCells = getWeekCells(dayCells, 14);
-        const twoMonthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 9, 9), 0, 4);
-        const twoWorkWeekCells = getWorkWeekCells(dayCells, 2);
-        const twoTimelineDayCells = duplicateWithDateShift(dayCells, dayDurationInMS);
-        const twoTimelineWeekCells = getTimelineCells(dayCells, 14);
-        const twoTimelineMonthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 8, 30), 0, 4);
-
-        [
-            {
-                view: 'day',
-                expectedCells: twoDayCells,
-            }, {
-                view: 'week',
-                expectedCells: twoWeekCells,
-            }, {
-                view: 'month',
-                expectedCells: twoMonthCells,
-            }, {
-                view: 'workWeek',
-                expectedCells: twoWorkWeekCells,
-            }, {
-                view: 'timelineDay',
-                expectedCells: twoTimelineDayCells,
-            }, {
-                view: 'timelineWeek',
-                expectedCells: twoTimelineWeekCells,
-            }, {
-                view: 'timelineMonth',
-                expectedCells: twoTimelineMonthCells,
-            },
-        ].forEach(({ view, expectedCells }) => {
-            test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
-                    + ' with intervalCount: 2', function(assert) {
-                const startDatesOfRenderedCells = [];
-
-                createWrapper({
-                    dataSource: [],
-                    views: [
-                        {
-                            type: view,
-                            intervalCount: 2,
-                        }
-                    ],
-                    currentView: view,
-                    showAllDayPanel: false,
-                    cellDuration: 60,
-                    startDayHour: 0,
-                    endDayHour: 4,
-                    firstDayOfWeek: 0,
-                    currentDate: new Date(2021, 7, 1),
-                    renovateRender: true,
-                    dataCellTemplate: (data) => {
-                        startDatesOfRenderedCells.push(
-                            {
-                                startDate: data.startDate,
-                                endDate: data.endDate,
-                            });
-                    },
-                });
-                assert.deepEqual(startDatesOfRenderedCells, expectedCells, 'startDates should be correct');
-            });
-        });
-
         [
             {
                 view: 'day',
@@ -749,14 +644,6 @@ module('CellTemplate tests', moduleConfig, () => {
                 view: 'month',
                 groupOrientation: 'vertical',
                 expectedCells: createVerticalGroupedCells(monthCells),
-            }, {
-                view: 'workWeek',
-                groupOrientation: 'horizontal',
-                expectedCells: createHorizontalGroupedCells(workWeekCells),
-            }, {
-                view: 'workWeek',
-                groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(workWeekCells),
             }, {
                 view: 'timelineDay',
                 groupOrientation: 'horizontal',
