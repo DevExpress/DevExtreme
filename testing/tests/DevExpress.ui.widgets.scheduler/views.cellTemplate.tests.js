@@ -792,6 +792,206 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
+        const twoWeekAllDayCells = [
+            new Date(2021, 7, 1),
+            new Date(2021, 7, 2),
+            new Date(2021, 7, 3),
+            new Date(2021, 7, 4),
+            new Date(2021, 7, 5),
+            new Date(2021, 7, 6),
+            new Date(2021, 7, 7),
+            new Date(2021, 7, 8),
+            new Date(2021, 7, 9),
+            new Date(2021, 7, 10),
+            new Date(2021, 7, 11),
+            new Date(2021, 7, 12),
+            new Date(2021, 7, 13),
+            new Date(2021, 7, 14),
+        ];
+
+        [
+            {
+                view: 'day',
+                expectedCells: [twoWeekAllDayCells[0], twoWeekAllDayCells[1]]
+            }, {
+                view: 'week',
+                expectedCells: twoWeekAllDayCells,
+            }, {
+                view: 'workWeek',
+                expectedCells: [...twoWeekAllDayCells.slice(1, 6), ...twoWeekAllDayCells.slice(8, 13)],
+            },
+        ].forEach(({ view, expectedCells }) => {
+            test(`allDay cells should have correct options in ${view} view`
+                + 'with intervalCount: 2', function(assert) {
+                const allDayCells = [];
+
+                const isGroupUndefined = checkIfGroupsAreUndefined(assert);
+
+                createWrapper({
+                    dataSource: [],
+                    views: [
+                        {
+                            type: view,
+                            intervalCount: 2,
+                        }
+                    ],
+                    currentView: view,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        if(data.allDay) {
+                            isGroupUndefined(data);
+
+                            assert.equal(
+                                data.startDate.getTime(),
+                                data.endDate.getTime(),
+                                'startDate and endDate of allDay cell should be equal');
+
+                            allDayCells.push(data.startDate);
+                        }
+                    }
+                });
+                assert.deepEqual(allDayCells, expectedCells, 'cells options should be correct');
+            });
+        });
+
+        const doubledDayAllDayCells = createVerticalGroupedCells([twoWeekAllDayCells[0]]);
+        const doubledWeekAllDayCells = createVerticalGroupedCells(twoWeekAllDayCells.slice(0, 7));
+        const doubledWorkWeekAllDayCells = createVerticalGroupedCells(twoWeekAllDayCells.slice(1, 6));
+
+        [
+            {
+                view: 'day',
+                expectedCells: doubledDayAllDayCells,
+                groupOrientation: 'vertical',
+            }, {
+                view: 'day',
+                expectedCells: doubledDayAllDayCells,
+                groupOrientation: 'horizontal',
+            }, {
+                view: 'week',
+                expectedCells: doubledWeekAllDayCells,
+                groupOrientation: 'vertical',
+            }, {
+                view: 'week',
+                expectedCells: doubledWeekAllDayCells,
+                groupOrientation: 'horizontal',
+            }, {
+                view: 'workWeek',
+                expectedCells: doubledWorkWeekAllDayCells,
+                groupOrientation: 'vertical',
+            }, {
+                view: 'workWeek',
+                expectedCells: doubledWorkWeekAllDayCells,
+                groupOrientation: 'horizontal',
+            },
+        ].forEach(({ view, expectedCells, groupOrientation }) => {
+            test(`allDay cells should have correct options in ${view} view`
+                + ` with ${groupOrientation} grouping`, function(assert) {
+                const allDayCells = [];
+
+                createWrapper({
+                    dataSource: [],
+                    views: [
+                        {
+                            type: view,
+                            groupOrientation,
+                        }
+                    ],
+                    currentView: view,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        if(data.allDay) {
+                            assert.equal(
+                                data.startDate.getTime(),
+                                data.endDate.getTime(),
+                                'startDate and endDate of allDay cell should be equal');
+
+                            allDayCells.push(data.startDate);
+                        }
+                    },
+                    groups: ['ownerId'],
+                    resources,
+                });
+
+                assert.deepEqual(allDayCells, expectedCells, 'cells options should be correct');
+            });
+        });
+
+        const horizontalDoubledWeekAllDayCells = createHorizontalGroupedCells(twoWeekAllDayCells.slice(0, 7));
+        const horizontalDoubledWorkWeekAllDayCells = createHorizontalGroupedCells(twoWeekAllDayCells.slice(1, 6));
+
+        [
+            {
+                view: 'day',
+                expectedCells: doubledDayAllDayCells,
+                groupOrientation: 'vertical',
+            }, {
+                view: 'day',
+                expectedCells: doubledDayAllDayCells,
+                groupOrientation: 'horizontal',
+            }, {
+                view: 'week',
+                expectedCells: doubledWeekAllDayCells,
+                groupOrientation: 'vertical',
+            }, {
+                view: 'week',
+                expectedCells: horizontalDoubledWeekAllDayCells,
+                groupOrientation: 'horizontal',
+            }, {
+                view: 'workWeek',
+                expectedCells: doubledWorkWeekAllDayCells,
+                groupOrientation: 'vertical',
+            }, {
+                view: 'workWeek',
+                expectedCells: horizontalDoubledWorkWeekAllDayCells,
+                groupOrientation: 'horizontal',
+            },
+        ].forEach(({ view, expectedCells, groupOrientation }) => {
+            test(`allDay cells should have correct options in ${view} view`
+                + ` with ${groupOrientation} grouping by date`, function(assert) {
+                const allDayCells = [];
+
+                createWrapper({
+                    dataSource: [],
+                    views: [
+                        {
+                            type: view,
+                            groupOrientation,
+                            groupByDate: true,
+                        }
+                    ],
+                    currentView: view,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        if(data.allDay) {
+                            assert.equal(
+                                data.startDate.getTime(),
+                                data.endDate.getTime(),
+                                'startDate and endDate of allDay cell should be equal');
+
+                            allDayCells.push(data.startDate);
+                        }
+                    },
+                    groups: ['ownerId'],
+                    resources,
+                });
+
+                assert.deepEqual(allDayCells, expectedCells, 'cells options should be correct');
+            });
+        });
+
         [{
             viewType: 'day',
             expectedTemplateOptions: [dataCells[0]],
