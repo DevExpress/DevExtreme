@@ -427,7 +427,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _setFocusedItemKey(itemKey) {
-        this._filesView.option('focusedRowKey', itemKey);
+        this._filesView?.option('focusedRowKey', itemKey);
     }
 
     clearSelection() {
