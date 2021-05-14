@@ -12,7 +12,7 @@ export interface GridInstance extends dxDataGrid {
   getScrollbarWidth: (isHorizontal: boolean) => number;
 }
 
-export interface IDataGrid {
+export interface DataGridForComponentWrapper {
   getComponentInstance: () => GridInstance;
   prevProps: DataGridProps;
 }
