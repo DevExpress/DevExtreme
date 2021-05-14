@@ -48,7 +48,10 @@ export type ItemRenderedEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxToolbar> & ChangedOptionInfo;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**
      * @docid
@@ -91,6 +94,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @module ui/toolbar
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxToolbar extends CollectionWidget {
@@ -101,6 +105,7 @@ export default class dxToolbar extends CollectionWidget {
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxToolbarItem extends CollectionWidgetItem {
     /**

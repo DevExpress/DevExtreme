@@ -14,6 +14,7 @@ import {
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 
+/** @namespace DevExpress */
 export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
     /**
      * @docid

@@ -5,6 +5,7 @@ import {
     DxPromise
 } from '../core/utils/deferred';
 
+/** @namespace DevExpress.fileManagement */
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
      * @docid

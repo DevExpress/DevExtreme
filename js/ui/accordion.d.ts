@@ -59,7 +59,10 @@ export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
 
-/** @deprecated use Properties instead */
+/** 
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**
      * @docid
@@ -185,6 +188,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @module ui/accordion
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxAccordion extends CollectionWidget {
@@ -220,6 +224,7 @@ export default class dxAccordion extends CollectionWidget {
 /**
  * @docid
  * @inherits CollectionWidgetItem
+ * @namespace DevExpress.ui
  * @type object
  */
 export interface dxAccordionItem extends CollectionWidgetItem {

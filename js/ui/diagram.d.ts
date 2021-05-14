@@ -81,7 +81,10 @@ export type CustomShapeToolboxTemplateData = {
     readonly item: dxDiagramShape;
 };
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
@@ -1234,6 +1237,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
  * @module ui/diagram
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxDiagram extends Widget {
@@ -1342,6 +1346,7 @@ export default class dxDiagram extends Widget {
 /**
  * @docid
  * @inherits dxDiagramItem
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramConnector extends dxDiagramItem {
     /**
@@ -1408,6 +1413,7 @@ export interface dxDiagramConnector extends dxDiagramItem {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramItem {
     /**
@@ -1440,6 +1446,7 @@ export interface dxDiagramItem {
 /**
  * @docid
  * @inherits dxDiagramItem
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramShape extends dxDiagramItem {
     /**
@@ -1521,6 +1528,7 @@ export interface dxDiagramShape extends dxDiagramItem {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramCustomCommand {
     /**
@@ -1552,6 +1560,7 @@ export interface dxDiagramCustomCommand {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramAddShapeArgs {
     /**
@@ -1579,6 +1588,7 @@ export interface dxDiagramAddShapeArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramAddShapeFromToolboxArgs {
   /**
@@ -1592,6 +1602,7 @@ export interface dxDiagramAddShapeFromToolboxArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramDeleteShapeArgs {
   /**
@@ -1604,6 +1615,7 @@ export interface dxDiagramDeleteShapeArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramDeleteConnectorArgs {
   /**
@@ -1616,6 +1628,7 @@ export interface dxDiagramDeleteConnectorArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramChangeConnectionArgs {
   /**
@@ -1653,6 +1666,7 @@ export interface dxDiagramChangeConnectionArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramChangeConnectorPointsArgs {
   /**
@@ -1695,6 +1709,7 @@ export interface dxDiagramChangeConnectorPointsArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramBeforeChangeShapeTextArgs {
   /**
@@ -1707,6 +1722,7 @@ export interface dxDiagramBeforeChangeShapeTextArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramChangeShapeTextArgs {
   /**
@@ -1725,6 +1741,7 @@ export interface dxDiagramChangeShapeTextArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramBeforeChangeConnectorTextArgs {
   /**
@@ -1743,6 +1760,7 @@ export interface dxDiagramBeforeChangeConnectorTextArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramChangeConnectorTextArgs {
   /**
@@ -1767,6 +1785,7 @@ export interface dxDiagramChangeConnectorTextArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramResizeShapeArgs {
   /**
@@ -1809,6 +1828,7 @@ export interface dxDiagramResizeShapeArgs {
 
 /**
  * @docid
+ * @namespace DevExpress.ui
  */
 export interface dxDiagramMoveShapeArgs {
   /**
