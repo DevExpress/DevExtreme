@@ -15,6 +15,7 @@ export interface ValueChangedInfo {
     readonly value?: any;
 }
 
+/** @namespace DevExpress.ui */
 export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     /**
      * @docid
@@ -100,6 +101,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class Editor extends Widget {
     constructor(element: UserDefinedElement, options?: EditorOptions)
