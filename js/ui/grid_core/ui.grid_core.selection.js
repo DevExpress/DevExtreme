@@ -615,9 +615,13 @@ export const selectionModule = {
                     const $editor = $element && $element.find('.' + SELECT_CHECKBOX_CLASS);
 
                     if($element && $editor.length && that.option('selection.mode') === 'multiple') {
+                        const selectAllValue = that.getController('selection').isSelectAll();
+                        const hasSelection = selectAllValue !== false;
+                        const isVisible = that.option('selection.allowSelectAll') ? !that.getController('data').isEmpty() : hasSelection;
+
                         $editor.dxCheckBox('instance').option({
-                            visible: !that.getController('data').isEmpty(),
-                            value: that.getController('selection').isSelectAll(),
+                            visible: isVisible,
+                            value: selectAllValue,
                         });
                     }
                 },
