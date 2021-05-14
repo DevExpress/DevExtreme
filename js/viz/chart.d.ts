@@ -626,6 +626,7 @@ export interface chartSeriesObject extends baseSeriesObject {
     stack?: string;
 }
 
+/** @deprecated use Properties instead */
 export interface dxChartOptions extends BaseChartOptions<dxChart> {
     /**
      * @docid

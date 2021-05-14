@@ -73,6 +73,7 @@ export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemElement?: DxElement;
 }
 
+/** @deprecated use Properties instead */
 export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid

@@ -3464,6 +3464,7 @@ export type RowTemplateData = {
   readonly isExpanded?: boolean;
 }
 
+/** @deprecated use Properties instead */
 export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     /**
      * @docid

@@ -70,6 +70,7 @@ export type PasteEvent = NativeEventInfo<dxNumberBox>;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxNumberBox> & ValueChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid

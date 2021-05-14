@@ -87,6 +87,7 @@ export type TitleRenderedEvent = EventInfo<dxLookup> & TitleRenderedInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxLookup> & ValueChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid

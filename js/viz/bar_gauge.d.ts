@@ -111,6 +111,7 @@ export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
+/** @deprecated use Properties instead */
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid

@@ -43,6 +43,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxBox> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxBox> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     /**
      * @docid

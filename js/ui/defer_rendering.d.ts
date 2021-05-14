@@ -35,6 +35,7 @@ export type RenderedEvent = EventInfo<dxDeferRendering>;
 /** @public */
 export type ShownEvent = EventInfo<dxDeferRendering>;
 
+/** @deprecated use Properties instead */
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
      * @docid

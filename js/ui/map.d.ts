@@ -74,6 +74,7 @@ export interface MapLocation {
     lng: number;
 }
 
+/** @deprecated use Properties instead */
 export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid

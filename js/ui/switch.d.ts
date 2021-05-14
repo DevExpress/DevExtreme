@@ -29,6 +29,7 @@ export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxSwitch> & ValueChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**
      * @docid
