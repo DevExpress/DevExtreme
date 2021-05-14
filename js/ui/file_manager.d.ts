@@ -102,6 +102,7 @@ export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
 }
 
 
+/** @deprecated use Properties instead */
 export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid

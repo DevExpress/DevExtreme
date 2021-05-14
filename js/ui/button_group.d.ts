@@ -42,6 +42,7 @@ export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid

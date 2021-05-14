@@ -43,6 +43,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxResponsiveBox> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
     /**
      * @docid

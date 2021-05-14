@@ -37,6 +37,7 @@ export type ShowingEvent = EventInfo<dxTooltip>;
 /** @public */
 export type ShownEvent = EventInfo<dxTooltip>;
 
+/** @deprecated use Properties instead */
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
 }
 /**

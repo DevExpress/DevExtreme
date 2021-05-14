@@ -38,6 +38,7 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSlider> & ValueChangedInf
     readonly value?: Array<number>;
 }
 
+/** @deprecated use Properties instead */
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
      * @docid

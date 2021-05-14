@@ -129,6 +129,7 @@ export interface DragTemplateData {
     readonly fromIndex: number;
 }
 
+/** @deprecated use Properties instead */
 export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid

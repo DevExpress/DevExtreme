@@ -250,6 +250,7 @@ export interface VectorMapLegendItem extends BaseLegendItem {
     start?: number;
 }
 
+/** @deprecated use Properties instead */
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid

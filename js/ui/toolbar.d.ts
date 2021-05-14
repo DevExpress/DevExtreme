@@ -48,6 +48,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxToolbar> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxToolbar> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**
      * @docid
