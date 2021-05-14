@@ -47,7 +47,10 @@ export type ShowingEvent = EventInfo<dxToast>;
 /** @public */
 export type ShownEvent = EventInfo<dxToast>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
@@ -155,6 +158,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.ui */
 export interface dxToastAnimation extends dxOverlayAnimation {
     /**
      * @docid dxToastOptions.animation.hide
@@ -177,6 +181,7 @@ export interface dxToastAnimation extends dxOverlayAnimation {
  * @module ui/toast
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxToast extends dxOverlay {

@@ -72,7 +72,10 @@ export type ShowingEvent = EventInfo<dxPopup>;
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
@@ -229,6 +232,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.ui */
 export interface dxPopupAnimation extends dxOverlayAnimation {
     /**
      * @docid dxPopupOptions.animation.hide
@@ -245,6 +249,7 @@ export interface dxPopupAnimation extends dxOverlayAnimation {
      */
     show?: animationConfig;
 }
+/** @namespace DevExpress.ui */
 export interface dxPopupToolbarItem {
     /**
      * @docid dxPopupOptions.toolbarItems.disabled
@@ -315,6 +320,7 @@ export interface dxPopupToolbarItem {
  * @module ui/popup
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxPopup extends dxOverlay {

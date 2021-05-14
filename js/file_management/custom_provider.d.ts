@@ -5,6 +5,7 @@ import FileSystemProviderBase, {
 import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
 
+/** @namespace DevExpress.fileManagement */
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**
      * @docid

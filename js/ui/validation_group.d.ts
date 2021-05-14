@@ -37,7 +37,10 @@ export type InitializedEvent = InitializedEventInfo<dxValidationGroup>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInfo;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }
 /**
@@ -47,6 +50,7 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @module ui/validation_group
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxValidationGroup extends DOMComponent {
@@ -71,6 +75,7 @@ export default class dxValidationGroup extends DOMComponent {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxValidationGroupResult {
     /**

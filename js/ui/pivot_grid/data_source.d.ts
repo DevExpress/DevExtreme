@@ -20,6 +20,7 @@ import XmlaStore, {
     XmlaStoreOptions
 } from './xmla_store';
 
+/** @namespace DevExpress.data */
 export interface PivotGridDataSourceOptions {
     /**
      * @docid
@@ -109,6 +110,7 @@ export interface PivotGridDataSourceOptions {
       type?: 'array' | 'local' | 'odata' | 'xmla'
     };
 }
+/** @namespace DevExpress.data */
 export interface PivotGridDataSourceField {
     /**
      * @docid PivotGridDataSourceOptions.fields.allowCrossGroupCalculation
