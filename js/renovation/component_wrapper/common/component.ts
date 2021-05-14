@@ -427,5 +427,5 @@ export default class ComponentWrapper extends DOMComponent {
 }
 
 /// #DEBUG
-ComponentWrapper.IS_RENOVATED_WIDGET = true;
+ComponentWrapper.IS_RENOVATED_WIDGET = true;  
 /// #ENDDEBUG
