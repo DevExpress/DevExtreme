@@ -69,7 +69,7 @@ export default class DataGridWrapper extends Component {
         super._optionChanged(e);
     }
 
-    _createTemplateComponent(props: any, templateOption: any): any {
+    _createTemplateComponent(templateOption: any): any {
         return templateOption;
     }
 
