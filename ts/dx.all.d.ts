@@ -1278,6 +1278,14 @@ declare module DevExpress {
 }
 declare module DevExpress.core {
   /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export interface Condition {}
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  interface Condition extends JQueryEventObject {}
+  /**
    * [descr:dxElement]
    * @deprecated [depNote:dxElement]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -1287,8 +1295,9 @@ declare module DevExpress.core {
    * [descr:DxElement]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export type DxElement<T extends Element = HTMLElement> =
-    {} extends ElementWrapper<T> ? T : ElementWrapper<T>;
+  export type DxElement<T extends Element = HTMLElement> = {} extends Condition
+    ? T
+    : ElementWrapper<T>;
   /**
    * [descr:dxSVGElement]
    * @deprecated [depNote:dxSVGElement]
@@ -1363,14 +1372,13 @@ declare module DevExpress.core {
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export type UserDefinedElement<T extends Element = Element> =
-    {} extends ElementWrapper<T> ? T : ElementWrapper<T> | T;
+    {} extends Condition ? T : ElementWrapper<T> | T;
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export type UserDefinedElementsArray =
-    {} extends ElementsArrayWrapper<Element>
-      ? Array<Element>
-      : ElementsArrayWrapper<Element>;
+  export type UserDefinedElementsArray = {} extends Condition
+    ? Array<Element>
+    : ElementsArrayWrapper<Element>;
 }
 declare module DevExpress.core.utils {
   /**
