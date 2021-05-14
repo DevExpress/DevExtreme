@@ -30,38 +30,6 @@ const createScheduler = async (
   }, true);
 };
 
-// test('Virtual scrolling layout in scheduler views', async (t) => {
-//   const scheduler = new Scheduler('#container');
-
-//   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-//   // TODO: views[0] is day view and we have a bug in its CSS
-//   // It is not advisable to create screenshots for incorrect layout
-//   for (let i = 1; i < views.length; i += 1) {
-//     const view = views[i];
-
-//     await scheduler.option('currentView', view.type);
-
-//     await t.expect(
-//       await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-scaling.png`),
-//     ).ok();
-
-//     await scrollTo(scrollConfig[i].firstDate);
-
-//     await t.expect(
-//       await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-scaling.png`),
-//     ).ok();
-//   }
-
-//   await t.expect(compareResults.isValid())
-//     .ok(compareResults.errorMessages());
-// }).before(async () => {
-//   await setZoomLevel(125);
-//   await createScheduler({});
-// }).after(async () => {
-//   await setZoomLevel(0);
-// });
-
 test('Virtual scrolling layout in scheduler views when horizontal grouping is enabled', async (t) => {
   const scheduler = new Scheduler('#container');
 
