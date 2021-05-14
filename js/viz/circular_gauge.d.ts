@@ -55,6 +55,7 @@ export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
+/** @deprecated use Properties instead */
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
      * @docid

@@ -37,6 +37,7 @@ export type InitializedEvent = InitializedEventInfo<dxValidationGroup>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }
 /**

@@ -51,6 +51,7 @@ export type OptionChangedEvent = EventInfo<dxGallery> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxGallery> & SelectionChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     /**
      * @docid

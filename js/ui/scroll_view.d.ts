@@ -38,6 +38,7 @@ export type ScrollEvent = ScrollEventInfo<dxScrollView>;
 /** @public */
 export type UpdatedEvent = ScrollEventInfo<dxScrollView>;
 
+/** @deprecated use Properties instead */
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid

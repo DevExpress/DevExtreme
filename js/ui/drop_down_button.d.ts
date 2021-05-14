@@ -64,6 +64,7 @@ export type SelectionChangedEvent = NativeEventInfo<dxDropDownButton> & {
     readonly previousItem: any;
 }
 
+/** @deprecated use Properties instead */
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * @docid

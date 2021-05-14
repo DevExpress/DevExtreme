@@ -47,6 +47,7 @@ export type OptionChangedEvent = EventInfo<dxTabs> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
      * @docid

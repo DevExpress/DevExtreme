@@ -43,6 +43,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxTileView> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTileView> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**
      * @docid

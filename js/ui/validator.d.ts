@@ -41,6 +41,7 @@ export type ValidatedEvent = {
     status?: 'valid' | 'invalid' | 'pending'
 }
 
+/** @deprecated use Properties instead */
 export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**
      * @docid

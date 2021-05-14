@@ -158,6 +158,7 @@ export type DragTemplateData = {
     readonly itemElement: DxElement;
 }
 
+/** @deprecated use Properties instead */
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid

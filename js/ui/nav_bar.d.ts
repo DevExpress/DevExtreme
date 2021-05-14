@@ -46,6 +46,7 @@ export type OptionChangedEvent = EventInfo<dxNavBar> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxNavBar> & SelectionChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
     /**
      * @docid
