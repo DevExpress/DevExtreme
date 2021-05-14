@@ -468,4 +468,63 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         assert.equal(dataGrid.getCellElement(1, 'field5'), undefined, 'wrong column field name');
         assert.equal(dataGrid.getCellElement(1, 100), undefined, 'wrong column visible index');
     });
+
+    QUnit.testInActiveWindow('Cells in fixed band columns should be editable on click (T996394)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 5; i++) {
+                items.push({
+                    id: i + 1,
+                    field1: `${i + 1}_1`,
+                    field2: `${i + 1}_2`,
+                    field3: `${i + 1}_3`,
+                    field4: `${i + 1}_4`,
+                    field5: `${i + 1}_5`,
+                    field6: `${i + 1}_6`,
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                startEditAction: 'click'
+            },
+            columns: [
+                {
+                    fixed: true,
+                    caption: 'A',
+                    columns: ['field1', 'field2', 'field3']
+                },
+                'field4',
+                {
+                    fixed: true,
+                    fixedPosition: 'right',
+                    caption: 'B',
+                    columns: ['field5', 'field6']
+                }
+            ]
+        });
+        this.clock.tick();
+
+        for(let rowIndex = 0; rowIndex < 5; rowIndex++) {
+            for(let columnIndex = 0; columnIndex < 5; columnIndex++) {
+                let $cell = $(dataGrid.getCellElement(rowIndex, columnIndex));
+
+                // act
+                $cell.trigger('dxclick');
+                this.clock.tick();
+                $cell = $(dataGrid.getCellElement(rowIndex, columnIndex));
+
+                // assert
+                assert.ok($cell.hasClass('dx-editor-cell'), `${rowIndex} ${columnIndex} editor cell`);
+                assert.ok($cell.hasClass('dx-focused'), `${rowIndex} ${columnIndex} focused`);
+                assert.ok($cell.find('.dx-texteditor-input').is(':focus'), `${rowIndex} ${columnIndex} input focused`);
+            }
+        }
+    });
 });
