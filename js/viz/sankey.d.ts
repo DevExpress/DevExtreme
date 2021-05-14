@@ -77,6 +77,7 @@ export type NodeHoverEvent = EventInfo<dxSankey> & {
 export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 
 
+/** @deprecated use Properties instead */
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid

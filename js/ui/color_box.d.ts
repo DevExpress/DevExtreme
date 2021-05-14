@@ -77,6 +77,7 @@ export type ValueChangedEvent = NativeEventInfo<dxColorBox> & ValueChangedInfo;
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
+/** @deprecated use Properties instead */
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
      * @docid

@@ -1126,7 +1126,22 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-revert-button {
       @include dx-button-sizing(2px, 18px, 0);
-      @include dx-button-styling($button-danger-bg, $button-danger-color, $button-danger-bg, $button-danger-bg, $button-danger-bg, $button-danger-color);
+
+      border-radius: $button-border-radius;
+
+      @include dx-button-styling-variant(
+        $button-danger-bg,
+        $button-danger-color,
+        none,
+        $button-danger-bg,
+        none,
+        $button-danger-bg,
+        none,
+        $button-danger-bg,
+        none,
+        $button-disabled-background,
+        $button-danger-color
+      );
 
       margin: 0 0 0 1px;
       height: $material-grid-base-cell-height;

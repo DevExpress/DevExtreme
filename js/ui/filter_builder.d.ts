@@ -89,6 +89,7 @@ export type FieldEditorTemplate = {
     readonly setValue: Function;
 }
 
+/** @deprecated use Properties instead */
 export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid

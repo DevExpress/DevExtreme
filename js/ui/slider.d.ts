@@ -36,6 +36,7 @@ export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxSlider> & ValueChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**
      * @docid

@@ -85,6 +85,7 @@ export type SimpleItemTemplateData = {
     readonly name?: string;
 }
 
+/** @deprecated use Properties instead */
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid

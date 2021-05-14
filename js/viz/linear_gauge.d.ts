@@ -56,6 +56,7 @@ export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
 
+/** @deprecated use Properties instead */
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
      * @docid

@@ -62,6 +62,7 @@ export type OptionChangedEvent = EventInfo<dxSlideOut> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxSlideOut> & SelectionChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     /**
      * @docid

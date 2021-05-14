@@ -4,6 +4,7 @@ import browser from 'core/utils/browser';
 import 'ui/html_editor';
 
 import nativePointerMock from '../../../helpers/nativePointerMock.js';
+import { prepareEmbedValue } from './utils.js';
 
 const { test, module } = QUnit;
 
@@ -81,7 +82,7 @@ module('Mentions integration', {
                 this.getItems().eq(1).trigger('dxclick');
                 this.clock.tick(POPUP_TIMEOUT);
             } else {
-                assert.strictEqual(value.replace(/\uFEFF/g, ''), expectedMention, 'mention has been added');
+                assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
                 done();
             }
         });
@@ -174,7 +175,7 @@ module('Mentions integration', {
                 this.getItems().eq(2).trigger('dxclick');
                 this.clock.tick(POPUP_TIMEOUT);
             } else {
-                assert.strictEqual(value.replace(/\uFEFF/g, ''), expectedMention, 'mention has been added');
+                assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
                 done();
             }
         });
@@ -330,7 +331,7 @@ module('Mentions integration', {
                 KeyEventsMock.simulateEvent($content.get(0), 'keydown', { keyCode: KEY_CODES.ENTER });
                 this.clock.tick();
             } else {
-                assert.strictEqual(value.replace(/\uFEFF/g, ''), expectedMention, 'mention has been added');
+                assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
                 done();
             }
         });
@@ -433,7 +434,7 @@ module('Mentions integration', {
                     this.clock.tick(POPUP_TIMEOUT);
                     break;
                 case 3:
-                    assert.strictEqual(value.replace(/\uFEFF/g, ''), expectedMention, 'mention has been added');
+                    assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
                     done();
                     break;
             }
@@ -551,7 +552,7 @@ module('Mentions integration', {
 
                 this.clock.tick();
             } else {
-                assert.strictEqual(value.replace(/\uFEFF/g, ''), expectedMention, 'mention has been added');
+                assert.strictEqual(prepareEmbedValue(value), expectedMention, 'mention has been added');
                 done();
             }
         });
@@ -577,7 +578,7 @@ module('Mentions integration', {
 
         this.createWidget();
 
-        const value = this.$element.find(`.${MENTION_CLASS}`).parent().html().replace(/\uFEFF/g, '');
+        const value = prepareEmbedValue(this.$element.find(`.${MENTION_CLASS}`).parent().html());
         assert.strictEqual(value, expectedMention);
     });
 });

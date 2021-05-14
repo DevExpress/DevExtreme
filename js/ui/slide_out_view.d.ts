@@ -30,6 +30,7 @@ export type InitializedEvent = InitializedEventInfo<dxSlideOutView>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxSlideOutView> & ChangedOptionInfo;
 
+/** @deprecated use Properties instead */
 export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**
      * @docid

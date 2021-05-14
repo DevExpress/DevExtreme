@@ -55,6 +55,7 @@ export type TooltipHiddenEvent = EventInfo<dxSparkline>;
 export type TooltipShownEvent = EventInfo<dxSparkline>;
 
 
+/** @deprecated use Properties instead */
 export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     /**
      * @docid

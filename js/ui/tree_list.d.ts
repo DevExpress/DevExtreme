@@ -389,6 +389,7 @@ export type ColumnHeaderCellTemplateData = {
 /** @public */
 export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
 
+/** @deprecated use Properties instead */
 export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
      * @docid
