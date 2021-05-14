@@ -775,7 +775,7 @@ const TagBox = SelectBox.inherit({
         const creator = new FilterCreator(values);
 
         const listSelectedItems = this._list?.option('selectedItems');
-        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource().isLoaded();
+        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource()?.isLoaded();
         const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
         const filteredItems = selectedItems.filter(clientFilterFunction);

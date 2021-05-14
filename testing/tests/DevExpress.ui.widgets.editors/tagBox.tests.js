@@ -4342,6 +4342,27 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         assert.strictEqual(loadSpy.callCount, 4, 'no unnecessary loadings');
     });
+
+    QUnit.test('Changing the data source should not cause an error when the search is active', function(assert) {
+        let isOk = true;
+
+        const tagBox = $('#tagBox')
+            .dxTagBox({
+                dataSource: null,
+                searchEnabled: true,
+                minSearchLength: 2,
+                opened: true
+            })
+            .dxTagBox('instance');
+
+        try {
+            tagBox.option('dataSource', []);
+        } catch(e) {
+            isOk = false;
+        }
+
+        assert.ok(isOk, 'dataSource updated without errors');
+    });
 });
 
 QUnit.module('popup position and size', moduleSetup, () => {
