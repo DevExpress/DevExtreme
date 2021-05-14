@@ -39,6 +39,7 @@ export type CellTemplateData = {
 /** @public */
 export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 
+/** @deprecated use Properties instead */
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
      * @docid

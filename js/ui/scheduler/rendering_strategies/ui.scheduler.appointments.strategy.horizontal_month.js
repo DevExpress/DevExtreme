@@ -29,7 +29,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         const fullChunksWidth = Math.floor(geometry.sourceAppointmentWidth);
         const widthWithoutFirstChunk = fullChunksWidth - firstChunkWidth;
 
-        return [geometry.reducedWidth, fullChunksWidth, widthWithoutFirstChunk];
+        return [firstChunkWidth, fullChunksWidth, widthWithoutFirstChunk];
     }
 
     _getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition) {
@@ -43,9 +43,9 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     _getAppointmentParts(geometry, settings) {
         const result = [];
 
-        const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry);
-        const leftPosition = this._getLeftPosition(settings);
         const weekWidth = Math.round(this._getFullWeekAppointmentWidth(settings.groupIndex));
+        const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry, settings, weekWidth);
+        const leftPosition = this._getLeftPosition(settings);
 
         const hasTailChunk = this.instance.fire('getEndViewDate') > settings.info.appointment.endDate;
         const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth);
@@ -67,24 +67,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
             } });
         }
 
-        const groupDeltaWidth = this._getGroupDeltaWidth(settings.groupIndex);
-        result.forEach(item => {
-            item.left = Math.max(item.left + groupDeltaWidth, 0);
-            item.width = Math.max(item.width - groupDeltaWidth, 0);
-        });
-
-        return result;
-    }
-
-    _getGroupDeltaWidth(groupIndex) {
-        let result = 0;
-        const workspace = this.instance.getWorkSpace();
-        if(workspace.isRenovatedRender()) {
-            const { viewDataProvider } = workspace;
-
-            const cellCountDelta = viewDataProvider.getGroupCellCountDelta(groupIndex);
-            result = cellCountDelta * workspace.getCellWidth();
-        }
 
         return result;
     }

@@ -118,6 +118,7 @@ export type SelectAllValueChangedEvent = EventInfo<dxList> & {
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxList> & SelectionChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
     /**
      * @docid

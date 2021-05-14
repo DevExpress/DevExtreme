@@ -1,4 +1,5 @@
 import dxDataGrid from '../../../../../ui/data_grid';
+import type { DataGridProps } from './data_grid_props';
 
 export interface GridInstance extends dxDataGrid {
   isReady: () => boolean;
@@ -9,4 +10,9 @@ export interface GridInstance extends dxDataGrid {
   isScrollbarVisible: () => boolean;
   getTopVisibleRowData: () => any;
   getScrollbarWidth: (isHorizontal: boolean) => number;
+}
+
+export interface IDataGrid {
+  getComponentInstance: () => GridInstance;
+  prevProps: DataGridProps;
 }

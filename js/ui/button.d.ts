@@ -41,6 +41,7 @@ export type TemplateData = {
     readonly icon?: string;
 }
 
+/** @deprecated use Properties instead */
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
      * @docid

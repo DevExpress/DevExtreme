@@ -87,6 +87,7 @@ export type DisabledDate = ComponentDisabledDate<dxDateBox>;
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
+/** @deprecated use Properties instead */
 export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     /**
      * @docid

@@ -65,6 +65,7 @@ export type PasteEvent = NativeEventInfo<dxTextArea>;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxTextArea> & ValueChangedInfo;
 
+/** @deprecated use Properties instead */
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**
      * @docid
