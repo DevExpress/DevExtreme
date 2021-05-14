@@ -105,17 +105,10 @@ const dxPieChart = BaseChart.inherit({
         });
     },
 
-    _optionChangesOrder: ['CENTER_TEMPLATE'],
-
     _optionChangesMap: {
         diameter: 'REINIT',
         minDiameter: 'REINIT',
-        sizeGroup: 'REINIT',
-        centerTemplate: 'CENTER_TEMPLATE'
-    },
-
-    _change_CENTER_TEMPLATE() {
-        this._renderExtraElements();
+        sizeGroup: 'REINIT'
     },
 
     _disposeCore: function() {
