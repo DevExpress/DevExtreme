@@ -453,20 +453,6 @@ const overlappingEnvironment = $.extend({}, environment, {
         assert.strictEqual(templateGroup.stub('move').callCount, 1);
     });
 
-    // t998109
-    QUnit.test('centerTemplate changing', function(assert) {
-        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
-        const centerTemplate = sinon.spy();
-
-        const chart = this.createPieChart({
-            dataSource: this.dataSource,
-            series: [{}]
-        });
-
-        chart.option('centerTemplate', centerTemplate);
-        assert.strictEqual(centerTemplate.callCount, 1);
-    });
-
     QUnit.test('Async tempaltes rendering. called group visibilty', function(assert) {
         chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
         const renderSpy = sinon.spy();
