@@ -91,7 +91,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel,
       pullingDownText, pulledDownText, refreshingText, reachBottomText,
-      pullDownEnabled, reachBottomEnabled,
+      pullDownEnabled, reachBottomEnabled, showScrollbar,
     },
     restAttributes,
   } = viewModel;
@@ -157,7 +157,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           visible={isLoadPanelVisible}
         />
       )}
-      { useSimulatedScrollbar && direction.isHorizontal && (
+      { showScrollbar !== 'never' && useSimulatedScrollbar && direction.isHorizontal && (
         <Scrollbar
           direction="horizontal"
           ref={hScrollbarRef}
@@ -167,7 +167,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           forceVisibility={needForceScrollbarsVisibility}
         />
       )}
-      { useSimulatedScrollbar && direction.isVertical && (
+      { showScrollbar !== 'never' && useSimulatedScrollbar && direction.isVertical && (
         <Scrollbar
           direction="vertical"
           ref={vScrollbarRef}
@@ -217,11 +217,11 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Mutable() loadingIndicatorEnabled = true;
 
-  @Mutable() hideScrollbarTimeout?: any;
+  @Mutable() hideScrollbarTimer?: any;
 
-  @Mutable() releaseTimeout?: any;
+  @Mutable() releaseTimer?: any;
 
-  @Mutable() refreshTimeout?: any;
+  @Mutable() refreshTimer?: any;
 
   @Mutable() eventForUserAction?: Event;
 
@@ -288,7 +288,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   release(): void {
-    this.clearReleaseTimeout();
+    this.clearReleaseTimer();
 
     if (this.isPullDownStrategy) {
       if (this.topPocketState === TopPocketState.STATE_LOADING) {
@@ -296,7 +296,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       }
     }
 
-    this.releaseTimeout = setTimeout((() => {
+    this.releaseTimer = setTimeout((() => {
       if (this.isPullDownStrategy) {
         this.contentTranslateTop = 0;
       }
@@ -305,14 +305,14 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }), this.isSwipeDownStrategy ? 800 : 400);
   }
 
-  clearReleaseTimeout(): void {
-    clearTimeout(this.releaseTimeout);
-    this.releaseTimeout = undefined;
+  clearReleaseTimer(): void {
+    clearTimeout(this.releaseTimer);
+    this.releaseTimer = undefined;
   }
 
   @Effect({ run: 'once' })
-  disposeReleaseTimeout(): DisposeEffectReturn {
-    return (): void => this.clearReleaseTimeout();
+  disposeReleaseTimer(): DisposeEffectReturn {
+    return (): void => this.clearReleaseTimer();
   }
 
   onRelease(): void {
@@ -608,21 +608,21 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
     this.needForceScrollbarsVisibility = true;
 
-    this.clearHideScrollbarTimeout();
+    this.clearHideScrollbarTimer();
 
-    this.hideScrollbarTimeout = setTimeout(() => {
+    this.hideScrollbarTimer = setTimeout(() => {
       this.needForceScrollbarsVisibility = false;
     }, HIDE_SCROLLBAR_TIMEOUT);
   }
 
   @Effect({ run: 'once' })
-  disposeHideScrollbarTimeout(): DisposeEffectReturn {
-    return (): void => this.clearHideScrollbarTimeout();
+  disposeHideScrollbarTimer(): DisposeEffectReturn {
+    return (): void => this.clearHideScrollbarTimer();
   }
 
-  clearHideScrollbarTimeout(): void {
-    clearTimeout(this.hideScrollbarTimeout);
-    this.hideScrollbarTimeout = undefined;
+  clearHideScrollbarTimer(): void {
+    clearTimeout(this.hideScrollbarTimer);
+    this.hideScrollbarTimer = undefined;
   }
 
   scrollLocation(): { top: number; left: number } {
@@ -763,21 +763,21 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   pullDownComplete(): void {
     if (this.topPocketState === TopPocketState.STATE_READY) {
       this.contentTranslateTop = this.topPocketHeight;
-      this.clearRefreshTimeout();
-      this.refreshTimeout = setTimeout((() => {
+      this.clearRefreshTimer();
+      this.refreshTimer = setTimeout((() => {
         this.pullDownRefreshing();
       }), 400);
     }
   }
 
-  clearRefreshTimeout(): void {
-    clearTimeout(this.refreshTimeout);
-    this.refreshTimeout = undefined;
+  clearRefreshTimer(): void {
+    clearTimeout(this.refreshTimer);
+    this.refreshTimer = undefined;
   }
 
   @Effect({ run: 'once' })
-  disposeRefreshTimeout(): DisposeEffectReturn {
-    return (): void => this.clearRefreshTimeout();
+  disposeRefreshTimer(): DisposeEffectReturn {
+    return (): void => this.clearRefreshTimer();
   }
 
   get topPocketHeight(): number {
@@ -930,8 +930,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       [`dx-scrollable dx-scrollable-native dx-scrollable-native-${this.platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
-      [SCROLLABLE_SCROLLBAR_SIMULATED]: this.useSimulatedScrollbar,
-      [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
+      [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar !== 'never' && this.useSimulatedScrollbar,
+      [SCROLLABLE_SCROLLBARS_HIDDEN]: showScrollbar === 'never',
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);

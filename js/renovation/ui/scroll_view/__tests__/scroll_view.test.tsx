@@ -111,26 +111,33 @@ describe('ScrollView', () => {
     describe('Getters', () => {
       describe('cssClasses', () => {
         each([false, true]).describe('useNative: %o', (useNative) => {
-          it('strategy classes', () => {
-            const viewModel = mount(viewFunction({ props: { useNative, direction: 'vertical' } } as any) as JSX.Element);
+          each(['onScroll', 'onHover', 'always', 'never']).describe('showScrollbar: %o', (showScrollbar) => {
+            it('strategy classes', () => {
+              const viewModel = mount(viewFunction({ props: { useNative, direction: 'vertical', showScrollbar } } as any) as JSX.Element);
 
-            const rootClasses = viewModel.getDOMNode().className;
+              const rootClasses = viewModel.getDOMNode().className;
 
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollview'));
-            expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollview'));
+              expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
 
-            if (useNative) {
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
-              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
-            } else {
-              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
-            }
+              if (showScrollbar === 'never') {
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+              } else {
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
+              }
+
+              if (useNative) {
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
+              } else {
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+                expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
+              }
+            });
           });
         });
 

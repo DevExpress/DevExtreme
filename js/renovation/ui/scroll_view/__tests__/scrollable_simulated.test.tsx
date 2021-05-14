@@ -613,9 +613,8 @@ describe('Simulated > Behavior', () => {
 
           expect(helper.viewModel.validDirections).toEqual({ horizontal: true, vertical: true });
           helper.checkActionHandlerCalls(expect,
-            ['onStart', 'onUpdated', 'onEnd'],
+            ['onStart', 'onUpdated'],
             [
-              [{ fakeEventArg: { value: 5 } }],
               [{ fakeEventArg: { value: 5 } }],
               [{ fakeEventArg: { value: 5 } }],
             ]);
@@ -1107,7 +1106,7 @@ describe('Simulated > Behavior', () => {
         }
       });
 
-      test.each(['onBounce', 'onStart', 'onEnd', 'onUpdated'])('actionName: %o', (action) => {
+      test.each(['onBounce', 'onStart', 'onUpdated'])('actionName: %o', (action) => {
         const helper = new ScrollableTestHelper({
           [`${action}`]: actionHandler,
         });
@@ -1121,6 +1120,52 @@ describe('Simulated > Behavior', () => {
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
+      });
+
+      each([
+        { vertical: true, horizontal: true },
+        { vertical: true, horizontal: false },
+        { vertical: false, horizontal: true },
+        { vertical: false, horizontal: false },
+      ]).describe('endActionDirections: %o', (endActionDirections) => {
+        each(optionValues.direction).describe('Direction: %o', (direction) => {
+          each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('scrollbarDirection: %o', (scrollbarDirection) => {
+            it('onEnd()', () => {
+              const helper = new ScrollableTestHelper({
+                direction,
+                onEnd: actionHandler,
+              });
+
+              helper.viewModel.endActionDirections = { ...endActionDirections };
+              helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
+
+              helper.viewModel.onEnd(scrollbarDirection);
+
+              const expectedEndActionDirections = { ...endActionDirections };
+              let onEndWasCalled = false;
+
+              if (direction === DIRECTION_BOTH) {
+                expectedEndActionDirections[scrollbarDirection] = true;
+
+                if (expectedEndActionDirections.vertical
+                  && expectedEndActionDirections.horizontal) {
+                  expectedEndActionDirections.vertical = false;
+                  expectedEndActionDirections.horizontal = false;
+                  onEndWasCalled = true;
+                }
+              } else {
+                onEndWasCalled = true;
+              }
+
+              if (actionHandler && onEndWasCalled) {
+                helper.checkActionHandlerCalls(expect, ['onEnd'], [[{ fakeEventArg: { value: 5 } }]]);
+              } else {
+                helper.checkActionHandlerCalls(expect, [], []);
+              }
+              expect(helper.viewModel.endActionDirections).toEqual(expectedEndActionDirections);
+            });
+          });
+        });
       });
 
       it('onPullDown()', () => {
@@ -1381,7 +1426,7 @@ describe('Simulated > Logic', () => {
             });
 
             const hasScrollbarsAlwaysVisibleClass = showScrollbar === 'always';
-            const hasScrollbarsHiddenClass = !showScrollbar;
+            const hasScrollbarsHiddenClass = showScrollbar === 'never';
 
             expect(instance.cssClasses).toEqual(hasScrollbarsAlwaysVisibleClass
               ? expect.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE)

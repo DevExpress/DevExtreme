@@ -138,7 +138,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   stepCore(): void {
     if (this.stopped) {
-      this.stop();
       return;
     }
 
@@ -211,10 +210,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       : OUT_BOUNDS_ACCELERATION;
   }
 
-  stop(): void {
-    this.stopComplete();
-  }
-
   suppressInertia(thumbScrolling?: boolean): void {
     if (!this.props.inertiaEnabled || thumbScrolling) {
       this.velocity = 0;
@@ -243,10 +238,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   moveTo(location: number): void {
     this.scrollbar.moveTo(location);
-  }
-
-  stopComplete(): void {
-    this.scrollbar.stopComplete();
   }
 
   scrollComplete(): void {
