@@ -47,7 +47,7 @@ if(Quill) {
         }
 
         showPopup(event) {
-            const selection = this.quill.getSelection();
+            const selection = this.quill.getSelection(true);
             const position = selection ? selection.index : this.quill.getLength();
 
             this.savePosition(position);

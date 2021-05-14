@@ -11,7 +11,7 @@ import positionUtils from '../animation/position';
 import { isObject, isString } from '../core/utils/type';
 import { fitIntoRange } from '../core/utils/math';
 import { addNamespace } from '../events/utils/index';
-import errors from '../core/errors';
+import errors from './widget/ui.errors';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
 
@@ -73,7 +73,7 @@ const attachEvent = function(that, name) {
     const event = shouldIgnoreHideEvent ? null : getEventName(that, `${name}Event`);
 
     if(shouldIgnoreHideEvent) {
-        errors.log('W0018');
+        errors.log('W1020');
     }
 
     if(!event || disabled) {

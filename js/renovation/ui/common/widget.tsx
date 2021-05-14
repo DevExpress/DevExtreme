@@ -94,8 +94,6 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onInactive?: (e: Event) => void;
 
-  @Event() onKeyboardHandled?: (args: Record<string, unknown>) => void;
-
   @Event() onVisibilityChange?: (args: boolean) => void;
 
   @Event() onFocusIn?: (e: Event) => void;

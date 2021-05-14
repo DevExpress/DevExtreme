@@ -70,6 +70,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
 .dx-scheduler-time-panel-cell {
   height: $generic-scheduler-workspace-date-table-cell-height;
+
+  &::after {
+    content: '';
+  }
 }
 
 .dx-scheduler-date-table-cell {
