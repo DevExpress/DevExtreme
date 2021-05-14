@@ -29,23 +29,24 @@ export default class AppointmentDataSource {
         this.initStrategy();
     }
 
-    get filterMaker() { return this.getStrategy().filterMaker; }
+    get filterMaker() { return this.getFilterStrategy().filterMaker; }
     get keyName() { return this.dataOperator.keyName; }
-    get strategyName() {
+    get filterStrategyName() {
         return this.scheduler.isVirtualScrolling()
             ? FilterStrategies.virtual
             : FilterStrategies.standard;
     }
 
-    getStrategy() {
-        if(!this.strategy || this.strategy.strategyName !== this.strategyName) {
+    getFilterStrategy() {
+        if(!this.filterStrategy || this.filterStrategy.strategyName !== this.filterStrategyName) {
             this.initStrategy();
         }
 
-        return this.strategy;
+        return this.filterStrategy;
     }
+
     initStrategy() {
-        this.strategy = this.strategyName === FilterStrategies.virtual
+        this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
             ? new AppointmentFilterVirtualStrategy(this.scheduler, this.dataSource, this.dataAccessors)
             : new AppointmentFilterBaseStrategy(this.scheduler, this.dataSource, this.dataAccessors);
     }
@@ -63,36 +64,36 @@ export default class AppointmentDataSource {
 
     // Filter mapping
     filter() {
-        return this.getStrategy().filter();
+        return this.getFilterStrategy().filter();
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
-        this.getStrategy().filterByDate(min, max, remoteFiltering, dateSerializationFormat);
+        this.getFilterStrategy().filterByDate(min, max, remoteFiltering, dateSerializationFormat);
     }
 
     appointmentTakesAllDay(appointment, startDayHour, endDayHour) {
-        return this.getStrategy().appointmentTakesAllDay(appointment, startDayHour, endDayHour);
+        return this.getFilterStrategy().appointmentTakesAllDay(appointment, startDayHour, endDayHour);
     }
 
     hasAllDayAppointments(appointments) {
-        return this.getStrategy().hasAllDayAppointments(appointments);
+        return this.getFilterStrategy().hasAllDayAppointments(appointments);
     }
 
     filterLoadedAppointments(filterOption, timeZoneCalculator) {
-        return this.getStrategy().filterLoadedAppointments(filterOption, timeZoneCalculator);
+        return this.getFilterStrategy().filterLoadedAppointments(filterOption, timeZoneCalculator);
     }
 
     // From subscribe
     replaceWrongEndDate(appointment, startDate, endDate) {
-        this.getStrategy().replaceWrongEndDate(appointment, startDate, endDate);
+        this.getFilterStrategy().replaceWrongEndDate(appointment, startDate, endDate);
     }
 
     calculateAppointmentEndDate(isAllDay, startDate) {
-        return this.getStrategy().calculateAppointmentEndDate(isAllDay, startDate);
+        return this.getFilterStrategy().calculateAppointmentEndDate(isAllDay, startDate);
     }
 
     appointmentTakesSeveralDays(appointment) {
-        return this.getStrategy().appointmentTakesSeveralDays(appointment);
+        return this.getFilterStrategy().appointmentTakesSeveralDays(appointment);
     }
 
     // Data operator mappings
