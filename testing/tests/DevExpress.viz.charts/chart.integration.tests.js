@@ -3668,6 +3668,26 @@ QUnit.test('Rotated labels', function(assert) {
     assert.strictEqual(settings.rotate, 90);
 });
 
+QUnit.test('axis.label.template option changing', function(assert) {
+    const template = sinon.spy();
+
+    const chart = this.createChart({
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }]
+    });
+
+    chart.option({
+        argumentAxis: {
+            label: {
+                template
+            }
+        }
+    });
+
+    assert.strictEqual(template.callCount, 1);
+
+});
+
 QUnit.module('Discrete axis label layout', $.extend({}, moduleSetup, {
     beforeEach() {
         moduleSetup.beforeEach.call(this);
