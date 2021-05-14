@@ -96,7 +96,7 @@ const EditStrategy = Class.inherit({
     },
 
     _isNode: (el) => {
-        return domAdapter.isNode(el && isRenderer(el) ? el.get(0) : el);
+        return domAdapter.isNode(isRenderer(el) ? el.get(0) : el);
     },
 
     deleteItemAtIndex: abstract,
