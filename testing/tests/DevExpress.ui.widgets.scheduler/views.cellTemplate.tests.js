@@ -587,7 +587,7 @@ module('CellTemplate tests', moduleConfig, () => {
         ].forEach(({ view, groupOrientation, expectedCells }) => {
             test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
                     + ` with ${groupOrientation} groupping`, function(assert) {
-                const startDatesOfRenderedCells = [];
+                const displayedCells = [];
 
                 createWrapper({
                     dataSource: [],
@@ -606,7 +606,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     currentDate: new Date(2021, 7, 1),
                     renovateRender: true,
                     dataCellTemplate: (data) => {
-                        startDatesOfRenderedCells.push(
+                        displayedCells.push(
                             {
                                 startDate: data.startDate,
                                 endDate: data.endDate,
@@ -615,7 +615,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     groups: ['ownerId'],
                     resources
                 });
-                assert.deepEqual(startDatesOfRenderedCells, expectedCells, 'cells options should be correct');
+                assert.deepEqual(displayedCells, expectedCells, 'cells options should be correct');
             });
         });
 
@@ -672,7 +672,7 @@ module('CellTemplate tests', moduleConfig, () => {
         ].forEach(({ view, groupOrientation, expectedCells }) => {
             test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
                     + ` with ${groupOrientation} groupping by date`, function(assert) {
-                const startDatesOfRenderedCells = [];
+                const displayedCells = [];
 
                 createWrapper({
                     dataSource: [],
@@ -692,7 +692,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     currentDate: new Date(2021, 7, 1),
                     renovateRender: true,
                     dataCellTemplate: (data) => {
-                        startDatesOfRenderedCells.push(
+                        displayedCells.push(
                             {
                                 startDate: data.startDate,
                                 endDate: data.endDate,
@@ -701,7 +701,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     groups: ['ownerId'],
                     resources
                 });
-                assert.deepEqual(startDatesOfRenderedCells, expectedCells, 'cells options should be correct');
+                assert.deepEqual(displayedCells, expectedCells, 'cells options should be correct');
             });
         });
 
