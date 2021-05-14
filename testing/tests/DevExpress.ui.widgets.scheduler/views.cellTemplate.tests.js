@@ -615,7 +615,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     groups: ['ownerId'],
                     resources
                 });
-                assert.deepEqual(startDatesOfRenderedCells, expectedCells, 'startDates should be correct');
+                assert.deepEqual(startDatesOfRenderedCells, expectedCells, 'cells options should be correct');
             });
         });
 
@@ -701,7 +701,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     groups: ['ownerId'],
                     resources
                 });
-                assert.deepEqual(startDatesOfRenderedCells, expectedCells, 'startDates should be correct');
+                assert.deepEqual(startDatesOfRenderedCells, expectedCells, 'cells options should be correct');
             });
         });
 
