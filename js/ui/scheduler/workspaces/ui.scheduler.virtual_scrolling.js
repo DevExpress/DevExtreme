@@ -136,8 +136,14 @@ export default class VirtualScrollingDispatcher {
     }
 
     getCellWidth() {
-        const cellWidth = this.workspace.getCellWidth() ||
-            this.workspace.getCellMinWidth();
+        let cellWidth = this.workspace.getCellWidth();
+        const minCellWidth = this.workspace.getCellMinWidth();
+
+        // TODO: Remove this after CSS refactoring
+        if(!cellWidth || cellWidth < minCellWidth) {
+            cellWidth = minCellWidth;
+        }
+
         const result = cellWidth > 0
             ? cellWidth
             : MIN_CELL_WIDTH;
@@ -522,11 +528,11 @@ class VirtualScrollingBase {
 
         const needAddItems = this._itemSizeChanged || isAppend || isPrepend;
         if(needAddItems) {
-            this._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
+            this._updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter);
         }
     }
 
-    _updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter) {
+    _updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter) {
         const { state } = this;
 
         state.virtualItemSizeBefore = virtualItemSizeBefore;
@@ -588,14 +594,15 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
         };
     }
 
-    _updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter) {
+    _updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter) {
         if(!this.isRTL) {
-            super._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
+            super._updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter);
         } else {
             const { state } = this;
 
             state.virtualItemSizeAfter = virtualItemSizeBefore;
             state.virtualItemSizeBefore = virtualItemSizeAfter;
+            state.startIndex = this.getTotalItemCount() - this.startIndex - this.state.itemCount;
         }
     }
 }
