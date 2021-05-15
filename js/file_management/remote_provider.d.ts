@@ -2,6 +2,7 @@ import FileSystemProviderBase, {
     FileSystemProviderBaseOptions
 } from './provider_base';
 
+/** @namespace DevExpress.fileManagement */
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**
      * @docid

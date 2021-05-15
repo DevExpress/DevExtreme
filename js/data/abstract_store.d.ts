@@ -6,6 +6,7 @@ import {
     LoadOptions
 } from './load_options';
 
+/** @namespace DevExpress.data */
 export interface StoreOptions<T = Store> {
     /**
      * @docid

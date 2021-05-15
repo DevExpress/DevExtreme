@@ -89,6 +89,10 @@ export type ValueChangedEvent = NativeEventInfo<dxAutocomplete> & ValueChangedIn
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
     /**
      * @docid
@@ -126,6 +130,7 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @module ui/autocomplete
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxAutocomplete extends dxDropDownList {
