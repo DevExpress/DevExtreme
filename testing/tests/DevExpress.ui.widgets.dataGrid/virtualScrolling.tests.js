@@ -577,16 +577,16 @@ QUnit.module('Subscribe to external scrollable events', {
         this.scrollController.setContentItemSizes(contentSizes);
         mockDataSource.load.reset();
         this.externalDataChangedHandler.reset();
-        this.clock = sinon.useFakeTimers(),
+        this.clock = sinon.useFakeTimers();
 
-        this.$fixtureElement = $('<div>').appendTo('body');
-
+        const $container = $('<div />').appendTo('body');
+        this.$fixtureElement = $('<div />').appendTo($container);
     },
 
     afterEach: function() {
         moduleConfig.afterEach.call(this);
         this.clock.restore();
-        this.$fixtureElement.remove();
+        this.$fixtureElement.parent().remove();
     }
 }, () => {
 

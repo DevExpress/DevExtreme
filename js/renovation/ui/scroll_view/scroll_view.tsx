@@ -27,6 +27,7 @@ import {
 import { WidgetProps } from '../common/widget';
 import { ScrollableNativeProps } from './scrollable_native';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
+import { ScrollViewWrapper } from '../../component_wrapper/scroll_view';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
@@ -106,7 +107,7 @@ Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 
 
 @Component({
   defaultOptionRules,
-  jQuery: { register: true },
+  jQuery: { register: true, component: ScrollViewWrapper },
   view: viewFunction,
 })
 
@@ -115,7 +116,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @InternalState() forceReachBottom?: boolean;
 
-  @Method()
+  // @Method()
   update(): void {
     this.scrollable.update();
   }
