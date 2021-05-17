@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import Component from './common/component';
+import { Option } from './common/types.ts';
 
 export class GridPagerWrapper extends Component {
-  _optionChanged(args: { name: string; value: unknown }): void {
+  _optionChanged(args: Option): void {
     switch (args.name) {
       case 'pageIndex': {
         const pageIndexChanged = this.option('pageIndexChanged');

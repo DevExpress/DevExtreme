@@ -399,13 +399,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   /* istanbul ignore next */
-  scrollToElement(element: HTMLElement): void {
+  scrollToElement(
+    element: HTMLElement,
+    scrollToOptions: {
+      block: 'start' | 'center' | 'end' | 'nearest';
+      inline: 'start' | 'center' | 'end' | 'nearest';
+      behavior: 'auto'; 'smooth';
+    },
+  ): void {
     if (!isDefined(element)) {
       return;
     }
 
     const { top, left } = this.scrollOffset();
-    element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    element.scrollIntoView(scrollToOptions || { block: 'nearest', inline: 'nearest' });
 
     const containerEl = this.containerElement;
 
@@ -422,16 +429,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     this.vScrollLocation = -containerEl.scrollTop;
     this.hScrollLocation = -containerEl.scrollLeft;
-
-    // this.vScrollLocation = -containerEl.scrollTop;
-    // this.hScrollLocation = -containerEl.scrollLeft;
-    // this.scrollTo({ top: this.scrollTop(), left: this.scrollLeft() });
-    // if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
-    //   const top = this.getElementLocation(element, DIRECTION_VERTICAL, offset);
-    //   const left = this.getElementLocation(element, DIRECTION_HORIZONTAL, offset);
-
-    //   this.scrollTo({ top, left });
-    // }
   }
 
   @Method()
