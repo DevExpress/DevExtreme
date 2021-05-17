@@ -121,7 +121,7 @@ const dxPieChart = BaseChart.inherit({
     _disposeCore: function() {
         pieSizeEqualizer.remove(this);
         this.callBase();
-        this._centerTemplateGroup && this._centerTemplateGroup.linkOff().dispose();
+        this._centerTemplateGroup.linkOff().dispose();
     },
 
     _groupSeries: function() {
