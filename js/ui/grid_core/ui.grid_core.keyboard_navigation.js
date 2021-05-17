@@ -274,6 +274,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     // #region Key_Handlers
     _keyDownHandler: function(e) {
+        const isCommandKeyPressed = e.ctrl || e.metaKey;
+
         const isEditing = this._editingController.isEditing();
         let needStopPropagation = true;
         const originalEvent = e.originalEvent;
@@ -314,7 +316,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     break;
 
                 case 'A':
-                    if(e.ctrl) {
+                    if(isCommandKeyPressed) {
                         this._ctrlAKeyHandler(e, isEditing);
                     } else {
                         this._beginFastEditing(e.originalEvent);
@@ -334,7 +336,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     break;
 
                 case 'F':
-                    if(e.ctrl) {
+                    if(isCommandKeyPressed) {
                         this._ctrlFKeyHandler(e);
                     } else {
                         this._beginFastEditing(e.originalEvent);
@@ -471,7 +473,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
     _ctrlAKeyHandler: function(eventArgs, isEditing) {
-        if(!isEditing && eventArgs.ctrl && !eventArgs.alt && this.option('selection.mode') === 'multiple' && this.option('selection.allowSelectAll')) {
+        if(!isEditing && !eventArgs.alt && this.option('selection.mode') === 'multiple' && this.option('selection.allowSelectAll')) {
             this._selectionController.selectAll();
             eventArgs.originalEvent.preventDefault();
         }
