@@ -10,6 +10,7 @@ import Editor, {
     EditorOptions
 } from '../editor/editor';
 
+/** @namespace DevExpress.ui */
 export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponent> {
     /**
      * @docid
@@ -291,6 +292,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
  * @inherits Editor
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class dxTextEditor<TProperties = Properties> extends Editor<TProperties> {
     /**
@@ -321,6 +323,7 @@ export default class dxTextEditor<TProperties = Properties> extends Editor<TProp
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxTextEditorButton {
     /**

@@ -474,6 +474,9 @@ export interface RowDragging<T extends GridBase> {
     showDragIcons?: boolean
 }
 
+/**
+ * @namespace DevExpress.ui
+ */
 export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOptions<TComponent> {
     /**
      * @docid
@@ -1695,6 +1698,11 @@ export interface StateStoring {
     type?: 'custom' | 'localStorage' | 'sessionStorage'
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type GridBaseEditing = EditingBase;
 export interface EditingBase {
     /**
@@ -1789,6 +1797,7 @@ export interface EditingBase {
 /**
  * @docid
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export interface DataChange {
     /**
@@ -1814,6 +1823,11 @@ export interface DataChange {
     pageIndex?: number;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type GridBaseEditingTexts = EditingTextsBase;
 export interface EditingTextsBase {
     /**
@@ -1895,6 +1909,11 @@ export interface EditingTextsBase {
     validationCancelChanges?: string;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type GridBasePaging = PagingBase;
 export interface PagingBase {
     /**
@@ -1922,6 +1941,11 @@ export interface PagingBase {
     pageSize?: number;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type GridBaseScrolling = ScrollingBase;
 export interface ScrollingBase {
     /**
@@ -1980,6 +2004,11 @@ export interface ScrollingBase {
     useNative?: boolean | 'auto';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type GridBaseSelection = SelectionBase;
 export interface SelectionBase {
     /**
@@ -2006,6 +2035,7 @@ export interface SelectionBase {
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export interface GridBase {
     /**
@@ -2557,6 +2587,11 @@ export interface ColumnCustomizeTextArg {
   groupInterval?: string | number;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type GridBaseColumn = ColumnBase;
 /**
  * @docid GridBaseColumn
@@ -3024,6 +3059,11 @@ export interface ColumnLookup {
   valueExpr?: string
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type GridBaseColumnButton = ColumnButtonBase;
 /**
  * @docid GridBaseColumnButton
@@ -3466,6 +3506,10 @@ export type RowTemplateData = {
   readonly isExpanded?: boolean;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     /**
      * @docid
@@ -4505,6 +4549,11 @@ export interface SummaryTexts {
     sumOtherColumn?: string
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxDataGridEditing = Editing;
 
 export interface Editing extends EditingBase {
@@ -4545,6 +4594,11 @@ export interface Editing extends EditingBase {
     texts?: any;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxDataGridScrolling = Scrolling;
 
 export interface Scrolling extends ScrollingBase {
@@ -4558,6 +4612,11 @@ export interface Scrolling extends ScrollingBase {
     mode?: 'infinite' | 'standard' | 'virtual';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxDataGridSelection = Selection;
 
 export interface Selection extends SelectionBase {
@@ -4591,6 +4650,7 @@ export interface Selection extends SelectionBase {
  * @module ui/data_grid
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
@@ -4806,6 +4866,11 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
     updateDimensions(): void;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxDataGridColumn = Column;
 
 /**
@@ -4954,6 +5019,11 @@ export interface Column extends ColumnBase {
     type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxDataGridColumnButton = ColumnButton;
 /**
  * @docid dxDataGridColumnButton
@@ -5012,6 +5082,11 @@ export interface ColumnButton extends ColumnButtonBase {
     visible?: boolean | ((options: { component?: dxDataGrid, row?: RowObject, column?: Column }) => boolean);
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxDataGridRowObject = RowObject;
 
 /**

@@ -33,6 +33,7 @@ export interface DropDownButtonTemplateDataModel {
     readonly icon?: string;
 }
 
+/** @namespace DevExpress.ui */
 export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TComponent> {
     /**
      * @docid
@@ -153,6 +154,7 @@ export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TC
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
     /**

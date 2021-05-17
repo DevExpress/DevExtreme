@@ -118,6 +118,7 @@ export interface dxElementWrapper {
   splice(start: number, deleteCount?: number): this;
 
   text(text: string | number | boolean): this;
+  text(): string;
 
   toArray(): Element[];
 

@@ -43,6 +43,10 @@ export type OptionChangedEvent = EventInfo<dxTabs> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
     /**
      * @docid
@@ -123,6 +127,7 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
  * @module ui/tabs
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxTabs<TProperties = Properties> extends CollectionWidget<TProperties> { }
@@ -131,6 +136,7 @@ export default class dxTabs<TProperties = Properties> extends CollectionWidget<T
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxTabsItem extends CollectionWidgetItem {
     /**

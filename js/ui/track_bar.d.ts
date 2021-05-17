@@ -2,6 +2,7 @@ import Editor, {
     EditorOptions
 } from './editor/editor';
 
+/** @namespace DevExpress.ui */
 export interface dxTrackBarOptions<TComponent> extends EditorOptions<TComponent> {
     /**
      * @docid
@@ -23,5 +24,6 @@ export interface dxTrackBarOptions<TComponent> extends EditorOptions<TComponent>
  * @inherits Editor
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class dxTrackBar<TProperties> extends Editor<TProperties> { }

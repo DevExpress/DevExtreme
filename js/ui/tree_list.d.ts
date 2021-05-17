@@ -389,6 +389,10 @@ export type ColumnHeaderCellTemplateData = {
 /** @public */
 export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
      * @docid
@@ -876,6 +880,11 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     selection?: Selection;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListEditing = Editing;
 
 export interface Editing extends EditingBase {
@@ -921,6 +930,11 @@ export interface Editing extends EditingBase {
     texts?: EditingTexts;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListEditingTexts = EditingTexts;
 
 export interface EditingTexts extends EditingTextsBase {
@@ -933,6 +947,11 @@ export interface EditingTexts extends EditingTextsBase {
     addRowToNode?: string;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListPaging = Paging;
 
 export interface Paging extends PagingBase {
@@ -945,6 +964,11 @@ export interface Paging extends PagingBase {
     enabled?: boolean;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListScrolling = Scrolling;
 
 export interface Scrolling extends ScrollingBase {
@@ -958,6 +982,11 @@ export interface Scrolling extends ScrollingBase {
     mode?: 'standard' | 'virtual';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListSelection = Selection;
 
 export interface Selection extends SelectionBase {
@@ -974,6 +1003,7 @@ export interface Selection extends SelectionBase {
  * @inherits GridBase
  * @module ui/tree_list
  * @export default
+ * @namespace DevExpress.ui
  * @prevFileNamespace DevExpress.ui
  * @public
  */
@@ -1219,6 +1249,11 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     updateDimensions(): void;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListColumn = Column;
 
 /**
@@ -1303,6 +1338,11 @@ export interface Column extends ColumnBase {
     type?: 'adaptive' | 'buttons';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListColumnButton = ColumnButton;
 
 
@@ -1363,6 +1403,11 @@ export interface ColumnButton extends ColumnButtonBase {
     visible?: boolean | ((options: { readonly component: dxTreeList, row?: RowObject, readonly column: Column }) => boolean);
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListNode = Node;
 
 /**
@@ -1416,6 +1461,11 @@ export interface Node {
     visible?: boolean;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListRowObject = RowObject;
 
 /**

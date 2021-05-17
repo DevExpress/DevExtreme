@@ -105,6 +105,10 @@ export type ValueChangedEvent = NativeEventInfo<dxSelectBox> & ValueChangedInfo;
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TComponent> {
     /**
      * @docid
@@ -186,6 +190,7 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
  * @module ui/select_box
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxSelectBox<TProperties = Properties> extends dxDropDownList<TProperties> { }

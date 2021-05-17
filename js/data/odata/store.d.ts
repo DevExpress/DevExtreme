@@ -17,6 +17,7 @@ interface PromiseExtension<T> {
     ): Promise<TResult1 | TResult2>;
 }
 
+/** @namespace DevExpress.data */
 export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
      * @docid

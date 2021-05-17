@@ -6,6 +6,7 @@ import {
     EventInfo
 } from '../../events/index';
 
+/** @namespace DevExpress.ui */
 export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
@@ -83,6 +84,7 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class Widget<TProperties> extends DOMComponent<TProperties> {
     /**
@@ -115,6 +117,7 @@ export default class Widget<TProperties> extends DOMComponent<TProperties> {
  * @section uiWidgetMarkupComponents
  * @prevFileNamespace DevExpress.ui
  * @public
+ * @namespace DevExpress.ui
  */
 export var dxItem: any;
 
@@ -126,6 +129,7 @@ export var dxItem: any;
  * @default undefined
  * @section Common
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | {

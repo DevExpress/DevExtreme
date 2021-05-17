@@ -102,6 +102,10 @@ export type ValueChangedEvent = NativeEventInfo<dxTagBox> & ValueChangedInfo;
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     /**
      * @docid
@@ -236,6 +240,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
  * @module ui/tag_box
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxTagBox extends dxSelectBox<dxTagBoxOptions> { }

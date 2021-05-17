@@ -39,6 +39,10 @@ export type ItemRenderedEvent = NativeEventInfo<dxTileView> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTileView> & ChangedOptionInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**
      * @docid
@@ -126,6 +130,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
  * @module ui/tile_view
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxTileView extends CollectionWidget<dxTileViewOptions> {
@@ -143,6 +148,7 @@ export default class dxTileView extends CollectionWidget<dxTileViewOptions> {
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxTileViewItem extends CollectionWidgetItem {
     /**

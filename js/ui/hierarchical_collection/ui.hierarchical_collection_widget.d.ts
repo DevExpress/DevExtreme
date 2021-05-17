@@ -2,6 +2,7 @@ import CollectionWidget, {
     CollectionWidgetOptions
 } from '../collection/ui.collection_widget.base';
 
+/** @namespace DevExpress.ui */
 export interface HierarchicalCollectionWidgetOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
     /**
      * @docid
@@ -62,5 +63,6 @@ export interface HierarchicalCollectionWidgetOptions<TComponent> extends Collect
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class HierarchicalCollectionWidget<TProperties> extends CollectionWidget<TProperties> { }

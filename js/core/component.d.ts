@@ -2,6 +2,7 @@ import {
   DxElement
 } from './element';
 
+/** @namespace DevExpress */
 export interface ComponentOptions<TComponent> {
   /**
    * @docid

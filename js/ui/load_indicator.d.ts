@@ -20,6 +20,10 @@ export type InitializedEvent = InitializedEventInfo<dxLoadIndicator>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
      * @docid
@@ -35,6 +39,7 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
  * @module ui/load_indicator
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxLoadIndicator extends Widget<dxLoadIndicatorOptions> { }

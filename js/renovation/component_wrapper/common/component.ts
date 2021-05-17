@@ -67,7 +67,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     }, {});
 
     this._checkContentReadyOption = (fullName) => {
-      return !!contentReadyOptions[fullName];  
+      return !!contentReadyOptions[fullName];
     };
     return this._checkContentReadyOption(fullName);
   }
@@ -163,7 +163,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       parentNode.$V = containerNode.$V;
       render(
         this._disposeMethodCalled ? createElement(
-          containerNode.tagName, 
+          containerNode.tagName,
           this.elementAttr
         ) : null,
         parentNode);
@@ -200,24 +200,27 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     return this._elementAttr;
   }
 
-  _patchOptionValues(options: Record<string, unknown>) {
+  _patchOptionValues(options: Record<string, unknown> = {}) {
     const { allowNull, twoWay, elements, props } = this._propsInfo;
     const defaultProps = this._viewComponent.defaultProps;
-
-    const widgetProps = [...props, 'onContentReady'].reduce((acc, propName) => {
+    const { ref, children, onKeyboardHandled } = options;
+    const onKeyDown = onKeyboardHandled ? (_, event_options) => (onKeyboardHandled as (unknown) => void)(event_options) : undefined;
+    const widgetProps = {
+      ref,
+      children,
+      onKeyDown,
+    };
+    [...props, 'onContentReady'].forEach(propName => {
       if (options.hasOwnProperty(propName)) {
-        acc[propName] = options[propName];
+        widgetProps[propName] = options[propName];
       }
-      return acc;
-    }, {
-      ref: options.ref,
-      children: options.children,
+
     });
 
     allowNull.forEach(
       setDefaultOptionValue(widgetProps, () => null)
     );
-
+    
     Object.keys(defaultProps).forEach(
       setDefaultOptionValue(
         widgetProps,
@@ -243,7 +246,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
   getProps() {
     const { elementAttr } = this.option();
-    
+
     const options = this._patchOptionValues({
       ...this._props,
       ref: this._viewRef,
@@ -270,8 +273,22 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     return {};
   }
 
+  getDefaultTemplates() {
+    const names = this.getDefaultTemplateNames();
+    const result = {};
+
+    names.forEach((name) => result[name] = 'dx-renovation-template-mock');
+
+    return result;
+  }
+
+  getDefaultTemplateNames(): string[] {
+    return [];
+  }
+
   _init() {
     super._init();
+    this._templateManager.addDefaultTemplates(this.getDefaultTemplates());
     this._props = { ...this.option() };
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
@@ -302,7 +319,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     }
     this._actionsMap[event] = action;
   }
-  
+
   _optionChanged(option) {
     const { name, fullName } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);
@@ -332,6 +349,9 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
     const template = this._getTemplate(templateOption);
 
+    if (template.toString() === 'dx-renovation-template-mock') {
+      return undefined;
+    }
     const templateWrapper = (model: any) => {
       return createElement(
         TemplateWrapper,
@@ -407,5 +427,5 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 }
 
 /// #DEBUG
-ComponentWrapper.IS_RENOVATED_WIDGET = true;
+ComponentWrapper.IS_RENOVATED_WIDGET = true;  
 /// #ENDDEBUG

@@ -66,6 +66,10 @@ export type PasteEvent = NativeEventInfo<dxNumberBox>;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxNumberBox> & ValueChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid
@@ -149,6 +153,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
  * @module ui/number_box
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> { }

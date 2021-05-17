@@ -104,6 +104,7 @@ export type ZoomFactorChangedEvent = EventInfo<dxVectorMap> & {
 /**
  * @docid
  * @publicName Layer
+ * @namespace DevExpress.viz
  */
 export interface MapLayer {
     /**
@@ -158,6 +159,7 @@ export interface MapLayer {
 /**
  * @docid
  * @publicName Layer Element
+ * @namespace DevExpress.viz
  */
 export interface MapLayerElement {
     /**
@@ -222,6 +224,7 @@ export interface MapLayerElement {
  * @docid
  * @inherits BaseLegendItem
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface VectorMapLegendItem extends BaseLegendItem {
     /**
@@ -250,6 +253,10 @@ export interface VectorMapLegendItem extends BaseLegendItem {
     start?: number;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid
@@ -732,6 +739,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
  * @docid
  * @inherits dxVectorMapCommonAnnotationConfig
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
     /**
@@ -747,6 +755,7 @@ export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotation
  * @docid
  * @inherits BaseWidgetAnnotationConfig
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
@@ -788,6 +797,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 
+/** @namespace DevExpress.viz */
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
@@ -885,6 +895,7 @@ export interface dxVectorMapLegends extends BaseLegend {
       layer?: string
     };
 }
+/** @namespace DevExpress.viz */
 export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
@@ -919,6 +930,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
  * @module viz/vector_map
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
 export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {

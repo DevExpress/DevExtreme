@@ -2,6 +2,7 @@ import {
     Properties as TextBoxProperties
 } from '../text_box';
 
+/** @namespace DevExpress.ui */
 export interface SearchBoxMixinOptions {
     /**
      * @docid

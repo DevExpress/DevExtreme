@@ -81,6 +81,7 @@ import dxTreeMap, { Properties as TreeMapProperties } from '../viz/tree_map';
 import dxVectorMap, { Properties as VectorMapProperties } from '../viz/vector_map';
 
 declare module '../core/element' {
+    interface Condition extends JQueryEventObject { }
     interface ElementWrapper<T extends Element> extends JQuery<T> { }
     interface ElementsArrayWrapper<T extends Element> extends JQuery<T> { }
     interface InternalElementWrapper<T extends Element> extends JQuery<T> { }

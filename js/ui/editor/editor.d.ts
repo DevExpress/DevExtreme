@@ -11,6 +11,7 @@ export interface ValueChangedInfo {
     readonly value?: any;
 }
 
+/** @namespace DevExpress.ui */
 export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid
@@ -96,6 +97,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class Editor<TProperties = Properties> extends Widget<TProperties> {
     /**

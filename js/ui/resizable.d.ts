@@ -38,6 +38,10 @@ export type ResizeStartEvent = NativeEventInfo<dxResizable> & ResizeInfo;
 /** @public */
 export type ResizeEndEvent = NativeEventInfo<dxResizable> & ResizeInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid
@@ -144,6 +148,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @module ui/resizable
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxResizable extends DOMComponent<dxResizableOptions> { }

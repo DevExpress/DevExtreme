@@ -14,6 +14,7 @@ import {
     dxMenuBaseItem
 } from '../menu';
 
+/** @namespace DevExpress.ui */
 export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWidgetOptions<TComponent> {
     /**
      * @docid
@@ -119,6 +120,7 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
  * @inherits HierarchicalCollectionWidget
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class dxMenuBase<TProperties> extends HierarchicalCollectionWidget<TProperties> {
     /**

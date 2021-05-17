@@ -55,6 +55,10 @@ export type ShownEvent = EventInfo<dxPopover>;
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent> {
     /**
      * @docid
@@ -159,6 +163,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.ui */
 export interface dxPopoverAnimation extends dxPopupAnimation {
     /**
      * @docid dxPopoverOptions.animation.hide
@@ -182,6 +187,7 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
  * @module ui/popover
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxPopover<TProperties = Properties> extends dxPopup<TProperties> {

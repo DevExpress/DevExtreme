@@ -279,6 +279,15 @@ const DropDownButton = Widget.inherit({
     },
 
     _buttonGroupOptions() {
+        const buttonTemplate = (this.option('splitButton') || !this.option('showArrowIcon')) ?
+            'content' : ({ text, icon }, buttonContent) => {
+                const $firstIcon = getImageContainer(icon);
+                const $textContainer = text ? $('<span>').text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
+                const $secondIcon = getImageContainer('spindown').addClass(DX_ICON_RIGHT_CLASS);
+
+                $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
+            };
+
         return extend({
             items: this._getButtonGroupItems(),
             focusStateEnabled: this.option('focusStateEnabled'),
@@ -290,17 +299,7 @@ const DropDownButton = Widget.inherit({
             selectionMode: 'none',
             tabIndex: this.option('tabIndex'),
             onKeyboardHandled: (e) => this._keyboardHandler(e),
-            buttonTemplate: ({ text, icon }, buttonContent) => {
-                if(this.option('splitButton') || !this.option('showArrowIcon')) {
-                    return 'content';
-                }
-
-                const $firstIcon = getImageContainer(icon);
-                const $textContainer = text ? $('<span>').text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
-                const $secondIcon = getImageContainer('spindown').addClass(DX_ICON_RIGHT_CLASS);
-
-                $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
-            }
+            buttonTemplate,
         }, this._options.cache('buttonGroupOptions'));
     },
 
@@ -644,7 +643,7 @@ const DropDownButton = Widget.inherit({
                 break;
             case 'showArrowIcon':
                 this._updateArrowClass();
-                this._buttonGroup.repaint();
+                this._renderButtonGroup();
                 this._popup && this._popup.repaint();
                 break;
             case 'width':

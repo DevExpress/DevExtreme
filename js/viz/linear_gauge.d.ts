@@ -51,7 +51,10 @@ export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
-
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
      * @docid
@@ -96,6 +99,7 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
      */
     valueIndicator?: GaugeIndicator;
 }
+/** @namespace DevExpress.viz */
 export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.horizontalOrientation
@@ -133,6 +137,7 @@ export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
       end?: number
     } | number;
 }
+/** @namespace DevExpress.viz */
 export interface dxLinearGaugeScale extends BaseGaugeScale {
     /**
      * @docid dxLinearGaugeOptions.scale.horizontalOrientation
@@ -165,6 +170,7 @@ export interface dxLinearGaugeScale extends BaseGaugeScale {
      */
     verticalOrientation?: 'bottom' | 'center' | 'top';
 }
+/** @namespace DevExpress.viz */
 export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxLinearGaugeOptions.scale.label.indentFromTick
@@ -180,6 +186,7 @@ export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @module viz/linear_gauge
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
 export default class dxLinearGauge extends BaseGauge<dxLinearGaugeOptions> { }

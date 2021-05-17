@@ -90,7 +90,10 @@ export type OptionChangedEvent = EventInfo<dxTreeMap> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
 
-
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
@@ -595,6 +598,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     valueField?: string;
 }
+/** @namespace DevExpress.viz */
 export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.contentTemplate
@@ -628,6 +632,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
  * @module viz/tree_map
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
 export default class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
@@ -681,6 +686,7 @@ export default class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
 /**
  * @docid
  * @publicName Node
+ * @namespace DevExpress.viz
  */
 export interface dxTreeMapNode {
     /**

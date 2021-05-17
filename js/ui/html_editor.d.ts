@@ -54,6 +54,10 @@ export interface MentionTemplateData {
     readonly id?: string | number;
     readonly value?: any;
 }
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
@@ -162,6 +166,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
  * @module ui/html_editor
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
@@ -395,6 +400,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorMediaResizing {
     /**
@@ -416,6 +422,7 @@ export interface dxHtmlEditorMediaResizing {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorMention {
     /**
@@ -499,6 +506,7 @@ export interface dxHtmlEditorMention {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorToolbar {
     /**
@@ -526,6 +534,7 @@ export interface dxHtmlEditorToolbar {
 /**
  * @docid
  * @inherits dxToolbarItem
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
@@ -554,6 +563,7 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorVariables {
     /**

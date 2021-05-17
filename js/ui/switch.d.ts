@@ -25,6 +25,10 @@ export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxSwitch> & ValueChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**
      * @docid
@@ -83,6 +87,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @module ui/switch
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxSwitch extends Editor<dxSwitchOptions> { }

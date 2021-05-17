@@ -19,6 +19,7 @@ import BaseWidget, {
     BaseWidgetTooltip
 } from '../core/base_widget';
 
+/** @namespace DevExpress.viz */
 export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
@@ -81,6 +82,7 @@ export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TCom
      */
     tooltip?: BaseSparklineTooltip;
 }
+/** @namespace DevExpress.viz */
 export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseSparklineOptions.tooltip.contentTemplate
@@ -122,6 +124,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  */
 export default class BaseSparkline<TProperties> extends BaseWidget<TProperties> {
     /**

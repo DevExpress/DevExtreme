@@ -43,6 +43,7 @@ export interface FileSavingEventInfo<T> {
   readonly data: Blob;
 }
 
+/** @namespace DevExpress.viz */
 export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
@@ -210,6 +211,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetExport {
     /**
      * @docid BaseWidgetOptions.export.backgroundColor
@@ -273,6 +275,7 @@ export interface BaseWidgetExport {
      */
     svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>);
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetLoadingIndicator {
     /**
      * @docid BaseWidgetOptions.loadingIndicator.backgroundColor
@@ -311,6 +314,7 @@ export interface BaseWidgetLoadingIndicator {
      */
     text?: string;
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetMargin {
     /**
      * @docid BaseWidgetOptions.margin.bottom
@@ -341,6 +345,7 @@ export interface BaseWidgetMargin {
      */
     top?: number;
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetSize {
     /**
      * @docid BaseWidgetOptions.size.height
@@ -357,6 +362,7 @@ export interface BaseWidgetSize {
      */
     width?: number;
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetTitle {
     /**
      * @docid BaseWidgetOptions.title.font
@@ -489,6 +495,7 @@ export interface BaseWidgetTitle {
      */
     wordWrap?: WordWrapType;
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetTooltip {
     /**
      * @docid BaseWidgetOptions.tooltip.arrowLength
@@ -649,6 +656,7 @@ export interface BaseWidgetTooltip {
  * @hidden
  * @inherits DOMComponent
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  */
 export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
     /**
@@ -720,6 +728,7 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.viz
  * @hidden
  */
 export interface Font {
@@ -762,6 +771,7 @@ export interface Font {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface BaseWidgetAnnotationConfig {
     /**

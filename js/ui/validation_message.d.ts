@@ -6,6 +6,7 @@ import dxOverlay, {
     dxOverlayOptions
 } from './overlay';
 
+/** @namespace DevExpress.ui */
 export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidationMessage> {
     mode?: string;
 
@@ -17,7 +18,7 @@ export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidatio
 
     offset?: object;
 }
-
+/** @namespace DevExpress.ui */
 export default class dxValidationMessage extends dxOverlay<dxValidationMessageOptions> { }
 
 /** @public */

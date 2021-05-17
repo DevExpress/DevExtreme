@@ -52,7 +52,10 @@ export type RouteRemovedEvent = EventInfo<dxMap> & {
   readonly options?: any;
 }
 
-/** @public */
+/**
+ * @public
+ * @namespace DevExpress.ui
+ */
 export interface MapLocation {
     /**
      * @docid
@@ -70,6 +73,10 @@ export interface MapLocation {
     lng: number;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid
@@ -373,6 +380,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
  * @module ui/map
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxMap extends Widget<dxMapOptions> {

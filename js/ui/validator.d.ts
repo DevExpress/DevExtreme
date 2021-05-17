@@ -37,6 +37,10 @@ export type ValidatedEvent = {
     status?: 'valid' | 'invalid' | 'pending'
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**
      * @docid
@@ -118,6 +122,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @module ui/validator
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxValidator extends DOMComponent<dxValidatorOptions> {
@@ -148,6 +153,7 @@ export default class dxValidator extends DOMComponent<dxValidatorOptions> {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxValidatorResult {
     /**

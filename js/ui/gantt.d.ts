@@ -235,6 +235,10 @@ export type TimeTooltipTemplateData = {
     readonly end: Date;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid
@@ -1004,6 +1008,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
  * @module ui/gantt
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxGantt extends Widget<dxGanttOptions> {
@@ -1196,6 +1201,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxGanttToolbar {
     /**
@@ -1210,6 +1216,7 @@ export interface dxGanttToolbar {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxGanttContextMenu {
     /**
@@ -1231,6 +1238,7 @@ export interface dxGanttContextMenu {
 /**
  * @docid
  * @inherits dxToolbarItem
+ * @namespace DevExpress.ui
  */
 export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
@@ -1253,6 +1261,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
 /**
  * @docid
  * @inherits dxContextMenuItem
+ * @namespace DevExpress.ui
  */
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
     /**
@@ -1267,6 +1276,7 @@ export interface dxGanttContextMenuItem extends dxContextMenuItem {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxGanttStripLine {
     /**

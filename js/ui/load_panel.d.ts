@@ -46,6 +46,10 @@ export type ShowingEvent = EventInfo<dxLoadPanel>;
 /** @public */
 export type ShownEvent = EventInfo<dxLoadPanel>;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
@@ -155,6 +159,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.ui */
 export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     /**
      * @docid dxLoadPanelOptions.animation.hide
@@ -177,6 +182,7 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
  * @module ui/load_panel
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxLoadPanel extends dxOverlay<dxLoadPanelOptions> { }

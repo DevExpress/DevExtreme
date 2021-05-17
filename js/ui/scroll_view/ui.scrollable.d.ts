@@ -23,6 +23,7 @@ export interface ScrollEventInfo<T> extends NativeEventInfo<T> {
     readonly reachedBottom?: boolean;
 }
 
+/** @namespace DevExpress.ui */
 export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid

@@ -62,19 +62,6 @@ QUnit.module('Mandatory component setup', {
     });
 
     widgets.forEach((meta) => {
-        QUnit.test(`${`dx${meta.name}`} - pass restAttributes to component's root`, function(assert) {
-            const message = 'You should pass restAttributes to the component\'s root\n'
-            + '<root {...viewModel.restAttributes} />';
-
-            $('#component')[`dx${meta.name}`]({
-                'data-custom-option': 'custom-value',
-            });
-
-            assert.equal($('#component').attr('data-custom-option'), 'custom-value', message);
-        });
-    });
-
-    widgets.forEach((meta) => {
         QUnit.test(`${`dx${meta.name}`} - merge own classes with className from restAttributes`, function(assert) {
             const message = 'You should merge your cssClass with className from restAttributes\n'
             + '<root className={viewModel.className} />\n'

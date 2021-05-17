@@ -19,4 +19,8 @@ function prepareTableValue(value) {
     return value.replace(/(\s?style="[^"]*")|(\s?data-row="[^"]*")/ig, '');
 }
 
-export { checkLink, prepareTableValue };
+function prepareEmbedValue(value) {
+    return value.replace(/\uFEFF/g, '');
+}
+
+export { checkLink, prepareTableValue, prepareEmbedValue };

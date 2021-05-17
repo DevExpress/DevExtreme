@@ -127,6 +127,32 @@ describe('Button', () => {
       });
     });
 
+    it('should pass template data to the template function', () => {
+      const template = jest.fn(() => <div />);
+
+      mount(viewFunction({
+        props: {
+          template,
+          text: 'button',
+          icon: 'icon',
+          templateData: {
+            templateField1: 'field1',
+            templateField2: 'field2',
+          },
+        },
+      } as any) as any);
+
+      expect(template).toHaveBeenCalledTimes(1);
+      expect(template).toHaveBeenCalledWith({
+        data: {
+          icon: 'icon',
+          templateField1: 'field1',
+          templateField2: 'field2',
+          text: 'button',
+        },
+      }, {});
+    });
+
     it('should render template', () => {
       const template = ({ data: { text } }: {
         data: {
