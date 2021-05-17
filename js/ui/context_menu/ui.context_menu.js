@@ -17,6 +17,8 @@ import { addNamespace } from '../../events/utils';
 import Overlay from '../overlay';
 import MenuBase from './ui.menu_base';
 import { Deferred } from '../../core/utils/deferred';
+import { name as contextMenuEventName } from '../../events/contextmenu';
+import holdEvent from '../../events/hold';
 
 const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item';
@@ -363,6 +365,18 @@ class ContextMenu extends MenuBase {
         this._addCustomCssClass($overlayContent);
         this._addPlatformDependentClass($overlayContent);
         this._attachContextMenuEvent();
+    }
+
+    preventShowingDefaultContextMenuAboveOverlay() {
+        const $itemContainer = this._itemContainer();
+        const eventName = addNamespace(contextMenuEventName, this.NAME);
+
+        eventsEngine.off($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`);
+        eventsEngine.on($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`, ((e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            eventsEngine.off($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`);
+        }).bind(this));
     }
 
     _itemContextMenuHandler(e) {
@@ -840,6 +854,11 @@ class ContextMenu extends MenuBase {
             event && event.stopPropagation();
 
             this._setAriaAttributes();
+
+            // T983617. Prevent the browser's context menu appears on desktop touch screens.
+            if(event?.originalEvent?.type === holdEvent.name) {
+                this.preventShowingDefaultContextMenuAboveOverlay();
+            }
         }
 
         return promise;
