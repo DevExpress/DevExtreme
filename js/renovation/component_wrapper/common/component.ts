@@ -311,7 +311,7 @@ export default class ComponentWrapper extends DOMComponent {
 
   _init(): void {
     super._init();
-    this._templateManager.addDefaultTemplates(this.getDefaultTemplates());
+    this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
     this._props = { ...this.option() };
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
