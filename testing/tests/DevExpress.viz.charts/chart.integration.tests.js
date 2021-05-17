@@ -2499,6 +2499,7 @@ const VALIDATE_PIECHART_GROUPS = [
     'dxc-series-group',
     'dxc-labels-group',
     'dxc-legend',
+    'dxc-hole-template',
     'dxc-annotations'
 ];
 
@@ -3021,25 +3022,6 @@ QUnit.test('pie chart groups order', function(assert) {
     const groups = root.find('>' + groupTag);
 
     checkOrder(assert, groups, VALIDATE_PIECHART_GROUPS);
-});
-
-// T997232
-QUnit.test('pie chart groups order. pie with centerTemplate', function(assert) {
-    const chart = this.createPieChart({
-        series: {},
-        dataSource: [{ arg: 0, val: 2 }],
-        centerTemplate() {}
-    });
-
-    const root = $(chart._renderer.root.element);
-    const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
-    const groups = root.find('>' + groupTag);
-
-    const groupsOrder = VALIDATE_PIECHART_GROUPS.slice();
-
-    groupsOrder.splice(4, 0, 'dxc-hole-template');
-
-    checkOrder(assert, groups, groupsOrder);
 });
 
 // T412270
