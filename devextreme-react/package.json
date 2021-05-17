@@ -13,7 +13,7 @@
     "clean": "gulp clean",
     "build": "npm run clean && gulp generate",
     "pack": "npm run clean && gulp npm.pack",
-    "test": "jest"
+    "test": "npm run build && jest"
   },
   "keywords": [
     "react",
