@@ -9,15 +9,15 @@ import {
   TwoWay,
 } from '@devextreme-generator/declarations';
 
-import BaseComponent from './base_test_widget';
+import BaseTestComponent from './wrappers/base';
 
-export const view = ({ restAttributes }: OptionsCheckWidget): JSX.Element => (
+export const view = ({ restAttributes }: OptionsTestWidget): JSX.Element => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <div {...restAttributes} />
 );
 
 @ComponentBindings()
-export class OptionsCheckWidgetProps {
+export class OptionsTestWidgetProps {
   @OneWay() text = 'default text';
 
   @TwoWay() twoWayProp = 1;
@@ -46,18 +46,18 @@ export class OptionsCheckWidgetProps {
 @Component({
   jQuery: {
     register: true,
-    component: BaseComponent,
+    component: BaseTestComponent,
   },
   view,
 })
-export default class OptionsCheckWidget extends JSXComponent(OptionsCheckWidgetProps) {
+export default class OptionsTestWidget extends JSXComponent(OptionsTestWidgetProps) {
   @Method()
   updateTwoWayPropCheck(): void {
     this.props.twoWayProp += 1;
   }
 
   @Method()
-  getLastReceivedProps(): OptionsCheckWidgetProps {
+  getLastReceivedProps(): OptionsTestWidgetProps {
     return this.props;
   }
 }
