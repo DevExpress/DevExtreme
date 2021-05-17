@@ -3706,7 +3706,6 @@ QUnit.module('View\'s focus', {
 
         assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'the first cell is still focused');
     });
-
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
