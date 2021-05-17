@@ -12,6 +12,7 @@ import {
   Mutable,
 } from '@devextreme-generator/declarations';
 import type DomComponent from '../../../core/dom_component';
+import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-line import/named
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { EventCallback } from './event_callback.d';
 import { renderTemplate } from '../../utils/render_template';
@@ -30,16 +31,11 @@ export const viewFunction = ({
   />
 );
 
-interface ComponentConstructor<TProperties> {
-  new(element: HTMLDivElement, options?: TProperties): DomComponent<TProperties>;
-  getInstance: (widgetRef: HTMLDivElement) => DomComponent<TProperties>;
-}
-
 @ComponentBindings()
 export class DomComponentWrapperProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
-  @OneWay() componentType!: ComponentConstructor<Record<string, any>>;
+  @OneWay() componentType!: ComponentClass<Record<string, any>>;
 
   @OneWay() componentProps!: {
     className?: string;

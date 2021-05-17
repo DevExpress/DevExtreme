@@ -130,6 +130,11 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
     _templateManager: TemplateManager;
 }
 
+export type ComponentClass<TProperties> = {
+    new(element: HTMLDivElement, options?: TProperties): DOMComponent<TProperties>;
+    getInstance: (widgetRef: HTMLDivElement) => DOMComponent<TProperties>;
+}
+
 type Properties = DOMComponentOptions<DOMComponent<Properties>>;
 
 /** @deprecated use Properties instead */
