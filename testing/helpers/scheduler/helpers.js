@@ -589,6 +589,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getTimePanelCells: () => $(CLASSES.timePanelCell),
             getVirtualCells: () => $(CLASSES.virtualCell),
             getOrdinaryHeaderPanelCells: () => $(`${CLASSES.headerPanelCell}:not(${CLASSES.weekHeaderPanelCell})`),
+            getWeekDayHeaderPanelCells: () => $(`${CLASSES.weekHeaderPanelCell}`),
             getTimePanelCurrentTimeCells: () => $(CLASSES.currentTimeCell),
             getHeaderPanelCurrentTimeCells: () => $(CLASSES.headerPanelCurrentTimeCell),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
