@@ -5,21 +5,6 @@ import { Widget } from '../common/widget';
 import { BoxProps } from './box_props';
 import { combineClasses } from '../../utils/combine_classes';
 
-const DIRECTION_MAP = { row: 'row', col: 'column' };
-const JUSTIFY_CONTENT_MAP = {
-  start: 'flex-start',
-  end: 'flex-end',
-  center: 'center',
-  'space-between': 'space-between',
-  'space-around': 'space-around',
-};
-const ALIGN_ITEMS_MAP = {
-  start: 'flex-start',
-  end: 'flex-end',
-  center: 'center',
-  stretch: 'stretch',
-};
-
 export const viewFunction = (viewModel: Box): JSX.Element => (
   <Widget
     classes={viewModel.cssClasses}
@@ -40,12 +25,24 @@ export class Box extends JSXComponent<BoxProps>() {
   }
 
   get cssStyles(): { [key: string]: string } {
+    const DIRECTION_MAP = { row: 'row', col: 'column' };
     const tryGetFromMap = (prop, map): string => ((prop in map) ? map[prop] : prop);
     return {
       display: 'flex',
       flexDirection: DIRECTION_MAP[this.props.direction],
-      justifyContent: tryGetFromMap(this.props.align, JUSTIFY_CONTENT_MAP),
-      alignItems: tryGetFromMap(this.props.crossAlign, ALIGN_ITEMS_MAP),
+      justifyContent: tryGetFromMap(this.props.align, {
+        start: 'flex-start',
+        end: 'flex-end',
+        center: 'center',
+        'space-between': 'space-between',
+        'space-around': 'space-around',
+      }),
+      alignItems: tryGetFromMap(this.props.crossAlign, {
+        start: 'flex-start',
+        end: 'flex-end',
+        center: 'center',
+        stretch: 'stretch',
+      }),
     };
   }
 }
