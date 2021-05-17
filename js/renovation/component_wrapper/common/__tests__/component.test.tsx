@@ -7,6 +7,7 @@ import './utils/test_components/empty_test_widget';
 import './utils/test_components/test_widget';
 import './utils/test_components/options_check_widget';
 import './utils/test_components/templated_test_widget';
+import './utils/test_components/non_templated_test_widget';
 import {
   defaultEvent,
   emitKeyboard,
@@ -20,6 +21,7 @@ const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrap
   dxTestWidget: any;
   dxOptionsCheckWidget: any;
   dxTemplatedTestWidget: any;
+  dxNonTemplatedTestWidget: any;
 };
 
 beforeEach(() => {
@@ -38,6 +40,10 @@ afterEach(() => {
 describe('Misc cases', () => {
   it('empty component creation does not fail', () => {
     expect(() => $('#component').dxEmptyTestWidget({})).not.toThrowError();
+  });
+
+  it('component creation does not fail if component does not have template', () => {
+    expect(() => { $('#component').dxNonTemplatedTestWidget({}); }).not.toThrow();
   });
 
   it('on disposing should clean effects', () => {
