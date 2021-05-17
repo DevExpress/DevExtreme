@@ -93,11 +93,11 @@ const moduleConfig = {
     }
 };
 
-const clearInput = (element, keyboard) => {
-    while(element.val()) {
-        keyboard.press('backspace');
-        keyboard.press('del');
-    }
+const clearInput = ($element, keyboard) => {
+    const textLength = $element.val().length;
+    keyboard
+        .caret({ start: 0, end: textLength })
+        .press('backspace');
 };
 
 const getExpectedResult = (date, mode, stringDate) => {
