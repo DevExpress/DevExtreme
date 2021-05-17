@@ -21,12 +21,12 @@ jobs:
 
     - name: Build
       run: npm run build
-
-    - name: Install webpack-cli
-      run: npm install --save-dev webpack-cli  
     
     - name: Install webpack 5 version  
       run: npm install --save-dev webpack@5  
+      
+    - name: Install webpack-cli
+      run: npm install --save-dev webpack-cli  
 
     - name: Install globalize
       run: npm install --save-dev devextreme-cldr-data globalize
