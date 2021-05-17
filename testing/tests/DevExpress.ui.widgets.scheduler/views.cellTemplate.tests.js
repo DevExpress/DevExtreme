@@ -992,6 +992,96 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
+        function generateDates(startDate, endDate) {
+            const result = [];
+
+            let currentDate = startDate;
+            while(currentDate <= endDate) {
+                result.push(currentDate);
+                currentDate = new Date(currentDate.getTime() + dayDurationInMS);
+            }
+
+            return result;
+        }
+
+        [
+            {
+                type: 'day',
+                description: 'startDate is before the currentDate',
+                startDate: new Date(2021, 7, 22),
+                expectedCells: generateDates(new Date(2021, 7, 22), new Date(2021, 7, 24)),
+            }, {
+                type: 'day',
+                description: 'startDate is equal to currentDate',
+                startDate: new Date(2021, 7, 23),
+                expectedCells: generateDates(new Date(2021, 7, 23), new Date(2021, 7, 25)),
+            }, {
+                type: 'day',
+                description: 'startDate is after the currentDate',
+                startDate: new Date(2021, 7, 24),
+                expectedCells: generateDates(new Date(2021, 7, 21), new Date(2021, 7, 23)),
+            }, {
+                type: 'week',
+                description: 'startDate is before the currentDate',
+                startDate: new Date(2021, 7, 19),
+                expectedCells: generateDates(new Date(2021, 7, 15), new Date(2021, 8, 4)),
+            }, {
+                type: 'week',
+                description: 'startDate is equal to currentDate',
+                startDate: new Date(2021, 7, 23),
+                expectedCells: generateDates(new Date(2021, 7, 22), new Date(2021, 8, 11)),
+            }, {
+                type: 'week',
+                description: 'startDate is after the currentDate',
+                startDate: new Date(2021, 7, 29),
+                expectedCells: generateDates(new Date(2021, 7, 8), new Date(2021, 7, 28)),
+            }, {
+                type: 'month',
+                description: 'startDate is before the currentDate',
+                startDate: new Date(2021, 6, 19),
+                expectedCells: generateDates(new Date(2021, 5, 27), new Date(2021, 9, 2)),
+            }, {
+                type: 'month',
+                description: 'startDate is equal to currentDate',
+                startDate: new Date(2021, 7, 23),
+                expectedCells: generateDates(new Date(2021, 7, 1), new Date(2021, 10, 6)),
+            }, {
+                type: 'month',
+                description: 'startDate is after the currentDate',
+                startDate: new Date(2021, 8, 1),
+                expectedCells: generateDates(new Date(2021, 4, 30), new Date(2021, 8, 4)),
+            }
+        ].forEach(({ type, description, startDate, expectedCells }) => {
+            test(`dataCellTemplate should have correct options in ${type} view when ${description}`, function(assert) {
+                const renderedCells = [];
+
+                createWrapper({
+                    dataSource: [],
+                    views: [
+                        {
+                            type,
+                            intervalCount: 3,
+                            startDate,
+                        }
+                    ],
+                    currentView: type,
+                    showAllDayPanel: false,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    cellDuration: 60,
+                    currentDate: new Date(2021, 7, 23),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        if(!data.allDay) {
+                            renderedCells.push(data.startDate);
+                        }
+                    },
+                });
+
+                assert.deepEqual(renderedCells, expectedCells, 'Template options are correct');
+            });
+        });
+
         [{
             viewType: 'day',
             expectedTemplateOptions: [dataCells[0]],
