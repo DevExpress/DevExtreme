@@ -5,5 +5,11 @@ module.exports = {
     },
     resolve: {
         modules: ['./artifacts/npm/devextreme', 'node_modules'],
+        alias: {
+            globalize$: ('node_modules/globalize/dist/globalize.js'),
+            globalize: ('node_modules/globalize/dist/globalize'),
+            cldr$: ('node_modules/cldrjs/dist/cldr.js'),
+            cldr: ('node_modules/cldrjs/dist/cldr')
+        },
     },
 };
