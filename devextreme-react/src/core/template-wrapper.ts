@@ -24,6 +24,7 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
   private readonly _removalListenerRef = React.createRef<HTMLElement>();
 
   private element: HTMLElement | undefined | null;
+  private hiddenElement: HTMLElement | undefined | null;
 
   constructor(props: ITemplateWrapperProps) {
     super(props);
@@ -46,10 +47,14 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
   public componentWillUnmount(): void {
     // Let React remove it itself
     const node = this.element;
+    const hiddenNode = this.hiddenElement;
     const { container } = this.props;
 
     if (node) {
       container.appendChild(node);
+    }
+    if(hiddenNode) {
+      container.appendChild(hiddenNode);
     }
     if (this._listenerElement) {
       container.appendChild(this._listenerElement);
@@ -61,6 +66,7 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
   }
 
   private getPreviousSiblingNode(node: HTMLDivElement | null) {
+    this.hiddenElement = node;
     this.element = node?.previousSibling as HTMLElement;
   }
 
