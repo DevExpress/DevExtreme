@@ -1,9 +1,7 @@
 import $ from 'jquery';
-import TextBox from 'ui/text_box';
+import 'ui/text_box';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'generic_light.css!';
 
@@ -16,8 +14,6 @@ QUnit.testStart(() => {
 
     $('#qunit-fixture').html(markup);
 });
-
-const internals = TextBox.__internals;
 
 const TEXTBOX_CLASS = 'dx-textbox';
 const INPUT_CLASS = 'dx-texteditor-input';
@@ -45,93 +41,6 @@ QUnit.module('common', {}, () => {
 
         assert.ok(element.has(SEARCHBOX_CLASS));
         assert.equal(element.find('.' + SEARCH_ICON_CLASS).length, 1);
-    });
-
-    QUnit.test('\'maxLength\' option on android 2.3 and 4.1', function(assert) {
-        const originalDevices = devices.real();
-        devices.real({
-            platform: 'android',
-            version: ['2', '3']
-        });
-
-        const originalUA = internals.uaAccessor();
-        internals.uaAccessor('default android browser');
-
-        try {
-            const $element = $('#textbox').dxTextBox({ maxLength: 1 });
-            const $input = $element.find('.' + INPUT_CLASS);
-            let event = $.Event('keydown', { key: '1' });
-
-            $input.trigger(event);
-            $input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            $input.trigger(event);
-            assert.ok(event.isDefaultPrevented());
-        } finally {
-            devices.real(originalDevices);
-            internals.uaAccessor(originalUA);
-        }
-    });
-
-    QUnit.test('\'maxLength\' option on IE', function(assert) {
-        const originalIE = browser.msie;
-
-        try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1 });
-            const $input = $element.find('.' + INPUT_CLASS);
-            let event = $.Event('keydown', { key: '1' });
-
-            $input.trigger(event);
-            $input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            $input.trigger(event);
-            assert.ok(event.isDefaultPrevented());
-        } finally {
-            browser.msie = originalIE;
-        }
-    });
-
-    QUnit.test('"maxLength" option on IE should works correctly with the hotkeys (T944726, T944493)', function(assert) {
-        const originalIE = browser.msie;
-
-        try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1, value: 'b' });
-            const $input = $element.find(`.${INPUT_CLASS}`);
-            let event = $.Event('keydown', { key: 'a', ctrlKey: true });
-
-            $input.trigger(event);
-            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
-
-            event = $.Event('keydown', { key: 'z', ctrlKey: true });
-            $input.trigger(event);
-            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
-        } finally {
-            browser.msie = originalIE;
-        }
-    });
-
-    QUnit.test('"maxLength" option on IE should works correctly with selected range', function(assert) {
-        const originalIE = browser.msie;
-
-        try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1, value: 'b' });
-            const $input = $element.find(`.${INPUT_CLASS}`);
-
-            keyboardMock($input, true)
-                .caret({ start: 0, end: 1 })
-                .type('a');
-
-            assert.strictEqual($input.val(), 'a', 'new text correctly applies');
-        } finally {
-            browser.msie = originalIE;
-        }
     });
 
     QUnit.test('call focus() method', function(assert) {
@@ -167,49 +76,6 @@ QUnit.module('common', {}, () => {
 
         assert.ok(!instance.option('showClearButton'), 'the \'showClearButton\' options is correct');
         assert.equal($(`.${CLEAR_BUTTON_AREA_CLASS}`).length, 0, 'clear button is not rendered');
-    });
-
-    QUnit.test('T810808 - should be possible to type characters in IE in TextBox with maxLength and mask', function(assert) {
-        const originalIE = browser.msie;
-
-        try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1, mask: '0' });
-            const $input = $element.find('.' + INPUT_CLASS);
-            const event = $.Event('keydown', { key: '1' });
-
-            $input.trigger(event);
-            $input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-        } finally {
-            browser.msie = originalIE;
-        }
-    });
-
-    QUnit.test('TextBox shouldn\'t lose last characters on change event in IE', function(assert) {
-        const originalIE = browser.msie;
-
-        try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1, mask: '00' });
-            const $input = $element.find('.' + INPUT_CLASS);
-
-            let event = $.Event('keydown', { key: '1' });
-            $input.trigger(event);
-            $input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            $input.trigger(event);
-            $input.val('12');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('change');
-            $input.trigger(event);
-            assert.equal($input.val(), '12');
-        } finally {
-            browser.msie = originalIE;
-        }
     });
 });
 
@@ -259,12 +125,10 @@ QUnit.module('options changing', {
 
     QUnit.test('\'maxLength\' option', function(assert) {
         const originalDevices = devices.real();
-        const originalIE = browser.msie;
         devices.real({
             platform: 'not android and not IE',
             version: ['24']
         });
-        browser.msie = false;
 
         try {
             this.instance.option('maxLength', 5);
@@ -277,51 +141,15 @@ QUnit.module('options changing', {
             assert.equal(this.input.attr('maxLength'), 3);
         } finally {
             devices.real(originalDevices);
-            browser.msie = originalIE;
-        }
-    });
-
-    QUnit.test('\'maxLength\' on android 2.3 and 4.1 ', function(assert) {
-        const originalDevices = devices.real();
-        devices.real({
-            platform: 'android',
-            version: ['4', '1']
-        });
-
-        const originalUA = internals.uaAccessor();
-        internals.uaAccessor('default android browser');
-
-        try {
-            this.instance.option('maxLength', 2);
-
-            let event = $.Event('keydown', { key: '1' });
-
-            this.input.trigger(event);
-            this.input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            this.input.trigger(event);
-            this.input.val('12');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '3' });
-            this.input.trigger(event);
-            assert.ok(event.isDefaultPrevented());
-        } finally {
-            devices.real(originalDevices);
-            internals.uaAccessor(originalUA);
         }
     });
 
     QUnit.test('\'maxLength\' should be ignored if mask is specified', function(assert) {
         const originalDevices = devices.real();
-        const originalIE = browser.msie;
         devices.real({
             platform: 'not android and not IE',
             version: ['24']
         });
-        browser.msie = false;
 
         try {
             this.instance.option('maxLength', 4);
@@ -332,7 +160,6 @@ QUnit.module('options changing', {
             assert.equal(this.input.attr('maxLength'), 4);
         } finally {
             devices.real(originalDevices);
-            browser.msie = originalIE;
         }
     });
 

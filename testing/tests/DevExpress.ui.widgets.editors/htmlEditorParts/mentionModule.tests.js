@@ -5,7 +5,6 @@ import Mentions from 'ui/html_editor/modules/mentions';
 
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import { Event as dxEvent } from 'events/index';
 import { normalizeKeyName } from 'events/utils/index';
 
@@ -22,7 +21,6 @@ const KEY_CODES = {
 };
 
 const POPUP_HIDING_TIMEOUT = 500;
-const IS_EDGE_BROWSER = browser.msie && parseInt(browser.version) > 11;
 
 const APPLY_VALUE_KEYS = [{ key: 'Enter', code: KEY_CODES.ENTER }, { key: ' ', code: KEY_CODES.SPACE }];
 
@@ -442,16 +440,10 @@ QUnit.module('Mentions module', moduleConfig, () => {
             items.push(i);
         }
 
-        if(IS_EDGE_BROWSER) {
-            this.$element.css({
-                fontSize: '14px'
-            });
-        } else {
-            this.$element.css({
-                fontSize: '14px',
-                lineHeight: 1.35715
-            });
-        }
+        this.$element.css({
+            fontSize: '14px',
+            lineHeight: 1.35715
+        });
 
         this.options.mentions = [{
             dataSource: {

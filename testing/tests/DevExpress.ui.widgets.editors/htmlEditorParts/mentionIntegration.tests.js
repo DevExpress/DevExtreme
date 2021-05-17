@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import browser from 'core/utils/browser';
 
 import 'ui/html_editor';
 
@@ -16,8 +15,6 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const MENTION_CLASS = 'dx-mention';
 
 const POPUP_TIMEOUT = 500;
-
-const IS_IE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const KEY_CODES = {
     ARROW_UP: 38,
@@ -57,14 +54,6 @@ module('Mentions integration', {
             this.instance = this.$element
                 .dxHtmlEditor(this.options)
                 .dxHtmlEditor('instance');
-        };
-
-        this.addText = (element, text, prevText) => {
-            if(IS_IE11) {
-                element.outerText = `${prevText}${text}`;
-            } else {
-                element.innerText += text;
-            }
         };
 
         this.getItems = () => $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
@@ -372,7 +361,7 @@ module('Mentions integration', {
         const valueChangeSpy = sinon.spy(({ component }) => {
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
-                this.addText(element, 'F', '@');
+                element.innerText += 'F';
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
@@ -398,7 +387,7 @@ module('Mentions integration', {
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
 
-                this.addText(element, 'F', '@');
+                element.innerText += 'F';
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
@@ -425,7 +414,7 @@ module('Mentions integration', {
 
             switch(valueChangeSpy.callCount) {
                 case 1:
-                    this.addText(element, 'F', '@');
+                    element.innerText += 'F';
                     this.clock.tick();
                     break;
                 case 2:
@@ -455,7 +444,7 @@ module('Mentions integration', {
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
 
-                this.addText(element, 'F', '@');
+                element.innerText += 'F';
                 this.clock.tick();
                 assert.strictEqual(this.getItems().length, 4, 'dataSource isn\'t filtered');
             } else {
@@ -482,12 +471,12 @@ module('Mentions integration', {
         const valueChangeSpy = sinon.spy(({ component }) => {
             let $items;
             if(valueChangeSpy.calledOnce) {
-                this.addText(getParagraph(), 'F', '@');
+                getParagraph().innerText += 'F';
                 this.clock.tick();
                 const $items = this.getItems();
                 assert.strictEqual($items.length, 4, 'dataSource isn\'t filtered');
             } else if(valueChangeSpy.calledTwice) {
-                this.addText(getParagraph(), 'r', '@F');
+                getParagraph().innerText += 'r';
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
@@ -514,7 +503,7 @@ module('Mentions integration', {
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
 
-                this.addText(element, 'A', '@');
+                element.innerText += 'A';
                 this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
