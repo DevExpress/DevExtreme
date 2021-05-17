@@ -1,4 +1,4 @@
-import AppointmentDataSource from 'ui/scheduler/appointments/appointmentDataSource';
+import AppointmentDataProvider from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import { compileGetter, compileSetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';
@@ -42,7 +42,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -53,7 +53,7 @@ module('Server side filtering', () => {
             }
         );
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
 
         dataSource.load();
 
@@ -77,7 +77,7 @@ module('Server side filtering', () => {
             store: data,
             filter: ['text', '=', 'Appointment 2']
         });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -98,7 +98,7 @@ module('Server side filtering', () => {
                 ['startDate', new Date(2015, 1, 9)]
             ]
         ];
-        appointmentDataSource.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
 
         let expectedFilter = [dateFilter, [
             'text',
@@ -111,8 +111,8 @@ module('Server side filtering', () => {
         const changedDataSource = new DataSource({
             store: data
         });
-        appointmentDataSource.setDataSource(changedDataSource, true);
-        appointmentDataSource.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+        appointmentDataProvider.setDataSource(changedDataSource, true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
 
         expectedFilter = [dateFilter];
         actualFilter = changedDataSource.filter();
@@ -130,7 +130,7 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -156,19 +156,19 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
+        appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
 
         dataSource.load().done(() => {
             dataSource.filter('priorityId', '=', 1);
 
-            appointmentDataSource.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
+            appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
 
-            appointmentDataSource.filterLoadedAppointments({
+            appointmentDataProvider.filterLoadedAppointments({
                 startDayHour: 3,
                 endDayHour: 4
             }, timeZoneCalculator);
 
-            assert.equal(appointmentDataSource.filterMaker._filterRegistry.user, undefined, 'Empty user filter');
+            assert.equal(appointmentDataProvider.filterMaker._filterRegistry.user, undefined, 'Empty user filter');
         });
     });
 
@@ -190,7 +190,7 @@ module('Server side filtering', () => {
             filter: [dateFilter, ['text', '=', 'Appointment 2']]
         });
 
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -201,7 +201,7 @@ module('Server side filtering', () => {
             }
         );
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
 
         const expectedFilter = [dateFilter, [
             'text',
@@ -230,7 +230,7 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentDataSource = new AppointmentDataSource(
+            const appointmentDataProvider = new AppointmentDataProvider(
                 schedulerMock,
                 dataSource,
                 {
@@ -241,7 +241,7 @@ module('Server side filtering', () => {
                 }
             );
 
-            appointmentDataSource.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
+            appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
 
             const expectedFilter = [[
                 [
@@ -279,14 +279,14 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+            const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
                 }
             });
 
-            appointmentDataSource.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
+            appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
 
             const expectedFilter = [[
                 [
@@ -322,14 +322,14 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate'
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [data[1]], 'filterByDate work correctly');
@@ -344,14 +344,14 @@ module('Server side filtering', () => {
             }]
         });
 
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'Start',
                 endDateExpr: 'End'
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
         dataSource.load();
 
         assert.equal(dataSource.items().length, 1, 'filterByDate works correctly with custom dateField');
@@ -369,7 +369,7 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -377,7 +377,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [tasks[0]], 'filterByDate works correctly');
@@ -394,7 +394,7 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -402,7 +402,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
         dataSource.load();
 
         assert.equal(dataSource.items().length, 0, 'filterByDate works correctly');
@@ -425,7 +425,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: recurrentAppts
         });
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -434,7 +434,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), recurrentAppts, 'filterByDate works correctly');
@@ -457,7 +457,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -466,7 +466,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
@@ -490,7 +490,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -499,7 +499,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
@@ -516,7 +516,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             expr: {
                 startDateExpr: 'startDate',
                 endDateExpr: 'endDate',
@@ -524,7 +524,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
+        appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
         dataSource.load();
 
         assert.deepEqual(dataSource.items(), [appts[0]], 'filterByDate works correctly');
@@ -541,7 +541,7 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -567,12 +567,12 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));
+        appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));
         dataSource.load();
 
         dataSource.filter('priorityId', '=', 1);
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1, 0),
@@ -594,7 +594,7 @@ module('Server side filtering', () => {
             filter: ['priorityId', '=', 1]
         });
 
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -611,7 +611,7 @@ module('Server side filtering', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
+        appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
         dataSource.load();
 
         const existingFilter = dataSource.filter();
@@ -619,7 +619,7 @@ module('Server side filtering', () => {
 
         existingFilter[1] = newUserFilter;
         dataSource.filter(existingFilter);
-        appointmentDataSource.filterByDate(new Date(2014, 11, 29, 0), new Date(2014, 11, 30), true);
+        appointmentDataProvider.filterByDate(new Date(2014, 11, 29, 0), new Date(2014, 11, 30), true);
         dataSource.load();
 
 
@@ -631,7 +631,7 @@ module('Server side filtering', () => {
 module('Client side after filtering', () => {
     test('Loaded appointments should be filtered by start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -654,11 +654,11 @@ module('Client side after filtering', () => {
             }
         });
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6, 0).toString() });
-        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6, 0).toString() });
+        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7
         }, timeZoneCalculator);
@@ -668,7 +668,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments on the borders should be filtered by start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -695,10 +695,10 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7
         }, timeZoneCalculator);
@@ -708,7 +708,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by decimal start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -735,11 +735,11 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() });
-        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() });
+        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3.5,
             endDayHour: 7.5
         }, timeZoneCalculator);
@@ -749,7 +749,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -776,13 +776,13 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentDataSource.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=WE' });
-        appointmentDataSource.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), RecRule: 'FREQ=WEEKLY,BYDAY=TH' });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
+        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=WE' });
+        appointmentDataProvider.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), RecRule: 'FREQ=WEEKLY,BYDAY=TH' });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2014, 11, 31).toString(),
@@ -797,7 +797,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule correctly, if appointment startDate.getHours < starDayHour', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -824,10 +824,10 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
@@ -842,7 +842,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule correctly for day interval', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -869,10 +869,10 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
@@ -887,7 +887,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = null', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -911,13 +911,13 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentDataSource.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
-        appointmentDataSource.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
+        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
+        appointmentDataProvider.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1).toString(),
@@ -933,7 +933,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = ""', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -957,13 +957,13 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentDataSource.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
-        appointmentDataSource.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
+        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
+        appointmentDataProvider.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             min: new Date(2015, 0, 1).toString(),
@@ -979,7 +979,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by resources', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -1006,12 +1006,12 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2] });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4 });
-        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 3, roomId: [1, 2] });
-        appointmentDataSource.add({ text: 'd', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2, 3] });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2] });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4 });
+        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 3, roomId: [1, 2] });
+        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2, 3] });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 2,
             endDayHour: 5,
             min: new Date(2015, 2, 16),
@@ -1036,7 +1036,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by allDay field', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -1059,12 +1059,12 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true });
-        appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false });
-        appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentDataSource.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true });
+        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false });
+        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7,
             allDay: false
@@ -1075,7 +1075,7 @@ module('Client side after filtering', () => {
 
     test('Loaded recurrent allDay appointments should not be filtered by start/endDayHour', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -1102,9 +1102,9 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' });
+        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 10,
             min: new Date(2015, 0, 1, 3),
@@ -1116,7 +1116,7 @@ module('Client side after filtering', () => {
 
     test('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -1139,13 +1139,13 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({
+        appointmentDataProvider.add({
             text: 'a',
             StartDate: new Date(2015, 2, 1, 10, 30),
             EndDate: new Date(2015, 2, 2, 5, 0)
         });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 1,
             endDayHour: 10,
             min: new Date(2015, 1, 23, 1, 0),
@@ -1157,7 +1157,7 @@ module('Client side after filtering', () => {
 
     test('The part of long appointment should be filtered by start/endDayHour, with startDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -1180,13 +1180,13 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({
+        appointmentDataProvider.add({
             text: 'a',
             StartDate: new Date(2015, 2, 1, 7, 0),
             EndDate: new Date(2015, 2, 2, 0, 30)
         });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 1,
             endDayHour: 10,
             min: new Date(2015, 2, 2, 1, 0),
@@ -1198,7 +1198,7 @@ module('Client side after filtering', () => {
 
     test('Appointment between days should be filtered by start/endDayHour (T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             schedulerMock,
             dataSource,
             {
@@ -1221,13 +1221,13 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({
+        appointmentDataProvider.add({
             text: 'a',
             StartDate: new Date(2015, 2, 1, 11, 0),
             EndDate: new Date(2015, 2, 2, 1, 0)
         });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 1,
             endDayHour: 10,
             min: new Date(2015, 2, 1, 1, 0),
@@ -1239,7 +1239,7 @@ module('Client side after filtering', () => {
 
     test('Wrong endDate of appointment should be replaced before filtering', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataSource = new AppointmentDataSource(
+        const appointmentDataProvider = new AppointmentDataProvider(
             {
                 ...schedulerMock,
                 getAppointmentDurationInMinutes: () => 60
@@ -1269,13 +1269,13 @@ module('Client side after filtering', () => {
             }
         );
 
-        appointmentDataSource.add({
+        appointmentDataProvider.add({
             text: 'a',
             StartDate: new Date(2015, 2, 1, 11, 0),
             EndDate: new Date(2015, 2, 1, 1, 0)
         });
 
-        const appts = appointmentDataSource.filterLoadedAppointments({
+        const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 0,
             endDayHour: 24,
             min: new Date(2015, 2, 1),
@@ -1300,7 +1300,7 @@ module('Virtual Scrolling', () => {
             store: appointments
         });
 
-        const appointmentDataSource = new AppointmentDataSource(schedulerMock, dataSource, {
+        const appointmentDataProvider = new AppointmentDataProvider(schedulerMock, dataSource, {
             getter: {
                 startDate: compileGetter('StartDate'),
                 endDate: compileGetter('EndDate'),
@@ -1326,14 +1326,14 @@ module('Virtual Scrolling', () => {
             }
         });
 
-        appointmentDataSource.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
+        appointmentDataProvider.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
 
         dataSource.load().done(() => {
             dataSource.filter('priorityId', '=', 1);
 
-            appointmentDataSource.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
+            appointmentDataProvider.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
 
-            const result = appointmentDataSource.filterLoadedAppointments({
+            const result = appointmentDataProvider.filterLoadedAppointments({
                 startDayHour: 9,
                 endDayHour: 11,
                 viewStartDayHour: 9,

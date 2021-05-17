@@ -1,14 +1,13 @@
-import config from '../../../core/config';
-import dateUtils from '../../../core/utils/date';
-import { equalByValue } from '../../../core/utils/common';
-import dateSerialization from '../../../core/utils/date_serialization';
-import { getRecurrenceProcessor } from '../recurrence';
-import { inArray, wrapToArray } from '../../../core/utils/array';
-import { extend } from '../../../core/utils/extend';
-import { map, each } from '../../../core/utils/iterator';
-import { isFunction, isDefined, isString } from '../../../core/utils/type';
-import { Deferred } from '../../../core/utils/deferred';
-import query from '../../../data/query';
+import config from '../../../../core/config';
+import dateUtils from '../../../../core/utils/date';
+import { equalByValue } from '../../../../core/utils/common';
+import dateSerialization from '../../../../core/utils/date_serialization';
+import { getRecurrenceProcessor } from '../../recurrence';
+import { inArray, wrapToArray } from '../../../../core/utils/array';
+import { extend } from '../../../../core/utils/extend';
+import { map, each } from '../../../../core/utils/iterator';
+import { isFunction, isDefined, isString } from '../../../../core/utils/type';
+import query from '../../../../data/query';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
@@ -18,193 +17,6 @@ const FilterStrategies = {
     virtual: 'virtual',
     standard: 'standard'
 };
-
-export default class AppointmentDataSource {
-    constructor(scheduler, dataSource, dataAccessors) {
-        this.scheduler = scheduler;
-        this.dataSource = dataSource;
-        this.dataAccessors = dataAccessors;
-
-        this.dataOperator = new DataOperator(this.dataSource);
-        this.initStrategy();
-    }
-
-    get filterMaker() { return this.getFilterStrategy().filterMaker; }
-    get keyName() { return this.dataOperator.keyName; }
-    get filterStrategyName() {
-        return this.scheduler.isVirtualScrolling()
-            ? FilterStrategies.virtual
-            : FilterStrategies.standard;
-    }
-
-    getFilterStrategy() {
-        if(!this.filterStrategy || this.filterStrategy.strategyName !== this.filterStrategyName) {
-            this.initStrategy();
-        }
-
-        return this.filterStrategy;
-    }
-
-    initStrategy() {
-        this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
-            ? new AppointmentFilterVirtualStrategy(this.scheduler, this.dataSource, this.dataAccessors)
-            : new AppointmentFilterBaseStrategy(this.scheduler, this.dataSource, this.dataAccessors);
-    }
-
-    setDataSource(dataSource) {
-        this.dataSource = dataSource;
-        this.initStrategy();
-        this.dataOperator.setDataSource(this.dataSource);
-    }
-
-    setDataAccessors(dataAccessors) {
-        this.dataAccessors = dataAccessors;
-        this.initStrategy();
-    }
-
-    // Filter mapping
-    filter() {
-        return this.getFilterStrategy().filter();
-    }
-
-    filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
-        this.getFilterStrategy().filterByDate(min, max, remoteFiltering, dateSerializationFormat);
-    }
-
-    appointmentTakesAllDay(appointment, startDayHour, endDayHour) {
-        return this.getFilterStrategy().appointmentTakesAllDay(appointment, startDayHour, endDayHour);
-    }
-
-    hasAllDayAppointments(appointments) {
-        return this.getFilterStrategy().hasAllDayAppointments(appointments);
-    }
-
-    filterLoadedAppointments(filterOption, timeZoneCalculator) {
-        return this.getFilterStrategy().filterLoadedAppointments(filterOption, timeZoneCalculator);
-    }
-
-    // From subscribe
-    replaceWrongEndDate(appointment, startDate, endDate) {
-        this.getFilterStrategy().replaceWrongEndDate(appointment, startDate, endDate);
-    }
-
-    calculateAppointmentEndDate(isAllDay, startDate) {
-        return this.getFilterStrategy().calculateAppointmentEndDate(isAllDay, startDate);
-    }
-
-    appointmentTakesSeveralDays(appointment) {
-        return this.getFilterStrategy().appointmentTakesSeveralDays(appointment);
-    }
-
-    // Data operator mappings
-    cleanState() { this.dataOperator.cleanState(); }
-    getUpdatedAppointment() { return this.dataOperator._updatedAppointment; }
-    getUpdatedAppointmentKeys() { return this.dataOperator._updatedAppointmentKeys; }
-
-    add(rawAppointment) {
-        return this.dataOperator.add(rawAppointment);
-    }
-
-    update(target, rawAppointment) {
-        return this.dataOperator.update(target, rawAppointment);
-    }
-
-    remove(rawAppointment) {
-        return this.dataOperator.remove(rawAppointment);
-    }
-}
-
-class DataOperator {
-    constructor(dataSource) {
-        this.setDataSource(dataSource);
-        this._updatedAppointmentKeys = [];
-    }
-
-    get keyName() {
-        const store = this._dataSource.store();
-        return store.key();
-    }
-
-    _getStoreKey(target) {
-        const store = this._dataSource.store();
-
-        return store.keyOf(target);
-    }
-
-    setDataSource(dataSource) {
-        this._dataSource = dataSource;
-
-        this.cleanState();
-        this._initStoreChangeHandlers();
-    }
-
-    _initStoreChangeHandlers() {
-        const dataSource = this._dataSource;
-        const store = dataSource?.store();
-
-        if(store) {
-            store.on('updating', newItem => {
-                this._updatedAppointment = newItem;
-            });
-
-            store.on('push', pushItems => {
-                const items = dataSource.items();
-                const keyName = store.key();
-
-                pushItems.forEach(pushItem => {
-                    const itemExists = items.filter(item => item[keyName] === pushItem.key).length !== 0;
-
-                    if(itemExists) {
-                        this._updatedAppointmentKeys.push({
-                            key: keyName,
-                            value: pushItem.key
-                        });
-                    } else {
-                        const { data } = pushItem;
-                        data && items.push(data);
-                    }
-                });
-
-                dataSource.load();
-            });
-        }
-    }
-
-    getUpdatedAppointment() {
-        return this._updatedAppointment;
-    }
-    getUpdatedAppointmentKeys() {
-        return this._updatedAppointmentKeys;
-    }
-
-    cleanState() {
-        this._updatedAppointment = null;
-        this._updatedAppointmentKeys = [];
-    }
-
-    add(rawAppointment) {
-        return this._dataSource.store().insert(rawAppointment).done(() => this._dataSource.load());
-    }
-
-    update(target, data) {
-        const key = this._getStoreKey(target);
-        const d = new Deferred();
-
-        this._dataSource.store().update(key, data)
-            .done(result =>
-                this._dataSource.load()
-                    .done(() => d.resolve(result))
-                    .fail(d.reject))
-            .fail(d.reject);
-
-        return d.promise();
-    }
-
-    remove(rawAppointment) {
-        const key = this._getStoreKey(rawAppointment);
-        return this._dataSource.store().remove(key).done(() => this._dataSource.load());
-    }
-}
 
 class AppointmentFilterHelper {
     compareDateWithStartDayHour(startDate, endDate, startDayHour, allDay, severalDays) {
@@ -334,7 +146,7 @@ class FilterMaker {
     }
 }
 
-class AppointmentFilterBaseStrategy {
+export class AppointmentFilterBaseStrategy {
     constructor(scheduler, dataSource, dataAccessors) {
         this.scheduler = scheduler;
         this.dataAccessors = dataAccessors;
@@ -830,38 +642,9 @@ class AppointmentFilterBaseStrategy {
             .filter(combinedFilter)
             .toArray();
     }
-
-    filterLoadedVirtualAppointments(filterOptions, timeZoneCalculator, groupCount) {
-        const combinedFilters = [];
-
-        let itemsToFilter = this.getPreparedDataItems();
-        const needPreFilter = groupCount > 0;
-        if(needPreFilter) {
-            itemsToFilter = itemsToFilter.filter(item => {
-                for(let i = 0; i < filterOptions.length; ++i) {
-                    const { resources } = filterOptions[i];
-                    if(this._filterAppointmentByResources(item, resources)) {
-                        return true;
-                    }
-                }
-            });
-        }
-
-        filterOptions.forEach(filterOption => {
-            combinedFilters.length && combinedFilters.push('or');
-
-            const filter = this._createAppointmentFilter(filterOption, timeZoneCalculator);
-
-            combinedFilters.push(filter);
-        });
-
-        return query(itemsToFilter)
-            .filter(combinedFilters)
-            .toArray();
-    }
-    //
 }
-class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
+
+export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
     get strategyName() { return FilterStrategies.virtual; }
 
     filter() {
@@ -910,11 +693,40 @@ class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
             });
         });
 
-        return this.filterLoadedVirtualAppointments(
+        return this.filterLoadedAppointments(
             filterOptions,
             this.timeZoneCalculator,
             this.workspace._getGroupCount()
         );
+    }
+
+    filterLoadedAppointments(filterOptions, timeZoneCalculator, groupCount) {
+        const combinedFilters = [];
+
+        let itemsToFilter = this.getPreparedDataItems();
+        const needPreFilter = groupCount > 0;
+        if(needPreFilter) {
+            itemsToFilter = itemsToFilter.filter(item => {
+                for(let i = 0; i < filterOptions.length; ++i) {
+                    const { resources } = filterOptions[i];
+                    if(this._filterAppointmentByResources(item, resources)) {
+                        return true;
+                    }
+                }
+            });
+        }
+
+        filterOptions.forEach(filterOption => {
+            combinedFilters.length && combinedFilters.push('or');
+
+            const filter = this._createAppointmentFilter(filterOption, timeZoneCalculator);
+
+            combinedFilters.push(filter);
+        });
+
+        return query(itemsToFilter)
+            .filter(combinedFilters)
+            .toArray();
     }
 
     hasAllDayAppointments() {

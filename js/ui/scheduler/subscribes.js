@@ -159,7 +159,7 @@ const subscribes = {
     },
 
     appointmentTakesSeveralDays: function(appointment) {
-        return this.appointmentDataSource.appointmentTakesSeveralDays(appointment);
+        return this.appointmentDataProvider.appointmentTakesSeveralDays(appointment);
     },
 
     getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
@@ -606,11 +606,11 @@ const subscribes = {
     },
 
     replaceWrongEndDate: function(appointment, startDate, endDate) {
-        this.appointmentDataSource.replaceWrongEndDate(appointment, startDate, endDate);
+        this.appointmentDataProvider.replaceWrongEndDate(appointment, startDate, endDate);
     },
 
     calculateAppointmentEndDate: function(isAllDay, startDate) {
-        return this.appointmentDataSource.calculateAppointmentEndDate(isAllDay, startDate);
+        return this.appointmentDataProvider.calculateAppointmentEndDate(isAllDay, startDate);
     },
 
     getEndDayHour: function() {
