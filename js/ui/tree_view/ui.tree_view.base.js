@@ -480,7 +480,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(this._scrollableContainer) {
-            return this._scrollableContainer.$content().children();
+            return $(this._scrollableContainer.content()).children();
         }
 
         return $();
@@ -495,7 +495,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(this._isRootLevel(parentId)) {
             if(!this._scrollableContainer) this._renderScrollableContainer();
-            this._scrollableContainer.$content().append($container);
+            $(this._scrollableContainer.content()).append($container);
         }
 
         return $container;
@@ -535,7 +535,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderContentImpl: function() {
         const $nodeContainer = this._renderNodeContainer();
 
-        this._scrollableContainer.$content().append($nodeContainer);
+        $(this._scrollableContainer.content()).append($nodeContainer);
 
         if(!this.option('items') || !this.option('items').length) {
             return;

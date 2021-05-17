@@ -4,7 +4,14 @@ import $ from 'jquery';
 
 import 'generic_light.css!';
 
-QUnit.module('scrollToItem', () => {
+QUnit.module('scrollToItem', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
     if(browser.msie) {
         return;
     }
@@ -69,6 +76,7 @@ QUnit.module('scrollToItem', () => {
     configs.forEach(config => {
         config.keysToScroll.forEach(key => {
             QUnit.test(`config:${config.description} -> onContentReady.scrollToItem(${key}) -> focusOut() -> focusIn()`, function(assert) {
+
                 let completionCallback = null;
                 let isFirstContentReadyEvent = true;
                 const options = $.extend({}, config, {
@@ -93,9 +101,12 @@ QUnit.module('scrollToItem', () => {
                         wrapper.getElement().focusout();
                         wrapper.getElement().focusin();
                         wrapper.checkNodeIsInVisibleArea(key);
+                        this.clock.tick(400);
                         done();
                     });
+
                 }
+                this.clock.tick();
             });
         });
 
@@ -116,6 +127,7 @@ QUnit.module('scrollToItem', () => {
                             done();
                         });
                     }
+                    this.clock.tick();
                 });
             });
         });
@@ -137,6 +149,7 @@ QUnit.module('scrollToItem', () => {
             wrapper.checkNodeIsInVisibleArea(key);
             done();
         });
+        this.clock.tick();
 
         wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
         const node = wrapper.getElement().find('[data-item-id="item1_1_1"]').get(0);
@@ -144,6 +157,7 @@ QUnit.module('scrollToItem', () => {
             wrapper.checkNodeIsInVisibleArea(node.getAttribute('data-item-id'));
             done();
         });
+        this.clock.tick();
 
         wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
         const itemData = wrapper.instance.option('items')[0].items[0].items[0];
@@ -151,6 +165,7 @@ QUnit.module('scrollToItem', () => {
             wrapper.checkNodeIsInVisibleArea(itemData.id);
             done();
         });
+        this.clock.tick();
     });
 
     QUnit.test('scrollToItem(not exists key)', function(assert) {
@@ -159,7 +174,10 @@ QUnit.module('scrollToItem', () => {
 
         const done = assert.async(3);
         wrapper.instance.scrollToItem('12345').fail(() => { assert.ok('scroll must fail, node not found for this key'); done(); });
+        this.clock.tick();
         wrapper.instance.scrollToItem($('<div/>').get(0)).fail(() => { assert.ok('scroll must fail, node not found for this itemElement'); done(); });
+        this.clock.tick();
         wrapper.instance.scrollToItem({}).fail(() => { assert.ok('scroll must fail, node not found for this itemData'); done(); });
+        this.clock.tick();
     });
 });
