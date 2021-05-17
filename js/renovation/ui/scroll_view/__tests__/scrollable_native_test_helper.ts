@@ -378,7 +378,6 @@ class ScrollableTestHelper {
       onStart: jest.fn(),
       onScroll: jest.fn(),
       onUpdated: jest.fn(),
-      onStop: jest.fn(),
       onEnd: jest.fn(),
       onPullDown: jest.fn(),
       onReachBottom: jest.fn(),

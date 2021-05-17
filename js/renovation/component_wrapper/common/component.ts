@@ -221,16 +221,21 @@ export default class ComponentWrapper extends DOMComponent {
       allowNull, twoWay, elements, props,
     } = this._propsInfo;
     const { defaultProps } = this._viewComponent;
-
-    const widgetProps = [...props, 'onContentReady'].reduce((filteredOptions, propName) => {
-      const result = filteredOptions;
-      if (Object.prototype.hasOwnProperty.call(options, propName)) {
-        result[propName] = options[propName];
+    const { ref, children, onKeyboardHandled } = options;
+    const onKeyDown = onKeyboardHandled
+      ? (_: never, event_options: unknown[]): void => {
+        (onKeyboardHandled as (args: unknown[]) => void)(event_options);
       }
-      return result;
-    }, {
-      ref: options.ref,
-      children: options.children,
+      : undefined;
+    const widgetProps = {
+      ref,
+      children,
+      onKeyDown,
+    };
+    [...props, 'onContentReady'].forEach((propName) => {
+      if (Object.prototype.hasOwnProperty.call(options, propName)) {
+        widgetProps[propName] = options[propName];
+      }
     });
 
     allowNull.forEach(
@@ -289,8 +294,24 @@ export default class ComponentWrapper extends DOMComponent {
     return {};
   }
 
+  getDefaultTemplates(): Record<string, undefined> {
+    const names = this.getDefaultTemplateNames();
+    const result = {};
+
+    names.forEach((name) => {
+      result[name] = 'dx-renovation-template-mock';
+    });
+
+    return result;
+  }
+
+  getDefaultTemplateNames(): string[] {
+    return [];
+  }
+
   _init(): void {
     super._init();
+    this._templateManager.addDefaultTemplates(this.getDefaultTemplates());
     this._props = { ...this.option() };
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
@@ -354,6 +375,9 @@ export default class ComponentWrapper extends DOMComponent {
 
     const template = this._getTemplate(templateOption);
 
+    if (template.toString() === 'dx-renovation-template-mock') {
+      return undefined;
+    }
     const templateWrapper = (model: TemplateModel): VNode => createElement(
       TemplateWrapper,
       {

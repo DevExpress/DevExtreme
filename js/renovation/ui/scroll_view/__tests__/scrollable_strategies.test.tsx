@@ -587,25 +587,31 @@ each([{
     describe('Getters', () => {
       describe('cssClasses', () => {
         each(optionValues.direction).describe('Direction: %o', (direction) => {
-          it('strategy classes', () => {
-            const helper = new ScrollableTestHelper({ direction });
+          each(['onScroll', 'onHover', 'always', 'never']).describe('showScrollbar: %o', (showScrollbar) => {
+            it('strategy classes', () => {
+              const helper = new ScrollableTestHelper({ direction, showScrollbar });
 
-            const rootClasses = helper.getScrollable().getDOMNode().className;
+              const rootClasses = helper.getScrollable().getDOMNode().className;
 
-            expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
-            expect(rootClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+              expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
+              expect(rootClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
+              if (showScrollbar === 'never') {
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+              } else {
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
+              }
 
-            if (Scrollable === ScrollableNative) {
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
-              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
-            } else {
-              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
-            }
+              if (Scrollable === ScrollableNative) {
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
+              } else {
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+                expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
+              }
+            });
           });
         });
 

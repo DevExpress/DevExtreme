@@ -2,6 +2,7 @@ import ArrayStore, {
     ArrayStoreOptions
 } from './array_store';
 
+/** @namespace DevExpress.data */
 export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
     /**
      * @docid

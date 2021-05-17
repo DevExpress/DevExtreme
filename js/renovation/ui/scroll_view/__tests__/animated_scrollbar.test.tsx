@@ -22,7 +22,6 @@ describe('Public methods', () => {
     { name: 'getMaxOffset', calledWith: [] },
     { name: 'scrollStep', calledWith: ['arg1'] },
     { name: 'moveTo', calledWith: ['arg1'] },
-    { name: 'stopComplete', calledWith: [] },
     { name: 'scrollComplete', calledWith: [] },
     { name: 'getLocationWithinRange', calledWith: ['arg1'] },
     { name: 'getMinOffset', calledWith: [] },
@@ -48,17 +47,6 @@ describe('Public methods', () => {
       expect(handlerMock).toBeCalledTimes(1);
       expect(handlerMock).toHaveBeenCalledWith(...methodInfo.calledWith);
     });
-  });
-
-  it('animator should call stopComplete during step if was stopped', () => {
-    const stopCompleteHandler = jest.fn();
-    const viewModel = new AnimatedScrollbar({ });
-    (viewModel as any).scrollbarRef = { current: { stopComplete: stopCompleteHandler } };
-    viewModel.stopped = true;
-
-    viewModel.stepCore();
-
-    expect(stopCompleteHandler).toHaveBeenCalledTimes(1);
   });
 
   each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
@@ -91,17 +79,28 @@ describe('Public methods', () => {
     });
   });
 
-  it('animator should do the next step if it was not stopped or finished', () => {
-    const viewModel = new AnimatedScrollbar({ }) as AnimatedScrollbar;
-    viewModel.stopped = false;
-    Object.defineProperties(viewModel, { isFinished: { get() { return false; } } });
-    viewModel.getStepAnimationFrame = jest.fn();
-    viewModel.step = jest.fn();
+  each([true, false]).describe('Stopped: %o', (stopped) => {
+    each([true, false]).describe('Finished: %o', (isFinished) => {
+      it('animator should do the next step if it was not stopped or finished', () => {
+        const viewModel = new AnimatedScrollbar({ }) as AnimatedScrollbar;
+        viewModel.stopped = stopped;
 
-    viewModel.stepCore();
+        Object.defineProperties(viewModel, { isFinished: { get() { return isFinished; } } });
+        viewModel.getStepAnimationFrame = jest.fn();
+        viewModel.step = jest.fn();
+        viewModel.complete = jest.fn();
 
-    expect(viewModel.step).toHaveBeenCalledTimes(1);
-    expect(viewModel.getStepAnimationFrame).toHaveBeenCalledTimes(1);
+        viewModel.stepCore();
+
+        if (isFinished || stopped) {
+          expect(viewModel.step).not.toBeCalled();
+          expect(viewModel.getStepAnimationFrame).not.toBeCalled();
+        } else {
+          expect(viewModel.step).toHaveBeenCalledTimes(1);
+          expect(viewModel.getStepAnimationFrame).toHaveBeenCalledTimes(1);
+        }
+      });
+    });
   });
 
   each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {

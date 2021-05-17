@@ -221,7 +221,7 @@ export const masterDetailModule = {
 
                     if(masterRowOptions && masterDataGrid) {
                         if(masterDataGrid.getView('rowsView').isFixedColumns()) {
-                            this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $detailElement);
+                            return this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $detailElement);
                         } else {
                             const scrollable = masterDataGrid.getScrollable();
                             // T607490

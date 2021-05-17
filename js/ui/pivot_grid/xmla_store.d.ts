@@ -1,3 +1,4 @@
+/** @namespace DevExpress.data */
 export interface XmlaStoreOptions {
     /**
      * @docid

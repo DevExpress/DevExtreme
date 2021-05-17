@@ -48,5 +48,5 @@ export class ScrollbarProps {
 
   @Event() onScroll?: () => void = noop;
 
-  @Event() onEnd?: () => void = noop;
+  @Event() onEnd?: (direction: string) => void = noop;
 }

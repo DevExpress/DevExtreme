@@ -36,7 +36,9 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
         const $parent = $(parentNode as Element);
         const $children = $parent.contents();
 
-        const { data, index } = this.props.model ?? { data: {} };
+        const {
+          data, index,
+        } = this.props.model ?? { data: {} };
 
         Object.keys(data).forEach((name) => {
           if (data[name] && domAdapter.isNode(data[name])) {
@@ -44,12 +46,17 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
           }
         });
 
-        this.props.template.render({
+        const $result = $(this.props.template.render({
           container: getPublicElement($parent),
           transclude: this.props.transclude,
           ...(!this.props.transclude ? { model: data } : {}),
           ...(!this.props.transclude && Number.isFinite(index) ? { index } : {}),
-        });
+        }));
+        const result = $result.get(0) as HTMLElement;
+
+        if (result && !result.parentNode) {
+          parentNode.appendChild(result);
+        }
 
         return (): void => {
           // NOTE: order is important

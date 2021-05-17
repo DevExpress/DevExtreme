@@ -158,10 +158,6 @@ const subscribes = {
         return this._resourcesManager.getResourcesFromItem(itemData);
     },
 
-    getBoundOffset: function() {
-        return { top: -this.getWorkSpaceAllDayHeight() };
-    },
-
     appointmentTakesSeveralDays: function(appointment) {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },

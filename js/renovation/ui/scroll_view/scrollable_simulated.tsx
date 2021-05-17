@@ -80,6 +80,7 @@ import { restoreLocation } from './utils/restore_location';
 import { getScrollTopMax } from './utils/get_scroll_top_max';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
 import { inRange } from '../../../core/utils/math';
+import { isVisible } from './utils/is_element_visible';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -242,6 +243,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Mutable() validDirections: { horizontal?: boolean; vertical?: boolean } = {};
 
+  @Mutable()
+  endActionDirections:
+  { horizontal: boolean; vertical: boolean } = { horizontal: false, vertical: false };
+
   @Mutable() prevContainerClientWidth = 0;
 
   @Mutable() prevContainerClientHeight = 0;
@@ -327,15 +332,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   refresh(): void {
-    this.topPocketState = TopPocketState.STATE_READY;
-
+    this.pocketStateChange(TopPocketState.STATE_READY);
     this.startLoading();
     this.props.onPullDown?.({});
   }
 
   startLoading(): void {
-    if (this.loadingIndicatorEnabled) {
-      // TODO: check visibility - && this.$element().is(':visible')
+    if (this.loadingIndicatorEnabled && isVisible(this.scrollableRef.current!)) {
       this.isLoadPanelVisible = true;
     }
     this.lock();
@@ -381,7 +384,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
         { x: location.left || 0, y: location.top || 0 },
       ),
     );
-    this.onEnd();
+    // this.onEnd();
   }
 
   @Method()
@@ -628,12 +631,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.props.onStart?.(this.getEventArgs());
   }
 
-  onEnd(): void {
-    this.props.onEnd?.(this.getEventArgs());
-  }
+  onEnd(direction: string): void {
+    if (this.direction.isBoth) {
+      this.endActionDirections[direction] = true;
 
-  onStop(): void {
-    this.props.onStop?.(this.getEventArgs());
+      const { horizontal, vertical } = this.endActionDirections;
+
+      if (horizontal && vertical) {
+        this.endActionDirections.vertical = false;
+        this.endActionDirections.horizontal = false;
+        this.props.onEnd?.(this.getEventArgs());
+      }
+    } else {
+      this.props.onEnd?.(this.getEventArgs());
+    }
   }
 
   onUpdated(): void {
@@ -714,8 +725,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.eventHandler(
       (scrollbar) => scrollbar.initHandler(e, crossThumbScrolling),
     );
-
-    this.onStop();
   }
 
   handleStart(e: Event): void {
@@ -1222,13 +1231,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE]: showScrollbar === 'always',
-      [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
+      [SCROLLABLE_SCROLLBARS_HIDDEN]: showScrollbar === 'never',
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
   }
 
-  get direction(): { isVertical: boolean; isHorizontal: boolean } {
+  get direction(): { isVertical: boolean; isHorizontal: boolean; isBoth: boolean } {
     return new ScrollDirection(this.props.direction);
   }
 }

@@ -23,6 +23,17 @@ function exportDataGrid(doc, dataGrid, options) {
                     const pdfCell = {
                         text: cellData.value
                     };
+
+                    if(cellData.cellSourceData.rowType === 'header') {
+                        const cellMerging = dataProvider.getCellMerging(rowIndex, cellIndex);
+                        if(cellMerging && cellMerging.rowspan > 0) {
+                            pdfCell.rowSpan = cellMerging.rowspan;
+                        }
+                        if(cellMerging && cellMerging.colspan > 0) {
+                            pdfCell.colSpan = cellMerging.colspan;
+                        }
+                    }
+
                     if(options.onCellExporting) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
@@ -45,6 +56,8 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 pdfGrid.addRow(currentRow, rowHeight);
             }
+
+            pdfGrid.mergeCellsBySpanAttributes();
 
             pdfGrid.drawTo(doc);
             resolve();

@@ -24,7 +24,6 @@ const Scrollable = DOMComponent.inherit({
         switch(args.name) {
             case 'onStart':
             case 'onEnd':
-            case 'onStop':
             case 'onUpdated':
             case 'onScroll':
             case 'onBounce':
