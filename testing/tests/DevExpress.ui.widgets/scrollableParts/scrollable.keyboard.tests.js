@@ -30,6 +30,10 @@ QUnit.module('keyboard support', {
                 </div>\
             </div>';
         $('#qunit-fixture').html(markup);
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 });
 
@@ -304,13 +308,14 @@ if(devices.real().deviceType === 'desktop') {
                     $contentContainer2.css('display', 'inline-block');
                 }
 
-                return new Promise(function(resolve) {
-                    $scrollable.dxScrollable('option', 'onScroll', function() {
+                return new Promise((resolve) => {
+                    $scrollable.dxScrollable('option', 'onScroll', () => {
                         setTimeout(() => {
+                            this.clock.tick(400);
                             checkScrollLocation($scrollable, scrollbarDirection === 'vertical' ? { top: 100, left: 0 } : { top: 0, left: 100 });
                             done();
-                        }, isRenovation ? 400 : 0);
-
+                        });
+                        this.clock.tick();
 
                         resolve();
                     });
