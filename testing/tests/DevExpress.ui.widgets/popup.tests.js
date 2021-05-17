@@ -17,7 +17,6 @@ import 'generic_light.css!';
 import 'ui/popup';
 import 'ui/tab_panel';
 
-const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 const IS_SAFARI = !!browser.safari;
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 
@@ -661,7 +660,7 @@ QUnit.module('options changed callbacks', {
         const popupHeight = $popup.height();
 
         $('<div>').height(50).appendTo($content);
-        assert.strictEqual($popup.height(), (popupHeight + 50), 'popup height has been changed (except IE11)');
+        assert.strictEqual($popup.height(), (popupHeight + 50), 'popup height has been changed');
 
         $('<div>').height(450).appendTo($content);
         assert.strictEqual($popup.outerHeight(), 400, 'popup height has been changed, it is equal to the maxHeight');
@@ -679,7 +678,7 @@ QUnit.module('options changed callbacks', {
         popup.option('width', 'auto');
         $content.empty();
 
-        assert.strictEqual($popup.outerHeight(), (IS_IE11 ? 400 : minHeight), 'popup with auto width can change height (except IE11)');
+        assert.strictEqual($popup.outerHeight(), minHeight, 'popup with auto width can change height');
     });
 
     QUnit.test('popup height should support top and bottom toolbars if height = auto', function(assert) {
@@ -772,13 +771,7 @@ QUnit.module('options changed callbacks', {
 
         popup.option('width', 'auto');
 
-        if(IS_IE11) {
-            assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width for IE11');
-            assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), 'has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with auto width for IE11');
-        } else {
-            assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width');
-        }
-
+        assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width');
     });
 
 

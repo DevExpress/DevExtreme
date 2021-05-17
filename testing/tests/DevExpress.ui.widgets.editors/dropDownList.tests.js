@@ -7,7 +7,6 @@ import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import browser from 'core/utils/browser';
 import fx from 'animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -1184,11 +1183,6 @@ QUnit.module('popup', moduleConfig, () => {
     });
 
     QUnit.testInActiveWindow('After search and load new page scrollTop should not be changed', function(assert) {
-        if(browser.msie) {
-            assert.ok(true, 'not applicable in IE');
-            return;
-        }
-
         this.clock.restore();
 
         const data = [];
