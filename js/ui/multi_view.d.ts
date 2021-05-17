@@ -47,6 +47,10 @@ export type OptionChangedEvent = EventInfo<dxMultiView> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxMultiView> & SelectionChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
     /**
      * @docid
@@ -111,6 +115,7 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
  * @module ui/multi_view
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxMultiView extends CollectionWidget {
@@ -121,6 +126,7 @@ export default class dxMultiView extends CollectionWidget {
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }

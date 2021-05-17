@@ -10,6 +10,32 @@ export type ChartSeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fulls
 export type DashStyleType = 'dash' | 'dot' | 'longDash' | 'solid';
 export type TimeIntervalType = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
 export type HatchingDirectionType = 'left' | 'none' | 'right';
+/**
+ * @docid
+ * @type number|object|Enums.VizTimeInterval
+ * @hidden
+ * @default undefined
+ */
+export type VizTimeInterval = number | {
+  /** @docid */
+  days?: number,
+  /** @docid */
+  hours?: number,
+  /** @docid */
+  milliseconds?: number,
+  /** @docid */
+  minutes?: number,
+  /** @docid */
+  months?: number,
+  /** @docid */
+  quarters?: number,
+  /** @docid */
+  seconds?: number,
+  /** @docid */
+  weeks?: number,
+  /** @docid */
+  years?: number
+} | TimeIntervalType;
 
 /**
  * @docid
@@ -427,7 +453,7 @@ export interface VizRange {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    length?: number | any | TimeIntervalType;
+    length?: VizTimeInterval;
     /**
      * @docid
      * @default undefined

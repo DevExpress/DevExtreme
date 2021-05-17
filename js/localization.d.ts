@@ -12,6 +12,7 @@ import {
  * @module localization
  * @export formatDate
  * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function formatDate(value: Date, format: format): string;
@@ -26,6 +27,7 @@ export function formatDate(value: Date, format: format): string;
  * @module localization
  * @export formatMessage
  * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function formatMessage(key: string, ...values: Array<string>): string;
@@ -40,6 +42,7 @@ export function formatMessage(key: string, ...values: Array<string>): string;
  * @module localization
  * @export formatNumber
  * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function formatNumber(value: number, format: format): string;
@@ -52,6 +55,7 @@ export function formatNumber(value: number, format: format): string;
  * @module localization
  * @export loadMessages
  * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function loadMessages(messages: any): void;
@@ -64,6 +68,7 @@ export function loadMessages(messages: any): void;
  * @module localization
  * @export locale
  * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function locale(): string;
@@ -76,6 +81,7 @@ export function locale(): string;
  * @module localization
  * @export locale
  * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function locale(locale: string): void;
@@ -90,6 +96,7 @@ export function locale(locale: string): void;
  * @module localization
  * @export parseDate
  * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function parseDate(text: string, format: format): Date;
@@ -104,6 +111,7 @@ export function parseDate(text: string, format: format): Date;
  * @module localization
  * @export parseNumber
  * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function parseNumber(text: string, format: format): number;

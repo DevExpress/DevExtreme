@@ -14,6 +14,7 @@ import Editor, {
     EditorOptions
 } from '../editor/editor';
 
+/** @namespace DevExpress.ui */
 export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
     /**
      * @docid
@@ -295,6 +296,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
  * @inherits Editor
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class dxTextEditor extends Editor {
     constructor(element: UserDefinedElement, options?: dxTextEditorOptions)
@@ -326,6 +328,7 @@ export default class dxTextEditor extends Editor {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxTextEditorButton {
     /**
