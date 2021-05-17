@@ -22,10 +22,11 @@ jobs:
     - name: Build
       run: npm run build
 
+    - name: Update webpack version
+      run: npm install --save-dev webpack@5
+
     - name: Build test bundle by rollup
       run: npx rollup --config ./testing/test_bundlers/rollup.config.js
 
     - name: Build test bundle by webpack
       run: npx webpack --config ./testing/test_bundlers/webpack.config.js
-
-

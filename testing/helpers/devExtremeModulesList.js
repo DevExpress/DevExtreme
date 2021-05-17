@@ -43,7 +43,7 @@ const modulesExportsList = {
         hold: require('events/hold'),
         hover: require('events/hover'),
         pointer: require('events/pointer'),
-        // remove: require('events/remove'),         need correct docs
+        // remove: require('events/remove'),         documentation needs to be adjusted
         swipe: require('events/swipe'),
         transform: require('events/transform')
     },
@@ -58,7 +58,7 @@ const modulesExportsList = {
         FileSystemItem: require('file_management/file_system_item'),
         ObjectFileSystemProvider: require('file_management/object_provider'),
         RemoteFileSystemProvider: require('file_management/remote_provider'),
-        // UploadInfo: require('file_management/upload_info'),         need correct docs
+        // UploadInfo: require('file_management/upload_info'),         documentation needs to be adjusted
     },
 
     integrationExportsList: {
