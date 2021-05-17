@@ -3,7 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Scheduler: Adaptive Generic theme layout`
+fixture`Layout:BrowserResize`
   .page(url(__dirname, '../../container.html'));
 
 const data = [{
@@ -98,6 +98,9 @@ const resourceDataSource = [{
 }];
 
 [{
+  currentView: 'agenda',
+  currentDate: new Date(2017, 4, 25),
+}, {
   currentView: 'day',
   currentDate: new Date(2017, 4, 25),
 }, {
@@ -110,7 +113,7 @@ const resourceDataSource = [{
   currentView: 'timelineDay',
   currentDate: new Date(2017, 4, 26),
 }].forEach(({ currentView, currentDate }) => {
-  test('Appointment layout after resize should be right', async (t) => {
+  test(`Appointment layout after resize should be rendered right in '${currentView}'`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -129,7 +132,7 @@ const resourceDataSource = [{
   }).before(async () => {
     await createWidget('dxScheduler', {
       dataSource: data,
-      views: ['day', 'week', 'month', 'timelineDay'],
+      views: [currentView],
       currentView,
       currentDate,
       resources: [{
