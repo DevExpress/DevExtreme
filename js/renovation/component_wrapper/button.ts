@@ -30,6 +30,12 @@ export default class Button extends Component {
     return ['content'];
   }
 
+  getDefaultKeyHandlers() {
+    const props = this.getProps();
+    const handler = (e, opts) => (props as any).onKeyDown(opts);
+    return { enter: handler, space: handler };
+  }
+
   _patchOptionValues(options) {
     options.templateData = options._templateData;
     return super._patchOptionValues(options);
