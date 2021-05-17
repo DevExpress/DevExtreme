@@ -23,7 +23,7 @@ jobs:
       run: npm run build
 
     - name: Update webpack version
-      run: npm install --save-dev webpack@5
+      run: npm update --save-dev
 
     - name: Build test bundle by rollup
       run: npx rollup --config ./testing/test_bundlers/rollup.config.js
