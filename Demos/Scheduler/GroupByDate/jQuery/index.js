@@ -19,7 +19,7 @@ $(function(){
         currentView: "Week",
         crossScrollingEnabled: true,
         groupByDate: groupByDate.option("value"),
-        currentDate: new Date(2021, 4, 21),
+        currentDate: new Date(2021, 3, 21),
         startDayHour: 9,
         endDayHour: 16,
         groups: ["priorityId"],
