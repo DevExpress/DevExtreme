@@ -449,7 +449,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
         renderSpy.lastCall.args[0].onRendered();
 
-        const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
+        const templateGroup = chart._renderer.g.returnValues[14];
         assert.strictEqual(templateGroup.stub('move').callCount, 1);
     });
 
@@ -465,7 +465,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             centerTemplate: $.noop
         });
 
-        const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
+        const templateGroup = chart._renderer.g.returnValues[14];
         assert.strictEqual(templateGroup.stub('attr').callCount, 2);
         assert.deepEqual(templateGroup.stub('attr').getCall(1).args[0], { visibility: 'hidden' });
 
@@ -484,7 +484,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             centerTemplate: centerTemplateSpy
         });
 
-        const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
+        const templateGroup = chart._renderer.g.returnValues[14];
 
         assert.deepEqual(templateGroup.attr.getCall(0).args, [{ class: 'dxc-hole-template' }]);
         assert.strictEqual(centerTemplateSpy.callCount, 1);
@@ -501,19 +501,18 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}],
             centerTemplate: centerTemplateSpy
         });
-        const groups = chart._renderer.root.children;
-        const templateGroup = groups[groups.length - 1];
+        const templateGroup = chart._renderer.g.returnValues[14];
 
         chart.render({ force: true });
 
-        assert.strictEqual(centerTemplateSpy.callCount, 2);
+        assert.strictEqual(centerTemplateSpy.callCount, 2, 'center template calls');
 
-        assert.strictEqual(templateGroup.clear.callCount, 1);
-        assert.ok(templateGroup.clear.getCall(0).calledAfter(centerTemplateSpy.getCall(0)));
-        assert.ok(templateGroup.clear.getCall(0).calledBefore(centerTemplateSpy.getCall(1)));
+        assert.strictEqual(templateGroup.clear.callCount, 2, 'template container clearing');
+        assert.ok(templateGroup.clear.getCall(0).calledBefore(centerTemplateSpy.getCall(0)));
+        assert.ok(templateGroup.clear.getCall(1).calledAfter(centerTemplateSpy.getCall(0)));
 
-        assert.ok(templateGroup.append.getCall(1).calledAfter(templateGroup.clear.getCall(0)));
-        assert.ok(templateGroup.append.getCall(1).calledBefore(centerTemplateSpy.getCall(1)));
+        assert.ok(templateGroup.linkAppend.getCall(0).calledBefore(templateGroup.clear.getCall(0)));
+        assert.ok(templateGroup.linkAppend.getCall(0).calledBefore(centerTemplateSpy.getCall(0)));
     });
 
     QUnit.module('Creation series for tracker', {

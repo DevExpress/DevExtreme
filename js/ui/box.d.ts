@@ -43,6 +43,10 @@ export type ItemRenderedEvent = NativeEventInfo<dxBox> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxBox> & ChangedOptionInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     /**
      * @docid
@@ -89,6 +93,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
  * @module ui/box
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxBox extends CollectionWidget {
@@ -98,6 +103,7 @@ export default class dxBox extends CollectionWidget {
 /**
  * @docid
  * @inherits CollectionWidgetItem
+ * @namespace DevExpress.ui
  * @type object
  */
 export interface dxBoxItem extends CollectionWidgetItem {

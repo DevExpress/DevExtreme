@@ -15,6 +15,7 @@ import {
     CollectionWidgetItem
 } from '../collection/ui.collection_widget.base';
 
+/** @namespace DevExpress.ui */
 export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * @docid
@@ -73,6 +74,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class DataExpressionMixin {
     constructor(options?: DataExpressionMixinOptions)
