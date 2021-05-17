@@ -1,4 +1,5 @@
 module.exports = {
+    mode: 'production',
     entry: './testing/test_bundlers/src/index.js',
     output: {
         filename: './artifacts/test_bundlers/dist_webpack/main.js',
