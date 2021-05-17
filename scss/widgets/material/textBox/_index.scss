@@ -18,8 +18,6 @@
     @include dx-texteditor-icon();
 
     &::before {
-      position: static;
-      text-indent: 0;
       color: $textbox-search-icon-color;
     }
 

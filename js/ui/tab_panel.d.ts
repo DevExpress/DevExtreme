@@ -73,6 +73,10 @@ export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemElement?: DxElement;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid
@@ -200,6 +204,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @module ui/tab_panel
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxTabPanel extends dxMultiView {
@@ -210,6 +215,7 @@ export default class dxTabPanel extends dxMultiView {
  * @docid
  * @inherits dxMultiViewItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxTabPanelItem extends dxMultiViewItem {
     /**

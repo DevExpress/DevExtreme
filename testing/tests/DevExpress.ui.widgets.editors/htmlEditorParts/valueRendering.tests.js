@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import 'ui/html_editor/converters/markdown';
 
-import { checkLink } from './utils.js';
+import { checkLink, prepareEmbedValue } from './utils.js';
 
 const CONTENT_CLASS = 'dx-htmleditor-content';
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
@@ -462,7 +462,7 @@ testModule('Custom blots rendering', {
         const instance = $('#htmlEditor')
             .dxHtmlEditor({
                 onValueChanged: (e) => {
-                    assert.equal(e.value.replace(/\uFEFF/g, ''), expected, 'markup contains a variable');
+                    assert.equal(prepareEmbedValue(e.value), expected, 'markup contains a variable');
                 }
             })
             .dxHtmlEditor('instance');
