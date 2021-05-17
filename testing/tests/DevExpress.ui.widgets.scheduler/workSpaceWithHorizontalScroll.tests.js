@@ -88,7 +88,7 @@ QUnit.test('Time panel scrollable should update position if date scrollable posi
     setTimeout(() => {
         assert.equal(timePanelScrollable.scrollTop(), 100, 'Scroll position is OK');
         done();
-    });
+    }, 100);
 });
 
 QUnit.test('Date table scrollable should update position if time panel position is changed', function(assert) {
