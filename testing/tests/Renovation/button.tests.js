@@ -547,6 +547,18 @@ QUnit.module('templates', moduleConfig, () => {
         assert.equal(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
         assert.equal(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');
     });
+
+    QUnit.test('should not throw error when called "focus" and has anonymous template', function(assert) {
+        $('#button').html('<span>Default slot</span>');
+        const $element = this.Button({});
+
+        try {
+            $element.trigger('dxhoverstart');
+            assert.ok(true, 'the error is not thrown');
+        } catch(e) {
+            assert.ok(false, 'the error is thrown');
+        }
+    });
 });
 
 QUnit.module('events subscriptions', moduleConfig, () => {

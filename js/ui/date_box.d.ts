@@ -87,6 +87,10 @@ export type DisabledDate = ComponentDisabledDate<dxDateBox>;
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     /**
      * @docid
@@ -233,6 +237,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
  * @module ui/date_box
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxDateBox extends dxDropDownEditor {

@@ -745,7 +745,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             this.callBase.apply(this, arguments);
 
             if(this.option('scrolling.mode') === 'virtual') {
-                $content = scrollable ? scrollable.$content() : this.element();
+                $content = scrollable ? $(scrollable.content()) : this.element();
                 this.callBase(widths, $content.children('.' + this.addWidgetPrefix(CONTENT_CLASS)).children(':not(.' + this.addWidgetPrefix(TABLE_CONTENT_CLASS) + ')'));
             }
         },
@@ -770,7 +770,9 @@ export const virtualScrollingModule = {
                 mode: 'standard',
                 preloadEnabled: false,
                 rowRenderingMode: 'standard',
-                loadTwoPagesOnStart: false
+                loadTwoPagesOnStart: false,
+                newMode: false,
+                minGap: 1
             }
         };
     },

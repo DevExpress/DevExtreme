@@ -118,6 +118,10 @@ export type SelectAllValueChangedEvent = EventInfo<dxList> & {
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxList> & SelectionChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
     /**
      * @docid
@@ -238,6 +242,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 itemElement:DxElement
        * @type_function_param2 itemData:object
+       * @return void
        */
       action?: ((itemElement: DxElement, itemData: any) => any),
       /**
@@ -573,6 +578,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
  * @module ui/list
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxList extends CollectionWidget {
@@ -774,6 +780,7 @@ export default class dxList extends CollectionWidget {
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxListItem extends CollectionWidgetItem {
     /**

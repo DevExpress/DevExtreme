@@ -51,7 +51,7 @@ const _getDigitPositionByIndex = function(digitIndex, text) {
 
     while(result) {
         index = result.index;
-        if(!digitIndex || counter >= digitIndex) {
+        if(counter >= digitIndex) {
             return index;
         }
         counter++;
