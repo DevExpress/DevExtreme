@@ -12,8 +12,8 @@ import { DateHeaderCell } from '../../../../base/header_panel/date_header/cell';
 const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
 
 describe('TimelineDateHeaderLayout', () => {
-  describe('Render', () => {
-    const dateHeaderMap: any = [[{
+  const dateHeaderData: any = {
+    dataMap: [[{
       startDate: new Date(2020, 6, 9),
       endDate: new Date(2020, 6, 10),
       today: true,
@@ -37,13 +37,19 @@ describe('TimelineDateHeaderLayout', () => {
       isLastGroupCell: true,
       colSpan: 34,
       key: '1',
-    }]];
+    }]],
+    leftVirtualCellCount: 1,
+    leftVirtualCellWidth: 2,
+    rightVirtualCellCount: 3,
+    rightVirtualCellWidth: 4,
+  };
 
+  describe('Render', () => {
     const render = (viewModel) => shallow(
       <LayoutView
         {...viewModel}
         props={{
-          dateHeaderMap,
+          dateHeaderData,
           ...viewModel.props,
         }}
       /> as any,
@@ -76,7 +82,7 @@ describe('TimelineDateHeaderLayout', () => {
         .toHaveLength(2);
 
       const firstCell = cells.at(0);
-      const firstCellData = dateHeaderMap[0][0];
+      const firstCellData = dateHeaderData.dataMap[0][0];
 
       expect(firstCell.props())
         .toMatchObject({
@@ -99,7 +105,7 @@ describe('TimelineDateHeaderLayout', () => {
         .toBe(firstCellData.key);
 
       const secondCell = cells.at(1);
-      const secondCellData = dateHeaderMap[0][1];
+      const secondCellData = dateHeaderData.dataMap[0][1];
 
       expect(secondCell.props())
         .toMatchObject({
@@ -127,15 +133,39 @@ describe('TimelineDateHeaderLayout', () => {
       const timeCellTemplate = () => null;
 
       [{
-        testDateHeaderMap: [[dateHeaderMap[0][0]]],
+        testDateHeaderData: {
+          dataMap: [[dateHeaderData.dataMap[0][0]]],
+          leftVirtualCellCount: 1,
+          leftVirtualCellWidth: 2,
+          rightVirtualCellCount: 3,
+          rightVirtualCellWidth: 4,
+        },
         cellCount: 1,
         expectedCellData: [{
           isWeekDayCell: false,
           isTimeCellTemplate: true,
         }],
-        description: 'should pass correct props to the cell when there is one row',
+        expectedRowProps: [{
+          className: 'dx-scheduler-header-row',
+          leftVirtualCellCount: 1,
+          leftVirtualCellWidth: 2,
+          rightVirtualCellCount: 3,
+          rightVirtualCellWidth: 4,
+          children: expect.anything(),
+        }],
+        rowsCount: 1,
       }, {
-        testDateHeaderMap: [[dateHeaderMap[0][0]], [dateHeaderMap[0][1]]],
+        testDateHeaderData: {
+          dataMap: [[dateHeaderData.dataMap[0][0]], [dateHeaderData.dataMap[0][1]]],
+          leftVirtualCellCount: 1,
+          leftVirtualCellWidth: 2,
+          rightVirtualCellCount: 3,
+          rightVirtualCellWidth: 4,
+          weekDayLeftVirtualCellCount: 5,
+          weekDayLeftVirtualCellWidth: 6,
+          weekDayRightVirtualCellCount: 7,
+          weekDayRightVirtualCellWidth: 8,
+        },
         cellCount: 2,
         expectedCellData: [{
           isWeekDayCell: true,
@@ -144,18 +174,34 @@ describe('TimelineDateHeaderLayout', () => {
           isWeekDayCell: false,
           isTimeCellTemplate: true,
         }],
-        description: 'should pass correct props to the cells when there are 2 rows',
+        expectedRowProps: [{
+          className: 'dx-scheduler-header-row',
+          leftVirtualCellCount: 5,
+          leftVirtualCellWidth: 6,
+          rightVirtualCellCount: 7,
+          rightVirtualCellWidth: 8,
+          children: expect.anything(),
+        }, {
+          className: 'dx-scheduler-header-row',
+          leftVirtualCellCount: 1,
+          leftVirtualCellWidth: 2,
+          rightVirtualCellCount: 3,
+          rightVirtualCellWidth: 4,
+          children: expect.anything(),
+        }],
+        rowsCount: 2,
       }].forEach(({
-        testDateHeaderMap,
+        testDateHeaderData,
         cellCount,
         expectedCellData,
-        description,
+        expectedRowProps,
+        rowsCount,
       }) => {
-        it(description, () => {
+        it(`should pass correct props to the cells when there are ${rowsCount} rows`, () => {
           const layout = render({
             isHorizontalGrouping: true,
             props: {
-              dateHeaderMap: testDateHeaderMap,
+              dateHeaderData: testDateHeaderData,
               dateCellTemplate,
               timeCellTemplate,
             },
@@ -168,6 +214,26 @@ describe('TimelineDateHeaderLayout', () => {
           cells.forEach((cell, index) => {
             expect(cell.props())
               .toMatchObject(expectedCellData[index]);
+          });
+        });
+
+        it(`should pass correct props to the Row components when there are ${rowsCount} rows`, () => {
+          const layout = render({
+            isHorizontalGrouping: true,
+            props: {
+              dateHeaderData: testDateHeaderData,
+              dateCellTemplate,
+              timeCellTemplate,
+            },
+          });
+
+          const rows = layout.find(Row);
+          expect(rows)
+            .toHaveLength(rowsCount);
+
+          rows.forEach((row, index) => {
+            expect(row.props())
+              .toMatchObject(expectedRowProps[index]);
           });
         });
       });
@@ -203,6 +269,7 @@ describe('TimelineDateHeaderLayout', () => {
           const layout = new TimelineDateHeaderLayout({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
             groups,
+            dateHeaderData,
           });
 
           expect(layout.isHorizontalGrouping)
@@ -218,6 +285,7 @@ describe('TimelineDateHeaderLayout', () => {
             groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
             groups,
             groupByDate: true,
+            dateHeaderData,
           });
 
           expect(layout.isHorizontalGrouping)
@@ -233,6 +301,7 @@ describe('TimelineDateHeaderLayout', () => {
             groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
             groups,
             groupByDate: false,
+            dateHeaderData,
           });
 
           expect(layout.isHorizontalGrouping)
