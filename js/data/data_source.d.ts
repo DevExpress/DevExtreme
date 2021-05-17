@@ -10,6 +10,7 @@ import {
     CustomStoreOptions
 } from './custom_store';
 
+/** @namespace DevExpress.data */
 export interface DataSourceOptions {
     /**
      * @docid

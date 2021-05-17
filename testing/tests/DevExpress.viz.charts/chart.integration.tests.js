@@ -2475,7 +2475,7 @@ function checkOrder(assert, groups, order) {
     }
 }
 
-const VALIDATE_GROUPS = [
+const VALIDATE_CHART_GROUPS = [
     'dxc-background',
     'dxc-title',
     'dxc-strips-group',
@@ -2492,6 +2492,14 @@ const VALIDATE_GROUPS = [
     'dxc-legend',
     'dxc-annotations',
     'dx-export-menu'
+];
+
+const VALIDATE_PIECHART_GROUPS = [
+    'dxc-background',
+    'dxc-series-group',
+    'dxc-labels-group',
+    'dxc-legend',
+    'dxc-annotations'
 ];
 
 QUnit.test('Legend inside position', function(assert) {
@@ -2516,7 +2524,7 @@ QUnit.test('Legend inside position', function(assert) {
     const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
     const groups = root.find('>' + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS);
+    checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
 QUnit.test('Legend inside position. Zooming', function(assert) {
@@ -2547,7 +2555,7 @@ QUnit.test('Legend inside position. Zooming', function(assert) {
     groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g',
     groups = root.find('>' + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS);
+    checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
 QUnit.test('Legend outside position', function(assert) {
@@ -2572,7 +2580,7 @@ QUnit.test('Legend outside position', function(assert) {
     const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
     const groups = root.find('>' + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS);
+    checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
 QUnit.test('Legend outside position. Zooming', function(assert) {
@@ -2603,7 +2611,7 @@ QUnit.test('Legend outside position. Zooming', function(assert) {
     groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g',
     groups = root.find('>' + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS);
+    checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
 QUnit.test('ScrollBar', function(assert) {
@@ -2631,7 +2639,7 @@ QUnit.test('ScrollBar', function(assert) {
     const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
     const groups = root.find('>' + groupTag);
 
-    const expectedGroups = VALIDATE_GROUPS.slice();
+    const expectedGroups = VALIDATE_CHART_GROUPS.slice();
     expectedGroups.splice(-2, 0, 'dxc-scroll-bar');
     checkOrder(assert, groups, expectedGroups);
 });
@@ -2658,7 +2666,7 @@ QUnit.test('Loading indicator should be the last', function(assert) {
     const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
 
     chart.showLoadingIndicator();
-    const expectedGroups = VALIDATE_GROUPS.slice();
+    const expectedGroups = VALIDATE_CHART_GROUPS.slice();
     expectedGroups.push('dx-loading-indicator');
     checkOrder(assert, root.find('>' + groupTag), expectedGroups);
 });
@@ -2999,6 +3007,39 @@ QUnit.test('Pie chart groups and classes', function(assert) {
     assert.equal($container.find('.dxc-series-group').length, 1, 'There is one series group');
     assert.equal($container.find('.dxc-labels-group').length, 1, 'There is one labels group');
     assert.equal($container.find('.dxc-legend').length, 1, 'There is one legend group');
+});
+
+// T997232
+QUnit.test('pie chart groups order', function(assert) {
+    const chart = this.createPieChart({
+        series: {},
+        dataSource: [{ arg: 0, val: 2 }]
+    });
+
+    const root = $(chart._renderer.root.element);
+    const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
+    const groups = root.find('>' + groupTag);
+
+    checkOrder(assert, groups, VALIDATE_PIECHART_GROUPS);
+});
+
+// T997232
+QUnit.test('pie chart groups order. pie with centerTemplate', function(assert) {
+    const chart = this.createPieChart({
+        series: {},
+        dataSource: [{ arg: 0, val: 2 }],
+        centerTemplate() {}
+    });
+
+    const root = $(chart._renderer.root.element);
+    const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
+    const groups = root.find('>' + groupTag);
+
+    const groupsOrder = VALIDATE_PIECHART_GROUPS.slice();
+
+    groupsOrder.splice(4, 0, 'dxc-hole-template');
+
+    checkOrder(assert, groups, groupsOrder);
 });
 
 // T412270
@@ -3625,6 +3666,26 @@ QUnit.test('Rotated labels', function(assert) {
     assert.roughEqual(Math.ceil(settings.translateX), 256, 1.5);
     assert.roughEqual(Math.round(settings.translateY), 390, 1.5);
     assert.strictEqual(settings.rotate, 90);
+});
+
+QUnit.test('axis.label.template option changing', function(assert) {
+    const template = sinon.spy();
+
+    const chart = this.createChart({
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }]
+    });
+
+    chart.option({
+        argumentAxis: {
+            label: {
+                template
+            }
+        }
+    });
+
+    assert.strictEqual(template.callCount, 1);
+
 });
 
 QUnit.module('Discrete axis label layout', $.extend({}, moduleSetup, {
