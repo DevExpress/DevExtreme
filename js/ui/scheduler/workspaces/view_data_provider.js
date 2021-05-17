@@ -183,7 +183,7 @@ class ViewDataGenerator {
         const weekDaysRow = [];
 
         for(let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
-            const cell = completeViewDataMap[index][dayIndex * cellCountInDay];
+            const cell = completeViewDataMap[index][dayIndex * colSpan];
 
             weekDaysRow.push({
                 ...cell,
