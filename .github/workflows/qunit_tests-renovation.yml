@@ -24,7 +24,7 @@ jobs:
     - name: Run QUnit tests
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
-        NORENOVATION: "true"
+        NORENOVATION: "false"
         GITHUBACTION: "true"
         TARGET: "test"
       run: |
