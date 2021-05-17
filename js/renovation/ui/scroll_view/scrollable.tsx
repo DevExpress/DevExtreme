@@ -232,6 +232,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.getElementLocation(element, direction);
   }
 
+  @Method()
+  scrollToElementTopLeft(element: HTMLElement): void {
+    this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
+  }
+
   get scrollableRef(): any {
     if (this.props.useNative) {
       return this.scrollableNativeRef.current!;

@@ -622,7 +622,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get isVisible(): boolean {
-    return this.props.showScrollbar !== 'never' && this.containerToContentRatio < 1;
+    return this.props.showScrollbar !== 'never' && this.containerToContentRatio < 1 && this.props.containerSize > 15;
   }
 
   get visible(): boolean {

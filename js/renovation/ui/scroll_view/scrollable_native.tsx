@@ -368,13 +368,20 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   /* istanbul ignore next */
-  scrollToElement(element: HTMLElement): void {
+  scrollToElement(
+    element: HTMLElement,
+    scrollToOptions: {
+      block: 'start' | 'center' | 'end' | 'nearest';
+      inline: 'start' | 'center' | 'end' | 'nearest';
+      behavior: 'auto'; 'smooth';
+    },
+  ): void {
     if (!isDefined(element)) {
       return;
     }
 
     const { top, left } = this.scrollOffset();
-    element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    element.scrollIntoView(scrollToOptions || { block: 'nearest', inline: 'nearest' });
 
     const distance = getOffsetDistance({ top, left }, this.props.direction, this.scrollOffset());
 
@@ -386,12 +393,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     if (!this.direction.isVertical) {
       containerEl.scrollTop += distance.top;
     }
-    // if (getClosestElement(element, `.${SCROLLABLE_CONTENT_CLASS}`)) {
-    //   const top = this.getElementLocation(element, DIRECTION_VERTICAL, offset);
-    //   const left = this.getElementLocation(element, DIRECTION_HORIZONTAL, offset);
-
-    //   this.scrollTo({ top, left });
-    // }
   }
 
   @Method()

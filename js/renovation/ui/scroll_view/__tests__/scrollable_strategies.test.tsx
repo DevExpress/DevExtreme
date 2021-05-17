@@ -79,20 +79,24 @@ each([{
 
       each(optionValues.direction).describe('Direction: %o', (direction) => {
         it('should render scrollbars', () => {
-          const helper = new ScrollableTestHelper({ direction, useSimulatedScrollbar: true, showScrollbar: 'always' });
+          const helper = new ScrollableTestHelper({
+            direction,
+            useSimulatedScrollbar: true,
+            showScrollbar: 'always',
+          });
 
           const scrollbars = helper.getScrollbars();
 
           if (helper.isBoth) {
             expect(scrollbars.length).toEqual(2);
-            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal');
-            expect(scrollbars.at(1).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical');
+            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal dx-state-invisible');
+            expect(scrollbars.at(1).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical dx-state-invisible');
           } else if (helper.isVertical) {
             expect(scrollbars.length).toEqual(1);
-            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical');
+            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical dx-state-invisible');
           } else if (helper.isHorizontal) {
             expect(scrollbars.length).toEqual(1);
-            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal');
+            expect(scrollbars.at(0).getDOMNode().className).toBe('dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal dx-state-invisible');
           }
         });
       });

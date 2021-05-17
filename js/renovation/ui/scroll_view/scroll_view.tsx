@@ -153,6 +153,11 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
+  scrollToElementTopLeft(element: HTMLElement): void {
+    this.scrollable.scrollToElementTopLeft(element);
+  }
+
+  @Method()
   scrollHeight(): number {
     return this.scrollable.scrollHeight();
   }
