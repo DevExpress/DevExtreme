@@ -24,7 +24,7 @@ const VirtualScrollingRowsViewExtender = {
     }
 };
 
-const HeaderFooterViewExtender = {
+const HeaderViewExtender = {
     _renderCore: function() {
         const that = this;
         const scrollLeft = that._scrollLeft;
@@ -255,8 +255,7 @@ export const virtualColumnsModule = {
             columns: ColumnsControllerExtender
         },
         views: {
-            columnHeadersView: HeaderFooterViewExtender,
-            footerView: HeaderFooterViewExtender,
+            columnHeadersView: HeaderViewExtender,
             rowsView: VirtualScrollingRowsViewExtender
         }
     }
