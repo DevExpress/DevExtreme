@@ -3,7 +3,7 @@ import {
   ComponentBindings,
   JSXComponent,
 } from '@devextreme-generator/declarations';
-import NonTemplatedTestComponent from './wrappers/non_templated';
+import NonTemplatedTestComponent from './component_wrapper/non_templated';
 
 export const view = (): JSX.Element => <div />;
 

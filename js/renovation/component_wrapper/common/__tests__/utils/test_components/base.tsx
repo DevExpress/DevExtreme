@@ -15,7 +15,7 @@ import {
   keyboard,
 } from '../../../../../../events/short';
 
-import BaseTestComponent from './wrappers/base';
+import BaseTestComponent from './component_wrapper/base';
 
 export const view = (viewModel: TestWidget): JSX.Element => (
   <div

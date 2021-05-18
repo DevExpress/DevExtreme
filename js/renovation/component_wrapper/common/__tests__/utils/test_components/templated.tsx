@@ -7,7 +7,7 @@ import {
   Template,
   OneWay,
 } from '@devextreme-generator/declarations';
-import TemplatedTestComponent from './wrappers/templated';
+import TemplatedTestComponent from './component_wrapper/templated';
 
 export const view = ({
   props: {

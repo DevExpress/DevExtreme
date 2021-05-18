@@ -9,7 +9,7 @@ import {
   TwoWay,
 } from '@devextreme-generator/declarations';
 
-import BaseTestComponent from './wrappers/base';
+import BaseTestComponent from './component_wrapper/base';
 
 export const view = ({ restAttributes }: OptionsTestWidget): JSX.Element => (
   // eslint-disable-next-line react/jsx-props-no-spreading
