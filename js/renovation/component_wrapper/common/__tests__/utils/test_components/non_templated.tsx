@@ -3,7 +3,7 @@ import {
   ComponentBindings,
   JSXComponent,
 } from '@devextreme-generator/declarations';
-import BaseComponent from './non_templated_test_widget_jquery_wrapper';
+import NonTemplatedTestComponent from './component_wrapper/non_templated';
 
 export const view = (): JSX.Element => <div />;
 
@@ -13,7 +13,7 @@ export class NonTemplatedTestWidgetProps {}
 @Component({
   jQuery: {
     register: true,
-    component: BaseComponent,
+    component: NonTemplatedTestComponent,
   },
   view,
 })

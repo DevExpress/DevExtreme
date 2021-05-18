@@ -15,7 +15,7 @@ import {
   keyboard,
 } from '../../../../../../events/short';
 
-import BaseComponent from './base_test_widget';
+import BaseTestComponent from './component_wrapper/base';
 
 export const view = (viewModel: TestWidget): JSX.Element => (
   <div
@@ -51,7 +51,7 @@ export class TestWidgetProps {
 @Component({
   jQuery: {
     register: true,
-    component: BaseComponent,
+    component: BaseTestComponent,
   },
   view,
 })
