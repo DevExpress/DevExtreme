@@ -4,7 +4,7 @@ import { createScreenshotsComparer } from '../../../../helpers/screenshot-compar
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Layout:Templates:CellTemplate`
+fixture`Layout:Templates:appointmentTemplate`
   .page(url(__dirname, '../../../container.html'));
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'agenda'].forEach((currentView) => {
