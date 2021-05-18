@@ -2,12 +2,20 @@
 
 const widgetsList = require('../../helpers/devExtremeModulesList.js').modulesExportsList.widgetsList;
 
-// require('localization/globalize/message');
-// require('localization/globalize/number');
-// require('localization/globalize/currency');
-// require('localization/globalize/date');
+const de = require('localization/messages/de.json');
+const ru = require('localization/messages/ru.json');
 
-// const Globalize = require('globalize');
+const Globalize = require('globalize');
+
+Globalize.load(
+    // Common and language-specific CLDR JSONs
+    require('devextreme-cldr-data/supplemental.json'),
+    require('devextreme-cldr-data/de.json'),
+    require('devextreme-cldr-data/ru.json')
+);
+
+Globalize.loadMessages(de);
+Globalize.loadMessages(ru);
 
 const myPopup = new widgetsList.Popup.default(document.getElementById('myPopUp'), {
     title: 'PopUp!'

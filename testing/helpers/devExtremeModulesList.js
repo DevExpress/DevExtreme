@@ -23,10 +23,10 @@ const modulesExportsList = {
         EndpointSelecror: require('data/endpoint_selector'),
         errorHandler: require('data/errors').errorHandler,
         LocalStore: require('data/local_store'),
-        ODataContext: require('data/odata/context'),
-        ODataStore: require('data/odata/store'),
-        EdmLiteral: require('data/odata/utils').EdmLiteral,
-        keyConverters: require('data/odata/utils').keyConverters,
+        // ODataContext: require('data/odata/context'),
+        // ODataStore: require('data/odata/store'),
+        // EdmLiteral: require('data/odata/utils').EdmLiteral,
+        // keyConverters: require('data/odata/utils').keyConverters,
         Query: require('data/query'),
         base64_encode: require('data/utils').base64_encode
     },
@@ -67,12 +67,12 @@ const modulesExportsList = {
         knockout: require('integration/knockout')
     },
 
-    // localizationGlobalizeExportsList: {
-    //     currency: require('/localization/globalize/currency'),
-    //     date: require('/localization/globalize/date'),
-    //     message: require('/localization/globalize/message'),
-    //     number: require('/localization/globalize/number')
-    // },
+    localizationGlobalizeExportsList: {
+        currency: require('localization/globalize/currency'),
+        date: require('localization/globalize/date'),
+        message: require('localization/globalize/message'),
+        number: require('localization/globalize/number')
+    },
 
     mobileExportsList: {
         hideTopOverlay: require('mobile/hide_top_overlay'),
