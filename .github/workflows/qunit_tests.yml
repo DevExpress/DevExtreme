@@ -10,7 +10,7 @@ jobs:
         CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz, renovation ]
 
     runs-on: ubuntu-latest
-    name: QUnit renovation 'No', ${{ matrix.CONSTEL }}
+    name: Constel ${{ matrix.CONSTEL }}
     timeout-minutes: 60
 
     steps:
