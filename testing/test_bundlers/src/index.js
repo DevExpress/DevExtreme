@@ -2,6 +2,13 @@
 
 const widgetsList = require('../../helpers/devExtremeModulesList.js').modulesExportsList.widgetsList;
 
+// require('localization/globalize/message');
+// require('localization/globalize/number');
+// require('localization/globalize/currency');
+// require('localization/globalize/date');
+
+// const Globalize = require('globalize');
+
 const myPopup = new widgetsList.Popup.default(document.getElementById('myPopUp'), {
     title: 'PopUp!'
 });
