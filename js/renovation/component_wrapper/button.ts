@@ -1,7 +1,7 @@
 /* eslint-disable */
 import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
-import { Button } from '../ui/button';
+import type { Button } from '../ui/button';
 
 export default class ButtonWrapper extends Component {
   _init() {
