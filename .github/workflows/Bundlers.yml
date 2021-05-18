@@ -22,6 +22,8 @@ jobs:
     - name: Build
       run: npm run build
     
+    - run: npm install --save-dev webpack@4 webpack-cli    
+
     - name: Install globalize
       run: npm install --save-dev devextreme-cldr-data globalize
 
