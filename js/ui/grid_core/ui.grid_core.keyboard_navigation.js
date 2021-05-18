@@ -6,7 +6,7 @@ import gridCoreUtils from './ui.grid_core.utils';
 import { isDefined, isEmptyObject } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { focused } from '../widget/selectors';
-import { addNamespace, createEvent } from '../../events/utils/index';
+import { addNamespace, createEvent, isCommandKeyPressed } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import { name as clickEventName } from '../../events/click';
 import { noop } from '../../core/utils/common';
@@ -274,8 +274,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     // #region Key_Handlers
     _keyDownHandler: function(e) {
-        const isCommandKeyPressed = e.ctrl || e.metaKey;
-
         const isEditing = this._editingController.isEditing();
         let needStopPropagation = true;
         const originalEvent = e.originalEvent;
@@ -316,7 +314,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     break;
 
                 case 'A':
-                    if(isCommandKeyPressed) {
+                    if(isCommandKeyPressed(e.originalEvent)) {
                         this._ctrlAKeyHandler(e, isEditing);
                     } else {
                         this._beginFastEditing(e.originalEvent);
@@ -336,7 +334,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     break;
 
                 case 'F':
-                    if(isCommandKeyPressed) {
+                    if(isCommandKeyPressed(e.originalEvent)) {
                         this._ctrlFKeyHandler(e);
                     } else {
                         this._beginFastEditing(e.originalEvent);

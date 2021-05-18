@@ -3470,7 +3470,7 @@ QUnit.module('Keyboard keys', {
     }, {
         ctrl: true
     }].forEach((keyConfig) => {
-        let keyName = keyConfig.meta ? "Command" : "Ctrl";
+        const keyName = keyConfig.meta ? 'Command' : 'Ctrl';
 
         QUnit.testInActiveWindow(`${keyName} + F`, function(assert) {
             // arrange
@@ -3536,7 +3536,7 @@ QUnit.module('Keyboard keys', {
 
             this.focusFirstCell();
 
-            const isPreventDefaultCalled = this.triggerKeyDown('A', {...keyConfig, alt: true }).preventDefault;
+            const isPreventDefaultCalled = this.triggerKeyDown('A', { ...keyConfig, alt: true }).preventDefault;
 
             // assert
             assert.notOk(this.selectionOptions.isSelectAllCalled, 'selectAll is not called');
@@ -3564,7 +3564,7 @@ QUnit.module('Keyboard keys', {
     });
 
     QUnit.testInActiveWindow('key A_T103450 ', function(assert) {
-            // arrange, act
+        // arrange, act
         setupModules(this);
         $.extend(this.options.editing, { mode: 'batch', allowUpdating: true });
         this.options.selection = { mode: 'multiple' };
