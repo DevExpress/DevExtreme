@@ -4,7 +4,7 @@ import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
 
 import { data, priorityData } from './data.js';
 
-const currentDate = new Date(2021, 4, 21);
+const currentDate = new Date(2021, 3, 21);
 const views = [{
   type: 'workWeek',
   name: 'Vertical Grouping',
