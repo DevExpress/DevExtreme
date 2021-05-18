@@ -36,35 +36,57 @@ describe('Box > Attrs', () => {
     });
   });
 
-  const getBoxStyles = (direction, align, crossAlign) => {
-    const DIRECTION_MAP = { row: 'row', col: 'column' };
-    const tryGetFromMap = (prop, map): string => ((prop in map) ? map[prop] : prop);
-    return {
-      display: 'flex',
-      flexDirection: DIRECTION_MAP[direction],
-      justifyContent: tryGetFromMap(align, {
-        start: 'flex-start',
-        end: 'flex-end',
-        center: 'center',
-        'space-between': 'space-between',
-        'space-around': 'space-around',
-      }),
-      alignItems: tryGetFromMap(crossAlign, {
-        start: 'flex-start',
-        end: 'flex-end',
-        center: 'center',
-        stretch: 'stretch',
-      }),
-    };
-  };
-  each(['row', 'column', undefined]).describe('direction: %o', (direction) => {
+  describe('cssStyles', () => {
+    it('display style', () => {
+      const props = {} as BoxProps;
+      const box = new Box(props);
+      expect(box.cssStyles.display).toEqual('flex');
+    });
+
+    each(['row', 'column', undefined]).describe('direction: %o', (direction) => {
+      it('flexDirection style', () => {
+        const props = { direction } as BoxProps;
+        const box = new Box(props);
+        let expectedDirection;
+        if (direction === 'row') {
+          expectedDirection = 'row';
+        } else if (direction === 'col') {
+          expectedDirection = 'column';
+        }
+
+        expect(box.cssStyles.flexDirection).toEqual(expectedDirection);
+      });
+    });
+
     each(['center', 'end', 'space-around', 'space-between', 'start', undefined]).describe('align: %o', (align) => {
-      each(['center', 'end', 'start', 'stretch', undefined]).describe('crossAlign: %o', (crossAlign) => {
-        it('cssStyle', () => {
-          const props = { direction, align, crossAlign } as BoxProps;
-          const box = new Box(props);
-          expect(box.cssStyles).toEqual(getBoxStyles(direction, align, crossAlign));
-        });
+      it('justifyContent style', () => {
+        const props = { align } as BoxProps;
+        const box = new Box(props);
+
+        let justifyContent = align;
+        if (align === 'start') {
+          justifyContent = 'flex-start';
+        } else if (align === 'end') {
+          justifyContent = 'flex-end';
+        }
+
+        expect(box.cssStyles.justifyContent).toEqual(justifyContent);
+      });
+    });
+
+    each(['center', 'end', 'start', 'stretch', undefined]).describe('crossAlign: %o', (crossAlign) => {
+      it('alignItems style', () => {
+        const props = { crossAlign } as BoxProps;
+        const box = new Box(props);
+
+        let alignItems = crossAlign;
+        if (crossAlign === 'start') {
+          alignItems = 'flex-start';
+        } else if (crossAlign === 'end') {
+          alignItems = 'flex-end';
+        }
+
+        expect(box.cssStyles.alignItems).toEqual(alignItems);
       });
     });
   });
