@@ -47,10 +47,9 @@ module('Basic markup', () => {
             label: 'Label'
         });
 
-        const $inputContainer = element.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
-        assert.strictEqual($inputContainer.length, 1, 'input container is rendered');
+        const $textEditorContainer = element.find(`.${CONTAINER_CLASS}`);
+        const label = $textEditorContainer.find(`.${LABEL_CLASS}`);
 
-        const label = $inputContainer.find(`.${LABEL_CLASS}`);
         assert.strictEqual(label.length, 1, 'label is in the element');
         assert.ok(element.hasClass(WITH_LABEL_CLASS), 'text editor has ' + WITH_LABEL_CLASS);
         assert.notOk(element.hasClass(WITH_FLOATING_LABEL_CLASS), 'text editor hasn\'t ' + WITH_FLOATING_LABEL_CLASS);
@@ -62,10 +61,9 @@ module('Basic markup', () => {
             labelMode: 'floating'
         });
 
-        const $inputContainer = element.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
-        assert.strictEqual($inputContainer.length, 1, 'input container is rendered');
+        const $textEditorContainer = element.find(`.${CONTAINER_CLASS}`);
+        const label = $textEditorContainer.find(`.${LABEL_CLASS}`);
 
-        const label = $inputContainer.find(`.${LABEL_CLASS}`);
         assert.strictEqual(label.length, 1, 'label is in the element');
         assert.notOk(element.hasClass(WITH_LABEL_CLASS), 'text editor hasn\'t ' + WITH_LABEL_CLASS);
         assert.ok(element.hasClass(WITH_FLOATING_LABEL_CLASS), 'text editor hasn ' + WITH_FLOATING_LABEL_CLASS);
