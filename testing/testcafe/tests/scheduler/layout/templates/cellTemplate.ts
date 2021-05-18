@@ -24,8 +24,14 @@ fixture`Layout:Templates:CellTemplate`
       views: [currentView],
       currentView,
       currentDate: new Date(2017, 4, 25),
-      dataCellTemplate: ClientFunction((itemData) => itemData.startDate),
-      dateCellTemplate: ClientFunction((itemData) => itemData.date),
+      showAllDayPanel: false,
+      dataCellTemplate: ClientFunction((itemData) => ($('<div />') as any).dxDateBox({
+        type: 'time',
+        value: itemData.startDate,
+      })),
+      dateCellTemplate: ClientFunction((itemData) => ($('<div />') as any).dxTextBox({
+        value: new Intl.DateTimeFormat('en-US').format(itemData.date),
+      })),
       height: 600,
     });
   });
