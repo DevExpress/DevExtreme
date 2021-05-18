@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import Class from '../../core/class';
 import { equalByValue } from '../../core/utils/common';
 import domAdapter from '../../core/dom_adapter';
+import { isRenderer } from '../../core/utils/type';
 const abstract = Class.abstract;
 
 
@@ -95,7 +96,7 @@ const EditStrategy = Class.inherit({
     },
 
     _isNode: (el) => {
-        return domAdapter.isNode((el && el.get) ? el.get(0) : el);
+        return domAdapter.isNode(el && isRenderer(el) ? el.get(0) : el);
     },
 
     deleteItemAtIndex: abstract,
