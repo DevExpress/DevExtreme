@@ -43,7 +43,6 @@ import {
   SCROLLABLE_WRAPPER_CLASS,
   SCROLLVIEW_CONTENT_CLASS,
   SCROLLABLE_DISABLED_CLASS,
-  SCROLLABLE_SCROLLBARS_HIDDEN,
   SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
   SCROLL_LINE_HEIGHT,
   SCROLLABLE_SCROLLBAR_CLASS,
@@ -324,10 +323,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   update(): void {
-    if (!this.props.updateManually) {
-      this.updateSizes();
-      this.onUpdated();
-    }
+    this.updateSizes();
+    this.onUpdated();
   }
 
   @Method()
@@ -362,7 +359,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return;
     }
 
-    this.update();
+    if (!this.props.updateManually) {
+      this.update();
+    }
 
     if (this.direction.isVertical) {
       const scrollbar = this.vScrollbarRef.current;
@@ -389,7 +388,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollOffset>): void {
-    this.update();
+    // if (!this.props.updateManually) {
+    //   this.update();
+    // }
 
     const { direction } = this.props;
     const distance = getOffsetDistance(targetLocation, direction, this.scrollOffset());
@@ -871,7 +872,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return false;
     }
 
-    this.update();
+    if (!this.props.updateManually) {
+      this.update();
+    }
 
     if (this.props.disabled
     || (isDxMouseWheelEvent(e) && isCommandKeyPressed({
@@ -1228,7 +1231,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE]: showScrollbar === 'always',
-      [SCROLLABLE_SCROLLBARS_HIDDEN]: showScrollbar === 'never',
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);

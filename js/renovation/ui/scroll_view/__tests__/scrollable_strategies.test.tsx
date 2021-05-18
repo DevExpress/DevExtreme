@@ -15,7 +15,7 @@ import {
 } from './utils';
 
 import {
-  SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_DISABLED_CLASS, SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
 } from '../common/consts';
 
 import { titleize } from '../../../../core/utils/inflector';
@@ -601,16 +601,22 @@ each([{
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
               expect(rootClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
-              if (showScrollbar === 'never') {
-                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
-              } else {
-                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
-              }
 
               if (Scrollable === ScrollableNative) {
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
+
+                if (showScrollbar === 'never') {
+                  expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+                } else {
+                  expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
+                }
               } else {
+                expect(rootClasses).toEqual(showScrollbar === 'always'
+                  ? expect.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE)
+                  : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE));
+
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));

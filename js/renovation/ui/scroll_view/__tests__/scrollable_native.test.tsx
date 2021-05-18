@@ -537,13 +537,8 @@ describe('Native > Effects', () => {
 
       viewModel.update();
 
-      if (!updateManually) {
-        expect(viewModel.updateSizes).toBeCalledTimes(1);
-        expect(viewModel.onUpdated).toBeCalledTimes(1);
-      } else {
-        expect(viewModel.updateSizes).toBeCalledTimes(0);
-        expect(viewModel.onUpdated).toBeCalledTimes(0);
-      }
+      expect(viewModel.updateSizes).toBeCalledTimes(1);
+      expect(viewModel.onUpdated).toBeCalledTimes(1);
     });
   });
 
@@ -1081,10 +1076,10 @@ describe('Methods', () => {
   describe('Validate(e)', () => {
     each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH, undefined]).describe('allowedDirection: %o', (allowedDirection) => {
       each([true, false]).describe('isScrollingOutOfBound: %o', (isScrollingOutOfBound) => {
-        it('isWheelEvent: true, disabled: false, locked: false', () => {
+        test.each([true, false])('isWheelEvent: true, disabled: false, locked: false, updateManually: %o', (updateManually) => {
           const e = { ...defaultEvent, type: 'dxmousewheel' } as any;
 
-          const scrollable = new Scrollable({ disabled: false });
+          const scrollable = new Scrollable({ disabled: false, updateManually });
           scrollable.locked = false;
           scrollable.isScrollingOutOfBound = jest.fn(() => isScrollingOutOfBound);
           scrollable.tryGetAllowedDirection = jest.fn(() => allowedDirection);
@@ -1098,7 +1093,11 @@ describe('Methods', () => {
 
           const actualValidateResult = scrollable.validate(e);
 
-          expect(scrollable.update).toHaveBeenCalledTimes(1);
+          if (!updateManually) {
+            expect(scrollable.update).toHaveBeenCalledTimes(1);
+          } else {
+            expect(scrollable.update).toBeCalledTimes(0);
+          }
           expect(scrollable.isScrollingOutOfBound).toHaveBeenCalledTimes(1);
           expect(actualValidateResult).toEqual(expectedValidateResult);
         });

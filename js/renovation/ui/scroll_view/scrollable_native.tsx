@@ -272,10 +272,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   update(): void {
-    if (!this.props.updateManually) {
-      this.updateSizes();
-      this.onUpdated();
-    }
+    this.updateSizes();
+    this.onUpdated();
   }
 
   @Method()
@@ -894,7 +892,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       return false;
     }
 
-    this.update();
+    if (!this.props.updateManually) {
+      this.update();
+    }
 
     if (disabled || (isDxMouseWheelEvent(e) && this.isScrollingOutOfBound(e))) {
       return false;

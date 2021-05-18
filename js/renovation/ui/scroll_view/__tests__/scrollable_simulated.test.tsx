@@ -7,8 +7,6 @@ import {
 } from '@devextreme-generator/declarations';
 import { setWindow } from '../../../../core/utils/window';
 import {
-  SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
-  SCROLLABLE_SCROLLBARS_HIDDEN,
   DIRECTION_HORIZONTAL,
   DIRECTION_VERTICAL,
   SCROLLABLE_SCROLLBAR_CLASS,
@@ -723,14 +721,21 @@ describe('Simulated > Behavior', () => {
       });
 
       describe('Validate(e)', () => {
-        it('locked: true, disabled: false, bounceEnabled: true, ', () => {
+        test.each([true, false])('locked: true, disabled: false, bounceEnabled: true, updateManually: %o', (updateManually) => {
           const e = { ...defaultEvent } as any;
-          const viewModel = new Scrollable({ direction, disabled: false, bounceEnabled: true });
+          const viewModel = new Scrollable({
+            direction, disabled: false, bounceEnabled: true, updateManually,
+          });
           viewModel.locked = false;
           viewModel.update = jest.fn();
 
           expect(viewModel.validate(e)).toEqual(true);
-          expect(viewModel.update).toHaveBeenCalledTimes(1);
+
+          if (updateManually) {
+            expect(viewModel.update).toBeCalledTimes(0);
+          } else {
+            expect(viewModel.update).toHaveBeenCalledTimes(1);
+          }
         });
 
         each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
@@ -1094,15 +1099,11 @@ describe('Simulated > Behavior', () => {
         helper.viewModel.updateSizes = jest.fn();
         helper.viewModel.update();
 
-        if (!updateManually) {
-          expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
-          if (actionHandler) {
-            helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ fakeEventArg: { value: 5 } }]]);
-          } else {
-            helper.checkActionHandlerCalls(expect, [], []);
-          }
+        expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
+        if (actionHandler) {
+          helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ fakeEventArg: { value: 5 } }]]);
         } else {
-          expect(helper.viewModel.updateSizes).toBeCalledTimes(0);
+          helper.checkActionHandlerCalls(expect, [], []);
         }
       });
 
@@ -1239,7 +1240,7 @@ describe('Simulated > Behavior', () => {
 
     describe('ScrollTo', () => {
       each(optionValues.direction).describe('Direction: %o', (direction) => {
-        each([false]).describe('rtlEnabled: %o', (rtlEnabled) => { // TODO: rtl = true
+        each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
           each([
             [{ top: 50, left: 50 }, 20, { top: 20, left: 20 }],
             [{ top: 50, left: 50 }, { top: 20, left: 15 }, { top: 20, left: 15 }],
@@ -1282,6 +1283,29 @@ describe('Simulated > Behavior', () => {
               expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
               helper.checkContainerPosition(expect, expectedScrollOffset);
             });
+          });
+
+          test.each([true, false])('ScrollBy() should call update(), updateManually: %o', (updateManually) => {
+            const helper = new ScrollableTestHelper({
+              direction: 'vertical',
+              updateManually,
+              rtlEnabled,
+            });
+            helper.initScrollbarSettings();
+
+            helper.viewModel.triggerScrollEvent = jest.fn();
+            helper.viewModel.update = jest.fn();
+            helper.viewModel.prepareDirections = jest.fn();
+            helper.viewModel.onStart = jest.fn();
+            helper.viewModel.eventHandler = jest.fn();
+
+            helper.viewModel.scrollBy({ left: 10, top: 10 });
+
+            if (updateManually) {
+              expect(helper.viewModel.update).toBeCalledTimes(0);
+            } else {
+              expect(helper.viewModel.update).toHaveBeenCalledTimes(1);
+            }
           });
 
           each([
@@ -1414,30 +1438,6 @@ describe('Simulated > Logic', () => {
           const instance = new Scrollable({});
           expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
           expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-        });
-      });
-
-      each(optionValues.direction).describe('Direction: %o', (direction) => {
-        each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
-          it('scrollable css classes', () => {
-            const instance = new Scrollable({
-              showScrollbar,
-              direction,
-            });
-
-            const hasScrollbarsAlwaysVisibleClass = showScrollbar === 'always';
-            const hasScrollbarsHiddenClass = showScrollbar === 'never';
-
-            expect(instance.cssClasses).toEqual(hasScrollbarsAlwaysVisibleClass
-              ? expect.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE)
-              : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE));
-
-            expect(instance.cssClasses).toEqual(hasScrollbarsHiddenClass
-              ? expect.stringMatching(SCROLLABLE_SCROLLBARS_HIDDEN)
-              : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_HIDDEN));
-
-            expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-          });
         });
       });
     });
