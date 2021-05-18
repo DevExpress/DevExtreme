@@ -8,7 +8,6 @@ const ru = require('localization/messages/ru.json');
 const Globalize = require('globalize');
 
 Globalize.load(
-    // Common and language-specific CLDR JSONs
     require('devextreme-cldr-data/supplemental.json'),
     require('devextreme-cldr-data/de.json'),
     require('devextreme-cldr-data/ru.json')
