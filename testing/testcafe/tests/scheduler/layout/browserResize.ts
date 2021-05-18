@@ -118,13 +118,13 @@ const resourceDataSource = [{
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`browser-resize-currentView=${currentView}-before-resize.png`, scheduler.element))
+      .expect(await takeScreenshot(`browser-resize-currentView=${currentView}-before-resize.png`, scheduler.workSpace))
       .ok();
 
     await t.resizeWindow(600, 600);
 
     await t
-      .expect(await takeScreenshot(`browser-resize-currentView=${currentView}-after-resize.png`, scheduler.element))
+      .expect(await takeScreenshot(`browser-resize-currentView=${currentView}-after-resize.png`, scheduler.workSpace))
       .ok()
 
       .expect(compareResults.isValid())
