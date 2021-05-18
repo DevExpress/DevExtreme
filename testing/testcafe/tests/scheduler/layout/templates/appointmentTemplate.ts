@@ -7,7 +7,7 @@ import url from '../../../../helpers/getPageUrl';
 fixture`Layout:Templates:CellTemplate`
   .page(url(__dirname, '../../../container.html'));
 
-['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'timelineMonth', 'agenda'].forEach((currentView) => {
+['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'agenda'].forEach((currentView) => {
   test(`appointmentTemplate layout should be rendered right in '${currentView}'`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
