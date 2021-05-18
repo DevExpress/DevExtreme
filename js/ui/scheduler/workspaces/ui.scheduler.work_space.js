@@ -2833,12 +2833,12 @@ class SchedulerWorkSpace extends WidgetObserver {
             position = this.calculateCellPositionByView(date, groupIndex, inAllDayRow);
         }
 
-        const shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow);
-        const horizontalHMax = this._getHorizontalMax(groupIndex, date);
-
         if(!position) {
             throw errors.Error('E1039');
         }
+
+        const shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow);
+        const horizontalHMax = this._getHorizontalMax(groupIndex, date);
 
         return {
             cellPosition: position.left + shift.cellPosition,
@@ -3081,7 +3081,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(!this._maxAllowedPosition[groupIndex]) {
-            const { cellIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            const { cellIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
             getMaxPosition(cellIndex);
         }
 
@@ -3131,7 +3131,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(!this._maxAllowedVerticalPosition[groupIndex]) {
-            const { rowIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            const { rowIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
             getMaxPosition(rowIndex);
         }
 

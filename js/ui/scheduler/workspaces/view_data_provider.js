@@ -812,10 +812,10 @@ class GroupedDataMapProvider {
         }
     }
 
-    getLasGroupCellPosition(groupIndex) {
+    getLastGroupCellPosition(groupIndex) {
         const groupRow = this.getLastGroupRow(groupIndex);
 
-        return groupRow[groupRow.length - 1].position;
+        return groupRow?.[groupRow?.length - 1].position;
     }
 
     getRowCountInGroup(groupIndex) {
@@ -938,8 +938,8 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getGroupIndices();
     }
 
-    getLasGroupCellPosition(groupIndex) {
-        return this._groupedDataMapProvider.getLasGroupCellPosition(groupIndex);
+    getLastGroupCellPosition(groupIndex) {
+        return this._groupedDataMapProvider.getLastGroupCellPosition(groupIndex);
     }
 
     getRowCountInGroup(groupIndex) {
