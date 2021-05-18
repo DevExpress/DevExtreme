@@ -13,7 +13,7 @@ fixture`Layout:Templates:CellTemplate`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`data-cell-template-currentView=${currentView}`, scheduler.workSpace))
+      .expect(await takeScreenshot(`data-cell-template-currentView=${currentView}`, scheduler.element.find('.dx-scheduler-header')))
       .ok()
 
       .expect(compareResults.isValid())
