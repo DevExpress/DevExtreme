@@ -2869,10 +2869,10 @@ QUnit.module('Multiple sorting', {
             this.columnHeadersView.render($testElement);
             const $headerCells = $testElement.find('.dx-header-row').children();
 
-            $headerCells.eq(1).trigger($.Event('dxclick', {[key]: true}));
+            $headerCells.eq(1).trigger($.Event('dxclick', { [key]: true }));
             this.clock.tick();
 
-            let cols = this.columnsController.getVisibleColumns();
+            const cols = this.columnsController.getVisibleColumns();
             assert.strictEqual(cols[0].sortOrder, undefined, 'first column has not sort order');
             assert.strictEqual(cols[1].sortOrder, undefined, 'second column has not sort order');
             assert.strictEqual(cols[2].sortOrder, 'asc', 'third column has sort order');
