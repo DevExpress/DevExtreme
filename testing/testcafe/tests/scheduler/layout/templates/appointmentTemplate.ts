@@ -8,12 +8,12 @@ fixture`Layout:Templates:CellTemplate`
   .page(url(__dirname, '../../../container.html'));
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'timelineMonth', 'agenda'].forEach((currentView) => {
-  test('appointmentTemplate layout should be rendered right in', async (t) => {
+  test(`appointmentTemplate layout should be rendered right in '${currentView}'`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot('appointment-template-currentView=', scheduler.workSpace))
+      .expect(await takeScreenshot(`appointment-template-currentView=${currentView}`, scheduler.workSpace))
       .ok()
 
       .expect(compareResults.isValid())
