@@ -53,6 +53,8 @@ export default class ComponentWrapper extends DOMComponent {
 
   _shouldRaiseContentReady = false;
 
+  _componentTemplates!: Record<string, any>;
+
   get _propsInfo(): {
     allowNull: string[];
     twoWay: [string, boolean, string][];
@@ -273,6 +275,9 @@ export default class ComponentWrapper extends DOMComponent {
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
     });
+    this._propsInfo.templates.forEach((template) => {
+      options[template] = this._componentTemplates[template];
+    });
 
     return {
       ...options,
@@ -316,6 +321,11 @@ export default class ComponentWrapper extends DOMComponent {
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
+    this._componentTemplates = {};
+    this._propsInfo.templates.forEach((template) => {
+      this._componentTemplates[template] = this._createTemplateComponent(this._props[template]);
+    });
+
     Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
 
     this._viewRef = createRef();
@@ -344,11 +354,17 @@ export default class ComponentWrapper extends DOMComponent {
   }
 
   _optionChanged(option: Option): void {
-    const { name, fullName } = option;
+    const { name, fullName, value } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);
+
+    if (this._propsInfo.templates.indexOf(name) > -1) {
+      this._componentTemplates[name] = this._createTemplateComponent(value);
+    }
+
     if (name && this._getActionConfigs()[name]) {
       this._addAction(name);
     }
+
     this._shouldRaiseContentReady = this._shouldRaiseContentReady
       || this._checkContentReadyOption(fullName);
     super._optionChanged(option);
@@ -365,10 +381,7 @@ export default class ComponentWrapper extends DOMComponent {
     return null;
   }
 
-  _createTemplateComponent(
-    props: unknown,
-    templateOption: unknown,
-  ): ((model: TemplateModel) => VNode) | undefined {
+  _createTemplateComponent(templateOption: unknown): ((model: TemplateModel) => VNode) | undefined {
     if (!templateOption) {
       return undefined;
     }
