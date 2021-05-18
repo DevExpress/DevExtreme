@@ -30,6 +30,8 @@ export default class ComponentWrapper extends DOMComponent {
 
   customKeyHandlers!: Record<string, AbstractFunction>;
 
+  defaultKeyHandlers!: Record<string, AbstractFunction>;
+
   _documentFragment!: DocumentFragment;
 
   _elementAttr!: {
@@ -311,6 +313,7 @@ export default class ComponentWrapper extends DOMComponent {
     super._init();
 
     this.customKeyHandlers = {};
+    this.defaultKeyHandlers = {};
     this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
     this._props = { ...this.option() };
     this._documentFragment = domAdapter.createDocumentFragment();
@@ -435,14 +438,10 @@ export default class ComponentWrapper extends DOMComponent {
   }
 
   _supportedKeys(): Record<string, AbstractFunction> {
-    return extend(
-      this.getDefaultKeyHandlers(),
-      this.customKeyHandlers,
-    );
-  }
-
-  getDefaultKeyHandlers(): Record<string, AbstractFunction> {
-    return {};
+    return {
+      ...this.defaultKeyHandlers,
+      ...this.customKeyHandlers,
+    };
   }
 
   registerKeyHandler(key: string, handler: AbstractFunction): void {
