@@ -183,7 +183,7 @@ class ViewDataGenerator {
         const weekDaysRow = [];
 
         for(let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
-            const cell = completeViewDataMap[index][dayIndex * cellCountInDay];
+            const cell = completeViewDataMap[index][dayIndex * colSpan];
 
             weekDaysRow.push({
                 ...cell,
@@ -314,8 +314,79 @@ class ViewDataGenerator {
         };
     }
 
-    _generateDateHeaderMap(completeDateHeaderMap, options) {
-        return completeDateHeaderMap.map(headerRow => headerRow.slice(0)); // TODO: virtualization
+    _generateDateHeaderData(completeDateHeaderMap, options) {
+        const {
+            isGenerateWeekDaysHeaderData,
+            cellCountInDay,
+            cellWidth,
+        } = options;
+
+        const dataMap = [];
+        let weekDayRowConfig = {};
+        const validCellWidth = cellWidth || 0;
+
+        if(isGenerateWeekDaysHeaderData) {
+            weekDayRowConfig = this._generateDateHeaderDataRow(
+                options,
+                completeDateHeaderMap,
+                cellCountInDay,
+                0,
+                validCellWidth,
+            );
+
+            dataMap.push(weekDayRowConfig.dateRow);
+        }
+
+        const datesRowConfig = this._generateDateHeaderDataRow(
+            options,
+            completeDateHeaderMap,
+            1,
+            isGenerateWeekDaysHeaderData ? 1 : 0,
+            validCellWidth,
+        );
+
+        dataMap.push(datesRowConfig.dateRow);
+
+        return {
+            dataMap,
+            leftVirtualCellWidth: datesRowConfig.leftVirtualCellWidth,
+            rightVirtualCellWidth: datesRowConfig.rightVirtualCellWidth,
+            leftVirtualCellCount: datesRowConfig.leftVirtualCellCount,
+            rightVirtualCellCount: datesRowConfig.rightVirtualCellCount,
+            weekDayLeftVirtualCellWidth: weekDayRowConfig.leftVirtualCellWidth,
+            weekDayRightVirtualCellWidth: weekDayRowConfig.rightVirtualCellWidth,
+            weekDayLeftVirtualCellCount: weekDayRowConfig.leftVirtualCellCount,
+            weekDayRightVirtualCellCount: weekDayRowConfig.rightVirtualCellCount,
+        };
+    }
+
+    _generateDateHeaderDataRow(options, completeDateHeaderMap, baseColSpan, rowIndex, cellWidth) {
+        const {
+            groupByDate,
+            horizontalGroupCount,
+            startCellIndex,
+            cellCount,
+            totalCellCount,
+        } = options;
+
+        const colSpan = groupByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
+        const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
+        const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
+
+        const dateRow = completeDateHeaderMap[rowIndex].slice(leftVirtualCellCount, actualCellCount);
+
+        const finalLeftVirtualCellCount = leftVirtualCellCount * colSpan;
+        const finalLeftVirtualCellWidth = finalLeftVirtualCellCount * cellWidth;
+        const finalRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
+        const finalRightVirtualCellWidth = finalRightVirtualCellCount * cellWidth;
+
+        return {
+            dateRow,
+            leftVirtualCellCount: finalLeftVirtualCellCount,
+            leftVirtualCellWidth: finalLeftVirtualCellWidth,
+            rightVirtualCellCount: finalRightVirtualCellCount,
+            rightVirtualCellWidth: finalRightVirtualCellWidth,
+        };
     }
 
     _generateTimePanelData(completeTimePanelMap, options) {
@@ -861,8 +932,8 @@ export default class ViewDataProvider {
     get viewDataMap() { return this._viewDataMap; }
     set viewDataMap(value) { this._viewDataMap = value; }
 
-    get dateHeaderMap() { return this._dateHeaderMap; }
-    set dateHeaderMap(value) { this._dateHeaderMap = value; }
+    get dateHeaderData() { return this._dateHeaderData; }
+    set dateHeaderData(value) { this._dateHeaderData = value; }
 
     get timePanelData() { return this._timePanelData; }
     set timePanelData(value) { this._timePanelData = value; }
@@ -892,7 +963,7 @@ export default class ViewDataProvider {
             this._workspace,
         );
 
-        this.dateHeaderMap = viewDataGenerator._generateDateHeaderMap(this.completeDateHeaderMap, renderOptions);
+        this.dateHeaderData = viewDataGenerator._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
         this.timePanelData = viewDataGenerator._generateTimePanelData(
             this.completeTimePanelMap,
             renderOptions,

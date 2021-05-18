@@ -6,6 +6,7 @@ import CollectionWidget, {
     CollectionWidgetOptions
 } from '../collection/ui.collection_widget.base';
 
+/** @namespace DevExpress.ui */
 export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
     /**
      * @docid
@@ -66,6 +67,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export default class HierarchicalCollectionWidget extends CollectionWidget {
     constructor(element: UserDefinedElement, options?: HierarchicalCollectionWidgetOptions)

@@ -7,6 +7,8 @@ import 'ui/data_grid/ui.data_grid';
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
+import { JSPdfBandsTests } from './jspdf_v2.dataGrid.bands.tests.js';
+
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -29,64 +31,64 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('exportDataGrid', moduleConfig, () => {
-
-    function argumentsToString() {
-        const items = [];
-        for(let i = 0; i < arguments.length; i++) { // Array.from(arguments) is not supported in IE
-            items.push(arguments[i]);
+function argumentsToString() {
+    const items = [];
+    for(let i = 0; i < arguments.length; i++) { // Array.from(arguments) is not supported in IE
+        items.push(arguments[i]);
+    }
+    for(let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
+        if(isObject(item)) {
+            items[i] = '{' + Object.keys(item).map((key) => key + ':' + item[key]).join(',') + '}';
         }
-        for(let i = items.length - 1; i >= 0; i--) {
-            const item = items[i];
-            if(isObject(item)) {
-                items[i] = '{' + Object.keys(item).map((key) => key + ':' + item[key]).join(',') + '}';
-            }
-        }
-        return items.toString();
     }
+    return items.toString();
+}
 
-    function createMockPdfDoc() {
-        const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
-        const result = _jsPDF({ unit: 'pt' });
-        result.__log = [];
+function createMockPdfDoc() {
+    const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
+    const result = _jsPDF({ unit: 'pt' });
+    result.__log = [];
 
-        result.__rect = result.rect;
-        result.rect = function() {
-            this.__log.push('rect,' + argumentsToString.apply(null, arguments));
-            this.__rect.apply(this, arguments);
-        };
+    result.__rect = result.rect;
+    result.rect = function() {
+        this.__log.push('rect,' + argumentsToString.apply(null, arguments));
+        this.__rect.apply(this, arguments);
+    };
 
-        result.__line = result.line;
-        result.line = function() {
-            this.__log.push('line,' + argumentsToString.apply(null, arguments));
-            this.__line.apply(this, arguments);
-        };
+    result.__line = result.line;
+    result.line = function() {
+        this.__log.push('line,' + argumentsToString.apply(null, arguments));
+        this.__line.apply(this, arguments);
+    };
 
-        result.__setLineWidth = result.setLineWidth;
-        result.setLineWidth = function() {
-            this.__log.push('setLineWidth,' + argumentsToString.apply(null, arguments));
-            this.__setLineWidth.apply(this, arguments);
-        };
+    result.__setLineWidth = result.setLineWidth;
+    result.setLineWidth = function() {
+        this.__log.push('setLineWidth,' + argumentsToString.apply(null, arguments));
+        this.__setLineWidth.apply(this, arguments);
+    };
 
-        result.__text = result.text;
-        result.text = function() {
-            this.__log.push('text,' + argumentsToString.apply(null, arguments));
-            this.__text.apply(this, arguments);
-        };
+    result.__text = result.text;
+    result.text = function() {
+        this.__log.push('text,' + argumentsToString.apply(null, arguments));
+        this.__text.apply(this, arguments);
+    };
 
-        result.__addPage = result.addPage;
-        result.addPage = function() {
-            this.__log.push('addPage,' + argumentsToString.apply(null, arguments));
-            this.__addPage.apply(this, arguments);
-        };
+    result.__addPage = result.addPage;
+    result.addPage = function() {
+        this.__log.push('addPage,' + argumentsToString.apply(null, arguments));
+        this.__addPage.apply(this, arguments);
+    };
 
-        return result;
-    }
+    return result;
+}
 
-    function createDataGrid(options) {
-        options.loadingTimeout = undefined;
-        return $('#dataGrid').dxDataGrid(options).dxDataGrid('instance');
-    }
+function createDataGrid(options) {
+    options.loadingTimeout = undefined;
+    return $('#dataGrid').dxDataGrid(options).dxDataGrid('instance');
+}
+
+QUnit.module('Table', moduleConfig, () => {
 
     QUnit.test('Required arguments', function(assert) {
         // TODO
@@ -598,104 +600,9 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Bands, [band[f1]]', function(assert) {
-        const done = assert.async();
-        const doc = createMockPdfDoc();
+});
 
-        const dataGrid = createDataGrid({
-            columns: [
-                {
-                    caption: 'Band1',
-                    columns: [
-                        { dataField: 'f1' },
-                    ]
-                }
-            ],
-            dataSource: [{ f1: 'f1_1' }],
-        });
-
-        const onRowExporting = (e) => {
-            if(e.rowCells[0].text === 'Band1') {
-                e.rowHeight = 16;
-            } else if(e.rowCells[0].text === 'F1') {
-                e.rowHeight = 20;
-            } else if(e.rowCells[0].text === 'f1_1') {
-                e.rowHeight = 24;
-            }
-        };
-
-        const expectedLog = [
-            'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,16',
-            'text,F1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,100,20',
-            'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
-        ];
-
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 60 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
-            // doc.save();
-            assert.deepEqual(doc.__log, expectedLog);
-            done();
-        });
-    });
-
-    QUnit.test('Bands, [f1, band[f2, f3]]', function(assert) {
-        const done = assert.async();
-        const doc = createMockPdfDoc();
-
-        const dataGrid = createDataGrid({
-            columns: [
-                'f1',
-                {
-                    caption: 'Band1',
-                    columns: [
-                        'f2',
-                        'f3',
-                    ]
-                }
-            ],
-            dataSource: [{ f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' }],
-        });
-
-        let cellIndex = 0;
-        const pdfCellRects = [
-            { x: 10, y: 15, w: 90, h: 36 }, { x: 100, y: 15, w: 110, h: 16 }, null, // TODO: remove pdfCellRects
-            null, { x: 100, y: 31, w: 50, h: 20 }, { x: 150, y: 31, w: 60, h: 20 },
-            { x: 10, y: 51, w: 90, h: 24 }, { x: 100, y: 51, w: 50, h: 24 }, { x: 150, y: 51, w: 60, h: 24 },
-        ];
-        const onCellExporting = ({ pdfCell }) => {
-            if(pdfCellRects[cellIndex] === null) {
-                pdfCell.skip = true; // TODO: pdfCell.isMerged?
-            } else {
-                pdfCell._rect = pdfCellRects[cellIndex];
-            }
-            cellIndex++;
-        };
-        const onRowExporting = (e) => {
-            const notEmptyCell = e.rowCells.filter((cell) => cell.text)[0];
-            if(notEmptyCell.text === 'F1') {
-                e.rowHeight = 16;
-            } else if(notEmptyCell.text === 'F2') {
-                e.rowHeight = 20;
-            } else if(notEmptyCell.text === 'f1_1') {
-                e.rowHeight = 24;
-            }
-        };
-
-        const expectedLog = [
-            'text,F1,10,33,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,36',
-            'text,Band1,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,110,16',
-            'text,F2,100,41,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,50,20',
-            'text,F3,150,41,{baseline:middle}', 'setLineWidth,1', 'rect,150,31,60,20',
-            'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,90,24',
-            'text,f2_1,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,50,24',
-            'text,f3_1,150,63,{baseline:middle}', 'setLineWidth,1', 'rect,150,51,60,24',
-        ];
-
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 200, h: 60 }, columnWidths: [ 90, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
-            // doc.save();
-            assert.deepEqual(doc.__log, expectedLog);
-            done();
-        });
-    });
+QUnit.module('Table splitting', moduleConfig, () => {
 
     QUnit.test('Split grid on one page, 1 col', function(assert) {
         const done = assert.async();
@@ -1435,4 +1342,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             done();
         });
     });
+
 });
+
+JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

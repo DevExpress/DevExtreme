@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as TableView, Table } from '../table';
-import { VirtualRow } from '../virtual-row';
+import { VirtualRow } from '../virtual_row';
 
 describe('LayoutBase', () => {
   describe('Render', () => {

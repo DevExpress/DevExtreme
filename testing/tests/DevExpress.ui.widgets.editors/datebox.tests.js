@@ -2,7 +2,6 @@ import $ from 'jquery';
 import Box from 'ui/box';
 import Calendar from 'ui/calendar';
 import DateBox from 'ui/date_box';
-import browser from 'core/utils/browser';
 import config from 'core/config';
 import dateLocalization from 'localization/date';
 import dateSerialization from 'core/utils/date_serialization';
@@ -94,11 +93,11 @@ const moduleConfig = {
     }
 };
 
-const clearInput = (element, keyboard) => {
-    while(element.val()) {
-        keyboard.press('backspace');
-        keyboard.press('del'); // Temporary for IE (keyboardMock: caret setting does not work in IE now)
-    }
+const clearInput = ($element, keyboard) => {
+    const textLength = $element.val().length;
+    keyboard
+        .caret({ start: 0, end: textLength })
+        .press('backspace');
 };
 
 const getExpectedResult = (date, mode, stringDate) => {
@@ -454,25 +453,6 @@ QUnit.module('datebox tests', moduleConfig, () => {
         }).dxDateBox('instance');
 
         assert.equal(instance.option('displayFormat'), displayFormat, 'the displayFormat option is not changed');
-    });
-
-    QUnit.test('set maxWidth for time view when fallback strategy is used', function(assert) {
-        if(!browser.msie) {
-            assert.ok(true);
-            return;
-        }
-
-        const dateBox = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendarWithTime',
-            value: new Date()
-        }).dxDateBox('instance');
-
-        dateBox.option('opened', true);
-
-        const maxWidth = $('.' + TIMEVIEW_CLASS).css('maxWidth');
-        assert.ok(typeUtils.isDefined(maxWidth), 'maxWidth is defined');
-        assert.equal(maxWidth, $('.' + TIMEVIEW_CLOCK_CLASS).css('minWidth'), 'minWidth of time view clock should be equal maxWidth');
     });
 
     QUnit.test('the \'displayFormat\' option should accept format objects (T378753)', function(assert) {
@@ -3236,7 +3216,7 @@ QUnit.module('datebox with time component', {
         dateBox.open();
     });
 
-    QUnit.test('DateBox with time should be rendered correctly in IE, templatesRenderAsynchronously=true', function(assert) {
+    QUnit.test('DateBox with time should be rendered correctly when templatesRenderAsynchronously=true', function(assert) {
         const clock = sinon.useFakeTimers();
         try {
             const dateBox = $('#dateBox').dxDateBox({

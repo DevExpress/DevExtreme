@@ -37,7 +37,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
       pulledDownText, pullingDownText, refreshingText, reachBottomText,
-      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onStop,
+      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
     },
     restAttributes,
   } = viewModel;
@@ -112,7 +112,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         onStart={onStart}
         onEnd={onEnd}
         onBounce={onBounce}
-        onStop={onStop}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
       >
@@ -126,7 +125,7 @@ type ScrollablePropsType = ScrollableProps
 & Pick<WidgetProps, 'aria'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce' | 'onStop'>;
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
   device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
@@ -231,6 +230,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   @Method()
   getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
     return this.scrollableRef.getElementLocation(element, direction);
+  }
+
+  @Method()
+  scrollToElementTopLeft(element: HTMLElement): void {
+    this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
   }
 
   get scrollableRef(): any {

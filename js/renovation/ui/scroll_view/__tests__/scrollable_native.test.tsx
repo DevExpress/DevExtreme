@@ -496,10 +496,10 @@ describe('Native > Effects', () => {
             onPullDownCalled = true;
           }
 
-          expect(viewModel.refreshTimeout).not.toBe(undefined);
+          expect(viewModel.refreshTimer).not.toBe(undefined);
 
-          viewModel.disposeRefreshTimeout()();
-          expect(viewModel.refreshTimeout).toBe(undefined);
+          viewModel.disposeRefreshTimer()();
+          expect(viewModel.refreshTimer).toBe(undefined);
         }
       }
 
@@ -578,23 +578,23 @@ describe('Native > Effects', () => {
       });
 
       test.each([true, false])('refresh(), loadingIndicatorEnabled: %o', (loadingIndicatorEnabled) => {
-        const viewModel = new Scrollable({
+        const helper = new ScrollableTestHelper({
           onPullDown: actionHandler,
         });
 
-        viewModel.loadingIndicatorEnabled = loadingIndicatorEnabled;
+        helper.viewModel.loadingIndicatorEnabled = loadingIndicatorEnabled;
 
-        viewModel.refresh();
+        helper.viewModel.refresh();
 
         if (actionHandler) {
           expect(actionHandler).toHaveBeenCalledTimes(1);
           expect(actionHandler).toHaveBeenCalledWith({});
         }
 
-        expect(viewModel.topPocketState).toEqual(TopPocketState.STATE_READY);
-        expect(viewModel.loadingIndicatorEnabled).toEqual(loadingIndicatorEnabled);
-        expect(viewModel.isLoadPanelVisible).toEqual(loadingIndicatorEnabled);
-        expect(viewModel.locked).toEqual(true);
+        expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_READY);
+        expect(helper.viewModel.loadingIndicatorEnabled).toEqual(loadingIndicatorEnabled);
+        expect(helper.viewModel.isLoadPanelVisible).toEqual(loadingIndicatorEnabled);
+        expect(helper.viewModel.locked).toEqual(true);
       });
 
       test.each(getPermutations([
@@ -606,7 +606,7 @@ describe('Native > Effects', () => {
 
         const viewModel = new Scrollable({});
 
-        viewModel.releaseTimeout = 10;
+        viewModel.releaseTimer = 10;
         viewModel.topPocketState = pocketState;
         Object.defineProperties(viewModel, {
           refreshStrategy: { get() { return refreshStrategy; } },
@@ -628,7 +628,7 @@ describe('Native > Effects', () => {
           }
         }
 
-        expect(viewModel.releaseTimeout).not.toBe(undefined);
+        expect(viewModel.releaseTimer).not.toBe(undefined);
         expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
         expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
 
@@ -652,8 +652,8 @@ describe('Native > Effects', () => {
         expect(viewModel.isLoadPanelVisible).toEqual(false);
         expect(viewModel.locked).toEqual(false);
 
-        viewModel.disposeReleaseTimeout()();
-        expect(viewModel.releaseTimeout).toBe(undefined);
+        viewModel.disposeReleaseTimer()();
+        expect(viewModel.releaseTimer).toBe(undefined);
       });
     });
 
@@ -1298,7 +1298,7 @@ describe('Methods', () => {
 
         expect(viewModel.needForceScrollbarsVisibility).toEqual(true);
 
-        expect(viewModel.hideScrollbarTimeout === undefined).toBe(false);
+        expect(viewModel.hideScrollbarTimer === undefined).toBe(false);
 
         expect(setTimeout).toHaveBeenCalledTimes(1);
         expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 500);
@@ -1309,8 +1309,8 @@ describe('Methods', () => {
 
         expect(viewModel.needForceScrollbarsVisibility).toEqual(false);
 
-        viewModel.disposeHideScrollbarTimeout()();
-        expect(viewModel.hideScrollbarTimeout).toBe(undefined);
+        viewModel.disposeHideScrollbarTimer()();
+        expect(viewModel.hideScrollbarTimer).toBe(undefined);
       });
     });
   });

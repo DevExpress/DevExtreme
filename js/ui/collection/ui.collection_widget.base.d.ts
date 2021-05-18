@@ -26,6 +26,7 @@ export interface SelectionChangedInfo<T = any> {
     readonly removedItems: Array<T>;
 }
 
+/** @namespace DevExpress.ui */
 export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
     /**
      * @docid
@@ -188,6 +189,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
  * @module ui/collection/ui.collection_widget.base
  * @export default
  * @hidden
+ * @namespace DevExpress.ui
  * @prevFileNamespace DevExpress.ui
  */
 export default class CollectionWidget extends Widget {
@@ -199,6 +201,7 @@ export default class CollectionWidget extends Widget {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface CollectionWidgetItem {
     /**

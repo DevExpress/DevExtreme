@@ -59,7 +59,6 @@ const BUTTON_NORMAL_TYPE = 'normal';
 const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
 
-const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
@@ -542,9 +541,7 @@ const Popup = Overlay.inherit({
 
         if(this._isAutoHeight() && this.option('autoResizeEnabled')) {
             if(isAutoWidth || IS_OLD_SAFARI) {
-                if(!IS_IE11) {
-                    currentHeightStrategyClass = HEIGHT_STRATEGIES.inherit;
-                }
+                currentHeightStrategyClass = HEIGHT_STRATEGIES.inherit;
             } else {
                 currentHeightStrategyClass = HEIGHT_STRATEGIES.flex;
             }

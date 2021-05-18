@@ -6,34 +6,26 @@ import { each } from '../../../core/utils/iterator';
 import browser from '../../../core/utils/browser';
 import { getWindow } from '../../../core/utils/window';
 
-let DropImageModule = {};
+import BaseModule from './base';
+
+let DropImageModule = BaseModule;
 
 if(Quill) {
-    const BaseModule = Quill.import('core/module');
-
     DropImageModule = class DropImageModule extends BaseModule {
         constructor(quill, options) {
             super(quill, options);
 
-            this.editorInstance = options.editorInstance;
             const widgetName = this.editorInstance.NAME;
 
-            eventsEngine.on(this.quill.root, addNamespace('dragover', widgetName), this._dragOverHandler.bind(this));
             eventsEngine.on(this.quill.root, addNamespace('drop', widgetName), this._dropHandler.bind(this));
             eventsEngine.on(this.quill.root, addNamespace('paste', widgetName), this._pasteHandler.bind(this));
-        }
-
-        _dragOverHandler(e) {
-            if(browser.msie) {
-                e.preventDefault();
-            }
         }
 
         _dropHandler(e) {
             const dataTransfer = e.originalEvent.dataTransfer;
             const hasFiles = dataTransfer?.files?.length;
 
-            this.editorInstance._saveValueChangeEvent(e);
+            this.saveValueChangeEvent(e);
             e.preventDefault();
             if(hasFiles) {
                 this._getImage(dataTransfer.files, this._addImage.bind(this));
@@ -43,7 +35,7 @@ if(Quill) {
         _pasteHandler(e) {
             const { clipboardData } = e.originalEvent;
 
-            this.editorInstance._saveValueChangeEvent(e);
+            this.saveValueChangeEvent(e);
 
             if(!clipboardData) {
                 return;
@@ -58,11 +50,7 @@ if(Quill) {
                         return;
                     }
 
-                    if(browser.msie) {
-                        setTimeout(() => { this._addImage(imageData); });
-                    } else {
-                        this._addImage(imageData);
-                    }
+                    this._addImage(imageData);
                 });
             }
         }

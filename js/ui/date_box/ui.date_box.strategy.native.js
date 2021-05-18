@@ -15,7 +15,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
         return extend({}, popupConfig, { width: 'auto' });
     },
 
-    getParsedText: function(text, format) {
+    getParsedText: function(text) {
         if(!text) {
             return null;
         }
@@ -25,16 +25,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
             return new Date(text.replace(/-/g, '/').replace('T', ' ').split('.')[0]);
         }
 
-        if(this._isTextInput()) {
-            return this.callBase(text, format);
-        } else {
-            return dateUtils.fromStandardDateFormat(text);
-        }
-    },
-
-    // IE11 fallback (T902036)
-    _isTextInput: function() {
-        return this.dateBox._input().prop('type') === 'text';
+        return dateUtils.fromStandardDateFormat(text);
     },
 
     renderPopupContent: noop,
