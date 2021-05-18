@@ -63,6 +63,21 @@ QUnit.module('live update', {
         assert.equal(this.itemRenderedSpy.callCount, 0, 'item is inserted after push');
     });
 
+    QUnit.test('insert item should not work if grouping 2', function(assert) {
+        const store = this.createList({ dataSource: {
+            paginate: false,
+            pushAggregationTimeout: 0,
+            load: () => [{ a: 'Item 0', id: 0 }, { a: 'Item 1', id: 1 }],
+            key: 'id',
+            group: 'a',
+            reshapeOnPush: true
+        } }).getDataSource().store();
+
+        store.push([{ a: 'Item 2', id: 2 }]);
+
+        assert.equal(this.itemRenderedSpy.callCount, 0, 'item is inserted after push');
+    });
+
     QUnit.test('insert item to specific position', function(assert) {
         const store = this.createList().getDataSource().store();
 

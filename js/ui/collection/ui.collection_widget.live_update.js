@@ -142,10 +142,16 @@ export default CollectionWidget.inherit({
     _insertByChange: function(keyInfo, items, change, isPartialRefresh) {
         when(isPartialRefresh || insert(keyInfo, items, change.data, change.index)).done(() => {
             this._beforeItemElementInserted(change);
-            this._renderItem(change.index ?? items.length, change.data);
+
+            const $groupContainer = this._getGroupContainer(change.data);
+            this._renderItem(change.index ?? items.length, change.data, $groupContainer);
             this._afterItemElementInserted();
             this._correctionIndex++;
         });
+    },
+
+    _getGroupContainer: function() {
+        return this._itemContainer();
     },
 
     _updateSelectionAfterRemoveByChange: function(removeIndex) {
