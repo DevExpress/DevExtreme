@@ -1,13 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import Component from './common/component';
+import { Deferred } from '../../core/utils/deferred';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export class ScrollableWrapper extends Component {
   update(): void {
     (this._viewRef as any).current.update();
 
-    // eslint-disable-next-line
-    return new Deferred().resolve();
+    return new (Deferred as any)().resolve();
   }
 
   _visibilityChanged(): void {
