@@ -8,6 +8,7 @@ import {
   InternalState,
 } from '@devextreme-generator/declarations';
 
+import { ScrollViewWrapper } from '../../component_wrapper/scroll_view';
 import { current, isMaterial } from '../../../ui/themes';
 import { isDefined } from '../../../core/utils/type';
 
@@ -106,7 +107,10 @@ Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 
 
 @Component({
   defaultOptionRules,
-  jQuery: { register: true },
+  jQuery: {
+    register: true,
+    component: ScrollViewWrapper,
+  },
   view: viewFunction,
 })
 
