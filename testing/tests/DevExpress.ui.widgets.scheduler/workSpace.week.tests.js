@@ -179,6 +179,7 @@ module('Work Space Week', () => {
                 endDate: new Date(2015, 2, 17, 6, 0),
                 allDay: false,
                 groupIndex: 0,
+                groups: undefined,
             });
         });
 
@@ -197,6 +198,7 @@ module('Work Space Week', () => {
                 endDate: new Date(2015, 2, 3, 1, 0),
                 allDay: false,
                 groupIndex: 0,
+                groups: undefined,
             });
         });
 

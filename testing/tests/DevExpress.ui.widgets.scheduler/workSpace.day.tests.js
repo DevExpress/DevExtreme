@@ -230,6 +230,7 @@ module('Work Space Day', {
             endDate: new Date(2015, 2, 16, 0, 30),
             allDay: false,
             groupIndex: 0,
+            groups: undefined,
         });
     });
 
@@ -385,6 +386,7 @@ module('Work Space Day with grouping by date', () => {
                 endDate: new Date(2018, 2, 1, 0, 30),
                 allDay: false,
                 groupIndex: 0,
+                groups: undefined,
             });
 
             assert.deepEqual($cells.eq(1).data('dxCellData'), {
@@ -392,6 +394,7 @@ module('Work Space Day with grouping by date', () => {
                 endDate: new Date(2018, 2, 2, 0, 30),
                 allDay: false,
                 groupIndex: 0,
+                groups: undefined,
             });
 
             assert.deepEqual($cells.eq(2).data('dxCellData'), {
@@ -399,6 +402,7 @@ module('Work Space Day with grouping by date', () => {
                 endDate: new Date(2018, 2, 1, 1, 0),
                 allDay: false,
                 groupIndex: 0,
+                groups: undefined,
             });
 
             assert.deepEqual($cells.eq(3).data('dxCellData'), {
@@ -406,6 +410,7 @@ module('Work Space Day with grouping by date', () => {
                 endDate: new Date(2018, 2, 2, 1, 0),
                 allDay: false,
                 groupIndex: 0,
+                groups: undefined,
             });
         });
 

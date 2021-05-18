@@ -668,7 +668,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     if(!this.isRenovatedRender()) {
                         this._toggleAllDayVisibility(true);
                     } else {
-                        this.renderRWorkspace();
+                        this.renderWorkSpace();
                     }
                 }
                 break;
@@ -1218,15 +1218,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             );
         }
 
-        if(this.isRenovatedRender()) {
-            this.renderRWorkspace();
-        } else {
-            this._renderDateHeader();
-            this._renderTimePanel();
-            this._renderGroupAllDayPanel();
-            this._renderDateTable();
-            this._renderAllDayPanel();
-        }
+        this.renderWorkSpace();
 
         this._updateGroupTableHeight();
 
@@ -1292,21 +1284,28 @@ class SchedulerWorkSpace extends WidgetObserver {
         return options;
     }
 
-    renovatedRenderSupported() { return false; }
+    renovatedRenderSupported() { return true; }
 
-    renderRWorkspace(isGenerateNewViewData = true) {
+    renderWorkSpace(isGenerateNewViewData = true) {
         this._cleanAllowedPositions();
-
         this.viewDataProvider.update(isGenerateNewViewData);
 
-        this.renderRHeaderPanel();
-        this.renderRTimeTable();
-        this.renderRDateTable();
-        this.renderRAllDayPanel();
+        if(this.isRenovatedRender()) {
+            this.renderRHeaderPanel();
+            this.renderRTimeTable();
+            this.renderRDateTable();
+            this.renderRAllDayPanel();
 
-        this.updateRSelection();
+            this.updateRSelection();
 
-        this.virtualScrollingDispatcher?.updateDimensions();
+            this.virtualScrollingDispatcher?.updateDimensions();
+        } else {
+            this._renderDateHeader();
+            this._renderTimePanel();
+            this._renderGroupAllDayPanel();
+            this._renderDateTable();
+            this._renderAllDayPanel();
+        }
     }
 
     renderRDateTable() {
@@ -2058,7 +2057,19 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getDateTableCellClass.bind(this),
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option('dataCellTemplate'),
-            getCellData: this._getCellData.bind(this),
+            getCellData: (_, rowIndex, cellIndex) => {
+                const {
+                    startDate, endDate, allDay, groups, groupIndex,
+                } = this.viewDataProvider.getCellData(rowIndex, cellIndex, false);
+
+                return {
+                    startDate,
+                    endDate,
+                    allDay,
+                    groups,
+                    groupIndex,
+                };
+            },
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: groupCount,
             groupByDate: this.option('groupByDate')

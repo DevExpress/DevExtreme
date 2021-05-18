@@ -217,6 +217,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             endDate: new Date(2015, 9, 21, 6),
             allDay: false,
             groupIndex: 0,
+            groups: undefined,
         }, 'data of first cell is correct');
 
         assert.deepEqual(dataUtils.data($cells.get(5), 'dxCellData'), {
@@ -224,6 +225,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             endDate: new Date(2015, 9, 21, 11),
             allDay: false,
             groupIndex: 0,
+            groups: undefined,
         }, 'data of 5th cell is correct');
 
         assert.deepEqual(dataUtils.data($cells.get(10), 'dxCellData'), {
@@ -231,6 +233,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             endDate: new Date(2015, 9, 21, 16),
             allDay: false,
             groupIndex: 0,
+            groups: undefined,
         }, 'data of 10th cell is correct');
     });
 
@@ -1026,6 +1029,7 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
                 endDate: new Date(2015, 3, 1 + index, 10),
                 allDay: false,
                 groupIndex: 0,
+                groups: undefined,
             }, 'cell\'s data is correct');
         });
     });
