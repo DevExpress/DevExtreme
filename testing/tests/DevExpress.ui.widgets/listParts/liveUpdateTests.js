@@ -3,6 +3,8 @@ import { DataSource } from 'data/data_source/data_source';
 
 import 'ui/list';
 
+const LIST_ITEM_CLASS = 'dx-list-item';
+
 QUnit.module('live update', {
     beforeEach: function() {
         this.itemRenderedSpy = sinon.spy();
@@ -63,19 +65,49 @@ QUnit.module('live update', {
         assert.equal(this.itemRenderedSpy.callCount, 0, 'item is inserted after push');
     });
 
-    QUnit.test('insert item should not work if grouping 2', function(assert) {
-        const store = this.createList({ dataSource: {
-            paginate: false,
-            pushAggregationTimeout: 0,
-            load: () => [{ a: 'Item 0', id: 0 }, { a: 'Item 1', id: 1 }],
-            key: 'id',
-            group: 'a',
-            reshapeOnPush: true
-        } }).getDataSource().store();
+    QUnit.test('insert item should work correct if grouping and repaintChangesOnly', function(assert) {
+        const listInstance = this.createList({
+            repaintChangesOnly: true,
+            dataSource: {
+                paginate: false,
+                pushAggregationTimeout: 0,
+                load: () => [{ a: 'Item 0', id: 0 }, { a: 'Item 1', id: 1 }],
+                key: 'id',
+                group: 'a',
+                reshapeOnPush: true
+            }, });
 
-        store.push([{ a: 'Item 2', id: 2 }]);
+        const store = listInstance.getDataSource().store();
+        const listItems = $(listInstance.element()).find(`.${LIST_ITEM_CLASS}`);
 
-        assert.equal(this.itemRenderedSpy.callCount, 0, 'item is inserted after push');
+        store.push([{ type: 'insert', data: { a: 'Item 0', id: 2 } }]);
+
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, 'item is inserted after push');
+        assert.equal(listItems.length, 3, 'new item is added');
+
+    });
+
+    QUnit.test('insert item should work correct if grouping and repaintChangesOnly (new group)', function(assert) {
+        const listInstance = this.createList({
+            repaintChangesOnly: true,
+            dataSource: {
+                paginate: false,
+                pushAggregationTimeout: 0,
+                load: () => [{ a: 'Item 0', id: 0 }, { a: 'Item 1', id: 1 }],
+                key: 'id',
+                group: 'a',
+                reshapeOnPush: true
+            }, });
+
+        const store = listInstance.getDataSource().store();
+        const listItems = $(listInstance.element()).find(`.${LIST_ITEM_CLASS}`);
+
+        store.push([{ type: 'insert', data: { a: 'Item 2', id: 2 } }]);
+
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, 'item is inserted after push');
+        assert.equal(listItems.length, 3, 'new item is added');
     });
 
     QUnit.test('insert item to specific position', function(assert) {
