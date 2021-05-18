@@ -132,7 +132,8 @@ class Diagram extends Widget {
             .appendTo($contentWrapper);
 
         delete this._contextMenu;
-        if(this.option('contextMenu.enabled')) {
+        this._diagramInstance.settings.contextMenuEnabled = this.option('contextMenu.enabled');
+        if(this._diagramInstance.settings.contextMenuEnabled) {
             this._renderContextMenu($contentWrapper);
         }
 

@@ -2,6 +2,7 @@ import {
     DxPromise
 } from '../../core/utils/deferred';
 
+/** @namespace DevExpress.data */
 export interface ODataContextOptions {
     /**
      * @docid

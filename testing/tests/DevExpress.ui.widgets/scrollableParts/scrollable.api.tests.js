@@ -357,17 +357,30 @@ QUnit.test('scrollbar hidden while scrolling when showScrollbar is false', funct
     assert.equal($scrollbar.is(':hidden'), true, 'scrollbar is hidden');
 });
 
-QUnit.test('showScrollbar render', function(assert) {
+QUnit.test('showScrollbar: never -> onScroll, useNative: true, useSimulatedScrollbars: true, should add dx-scrollable-scrollbars-hidden class', function(assert) {
+    const $scrollable = $('#scrollable').dxScrollable({
+        useNative: true,
+        showScrollbar: false
+    });
+
+    assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), true);
+
+    $scrollable.dxScrollable('option', 'showScrollbar', true);
+
+    assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), false);
+});
+
+QUnit.test('showScrollbar: never -> onScroll, useNative: false, should not add dx-scrollable-scrollbars-hidden class', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         showScrollbar: isRenovation ? 'never' : false
     });
 
-    assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), true, 'scrollable has class scrollbars_disabled');
+    assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), false);
 
     $scrollable.dxScrollable('option', 'showScrollbar', isRenovation ? 'onScroll' : true);
 
-    assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), false, 'scrollable has not class scrollbars_disabled');
+    assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), false);
 });
 
 QUnit.test('event arguments', function(assert) {

@@ -3,7 +3,7 @@ import fixtures from '../../helpers/positionFixtures.js';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
-import errors from 'core/errors';
+import errors from 'ui/widget/ui.errors';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
 
@@ -1538,14 +1538,14 @@ QUnit.module('behavior', () => {
     }, () => {
         QUnit.test('on init', function(assert) {
             assert.ok(this.stub.calledOnce, 'the log method is called once');
-            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
         });
 
         QUnit.test('at runtime', function(assert) {
             this.popover.option('hideEvent', 'click');
 
             assert.strictEqual(this.stub.callCount, 2, 'the log method is called twice');
-            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
         });
     });
 });

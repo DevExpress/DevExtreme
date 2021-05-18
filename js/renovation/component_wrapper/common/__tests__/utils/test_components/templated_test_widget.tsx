@@ -7,6 +7,7 @@ import {
   Template,
   OneWay,
 } from '@devextreme-generator/declarations';
+import BaseComponent from './templated_test_widget_jquery_wrapper';
 
 export const view = ({
   props: {
@@ -67,6 +68,7 @@ export class TemplatedTestWidgetProps {
 @Component({
   jQuery: {
     register: true,
+    component: BaseComponent,
   },
   view,
 })

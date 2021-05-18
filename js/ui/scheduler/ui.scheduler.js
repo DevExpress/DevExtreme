@@ -1645,28 +1645,8 @@ class Scheduler extends Widget {
         return this._workSpace.getScrollable();
     }
 
-    getWorkSpaceScrollableScrollTop(allDay) {
-        return this._workSpace.getGroupedScrollableScrollTop(allDay);
-    }
-
-    getWorkSpaceScrollableScrollLeft() {
-        return this._workSpace.getScrollableScrollLeft();
-    }
-
     getWorkSpaceScrollableContainer() {
         return this._workSpace.getScrollableContainer();
-    }
-
-    getWorkSpaceAllDayHeight() {
-        return this._workSpace.getAllDayHeight();
-    }
-
-    getWorkSpaceAllDayOffset() {
-        return this._workSpace.getAllDayOffset();
-    }
-
-    getWorkSpaceHeaderPanelHeight() {
-        return this._workSpace.getHeaderPanelHeight();
     }
 
     getWorkSpaceDateTableOffset() {

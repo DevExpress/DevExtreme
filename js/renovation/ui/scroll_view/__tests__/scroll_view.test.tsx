@@ -68,6 +68,7 @@ describe('ScrollView', () => {
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
       { name: 'scrollToElement', calledWith: ['arg1'] },
+      { name: 'scrollToElementTopLeft', calledWith: ['arg1'] },
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
