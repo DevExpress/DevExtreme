@@ -3,6 +3,7 @@ import { ClientFunction } from 'testcafe';
 export default async function createWidget(
   widgetName: string,
   options: any,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   disableAnimation = false,
   selector = '#container',
 ): Promise<void> {
@@ -19,11 +20,9 @@ export default async function createWidget(
             },
   })();
 
-  if (disableAnimation) {
-    await (ClientFunction(() => {
-      (window as any).DevExpress.fx.off = true;
-    }))();
-  }
+  await (ClientFunction(() => {
+    (window as any).DevExpress.fx.off = true;
+  }))();
 }
 
 export async function disposeWidgets(): Promise<void> {
