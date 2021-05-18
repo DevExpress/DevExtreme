@@ -53,7 +53,7 @@ test('The tooltip of collector should not scroll page and immediately hide', asy
     endDate: new Date(2017, 4, 22, 11, 30),
   }],
 })).after(async (t) => {
-  await t.resizeWindow(1200, 800);
+  await t.maximizeWindow();
 });
 
 test('The tooltip should not hide after automatic scrolling during an appointment click', async (t) => {
@@ -70,7 +70,7 @@ test('The tooltip should not hide after automatic scrolling during an appointmen
   currentView: 'week',
   dataSource,
 })).after(async (t) => {
-  await t.resizeWindow(1200, 800);
+  await t.maximizeWindow();
 });
 
 test('The tooltip should hide after manually scrolling in the browser', async (t) => {
@@ -91,5 +91,5 @@ test('The tooltip should hide after manually scrolling in the browser', async (t
   currentView: 'week',
   dataSource,
 })).after(async (t) => {
-  await t.resizeWindow(1200, 800);
+  await t.maximizeWindow();
 });

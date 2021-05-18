@@ -52,7 +52,7 @@ const createScheduler = async (
       crossScrollingEnabled,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await t.maximizeWindow();
   });
 
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t) => {
@@ -77,7 +77,7 @@ const createScheduler = async (
       resources: resourceDataSource,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await t.maximizeWindow();
   });
 
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t) => {
@@ -102,6 +102,6 @@ const createScheduler = async (
       resources: resourceDataSource,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await t.maximizeWindow();
   });
 });
