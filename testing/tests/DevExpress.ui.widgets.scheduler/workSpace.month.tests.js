@@ -118,7 +118,6 @@ module('Work Space Month', () => {
                 endDate: new Date(2015, 1, 24, 0, 0),
                 allDay: undefined,
                 groupIndex: 0,
-                groups: undefined,
             });
         });
 
@@ -137,7 +136,6 @@ module('Work Space Month', () => {
                 endDate: new Date(2015, 1, 23, 10, 0),
                 allDay: undefined,
                 groupIndex: 0,
-                groups: undefined,
             });
         });
 
@@ -157,7 +155,6 @@ module('Work Space Month', () => {
                 endDate: new Date(2015, 1, 23, 5, 0),
                 allDay: undefined,
                 groupIndex: 0,
-                groups: undefined,
             });
         });
 
@@ -249,7 +246,6 @@ module('Work Space Month', () => {
                     endDate: new Date(2016, 2, 15, 0, 0),
                     allDay: undefined,
                     groupIndex: 0,
-                    groups: undefined,
                 }, 'data of the cell is right');
             } finally {
                 this.instance.getStartViewDate = origGetFirstViewDate;
