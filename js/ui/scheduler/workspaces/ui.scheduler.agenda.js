@@ -15,6 +15,8 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
+import { getInstanceFactory } from '../instanceFactory';
+
 const { tableCreator } = tableCreatorModule;
 
 const AGENDA_CLASS = 'dx-scheduler-agenda';
@@ -237,7 +239,9 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _makeGroupRows() {
-        const tree = this.invoke('createReducedResourcesTree');
+        const { agendaResourceProcessor } = getInstanceFactory().resourceManager;
+
+        const tree = agendaResourceProcessor.createReducedResourcesTree(this.instance._loadedResources); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
         const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
         const cellTemplates = [];

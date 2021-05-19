@@ -1,6 +1,7 @@
 import { wrapToArray } from '../../../core/utils/array';
 import { when, Deferred } from '../../../core/utils/deferred';
 import { getFieldExpr, getDisplayExpr, getValueExpr, getWrappedDataSource } from './utils';
+import { getInstanceFactory } from '../instanceFactory';
 
 class PromiseItem {
     constructor(rawAppointment, promise) {
@@ -131,5 +132,12 @@ export class AgendaResourceProcessor {
         }
 
         return resultAsync.promise();
+    }
+
+    createReducedResourcesTree(resources) {
+        const { resourceManager } = getInstanceFactory();
+        const tree = resourceManager.createResourcesTree(resources);
+
+        return resourceManager.reduceResourcesTree(tree, this.getFilteredItems());
     }
 }

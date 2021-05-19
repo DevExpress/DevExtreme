@@ -263,7 +263,6 @@ export class ResourceManager {
         const resourceDataLength = resourceData.length;
         let color;
 
-
         if(resourceDataLength) {
             for(let i = 0; i < resourceDataLength; i++) {
                 if(valueGetter(resourceData[i]) === value) {
@@ -396,7 +395,36 @@ export class ResourceManager {
         return result;
     }
 
-    groupAppointmentsByResources(appointments, resources) {
+    groupAppointmentsByResources(appointments, groups, loadedResources) {
+        let result = { '0': appointments };
+
+        if(groups && groups.length && this.getResourcesData().length) {
+            result = this.groupAppointmentsByResourcesCore(appointments, loadedResources);
+        }
+
+        let totalResourceCount = 0;
+
+        each(loadedResources, function(i, resource) {
+            if(!i) {
+                totalResourceCount = resource.items.length;
+            } else {
+                totalResourceCount *= resource.items.length;
+            }
+        });
+
+        for(let j = 0; j < totalResourceCount; j++) {
+            const index = j.toString();
+
+            if(result[index]) {
+                continue;
+            }
+
+            result[index] = [];
+        }
+
+        return result;
+    }
+    groupAppointmentsByResourcesCore(appointments, resources) {
         const tree = this.createResourcesTree(resources);
         const result = {};
 
@@ -415,6 +443,87 @@ export class ResourceManager {
         }).bind(this));
 
         return result;
+    }
+
+    getCellGroups(groupIndex, groups) {
+        const result = [];
+
+        if(this._getGroupCount()) {
+            if(groupIndex < 0) {
+                return;
+            }
+
+            const path = this._getPathToLeaf(groupIndex, groups);
+
+            for(let i = 0; i < groups.length; i++) {
+                result.push({
+                    name: groups[i].name,
+                    id: path[i]
+                });
+            }
+
+        }
+
+        return result;
+    }
+
+    getAppointmentColor(options, groups) {
+        const resourceForPainting = this.getResourceForPainting(groups);
+        let response = new Deferred().resolve().promise();
+
+        if(resourceForPainting) {
+            const field = getFieldExpr(resourceForPainting);
+            const groupIndex = options.groupIndex;
+            const groups = this.getCellGroups(groupIndex, groups);
+            const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(options.itemData));
+
+            let groupId = resourceValues.length
+                ? resourceValues[0]
+                : undefined;
+
+            for(let i = 0; i < groups.length; i++) {
+                if(groups[i].name === field) {
+                    groupId = groups[i].id;
+                    break;
+                }
+            }
+
+            response = this.getResourceColor(field, groupId);
+        }
+
+        return response;
+    }
+
+    _getPathToLeaf(leafIndex, groups) {
+        const tree = this.createResourcesTree(groups);
+
+        function findLeafByIndex(data, index) {
+            for(let i = 0; i < data.length; i++) {
+                if(data[i].leafIndex === index) {
+                    return data[i];
+                } else {
+                    const leaf = findLeafByIndex(data[i].children, index);
+                    if(leaf) {
+                        return leaf;
+                    }
+                }
+            }
+        }
+
+        function makeBranch(leaf, result) {
+            result = result || [];
+            result.push(leaf.value);
+
+            if(leaf.parent) {
+                makeBranch(leaf.parent, result);
+            }
+
+            return result;
+        }
+
+        const leaf = findLeafByIndex(tree, leafIndex);
+
+        return makeBranch(leaf).reverse();
     }
 
     reduceResourcesTree(tree, existingAppointments, _result) {

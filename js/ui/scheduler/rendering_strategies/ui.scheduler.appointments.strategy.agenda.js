@@ -2,6 +2,7 @@ import dateUtils from '../../../core/utils/date';
 import { each } from '../../../core/utils/iterator';
 import { merge } from '../../../core/utils/array';
 import BaseRenderingStrategy from './ui.scheduler.appointments.strategy.base';
+import { getInstanceFactory } from '../instanceFactory';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getAppointmentMinSize() {
@@ -18,12 +19,24 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
         return geometry;
     }
 
+    groupAppointmentByResources(appointments) {
+        const { resourceManager } = getInstanceFactory();
+
+        return resourceManager.groupAppointmentsByResources(
+            appointments,
+            this.instance._getCurrentViewOption('groups'),
+            this.instance._loadedResources
+        );
+    }
+
     createTaskPositionMap(appointments) {
         let height;
         let appointmentsByResources;
         if(appointments.length) {
             height = this.instance.fire('getAgendaVerticalStepHeight');
-            appointmentsByResources = this.instance.fire('groupAppointmentsByResources', appointments);
+
+            appointmentsByResources = this.groupAppointmentsByResources(appointments);
+
             let groupedAppts = [];
 
             each(appointmentsByResources, function(i, appts) {
@@ -155,13 +168,14 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getCollectorTopOffset() {
     }
 
+
     calculateRows(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
 
-        const groupedAppointments = this.instance.fire('groupAppointmentsByResources', appointments);
         currentDate = dateUtils.trimTime(new Date(currentDate));
 
-        each(groupedAppointments, function(groupIndex, currentAppointments) {
+        const groupedAppointments = this.groupAppointmentByResources(appointments);
+        each(groupedAppointments, function(_, currentAppointments) {
 
             const groupResult = [];
             const appts = {

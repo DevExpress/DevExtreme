@@ -42,7 +42,6 @@ import { hide as hideLoading, show as showLoading } from './loading';
 import AppointmentCollection from './appointments/appointmentCollection';
 import AppointmentLayoutManager from './appointments.layout_manager';
 import { Header } from './header/header';
-import { ResourceManager } from './resources/resourceManager';
 import subscribes from './subscribes';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone';
@@ -61,6 +60,7 @@ import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
 import utils from './utils';
 import AppointmentDataProvider from './appointments/DataProvider/appointmentDataProvider';
+import { getInstanceFactory } from './instanceFactory';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -587,7 +587,8 @@ class Scheduler extends Widget {
                 });
                 break;
             case 'resources':
-                this._resourcesManager.setResources(this.option('resources'));
+
+                getInstanceFactory().resourceManager.setResources(this.option('resources'));
 
                 this.appointmentDataProvider.setDataAccessors(this._combineDataAccessors());
 
@@ -845,7 +846,7 @@ class Scheduler extends Widget {
         const groups = this._getCurrentViewOption('groups');
         const result = new Deferred();
 
-        this._resourcesManager.loadResources(groups).done((function(resources) {
+        getInstanceFactory().resourceManager.loadResources(groups).done((function(resources) {
             this._loadedResources = resources;
             result.resolve(resources);
         }).bind(this));
@@ -965,8 +966,12 @@ class Scheduler extends Widget {
 
         this._initEditing();
 
-        this._resourcesManager = new ResourceManager(this.option('resources'));
+        getInstanceFactory().create({
+            resources: this.option('resources'),
+            scheduler: this
+        });
 
+        // TODO move to the InstanceFactory
         this.appointmentDataProvider = new AppointmentDataProvider(
             this,
             this._dataSource,
@@ -1041,7 +1046,7 @@ class Scheduler extends Widget {
 
     // TODO - Move to appointment filter helper
     _combineDataAccessors() {
-        const resourcesDataAccessors = this._resourcesManager._dataAccessors;
+        const resourcesDataAccessors = getInstanceFactory().resourceManager._dataAccessors;
         const result = extend(true, {}, this._dataAccessors);
 
         each(resourcesDataAccessors, (function(type, accessor) {
@@ -1860,7 +1865,8 @@ class Scheduler extends Widget {
         result.endDate = new Date(resultedEndDate.getTime() - timeZoneOffset);
 
         const rawResult = result.source();
-        this._resourcesManager.setResourcesToItem(rawResult, targetCell.groups);
+
+        getInstanceFactory().resourceManager.setResourcesToItem(rawResult, targetCell.groups);
 
         return rawResult;
     }
@@ -2025,10 +2031,6 @@ class Scheduler extends Widget {
         return this._appointments;
     }
 
-    getResourceManager() {
-        return this._resourcesManager;
-    }
-
     getLayoutManager() {
         return this._layoutManager;
     }
@@ -2126,7 +2128,8 @@ class Scheduler extends Widget {
         const groups = this._getCurrentViewOption('groups');
 
         if(groups?.length) {
-            const resourcesSetter = this._resourcesManager._dataAccessors.setter;
+            const { resourceManager } = getInstanceFactory();
+            const resourcesSetter = resourceManager._dataAccessors.setter;
             const workSpace = this._workSpace;
             let getGroups;
             let setResourceCallback;
@@ -2134,7 +2137,11 @@ class Scheduler extends Widget {
             if(this._isAgenda()) {
                 getGroups = function() {
                     const apptSettings = this.getLayoutManager()._positionMap[appointmentIndex];
-                    return workSpace._getCellGroups(apptSettings[0].groupIndex);
+
+                    return resourceManager.getCellGroups(
+                        apptSettings[0].groupIndex,
+                        this.option('groups')
+                    );
                 };
 
                 setResourceCallback = function(_, group) {

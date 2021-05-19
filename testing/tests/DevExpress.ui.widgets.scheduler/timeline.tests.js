@@ -3,7 +3,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
@@ -26,13 +26,6 @@ const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'SchedulerTime
 
 const stubInvokeMethod = function(instance) {
     sinon.stub(instance, 'invoke', function() {
-        const subscribe = arguments[0];
-        if(subscribe === 'createResourcesTree') {
-            return new ResourceManager().createResourcesTree(arguments[1]);
-        }
-        if(subscribe === 'convertDateByTimezone') {
-            return arguments[1];
-        }
     });
 };
 
@@ -46,7 +39,10 @@ QUnit.module('Timeline Base', {
             }
 
             this.instance = $('#scheduler-timeline').dxSchedulerTimeline().dxSchedulerTimeline('instance');
-            stubInvokeMethod(this.instance, options);
+
+            const resources = options && options.resources || {};
+
+            getInstanceFactory().create({ resources });
         };
 
         this.createInstance();
