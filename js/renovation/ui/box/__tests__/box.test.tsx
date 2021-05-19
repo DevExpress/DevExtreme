@@ -51,7 +51,7 @@ describe('Box > Attrs', () => {
       expect(new Box(props).cssStyles.flexDirection).toEqual('column');
 
       props = { direction: null };
-      expect(new Box(props).cssStyles.flexDirection).toEqual(null);
+      expect(new Box(props).cssStyles.flexDirection).toEqual(undefined);
 
       props = { direction: undefined };
       expect(new Box(props).cssStyles.flexDirection).toEqual(undefined);
@@ -72,7 +72,7 @@ describe('Box > Attrs', () => {
       expect(new Box(props).cssStyles.justifyContent).toEqual('space-between');
 
       props = { align: 'start' };
-      expect(new Box(props).cssStyles.justifyContent).toEqual('start');
+      expect(new Box(props).cssStyles.justifyContent).toEqual('flex-start');
 
       props = { align: null };
       expect(new Box(props).cssStyles.justifyContent).toEqual(null);
