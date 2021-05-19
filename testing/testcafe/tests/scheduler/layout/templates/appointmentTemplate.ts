@@ -13,7 +13,7 @@ fixture`Layout:Templates:appointmentTemplate`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`appointment-template-currentView=${currentView}`, scheduler.workSpace))
+      .expect(await takeScreenshot(`appointment-template-currentView=${currentView}.png`, scheduler.workSpace))
       .ok()
 
       .expect(compareResults.isValid())
