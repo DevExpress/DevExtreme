@@ -732,6 +732,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._cleanView();
         this._toggleGroupedClass();
         this._toggleWorkSpaceWithOddCells();
+
+        this.virtualScrollingDispatcher?.updateDimensions(true);
         this._renderView();
         this.option('crossScrollingEnabled') && this._setTableSizes();
         this.cache.clear();
@@ -2327,6 +2329,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _cleanView() {
         this.cache.clear();
+        this._cleanTableWidths();
         this._cleanAllowedPositions();
         this.virtualSelectionState?.releaseSelectedAndFocusedCells();
         if(!this.isRenovatedRender()) {
@@ -2350,6 +2353,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._disposeRenovatedComponents();
 
         super._clean();
+    }
+
+    _cleanTableWidths() {
+        this._$headerPanel.css('width', '');
+        this._$dateTable.css('width', '');
+        this._$allDayTable && this._$allDayTable.css('width', '');
     }
 
     _disposeRenovatedComponents() {
