@@ -537,6 +537,8 @@ class SchedulerAgenda extends WorkSpace {
 
         return isUpdateNeeded;
     }
+
+    renovatedRenderSupported() { return false; }
 }
 
 registerComponent('dxSchedulerAgenda', SchedulerAgenda);

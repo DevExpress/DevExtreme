@@ -66,7 +66,6 @@ describe('Scrollbar', () => {
                   : 1
                 );
 
-                // TODO: test with bottom & top
                 expect(viewModel.scrollStyles).toEqual({
                   [direction === 'vertical' ? 'height' : 'width']: expectedScrollSize,
                   transform: direction === DIRECTION_VERTICAL ? `translate(0px, ${expectedScrollTranslate}px)` : `translate(${expectedScrollTranslate}px, 0px)`,
@@ -354,7 +353,7 @@ describe('Scrollbar', () => {
               });
 
               viewModel.moveToMouseLocation(clickLocation.eventData);
-              // TODO
+
               expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
               expect(viewModel.moveTo).toHaveBeenCalledWith(clickLocation.expected);
             });

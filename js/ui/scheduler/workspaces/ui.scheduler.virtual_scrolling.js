@@ -136,8 +136,14 @@ export default class VirtualScrollingDispatcher {
     }
 
     getCellWidth() {
-        const cellWidth = this.workspace.getCellWidth() ||
-            this.workspace.getCellMinWidth();
+        let cellWidth = this.workspace.getCellWidth();
+        const minCellWidth = this.workspace.getCellMinWidth();
+
+        // TODO: Remove this after CSS refactoring
+        if(!cellWidth || cellWidth < minCellWidth) {
+            cellWidth = minCellWidth;
+        }
+
         const result = cellWidth > 0
             ? cellWidth
             : MIN_CELL_WIDTH;
@@ -263,21 +269,21 @@ export default class VirtualScrollingDispatcher {
         }
     }
 
-    updateDimensions() {
+    updateDimensions(isForce) {
         const cellHeight = this.getCellHeight(false);
         const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
-        if(needUpdateVertical) {
+        if(needUpdateVertical || isForce) {
             this.rowHeight = cellHeight;
 
-            this.verticalVirtualScrolling.reinitState(cellHeight);
+            this.verticalVirtualScrolling?.reinitState(cellHeight, isForce);
         }
 
         const cellWidth = this.getCellWidth();
         const needUpdateHorizontal = this.horizontalScrollingAllowed && cellWidth !== this.cellWidth;
-        if(needUpdateHorizontal) {
+        if(needUpdateHorizontal || isForce) {
             this.cellWidth = cellWidth;
 
-            this.horizontalVirtualScrolling.reinitState(cellWidth);
+            this.horizontalVirtualScrolling?.reinitState(cellWidth, isForce);
         }
 
         if(needUpdateVertical || needUpdateHorizontal) {
@@ -391,10 +397,10 @@ class VirtualScrollingBase {
             : -1;
     }
 
-    updateState(position) {
+    updateState(position, isForce) {
         position = this._correctPosition(position);
 
-        if(!this.needUpdateState(position)) {
+        if(!this.needUpdateState(position) && !isForce) {
             return false;
         }
 
@@ -429,14 +435,14 @@ class VirtualScrollingBase {
         return true;
     }
 
-    reinitState(itemSize) {
+    reinitState(itemSize, isForceUpdate) {
         const { position } = this;
 
         this.itemSize = itemSize;
 
-        this.updateState(0);
+        this.updateState(0, isForceUpdate);
         if(position > 0) {
-            this.updateState(position);
+            this.updateState(position, isForceUpdate);
         }
     }
 
@@ -522,11 +528,11 @@ class VirtualScrollingBase {
 
         const needAddItems = this._itemSizeChanged || isAppend || isPrepend;
         if(needAddItems) {
-            this._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
+            this._updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter);
         }
     }
 
-    _updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter) {
+    _updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter) {
         const { state } = this;
 
         state.virtualItemSizeBefore = virtualItemSizeBefore;
@@ -588,14 +594,15 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
         };
     }
 
-    _updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter) {
+    _updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter) {
         if(!this.isRTL) {
-            super._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
+            super._updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter);
         } else {
             const { state } = this;
 
             state.virtualItemSizeAfter = virtualItemSizeBefore;
             state.virtualItemSizeBefore = virtualItemSizeAfter;
+            state.startIndex = this.getTotalItemCount() - this.startIndex - this.state.itemCount;
         }
     }
 }
@@ -618,7 +625,7 @@ class Renderer {
     }
 
     _renderGrid() {
-        this.workspace.renderRWorkspace(false);
+        this.workspace.renderWorkSpace(false);
     }
 
     _renderAppointments() {

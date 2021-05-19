@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Component from './common/component';
+import { Option } from './common/types.ts';
 import { Deferred } from '../../core/utils/deferred';
 
 // eslint-disable-next-line react/prefer-stateless-function
@@ -10,9 +11,11 @@ export class ScrollViewWrapper extends Component {
     return new (Deferred as any)().resolve();
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  // https://trello.com/c/UCUiKGfd/2724-renovation-renovated-components-ignores-children-when-usetemplates-returns-false
-  // _useTemplates(): boolean {
-  //   return false;
-  // }
+  _optionChanged(option: Option): void {
+    const { name } = option;
+    if (name === 'useNative') {
+      this._isNodeReplaced = false;
+    }
+    super._optionChanged(option);
+  }
 }

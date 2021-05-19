@@ -255,7 +255,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  validateEvent(e): boolean {
+  validateEvent(e: Event): boolean {
     return this.scrollbar.validateEvent(e);
   }
 
@@ -275,7 +275,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  initHandler(e, crossThumbScrolling: boolean): void {
+  initHandler(e: Event, crossThumbScrolling: boolean): void {
     this.scrollbar.initHandler(e, crossThumbScrolling);
   }
 

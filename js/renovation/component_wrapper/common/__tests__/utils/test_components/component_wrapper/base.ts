@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-underscore-dangle */
-import Component from '../../../component';
+import Component from '../../../../component';
 
-export default class BaseTestWidget extends Component {
+export default class BaseTestComponent extends Component {
   lastPassedProps: any;
 
   getLastPassedProps(): any {
     return this.lastPassedProps;
+  }
+
+  _init(): void {
+    super._init();
+    this.defaultKeyHandlers.enter = () => 'default enter handler';
+    this.defaultKeyHandlers.arrowUp = () => 'default arrow up handler';
   }
 
   _getContentReadyOptions(): string[] {

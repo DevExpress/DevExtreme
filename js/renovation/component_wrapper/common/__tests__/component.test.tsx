@@ -3,11 +3,11 @@
  */
 // eslint-disable-next-line import/named
 import renderer, { dxElementWrapper } from '../../../../core/renderer';
-import './utils/test_components/empty_test_widget';
-import './utils/test_components/test_widget';
-import './utils/test_components/options_check_widget';
-import './utils/test_components/templated_test_widget';
-import './utils/test_components/non_templated_test_widget';
+import './utils/test_components/empty';
+import './utils/test_components/base';
+import './utils/test_components/options';
+import './utils/test_components/templated';
+import './utils/test_components/non_templated';
 import {
   defaultEvent,
   emitKeyboard,
@@ -19,7 +19,7 @@ import * as UpdatePropsImmutable from '../../utils/update-props-immutable';
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
   dxTestWidget: any;
-  dxOptionsCheckWidget: any;
+  dxOptionsTestWidget: any;
   dxTemplatedTestWidget: any;
   dxNonTemplatedTestWidget: any;
 };
@@ -389,9 +389,9 @@ describe('Widget\'s container manipulations', () => {
 
 describe('option', () => {
   it('should return default props of component', () => {
-    $('#component').dxOptionsCheckWidget({});
+    $('#component').dxOptionsTestWidget({});
 
-    expect($('#component').dxOptionsCheckWidget('option').text).toBe('default text');
+    expect($('#component').dxOptionsTestWidget('option').text).toBe('default text');
   });
 
   it('should copy default props of component (not by reference)', () => {
@@ -402,17 +402,17 @@ describe('option', () => {
       </div>
       `;
 
-    $('#component1').dxOptionsCheckWidget({});
-    $('#component2').dxOptionsCheckWidget({});
+    $('#component1').dxOptionsTestWidget({});
+    $('#component2').dxOptionsTestWidget({});
 
-    const objectProp1 = $('#component1').dxOptionsCheckWidget('option').objectProp;
-    const objectProp2 = $('#component2').dxOptionsCheckWidget('option').objectProp;
+    const objectProp1 = $('#component1').dxOptionsTestWidget('option').objectProp;
+    const objectProp2 = $('#component2').dxOptionsTestWidget('option').objectProp;
 
     expect(objectProp1).not.toBe(objectProp2);
   });
 
   it('nested option changed', () => {
-    const component = $('#component').dxOptionsCheckWidget({}).dxOptionsCheckWidget('instance');
+    const component = $('#component').dxOptionsTestWidget({}).dxOptionsTestWidget('instance');
     expect(component.getLastReceivedProps().nestedObject.nestedProp).toBe('default value');
     const { nestedObject } = component.getLastReceivedProps();
     const spyUpdatePropsImmutable = jest.spyOn(UpdatePropsImmutable, 'updatePropsImmutable');
@@ -431,26 +431,26 @@ describe('option', () => {
   });
 
   it('should return default value of TwoWay prop', () => {
-    $('#component').dxOptionsCheckWidget({});
+    $('#component').dxOptionsTestWidget({});
 
-    expect($('#component').dxOptionsCheckWidget('option').twoWayProp).toBe(1);
+    expect($('#component').dxOptionsTestWidget('option').twoWayProp).toBe(1);
   });
 
   it('should return updated value of TwoWay prop', () => {
-    $('#component').dxOptionsCheckWidget({});
+    $('#component').dxOptionsTestWidget({});
 
-    $('#component').dxOptionsCheckWidget('updateTwoWayPropCheck');
+    $('#component').dxOptionsTestWidget('updateTwoWayPropCheck');
 
-    expect($('#component').dxOptionsCheckWidget('option').twoWayProp).toBe(2);
+    expect($('#component').dxOptionsTestWidget('option').twoWayProp).toBe(2);
   });
 
   it('fires optionChanged on TwoWay prop change', () => {
     const optionChanged = jest.fn();
-    $('#component').dxOptionsCheckWidget({
+    $('#component').dxOptionsTestWidget({
       onOptionChanged: optionChanged,
     });
 
-    $('#component').dxOptionsCheckWidget('updateTwoWayPropCheck');
+    $('#component').dxOptionsTestWidget('updateTwoWayPropCheck');
 
     expect(optionChanged).toBeCalledTimes(1);
     expect(optionChanged.mock.calls[0][0]).toEqual({
@@ -459,12 +459,12 @@ describe('option', () => {
       previousValue: 1,
       value: 2,
       element: $('#component').get(0),
-      component: $('#component').dxOptionsCheckWidget('instance'),
+      component: $('#component').dxOptionsTestWidget('instance'),
     });
   });
 
   it('convert `undefined` to `null` or `default value`', () => {
-    $('#component').dxOptionsCheckWidget({
+    $('#component').dxOptionsTestWidget({
       oneWayWithValue: 15,
       oneWayWithoutValue: 15,
       oneWayNullWithValue: 15,
@@ -472,7 +472,7 @@ describe('option', () => {
       twoWayNullWithValue: '15',
     });
 
-    $('#component').dxOptionsCheckWidget({
+    $('#component').dxOptionsTestWidget({
       oneWayWithValue: undefined,
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: undefined,
@@ -480,7 +480,7 @@ describe('option', () => {
       twoWayNullWithValue: undefined,
     });
 
-    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject({
+    expect($('#component').dxOptionsTestWidget('getLastPassedProps')).toMatchObject({
       oneWayWithValue: 10,
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: null,
@@ -488,7 +488,7 @@ describe('option', () => {
       twoWayNullWithValue: null,
     });
 
-    expect($('#component').dxOptionsCheckWidget('option')).toMatchObject({
+    expect($('#component').dxOptionsTestWidget('option')).toMatchObject({
       oneWayWithValue: undefined,
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: undefined,
@@ -502,24 +502,24 @@ describe('option', () => {
       const element = document.createElement('div');
       const wrapper = $(element);
 
-      $('#component').dxOptionsCheckWidget({
+      $('#component').dxOptionsTestWidget({
         propWithElement: wrapper,
       });
 
-      expect($('#component').dxOptionsCheckWidget('getLastPassedProps').propWithElement).toEqual(element);
+      expect($('#component').dxOptionsTestWidget('getLastPassedProps').propWithElement).toEqual(element);
     });
 
     it('leave option as is if it is not jQuery wrapper', () => {
-      $('#component').dxOptionsCheckWidget({
+      $('#component').dxOptionsTestWidget({
         propWithElement: 15,
       });
 
-      expect($('#component').dxOptionsCheckWidget('getLastPassedProps').propWithElement).toEqual(15);
+      expect($('#component').dxOptionsTestWidget('getLastPassedProps').propWithElement).toEqual(15);
     });
   });
 
   it('should return null for template option if it is not set', () => {
-    const widget = $('#component').dxOptionsCheckWidget({}).dxOptionsCheckWidget('instance');
+    const widget = $('#component').dxOptionsTestWidget({}).dxOptionsTestWidget('instance');
 
     expect(widget.option('contentTemplate')).toBe(null);
   });
@@ -534,10 +534,10 @@ describe('option', () => {
     };
     const { excessiveOption, ...props } = options;
 
-    $('#component').dxOptionsCheckWidget(options);
+    $('#component').dxOptionsTestWidget(options);
 
-    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject(props);
-    expect($('#component').dxOptionsCheckWidget('option')).toMatchObject(options);
+    expect($('#component').dxOptionsTestWidget('getLastPassedProps')).toMatchObject(props);
+    expect($('#component').dxOptionsTestWidget('option')).toMatchObject(options);
   });
 
   it('should still pass elementAttr to props', () => {
@@ -551,13 +551,13 @@ describe('option', () => {
     };
     const { elementAttr, ...props } = options;
 
-    $('#component').dxOptionsCheckWidget(options);
+    $('#component').dxOptionsTestWidget(options);
 
-    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject({
+    expect($('#component').dxOptionsTestWidget('getLastPassedProps')).toMatchObject({
       ...props,
       style: elementStyle,
     });
-    expect($('#component').dxOptionsCheckWidget('option')).toMatchObject(options);
+    expect($('#component').dxOptionsTestWidget('option')).toMatchObject(options);
   });
 
   it('should remap "onKeyboardHandled" event to "onKeyDown"', () => {
@@ -861,6 +861,21 @@ describe('events/actions', () => {
 });
 
 describe('registerKeyHandler', () => {
+  it('"_supportedKeys" internal method should merge custom and default handlers', () => {
+    $('#component').dxTestWidget({});
+
+    const instance = $('#component').dxTestWidget('instance');
+
+    instance.registerKeyHandler('space', () => 'custom space handler');
+    instance.registerKeyHandler('enter', () => 'custom enter handler');
+
+    const supportedKeys = instance._supportedKeys();
+
+    expect(supportedKeys.enter()).toBe('custom enter handler');
+    expect(supportedKeys.space()).toBe('custom space handler');
+    expect(supportedKeys.arrowUp()).toBe('default arrow up handler');
+  });
+
   it('call custom handler only', () => {
     const customHandler = jest.fn();
     const propHandler = jest.fn();

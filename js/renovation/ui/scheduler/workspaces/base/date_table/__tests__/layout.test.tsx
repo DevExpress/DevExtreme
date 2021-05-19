@@ -36,6 +36,8 @@ describe('DateTableLayoutBase', () => {
       groupIndex: 1,
     }],
     cellCountInGroupRow: 1,
+    leftVirtualCellCount: 32,
+    rightVirtualCellCount: 44,
   };
 
   describe('Render', () => {
@@ -87,6 +89,8 @@ describe('DateTableLayoutBase', () => {
           leftVirtualCellWidth: 300,
           rightVirtualCellWidth: 400,
           virtualCellsCount: 3,
+          leftVirtualCellCount: 32,
+          rightVirtualCellCount: 44,
         });
       expect(table.hasClass('some-class'))
         .toBe(true);
