@@ -305,4 +305,3 @@ QUnit.test('Header panel and date table should have a correct width, groupOrient
     assert.equal(headerPanelWidth, 797, 'Width is OK');
     assert.equal(dateTableWidth, 797, 'Width is OK');
 });
-
