@@ -80,7 +80,7 @@ export interface Device {
  * @public
  */
 declare class DevicesObject {
-    constructor(options: { window?: Window });
+    constructor(options?: { window?: Window });
     /**
      * @docid
      * @publicName current()
@@ -134,7 +134,7 @@ declare class DevicesObject {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    on(events: any): this;
+     on(events: {[key: string]: Function}): this;
     /**
      * @docid
      * @publicName orientation()
@@ -142,7 +142,7 @@ declare class DevicesObject {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    orientation(): string;
+    orientation(): 'portrait' | 'landscape' | undefined;
     /**
      * @docid
      * @publicName real()

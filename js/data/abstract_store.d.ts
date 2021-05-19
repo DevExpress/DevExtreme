@@ -40,11 +40,12 @@ export interface StoreOptions<T = Store> {
     /**
      * @docid
      * @type_function_param1 result:Array<any>
+     * @type_function_param2 loadOptions:LoadOptions
      * @action
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoaded?: ((result: Array<any>) => void);
+    onLoaded?: ((result: Array<any>, loadOptions: LoadOptions) => void);
     /**
      * @docid
      * @type_function_param1 loadOptions:LoadOptions
@@ -123,11 +124,12 @@ export default class Store {
      * @docid
      * @publicName byKey(key)
      * @param1 key:object|string|number
+     * @param2 extraOptions:LoadOptions
      * @return Promise<any>
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number): DxPromise<any>;
+    byKey(key: any | string | number, extraOptions?: LoadOptions): DxPromise<any>;
     /**
      * @docid
      * @publicName insert(values)
@@ -140,20 +142,20 @@ export default class Store {
     /**
      * @docid
      * @publicName key()
-     * @return any
+     * @return string|Array<string>
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    key(): any;
+    key(): string | Array<string>;
     /**
      * @docid
      * @publicName keyOf(obj)
      * @param1 obj:object
-     * @return any
+     * @return any|string|number
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    keyOf(obj: any): any;
+    keyOf(obj: any): any | string | number;
     /**
      * @docid
      * @publicName load()
@@ -208,7 +210,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    on(events: any): this;
+     on(events: {[key: string]: Function}): this;
     /**
      * @docid
      * @publicName push(changes)
@@ -216,7 +218,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    push(changes: Array<any>): void;
+    push(changes: Array<{type: 'insert' | 'update' | 'remove', data?: any, key?: any, index?: number}>): void;
     /**
      * @docid
      * @publicName remove(key)
@@ -225,7 +227,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    remove(key: any | string | number): DxPromise<void>;
+    remove(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName totalCount(options)
@@ -236,7 +238,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    totalCount(obj: { filter?: any, group?: any }): DxPromise<number>;
+    totalCount(obj: { filter?: Array<any>, group?: Array<any> }): DxPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)
@@ -246,5 +248,5 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    update(key: any | string | number, values: any): DxPromise<any>;
+    update(key: any, values: any): DxPromise<any>;
 }

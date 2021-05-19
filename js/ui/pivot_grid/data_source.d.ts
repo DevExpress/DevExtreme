@@ -597,7 +597,7 @@ export default class PivotGridDataSource {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    on(events: any): this;
+     on(events: {[key: string]: Function}): this;
     /**
      * @docid
      * @publicName reload()

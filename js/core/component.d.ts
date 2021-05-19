@@ -1,6 +1,7 @@
 import {
   DxElement
 } from './element';
+import { ChangedOptionInfo, BaseEventInfo, InitializedEventInfo } from '../events/index';
 
 /** @namespace DevExpress */
 export interface ComponentOptions<T = Component> {
@@ -13,7 +14,7 @@ export interface ComponentOptions<T = Component> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onDisposing?: ((e: { component: T }) => void);
+  onDisposing?: ((e: BaseEventInfo<T>) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -23,7 +24,7 @@ export interface ComponentOptions<T = Component> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onInitialized?: ((e: { component?: T, element?: DxElement }) => void);
+  onInitialized?: ((e: InitializedEventInfo<T>) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -36,7 +37,7 @@ export interface ComponentOptions<T = Component> {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => void);
+  onOptionChanged?: ((e: BaseEventInfo<T>&ChangedOptionInfo) => void);
 }
 /**
  * @docid
@@ -108,7 +109,7 @@ export default class Component {
    * @prevFileNamespace DevExpress.core
    * @public
    */
-  on(events: any): this;
+  on(events: {[key: string]: Function}): this;
   /**
    * @docid
    * @publicName option()

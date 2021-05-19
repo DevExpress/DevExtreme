@@ -13,6 +13,8 @@ import {
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
+import { ChangedOptionInfo, EventInfo } from '../events/index';
+import { Rule } from './options/utils';
 
 /** @namespace DevExpress */
 export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
@@ -22,14 +24,14 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.integration
      * @public
      */
-    bindingOptions?: any;
+    bindingOptions?: {[key:string]: any};
     /**
      * @docid
      * @default {}
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    elementAttr?: any;
+    elementAttr?: {[key:string]: any};
     /**
      * @docid
      * @default undefined
@@ -45,7 +47,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: DxElement, model?: any }) => void);
+    onDisposing?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @action
@@ -53,7 +55,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
+    onOptionChanged?: ((e: EventInfo<T>&ChangedOptionInfo) => void);
     /**
      * @docid
      * @default false
@@ -93,7 +95,7 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
+    static defaultOptions(rule: Rule<DOMComponentOptions>): void;
     /**
      * @docid
      * @publicName dispose()

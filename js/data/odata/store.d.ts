@@ -9,6 +9,7 @@ import Store, {
 import {
     LoadOptions
 } from '../load_options';
+import { ODataRequestOptions } from './context'
 
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
@@ -32,7 +33,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
+    beforeSend?: ((options: { url: string, async: boolean, method: string, timeout: number, params: any, payload: any, headers: any }) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.data
@@ -48,7 +49,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
+    errorHandler?: ((e: { httpStatus: number, errorDetails: any, requestOptions: ODataRequestOptions }) => void);
     /**
      * @docid
      * @default {}
@@ -138,7 +139,7 @@ export default class ODataStore extends Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    createQuery(loadOptions: any): any;
+    createQuery(loadOptions?: {expand?: string | Array<string>, requireTotalCount?: boolean, customQueryParams?: any}): any;
 
     /**
      * @docid

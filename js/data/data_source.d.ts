@@ -54,7 +54,7 @@ export interface DataSourceOptions {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onChanged?: ((e: { changes?: Array<any> }) => void);
+    onChanged?: ((e: { readonly changes?: Array<any> }) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -63,7 +63,7 @@ export interface DataSourceOptions {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoadError?: ((error: { message?: string }) => void);
+    onLoadError?: ((error: { readonly message?: string }) => void);
     /**
      * @docid
      * @type_function_param1 isLoading:boolean
@@ -127,7 +127,7 @@ export interface DataSourceOptions {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    searchOperation?: string;
+    searchOperation?: '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
     /**
      * @docid
      * @default null
@@ -175,7 +175,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    cancel(): boolean;
+    cancel(operationId : number): boolean;
     /**
      * @docid
      * @publicName dispose()
@@ -254,7 +254,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    key(): any & string & number;
+    key(): any | string | number;
     /**
      * @docid
      * @publicName load()
@@ -270,7 +270,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    loadOptions(): any;
+    loadOptions(): {sort?: any, filter?: any, select?: any, group?: any, requireTotalCount?: boolean};
     /**
      * @docid
      * @publicName off(eventName)
@@ -308,7 +308,7 @@ export default class DataSource {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    on(events: any): this;
+     on(events: {[key: string]: Function}): this;
     /**
      * @docid
      * @publicName pageIndex()
