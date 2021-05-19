@@ -1028,11 +1028,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._$selectAllItem = $('<div>').addClass(SELECT_ALL_ITEM_CLASS);
 
         const value = this._dataAdapter.isAllSelected();
-        const checkBox = this._createComponent(this._$selectAllItem, CheckBox, {
+        this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
-            text: this.option('selectAllText')
+            text: this.option('selectAllText'),
+            onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
         });
-        checkBox.on('valueChanged', this._onSelectAllCheckboxValueChanged.bind(this));
 
         this._toggleSelectedClass(this._$selectAllItem, value);
 
@@ -1223,9 +1223,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(this._selectAllEnabled()) {
             const selectAllCheckbox = this._$selectAllItem.dxCheckBox('instance');
 
-            selectAllCheckbox.off('valueChanged');
+            selectAllCheckbox.option('onValueChanged', undefined);
             selectAllCheckbox.option('value', this._dataAdapter.isAllSelected());
-            selectAllCheckbox.on('valueChanged', this._onSelectAllCheckboxValueChanged.bind(this));
+            selectAllCheckbox.option('onValueChanged', this._onSelectAllCheckboxValueChanged.bind(this));
         }
     },
 
