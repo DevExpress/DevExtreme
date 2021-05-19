@@ -1,7 +1,6 @@
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
-import { data as elementData } from '../../../core/element_data';
 import dateUtils from '../../../core/utils/date';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getPublicElement } from '../../../core/element';
@@ -2750,11 +2749,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const currentCell = $cell[0];
 
         if(currentCell) {
-            if(this.isRenovatedRender()) {
-                data = this._getCellDataInRenovatedView($cell);
-            } else {
-                data = elementData(currentCell, CELL_DATA);
-            }
+            data = this._getDataByCell($cell);
         }
 
         return extend(true, {}, data);
@@ -2768,7 +2763,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.virtualScrollingDispatcher?.virtualCellOffset || 0;
     }
 
-    _getCellDataInRenovatedView($cell) {
+    _getDataByCell($cell) {
         let rowIndex = $cell.parent().index();
         if(this.isVirtualScrolling()) {
             rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
@@ -3022,36 +3017,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     getMaxAllowedPosition(groupIndex) {
         const validGroupIndex = groupIndex || 0;
 
-        if(this.isRenovatedRender()) {
-            return this.getRMaxAllowedHorizontalPosition(validGroupIndex);
-        }
-
-        return this.getMaxAllowedHorizontalPosition(validGroupIndex);
-    }
-
-    getMaxAllowedHorizontalPosition(groupIndex) {
-        if(this._maxAllowedPosition.length === 0) {
-            const isRtl = this.option('rtlEnabled');
-
-            this._maxAllowedPosition = [];
-
-            this._$dateTable
-                .find('tr')
-                .first()
-                .find(`td:nth-child(${this._getCellCount()}n)`)
-                .each((function(_, cell) {
-
-                    let maxPosition = $(cell).position().left;
-
-                    if(!isRtl) {
-                        maxPosition += getBoundingRect(cell).width;
-                    }
-
-                    this._maxAllowedPosition.push(Math.round(maxPosition));
-                }).bind(this));
-        }
-
-        return this._maxAllowedPosition[groupIndex];
+        return this.getRMaxAllowedHorizontalPosition(validGroupIndex);
     }
 
     getRMaxAllowedHorizontalPosition(groupIndex) {
@@ -3079,30 +3045,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getMaxAllowedVerticalPosition(groupIndex) {
-        if(this.isRenovatedRender()) {
-            return this.getRMaxAllowedVerticalPosition(groupIndex);
-        }
-
-        return this.getMaxAllowedVerticalPositionStandard(groupIndex);
+        return this.getRMaxAllowedVerticalPosition(groupIndex);
     }
 
-    getMaxAllowedVerticalPositionStandard(groupIndex) {
-        if(this._maxAllowedVerticalPosition.length === 0) {
-            const rowCount = this._getRowCount();
-            this._$dateTable
-                .find(`tr:not(.${VIRTUAL_ROW_CLASS}):nth-child(${rowCount}n)`)
-                .each((_, row) => {
-
-                    const maxPosition = $(row).position().top + getBoundingRect(row).height;
-
-                    this._maxAllowedVerticalPosition.push(Math.round(maxPosition));
-                });
-        }
-
-        return this._maxAllowedVerticalPosition[groupIndex];
-    }
-
-    // TODO - renovate render strategy
     getRMaxAllowedVerticalPosition(groupIndex) {
         const getMaxPosition = rowIndex => {
             const row = this._$dateTable
