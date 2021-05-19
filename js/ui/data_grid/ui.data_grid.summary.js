@@ -95,15 +95,6 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
             }
         },
 
-        _updateScrollLeftPosition: function() {
-            const scrollLeft = this._scrollLeft;
-
-            if(scrollLeft > 0) {
-                this._scrollLeft = 0;
-                this.scrollTo({ left: scrollLeft });
-            }
-        },
-
         _updateContent: function($newTable, change) {
             if(change && change.changeType === 'update' && change.columnIndices) {
                 const $row = this.getTableElement().find('.dx-row');
