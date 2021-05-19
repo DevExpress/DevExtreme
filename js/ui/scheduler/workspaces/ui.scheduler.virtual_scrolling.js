@@ -625,7 +625,7 @@ class Renderer {
     }
 
     _renderGrid() {
-        this.workspace.renderRWorkspace(false);
+        this.workspace.renderWorkSpace(false);
     }
 
     _renderAppointments() {

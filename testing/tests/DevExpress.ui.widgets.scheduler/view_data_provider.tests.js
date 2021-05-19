@@ -273,15 +273,15 @@ module('View Data Provider', {
                 assert.deepEqual(groupIndices, [2, 3], 'Indices are correct');
             });
 
-            test('getLasGroupCellPosition', function(assert) {
+            test('getLastGroupCellPosition', function(assert) {
                 assert.deepEqual(
-                    this.viewDataProvider.getLasGroupCellPosition(2),
+                    this.viewDataProvider.getLastGroupCellPosition(2),
                     { rowIndex: 1, cellIndex: 1 },
                     'Last position for the group 2 is correct'
                 );
 
                 assert.deepEqual(
-                    this.viewDataProvider.getLasGroupCellPosition(3),
+                    this.viewDataProvider.getLastGroupCellPosition(3),
                     { rowIndex: 3, cellIndex: 1 },
                     'Last position for the group 3 is correct'
                 );
