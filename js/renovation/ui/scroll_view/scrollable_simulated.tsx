@@ -50,7 +50,6 @@ import {
 
 import {
   ScrollOffset,
-  AllowedDirection,
   ScrollEventArgs,
   ScrollableDirection,
 } from './types.d';
@@ -228,6 +227,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
 })
 
 export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
+  // https://trello.com/c/psOGNvMc/2745-renovation-type-for-timers
   @Mutable() validateWheelTimer?: any;
 
   @Mutable() locked = false;
@@ -262,9 +262,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
-  @Ref() vScrollbarRef!: RefObject; // TODO: any -> Scrollbar (Generators)
+  @Ref() vScrollbarRef!: RefObject<AnimatedScrollbar>;
 
-  @Ref() hScrollbarRef!: RefObject; // TODO: any -> Scrollbar (Generators)
+  @Ref() hScrollbarRef!: RefObject<AnimatedScrollbar>;
 
   @ForwardRef() topPocketRef!: RefObject<HTMLDivElement>;
 
@@ -358,13 +358,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.update();
 
     if (this.direction.isVertical) {
-      const scrollbar = this.vScrollbarRef.current;
+      const scrollbar = this.vScrollbarRef.current!;
       location.top = scrollbar.getLocationWithinRange(
         location.top! + this.vScrollLocation,
       ) - this.vScrollLocation;
     }
     if (this.direction.isHorizontal) {
-      const scrollbar = this.hScrollbarRef.current;
+      const scrollbar = this.hScrollbarRef.current!;
       location.left = scrollbar.getLocationWithinRange(
         location.left! + this.hScrollLocation,
       ) - this.hScrollLocation;
@@ -760,12 +760,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     if (this.direction.isVertical) {
       verticalScrolling = this.props.scrollByThumb
-        && this.vScrollbarRef.current.isThumb(target);
+        && this.vScrollbarRef.current!.isThumb(target);
     }
 
     if (this.direction.isHorizontal) {
       horizontalScrolling = this.props.scrollByThumb
-        && this.hScrollbarRef.current.isThumb(target);
+        && this.hScrollbarRef.current!.isThumb(target);
     }
 
     return verticalScrolling || horizontalScrolling;
@@ -793,15 +793,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.prepareDirections(false);
 
     if (this.direction.isVertical) {
-      const isValid = this.validateEvent(e, this.vScrollbarRef.current);
+      const isValid = this.validateEvent(e, this.vScrollbarRef.current!);
       this.validDirections[DIRECTION_VERTICAL] = isValid;
     }
     if (this.direction.isHorizontal) {
-      const isValid = this.validateEvent(e, this.hScrollbarRef.current);
+      const isValid = this.validateEvent(e, this.hScrollbarRef.current!);
       this.validDirections[DIRECTION_HORIZONTAL] = isValid;
     }
   }
 
+  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
   validateEvent(e, scrollbarRef: any): boolean {
     const { scrollByThumb, scrollByContent } = this.props;
 
@@ -824,7 +825,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return false;
   }
 
-  eventHandler(handler: (scrollbarInstance: AnimatedScrollbar) => void): void {
+  eventHandler(handler: (scrollbarInstance: any) => void): void {
     if (this.direction.isHorizontal) {
       handler(this.hScrollbarRef.current!);
     }
@@ -838,19 +839,21 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   allowedDirection(): ScrollableDirection | undefined {
-    const { allowedDirections } = this;
+    // https://trello.com/c/Jnvnb7qc/2728-renovation-react-cannot-destruct-from-this
+    // const { allowedDirections } = this;
 
-    if (this.direction.isBoth && allowedDirections.vertical && allowedDirections.horizontal) {
+    if (this.direction.isBoth
+      && this.allowedDirections.vertical && this.allowedDirections.horizontal) {
       return DIRECTION_BOTH;
-    } if (this.direction.isHorizontal && allowedDirections.horizontal) {
+    } if (this.direction.isHorizontal && this.allowedDirections.horizontal) {
       return DIRECTION_HORIZONTAL;
-    } if (this.direction.isVertical && allowedDirections.vertical) {
+    } if (this.direction.isVertical && this.allowedDirections.vertical) {
       return DIRECTION_VERTICAL;
     }
     return undefined;
   }
 
-  get allowedDirections(): AllowedDirection {
+  get allowedDirections(): { vertical: boolean; horizontal: boolean } {
     return {
       vertical: this.direction.isVertical
         && (Math.round(
