@@ -64,11 +64,16 @@ class SchedulerTableCreator {
                     }
                 }
 
-                let cellData;
+
+                let cellDataObject;
+                let dataKey;
+                let dataValue;
 
                 if(options.getCellData) {
-                    cellData = options.getCellData(td, rowIndex, columnIndex, groupIndex);
-                    elementData(td, 'dxCellData', cellData);
+                    cellDataObject = options.getCellData(td, rowIndex, columnIndex, groupIndex);
+                    dataKey = cellDataObject.key;
+                    dataValue = cellDataObject.value;
+                    dataKey && elementData(td, dataKey, dataValue);
                 }
 
                 if(options.cellTemplate && options.cellTemplate.render) {
@@ -86,21 +91,21 @@ class SchedulerTableCreator {
                         index: rowIndex * options.cellCount + columnIndex,
                     };
 
-                    if(cellData) {
-                        if(cellData.startDate) {
-                            templateOptions.model['startDate'] = cellData.startDate;
+                    if(dataValue) {
+                        if(dataValue.startDate) {
+                            templateOptions.model['startDate'] = dataValue.startDate;
                         }
 
-                        if(cellData.endDate) {
-                            templateOptions.model['endDate'] = cellData.endDate;
+                        if(dataValue.endDate) {
+                            templateOptions.model['endDate'] = dataValue.endDate;
                         }
 
-                        if(cellData.groups) {
-                            templateOptions.model['groups'] = cellData.groups;
+                        if(dataValue.groups) {
+                            templateOptions.model['groups'] = dataValue.groups;
                         }
 
-                        if(cellData.allDay) {
-                            templateOptions.model['allDay'] = cellData.allDay;
+                        if(dataValue.allDay) {
+                            templateOptions.model['allDay'] = dataValue.allDay;
                         }
                     }
 
