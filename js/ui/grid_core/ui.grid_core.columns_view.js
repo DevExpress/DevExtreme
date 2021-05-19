@@ -804,6 +804,15 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return ['scrollChanged'];
     },
 
+    _updateScrollLeftPosition: function() {
+        const scrollLeft = this._scrollLeft;
+
+        if(scrollLeft >= 0) {
+            this._scrollLeft = 0;
+            this.scrollTo({ left: scrollLeft });
+        }
+    },
+
     scrollTo: function(pos) {
         const $element = this.element();
         const $scrollContainer = $element && $element.children('.' + this.addWidgetPrefix(SCROLL_CONTAINER_CLASS)).not('.' + this.addWidgetPrefix(CONTENT_FIXED_CLASS));
