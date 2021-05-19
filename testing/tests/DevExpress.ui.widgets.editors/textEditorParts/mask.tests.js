@@ -328,12 +328,7 @@ QUnit.module('typing', moduleConfig, () => {
             'ArrowLeft',
             'ArrowUp',
             'ArrowRight',
-            'ArrowDown',
-            // IE9
-            'Left',
-            'Up',
-            'Right',
-            'Down'
+            'ArrowDown'
         ];
 
         let isKeyPressPrevented = false;
@@ -455,38 +450,6 @@ QUnit.module('typing', moduleConfig, () => {
         } finally {
             clock.restore();
             inputMatchesStub && inputMatchesStub.restore();
-        }
-    });
-
-    QUnit.test('TextEditor with mask option should work correctly with autofill in Edge (T869537)', function(assert) {
-        if(!(browser.msie && browser.version > 11)) {
-            assert.expect(0);
-            return;
-        }
-
-        const clock = sinon.useFakeTimers();
-
-        try {
-            const testText = '555555';
-            const $textEditor = $('#texteditor').dxTextEditor({
-                mask: '+1 (X00) 000',
-                maskRules: { X: /[02-9]/ },
-                mode: 'tel',
-                useMaskedValue: true
-            });
-            const $input = $textEditor.find('.dx-texteditor-input');
-            const textEditor = $textEditor.dxTextEditor('instance');
-            const keyboard = keyboardMock($input, true);
-
-            $input.val(testText);
-            $input.addClass('edge-autofilled');
-            keyboard.input();
-
-            clock.tick();
-            assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
-            assert.equal(textEditor.option('isValid'), true, 'isValid is true');
-        } finally {
-            clock.restore();
         }
     });
 
@@ -1157,8 +1120,7 @@ QUnit.module('value', moduleConfig, () => {
 
         keyboard.type('x');
 
-        // NOTE: triggerHandler instead of trigger due to IE blur async firing
-        $input.triggerHandler('blur');
+        $input.trigger('blur');
 
         assert.equal(valueChangedFired, 1, 'change fired once on blur');
     });
@@ -1184,13 +1146,12 @@ QUnit.module('value', moduleConfig, () => {
 
         keyboard.press('del');
 
-        // NOTE: triggerHandler instead of trigger due to IE blur async firing
-        $input.triggerHandler('focusout');
+        $input.trigger('focusout');
 
         assert.equal(valueChangedHandler.callCount, 1, 'change fired once on blur');
     });
 
-    QUnit.test('valueChangeEvent=change should fire change on beforedeactivate (ie raises blur in wrong time)', function(assert) {
+    QUnit.test('valueChangeEvent=change should fire change on beforedeactivate', function(assert) {
         let valueChangedFired = 0;
 
         const $textEditor = $('#texteditor').dxTextEditor({
@@ -1211,7 +1172,7 @@ QUnit.module('value', moduleConfig, () => {
 
         keyboard.type('x');
 
-        $input.triggerHandler('beforedeactivate');
+        $input.trigger('beforedeactivate');
 
         assert.equal(valueChangedFired, 1, 'change fired once on beforedeactivate');
     });
@@ -1761,7 +1722,6 @@ QUnit.module('custom mask maskRules', moduleConfig, () => {
     });
 
     QUnit.test('fullText updated, if pasted text is accepted', function(assert) {
-        // Fix blinking on blur in MS Edge (https://trello.com/c/HyC0Shoz)
         assert.expect(1);
         let firstTimeCall = true;
 

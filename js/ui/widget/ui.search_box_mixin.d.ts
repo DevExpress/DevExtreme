@@ -2,6 +2,7 @@ import {
     dxTextBoxOptions
 } from '../text_box';
 
+/** @namespace DevExpress.ui */
 export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     /**
      * @docid

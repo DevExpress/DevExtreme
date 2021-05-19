@@ -5,7 +5,6 @@ import fx from 'animation/fx';
 import DropDownBox from 'ui/drop_down_box';
 import typeUtils, { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import { normalizeKeyName } from 'events/utils/index';
 
@@ -48,8 +47,6 @@ const moduleConfig = {
         this.clock.restore();
     }
 };
-
-const isIE11 = (browser.msie && parseInt(browser.version) === 11);
 
 QUnit.module('common', moduleConfig, () => {
     QUnit.test('the widget should work without the dataSource', function(assert) {
@@ -516,11 +513,6 @@ QUnit.module('popup options', moduleConfig, () => {
     });
 
     QUnit.test('Dropdownbox popup should change height according to the content', function(assert) {
-        if(isIE11) {
-            assert.expect(0);
-            return;
-        }
-
         const $content = $('<div>').attr('id', 'content');
 
         const instance = new DropDownBox($('#dropDownBox'), {
@@ -591,11 +583,6 @@ QUnit.module('popup options', moduleConfig, () => {
 
 QUnit.module('keyboard navigation', moduleConfig, () => {
     QUnit.testInActiveWindow('first focusable element inside of content should get focused after tab pressing', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         const $input1 = $('<input>', { id: 'input1', type: 'text' });
         const $input2 = $('<input>', { id: 'input2', type: 'text' });
 

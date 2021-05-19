@@ -86,6 +86,10 @@ export type InitializedEvent = InitializedEventInfo<dxPivotGrid>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPivotGrid> & ChangedOptionInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid
@@ -773,6 +777,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
  * @module ui/pivot_grid
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxPivotGrid extends Widget {
@@ -830,6 +835,7 @@ export default class dxPivotGrid extends Widget {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxPivotGridPivotGridCell {
     /**
@@ -903,6 +909,7 @@ export interface dxPivotGridPivotGridCell {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxPivotGridSummaryCell {
     /**

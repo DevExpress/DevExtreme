@@ -1,7 +1,6 @@
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { isNumeric, isDefined, isFunction, isString } from '../../core/utils/type';
-import browser from '../../core/utils/browser';
 import devices from '../../core/devices';
 import { fitIntoRange, inRange } from '../../core/utils/math';
 
@@ -21,10 +20,9 @@ const MOVE_FORWARD = 1;
 const MOVE_BACKWARD = -1;
 const MINUS = '-';
 const MINUS_KEY = 'minus';
-const NUMPUD_MINUS_KEY_IE = 'Subtract';
 const INPUT_EVENT = 'input';
 
-const CARET_TIMEOUT_DURATION = browser.msie ? 300 : 0; // If we move caret before the second click, IE can prevent browser text selection on double click
+const CARET_TIMEOUT_DURATION = 0;
 
 const NumberBoxMask = NumberBoxBase.inherit({
 
@@ -558,12 +556,6 @@ const NumberBoxMask = NumberBoxBase.inherit({
             this._isValuePasted = false;
         }.bind(this));
 
-        if(browser.msie && browser.version < 12) {
-            eventsEngine.on($input, addNamespace('paste', NUMBER_FORMATTER_NAMESPACE), function() {
-                this._isValuePasted = true;
-            }.bind(this));
-        }
-
         eventsEngine.on($input, addNamespace('dxclick', NUMBER_FORMATTER_NAMESPACE), function() {
             if(!this._caretTimeout) {
                 this._caretTimeout = setTimeout(function() {
@@ -658,16 +650,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
                 const caretInBoundaries = getCaretInBoundaries(caret, currentText, format);
 
-                if(browser.msie) {
-                    clearTimeout(this._caretTimeout);
-                    this._caretTimeout = setTimeout(this._caret.bind(this, caretInBoundaries));
-                } else {
-                    this._caret(caretInBoundaries);
-                }
-            }
-
-            if(e.key === NUMPUD_MINUS_KEY_IE) { // Workaround for IE (T592690)
-                eventsEngine.trigger(this._input(), INPUT_EVENT);
+                this._caret(caretInBoundaries);
             }
         }
     },

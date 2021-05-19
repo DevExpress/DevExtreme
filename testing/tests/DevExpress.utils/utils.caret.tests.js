@@ -2,7 +2,6 @@ import $ from 'jquery';
 import caret from 'ui/text_box/utils.caret';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import domAdapter from 'core/dom_adapter';
-import browser from 'core/utils/browser';
 import devices from 'core/devices';
 
 const { module: testModule, test } = QUnit;
@@ -91,7 +90,7 @@ testModule('caret', () => {
             ` 'force' parameter is ${forceSetCaret}`;
         test(testTitle, function(assert) {
             const { ios, mac } = devices.real();
-            const itShouldBePrevented = !forceSetCaret && (browser.msie || ios || mac);
+            const itShouldBePrevented = !forceSetCaret && (ios || mac);
             const $input = $('<input>').val('12345').appendTo('#qunit-fixture');
             const otherInput = $('<input>').appendTo('#qunit-fixture').get(0);
             const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement', () => itShouldBePrevented ? otherInput : $input.get(0));
