@@ -2057,19 +2057,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getDateTableCellClass.bind(this),
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option('dataCellTemplate'),
-            getCellData: (_, rowIndex, cellIndex) => {
-                const {
-                    startDate, endDate, allDay, groups, groupIndex,
-                } = this.viewDataProvider.getCellData(rowIndex, cellIndex, false);
-
-                return {
-                    startDate,
-                    endDate,
-                    allDay,
-                    groups,
-                    groupIndex,
-                };
-            },
+            getCellData: this._getCellData.bind(this),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: groupCount,
             groupByDate: this.option('groupByDate')
