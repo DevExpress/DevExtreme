@@ -254,6 +254,16 @@ each([{
       describe('Effects', () => {
         beforeEach(clearEventHandlers);
 
+        it('UpdateHandler() should call update() method', () => {
+          const viewModel = new Scrollable({ });
+
+          viewModel.update = jest.fn();
+
+          viewModel.updateHandler();
+
+          expect(viewModel.update).toHaveBeenCalledTimes(1);
+        });
+
         each([optionValues.direction]).describe('ScrollEffect params. Direction: %o', (direction) => {
           each([
             { eventName: 'dxscrollinit', effectName: 'init', passEvent: true },
@@ -573,7 +583,7 @@ each([{
         viewModel.update = jest.fn();
 
         expect((viewModel as any).validate(e)).toEqual(false);
-        expect(viewModel.update).toHaveBeenCalledTimes(1);
+        expect(viewModel.update).toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
       });
 
       it('validate(e), locked: true, disabled: false', () => {

@@ -58,7 +58,6 @@ describe('Simulated > View', () => {
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
-      updateManually: false,
       useKeyboard: true,
       useNative: true,
     });
@@ -158,16 +157,6 @@ describe('Simulated > Render', () => {
 });
 
 describe('Simulated > Behavior', () => {
-  it('updateHandler()', () => {
-    const helper = new ScrollableTestHelper({});
-
-    helper.viewModel.update = jest.fn();
-
-    helper.viewModel.updateHandler();
-
-    expect(helper.viewModel.update).toBeCalledTimes(1);
-  });
-
   describe('Effects', () => {
     beforeEach(clearEventHandlers);
 
@@ -652,7 +641,7 @@ describe('Simulated > Behavior', () => {
         optionValues.bounceEnabled,
         optionValues.isDxWheelEvent,
         [true, false],
-      ]))('getDirection(e), scrollSize default, ContainerSize: %o, ContentSize: %o, OverflowStyle: %o, BounceEnabled: %o, IsDxWheelEvent: %o, IsShiftKeyPressed: %o',
+      ]))('tryGetAllowedDirection(e), scrollSize default, ContainerSize: %o, ContentSize: %o, OverflowStyle: %o, BounceEnabled: %o, IsDxWheelEvent: %o, IsShiftKeyPressed: %o',
         (containerSize, contentSize, overflow, bounceEnabled, isDxWheelEvent, shiftKey) => {
           const helper = new ScrollableTestHelper({
             direction, overflow, bounceEnabled, contentSize, containerSize,
@@ -681,7 +670,7 @@ describe('Simulated > Behavior', () => {
             }
           }
 
-          expect(helper.viewModel.getDirection(e)).toBe(expectedDirectionResult);
+          expect(helper.viewModel.tryGetAllowedDirection(e)).toBe(expectedDirectionResult);
         });
 
       each([-1, 1]).describe('Wheel delta: %o', (delta) => {
@@ -721,21 +710,16 @@ describe('Simulated > Behavior', () => {
       });
 
       describe('Validate(e)', () => {
-        test.each([true, false])('locked: true, disabled: false, bounceEnabled: true, updateManually: %o', (updateManually) => {
+        it('locked: true, disabled: false, bounceEnabled: true', () => {
           const e = { ...defaultEvent } as any;
           const viewModel = new Scrollable({
-            direction, disabled: false, bounceEnabled: true, updateManually,
+            direction, disabled: false, bounceEnabled: true,
           });
           viewModel.locked = false;
           viewModel.update = jest.fn();
 
           expect(viewModel.validate(e)).toEqual(true);
-
-          if (updateManually) {
-            expect(viewModel.update).toBeCalledTimes(0);
-          } else {
-            expect(viewModel.update).toHaveBeenCalledTimes(1);
-          }
+          expect(viewModel.update).toHaveBeenCalledTimes(1);
         });
 
         each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
@@ -1089,22 +1073,22 @@ describe('Simulated > Behavior', () => {
         expect(helper.viewModel.locked).toEqual(true);
       });
 
-      test.each([true, false])('update(), updateManually: %o', (updateManually) => {
+      it('Update() should call onUpdated action', () => {
         const helper = new ScrollableTestHelper({
           onUpdated: actionHandler,
-          updateManually,
         });
 
         helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
         helper.viewModel.updateSizes = jest.fn();
+
         helper.viewModel.update();
 
-        expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
         if (actionHandler) {
           helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ fakeEventArg: { value: 5 } }]]);
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
+        expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
       });
 
       test.each(['onBounce', 'onStart', 'onUpdated'])('actionName: %o', (action) => {
@@ -1240,6 +1224,36 @@ describe('Simulated > Behavior', () => {
 
     describe('ScrollTo', () => {
       each(optionValues.direction).describe('Direction: %o', (direction) => {
+        it('ScrollBy() should call update()', () => {
+          const helper = new ScrollableTestHelper({ direction });
+          helper.initScrollbarSettings();
+
+          helper.viewModel.triggerScrollEvent = jest.fn();
+          helper.viewModel.update = jest.fn();
+          helper.viewModel.prepareDirections = jest.fn();
+          helper.viewModel.onStart = jest.fn();
+          helper.viewModel.eventHandler = jest.fn();
+
+          helper.viewModel.scrollBy({ left: 10, top: 10 });
+
+          expect(helper.viewModel.update).toHaveBeenCalledTimes(1);
+        });
+
+        it('ScrollBy() should not call update() if position not changed', () => {
+          const helper = new ScrollableTestHelper({ direction });
+          helper.initScrollbarSettings();
+
+          helper.viewModel.triggerScrollEvent = jest.fn();
+          helper.viewModel.update = jest.fn();
+          helper.viewModel.prepareDirections = jest.fn();
+          helper.viewModel.onStart = jest.fn();
+          helper.viewModel.eventHandler = jest.fn();
+
+          helper.viewModel.scrollBy({ left: 0, top: 0 });
+
+          expect(helper.viewModel.update).toHaveBeenCalledTimes(0);
+        });
+
         each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
           each([
             [{ top: 50, left: 50 }, 20, { top: 20, left: 20 }],
@@ -1283,29 +1297,6 @@ describe('Simulated > Behavior', () => {
               expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
               helper.checkContainerPosition(expect, expectedScrollOffset);
             });
-          });
-
-          test.each([true, false])('ScrollBy() should call update(), updateManually: %o', (updateManually) => {
-            const helper = new ScrollableTestHelper({
-              direction: 'vertical',
-              updateManually,
-              rtlEnabled,
-            });
-            helper.initScrollbarSettings();
-
-            helper.viewModel.triggerScrollEvent = jest.fn();
-            helper.viewModel.update = jest.fn();
-            helper.viewModel.prepareDirections = jest.fn();
-            helper.viewModel.onStart = jest.fn();
-            helper.viewModel.eventHandler = jest.fn();
-
-            helper.viewModel.scrollBy({ left: 10, top: 10 });
-
-            if (updateManually) {
-              expect(helper.viewModel.update).toBeCalledTimes(0);
-            } else {
-              expect(helper.viewModel.update).toHaveBeenCalledTimes(1);
-            }
           });
 
           each([

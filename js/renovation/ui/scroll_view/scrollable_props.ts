@@ -20,8 +20,6 @@ export class ScrollableProps {
 
   @OneWay() scrollByThumb = false;
 
-  @OneWay() updateManually = false;
-
   @OneWay() classes?: string;
 
   @OneWay() pullDownEnabled = false;

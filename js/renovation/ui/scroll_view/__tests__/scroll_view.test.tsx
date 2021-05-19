@@ -54,7 +54,6 @@ describe('ScrollView', () => {
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
-      updateManually: false,
       useNative: true,
     });
   });
