@@ -2792,24 +2792,19 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
-        groupIndex = groupIndex || 0;
+        const validGroupIndex = groupIndex || 0;
 
-        const cellInfo = { groupIndex, startDate: date, isAllDay: inAllDayRow };
+        const cellInfo = { groupIndex: validGroupIndex, startDate: date, isAllDay: inAllDayRow };
         const positionByMap = this.viewDataProvider.findCellPositionInMap(cellInfo);
         if(!positionByMap) {
             return undefined;
         }
 
         const $cell = this._dom_getDateCell(positionByMap);
-
-        const position = this._getCellPositionWithCache($cell, positionByMap, groupIndex);
-
-        if(!position) {
-            throw errors.Error('E1039');
-        }
+        const position = this._getCellPositionWithCache($cell, positionByMap, validGroupIndex);
 
         const shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow);
-        const horizontalHMax = this._getHorizontalMax(groupIndex, date);
+        const horizontalHMax = this._getHorizontalMax(validGroupIndex, date);
 
         return {
             cellPosition: position.left + shift.cellPosition,
@@ -2818,8 +2813,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             rowIndex: position.rowIndex,
             cellIndex: position.cellIndex,
             hMax: horizontalHMax,
-            vMax: this.getVerticalMax(groupIndex),
-            groupIndex: groupIndex
+            vMax: this.getVerticalMax(validGroupIndex),
+            groupIndex: validGroupIndex
         };
     }
 
