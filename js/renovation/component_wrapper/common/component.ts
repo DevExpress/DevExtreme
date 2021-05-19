@@ -28,6 +28,10 @@ export default class ComponentWrapper extends DOMComponent {
     [name: string]: AbstractFunction;
   };
 
+  customKeyHandlers!: Record<string, AbstractFunction>;
+
+  defaultKeyHandlers!: Record<string, AbstractFunction>;
+
   _documentFragment!: DocumentFragment;
 
   _elementAttr!: {
@@ -40,10 +44,6 @@ export default class ComponentWrapper extends DOMComponent {
   _props!: Record<string, unknown>;
 
   _storedClasses?: string;
-
-  _supportedKeys!: () => {
-    [name: string]: AbstractFunction;
-  };
 
   _viewRef!: RefObject<unknown>;
 
@@ -316,6 +316,9 @@ export default class ComponentWrapper extends DOMComponent {
 
   _init(): void {
     super._init();
+
+    this.customKeyHandlers = {};
+    this.defaultKeyHandlers = {};
     this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
     this._props = { ...this.option() };
     this._documentFragment = domAdapter.createDocumentFragment();
@@ -329,7 +332,6 @@ export default class ComponentWrapper extends DOMComponent {
     Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
 
     this._viewRef = createRef();
-    this._supportedKeys = (): Record<string, AbstractFunction> => ({});
   }
 
   _addAction(event: string, actionToAdd?: AbstractFunction): void {
@@ -402,10 +404,10 @@ export default class ComponentWrapper extends DOMComponent {
     return templateWrapper;
   }
 
-  _wrapKeyDownHandler(initialHandler: AbstractFunction) {
-    return (options): void => {
+  _wrapKeyDownHandler(initialHandler: AbstractFunction): AbstractFunction {
+    return (options: { originalEvent: Event; keyName: string; which: string }): Event => {
       const { originalEvent, keyName, which } = options;
-      const keys = this._supportedKeys();
+      const keys = this.customKeyHandlers;
       const func = keys[keyName] || keys[which];
 
       // NOTE: registered handler has more priority
@@ -414,7 +416,7 @@ export default class ComponentWrapper extends DOMComponent {
         const result = handler(originalEvent, options);
 
         if (!result) {
-          originalEvent.cancel = true;
+          (originalEvent as any).cancel = true;
           return originalEvent;
         }
       }
@@ -448,12 +450,15 @@ export default class ComponentWrapper extends DOMComponent {
     this._refresh();
   }
 
+  _supportedKeys(): Record<string, AbstractFunction> {
+    return {
+      ...this.defaultKeyHandlers,
+      ...this.customKeyHandlers,
+    };
+  }
+
   registerKeyHandler(key: string, handler: AbstractFunction): void {
-    const currentKeys = this._supportedKeys();
-    this._supportedKeys = (): Record<string, AbstractFunction> => ({
-      ...currentKeys,
-      [key]: handler,
-    });
+    this.customKeyHandlers[key] = handler;
   }
 
   // NOTE: this method will be deprecated

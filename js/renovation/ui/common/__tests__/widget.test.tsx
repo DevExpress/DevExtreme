@@ -429,13 +429,13 @@ describe('Widget', () => {
           expect(onKeyDown).toHaveBeenCalledTimes(1);
         });
 
-        it('should subscribe without focusable', () => {
+        it('should not subscribe if focusStateEnabled is "false"', () => {
           const widget = new Widget({ focusStateEnabled: false, onKeyDown });
           widget.widgetRef = {} as any;
           widget.keyboardEffect();
 
           emitKeyboard(KEY.enter);
-          expect(onKeyDown).toHaveBeenCalledTimes(1);
+          expect(onKeyDown).toHaveBeenCalledTimes(0);
         });
 
         it('should return nothing if widget does not have event and is not focusable', () => {

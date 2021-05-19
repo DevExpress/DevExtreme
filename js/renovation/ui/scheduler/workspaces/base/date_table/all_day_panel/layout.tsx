@@ -21,8 +21,10 @@ export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
       >
         <AllDayPanelTableBody
           viewData={viewModel.allDayPanelData}
-          leftVirtualCellWidth={viewModel.props.leftVirtualCellWidth}
-          rightVirtualCellWidth={viewModel.props.rightVirtualCellWidth}
+          leftVirtualCellWidth={viewModel.props.viewData.leftVirtualCellWidth}
+          rightVirtualCellWidth={viewModel.props.viewData.rightVirtualCellWidth}
+          leftVirtualCellCount={viewModel.props.viewData.leftVirtualCellCount}
+          rightVirtualCellCount={viewModel.props.viewData.rightVirtualCellCount}
           dataCellTemplate={viewModel.props.dataCellTemplate}
         />
       </Table>

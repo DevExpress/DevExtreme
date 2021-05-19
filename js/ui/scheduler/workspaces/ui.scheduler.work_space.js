@@ -736,6 +736,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.virtualScrollingDispatcher?.updateDimensions(true);
         this._renderView();
         this.option('crossScrollingEnabled') && this._setTableSizes();
+        this.cache.clear();
     }
 
     _init() {
@@ -1246,7 +1247,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isShowAllDayPanel() && this._isVerticalGroupedWorkSpace();
     }
 
-    generateRenderOptions() {
+    generateRenderOptions(isProvideVirtualCellsWidth) {
         const groupCount = this._getGroupCount();
         const verticalGroupCount = !this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
         const horizontalGroupCount = this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
@@ -1282,6 +1283,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupsList: this._getAllGroups(),
             isHorizontalGrouping: this._isHorizontalGroupedWorkSpace(),
             isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
+            isProvideVirtualCellsWidth,
         };
 
         if(this.isVirtualScrolling()) {
@@ -3368,6 +3370,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getGroupWidth(groupIndex) {
         let result = this._getCellCount() * this.getCellWidth();
+        // TODO: refactor after deleting old render
+        if(this.isVirtualScrolling()) {
+            const groupedData = this.viewDataProvider.groupedDataMap.dateTableGroupedMap;
+            const groupLength = groupedData[groupIndex][0].length;
+
+            result = groupLength * this.getCellWidth();
+        }
+
         const position = this.getMaxAllowedPosition(groupIndex);
         const currentPosition = position[groupIndex];
 

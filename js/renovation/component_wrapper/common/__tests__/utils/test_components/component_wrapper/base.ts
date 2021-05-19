@@ -9,6 +9,12 @@ export default class BaseTestComponent extends Component {
     return this.lastPassedProps;
   }
 
+  _init(): void {
+    super._init();
+    this.defaultKeyHandlers.enter = () => 'default enter handler';
+    this.defaultKeyHandlers.arrowUp = () => 'default arrow up handler';
+  }
+
   _getContentReadyOptions(): string[] {
     return [...super._getContentReadyOptions(), 'width', 'height'];
   }
