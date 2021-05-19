@@ -861,6 +861,21 @@ describe('events/actions', () => {
 });
 
 describe('registerKeyHandler', () => {
+  it('"_supportedKeys" internal method should merge custom and default handlers', () => {
+    $('#component').dxTestWidget({});
+
+    const instance = $('#component').dxTestWidget('instance');
+
+    instance.registerKeyHandler('space', () => 'custom space handler');
+    instance.registerKeyHandler('enter', () => 'custom enter handler');
+
+    const supportedKeys = instance._supportedKeys();
+
+    expect(supportedKeys.enter()).toBe('custom enter handler');
+    expect(supportedKeys.space()).toBe('custom space handler');
+    expect(supportedKeys.arrowUp()).toBe('default arrow up handler');
+  });
+
   it('call custom handler only', () => {
     const customHandler = jest.fn();
     const propHandler = jest.fn();
