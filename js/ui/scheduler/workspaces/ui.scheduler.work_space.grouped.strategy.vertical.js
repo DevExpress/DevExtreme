@@ -73,13 +73,13 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         return cellClass;
     }
 
-    getHorizontalMax(groupIndex) {
-        if(this._workSpace.isRenovatedRender()) {
-            return this._workSpace.getMaxAllowedPosition(groupIndex);
-        }
+    // getHorizontalMax(groupIndex) {
+    //     if(this._workSpace.isRenovatedRender()) {
+    //         return this._workSpace.getMaxAllowedPosition(groupIndex);
+    //     }
 
-        return this._workSpace.getMaxAllowedPosition(0);
-    }
+    //     return this._workSpace.getMaxAllowedPosition(0);
+    // }
 
     getVerticalMax(groupIndex) {
         let maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition(groupIndex);
@@ -219,13 +219,6 @@ class VerticalGroupedStrategy extends GroupedStrategy {
 
     getScrollableScrollTop() {
         return this._workSpace.getScrollable().scrollTop();
-    }
-
-    getGroupIndexByCell($cell) {
-        const rowIndex = $cell.parent().index();
-        const rowCount = this._workSpace._getRowCountWithAllDayRows();
-
-        return Math.ceil((rowIndex + 1) / rowCount);
     }
 }
 

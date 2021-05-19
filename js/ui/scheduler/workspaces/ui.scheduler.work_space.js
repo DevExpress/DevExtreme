@@ -524,18 +524,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getGroupIndexByCell($cell) {
-        if(this.isVirtualScrolling()) {
-            const {
-                rowIndex,
-                columnIndex,
-            } = this._getCoordinatesByCell($cell);
-            const isAllDayCell = $cell.hasClass(ALL_DAY_TABLE_CELL_CLASS);
+        const {
+            rowIndex,
+            columnIndex,
+        } = this._getCoordinatesByCell($cell);
+        const isAllDayCell = $cell.hasClass(ALL_DAY_TABLE_CELL_CLASS);
 
-            return this.viewDataProvider.getCellData(
-                rowIndex, columnIndex, isAllDayCell,
-            ).groupIndex;
-        }
-        return this._groupedStrategy.getGroupIndexByCell($cell);
+        return this.viewDataProvider.getCellData(
+            rowIndex, columnIndex, isAllDayCell,
+        ).groupIndex;
     }
 
     _toggleFocusedCellClass(isFocused, $element) {
@@ -1468,13 +1465,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _setSelectedCellsByCellData(data) {
         const cells = [];
         const $cells = this._getAllCells(data?.[0]?.allDay);
-        let cellsInRow = this._getTotalCellCount(this._getGroupCount());
-
-        if(this.isVirtualScrolling()) {
-            const renderState = this.virtualScrollingDispatcher.getRenderState();
-
-            cellsInRow = renderState.cellCount || cellsInRow;
-        }
+        const cellsInRow = this.viewDataProvider.getColumnsCount();
 
         data.forEach((cellData) => {
             const { groups, startDate, allDay, index } = cellData;
@@ -2790,14 +2781,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getHorizontalMax(groupIndex) {
         if(this.isVirtualScrolling()) {
-            return this._groupedStrategy.getHorizontalMax(groupIndex);
+            return this.getMaxAllowedPosition(groupIndex);
         }
 
         const correctedGroupIndex = this.isGroupedByDate()
             ? this._getGroupCount() - 1
             : groupIndex;
 
-        return this._groupedStrategy.getHorizontalMax(correctedGroupIndex);
+        return this.getMaxAllowedPosition(correctedGroupIndex);
     }
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {

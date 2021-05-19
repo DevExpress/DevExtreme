@@ -102,9 +102,9 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return cellClass;
     }
 
-    getHorizontalMax(groupIndex) {
-        return this._workSpace.getMaxAllowedPosition(groupIndex);
-    }
+    // getHorizontalMax(groupIndex) {
+    //     return this._workSpace.getMaxAllowedPosition(groupIndex);
+    // }
 
     getVerticalMax(groupIndex) {
         const isVirtualScrolling = this._workSpace.isVirtualScrolling();
@@ -254,13 +254,6 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
 
     getScrollableScrollTop(allDay) {
         return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
-    }
-
-    getGroupIndexByCell($cell) {
-        const rowIndex = $cell.parent().index();
-        const cellIndex = $cell.index();
-
-        return this.getGroupIndex(rowIndex, cellIndex);
     }
 }
 
