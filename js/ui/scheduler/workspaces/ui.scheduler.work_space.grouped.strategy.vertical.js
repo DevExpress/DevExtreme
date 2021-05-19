@@ -73,14 +73,6 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         return cellClass;
     }
 
-    // getHorizontalMax(groupIndex) {
-    //     if(this._workSpace.isRenovatedRender()) {
-    //         return this._workSpace.getMaxAllowedPosition(groupIndex);
-    //     }
-
-    //     return this._workSpace.getMaxAllowedPosition(0);
-    // }
-
     getVerticalMax(groupIndex) {
         let maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition(groupIndex);
 
@@ -164,10 +156,6 @@ class VerticalGroupedStrategy extends GroupedStrategy {
                 bottom: bottomOffset
             };
         });
-    }
-
-    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        return this.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
     }
 
     shiftIndicator($indicator, height, rtlOffset, i) {

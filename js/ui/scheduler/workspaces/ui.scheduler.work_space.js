@@ -2793,21 +2793,16 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
-        let position;
 
-        if(this.isVirtualScrolling()) {
-            const cellInfo = { groupIndex, startDate: date, isAllDay: inAllDayRow };
-            const positionByMap = this.viewDataProvider.findCellPositionInMap(cellInfo);
-            if(!positionByMap) {
-                return undefined;
-            }
-
-            const $cell = this._dom_getDateCell(positionByMap);
-
-            position = this._getCellPositionWithCache($cell, positionByMap, groupIndex);
-        } else {
-            position = this.calculateCellPositionByView(date, groupIndex, inAllDayRow);
+        const cellInfo = { groupIndex, startDate: date, isAllDay: inAllDayRow };
+        const positionByMap = this.viewDataProvider.findCellPositionInMap(cellInfo);
+        if(!positionByMap) {
+            return undefined;
         }
+
+        const $cell = this._dom_getDateCell(positionByMap);
+
+        const position = this._getCellPositionWithCache($cell, positionByMap, groupIndex);
 
         if(!position) {
             throw errors.Error('E1039');
@@ -2826,11 +2821,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             vMax: this.getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
-    }
-    calculateCellPositionByView(date, groupIndex, inAllDayRow,) {
-        const index = this.getCellIndexByDate(date, inAllDayRow);
-
-        return this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
     }
 
     getVerticalMax(groupIndex) {
@@ -3155,14 +3145,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $cells = this._getCells();
         const cellWidth = this.getCellWidth();
 
-        let result;
-        if(this.isVirtualScrolling()) {
-            const groupedDataMap = this.viewDataProvider.groupedDataMap;
-
-            result = this._groupedStrategy.getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
-        } else {
-            result = this._groupedStrategy.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
-        }
+        const groupedDataMap = this.viewDataProvider.groupedDataMap;
+        const result = this._groupedStrategy
+            .getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap);
 
         if(this._isRTL()) {
             const startOffset = result.left;

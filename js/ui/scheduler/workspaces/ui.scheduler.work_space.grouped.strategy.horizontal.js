@@ -102,10 +102,6 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return cellClass;
     }
 
-    // getHorizontalMax(groupIndex) {
-    //     return this._workSpace.getMaxAllowedPosition(groupIndex);
-    // }
-
     getVerticalMax(groupIndex) {
         const isVirtualScrolling = this._workSpace.isVirtualScrolling();
         const correctedGroupIndex = isVirtualScrolling
@@ -166,21 +162,7 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return this._createGroupBoundOffset(startCell, endCell, cellWidth);
     }
 
-    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        if(this._workSpace.isGroupedByDate()) {
-            return this._getGroupedByDateBoundOffset($cells, cellWidth);
-        }
-
-        const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
-        const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
-        const startCellIndex = groupIndex * cellCount;
-
-        const startCell = $cells.eq(startCellIndex);
-        const endCell = $cells.eq(startCellIndex + cellCount - 1);
-        return this._createGroupBoundOffset(startCell, endCell, cellWidth);
-    }
-
-    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap) {
+    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap) {
         if(this._workSpace.isGroupedByDate()) {
             return this._getGroupedByDateBoundOffset($cells, cellWidth);
         }
