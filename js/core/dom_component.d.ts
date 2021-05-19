@@ -13,6 +13,8 @@ import {
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
+import { ChangedOptionInfo, EventInfo } from '../events/index';
+import { Rule } from './options/utils';
 
 /** @namespace DevExpress */
 export interface DOMComponentOptions<TComponent> extends ComponentOptions<TComponent> {
@@ -21,13 +23,13 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @default {}
      * @public
      */
-    bindingOptions?: any;
+    bindingOptions?: {[key:string]: any};
     /**
      * @docid
      * @default {}
      * @public
      */
-    elementAttr?: any;
+    elementAttr?: {[key:string]: any};
     /**
      * @docid
      * @default undefined
@@ -86,7 +88,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @param1_field2 options:Object
      * @public
      */
-    static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
+    static defaultOptions(rule: Rule<DOMComponentOptions>): void;
     /**
      * @docid
      * @publicName dispose()

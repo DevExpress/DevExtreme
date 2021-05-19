@@ -1,6 +1,7 @@
 import {
   DxElement
 } from './element';
+import { ChangedOptionInfo, BaseEventInfo, InitializedEventInfo } from '../events/index';
 
 /** @namespace DevExpress */
 export interface ComponentOptions<TComponent> {
@@ -97,7 +98,7 @@ export default class Component<TProperties> {
    * @return this
    * @public
    */
-  on(events: any): this;
+  on(events: {[key: string]: Function}): this;
   /**
    * @docid
    * @publicName option()

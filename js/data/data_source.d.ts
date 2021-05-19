@@ -48,7 +48,7 @@ export interface DataSourceOptions {
      * @action
      * @public
      */
-    onChanged?: ((e: { changes?: Array<any> }) => void);
+    onChanged?: ((e: { readonly changes?: Array<any> }) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -56,7 +56,7 @@ export interface DataSourceOptions {
      * @action
      * @public
      */
-    onLoadError?: ((error: { message?: string }) => void);
+    onLoadError?: ((error: { readonly message?: string }) => void);
     /**
      * @docid
      * @type_function_param1 isLoading:boolean
@@ -111,7 +111,7 @@ export interface DataSourceOptions {
      * @default "contains"
      * @public
      */
-    searchOperation?: string;
+    searchOperation?: '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
     /**
      * @docid
      * @default null
@@ -153,7 +153,7 @@ export default class DataSource {
      * @return boolean
      * @public
      */
-    cancel(): boolean;
+    cancel(operationId : number): boolean;
     /**
      * @docid
      * @publicName dispose()
@@ -222,7 +222,7 @@ export default class DataSource {
      * @return object|string|number
      * @public
      */
-    key(): any & string & number;
+    key(): any | string | number;
     /**
      * @docid
      * @publicName load()
@@ -236,7 +236,7 @@ export default class DataSource {
      * @return object
      * @public
      */
-    loadOptions(): any;
+    loadOptions(): {sort?: any, filter?: any, select?: any, group?: any, requireTotalCount?: boolean};
     /**
      * @docid
      * @publicName off(eventName)
@@ -270,7 +270,7 @@ export default class DataSource {
      * @return this
      * @public
      */
-    on(events: any): this;
+     on(events: {[key: string]: Function}): this;
     /**
      * @docid
      * @publicName pageIndex()

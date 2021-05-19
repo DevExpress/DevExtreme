@@ -1,3 +1,4 @@
+import Component from '../core/component';
 import {
     Device
 } from '../core/devices';
@@ -13,7 +14,7 @@ import {
  * @export default
  * @public
  */
-export default class animationPresets {
+export default class animationPresets extends Component {
     /**
      * @docid
      * @publicName applyChanges()
@@ -37,10 +38,10 @@ export default class animationPresets {
      * @docid
      * @publicName getPreset(name)
      * @param1 name:string
-     * @return any
+     * @return object
      * @public
      */
-    getPreset(name: string): any;
+    getPreset(name: string): { animation?: animationConfig, device?: Device };
     /**
      * @docid
      * @publicName registerDefaultPresets()

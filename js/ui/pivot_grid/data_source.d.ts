@@ -525,7 +525,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    on(events: any): this;
+     on(events: {[key: string]: Function}): this;
     /**
      * @docid
      * @publicName reload()

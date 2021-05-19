@@ -1,3 +1,5 @@
+import Component from "./component";
+
 /**
  * @docid
  * @publicName registerComponent(name, componentClass)
@@ -7,7 +9,7 @@
  * @namespace DevExpress
  * @hidden
  */
-export default function registerComponent(name: string, componentClass: any): void;
+export default function registerComponent(name: string, componentClass: Component): void;
 
 /**
  * @docid
@@ -19,4 +21,4 @@ export default function registerComponent(name: string, componentClass: any): vo
  * @namespace DevExpress
  * @hidden
  */
-export default function registerComponent(name: string, namespace: any, componentClass: any): void;
+export default function registerComponent(name: string, namespace: { [key:string]: Component }, componentClass: Component): void;

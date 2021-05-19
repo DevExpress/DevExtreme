@@ -70,7 +70,7 @@ export interface Device {
  * @public
  */
 declare class DevicesObject {
-    constructor(options: { window?: Window });
+    constructor(options?: { window?: Window });
     /**
      * @docid
      * @publicName current()
@@ -118,14 +118,14 @@ declare class DevicesObject {
      * @return this
      * @public
      */
-    on(events: any): this;
+     on(events: {[key: string]: Function}): this;
     /**
      * @docid
      * @publicName orientation()
      * @return String
      * @public
      */
-    orientation(): string;
+    orientation(): 'portrait' | 'landscape' | undefined;
     /**
      * @docid
      * @publicName real()

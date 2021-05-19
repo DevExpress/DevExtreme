@@ -1,10 +1,14 @@
-import {
-    DxElement
-} from '../core/element';
+import { DxElement } from '../core/element';
+import { DxPromise } from '../core/utils/deferred';
+import { positionConfig } from './position';
 
-import {
-    DxPromise
-} from '../core/utils/deferred';
+export type animationState = string | number | {
+    scale?: number,
+    opacity?: number,
+} | {
+    opacity?: number,
+    position?: positionConfig;
+};
 
 /**
  * @docid
@@ -15,10 +19,10 @@ export interface animationConfig {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
-     * @type_function_param2 config:object
+     * @type_function_param2 config:animationConfig
      * @public
      */
-    complete?: (($element: DxElement, config: any) => void);
+    complete?: (($element: DxElement, config: animationConfig) => void);
     /**
      * @docid
      * @default 0
@@ -48,8 +52,8 @@ export interface animationConfig {
      * @docid
      * @default {}
      * @public
-     */
-    from?: number | string | any;
+     */    
+    from?: animationState;
     /**
      * @docid
      * @default undefined
@@ -62,13 +66,13 @@ export interface animationConfig {
      * @type_function_param2 config:object
      * @public
      */
-    start?: (($element: DxElement, config: any) => void);
+    start?: (($element: DxElement, config: animationConfig) => void);
     /**
      * @docid
      * @default {}
      * @public
      */
-    to?: number | string | any;
+    to?: animationState;
     /**
      * @docid
      * @type Enums.AnimationType
