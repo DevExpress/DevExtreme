@@ -1,6 +1,7 @@
 import $ from '../../core/renderer';
 import CollectionWidget from './ui.collection_widget.edit';
 import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
 import { update, insert, indexByKey } from '../../data/array_utils';
 import dataUtils from '../../data/utils';
 import { when } from '../../core/utils/deferred';
@@ -82,6 +83,25 @@ export default CollectionWidget.inherit({
         return this._isItemEquals(item1, item2);
     },
 
+    _shouldChangeGroupStructure: function(changes, items) {
+        let result = false;
+        if(this.option('grouped')) {
+            each(changes, (i, change) => {
+                if(change.type === 'insert') {
+                    result = true;
+                    each(items, (_, item) => {
+                        if(change.data.key === item.key) {
+                            result = false;
+                        }
+                    });
+
+                }
+            });
+        }
+
+        return result;
+    },
+
     _partialRefresh: function() {
         if(this.option('repaintChangesOnly')) {
             const keyOf = (data) => {
@@ -91,7 +111,7 @@ export default CollectionWidget.inherit({
                 return this.keyOf(data);
             };
             const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemStrictEquals.bind(this));
-            if(result && this._itemsCache.length) {
+            if(result && this._itemsCache.length && !this._shouldChangeGroupStructure(result)) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
                 return true;
