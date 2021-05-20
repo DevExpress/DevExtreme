@@ -48,6 +48,7 @@ type IOption = {
   name: string;
   isSubscribable?: true;
   isArray?: boolean;
+  type?: any
 } & ({
   type: string;
   nested?: undefined;
@@ -115,7 +116,8 @@ function renderObject(props: IOption[], indent: number): string {
   props.forEach((opt) => {
     result += `\n${getIndent(indent)}${opt.name}?: `;
     if (opt.nested && isNotEmptyArray(opt.nested)) {
-      result += renderObject(opt.nested, indent);
+      const type = opt.type ? `${opt.type} | ` : '';
+      result += `${type}${renderObject(opt.nested, indent)}`;
       if (opt.isArray) { result += '[]'; }
     } else {
       result += opt.type;

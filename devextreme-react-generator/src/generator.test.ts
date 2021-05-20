@@ -2,8 +2,10 @@ import { IProp, IComplexProp } from './integration-data-model';
 import {
   collectIndependentEvents,
   collectSubscribableRecursively,
+  getComplexOptionType,
   mapSubscribableOption,
   isNestedOptionArray,
+  convertToBaseType,
   mapOption,
   extractNestedComponents,
   createPropTyping,
@@ -293,6 +295,50 @@ describe('mapOption', () => {
     expect(mapOption(option)).toEqual({
       name: 'option',
       type: 'any',
+      isSubscribable: undefined,
+    });
+  });
+
+  it('complex option with types', () => {
+    const option = {
+      name: 'option',
+      isSubscribable: false,
+      types: [{
+        type: 'String',
+        acceptableValues: [],
+        isCustomType: false,
+      }, {
+        type: 'Number',
+        acceptableValues: [],
+        isCustomType: false,
+      }, {
+        type: 'MyType',
+        acceptableValues: [],
+        isCustomType: false,
+      }],
+      props: [{
+        name: 'prop1',
+        firedEvents: [],
+        isSubscribable: false,
+        props: [],
+        types: [{
+          type: 'Number',
+          acceptableValues: [],
+          isCustomType: false,
+        }],
+      }],
+      firedEvents: [],
+    };
+
+    expect(mapOption(option)).toEqual({
+      isArray: false,
+      name: 'option',
+      type: 'string | number',
+      nested: [{
+        isSubscribable: undefined,
+        name: 'prop1',
+        type: 'any',
+      }],
       isSubscribable: undefined,
     });
   });
@@ -654,6 +700,41 @@ describe('mapWidget', () => {
         propName: 'option3',
         types: ['object'],
       }]);
+    });
+  });
+  describe('convertToBaseType', () => {
+    const types = ['Object', 'MyType', 'Number', 'String', 'Boolean', 'Any'];
+    const expected = ['object', undefined, 'number', 'string', 'boolean', 'any'];
+
+    it('should return base types', () => {
+      expect(types.map((t) => convertToBaseType(t))).toEqual(expected);
+    });
+  });
+
+  describe('getComplexOptionType', () => {
+    const types = [{
+      type: 'String',
+      acceptableValues: [],
+      isCustomType: false,
+    }, {
+      type: 'Number',
+      acceptableValues: [],
+      isCustomType: false,
+    }, {
+      type: 'Object',
+      acceptableValues: [],
+      isCustomType: false,
+    }, {
+      type: 'MyType',
+      acceptableValues: [],
+      isCustomType: true,
+    },
+    ];
+
+    const expected = 'string | number | object';
+
+    it('should return base types', () => {
+      expect(getComplexOptionType(types)).toEqual(expected);
     });
   });
 });

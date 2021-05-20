@@ -414,9 +414,9 @@ class CLASS_NAME extends BaseComponent<ICLASS_NAMEOptions> {
 // CLASS_NAME
 interface IOpt_1_ComponentProps {
   sub_opt_2?: TYPE_1;
-  sub_opt_3?: {
+  sub_opt_3?: TYPE_SUB_3 | {
     sub_sub_opt_4?: TYPE_2;
-    sub_sub_opt_5?: {
+    sub_sub_opt_5?: TYPE_SUB_OPT_5 | TYPE_SUB_OPT_6 | {
       sub_sub_sub_opt_6?: TYPE_3;
     };
   };
@@ -465,6 +465,7 @@ export {
               },
               {
                 name: 'sub_opt_3',
+                type: 'TYPE_SUB_3',
                 nested: [
                   {
                     name: 'sub_sub_opt_4',
@@ -472,6 +473,7 @@ export {
                   },
                   {
                     name: 'sub_sub_opt_5',
+                    type: 'TYPE_SUB_OPT_5 | TYPE_SUB_OPT_6',
                     nested: [
                       {
                         name: 'sub_sub_sub_opt_6',
