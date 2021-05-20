@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
@@ -37,6 +33,10 @@ export type InitializedEvent = InitializedEventInfo<dxValidationGroup>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }
 /**
@@ -46,10 +46,10 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @module ui/validation_group
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxValidationGroup extends DOMComponent {
-    constructor(element: UserDefinedElement, options?: dxValidationGroupOptions)
+export default class dxValidationGroup extends DOMComponent<dxValidationGroupOptions> {
     /**
      * @docid
      * @publicName reset()
@@ -70,6 +70,7 @@ export default class dxValidationGroup extends DOMComponent {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxValidationGroupResult {
     /**

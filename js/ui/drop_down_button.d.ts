@@ -28,7 +28,7 @@ import {
 } from './list';
 
 import {
-    dxPopupOptions
+    Properties as PopupProperties
 } from './popup';
 
 import Widget, {
@@ -64,6 +64,10 @@ export type SelectionChangedEvent = NativeEventInfo<dxDropDownButton> & {
     readonly previousItem: any;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * @docid
@@ -103,8 +107,9 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxPopupOptions
      */
-    dropDownOptions?: dxPopupOptions;
+    dropDownOptions?: PopupProperties;
     /**
      * @docid
      * @default true
@@ -280,10 +285,10 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
  * @module ui/drop_down_button
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxDropDownButton extends Widget {
-    constructor(element: UserDefinedElement, options?: dxDropDownButtonOptions)
+export default class dxDropDownButton extends Widget<dxDropDownButtonOptions> {
     /**
      * @docid
      * @publicName close()
@@ -324,6 +329,7 @@ export default class dxDropDownButton extends Widget {
  * @docid
  * @inherits dxListItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxDropDownButtonItem extends dxListItem {
     /**

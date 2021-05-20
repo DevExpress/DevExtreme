@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -33,6 +32,10 @@ export type InitializedEvent = InitializedEventInfo<dxSpeedDialAction>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxSpeedDialAction> & ChangedOptionInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
      * @docid
@@ -93,11 +96,10 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @module ui/speed_dial_action
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxSpeedDialAction extends Widget {
-    constructor(element: UserDefinedElement, options?: dxSpeedDialActionOptions)
-}
+export default class dxSpeedDialAction extends Widget<dxSpeedDialActionOptions> { }
 
 /** @public */
 export type Properties = dxSpeedDialActionOptions;

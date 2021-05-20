@@ -21,7 +21,10 @@ import {
 
 import dxSortable from './sortable';
 
-export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends DOMComponentOptions<T> {
+/**
+ * @namespace DevExpress.ui
+ */
+export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
      * @default true
@@ -112,6 +115,7 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export interface DraggableBase { }
 
@@ -158,6 +162,10 @@ export type DragTemplateData = {
     readonly itemElement: DxElement;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid
@@ -243,11 +251,10 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
  * @module ui/draggable
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxDraggable extends DOMComponent implements DraggableBase {
-    constructor(element: UserDefinedElement, options?: dxDraggableOptions)
-}
+export default class dxDraggable extends DOMComponent<dxDraggableOptions> implements DraggableBase { }
 
 /** @public */
 export type Properties = dxDraggableOptions;

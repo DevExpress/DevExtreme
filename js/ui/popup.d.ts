@@ -72,7 +72,11 @@ export type ShowingEvent = EventInfo<dxPopup>;
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
-export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
+export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent> {
     /**
      * @docid
      * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} [for](iOS)
@@ -228,6 +232,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.ui */
 export interface dxPopupAnimation extends dxOverlayAnimation {
     /**
      * @docid dxPopupOptions.animation.hide
@@ -244,6 +249,7 @@ export interface dxPopupAnimation extends dxOverlayAnimation {
      */
     show?: animationConfig;
 }
+/** @namespace DevExpress.ui */
 export interface dxPopupToolbarItem {
     /**
      * @docid dxPopupOptions.toolbarItems.disabled
@@ -314,18 +320,17 @@ export interface dxPopupToolbarItem {
  * @module ui/popup
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxPopup extends dxOverlay {
-    constructor(element: UserDefinedElement, options?: dxPopupOptions)
-}
+export default class dxPopup<TProperties = Properties> extends dxOverlay<TProperties> {}
 
 /** @public */
-export type Properties = dxPopupOptions;
+export type Properties = dxPopupOptions<dxPopup<Properties>>;
 
 /** @deprecated use Properties instead */
-export type Options = dxPopupOptions;
+export type Options = Properties;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxPopupOptions;
+export type IOptions = Properties;
 export type ToolbarItem = dxPopupToolbarItem;

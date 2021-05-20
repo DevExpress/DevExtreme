@@ -28,9 +28,18 @@ export interface VectorMapProjectionConfig {
     to?: ((coordinates: Array<number>) => Array<number>);
 }
 
-type Projection = (data: VectorMapProjectionConfig) => any;
-
-type ProjectionMethods = {
+/**
+ * @docid viz.map.projection
+ * @publicName projection(data)
+ * @param1 data:VectorMapProjectionConfig
+ * @return object
+ * @static
+ * @namespace DevExpress.viz.map
+ * @module viz/vector_map/projection
+ * @export projection
+ * @prevFileNamespace DevExpress.viz
+ */
+export const projection: {
     /**
      * @docid viz.map.projection.add
      * @publicName add(name, projection)
@@ -54,19 +63,6 @@ type ProjectionMethods = {
      * @prevFileNamespace DevExpress.viz
      */
     get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
+
+    (data: VectorMapProjectionConfig): any;
 }
-
-/**
- * @docid viz.map.projection
- * @publicName projection(data)
- * @param1 data:VectorMapProjectionConfig
- * @return object
- * @static
- * @namespace DevExpress.viz.map
- * @module viz/vector_map/projection
- * @export projection
- * @hidden
- * @prevFileNamespace DevExpress.viz
- */
-export const projection: Projection & ProjectionMethods;
-

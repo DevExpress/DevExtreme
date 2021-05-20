@@ -53,7 +53,8 @@ export interface TooltipInfo {
     target?: basePointObject | dxChartAnnotationConfig | any;
 }
 
-export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
+/** @namespace DevExpress.viz */
+export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
      * @type object
@@ -136,7 +137,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDone?: ((e: EventInfo<T>) => void);
+    onDone?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -151,7 +152,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: NativeEventInfo<T> & PointInteractionInfo) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<TComponent> & PointInteractionInfo) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -163,7 +164,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointHoverChanged?: ((e: EventInfo<T> & PointInteractionInfo) => void);
+    onPointHoverChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -175,7 +176,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointSelectionChanged?: ((e: EventInfo<T> & PointInteractionInfo) => void);
+    onPointSelectionChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo) => void);
     /**
      * @docid
      * @default null
@@ -189,7 +190,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<T> & TooltipInfo) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
     /**
      * @docid
      * @default null
@@ -203,7 +204,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
     /**
      * @docid
      * @extends CommonVizPalette
@@ -245,6 +246,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      */
     tooltip?: BaseChartTooltip;
 }
+/** @namespace DevExpress.viz */
 export interface BaseChartAdaptiveLayout {
     /**
      * @docid BaseChartOptions.adaptiveLayout.height
@@ -268,6 +270,7 @@ export interface BaseChartAdaptiveLayout {
      */
     width?: number;
 }
+/** @namespace DevExpress.viz */
 export interface BaseChartLegend extends BaseLegend {
     /**
      * @docid BaseChartOptions.legend.customizeItems
@@ -288,6 +291,7 @@ export interface BaseChartLegend extends BaseLegend {
      */
     markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
 }
+/** @namespace DevExpress.viz */
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.argumentFormat
@@ -336,9 +340,9 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget, DataHelperMixin
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  */
-export class BaseChart extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: BaseChartOptions)
+export class BaseChart<TProperties> extends BaseWidget<TProperties> {
     /**
      * @docid
      * @publicName clearSelection()
@@ -402,6 +406,7 @@ export class BaseChart extends BaseWidget {
  * @docid
  * @type object
  * @inherits BaseLegendItem
+ * @namespace DevExpress.viz
  */
 export interface BaseChartLegendItem extends BaseLegendItem {
     /**
@@ -416,6 +421,7 @@ export interface BaseChartLegendItem extends BaseLegendItem {
  * @docid
  * @type object
  * @inherits BaseWidgetAnnotationConfig
+ * @namespace DevExpress.viz
  */
 export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**

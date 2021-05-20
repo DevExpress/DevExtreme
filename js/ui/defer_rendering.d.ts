@@ -3,7 +3,6 @@ import {
 } from '../animation/fx';
 
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -35,6 +34,10 @@ export type RenderedEvent = EventInfo<dxDeferRendering>;
 /** @public */
 export type ShownEvent = EventInfo<dxDeferRendering>;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
      * @docid
@@ -88,11 +91,10 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
  * @module ui/defer_rendering
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxDeferRendering extends Widget {
-    constructor(element: UserDefinedElement, options?: dxDeferRenderingOptions)
-}
+export default class dxDeferRendering extends Widget<dxDeferRenderingOptions> { }
 
 /** @public */
 export type Properties = dxDeferRenderingOptions;

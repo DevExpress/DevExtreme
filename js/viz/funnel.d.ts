@@ -50,6 +50,7 @@ import BaseWidget, {
  * @docid
  * @inherits BaseLegendItem
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface FunnelLegendItem extends BaseLegendItem {
     /**
@@ -100,7 +101,10 @@ export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
-
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid
@@ -601,6 +605,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      */
     valueField?: string;
 }
+/** @namespace DevExpress.viz */
 export interface dxFunnelLegend extends BaseLegend {
     /**
      * @docid dxFunnelOptions.legend.customizeHint
@@ -649,6 +654,7 @@ export interface dxFunnelLegend extends BaseLegend {
      */
     visible?: boolean;
 }
+/** @namespace DevExpress.viz */
 export interface dxFunnelTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxFunnelOptions.tooltip.contentTemplate
@@ -686,10 +692,10 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
  * @module viz/funnel
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxFunnel extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: dxFunnelOptions)
+export default class dxFunnel extends BaseWidget<dxFunnelOptions> {
     /**
      * @docid
      * @publicName clearSelection()
@@ -718,6 +724,7 @@ export default class dxFunnel extends BaseWidget {
 /**
  * @docid
  * @publicName Item
+ * @namespace DevExpress.viz
  */
 export interface dxFunnelItem {
     /**

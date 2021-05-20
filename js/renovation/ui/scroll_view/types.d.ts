@@ -19,7 +19,3 @@ export interface ScrollOffset {
   top: number;
   left: number;
 }
-export interface AllowedDirection {
-  vertical: boolean;
-  horizontal: boolean;
-}

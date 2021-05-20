@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DataSource from '../data/data_source';
 
 import {
@@ -35,6 +31,10 @@ export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxRadioGroup> & ValueChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
      * @docid
@@ -88,10 +88,10 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
  * @module ui/radio_group
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxRadioGroup extends Editor {
-    constructor(element: UserDefinedElement, options?: dxRadioGroupOptions)
+export default class dxRadioGroup extends Editor<dxRadioGroupOptions> {
     getDataSource(): DataSource;
 }
 

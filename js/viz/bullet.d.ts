@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -49,7 +45,10 @@ export type TooltipHiddenEvent = EventInfo<dxBullet>;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxBullet>;
 
-
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
     /**
      * @docid
@@ -125,11 +124,10 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
  * @module viz/bullet
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxBullet extends BaseSparkline {
-    constructor(element: UserDefinedElement, options?: dxBulletOptions)
-}
+export default class dxBullet extends BaseSparkline<dxBulletOptions> { }
 
 /** @public */
 export type Properties = dxBulletOptions;

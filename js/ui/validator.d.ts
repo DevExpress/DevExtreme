@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
@@ -41,6 +37,10 @@ export type ValidatedEvent = {
     status?: 'valid' | 'invalid' | 'pending'
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**
      * @docid
@@ -122,10 +122,10 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @module ui/validator
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxValidator extends DOMComponent {
-    constructor(element: UserDefinedElement, options?: dxValidatorOptions)
+export default class dxValidator extends DOMComponent<dxValidatorOptions> {
     /**
      * @docid
      * @publicName focus()
@@ -153,6 +153,7 @@ export default class dxValidator extends DOMComponent {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxValidatorResult {
     /**

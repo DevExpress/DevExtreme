@@ -88,7 +88,7 @@ QUnit.test('Time panel scrollable should update position if date scrollable posi
     setTimeout(() => {
         assert.equal(timePanelScrollable.scrollTop(), 100, 'Scroll position is OK');
         done();
-    });
+    }, 100);
 });
 
 QUnit.test('Date table scrollable should update position if time panel position is changed', function(assert) {
@@ -305,4 +305,3 @@ QUnit.test('Header panel and date table should have a correct width, groupOrient
     assert.equal(headerPanelWidth, 797, 'Width is OK');
     assert.equal(dateTableWidth, 797, 'Width is OK');
 });
-

@@ -325,8 +325,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return this._getRowCount();
     }
 
-    renovatedRenderSupported() { return true; }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}

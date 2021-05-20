@@ -592,8 +592,8 @@ export const AdvancedChart = BaseChart.inherit({
             axesContainerGroup: that._axesGroup,
             gridGroup: that._gridGroup,
             isArgumentAxis: isArgumentAxes,
-            getTemplate() {
-                return that._getTemplate(options.label.template);
+            getTemplate(template) {
+                return that._getTemplate(template);
             }
         }, that._getAxisRenderingOptions(typeSelector));
         const axis = new Axis(renderingSettings);

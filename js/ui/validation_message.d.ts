@@ -1,13 +1,13 @@
 import {
-    UserDefinedElement,
-    DxElement
+    UserDefinedElement
 } from '../core/element';
 
 import dxOverlay, {
     dxOverlayOptions
 } from './overlay';
 
-export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxOverlayOptions<T> {
+/** @namespace DevExpress.ui */
+export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidationMessage> {
     mode?: string;
 
     validationErrors?: Array<object> | null;
@@ -18,10 +18,14 @@ export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxO
 
     offset?: object;
 }
+/** @namespace DevExpress.ui */
+export default class dxValidationMessage extends dxOverlay<dxValidationMessageOptions> { }
 
-export default class dxValidationMessage extends dxOverlay {
-    constructor(element: UserDefinedElement, options?: dxValidationMessageOptions)
-}
+/** @public */
+export type Properties = dxValidationMessageOptions;
 
+/** @deprecated use Properties instead */
 export type Options = dxValidationMessageOptions;
+
+/** @deprecated use Properties instead */
 export type IOptions = dxValidationMessageOptions;

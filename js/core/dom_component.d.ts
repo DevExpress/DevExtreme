@@ -14,7 +14,8 @@ import {
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 
-export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
+/** @namespace DevExpress */
+export interface DOMComponentOptions<TComponent> extends ComponentOptions<TComponent> {
     /**
      * @docid
      * @default {}
@@ -41,18 +42,20 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @docid
      * @action
      * @default null
+     * @type_function_param1_field1 component:<DOMComponent>
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: DxElement, model?: any }) => void);
+    onDisposing?: ((e: { component?: TComponent, element?: DxElement, model?: any }) => void);
     /**
      * @docid
      * @action
      * @default null
+     * @type_function_param1_field1 component:<DOMComponent>
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
+    onOptionChanged?: ((e: { component?: TComponent, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
     /**
      * @docid
      * @default false
@@ -79,8 +82,8 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @hidden
  * @prevFileNamespace DevExpress.core
  */
-export default class DOMComponent extends Component {
-    constructor(element: UserDefinedElement, options?: DOMComponentOptions);
+export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
+    constructor(element: UserDefinedElement, options?: TProperties);
     /**
      * @docid
      * @static
@@ -118,7 +121,7 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    static getInstance(element: UserDefinedElement): DOMComponent;
+    static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
 
     $element(): UserDefinedElement;
     _getTemplate(template: unknown): FunctionTemplate;
@@ -127,5 +130,15 @@ export default class DOMComponent extends Component {
     _templateManager: TemplateManager;
 }
 
-export type Options = DOMComponentOptions;
-export type IOptions = DOMComponentOptions;
+export type ComponentClass<TProperties> = {
+    new(element: HTMLDivElement, options?: TProperties): DOMComponent<TProperties>;
+    getInstance: (widgetRef: HTMLDivElement) => DOMComponent<TProperties>;
+}
+
+type Properties = DOMComponentOptions<DOMComponent<Properties>>;
+
+/** @deprecated use Properties instead */
+export type Options = Properties;
+
+/** @deprecated use Properties instead */
+export type IOptions = Properties;

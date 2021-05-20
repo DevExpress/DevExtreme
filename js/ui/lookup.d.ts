@@ -41,7 +41,7 @@ import {
 } from './list';
 
 import {
-    dxPopoverOptions,
+    Properties as PopoverProperties,
 } from './popover';
 
 import {
@@ -87,6 +87,10 @@ export type TitleRenderedEvent = EventInfo<dxLookup> & TitleRenderedInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxLookup> & ValueChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
@@ -456,8 +460,9 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     dropDownCentered?: boolean;
     /**
      * @docid
+     * @type dxPopoverOptions
      */
-    dropDownOptions?: dxPopoverOptions;
+    dropDownOptions?: PopoverProperties;
 
 }
 /**
@@ -467,11 +472,10 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
  * @module ui/lookup
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxLookup extends dxDropDownList {
-    constructor(element: UserDefinedElement, options?: dxLookupOptions)
-}
+export default class dxLookup extends dxDropDownList<dxLookupOptions> { }
 
 /** @public */
 export type Properties = dxLookupOptions;

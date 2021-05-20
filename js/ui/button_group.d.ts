@@ -42,6 +42,10 @@ export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid
@@ -148,15 +152,15 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
  * @module ui/button_group
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxButtonGroup extends Widget {
-    constructor(element: UserDefinedElement, options?: dxButtonGroupOptions)
-}
+export default class dxButtonGroup extends Widget<dxButtonGroupOptions> { }
 
 /**
  * @docid
  * @inherits CollectionWidgetItem
+ * @namespace DevExpress.ui
  * @type object
  */
 export interface dxButtonGroupItem extends CollectionWidgetItem {

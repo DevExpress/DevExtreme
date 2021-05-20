@@ -39,6 +39,10 @@ export type CellTemplateData = {
 /** @public */
 export type DisabledDate = ComponentDisabledDate<dxCalendar>;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
      * @docid
@@ -170,11 +174,10 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @module ui/calendar
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxCalendar extends Editor {
-    constructor(element: UserDefinedElement, options?: dxCalendarOptions)
-}
+export default class dxCalendar extends Editor<dxCalendarOptions> { }
 
 /** @public */
 export type Properties = dxCalendarOptions;

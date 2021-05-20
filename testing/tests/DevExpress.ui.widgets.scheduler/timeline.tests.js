@@ -67,7 +67,7 @@ QUnit.test('Header scrollable should update position if date scrollable position
     setTimeout(() => {
         assert.equal(headerScrollable.scrollLeft(), 100, 'Scroll position is OK');
         done();
-    });
+    }, 100);
 });
 
 QUnit.test('Header scrollable should have right scrolloByContent (T708008)', function(assert) {
@@ -130,7 +130,7 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
         setTimeout(() => {
             assert.equal(groupPanelScrollable.scrollTop(), 200, 'Scroll position is OK');
             done();
-        });
+        }, 100);
     });
 
     QUnit.test(`Date table scrollable should update position if sidebar position is changed when renovateRender is ${renovateRender}`, function(assert) {

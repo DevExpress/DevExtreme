@@ -18,6 +18,8 @@ import { combineClasses } from '../../utils/combine_classes';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
 import { getAugmentedLocation } from './utils/get_augmented_location';
 import { getBoundaryProps, isReachedBottom } from './utils/get_boundary_props';
+import { getScrollSign, normalizeOffsetLeft } from './utils/normalize_offset_left';
+import { getElementLocationInternal } from './utils/get_element_location_internal';
 
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
@@ -38,12 +40,6 @@ import {
 } from './types.d';
 
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
-
-import {
-  getScrollSign,
-  getLocation,
-  normalizeOffsetLeft,
-} from './scrollable_utils';
 
 import {
   ScrollDirection,
@@ -272,10 +268,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   update(): void {
-    if (!this.props.updateManually) {
-      this.updateSizes();
-      this.onUpdated();
-    }
+    this.updateSizes();
+    this.onUpdated();
   }
 
   @Method()
@@ -357,7 +351,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       return;
     }
 
-    const containerEl = this.containerRef.current!;
+    const containerEl = this.containerElement;
     if (this.direction.isVertical) {
       containerEl.scrollTop += location.top;
     }
@@ -368,17 +362,24 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   /* istanbul ignore next */
-  scrollToElement(element: HTMLElement): void {
+  scrollToElement(
+    element: HTMLElement,
+    scrollToOptions: {
+      block: 'start' | 'center' | 'end' | 'nearest';
+      inline: 'start' | 'center' | 'end' | 'nearest';
+      behavior: 'auto'; 'smooth';
+    },
+  ): void {
     if (!isDefined(element)) {
       return;
     }
 
     const { top, left } = this.scrollOffset();
-    element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    element.scrollIntoView(scrollToOptions || { block: 'nearest', inline: 'nearest' });
 
     const distance = getOffsetDistance({ top, left }, this.props.direction, this.scrollOffset());
 
-    const containerEl = this.containerRef.current!;
+    const containerEl = this.containerElement;
     if (!this.direction.isHorizontal) {
       containerEl.scrollLeft += getScrollSign(!!this.props.rtlEnabled) * distance.left;
     }
@@ -386,34 +387,27 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     if (!this.direction.isVertical) {
       containerEl.scrollTop += distance.top;
     }
-    // if (getClosestElement(element, `.${SCROLLABLE_CONTENT_CLASS}`)) {
-    //   const top = this.getElementLocation(element, DIRECTION_VERTICAL, offset);
-    //   const left = this.getElementLocation(element, DIRECTION_HORIZONTAL, offset);
-
-    //   this.scrollTo({ top, left });
-    // }
   }
 
   @Method()
+  // TODO: it uses for DataGrid only
   /* istanbul ignore next */
   getElementLocation(
     element: HTMLElement,
     direction: ScrollableDirection,
     offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
   ): number {
-    const scrollOffset = {
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      ...offset,
-    };
-
-    return getLocation(
+    return getElementLocationInternal(
       element,
-      scrollOffset,
+      {
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        ...offset,
+      },
       direction,
-      this.containerRef.current!,
+      this.containerElement,
     );
   }
 
@@ -430,7 +424,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @Method()
   scrollOffset(): ScrollOffset {
     const { top, left } = this.scrollLocation();
-    const scrollLeftMax = getScrollLeftMax(this.containerRef.current!);
+    const scrollLeftMax = getScrollLeftMax(this.containerElement);
 
     return {
       top,
@@ -450,16 +444,16 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   clientHeight(): number {
-    return this.containerRef.current!.clientHeight;
+    return this.containerElement.clientHeight;
   }
 
   @Method()
   clientWidth(): number {
-    return this.containerRef.current!.clientWidth;
+    return this.containerElement.clientWidth;
   }
 
   @Effect() scrollEffect(): EffectReturn {
-    return subscribeToScrollEvent(this.containerRef.current!,
+    return subscribeToScrollEvent(this.containerElement,
       (e: Event) => {
         this.handleScroll(e);
       });
@@ -541,7 +535,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return {
       event: this.eventForUserAction,
       scrollOffset,
-      ...getBoundaryProps(this.props.direction, scrollOffset, this.containerRef.current!, 0),
+      ...getBoundaryProps(this.props.direction, scrollOffset, this.containerElement, 0),
     };
   }
 
@@ -564,13 +558,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Effect() effectResetInactiveState(): void {
-    const containerEl = this.containerRef.current;
-
-    if (this.props.direction === DIRECTION_BOTH || !isDefined(containerEl)) { // || !hasWindow()
+    if (this.props.direction === DIRECTION_BOTH
+      || !isDefined(this.containerElement)) { // || !hasWindow()
       return;
     }
 
-    containerEl[this.fullScrollInactiveProp] = 0;
+    this.containerElement[this.fullScrollInactiveProp] = 0;
   }
 
   get fullScrollInactiveProp(): 'scrollLeft' | 'scrollTop' {
@@ -586,7 +579,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   updateSizes(): void {
-    const containerEl = this.containerRef.current;
+    const containerEl = this.containerElement;
     const contentEl = this.contentRef.current;
 
     if (isDefined(containerEl)) {
@@ -627,8 +620,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   scrollLocation(): { top: number; left: number } {
     return {
-      top: this.containerRef.current!.scrollTop,
-      left: this.containerRef.current!.scrollLeft,
+      top: this.containerElement.scrollTop,
+      left: this.containerElement.scrollLeft,
     };
   }
 
@@ -654,7 +647,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       getDirection: this.tryGetAllowedDirection,
       validate: this.validate,
       isNative: true,
-      scrollTarget: this.containerRef.current,
+      scrollTarget: this.containerElement,
     };
   }
 
@@ -853,7 +846,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const { top } = this.scrollLocation();
 
     return this.props.reachBottomEnabled
-      && isReachedBottom(this.containerRef.current!, top, this.bottomPocketHeight);
+      && isReachedBottom(this.containerElement, top, this.bottomPocketHeight);
   }
 
   get bottomPocketHeight(): number {
@@ -867,12 +860,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   tryGetAllowedDirection(): ScrollableDirection | undefined {
     const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.props.direction);
 
-    const contentEl = this.contentRef.current;
-    const containerEl = this.containerRef.current;
+    const contentEl = this.contentRef.current!;
+    const containerEl = this.containerElement;
 
-    const isOverflowVertical = (isVertical && contentEl!.clientHeight > containerEl!.clientHeight)
+    const isOverflowVertical = (isVertical && contentEl.clientHeight > containerEl.clientHeight)
       || this.pullDownEnabled;
-    const isOverflowHorizontal = (isHorizontal && contentEl!.clientWidth > containerEl!.clientWidth)
+    const isOverflowHorizontal = (isHorizontal && contentEl.clientWidth > containerEl.clientWidth)
       || this.pullDownEnabled;
 
     if (isBoth && isOverflowVertical && isOverflowHorizontal) {
@@ -893,8 +886,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       return false;
     }
 
-    this.update();
-
     if (disabled || (isDxMouseWheelEvent(e) && this.isScrollingOutOfBound(e))) {
       return false;
     }
@@ -910,7 +901,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const { delta, shiftKey } = e as any;
     const {
       scrollLeft, scrollTop, scrollWidth, clientWidth, scrollHeight, clientHeight,
-    } = this.containerRef.current!;
+    } = this.containerElement;
 
     if (delta > 0) {
       return shiftKey ? !scrollLeft : !scrollTop;
@@ -966,5 +957,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
 
     return undefined;
+  }
+
+  get containerElement(): HTMLDivElement {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this.containerRef.current!;
   }
 }

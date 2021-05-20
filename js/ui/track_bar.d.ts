@@ -1,12 +1,9 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import Editor, {
     EditorOptions
 } from './editor/editor';
 
-export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
+/** @namespace DevExpress.ui */
+export interface dxTrackBarOptions<TComponent> extends EditorOptions<TComponent> {
     /**
      * @docid
      * @default 100
@@ -27,7 +24,6 @@ export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
  * @inherits Editor
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
-export default class dxTrackBar extends Editor {
-    constructor(element: UserDefinedElement, options?: dxTrackBarOptions)
-}
+export default class dxTrackBar<TProperties> extends Editor<TProperties> { }

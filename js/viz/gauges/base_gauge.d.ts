@@ -31,7 +31,8 @@ export interface TooltipInfo {
     target: any;
 }
 
-export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
+/** @namespace DevExpress.viz */
+export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
      * @type object
@@ -66,7 +67,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<T> & TooltipInfo) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
     /**
      * @docid
      * @default null
@@ -80,7 +81,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
     /**
      * @docid
      * @type object
@@ -121,6 +122,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      */
     value?: number;
 }
+/** @namespace DevExpress.viz */
 export interface BaseGaugeAnimation {
     /**
      * @docid BaseGaugeOptions.animation.duration
@@ -145,6 +147,7 @@ export interface BaseGaugeAnimation {
      */
     enabled?: boolean;
 }
+/** @namespace DevExpress.viz */
 export interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     /**
      * @docid BaseGaugeOptions.loadingIndicator.enabled
@@ -153,6 +156,7 @@ export interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
      */
     enabled?: boolean;
 }
+/** @namespace DevExpress.viz */
 export interface BaseGaugeRangeContainer {
     /**
      * @docid BaseGaugeOptions.rangeContainer.backgroundColor
@@ -210,6 +214,7 @@ export interface BaseGaugeRangeContainer {
       startValue?: number
     }>;
 }
+/** @namespace DevExpress.viz */
 export interface BaseGaugeScale {
     /**
      * @docid BaseGaugeOptions.scale.allowDecimals
@@ -353,6 +358,7 @@ export interface BaseGaugeScale {
      */
     tickInterval?: number;
 }
+/** @namespace DevExpress.viz */
 export interface BaseGaugeScaleLabel {
     /**
      * @docid BaseGaugeOptions.scale.label.customizeText
@@ -402,6 +408,7 @@ export interface BaseGaugeScaleLabel {
      */
     visible?: boolean;
 }
+/** @namespace DevExpress.viz */
 export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseGaugeOptions.tooltip.contentTemplate
@@ -440,9 +447,9 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  */
-export class BaseGauge extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: BaseGaugeOptions)
+export class BaseGauge<TProperties> extends BaseWidget<TProperties> {
     /**
      * @docid
      * @publicName subvalues()
@@ -481,6 +488,7 @@ export class BaseGauge extends BaseWidget {
  * @docid
  * @section CommonIndicators
  * @type object
+ * @namespace DevExpress.viz
  * @hidden
  */
 export interface CommonIndicator {
@@ -668,6 +676,7 @@ export type GaugeIndicatorType = 'circle' | 'rangeBar' | 'rectangle' | 'rectangl
 /**
  * @docid
  * @inherits CommonIndicator
+ * @namespace DevExpress.viz
  * @hidden
  */
 export interface GaugeIndicator extends CommonIndicator {

@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -47,7 +43,11 @@ export type OptionChangedEvent = EventInfo<dxMultiView> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxMultiView> & SelectionChangedInfo;
 
-export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
+export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
     /**
      * @docid
      * @default true
@@ -111,25 +111,25 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
  * @module ui/multi_view
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxMultiView extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxMultiViewOptions)
-}
+export default class dxMultiView<TProperties = Properties> extends CollectionWidget<TProperties> { }
 
 /**
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 
 /** @public */
-export type Properties = dxMultiViewOptions;
+export type Properties = dxMultiViewOptions<dxMultiView<Properties>>;
 
 /** @deprecated use Properties instead */
-export type Options = dxMultiViewOptions;
+export type Options = Properties;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxMultiViewOptions;
+export type IOptions = Properties;

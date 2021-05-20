@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     DxPromise
 } from '../core/utils/deferred';
 
@@ -51,6 +47,10 @@ export type OptionChangedEvent = EventInfo<dxGallery> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxGallery> & SelectionChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     /**
      * @docid
@@ -170,10 +170,10 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
  * @module ui/gallery
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxGallery extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxGalleryOptions)
+export default class dxGallery extends CollectionWidget<dxGalleryOptions> {
     /**
      * @docid
      * @publicName goToItem(itemIndex, animation)
@@ -208,6 +208,7 @@ export default class dxGallery extends CollectionWidget {
  * @docid
  * @type object
  * @inherits CollectionWidgetItem
+ * @namespace DevExpress.ui
  */
 export interface dxGalleryItem extends CollectionWidgetItem {
     /**

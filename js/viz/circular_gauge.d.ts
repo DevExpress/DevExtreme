@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -55,6 +51,10 @@ export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
      * @docid
@@ -104,6 +104,7 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
      */
     valueIndicator?: GaugeIndicator;
 }
+/** @namespace DevExpress.viz */
 export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.orientation
@@ -121,6 +122,7 @@ export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
      */
     width?: number;
 }
+/** @namespace DevExpress.viz */
 export interface dxCircularGaugeScale extends BaseGaugeScale {
     /**
      * @docid dxCircularGaugeOptions.scale.label
@@ -138,6 +140,7 @@ export interface dxCircularGaugeScale extends BaseGaugeScale {
      */
     orientation?: 'center' | 'inside' | 'outside';
 }
+/** @namespace DevExpress.viz */
 export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxCircularGaugeOptions.scale.label.hideFirstOrLast
@@ -161,11 +164,10 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @module viz/circular_gauge
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxCircularGauge extends BaseGauge {
-    constructor(element: UserDefinedElement, options?: dxCircularGaugeOptions)
-}
+export default class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> { }
 
 /** @public */
 export type Properties = dxCircularGaugeOptions;

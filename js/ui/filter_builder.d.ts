@@ -89,6 +89,10 @@ export type FieldEditorTemplate = {
     readonly setValue: Function;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
@@ -320,10 +324,10 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
  * @module ui/filter_builder
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxFilterBuilder extends Widget {
-    constructor(element: UserDefinedElement, options?: dxFilterBuilderOptions)
+export default class dxFilterBuilder extends Widget<dxFilterBuilderOptions> {
     /**
      * @docid
      * @publicName getFilterExpression()
@@ -337,6 +341,7 @@ export default class dxFilterBuilder extends Widget {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFilterBuilderCustomOperation {
     /**
@@ -412,6 +417,7 @@ export interface dxFilterBuilderCustomOperation {
 /**
  * @@docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFilterBuilderField {
     /**

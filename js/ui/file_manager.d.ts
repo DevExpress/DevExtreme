@@ -101,7 +101,10 @@ export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemIndex: number;
 }
 
-
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
@@ -441,10 +444,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
  * @module ui/file_manager
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxFileManager extends Widget {
-    constructor(element: UserDefinedElement, options?: dxFileManagerOptions)
+export default class dxFileManager extends Widget<dxFileManagerOptions> {
     /**
      * @docid
      * @publicName getCurrentDirectory()
@@ -474,6 +477,7 @@ export default class dxFileManager extends Widget {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFileManagerContextMenu {
     /**
@@ -488,6 +492,7 @@ export interface dxFileManagerContextMenu {
 /**
  * @docid
  * @inherits dxContextMenuItem
+ * @namespace DevExpress.ui
  */
 export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
     /**
@@ -521,6 +526,7 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFileManagerToolbar {
     /**
@@ -544,6 +550,7 @@ export interface dxFileManagerToolbar {
 /**
  * @docid
  * @inherits dxToolbarItem
+ * @namespace DevExpress.ui
  */
 export interface dxFileManagerToolbarItem extends dxToolbarItem {
     /**
@@ -600,6 +607,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFileManagerDetailsColumn {
     /**

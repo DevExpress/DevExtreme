@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     PaletteType,
     PaletteExtensionModeType
 } from './palette';
@@ -31,7 +27,7 @@ import {
     ChartSeries,
     ScaleBreak,
     VizRange,
-    TimeIntervalType
+    VizTimeInterval
 } from './common';
 
 import BaseWidget, {
@@ -73,6 +69,10 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSelector> & {
   readonly previousValue: Array<number | string | Date>,
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * @docid
@@ -414,7 +414,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      aggregationInterval?: number | any | TimeIntervalType,
+      aggregationInterval?: VizTimeInterval,
       /**
        * @docid
        * @prevFileNamespace DevExpress.viz
@@ -602,14 +602,14 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      maxRange?: number | any | TimeIntervalType,
+      maxRange?: VizTimeInterval,
       /**
        * @docid
        * @prevFileNamespace DevExpress.viz
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      minRange?: number | any | TimeIntervalType,
+      minRange?: VizTimeInterval,
       /**
        * @docid
        * @prevFileNamespace DevExpress.viz
@@ -652,7 +652,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      minorTickInterval?: number | any | TimeIntervalType,
+      minorTickInterval?: VizTimeInterval,
       /**
        * @docid
        * @prevFileNamespace DevExpress.viz
@@ -708,7 +708,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @inherits VizTimeInterval
        * @type number|object|Enums.VizTimeInterval
        */
-      tickInterval?: number | any | TimeIntervalType,
+      tickInterval?: VizTimeInterval,
       /**
        * @docid
        * @prevFileNamespace DevExpress.viz
@@ -884,10 +884,10 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
  * @module viz/range_selector
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxRangeSelector extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: dxRangeSelectorOptions)
+export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
     getDataSource(): DataSource;
     /**
      * @docid

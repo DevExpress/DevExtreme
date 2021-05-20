@@ -5,7 +5,6 @@ import 'generic_light.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import { Template } from 'core/templates/template';
-import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { value as viewPort } from 'core/utils/view_port';
@@ -166,7 +165,7 @@ testModule('render', moduleConfig, () => {
 
         assert.ok($(toSelector(OVERLAY_CONTENT_CLASS)).length);
 
-        instance._dispose();
+        instance.dispose();
         assert.ok(!$(toSelector(OVERLAY_CONTENT_CLASS)).length);
     });
 
@@ -974,12 +973,15 @@ testModule('position', moduleConfig, () => {
     });
 
     test('position as function', function(assert) {
-        const instance = $('#overlay').dxOverlay({
+        const overlay = $('#overlay').dxOverlay({
             visible: true,
-            position: function() { return { of: 'body' }; }
+            position: function() { return { my: 'left', at: 'left', of: 'body', offset: '7 0' }; }
         }).dxOverlay('instance');
 
-        assert.strictEqual(instance._position.of, 'body');
+
+        const $content = overlay.$content();
+
+        assert.strictEqual($content.position().left, $('body').position().left + 7, 'overlay positioned correctly');
     });
 
     test('overlay wrapper should have correct dimensions even when there is "target" property in window', function(assert) {
@@ -3335,10 +3337,6 @@ testModule('keyboard navigation', {
     });
 
     test('overlay have focus on show click', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
 
         const $overlayContent = this.$overlayContent;
 
@@ -3384,11 +3382,6 @@ testModule('focus policy', {
     }
 }, () => {
     test('elements under overlay with shader have not to get focus by tab', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
             visible: true,
             shading: true,

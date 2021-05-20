@@ -43,7 +43,8 @@ export interface FileSavingEventInfo<T> {
   readonly data: Blob;
 }
 
-export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
+/** @namespace DevExpress.viz */
+export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
      * @default false
@@ -92,7 +93,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDrawn?: ((e: EventInfo<T>) => void);
+    onDrawn?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -104,7 +105,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExported?: ((e: EventInfo<T>) => void);
+    onExported?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -119,7 +120,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onExporting?: ((e: EventInfo<T> & ExportInfo) => void);
+    onExporting?: ((e: EventInfo<TComponent> & ExportInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -134,7 +135,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onFileSaving?: ((e: FileSavingEventInfo<T>) => void);
+    onFileSaving?: ((e: FileSavingEventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -147,7 +148,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onIncidentOccurred?: ((e: EventInfo<T> & IncidentInfo) => void);
+    onIncidentOccurred?: ((e: EventInfo<TComponent> & IncidentInfo) => void);
     /**
      * @docid
      * @default false
@@ -210,6 +211,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetExport {
     /**
      * @docid BaseWidgetOptions.export.backgroundColor
@@ -273,6 +275,7 @@ export interface BaseWidgetExport {
      */
     svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>);
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetLoadingIndicator {
     /**
      * @docid BaseWidgetOptions.loadingIndicator.backgroundColor
@@ -311,6 +314,7 @@ export interface BaseWidgetLoadingIndicator {
      */
     text?: string;
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetMargin {
     /**
      * @docid BaseWidgetOptions.margin.bottom
@@ -341,6 +345,7 @@ export interface BaseWidgetMargin {
      */
     top?: number;
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetSize {
     /**
      * @docid BaseWidgetOptions.size.height
@@ -357,6 +362,7 @@ export interface BaseWidgetSize {
      */
     width?: number;
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetTitle {
     /**
      * @docid BaseWidgetOptions.title.font
@@ -489,6 +495,7 @@ export interface BaseWidgetTitle {
      */
     wordWrap?: WordWrapType;
 }
+/** @namespace DevExpress.viz */
 export interface BaseWidgetTooltip {
     /**
      * @docid BaseWidgetOptions.tooltip.arrowLength
@@ -649,9 +656,9 @@ export interface BaseWidgetTooltip {
  * @hidden
  * @inherits DOMComponent
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  */
-export default class BaseWidget extends DOMComponent {
-    constructor(element: UserDefinedElement, options?: BaseWidgetOptions)
+export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
     /**
      * @docid
      * @static
@@ -721,6 +728,7 @@ export default class BaseWidget extends DOMComponent {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.viz
  * @hidden
  */
 export interface Font {
@@ -763,6 +771,7 @@ export interface Font {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface BaseWidgetAnnotationConfig {
     /**

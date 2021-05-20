@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -38,6 +34,10 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSlider> & ValueChangedInf
     readonly value?: Array<number>;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
      * @docid
@@ -96,11 +96,10 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @module ui/range_slider
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxRangeSlider extends dxTrackBar {
-    constructor(element: UserDefinedElement, options?: dxRangeSliderOptions)
-}
+export default class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> { }
 
 /** @public */
 export type Properties = dxRangeSliderOptions;

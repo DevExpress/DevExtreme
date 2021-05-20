@@ -16,6 +16,7 @@ import devices from '../../../../core/devices';
 import { touch } from '../../../../core/utils/support';
 import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
+import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
 interface Mock extends jest.Mock {}
 
@@ -53,7 +54,6 @@ describe('ScrollView', () => {
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
-      updateManually: false,
       useNative: true,
     });
   });
@@ -68,6 +68,7 @@ describe('ScrollView', () => {
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
       { name: 'scrollToElement', calledWith: ['arg1'] },
+      { name: 'scrollToElementTopLeft', calledWith: ['arg1'] },
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
@@ -123,16 +124,21 @@ describe('ScrollView', () => {
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
 
-              if (showScrollbar === 'never') {
-                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
-              } else {
-                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
-              }
-
               if (useNative) {
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
+
+                if (showScrollbar === 'never') {
+                  expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+                } else {
+                  expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
+                }
               } else {
+                expect(rootClasses).toEqual(showScrollbar === 'always'
+                  ? expect.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE)
+                  : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE));
+
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));

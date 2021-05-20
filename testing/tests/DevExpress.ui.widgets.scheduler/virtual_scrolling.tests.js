@@ -54,7 +54,7 @@ module('Virtual Scrolling', {
                 _insertAllDayRowsIntoDateTable: noop,
                 _allDayPanels: undefined,
                 isGroupedAllDayPanel: noop,
-                renderRWorkspace: noop,
+                renderWorkSpace: noop,
                 renderRAppointments: noop,
                 _createAction: () => { return () => 'action'; },
                 $element: () => {
@@ -77,6 +77,7 @@ module('Virtual Scrolling', {
                     return false;
                 },
                 updateAppointments: () => {},
+                getCellMinWidth: () => 1,
             }, workspaceSettings);
 
             this.scrollableMock = {
@@ -294,13 +295,13 @@ module('Virtual Scrolling', {
                     rowCount: 9,
                     startIndex: 0,
                     startRowIndex: 0,
-                    topVirtualRowHeight: 0
+                    topVirtualRowHeight: 0,
                 }
             }, {
                 orientation: 'horizontal',
                 expectedRenderState: {
                     cellCount: 6,
-                    cellWidth: undefined,
+                    cellWidth: 150,
                     leftVirtualCellWidth: 0,
                     rightVirtualCellWidth: 29100,
                     startCellIndex: 0
@@ -314,10 +315,10 @@ module('Virtual Scrolling', {
                     startRowIndex: 0,
                     topVirtualRowHeight: 0,
                     cellCount: 6,
-                    cellWidth: undefined,
+                    cellWidth: 150,
                     leftVirtualCellWidth: 0,
                     rightVirtualCellWidth: 29100,
-                    startCellIndex: 0
+                    startCellIndex: 0,
                 }
             }
         ].forEach(({ orientation, expectedRenderState }) => {
@@ -609,7 +610,7 @@ module('Virtual Scrolling', {
                     outlineSizeAfter: 0,
                     outlineSizeBefore: 0,
                     prevPosition: 400,
-                    startIndex: 0,
+                    startIndex: 196,
                     virtualItemCountAfter: 196,
                     virtualItemCountBefore: 0,
                     virtualItemSizeAfter: 0,

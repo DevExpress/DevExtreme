@@ -183,7 +183,7 @@ class ViewDataGenerator {
         const weekDaysRow = [];
 
         for(let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
-            const cell = completeViewDataMap[index][dayIndex * cellCountInDay];
+            const cell = completeViewDataMap[index][dayIndex * colSpan];
 
             weekDaysRow.push({
                 ...cell,
@@ -314,8 +314,81 @@ class ViewDataGenerator {
         };
     }
 
-    _generateDateHeaderMap(completeDateHeaderMap, options) {
-        return completeDateHeaderMap.map(headerRow => headerRow.slice(0)); // TODO: virtualization
+    _generateDateHeaderData(completeDateHeaderMap, options) {
+        const {
+            isGenerateWeekDaysHeaderData,
+            cellCountInDay,
+            cellWidth,
+            isProvideVirtualCellsWidth,
+        } = options;
+
+        const dataMap = [];
+        let weekDayRowConfig = {};
+        const validCellWidth = cellWidth || 0;
+
+        if(isGenerateWeekDaysHeaderData) {
+            weekDayRowConfig = this._generateDateHeaderDataRow(
+                options,
+                completeDateHeaderMap,
+                cellCountInDay,
+                0,
+                validCellWidth,
+            );
+
+            dataMap.push(weekDayRowConfig.dateRow);
+        }
+
+        const datesRowConfig = this._generateDateHeaderDataRow(
+            options,
+            completeDateHeaderMap,
+            1,
+            isGenerateWeekDaysHeaderData ? 1 : 0,
+            validCellWidth,
+        );
+
+        dataMap.push(datesRowConfig.dateRow);
+
+        return {
+            dataMap,
+            leftVirtualCellWidth: isProvideVirtualCellsWidth ? datesRowConfig.leftVirtualCellWidth : undefined,
+            rightVirtualCellWidth: isProvideVirtualCellsWidth ? datesRowConfig.rightVirtualCellWidth : undefined,
+            leftVirtualCellCount: datesRowConfig.leftVirtualCellCount,
+            rightVirtualCellCount: datesRowConfig.rightVirtualCellCount,
+            weekDayLeftVirtualCellWidth: weekDayRowConfig.leftVirtualCellWidth,
+            weekDayRightVirtualCellWidth: weekDayRowConfig.rightVirtualCellWidth,
+            weekDayLeftVirtualCellCount: weekDayRowConfig.leftVirtualCellCount,
+            weekDayRightVirtualCellCount: weekDayRowConfig.rightVirtualCellCount,
+        };
+    }
+
+    _generateDateHeaderDataRow(options, completeDateHeaderMap, baseColSpan, rowIndex, cellWidth) {
+        const {
+            groupByDate,
+            horizontalGroupCount,
+            startCellIndex,
+            cellCount,
+            totalCellCount,
+            isProvideVirtualCellsWidth,
+        } = options;
+
+        const colSpan = groupByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
+        const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
+        const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
+
+        const dateRow = completeDateHeaderMap[rowIndex].slice(leftVirtualCellCount, actualCellCount);
+
+        const finalLeftVirtualCellCount = leftVirtualCellCount * colSpan;
+        const finalLeftVirtualCellWidth = finalLeftVirtualCellCount * cellWidth;
+        const finalRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
+        const finalRightVirtualCellWidth = finalRightVirtualCellCount * cellWidth;
+
+        return {
+            dateRow,
+            leftVirtualCellCount: finalLeftVirtualCellCount,
+            leftVirtualCellWidth: isProvideVirtualCellsWidth ? finalLeftVirtualCellWidth : undefined,
+            rightVirtualCellCount: finalRightVirtualCellCount,
+            rightVirtualCellWidth: isProvideVirtualCellsWidth ? finalRightVirtualCellWidth : undefined,
+        };
     }
 
     _generateTimePanelData(completeTimePanelMap, options) {
@@ -388,6 +461,7 @@ class ViewDataGenerator {
             rowCount,
             startRowIndex,
             startCellIndex,
+            isProvideVirtualCellsWidth,
         } = options;
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
 
@@ -433,8 +507,8 @@ class ViewDataGenerator {
             groupedData,
             topVirtualRowHeight,
             bottomVirtualRowHeight,
-            leftVirtualCellWidth,
-            rightVirtualCellWidth,
+            leftVirtualCellWidth: isProvideVirtualCellsWidth ? leftVirtualCellWidth : undefined,
+            rightVirtualCellWidth: isProvideVirtualCellsWidth ? rightVirtualCellWidth : undefined,
             cellCountInGroupRow,
             isGroupedAllDayPanel,
             leftVirtualCellCount: startCellIndex,
@@ -812,10 +886,10 @@ class GroupedDataMapProvider {
         }
     }
 
-    getLasGroupCellPosition(groupIndex) {
+    getLastGroupCellPosition(groupIndex) {
         const groupRow = this.getLastGroupRow(groupIndex);
 
-        return groupRow[groupRow.length - 1].position;
+        return groupRow?.[groupRow?.length - 1].position;
     }
 
     getRowCountInGroup(groupIndex) {
@@ -861,8 +935,8 @@ export default class ViewDataProvider {
     get viewDataMap() { return this._viewDataMap; }
     set viewDataMap(value) { this._viewDataMap = value; }
 
-    get dateHeaderMap() { return this._dateHeaderMap; }
-    set dateHeaderMap(value) { this._dateHeaderMap = value; }
+    get dateHeaderData() { return this._dateHeaderData; }
+    set dateHeaderData(value) { this._dateHeaderData = value; }
 
     get timePanelData() { return this._timePanelData; }
     set timePanelData(value) { this._timePanelData = value; }
@@ -892,7 +966,7 @@ export default class ViewDataProvider {
             this._workspace,
         );
 
-        this.dateHeaderMap = viewDataGenerator._generateDateHeaderMap(this.completeDateHeaderMap, renderOptions);
+        this.dateHeaderData = viewDataGenerator._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
         this.timePanelData = viewDataGenerator._generateTimePanelData(
             this.completeTimePanelMap,
             renderOptions,
@@ -938,22 +1012,12 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getGroupIndices();
     }
 
-    getLasGroupCellPosition(groupIndex) {
-        return this._groupedDataMapProvider.getLasGroupCellPosition(groupIndex);
+    getLastGroupCellPosition(groupIndex) {
+        return this._groupedDataMapProvider.getLastGroupCellPosition(groupIndex);
     }
 
     getRowCountInGroup(groupIndex) {
         return this._groupedDataMapProvider.getRowCountInGroup(groupIndex);
-    }
-
-    getGroupCellCountDelta(groupIndex) {
-        const { dateTableGroupedMap } = this._groupedDataMapProvider.groupedDataMap;
-        const groupedData = dateTableGroupedMap[groupIndex];
-        const { cellCountInGroupRow: totalCellCountInGroupRow } = this.viewData;
-
-        const cellCountInGroupRow = groupedData[0].length;
-
-        return totalCellCountInGroupRow - cellCountInGroupRow;
     }
 
     getCellData(rowIndex, cellIndex, isAllDay) {
@@ -1083,5 +1147,29 @@ export default class ViewDataProvider {
             && time >= cellStartTime
             && time < cellEndTime)
             || (allDay && trimmedTime === cellStartTime);
+    }
+
+    getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {
+        const { dateTableGroupedMap } = this._groupedDataMapProvider.groupedDataMap;
+        const groupedData = dateTableGroupedMap[groupIndex];
+        let includedDays = 0;
+
+        for(let rowIndex = 0; rowIndex < groupedData.length; rowIndex += 1) {
+            for(let columnIndex = 0; columnIndex < groupedData[rowIndex].length; columnIndex += 1) {
+                const cell = groupedData[rowIndex][columnIndex].cellData;
+                if(startDate.getTime() < cell.endDate.getTime()
+                    && endDate.getTime() > cell.startDate.getTime()) {
+                    includedDays += 1;
+                }
+            }
+        }
+
+        const lastCell = groupedData[groupedData.length - 1][groupedData[0].length - 1].cellData;
+        const lastCellStart = dateUtils.trimTime(lastCell.startDate);
+        const daysAfterView = Math.floor((endDate.getTime() - lastCellStart.getTime()) / dateUtils.dateToMilliseconds('day'));
+
+        const deltaDays = daysAfterView > 0 ? daysAfterView : 0;
+
+        return daysCount - includedDays - deltaDays;
     }
 }

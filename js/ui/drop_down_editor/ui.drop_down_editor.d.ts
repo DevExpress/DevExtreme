@@ -17,7 +17,11 @@ import {
 } from '../text_box/ui.text_editor.base';
 
 import {
-    dxPopupOptions
+    Properties as PopoverProperties
+} from '../popover';
+
+import {
+    Properties as PopupProperties
 } from '../popup';
 
 import {
@@ -29,7 +33,8 @@ export interface DropDownButtonTemplateDataModel {
     readonly icon?: string;
 }
 
-export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
+/** @namespace DevExpress.ui */
+export interface dxDropDownEditorOptions<TComponent> extends dxTextBoxOptions<TComponent> {
     /**
      * @docid
      * @default true
@@ -57,8 +62,9 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxPopupOptions | dxPopoverOptions
      */
-    dropDownOptions?: dxPopupOptions;
+    dropDownOptions?: PopupProperties | PopoverProperties;
     /**
      * @docid
      * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
@@ -97,7 +103,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: EventInfo<T>) => void);
+    onClosed?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -109,7 +115,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: EventInfo<T>) => void);
+    onOpened?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default false
@@ -148,9 +154,9 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
  * @export default
  * @hidden
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
-export default class dxDropDownEditor extends dxTextBox {
-    constructor(element: UserDefinedElement, options?: dxDropDownEditorOptions)
+export default class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
     /**
      * @docid
      * @publicName close()
@@ -183,5 +189,6 @@ export default class dxDropDownEditor extends dxTextBox {
     open(): void;
 }
 
-export type Options = dxDropDownEditorOptions;
-export type IOptions = dxDropDownEditorOptions;
+type Properties = dxDropDownEditorOptions<dxDropDownEditor<Properties>>;
+export type Options = Properties;
+export type IOptions = Properties;

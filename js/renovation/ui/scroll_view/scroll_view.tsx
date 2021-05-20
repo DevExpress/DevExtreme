@@ -8,6 +8,7 @@ import {
   InternalState,
 } from '@devextreme-generator/declarations';
 
+import { ScrollViewWrapper } from '../../component_wrapper/scroll_view';
 import { current, isMaterial } from '../../../ui/themes';
 import { isDefined } from '../../../core/utils/type';
 
@@ -40,7 +41,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       useNative, children,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
-      scrollByContent, useKeyboard, updateManually, pullDownEnabled,
+      scrollByContent, useKeyboard, pullDownEnabled,
       useSimulatedScrollbar, inertiaEnabled,
       onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
     },
@@ -61,7 +62,6 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       direction={direction}
       showScrollbar={showScrollbar}
       scrollByThumb={scrollByThumb}
-      updateManually={updateManually}
       pullDownEnabled={pullDownEnabled}
       reachBottomEnabled={reachBottomEnabled}
       onScroll={onScroll}
@@ -106,7 +106,10 @@ Omit<ScrollableProps, 'forceGeneratePockets' | 'needScrollViewContentWrapper' | 
 
 @Component({
   defaultOptionRules,
-  jQuery: { register: true },
+  jQuery: {
+    register: true,
+    component: ScrollViewWrapper,
+  },
   view: viewFunction,
 })
 
@@ -150,6 +153,11 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Method()
   scrollToElement(element: HTMLElement): void {
     this.scrollable.scrollToElement(element);
+  }
+
+  @Method()
+  scrollToElementTopLeft(element: HTMLElement): void {
+    this.scrollable.scrollToElementTopLeft(element);
   }
 
   @Method()

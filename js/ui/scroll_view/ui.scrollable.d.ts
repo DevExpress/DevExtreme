@@ -15,7 +15,7 @@ import {
     NativeEventInfo
 } from '../../events/index';
 
-export interface ScrollEventInfo<T = dxScrollable> extends NativeEventInfo<T> {
+export interface ScrollEventInfo<T> extends NativeEventInfo<T> {
     readonly scrollOffset?: any;
     readonly reachedLeft?: boolean;
     readonly reachedRight?: boolean;
@@ -23,7 +23,8 @@ export interface ScrollEventInfo<T = dxScrollable> extends NativeEventInfo<T> {
     readonly reachedBottom?: boolean;
 }
 
-export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
+/** @namespace DevExpress.ui */
+export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
      * @default false [for](desktop)
@@ -64,7 +65,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: ScrollEventInfo<T>) => void);
+    onScroll?: ((e: ScrollEventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -82,7 +83,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUpdated?: ((e: ScrollEventInfo<T>) => void);
+    onUpdated?: ((e: ScrollEventInfo<TComponent>) => void);
     /**
      * @docid
      * @default false [for](non-touch_devices)
@@ -125,8 +126,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
  * @hidden
  * @prevFileNamespace DevExpress.ui
  */
-export default class dxScrollable extends DOMComponent {
-    constructor(element: UserDefinedElement, options?: dxScrollableOptions)
+export default class dxScrollable<TProperties = Properties> extends DOMComponent<TProperties> {
     /**
      * @docid
      * @publicName clientHeight()
@@ -224,3 +224,5 @@ export default class dxScrollable extends DOMComponent {
      */
     update(): DxPromise<void>;
 }
+
+type Properties = dxScrollableOptions<dxScrollable<Properties>>;

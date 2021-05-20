@@ -277,14 +277,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             groupCellTemplates = this._renderGroupHeader();
         }
 
-        if(this.isRenovatedRender()) {
-            this.renderRWorkspace();
-        } else {
-            this._renderDateHeader();
-            this._renderTimePanel();
-            this._renderDateTable();
-            this._renderAllDayPanel();
-        }
+        this.renderWorkSpace();
 
         this._shader = new HorizontalShader(this);
 
@@ -626,14 +619,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeCellIndex);
     }
 
-    renovatedRenderSupported() { return true; }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
 
+    _renderGroupAllDayPanel() {}
+
     generateRenderOptions() {
-        const options = super.generateRenderOptions();
+        const options = super.generateRenderOptions(true);
 
         const groupCount = this._getGroupCount();
         const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()

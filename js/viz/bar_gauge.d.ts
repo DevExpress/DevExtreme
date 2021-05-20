@@ -41,6 +41,7 @@ import BaseWidget, {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface BarGaugeBarInfo {
     /**
@@ -67,6 +68,7 @@ export interface BarGaugeBarInfo {
  * @docid
  * @inherits BaseLegendItem
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface BarGaugeLegendItem extends BaseLegendItem {
     /**
@@ -111,6 +113,10 @@ export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid
@@ -320,6 +326,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     values?: Array<number>;
 }
+/** @namespace DevExpress.viz */
 export interface dxBarGaugeLegend extends BaseLegend {
     /**
      * @docid dxBarGaugeOptions.legend.customizeHint
@@ -375,6 +382,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      */
     visible?: boolean;
 }
+/** @namespace DevExpress.viz */
 export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     /**
      * @docid dxBarGaugeOptions.loadingIndicator.enabled
@@ -383,6 +391,7 @@ export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
      */
     enabled?: boolean
 }
+/** @namespace DevExpress.viz */
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.contentTemplate
@@ -423,10 +432,10 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
  * @module viz/bar_gauge
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxBarGauge extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: dxBarGaugeOptions)
+export default class dxBarGauge extends BaseWidget<dxBarGaugeOptions> {
     /**
      * @docid
      * @publicName values()

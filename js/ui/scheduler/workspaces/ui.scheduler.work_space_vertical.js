@@ -71,8 +71,6 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
         return this._formatWeekdayAndDay;
     }
 
-    renovatedRenderSupported() { return true; }
-
     generateRenderOptions() {
         const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this.getStartViewDate());
         const _getTimeText = (row, column) => {

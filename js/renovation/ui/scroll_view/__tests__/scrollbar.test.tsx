@@ -66,7 +66,6 @@ describe('Scrollbar', () => {
                   : 1
                 );
 
-                // TODO: test with bottom & top
                 expect(viewModel.scrollStyles).toEqual({
                   [direction === 'vertical' ? 'height' : 'width']: expectedScrollSize,
                   transform: direction === DIRECTION_VERTICAL ? `translate(0px, ${expectedScrollTranslate}px)` : `translate(${expectedScrollTranslate}px, 0px)`,
@@ -117,39 +116,42 @@ describe('Scrollbar', () => {
             each([true, false]).describe('isScrollableHovered: %o', (isScrollableHovered) => {
               each([true, false]).describe('hovered: %o', (hovered) => {
                 each([true, false, undefined]).describe('ShowOnScrollByWheel: %o', (showOnScrollByWheel) => {
-                  it('scroll visibility', () => {
-                    const viewModel = new Scrollbar({
-                      direction,
-                      showScrollbar,
-                      isScrollableHovered,
+                  each([10, 15, 20]).describe('containerSize: %o', (containerSize) => {
+                    it('scroll visibility', () => {
+                      const viewModel = new Scrollbar({
+                        direction,
+                        showScrollbar,
+                        isScrollableHovered,
+                        containerSize,
+                      });
+
+                      viewModel.visibility = visibility;
+                      viewModel.showOnScrollByWheel = showOnScrollByWheel;
+                      viewModel.hovered = hovered;
+                      Object.defineProperties(viewModel, {
+                        containerToContentRatio: { get() { return containerToContentRatio; } },
+                      });
+
+                      const expectedScrollbarVisibility = showScrollbar !== 'never' && containerToContentRatio < 1 && containerSize > 15;
+
+                      expect(viewModel.isVisible).toEqual(expectedScrollbarVisibility);
+
+                      let expectedScrollVisibility;
+
+                      if (!expectedScrollbarVisibility) {
+                        expectedScrollVisibility = false;
+                      } else if (showScrollbar === 'onHover') {
+                        expectedScrollVisibility = visibility || isScrollableHovered || hovered;
+                      } else if (showScrollbar === 'always') {
+                        expectedScrollVisibility = true;
+                      } else {
+                        expectedScrollVisibility = visibility || !!showOnScrollByWheel;
+                      }
+
+                      expect(viewModel.scrollClasses).toEqual(expectedScrollVisibility
+                        ? expect.not.stringMatching('dx-state-invisible')
+                        : expect.stringMatching('dx-state-invisible'));
                     });
-
-                    viewModel.visibility = visibility;
-                    viewModel.showOnScrollByWheel = showOnScrollByWheel;
-                    viewModel.hovered = hovered;
-                    Object.defineProperties(viewModel, {
-                      containerToContentRatio: { get() { return containerToContentRatio; } },
-                    });
-
-                    const expectedScrollbarVisibility = showScrollbar !== 'never' && containerToContentRatio < 1;
-
-                    expect(viewModel.isVisible).toEqual(expectedScrollbarVisibility);
-
-                    let expectedScrollVisibility;
-
-                    if (!expectedScrollbarVisibility) {
-                      expectedScrollVisibility = false;
-                    } else if (showScrollbar === 'onHover') {
-                      expectedScrollVisibility = visibility || isScrollableHovered || hovered;
-                    } else if (showScrollbar === 'always') {
-                      expectedScrollVisibility = true;
-                    } else {
-                      expectedScrollVisibility = visibility || !!showOnScrollByWheel;
-                    }
-
-                    expect(viewModel.scrollClasses).toEqual(expectedScrollVisibility
-                      ? expect.not.stringMatching('dx-state-invisible')
-                      : expect.stringMatching('dx-state-invisible'));
                   });
                 });
               });
@@ -351,7 +353,7 @@ describe('Scrollbar', () => {
               });
 
               viewModel.moveToMouseLocation(clickLocation.eventData);
-              // TODO
+
               expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
               expect(viewModel.moveTo).toHaveBeenCalledWith(clickLocation.expected);
             });

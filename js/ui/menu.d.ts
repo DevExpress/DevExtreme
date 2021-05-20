@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -69,6 +68,10 @@ export type SubmenuShownEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     /**
      * @docid
@@ -208,16 +211,16 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  * @module ui/menu
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxMenu extends dxMenuBase {
-    constructor(element: UserDefinedElement, options?: dxMenuOptions)
-}
+export default class dxMenu extends dxMenuBase<dxMenuOptions> { }
 
 /**
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxMenuBaseItem extends CollectionWidgetItem {
     /**
@@ -285,6 +288,7 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
  * @docid
  * @inherits dxMenuBaseItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxMenuItem extends dxMenuBaseItem {
     /**

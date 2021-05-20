@@ -33,7 +33,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       useNative, children, classes,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
-      scrollByContent, useKeyboard, updateManually, pullDownEnabled,
+      scrollByContent, useKeyboard, pullDownEnabled,
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
       pulledDownText, pullingDownText, refreshingText, reachBottomText,
@@ -54,8 +54,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         visible={visible}
         rtlEnabled={rtlEnabled}
         direction={direction}
-        showScrollbar={showScrollbar} // TODO: https://trello.com/c/ztUBYg5y/
-        updateManually={updateManually}
+        showScrollbar={showScrollbar}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
         forceGeneratePockets={forceGeneratePockets}
@@ -90,7 +89,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         direction={direction}
         showScrollbar={showScrollbar}
         scrollByThumb={scrollByThumb}
-        updateManually={updateManually}
         pullDownEnabled={pullDownEnabled}
         reachBottomEnabled={reachBottomEnabled}
         forceGeneratePockets={forceGeneratePockets}
@@ -228,8 +226,14 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
+  // TODO: it uses for DataGrid only
   getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
     return this.scrollableRef.getElementLocation(element, direction);
+  }
+
+  @Method()
+  scrollToElementTopLeft(element: HTMLElement): void {
+    this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
   }
 
   get scrollableRef(): any {

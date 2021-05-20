@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -35,6 +31,10 @@ export type OptionChangedEvent = EventInfo<dxProgressBar> & ChangedOptionInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid
@@ -80,11 +80,10 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
  * @module ui/progress_bar
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxProgressBar extends dxTrackBar {
-    constructor(element: UserDefinedElement, options?: dxProgressBarOptions)
-}
+export default class dxProgressBar extends dxTrackBar<dxProgressBarOptions> { }
 
 /** @public */
 export type Properties = dxProgressBarOptions;

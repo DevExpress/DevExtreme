@@ -23,6 +23,10 @@ import {
     ValueChangedInfo
 } from './editor/editor';
 
+import {
+    Properties as PopupProperties
+} from './popup';
+
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxColorBox>;
 
@@ -77,6 +81,10 @@ export type ValueChangedEvent = NativeEventInfo<dxColorBox> & ValueChangedInfo;
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
      * @docid
@@ -130,6 +138,12 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @public
      */
     value?: string;
+
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
+    dropDownOptions?: PopupProperties;
 }
 /**
  * @docid
@@ -138,11 +152,10 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
  * @module ui/color_box
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxColorBox extends dxDropDownEditor {
-    constructor(element: UserDefinedElement, options?: dxColorBoxOptions)
-}
+export default class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> { }
 
 /** @public */
 export type Properties = dxColorBoxOptions;

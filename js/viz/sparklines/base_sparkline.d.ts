@@ -19,7 +19,8 @@ import BaseWidget, {
     BaseWidgetTooltip
 } from '../core/base_widget';
 
-export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptions<T> {
+/** @namespace DevExpress.viz */
+export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
      * @type object
@@ -46,7 +47,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<T>) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -59,7 +60,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<T>) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz
@@ -81,6 +82,7 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
      */
     tooltip?: BaseSparklineTooltip;
 }
+/** @namespace DevExpress.viz */
 export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseSparklineOptions.tooltip.contentTemplate
@@ -122,10 +124,9 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  */
-export default class BaseSparkline extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: BaseSparklineOptions)
-
+export default class BaseSparkline<TProperties> extends BaseWidget<TProperties> {
     /**
      * @docid
      * @publicName hideLoadingIndicator()
