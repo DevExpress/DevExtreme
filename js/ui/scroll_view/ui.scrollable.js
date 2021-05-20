@@ -2,11 +2,11 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { nativeScrolling } from '../../core/utils/support';
 import browser from '../../core/utils/browser';
-import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
+import { ensureDefined } from '../../core/utils/common';
 import { isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
-import { getWindow, hasWindow } from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
@@ -18,6 +18,7 @@ import { SimulatedStrategy } from './ui.scrollable.simulated';
 import NativeStrategy from './ui.scrollable.native';
 import { deviceDependentOptions } from './ui.scrollable.device';
 import { when } from '../../core/utils/deferred';
+import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -86,12 +87,6 @@ const Scrollable = DOMComponent.inherit({
         this._locked = false;
     },
 
-    _getWindowDevicePixelRatio: function() {
-        return hasWindow()
-            ? getWindow().devicePixelRatio
-            : 1;
-    },
-
     _visibilityChanged: function(visible) {
         if(visible) {
             this.update();
@@ -142,38 +137,11 @@ const Scrollable = DOMComponent.inherit({
 
         this.callBase();
 
-        this._rtlConfig = {
-            scrollRight: 0,
-            clientWidth: this._container().get(0).clientWidth,
-            windowPixelRatio: this._getWindowDevicePixelRatio()
-        };
-        this._updateRtlPosition();
+        this._updateRtlPosition(true);
     },
 
-    _isHorizontalAndRtlEnabled: function() {
-        return this.option('rtlEnabled') && this.option('direction') !== VERTICAL;
-    },
-
-    _updateRtlPosition: function() {
-        this._updateBounds();
-        if(this._isHorizontalAndRtlEnabled()) {
-            deferUpdate(() => {
-                let scrollLeft = this._getMaxOffset().left - this._rtlConfig.scrollRight;
-
-                if(scrollLeft <= 0) {
-                    scrollLeft = 0;
-                    this._rtlConfig.scrollRight = this._getMaxOffset().left;
-                }
-
-                deferRender(() => {
-                    if(this.scrollLeft() !== scrollLeft) {
-                        this._rtlConfig.skipUpdating = true;
-                        this.scrollTo({ left: scrollLeft });
-                        this._rtlConfig.skipUpdating = false;
-                    }
-                });
-            });
-        }
+    _updateRtlPosition: function(needInitializeRtlConfig) {
+        this._strategy.updateRtlPosition(needInitializeRtlConfig);
     },
 
     _getMaxOffset: function() {
@@ -183,10 +151,6 @@ const Scrollable = DOMComponent.inherit({
             left: scrollWidth - clientWidth,
             top: scrollHeight - clientHeight,
         };
-    },
-
-    _updateBounds: function() {
-        this._strategy.updateBounds();
     },
 
     _attachEventHandlers: function() {
@@ -209,18 +173,6 @@ const Scrollable = DOMComponent.inherit({
 
         eventsEngine.off(this._$container, '.' + SCROLLABLE);
         eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
-    },
-
-    _updateRtlConfig: function() {
-        if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
-            const { clientWidth, scrollLeft } = this._container().get(0);
-            const windowPixelRatio = this._getWindowDevicePixelRatio();
-            if(this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
-                this._rtlConfig.scrollRight = this._getMaxOffset().left - scrollLeft;
-            }
-            this._rtlConfig.clientWidth = clientWidth;
-            this._rtlConfig.windowPixelRatio = windowPixelRatio;
-        }
     },
 
     _validate: function(e) {
@@ -416,14 +368,13 @@ const Scrollable = DOMComponent.inherit({
     },
 
     scrollOffset: function() {
-        return this._getScrollOffset();
+        return this._strategy._getScrollOffset();
     },
 
-    _getScrollOffset() {
-        return {
-            top: -this._location().top,
-            left: -this._location().left
-        };
+    _isRtlNativeStrategy: function() {
+        const { useNative, rtlEnabled } = this.option();
+
+        return useNative && rtlEnabled;
     },
 
     scrollTop: function() {
@@ -468,7 +419,6 @@ const Scrollable = DOMComponent.inherit({
 
         this._updateIfNeed();
         this._strategy.scrollBy(distance);
-        this._updateRtlConfig();
     },
 
     scrollTo: function(targetLocation) {
@@ -483,6 +433,10 @@ const Scrollable = DOMComponent.inherit({
             location = this._strategy._applyScaleRatio(location);
         }
 
+        if(this._isScrollInverted()) {
+            location.left = this._getScrollSign() * location.left - this._getMaxOffset().left;
+        }
+
         const distance = this._normalizeLocation({
             left: location.left - ensureDefined(targetLocation.left, location.left),
             top: location.top - ensureDefined(targetLocation.top, location.top)
@@ -493,7 +447,17 @@ const Scrollable = DOMComponent.inherit({
         }
 
         this._strategy.scrollBy(distance);
-        this._updateRtlConfig();
+    },
+
+    _getScrollSign() {
+        return getScrollRtlBehavior().positive ? -1 : 1;
+    },
+
+    _isScrollInverted: function() {
+        const { rtlEnabled, useNative } = this.option();
+        const { decreasing, positive } = getScrollRtlBehavior();
+
+        return useNative && rtlEnabled && (decreasing ^ positive);
     },
 
     scrollToElement: function(element, offset) {
@@ -530,9 +494,15 @@ const Scrollable = DOMComponent.inherit({
 
         if(direction !== VERTICAL) {
             const leftPosition = this._elementPositionRelativeToContent($element, 'left');
+
+
             scrollPosition.left = this.option('rtlEnabled') === true
-                ? leftPosition + $element.width() - this.clientWidth()
+                ? leftPosition + $element.outerWidth() - this.clientWidth()
                 : leftPosition;
+
+            if(this._isRtlNativeStrategy()) {
+                scrollPosition.left += this._container().get(0).offsetWidth - this._container().get(0).clientWidth;
+            }
         }
         if(direction !== HORIZONTAL) {
             scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');

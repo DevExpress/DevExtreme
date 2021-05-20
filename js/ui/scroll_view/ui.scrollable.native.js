@@ -6,6 +6,7 @@ import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
+import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -39,8 +40,8 @@ const NativeStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
+        this._isScrollInverted = scrollable._isScrollInverted.bind(scrollable);
     },
 
     render: function() {
@@ -58,6 +59,7 @@ const NativeStrategy = Class.inherit({
     },
 
     updateBounds: noop,
+    updateRtlPosition: noop,
 
     _renderScrollbars: function() {
         this._scrollbars = {};
@@ -116,23 +118,44 @@ const NativeStrategy = Class.inherit({
         return {
             event: this._eventForUserAction,
             scrollOffset: this._getScrollOffset(),
-            reachedLeft: this._isReachedLeft(left),
-            reachedRight: this._isReachedRight(left),
+            reachedLeft: this._isScrollInverted() ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: this._isScrollInverted() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
             reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
             reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top : undefined
         };
     },
 
-    _isReachedLeft: function() {
-        return this._isDirection(HORIZONTAL) ? this.location().left >= 0 : undefined;
+    _getScrollOffset: function() {
+        const { top, left } = this.location();
+
+        return {
+            top: -top,
+            left: this._normalizeOffsetLeft(-left)
+        };
     },
 
-    _isReachedRight: function() {
-        return this._isDirection(HORIZONTAL) ? Math.abs(this.location().left) >= this._getMaxOffset().left : undefined;
+    _normalizeOffsetLeft(scrollLeft) {
+        if(this._isScrollInverted()) {
+            if(getScrollRtlBehavior().positive) {
+                // for ie11 support
+                return this._getMaxOffset().left - scrollLeft;
+            }
+
+            return this._getMaxOffset().left + scrollLeft;
+        }
+
+        return scrollLeft;
+    },
+
+    _isReachedLeft: function(left) {
+        return this._isDirection(HORIZONTAL) ? left >= 0 : undefined;
+    },
+
+    _isReachedRight: function(left) {
+        return this._isDirection(HORIZONTAL) ? Math.abs(left) >= this._getMaxOffset().left : undefined;
     },
 
     handleScroll: function(e) {
-        this._component._updateRtlConfig();
         if(!this._isScrollLocationChanged()) {
             // NOTE: ignoring scroll events when scroll location was not changed (for Android browser - B250122)
             e.stopImmediatePropagation();
@@ -248,7 +271,11 @@ const NativeStrategy = Class.inherit({
     scrollBy: function(distance) {
         const location = this.location();
         this._$container.scrollTop(Math.round(-location.top - distance.top));
-        this._$container.scrollLeft(Math.round(-location.left - distance.left));
+        this._$container.scrollLeft(Math.round(-location.left - this._getScrollSign() * distance.left));
+    },
+
+    _getScrollSign() {
+        return this._isScrollInverted() && getScrollRtlBehavior().positive ? -1 : 1;
     },
 
     validate: function(e) {
