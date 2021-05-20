@@ -41,7 +41,7 @@ const REVERT_BUTTON_CLASS = 'dx-revert-button';
 
 const FAST_EDITING_DELETE_KEY = 'delete';
 
-const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex]';
+const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-dropdowneditor-icon';
 
 const EDIT_MODE_ROW = 'row';
 const EDIT_MODE_FORM = 'form';
