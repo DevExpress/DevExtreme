@@ -20,7 +20,6 @@
         'disable-date': isHoliday(dataCell.startDate) || isWeekend(dataCell.startDate),
         'dinner': isDinner(dataCell.startDate)
       }">
-      {{dataCell.text}}
     </div>
 
     <div *dxTemplate="let dateCell of 'dateCellTemplate'"
