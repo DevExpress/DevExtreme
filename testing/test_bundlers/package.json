@@ -1,0 +1,18 @@
+{
+  "name": "test_devextreme_modules",
+  "version": "1.0.0",
+   "scripts": {
+    "build-webpack": "webpack",
+    "build-rollup": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^18.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@types/devextreme": "^16.2.1",
+    "devextreme-cldr-data": "^1.0.3",
+    "globalize": "^1.6.0",
+    "rollup": "^2.46.0",
+    "webpack": "^5.37.0",
+    "webpack-cli": "^4.7.0"
+  }
+}
