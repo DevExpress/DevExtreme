@@ -67,7 +67,8 @@ export default {
       dataSource: {
         store: {
           type: 'odata',
-          url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks'
+          url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
+          key: 'Task_ID'
         },
         expand: 'ResponsibleEmployee',
         select: [

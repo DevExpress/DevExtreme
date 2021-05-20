@@ -26,6 +26,7 @@ class App extends React.Component {
       <div>
         <DataGrid
           dataSource={customers}
+          keyExpr="ID"
           allowColumnReordering={true}
           showBorders={true}
         >

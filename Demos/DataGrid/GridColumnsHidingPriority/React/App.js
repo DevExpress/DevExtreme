@@ -14,6 +14,7 @@ class App extends React.Component {
         <DataGrid
           id="gridContainer"
           dataSource={this.dataSource}
+          keyExpr="ID"
           showBorders={true}>
           <Column dataField="OrderNumber" width={130} caption="Invoice Number" />
           <Column dataField="CustomerStoreCity" caption="City" hidingPriority={0} />

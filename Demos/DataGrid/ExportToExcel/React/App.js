@@ -14,6 +14,7 @@ class App extends React.Component {
         <DataGrid
           id="gridContainer"
           dataSource={this.dataSource}
+          keyExpr="ID"
           showBorders={true}>
           <Export enabled={true} fileName="Employees" allowExportSelectedData={true} />
           <Selection mode="multiple" />

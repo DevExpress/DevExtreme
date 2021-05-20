@@ -20,6 +20,7 @@ $(function(){
 
     var dataGrid = $('#gridContainer').dxDataGrid({
         dataSource: customers,
+        keyExpr: "ID",
         allowColumnReordering: true,
         showBorders: true,
         grouping: {

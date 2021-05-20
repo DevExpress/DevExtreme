@@ -1,6 +1,12 @@
 <div id="header">Sales amounts report</div>
 
-<dx-data-grid id="gridContainer" [dataSource]="orders" [showBorders]="true" (onExporting)="onExporting($event)" (onCellPrepared)="onCellPrepared($event)">
+<dx-data-grid id="gridContainer"
+    [dataSource]="orders"
+    keyExpr="ID"
+    [showBorders]="true"
+    (onExporting)="onExporting($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+>
     
     <dxo-group-panel [visible]="true"></dxo-group-panel>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>

@@ -3,6 +3,7 @@ var DemoApp = angular.module('DemoApp', ['dx']);
 DemoApp.controller('DemoController', function DemoController($scope) {
   $scope.gridOptions = {
     dataSource: employees,
+    keyExpr: "ID",
     showBorders: true,
     showRowLines: true,
     showColumnLines: false,

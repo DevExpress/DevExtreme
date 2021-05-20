@@ -13,6 +13,7 @@ class App extends React.Component {
           id: 'gridContainer'
         }}
         dataSource={dataSource}
+        keyExpr="id"
         showBorders={true}
         customizeColumns={customizeColumns}
       >

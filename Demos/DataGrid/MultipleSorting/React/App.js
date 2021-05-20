@@ -21,6 +21,7 @@ class App extends React.Component {
       <div>
         <DataGrid
           dataSource={employees}
+          keyExpr="ID"
           showBorders={true}
           ref={(ref) => this.dataGrid = ref}
         >

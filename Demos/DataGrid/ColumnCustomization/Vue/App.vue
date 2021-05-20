@@ -3,6 +3,7 @@
     <DxDataGrid
       id="gridContainer"
       :data-source="employees"
+      key-expr="ID"
       :allow-column-reordering="true"
       :allow-column-resizing="true"
       :column-auto-width="true"

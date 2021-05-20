@@ -6,6 +6,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
     $scope.gridOptions = {
         dataSource: generateData(rowCount, columnCount),
+        keyExpr: "field1",
         columnWidth: 100,
         showBorders: true,
         scrolling: {

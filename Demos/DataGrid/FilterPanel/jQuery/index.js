@@ -1,6 +1,7 @@
 $(function() {
     $("#gridContainer").dxDataGrid({
         dataSource: orders,
+        keyExpr: "ID",
         columnsAutoWidth: true,
         filterRow: { visible: true },
         filterPanel: { visible: true },

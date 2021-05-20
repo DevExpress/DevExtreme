@@ -1,4 +1,9 @@
-<dx-data-grid id="gridContainer" [dataSource]="orders" [showBorders]="true" (onCellPrepared)="onCellPrepared($event)">
+<dx-data-grid id="gridContainer"
+    [dataSource]="orders"
+    keyExpr="ID"
+    [showBorders]="true"
+    (onCellPrepared)="onCellPrepared($event)"
+>
     <dxo-group-panel [visible]="true"></dxo-group-panel>
     <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxi-sort-by-group-summary-info summaryItem="count"></dxi-sort-by-group-summary-info>

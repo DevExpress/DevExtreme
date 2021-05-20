@@ -1,4 +1,9 @@
-<dx-data-grid id="gridContainer" [dataSource]="dataSource" [showBorders]="true">
+<dx-data-grid
+    id="gridContainer"
+    [dataSource]="dataSource"
+    keyExpr="ID"
+    [showBorders]="true"
+>
 
     <dxo-export [enabled]="true" fileName="Employees" [allowExportSelectedData]="true"></dxo-export>
     <dxo-selection mode="multiple"></dxo-selection>

@@ -3,6 +3,7 @@
     <DxDataGrid
       id="gridContainer"
       :data-source="dataSource"
+      key-expr="ID"
       :show-borders="true"
     >
       <DxExport

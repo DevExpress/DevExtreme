@@ -2,6 +2,7 @@
   <DxDataGrid
     id="gridContainer"
     :data-source="dataSource"
+    key-expr="field1"
     :show-borders="true"
     :column-width="100"
   >

@@ -1,6 +1,7 @@
 $(function(){
     var dataGrid = $("#grid-container").dxDataGrid({
         dataSource: employees,
+        keyExpr: "ID",
         showColumnLines: false,
         showRowLines: true,
         rowAlternationEnabled: true,

@@ -1,6 +1,7 @@
 <dx-data-grid 
     id="gridContainer" 
     [dataSource]="dataSource"
+    keyExpr="ID"
     [columns]="columns"
     [filterValue]="filterValue"
     (onInitialized)="onInitialized($event)"

@@ -1,6 +1,7 @@
 <template>
   <DxDataGrid
     :data-source="dataSource"
+    key-expr="ID"
     :columns="columns"
     :show-borders="true"
   />

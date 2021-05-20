@@ -14,6 +14,7 @@ class App extends React.Component {
         <DataGrid
           id="gridContainer"
           dataSource={this.dataSource}
+          keyExpr="ID"
           columnHidingEnabled={true}
           showBorders={true}>
           <Editing allowAdding={true} allowUpdating={true} mode="batch" />

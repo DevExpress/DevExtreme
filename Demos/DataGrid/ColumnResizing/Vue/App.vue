@@ -3,6 +3,7 @@
     <DxDataGrid
       id="orders"
       :data-source="orders"
+      key-expr="ID"
       :allow-column-resizing="true"
       :show-borders="true"
       :column-resizing-mode="currentMode"

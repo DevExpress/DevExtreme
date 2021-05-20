@@ -1,6 +1,7 @@
 $(function(){
     $("#gridContainer").dxDataGrid({
         dataSource: countries,
+        keyExpr: "ID",
         columnAutoWidth: true,
         allowColumnReordering: true,
         showBorders: true,

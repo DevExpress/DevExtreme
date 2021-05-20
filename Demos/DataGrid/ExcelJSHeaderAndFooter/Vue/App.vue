@@ -2,6 +2,7 @@
   <DxDataGrid
     id="grid"
     :data-source="countries"
+    key-expr="ID"
     :show-borders="true"
     @exporting="onExporting"
   >

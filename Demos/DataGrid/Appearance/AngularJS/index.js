@@ -8,6 +8,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     
     $scope.dataGridOptions = {
         dataSource: employees,
+        keyExpr: "ID",
         bindingOptions: {
             showColumnLines: "showColumnLines",
             showRowLines: "showRowLines",

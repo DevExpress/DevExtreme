@@ -1,6 +1,7 @@
 <dx-data-grid 
     id="gridContainer"
     [dataSource]="dataSource"
+    keyExpr="id"
     [customizeColumns]="customizeColumns"
     [showBorders]="true"
     (onContentReady)="onContentReady($event)">

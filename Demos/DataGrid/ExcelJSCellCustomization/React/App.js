@@ -23,6 +23,7 @@ class App extends React.Component {
         <DataGrid
           id="gridContainer"
           dataSource={this.companies}
+          keyExpr="ID"
           showBorders={true}
           onExporting={this.onExporting}>
 

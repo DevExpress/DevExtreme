@@ -1,6 +1,7 @@
 $(function(){
   $('#gridContainer').dxDataGrid({
     dataSource: countries,
+    keyExpr: "ID",
     showBorders: true,
     export: {
       enabled: true

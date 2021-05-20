@@ -33,7 +33,8 @@ export class AppComponent {
     this.priceDataSource = {
       store: {
         type: 'odata',
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products'
+        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+        key: 'Product_ID'
       },
       select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
       filter: ['Product_ID', '<', 10]
@@ -42,7 +43,8 @@ export class AppComponent {
     this.ratingDataSource = {
       store: {
         type: 'odata',
-        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products'
+        url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+        key: 'Product_ID'
       },
       select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
       filter: ['Product_ID', '<', 10]

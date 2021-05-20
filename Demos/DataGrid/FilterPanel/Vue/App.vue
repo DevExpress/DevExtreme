@@ -3,6 +3,7 @@
     <DxDataGrid
       id="gridContainer"
       :data-source="orders"
+      key-expr="ID"
       :columns-auto-width="true"
       :show-borders="true"
       :filter-builder="filterBuilder"

@@ -1,6 +1,7 @@
 $(function() {
     const dataGrid = $("#gridContainer").dxDataGrid({
         dataSource: generateData(100000),
+        keyExpr: 'id',
         showBorders: true,
         customizeColumns: function(columns) {
             columns[0].width = 70;

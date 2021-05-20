@@ -1,9 +1,13 @@
-<dx-data-grid id="gridContainer" #grid
-        [dataSource]="employees"
-        [showColumnLines]="false"
-        [showRowLines]="true"
-        [showBorders]="true"
-        [rowAlternationEnabled]="true">
+<dx-data-grid
+    id="gridContainer"
+    #grid
+    [dataSource]="employees"
+    keyExpr="ID"
+    [showColumnLines]="false"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [rowAlternationEnabled]="true"
+>
 
     <dxi-column dataField="Prefix" [width]="80" caption="Title"></dxi-column>
     <dxi-column dataField="FirstName"></dxi-column>

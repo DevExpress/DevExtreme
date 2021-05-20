@@ -18,6 +18,7 @@ class App extends React.Component {
     return (
       <DataGrid id="gridContainer"
         dataSource={this.dataSource}
+        keyExpr="date"
         showRowLines={true}
         showColumnLines={false}
         showBorders={true}>

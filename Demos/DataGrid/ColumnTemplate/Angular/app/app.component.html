@@ -1,4 +1,9 @@
-<dx-data-grid id="gridContainer" [dataSource]="employees" [showBorders]="true">
+<dx-data-grid
+    id="gridContainer"
+    [dataSource]="employees"
+    keyExpr="ID"
+    [showBorders]="true"
+>
 
     <dxi-column dataField="Picture" [width]="100" [allowFiltering]="false"
         [allowSorting]="false" cellTemplate="cellTemplate"></dxi-column>

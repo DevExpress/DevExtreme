@@ -2,6 +2,7 @@
   <div>
     <DxDataGrid
       :data-source="tasks"
+      key-expr="ID"
       :show-borders="true"
       :height="440"
     >

@@ -1,4 +1,11 @@
-<dx-data-grid id="gridContainer" [dataSource]="employees" [showBorders]="true" [showRowLines]="true" [showColumnLines]="false" (onExporting)="onExporting($event)">
+<dx-data-grid id="gridContainer"
+  [dataSource]="employees"
+  keyExpr="ID"
+  [showBorders]="true"
+  [showRowLines]="true"
+  [showColumnLines]="false"
+  (onExporting)="onExporting($event)"
+>
   <dxi-column dataField="Picture" cellTemplate="cellTemplate" width="90px"></dxi-column>
   <dxi-column dataField="FirstName"></dxi-column>
   <dxi-column dataField="LastName"></dxi-column>

@@ -45,6 +45,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <DataGrid dataSource={this.employees}
+          keyExpr="ID"
           showColumnLines={showColumnLines}
           showRowLines={showRowLines}
           showBorders={showBorders}

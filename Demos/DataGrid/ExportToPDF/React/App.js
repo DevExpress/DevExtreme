@@ -42,6 +42,7 @@ export default function App() {
         <DataGrid
           ref={dataGridRef}
           dataSource={customers}
+          keyExpr="ID"
           allowColumnReordering={true}
           showBorders={true}
         >

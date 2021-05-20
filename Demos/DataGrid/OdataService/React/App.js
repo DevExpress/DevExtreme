@@ -6,7 +6,8 @@ import DataGrid, { Column } from 'devextreme-react/data-grid';
 const dataSourceOptions = {
   store: {
     type: 'odata',
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products'
+    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+    key: 'Product_ID'
   },
   select: [
     'Product_ID',

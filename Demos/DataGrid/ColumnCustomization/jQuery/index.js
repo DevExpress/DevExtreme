@@ -1,6 +1,7 @@
 $(function(){
     $("#gridContainer").dxDataGrid({
         dataSource: employees,
+        keyExpr: "ID",
         allowColumnReordering: true,
         allowColumnResizing: true,
         columnAutoWidth: true,

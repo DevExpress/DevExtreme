@@ -13,6 +13,7 @@ class App extends React.Component {
           id: 'gridContainer'
         }}
         dataSource={dataSource}
+        keyExpr="field1"
         showBorders={true}
         columnWidth={100}
       >

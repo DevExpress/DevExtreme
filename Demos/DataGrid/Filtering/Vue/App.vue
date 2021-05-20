@@ -4,6 +4,7 @@
       id="gridContainer"
       :ref="dataGridRefName"
       :data-source="orders"
+      key-expr="ID"
       :show-borders="true"
     >
       <DxFilterRow

@@ -18,6 +18,7 @@ class App extends React.Component {
         filterBuilder={filterBuilder}
         defaultFilterValue={filterValue}
         dataSource={orders}
+        keyExpr="ID"
         showBorders={true}
       >
         <FilterRow visible={true} />

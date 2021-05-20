@@ -1,6 +1,7 @@
 <dx-data-grid
     id="gridContainer"
     [dataSource]="employees"
+    keyExpr="ID"
     (onFocusedCellChanging)="onFocusedCellChanging($event)"
     [showBorders]="true">
     <dxo-keyboard-navigation

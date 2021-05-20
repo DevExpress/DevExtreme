@@ -1,6 +1,7 @@
 <dx-data-grid
     id="gridContainer" 
     [dataSource]="employees"
+    keyExpr="ID"
     [showBorders]="true">
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxi-column dataField="Prefix" caption="Title" [width]="70"></dxi-column>

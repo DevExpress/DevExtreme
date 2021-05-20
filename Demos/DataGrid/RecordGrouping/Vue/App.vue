@@ -3,6 +3,7 @@
     <DxDataGrid
       :allow-column-reordering="true"
       :data-source="customers"
+      key-expr="ID"
       :show-borders="true"
     >
 

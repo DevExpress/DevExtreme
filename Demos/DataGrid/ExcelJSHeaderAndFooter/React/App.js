@@ -26,6 +26,7 @@ class App extends React.Component {
     return (
       <DataGrid
         dataSource={countries}
+        keyExpr="ID"
         showBorders={true}
         onExporting={this.onExporting}
       >

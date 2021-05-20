@@ -2,6 +2,7 @@
   <div>
     <DxDataGrid
       :data-source="employees"
+      key-expr="ID"
       :show-column-lines="showColumnLines"
       :show-row-lines="showRowLines"
       :show-borders="showBorders"

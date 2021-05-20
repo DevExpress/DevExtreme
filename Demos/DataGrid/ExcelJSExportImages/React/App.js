@@ -23,6 +23,7 @@ class App extends React.Component {
         <DataGrid
           id="gridContainer"
           dataSource={this.employees}
+          keyExpr="ID"
           showBorders={true}
           showRowLines={true}
           showColumnLines={false}

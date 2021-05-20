@@ -1,6 +1,7 @@
 $(function(){
     var dataGrid = $("#gridContainer").dxDataGrid({
         dataSource: employees,
+        keyExpr: "ID",
         showBorders: true,
         sorting: {
             mode: "multiple"

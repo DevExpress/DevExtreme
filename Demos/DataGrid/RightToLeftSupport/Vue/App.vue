@@ -3,6 +3,7 @@
     <DxDataGrid
       id="gridContainer"
       :data-source="dataSource"
+      key-expr="nameEn"
       :rtl-enabled="rtlEnabled"
       :show-borders="true"
     >

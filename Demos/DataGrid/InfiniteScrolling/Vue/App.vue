@@ -3,6 +3,7 @@
     id="gridContainer"
     :customize-columns="customizeColumns"
     :data-source="dataSource"
+    key-expr="id"
     :show-borders="true"
   >
     <DxLoadPanel :enabled="false"/>

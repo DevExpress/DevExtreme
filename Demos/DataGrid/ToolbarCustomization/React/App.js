@@ -90,6 +90,7 @@ class App extends React.Component {
       <DataGrid id="gridContainer"
         ref={(ref) => this.dataGrid = ref}
         dataSource={this.orders}
+        keyExpr="ID"
         showBorders={true}
         onToolbarPreparing={this.onToolbarPreparing}>
         <Grouping autoExpandAll={this.state.expanded} />

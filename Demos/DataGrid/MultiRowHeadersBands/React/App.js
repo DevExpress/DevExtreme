@@ -15,6 +15,7 @@ class App extends React.Component {
       <DataGrid
         id="grid"
         dataSource={countries}
+        keyExpr="ID"
         columnAutoWidth={true}
         allowColumnReordering={true}
         showBorders={true}

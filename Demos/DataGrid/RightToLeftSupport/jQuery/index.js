@@ -53,6 +53,7 @@ $(function(){
     
     var dataGrid = $("#gridContainer").dxDataGrid({
         dataSource: europeanUnion,
+        keyExpr: "nameEn",
         showBorders: true,
         searchPanel: {
             visible: true

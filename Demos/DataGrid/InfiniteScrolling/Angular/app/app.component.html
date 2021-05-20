@@ -1,6 +1,7 @@
 <dx-data-grid 
     id="gridContainer"
     [dataSource]="dataSource"
+    keyExpr="id"
     [customizeColumns]="customizeColumns"
     [showBorders]="true">
     <dxo-load-panel [enabled]="false"></dxo-load-panel>

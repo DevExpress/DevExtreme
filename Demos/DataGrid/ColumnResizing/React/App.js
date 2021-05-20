@@ -26,6 +26,7 @@ class App extends React.Component {
       <div>
         <DataGrid id="orders"
           dataSource={orders}
+          keyExpr="ID"
           showBorders={true}
           allowColumnResizing={true}
           columnResizingMode={this.state.mode}

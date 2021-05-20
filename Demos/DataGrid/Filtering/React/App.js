@@ -60,6 +60,7 @@ class App extends React.Component {
         <DataGrid id="gridContainer"
           ref={(ref) => this.dataGrid = ref}
           dataSource={this.orders}
+          keyExpr="ID"
           showBorders={true}>
           <FilterRow visible={this.state.showFilterRow}
             applyFilter={this.state.currentFilter} />

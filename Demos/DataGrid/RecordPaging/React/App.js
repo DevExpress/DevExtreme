@@ -41,6 +41,7 @@ class App extends React.Component {
         <DataGrid
           id='gridContainer'
           dataSource={generateData(100000)}
+          keyExpr="id"
           showBorders={true}
           customizeColumns={this.customizeColumns}
         >

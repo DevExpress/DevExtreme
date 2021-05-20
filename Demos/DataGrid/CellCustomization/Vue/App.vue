@@ -3,6 +3,7 @@
     <DxDataGrid
       id="gridContainer"
       :data-source="dataSource"
+      key-expr="date"
       :show-row-lines="true"
       :show-column-lines="false"
       :show-borders="true"

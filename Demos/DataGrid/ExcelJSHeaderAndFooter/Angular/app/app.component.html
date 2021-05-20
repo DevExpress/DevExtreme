@@ -4,6 +4,7 @@
 <dx-data-grid
   id="gridContainer"
   [dataSource]="countries"
+  keyExpr="ID"
   [showBorders]="true"
   (onExporting)="onExporting($event)">
   <dxo-export [enabled]="true"></dxo-export>

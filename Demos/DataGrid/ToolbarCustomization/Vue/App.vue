@@ -3,6 +3,7 @@
     id="gridContainer"
     :ref="gridRefName"
     :data-source="orders"
+    key-expr="ID"
     :show-borders="true"
     @toolbar-preparing="onToolbarPreparing($event)"
   >

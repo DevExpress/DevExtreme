@@ -9,6 +9,7 @@ class App extends React.Component {
     return (
       <DataGrid
         dataSource={customers}
+        keyExpr="ID"
         defaultColumns={columns}
         showBorders={true}
       />

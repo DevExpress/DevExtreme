@@ -6,6 +6,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     
     $scope.dataGridOptions = {
         dataSource: orders,
+        keyExpr: 'ID',
         showBorders: true,
         bindingOptions: {
             "grouping.autoExpandAll": "expanded"

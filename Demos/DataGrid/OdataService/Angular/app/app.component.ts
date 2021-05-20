@@ -20,7 +20,8 @@ export class AppComponent {
         this.dataSource = {
             store: {
                 type: 'odata',
-                url: 'https://js.devexpress.com/Demos/DevAV/odata/Products'
+                url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+                key: 'Product_ID'
             },
             select: [
                 'Product_ID',

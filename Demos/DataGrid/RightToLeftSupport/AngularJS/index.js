@@ -59,6 +59,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     
     $scope.dataGridOptions = {
         dataSource: europeanUnion,
+        keyExpr: "nameEn",
         showBorders: true,
         paging: {
             pageSize: 15

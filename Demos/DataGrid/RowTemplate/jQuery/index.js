@@ -3,6 +3,7 @@ $(function(){
 
     $("#gridContainer").dxDataGrid({
         dataSource: employees,
+        keyExpr: "ID",
         rowTemplate: function(container, item) {
             var data = item.data,
                 markup = "<tbody class='employee dx-row " + ((item.rowIndex % 2) ? 'dx-row-alt' : '') + "'>" +

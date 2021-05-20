@@ -1,4 +1,10 @@
-<dx-data-grid id="gridContainer" [dataSource]="companies" [showBorders]="true" (onExporting)="onExporting($event)">
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="companies"
+  keyExpr="ID"
+  [showBorders]="true"
+  (onExporting)="onExporting($event)"
+>
   <dxo-group-panel [visible]="true"></dxo-group-panel>
   <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
   <dxo-export [enabled]="true"></dxo-export>

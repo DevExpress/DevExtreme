@@ -2,6 +2,7 @@
   <DxDataGrid
     id="grid"
     :data-source="countries"
+    key-expr="ID"
     :column-auto-width="true"
     :allow-column-reordering="true"
     :show-borders="true"

@@ -1,6 +1,7 @@
 $(function(){
   $("#gridContainer").dxDataGrid({
     dataSource: companies,
+    keyExpr: "ID",
     showBorders: true,
     groupPanel: {
       visible: true

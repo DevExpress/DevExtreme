@@ -1,6 +1,7 @@
 $(function() {
     $("#gridContainer").dxDataGrid({
         dataSource: weekData,
+        keyExpr: "date",
         showRowLines: true,
         showBorders: true,
         showColumnLines: false,

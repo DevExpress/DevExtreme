@@ -7,6 +7,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
     $scope.dataGridOptions = {
         dataSource: customers,
+        keyExpr: "ID",
         allowColumnResizing: true,
         showBorders: true,
         columnMinWidth: 50,

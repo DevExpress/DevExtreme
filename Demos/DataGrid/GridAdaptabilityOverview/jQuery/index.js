@@ -1,6 +1,7 @@
 $(function(){
     $("#gridContainer").dxDataGrid({
         dataSource: orders, 
+        keyExpr: "ID",
         columnHidingEnabled: true,
         showBorders: true,
         editing: {

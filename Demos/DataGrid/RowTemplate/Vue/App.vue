@@ -3,6 +3,7 @@
     <DxDataGrid
       id="gridContainer"
       :data-source="employees"
+      key-expr="ID"
       :column-auto-width="true"
       :show-borders="true"
       row-template="dataRowTemplate"

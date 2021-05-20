@@ -14,6 +14,7 @@ class App extends React.Component {
     return (
       <DataGrid id="gridContainer"
         dataSource={this.employees}
+        keyExpr="ID"
         showBorders={true}
       >
         <Column dataField="Picture"

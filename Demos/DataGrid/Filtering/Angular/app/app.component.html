@@ -2,6 +2,7 @@
 <dx-data-grid 
     id="gridContainer" 
     [dataSource]="orders"
+    keyExpr="ID"
     [showBorders]="true">
     <dxo-filter-row 
         [visible]="showFilterRow" 

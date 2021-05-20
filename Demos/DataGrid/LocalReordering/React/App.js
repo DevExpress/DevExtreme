@@ -42,6 +42,7 @@ class App extends React.Component {
         <DataGrid
           height={440}
           dataSource={this.state.tasks}
+          keyExpr="ID"
           showBorders={true}
         >
           <RowDragging

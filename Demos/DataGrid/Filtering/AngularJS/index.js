@@ -28,6 +28,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             dataGrid = e.component;
         },
         dataSource: orders,
+        keyExpr: "ID",
         showBorders: true,
         bindingOptions: {
             filterRow: "filterRow",

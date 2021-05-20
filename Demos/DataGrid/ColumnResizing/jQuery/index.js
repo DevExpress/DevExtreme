@@ -1,6 +1,7 @@
 $(function(){
     var dataGrid = $("#orders").dxDataGrid({
         dataSource: customers,
+        keyExpr: "ID",
         allowColumnResizing: true,
         showBorders: true,
         columnResizingMode: "nextColumn",

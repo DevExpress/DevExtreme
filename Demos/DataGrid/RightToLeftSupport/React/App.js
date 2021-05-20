@@ -42,6 +42,7 @@ class App extends React.Component {
       <React.Fragment>
         <DataGrid id="gridContainer"
           dataSource={this.dataSource}
+          keyExpr="nameEn"
           rtlEnabled={rtlEnabled}
           showBorders={true}>
           <Paging defaultPageSize={15} />
