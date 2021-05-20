@@ -207,7 +207,7 @@
     "transpile-tests": "gulp transpile-tests",
     "discover-declarations": "dx-tools discover --js-scripts ./js",
     "update-ts": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts",
-    "validate-ts": "gulp ts-compilation-check ts-jquery-check ts-modules-check",
+    "validate-ts": "gulp validate-ts",
     "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner",
