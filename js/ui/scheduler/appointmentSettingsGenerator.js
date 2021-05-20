@@ -433,7 +433,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
     _getAppointmentFirstViewDate(appointment, rawAppointment) {
         const { viewDataProvider } = this.scheduler.getWorkSpace();
-        const { groupIndex } = appointment.source;
+        const groupIndex = appointment.source.groupIndex || 0;
         const {
             startDate,
             endDate
