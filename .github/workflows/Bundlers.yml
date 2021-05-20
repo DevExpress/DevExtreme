@@ -26,10 +26,14 @@ jobs:
       working-directory: ./testing/test_bundlers  
       run: npm install
 
-    - name: Build test bundle by webpack
+    - name: Build test cjs import bundle by webpack
       working-directory: ./testing/test_bundlers
-      run: npm run build-webpack
+      run: npm run build:webpack-cjs
+
+    - name: Build test esm import bundle by webpack
+      working-directory: ./testing/test_bundlers
+      run: npm run build:webpack-esm
 
     - name: Build test bundle by rollup
       working-directory: ./testing/test_bundlers
-      run: npm run build-rollup
+      run: npm run build:rollup-esm

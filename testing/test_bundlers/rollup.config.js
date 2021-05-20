@@ -5,7 +5,7 @@ import commonjs from '@rollup/plugin-commonjs';
 export default {
     input: '../../testing/test_bundlers/src/index_esm.js',
     output: {
-        file: '../../artifacts/test_bundlers/dist_rollup/main.js',
+        file: '../../artifacts/test_bundlers/dist_rollup/main_esm.js',
         exports: 'auto',
         format: 'es'
     },
