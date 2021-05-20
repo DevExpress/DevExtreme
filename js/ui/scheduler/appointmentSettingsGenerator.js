@@ -327,24 +327,6 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         });
     }
 
-    // _cropAppointmentsByStartDayHour(appointments, rawAppointment, isAllDay) {
-    //     return appointments.map(appointment => {
-    //         const startDate = new Date(appointment.startDate);
-    //         const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
-    //         const startDayHour = this._getViewStartDayHour(firstViewDate);
-
-    //         appointment.startDate = this._getAppointmentResultDate({
-    //             appointment,
-    //             rawAppointment,
-    //             startDate,
-    //             startDayHour,
-    //             firstViewDate
-    //         });
-
-    //         return appointment;
-    //     });
-    // }
-
     _cropAppointmentsByStartDayHour(appointments, rawAppointment, isAllDay) {
         return appointments.filter(appointment => {
             const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
@@ -542,19 +524,6 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
 
     _getViewStartDayHour(firstViewDate) {
         return firstViewDate.getHours();
-    }
-
-    _getAppointmentFirstViewDate(appointment, rawAppointment) {
-        const { viewDataProvider } = this.scheduler.getWorkSpace();
-        const { groupIndex } = appointment.source;
-        const {
-            startDate,
-            endDate
-        } = appointment;
-
-        const isAllDay = this._isAllDayAppointment(rawAppointment);
-
-        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay);
     }
 
     _updateGroupIndices(appointments, itemResources) {
