@@ -58,7 +58,6 @@ const NativeStrategy = Class.inherit({
         }
     },
 
-    updateBounds: noop,
     updateRtlPosition: noop,
 
     _renderScrollbars: function() {
