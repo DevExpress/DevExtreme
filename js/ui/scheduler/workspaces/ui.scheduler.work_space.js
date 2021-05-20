@@ -2993,10 +2993,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     getMaxAllowedPosition(groupIndex) {
         const validGroupIndex = groupIndex || 0;
 
-        return this.getRMaxAllowedHorizontalPosition(validGroupIndex);
+        return this.getMaxAllowedHorizontalPosition(validGroupIndex);
     }
 
-    getRMaxAllowedHorizontalPosition(groupIndex) {
+    getMaxAllowedHorizontalPosition(groupIndex) {
         const getMaxPosition = cellIndex => {
             const cell = this._$dateTable
                 .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
@@ -3021,10 +3021,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getMaxAllowedVerticalPosition(groupIndex) {
-        return this.getRMaxAllowedVerticalPosition(groupIndex);
-    }
-
-    getRMaxAllowedVerticalPosition(groupIndex) {
         const getMaxPosition = rowIndex => {
             const row = this._$dateTable
                 .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
