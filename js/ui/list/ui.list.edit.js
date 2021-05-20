@@ -241,7 +241,7 @@ const ListEdit = ListBase.inherit({
         this.callBase(...arguments);
     },
 
-    _getGroupContainer: function(changeData) {
+    _getItemContainer: function(changeData) {
         if(this.option('grouped')) {
             const groupIndex = this._editStrategy.getIndexByItemData(changeData)?.group;
             return this._itemContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex).find('.' + LIST_GROUP_BODY_CLASS);
