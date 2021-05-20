@@ -2,7 +2,7 @@ import React from 'react';
 import Utils from './utils.js';
 
 export default function DataCell(props) {
-  const { startDate, text } = props.itemData;
+  const { startDate } = props.itemData;
   const isDisableDate = Utils.isHoliday(startDate) || Utils.isWeekend(startDate);
   const isDinner = Utils.isDinner(startDate);
   const cssClasses = [];
@@ -14,8 +14,6 @@ export default function DataCell(props) {
   }
 
   return (
-    <div className={cssClasses}>
-      {text}
-    </div>
+    <div className={cssClasses} />
   );
 }
