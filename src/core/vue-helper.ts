@@ -1,4 +1,12 @@
-import { ComponentPublicInstance, createApp, Slot, Slots, VNode, VNodeProps } from "vue";
+import {
+    App,
+    ComponentPublicInstance,
+    createApp,
+    Slot,
+    Slots,
+    VNode,
+    VNodeProps
+} from "vue";
 import { camelize } from "./helpers";
 
 import { IBaseComponent } from "./component";
@@ -128,6 +136,14 @@ interface ChildConfiguration extends VNode {
     $_innerChanges?: Record<string, any>;
 }
 
+function setCustomPluginsData(appContext: App, parentAppContext: App) {
+    for (const prop in parentAppContext) {
+        if (!appContext.hasOwnProperty(prop) && parentAppContext.hasOwnProperty(prop)) {
+            appContext[prop] = parentAppContext[prop];
+        }
+    }
+}
+
 function setAppContext(template, parent) {
     template._context.components = Object.assign(parent.$.appContext.components, template._context.components);
     Object.setPrototypeOf(template._context.provides, Object.getPrototypeOf(parent.$.provides));
@@ -135,6 +151,7 @@ function setAppContext(template, parent) {
     template._context.config = parent.$.appContext.config;
     template._context.directives = parent.$.appContext.directives;
     template._context.mixins = parent.$.appContext.mixins;
+    setCustomPluginsData(template._context.app, parent.$.appContext.app);
 }
 
 function findConfigurationComponents(children: VNode[]) {

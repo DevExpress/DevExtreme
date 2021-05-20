@@ -1,12 +1,16 @@
 import { mount } from "@vue/test-utils";
 import * as events from "devextreme/events";
-import { defineComponent, nextTick } from "vue";
+import { App, defineComponent, nextTick } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { IWidgetComponent } from "../component";
 import globalConfig from "../config";
 import { IConfigurable, IConfigurationComponent } from "../configuration-component";
 import { createComponent, createConfigurationComponent, createExtensionComponent } from "../index";
+
+interface CustomApp extends App {
+    test: string;
+}
 
 const eventHandlers = {};
 const Widget = {
@@ -24,6 +28,12 @@ const Widget = {
     },
     beginUpdate: jest.fn(),
     endUpdate: jest.fn(),
+};
+
+const CustomPlugin = {
+    install: (app) => {
+        app.test = "test data";
+    }
 };
 
 function createWidget(_, options) {
@@ -1059,6 +1069,35 @@ describe("component rendering", () => {
             mount(vm, { global: { config } });
             renderItemTemplate();
             expect(templateGlobalProperties).toEqual(config.globalProperties);
+        });
+
+        it("template should have custom plugins data", () => {
+            let  testData;
+            const CustomComponent = defineComponent({
+                template: `<div></div>`,
+                mounted() {
+                    testData = (this.$.appContext.app as CustomApp).test;
+                }
+            });
+            const vm = defineComponent({
+                template: `<test-component id="component">
+                                <template #item>
+                                    <CustomComponent></CustomComponent>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    CustomComponent
+                }
+            });
+
+            mount(vm, {
+                global: {
+                    plugins: [CustomPlugin]
+                }
+            });
+            renderItemTemplate();
+            expect(testData).toEqual("test data");
         });
 
         it("template should have router provides of parent", () => {
