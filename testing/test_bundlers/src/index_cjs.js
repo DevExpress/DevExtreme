@@ -1,6 +1,6 @@
 /* global document */
 
-const widgetsList = require('../../helpers/devExtremeModulesList.js').modulesExportsList.widgetsList;
+const widgetsList = require('../../helpers/devExtremeCjsModulesList.js').modulesExportsList.widgetsList;
 
 const de = require('localization/messages/de.json');
 const ru = require('localization/messages/ru.json');

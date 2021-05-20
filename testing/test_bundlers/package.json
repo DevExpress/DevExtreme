@@ -1,7 +1,7 @@
 {
   "name": "test_devextreme_modules",
   "version": "1.0.0",
-   "scripts": {
+  "scripts": {
     "build:webpack-cjs": "webpack --config ./webpack.config.cjs.js",
     "build:webpack-esm": "webpack --config ./webpack.config.js",
     "build:rollup-esm": "rollup -c"
@@ -9,7 +9,6 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
-    "@types/devextreme": "^16.2.1",
     "devextreme-cldr-data": "^1.0.3",
     "globalize": "^1.6.0",
     "rollup": "^2.46.0",

@@ -9,7 +9,7 @@ module.exports = {
         path: path.resolve(__dirname, '../../artifacts/test_bundlers/dist_webpack/'),
     },
     resolve: {
-        modules: ['./artifacts/npm/devextreme', 'node_modules'],
+        modules: ['./artifacts/npm/', 'node_modules'],
         alias: {
             globalize$: path.resolve(__dirname, '../../node_modules/globalize/dist/globalize.js'),
             globalize: path.resolve(__dirname, '../../node_modules/globalize/dist/globalize'),
