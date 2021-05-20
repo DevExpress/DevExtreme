@@ -2521,7 +2521,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
-    QUnit.testInActiveWindow('DropDownEditor Overlay should be closed on dropdown button click in ios ()', function(assert) {
+    QUnit.testInActiveWindow('DropDownEditor Overlay should be closed on dropdown button click in ios (T998455)', function(assert) {
         const dataGrid = createDataGrid({
             dataSource: [
                 { id: 1, field1: 'test1' }
