@@ -2,7 +2,6 @@ import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import 'generic_light.css!';
 import config from 'core/config';
-import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
@@ -661,11 +660,6 @@ module('slider with tooltip', () => {
     });
 
     test('tooltip renders correct after value length changed', function(assert) {
-        if(browser.msie) {
-            assert.expect(0);
-            return;
-        }
-
         const originalFX = fx.off;
         try {
             fx.off = true;

@@ -125,7 +125,6 @@ describe('CheckBox', () => {
         height: 100,
         hint: 'hint',
         hoverStateEnabled: true,
-        onContentReady: (): null => null,
         rtlEnabled: true,
         tabIndex: -2,
         visible: true,
@@ -224,32 +223,52 @@ describe('CheckBox', () => {
     describe('Effects', () => {
       afterEach(clearEventHandlers);
 
-      describe('contentReadyEffect', () => {
-        it('should call "onContentReady" callback with the widget root node', () => {
-          const onContentReady = jest.fn();
-          const checkBox = new CheckBox({ onContentReady });
-          checkBox.contentReadyEffect();
-          expect(onContentReady).toHaveBeenCalledTimes(1);
-          expect(onContentReady).toHaveBeenCalledWith({});
-        });
-
-        it('should not raise any error if contentReady is not defined', () => {
-          const checkBox = new CheckBox({ onContentReady: undefined });
-          expect(checkBox.contentReadyEffect.bind(checkBox)).not.toThrow();
-        });
-      });
-
       describe('updateValidationMessageVisibility', () => {
-        it('should set showValidationMessage', () => {
+        it('should set showValidationMessage to true when isValid=false, validationStatus="invalid" and there are validation errors', () => {
           const checkBox = new CheckBox({
             isValid: false,
             validationStatus: 'invalid',
             validationErrors: [{ message: 'error message' }],
           });
-          expect(checkBox.showValidationMessage).toBe(false);
 
           checkBox.updateValidationMessageVisibility();
+
           expect(checkBox.showValidationMessage).toBe(true);
+        });
+
+        it('should set showValidationMessage to false if there is no validation errors', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+          });
+
+          checkBox.updateValidationMessageVisibility();
+
+          expect(checkBox.showValidationMessage).toBe(false);
+        });
+
+        it('should set showValidationMessage to false if validationStatis not equal to "invalid"', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'pending',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          checkBox.updateValidationMessageVisibility();
+
+          expect(checkBox.showValidationMessage).toBe(false);
+        });
+
+        it('should set showValidationMessage to false if isValid is true', () => {
+          const checkBox = new CheckBox({
+            isValid: true,
+            validationStatus: 'invalid',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          checkBox.updateValidationMessageVisibility();
+
+          expect(checkBox.showValidationMessage).toBe(false);
         });
       });
 

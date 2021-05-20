@@ -21,6 +21,7 @@ import { Icon } from './common/icon';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
+// eslint-disable-next-line import/no-cycle
 import BaseComponent from '../component_wrapper/button';
 import { EffectReturn } from '../utils/effect_return.d';
 
@@ -44,7 +45,7 @@ const getCssClasses = (model: ButtonProps): string => {
 };
 export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
-    children, icon, iconPosition, template: ButtonTemplate, text,
+    children, icon, iconPosition, template: ButtonTemplate, text, templateData,
   } = viewModel.props;
   const renderText = !ButtonTemplate && !children && text;
   const isIconLeft = iconPosition === 'left';
@@ -64,7 +65,6 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       hint={viewModel.props.hint}
       hoverStateEnabled={viewModel.props.hoverStateEnabled}
       onActive={viewModel.onActive}
-      onContentReady={viewModel.props.onContentReady}
       onClick={viewModel.onWidgetClick}
       onInactive={viewModel.onInactive}
       onKeyDown={viewModel.onWidgetKeyDown}
@@ -75,7 +75,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className="dx-button-content" ref={viewModel.contentRef}>
-        {ButtonTemplate && (<ButtonTemplate data={{ icon, text }} />)}
+        {ButtonTemplate && (<ButtonTemplate data={{ icon, text, ...templateData }} />)}
         {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
         {renderText && (<span className="dx-button-text">{text}</span>)}
@@ -121,13 +121,15 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() type?: string;
+  @OneWay() type?: string = 'normal';
 
   @OneWay() useInkRipple?: boolean = false;
 
   @OneWay() useSubmitBehavior?: boolean = false;
 
   @OneWay() validationGroup?: string = undefined;
+
+  @OneWay() templateData?: Record<string, unknown> = {};
 }
 
 export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
@@ -155,16 +157,6 @@ export class Button extends JSXComponent(ButtonProps) {
   @Ref() submitInputRef!: RefObject<HTMLInputElement>;
 
   @Ref() widgetRef!: RefObject<Widget>;
-
-  @Effect()
-  contentReadyEffect(): EffectReturn {
-    // NOTE: we should trigger this effect on change each
-    //       property upon which onContentReady depends
-    //       (for example, text, icon, etc)
-    const { onContentReady } = this.props;
-
-    onContentReady?.({ element: this.contentRef.current!.parentNode });
-  }
 
   @Method()
   focus(): void {

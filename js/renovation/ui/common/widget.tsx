@@ -41,26 +41,6 @@ const getAria = (args: Record<string, unknown>):
   return r;
 }, {});
 
-const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string => {
-  const isFocusable = !!model.focusStateEnabled && !model.disabled;
-  const isHoverable = !!model.hoverStateEnabled && !model.disabled;
-  const canBeActive = !!model.activeStateEnabled && !model.disabled;
-  const classesMap = {
-    'dx-widget': true,
-    [String(model.classes)]: !!model.classes,
-    [String(model.className)]: !!model.className,
-    'dx-state-disabled': !!model.disabled,
-    'dx-state-invisible': !model.visible,
-    'dx-state-focused': !!model.focused && isFocusable,
-    'dx-state-active': !!model.active && canBeActive,
-    'dx-state-hover': !!model.hovered && isHoverable && !model.active,
-    'dx-rtl': !!model.rtlEnabled,
-    'dx-visibility-change-handler': !!model.onVisibilityChange,
-  };
-
-  return combineClasses(classesMap);
-};
-
 export const viewFunction = (viewModel: Widget): JSX.Element => {
   const widget = (
     <div
@@ -106,13 +86,13 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() name?: string = '';
 
+  @OneWay() addWidgetClass = true;
+
   @Event() onActive?: (e: Event) => void;
 
   @Event() onDimensionChanged?: () => void;
 
   @Event() onInactive?: (e: Event) => void;
-
-  @Event() onKeyboardHandled?: (args: Record<string, unknown>) => void;
 
   @Event() onVisibilityChange?: (args: boolean) => void;
 
@@ -272,9 +252,9 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   keyboardEffect(): EffectReturn {
-    const { onKeyDown } = this.props;
+    const { onKeyDown, focusStateEnabled } = this.props;
 
-    if (onKeyDown) {
+    if (focusStateEnabled && onKeyDown) {
       const id = keyboard.on(
         this.widgetRef.current,
         this.widgetRef.current,
@@ -361,6 +341,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   get cssClasses(): string {
     const {
       classes,
+      addWidgetClass,
       className,
       disabled,
       activeStateEnabled,
@@ -370,20 +351,23 @@ export class Widget extends JSXComponent(WidgetProps) {
       visible,
     } = this.props;
 
-    return getCssClasses({
-      active: this.active,
-      focused: this.focused,
-      hovered: this.hovered,
-      className,
-      classes,
-      disabled,
-      activeStateEnabled,
-      focusStateEnabled,
-      hoverStateEnabled,
-      onVisibilityChange,
-      rtlEnabled: this.rtlEnabled,
-      visible,
-    });
+    const isFocusable = !!focusStateEnabled && !disabled;
+    const isHoverable = !!hoverStateEnabled && !disabled;
+    const canBeActive = !!activeStateEnabled && !disabled;
+    const classesMap = {
+      'dx-widget': addWidgetClass,
+      [String(classes)]: !!classes,
+      [String(className)]: !!className,
+      'dx-state-disabled': !!disabled,
+      'dx-state-invisible': !visible,
+      'dx-state-focused': !!this.focused && isFocusable,
+      'dx-state-active': !!this.active && canBeActive,
+      'dx-state-hover': !!this.hovered && isHoverable && !this.active,
+      'dx-rtl': !!this.rtlEnabled,
+      'dx-visibility-change-handler': !!onVisibilityChange,
+    };
+
+    return combineClasses(classesMap);
   }
 
   get tabIndex(): undefined | number {

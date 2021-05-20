@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as TableView, Table } from '../table';
-import { VirtualRow } from '../virtual-row';
+import { VirtualRow } from '../virtual_row';
 
 describe('LayoutBase', () => {
   describe('Render', () => {
@@ -78,6 +78,8 @@ describe('LayoutBase', () => {
         props: {
           leftVirtualCellWidth: 100,
           rightVirtualCellWidth: 150,
+          leftVirtualCellCount: 32,
+          rightVirtualCellCount: 42,
         },
       });
 
@@ -87,12 +89,14 @@ describe('LayoutBase', () => {
         .toHaveLength(2);
 
       virtualRows
-        .forEach((item) => {
-          expect(item.prop('leftVirtualCellWidth'))
-            .toEqual(100);
-
-          expect(item.prop('rightVirtualCellWidth'))
-            .toEqual(150);
+        .forEach((row) => {
+          expect(row.props())
+            .toMatchObject({
+              leftVirtualCellWidth: 100,
+              rightVirtualCellWidth: 150,
+              leftVirtualCellCount: 32,
+              rightVirtualCellCount: 42,
+            });
         });
     });
   });

@@ -82,6 +82,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() prevScrollLocation = 0;
 
+  @Mutable() hideScrollbarTimer?: any;
+
+  @InternalState() pendingPullDown = false;
+
   @InternalState() showOnScrollByWheel?: boolean;
 
   @InternalState() hovered = false;
@@ -90,21 +94,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @InternalState() visibility = false;
 
-  @InternalState() boundaryOffset = 0;
-
-  @InternalState() maxOffset = 0;
-
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
-
-  @Effect()
-  updateBoundaryOffset(): void {
-    if (this.props.forceGeneratePockets) {
-      this.boundaryOffset = this.props.scrollLocation - this.topPocketSize;
-      this.maxOffset = this.boundaryOffset > 0 ? this.topPocketSize : 0;
-    }
-  }
 
   @Effect()
   pointerDownEffect(): DisposeEffectReturn {
@@ -228,10 +220,20 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.visibility = false;
 
     if (isDefined(this.showOnScrollByWheel) && this.props.showScrollbar === 'onScroll') {
-      setTimeout(() => {
+      this.hideScrollbarTimer = setTimeout(() => {
         this.showOnScrollByWheel = undefined;
       }, HIDE_SCROLLBAR_TIMEOUT);
     }
+  }
+
+  clearHideScrollbarTimer(): void {
+    clearTimeout(this.hideScrollbarTimer);
+    this.hideScrollbarTimer = undefined;
+  }
+
+  @Effect({ run: 'once' })
+  disposeHideScrollbarTimer(): DisposeEffectReturn {
+    return (): void => this.clearHideScrollbarTimer();
   }
 
   @Method()
@@ -280,12 +282,19 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       }
     }
 
+    if (this.inRange()) {
+      this.hide();
+      this.props.onEnd?.(this.props.direction);
+      return;
+    }
+
     this.scrollToBounds();
   }
 
   pullDownRefreshing(): void {
     this.setPocketState(TopPocketState.STATE_REFRESHING);
     this.onPullDown();
+    this.pendingPullDown = false;
   }
 
   reachBottomLoading(): void {
@@ -306,13 +315,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return;
     }
 
+    if (this.isPullDown) {
+      this.pendingPullDown = true;
+    }
     this.onBounceAnimatorStart();
   }
-
-  @Method()
-  /* istanbul ignore next */
-  // eslint-disable-next-line class-methods-use-this
-  stopComplete(): void {}
 
   resetThumbScrolling(): void {
     this.thumbScrolling = false;
@@ -429,17 +436,31 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
   }
 
+  get maxOffset(): number {
+    if (this.props.forceGeneratePockets) {
+      if (this.isPullDown && this.pendingPullDown) {
+        return this.topPocketSize;
+      }
+    }
+
+    return 0;
+  }
+
   @Method()
   moveTo(location: number): void {
     const scrollDelta = Math.abs(this.prevScrollLocation - location);
     // there is an issue https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
-    this.props.scrollLocationChange?.(this.fullScrollProp, location, scrollDelta);
+    this.props.scrollLocationChange?.(this.fullScrollProp, location);
     this.updateContent(location);
+    if (scrollDelta >= 1) {
+      this.props.onScroll?.();
+    }
+
     this.prevScrollLocation = location;
     this.rightScrollLocation = this.minOffset - location;
 
     if (this.props.forceGeneratePockets) {
-      if (this.isPullDown()) {
+      if (this.isPullDown) {
         if (this.props.pocketState !== TopPocketState.STATE_READY) {
           this.setPocketState(TopPocketState.STATE_READY);
         }
@@ -476,8 +497,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.props.pocketStateChange?.(state);
   }
 
-  isPullDown(): boolean {
-    return this.props.pullDownEnabled && this.props.bounceEnabled && this.boundaryOffset >= 0;
+  get isPullDown(): boolean {
+    return this.props.pullDownEnabled
+      && this.props.bounceEnabled
+      && (this.props.scrollLocation - this.props.topPocketSize) >= 0;
   }
 
   isReachBottom(): boolean {
@@ -599,7 +622,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get isVisible(): boolean {
-    return this.props.showScrollbar !== 'never' && this.containerToContentRatio < 1;
+    return this.props.showScrollbar !== 'never' && this.containerToContentRatio < 1 && this.props.containerSize > 15;
   }
 
   get visible(): boolean {

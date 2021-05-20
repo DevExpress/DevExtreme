@@ -24,13 +24,11 @@ export class ScrollableSimulatedProps extends ScrollableProps {
 
   @Event() onBounce?: EventCallback<ScrollEventArgs>;
 
-  @Event() onStop?: EventCallback<ScrollEventArgs>;
-
   @Event()
   contentTranslateOffsetChange?: (scrollProp: 'left' | 'top', translateOffset: number) => void;
 
   @Event()
-  scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number, scrollDelta: number) => void;
+  scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number) => void;
 }
 
 export type ScrollableSimulatedPropsType = ScrollableSimulatedProps

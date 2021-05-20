@@ -54,7 +54,7 @@ module('Virtual Scrolling', {
                 _insertAllDayRowsIntoDateTable: noop,
                 _allDayPanels: undefined,
                 isGroupedAllDayPanel: noop,
-                renderRWorkspace: noop,
+                renderWorkSpace: noop,
                 renderRAppointments: noop,
                 _createAction: () => { return () => 'action'; },
                 $element: () => {
@@ -77,6 +77,7 @@ module('Virtual Scrolling', {
                     return false;
                 },
                 updateAppointments: () => {},
+                getCellMinWidth: () => 1,
             }, workspaceSettings);
 
             this.scrollableMock = {
@@ -294,13 +295,13 @@ module('Virtual Scrolling', {
                     rowCount: 9,
                     startIndex: 0,
                     startRowIndex: 0,
-                    topVirtualRowHeight: 0
+                    topVirtualRowHeight: 0,
                 }
             }, {
                 orientation: 'horizontal',
                 expectedRenderState: {
                     cellCount: 6,
-                    cellWidth: undefined,
+                    cellWidth: 150,
                     leftVirtualCellWidth: 0,
                     rightVirtualCellWidth: 29100,
                     startCellIndex: 0
@@ -314,10 +315,10 @@ module('Virtual Scrolling', {
                     startRowIndex: 0,
                     topVirtualRowHeight: 0,
                     cellCount: 6,
-                    cellWidth: undefined,
+                    cellWidth: 150,
                     leftVirtualCellWidth: 0,
                     rightVirtualCellWidth: 29100,
-                    startCellIndex: 0
+                    startCellIndex: 0,
                 }
             }
         ].forEach(({ orientation, expectedRenderState }) => {
@@ -489,7 +490,7 @@ module('Virtual Scrolling', {
             assert.ok(spyVerticalReinit.calledOnce, 'Vertical scrolling reinitState called once');
         });
 
-        test('it should return integer values for cellHeight and cellWidth', function(assert) {
+        test('it should correctly round up cellHeight and cellWidth', function(assert) {
             this.prepareInstance();
 
             this.workspaceMock.getCellHeight = () => 100.123;
@@ -501,8 +502,8 @@ module('Virtual Scrolling', {
             this.workspaceMock.getCellHeight = () => 100.523;
             this.workspaceMock.getCellWidth = () => 200.534;
 
-            assert.equal(this.virtualScrollingDispatcher.getCellHeight(), 101, 'Cell height is correct');
-            assert.equal(this.virtualScrollingDispatcher.getCellWidth(), 201, 'Cell width is correct');
+            assert.equal(this.virtualScrollingDispatcher.getCellHeight(), 100, 'Cell height is correct');
+            assert.equal(this.virtualScrollingDispatcher.getCellWidth(), 200, 'Cell width is correct');
         });
 
         test('it should return correct leftVirtualCellsCount if RTL', function(assert) {
@@ -609,7 +610,7 @@ module('Virtual Scrolling', {
                     outlineSizeAfter: 0,
                     outlineSizeBefore: 0,
                     prevPosition: 400,
-                    startIndex: 0,
+                    startIndex: 196,
                     virtualItemCountAfter: 196,
                     virtualItemCountBefore: 0,
                     virtualItemSizeAfter: 0,

@@ -20,10 +20,6 @@ export class BaseWidgetProps {
 
   @Event() onClick?: (e: any) => void;
 
-  @Event({
-    actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
-  }) onContentReady?: (e: any) => any;
-
   @Event() onKeyDown?: (e: any) => any;
 
   @OneWay() rtlEnabled?: boolean;

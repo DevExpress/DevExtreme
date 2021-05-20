@@ -15,7 +15,9 @@ export const viewFunction = (viewModel: LayoutManager): JSX.Element => {
       classes={cssClasses}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
-      <ResponsiveBox />
+      <ResponsiveBox
+        screenByWidth={viewModel.props.screenByWidth}
+      />
     </Widget>
   );
 };

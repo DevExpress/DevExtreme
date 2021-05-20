@@ -43,7 +43,6 @@ describe('DataGrid', () => {
         height: 400,
         hint: 'hint',
         hoverStateEnabled: false,
-        onContentReady: jest.fn(),
         rtlEnabled: false,
         tabIndex: 0,
         visible: true,
@@ -89,9 +88,9 @@ describe('DataGrid', () => {
         columns: ['test'],
       } as DataGridProps;
 
-      const instance = component.createInstance();
+      component.setupInstance();
 
-      expect(instance.option()).toMatchObject(component.props);
+      expect(component.instance.option()).toMatchObject(component.props);
     });
 
     it('Init when property as undefined', () => {
@@ -100,9 +99,9 @@ describe('DataGrid', () => {
         columns: undefined,
       } as DataGridProps;
 
-      const instance = component.createInstance();
+      component.setupInstance();
 
-      expect(Object.prototype.hasOwnProperty.call(instance.option(), 'columns')).toBe(false);
+      expect(Object.prototype.hasOwnProperty.call(component.instance.option(), 'columns')).toBe(false);
     });
 
     it('Init with widgetElementRef', () => {
@@ -111,17 +110,29 @@ describe('DataGrid', () => {
         current: {} as HTMLDivElement,
       } as RefObject;
 
-      const instance = component.createInstance();
+      component.setupInstance();
 
-      expect(instance.element()).toBe(component.widgetElementRef.current);
+      expect(component.instance.element()).toBe(component.widgetElementRef.current);
     });
 
     // Related to
     // QUnit.test('The onOptionChanged event should be called once when changing column option'
     it('internal component shouldnt raise optionChanged', () => {
       const component = new DataGrid({ onOptionChanged: jest.fn() } as any);
-      const internalGrid = component.createInstance() as any;
-      expect(internalGrid.options.onOptionChanged).toBeUndefined();
+      component.setupInstance() as any;
+      expect((component.instance as any).options.onOptionChanged).toBeUndefined();
+    });
+
+    it('instance should subscribe on "onContentReady"', () => {
+      const props = {
+      } as DataGridProps;
+      const contentReadyHandler = jest.fn();
+      const component = new DataGrid(props);
+      component.restAttributes = { onContentReady: contentReadyHandler };
+
+      component.setupInstance();
+
+      expect((component.instance as any).options.onContentReady).toBe(contentReadyHandler);
     });
 
     describe('Methods', () => {
@@ -236,7 +247,7 @@ describe('DataGrid', () => {
 
           it(`${methodName} if widget is not initialized`, () => {
             const component = new DataGrid({});
-            component.createInstance = jest.fn();
+            component.setupInstance = jest.fn();
             component.instance = null as any;
             component[methodName]();
 
@@ -251,7 +262,7 @@ describe('DataGrid', () => {
       it('dispose', () => {
         const component = new DataGrid({});
 
-        component.initInstanceElement();
+        component.setupInstance();
 
         component.dispose()();
 
@@ -269,7 +280,7 @@ describe('DataGrid', () => {
         } as DataGridProps;
         const component = new DataGrid(initialProps);
 
-        component.initInstanceElement();
+        component.setupInstance();
 
         component.instance.option = jest.fn();
         component.updateOptions();
@@ -319,7 +330,7 @@ describe('DataGrid', () => {
       it('The updateDimensions should be raised on dimensionChanged event', () => {
         const component = new DataGrid({});
 
-        component.initInstanceElement();
+        component.setupInstance();
 
         component.onDimensionChanged();
 
@@ -344,8 +355,7 @@ describe('DataGrid', () => {
 
       component.instanceOptionChangedHandler = jest.fn();
 
-      component.initInstanceElement();
-      component.subscribeOptionChanged();
+      component.setupInstance();
 
       expect(component.instance.on).toBeCalledWith('optionChanged', expect.any(Function));
 
@@ -353,16 +363,6 @@ describe('DataGrid', () => {
       calledOptionChangedHandler(e);
 
       expect(component.instanceOptionChangedHandler).toBeCalledWith(e);
-    });
-
-    it('subscribeOptionChanged should not fail if component instance is not created', () => {
-      const initialProps = {
-      } as DataGridProps;
-      const component = new DataGrid(initialProps);
-
-      component.subscribeOptionChanged();
-
-      expect(component.instance).toBeUndefined();
     });
 
     test.each`
@@ -466,7 +466,7 @@ describe('DataGrid', () => {
       const props = {
       } as DataGridProps;
       const component = new DataGrid(props);
-      component.initInstanceElement();
+      component.setupInstance();
       component.prevProps = {} as any;
       component.instance.option = jest.fn();
       // simulate updateOptions effect call after state changed

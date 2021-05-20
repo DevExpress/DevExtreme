@@ -32,13 +32,13 @@ import {
 export const viewFunction = (viewModel: TopPocket): JSX.Element => {
   const {
     releaseVisibleClass, readyVisibleClass, refreshVisibleClass,
-    pullDownClasses, pullingDownText, pulledDownText, refreshingText,
+    topPocketClasses, pullDownClasses, pullingDownText, pulledDownText, refreshingText,
     pullDownStyles, pullDownIconStyles, pullDownRef, topPocketStyles,
     props: { topPocketRef, refreshStrategy },
   } = viewModel;
 
   return (
-    <div ref={topPocketRef} className={SCROLLVIEW_TOP_POCKET_CLASS} style={topPocketStyles}>
+    <div ref={topPocketRef} className={topPocketClasses} style={topPocketStyles}>
       <div ref={pullDownRef} className={pullDownClasses} style={pullDownStyles}>
         { refreshStrategy !== 'swipeDown' && <div className={SCROLLVIEW_PULLDOWN_IMAGE_CLASS} /> }
         { refreshStrategy === 'swipeDown' && <div className={PULLDOWN_ICON_CLASS} style={pullDownIconStyles} />}
@@ -155,6 +155,15 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
       [SCROLLVIEW_PULLDOWN_READY_CLASS]: pocketState === TopPocketState.STATE_READY,
       [SCROLLVIEW_PULLDOWN_LOADING_CLASS]: pocketState === TopPocketState.STATE_REFRESHING,
       'dx-state-invisible': !visible,
+    };
+
+    return combineClasses(classesMap);
+  }
+
+  get topPocketClasses(): string {
+    const classesMap = {
+      [SCROLLVIEW_TOP_POCKET_CLASS]: true,
+      'dx-state-invisible': !this.props.visible,
     };
 
     return combineClasses(classesMap);

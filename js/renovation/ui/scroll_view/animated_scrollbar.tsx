@@ -40,7 +40,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       forceGeneratePockets, pullDownEnabled, reachBottomEnabled,
       scrollLocation, forceUpdateScrollbarLocation, contentTranslateOffsetChange,
       scrollLocationChange, isScrollableHovered, topPocketSize, bottomPocketSize,
-      onPullDown, onRelease, onReachBottom,
+      onPullDown, onRelease, onReachBottom, onScroll, onEnd,
       pocketState, pocketStateChange,
       rtlEnabled,
     },
@@ -63,6 +63,8 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
       forceUpdateScrollbarLocation={forceUpdateScrollbarLocation}
+      onScroll={onScroll}
+      onEnd={onEnd}
       // Horizontal
       rtlEnabled={rtlEnabled}
       // Vertical
@@ -136,7 +138,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   stepCore(): void {
     if (this.stopped) {
-      this.stop();
       return;
     }
 
@@ -209,10 +210,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       : OUT_BOUNDS_ACCELERATION;
   }
 
-  stop(): void {
-    this.stopComplete();
-  }
-
   suppressInertia(thumbScrolling?: boolean): void {
     if (!this.props.inertiaEnabled || thumbScrolling) {
       this.velocity = 0;
@@ -243,10 +240,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.moveTo(location);
   }
 
-  stopComplete(): void {
-    this.scrollbar.stopComplete();
-  }
-
   scrollComplete(): void {
     this.scrollbar.scrollComplete();
   }
@@ -262,7 +255,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  validateEvent(e): boolean {
+  validateEvent(e: Event): boolean {
     return this.scrollbar.validateEvent(e);
   }
 
@@ -282,7 +275,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  initHandler(e, crossThumbScrolling: boolean): void {
+  initHandler(e: Event, crossThumbScrolling: boolean): void {
     this.scrollbar.initHandler(e, crossThumbScrolling);
   }
 

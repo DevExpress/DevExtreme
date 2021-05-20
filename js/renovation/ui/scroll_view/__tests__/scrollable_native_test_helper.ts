@@ -270,21 +270,6 @@ class ScrollableTestHelper {
     }
   }
 
-  checkScrollbarProps(expectedProps: { [key: string]: any }): void {
-    if (this.isVertical) {
-      this.viewModel.vScrollbarRef.current!.props = {
-        direction: 'vertical',
-        ...expectedProps,
-      };
-    }
-    if (this.isHorizontal) {
-      this.viewModel.hScrollbarRef.current!.props = {
-        direction: 'horizontal',
-        ...expectedProps,
-      };
-    }
-  }
-
   changeScrollbarMethod(method: string, mock): void {
     const { hScrollbarRef, vScrollbarRef } = this.viewModel;
 
@@ -393,7 +378,6 @@ class ScrollableTestHelper {
       onStart: jest.fn(),
       onScroll: jest.fn(),
       onUpdated: jest.fn(),
-      onStop: jest.fn(),
       onEnd: jest.fn(),
       onPullDown: jest.fn(),
       onReachBottom: jest.fn(),
@@ -408,33 +392,6 @@ class ScrollableTestHelper {
     });
 
     return actionHandlers;
-  }
-
-  checkValidDirection(jestExpect: (any) => any,
-    expectedValidDirections: { vertical?: boolean; horizontal?: boolean } | undefined,
-    options: { [key: string]: string | boolean }): void {
-    if (expectedValidDirections) {
-      jestExpect(this.viewModel.validDirections).toEqual(expectedValidDirections);
-    } else {
-      jestExpect(this.viewModel.validDirections).toEqual(this.getValidDirection(options));
-    }
-  }
-
-  getValidDirection(options: { [key: string]: any }): { vertical: boolean; horizontal: boolean } {
-    const {
-      scrollByContent, scrollByThumb, targetClass, isDxWheelEvent,
-    } = options;
-
-    const isDirectionValid = scrollByContent || (scrollByThumb && targetClass !== 'dx-scrollable-container');
-
-    return {
-      vertical: isDxWheelEvent
-        ? true
-        : this.isVertical && isDirectionValid && !(this.isBoth && scrollByThumb && !scrollByContent && targetClass !== 'dx-scrollable-container'),
-      horizontal: isDxWheelEvent
-        ? true
-        : this.isHorizontal && isDirectionValid,
-    };
   }
 }
 

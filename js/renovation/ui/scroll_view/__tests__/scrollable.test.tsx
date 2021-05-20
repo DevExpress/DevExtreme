@@ -37,7 +37,6 @@ describe('Scrollable', () => {
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
-      updateManually: false,
       useNative: true,
     });
   });
@@ -52,6 +51,7 @@ describe('Scrollable', () => {
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
       { name: 'scrollToElement', calledWith: ['arg1'] },
+      { name: 'scrollToElementTopLeft', aliasName: 'scrollToElement', calledWith: ['arg1', { block: 'start', inline: 'start' }] },
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },

@@ -1,4 +1,3 @@
-import $ from '../../core/renderer';
 import { hasWindow } from '../../core/utils/window';
 import registerComponent from '../../core/component_registrator';
 import { noop } from '../../core/utils/common';
@@ -36,51 +35,11 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         }
     },
 
-    _optionChanged: function(args) {
-        switch(args.name) {
-            case 'onPullDown':
-            case 'onReachBottom':
-                this._createActions();
-                break;
-            case 'pullingDownText':
-            case 'pulledDownText':
-            case 'refreshingText':
-            case 'refreshStrategy':
-                this._invalidate();
-                break;
-            case 'reachBottomText':
-                this._updateReachBottomText();
-                break;
-            default:
-                this.callBase(args);
-        }
-    },
-
     release: function(preventReachBottom) {
         if(preventReachBottom !== undefined) {
             this.toggleLoading(!preventReachBottom);
         }
         return this._strategy.release();
-    },
-
-    /**
-    * @name dxScrollView.toggleLoading
-    * @publicName toggleLoading(showOrHide)
-    * @param1 showOrHide:boolean
-    * @hidden
-    */
-    toggleLoading: function(showOrHide) {
-        this._reachBottomEnable(showOrHide);
-    },
-
-    /**
-    * @name dxScrollView.isFull
-    * @publicName isFull()
-    * @return boolean
-    * @hidden
-    */
-    isFull: function() {
-        return $(this.content()).height() > this._$container.height();
     },
 });
 

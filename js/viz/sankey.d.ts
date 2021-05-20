@@ -76,7 +76,10 @@ export type NodeHoverEvent = EventInfo<dxSankey> & {
 /** @public */
 export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 
-
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid
@@ -598,6 +601,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      */
     weightField?: string;
 }
+/** @namespace DevExpress.viz */
 export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeLinkTooltip
@@ -664,6 +668,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
  * @module viz/sankey
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
 export default class dxSankey extends BaseWidget {
@@ -698,6 +703,7 @@ export default class dxSankey extends BaseWidget {
  * @docid
  * @publicName connection
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface dxSankeyConnectionInfoObject {
     /**
@@ -723,6 +729,7 @@ export interface dxSankeyConnectionInfoObject {
 /**
  * @docid
  * @publicName Link
+ * @namespace DevExpress.viz
  */
 export interface dxSankeyLink {
     /**
@@ -766,6 +773,7 @@ export interface dxSankeyLink {
 /**
  * @docid
  * @publicName Node
+ * @namespace DevExpress.viz
  */
 export interface dxSankeyNode {
     /**

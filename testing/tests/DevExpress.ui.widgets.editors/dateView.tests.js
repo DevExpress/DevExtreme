@@ -1,7 +1,6 @@
 import fx from 'animation/fx';
 import translator from 'animation/translator';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -758,10 +757,7 @@ QUnit.module('dateView', {
         assert.equal(newValue.getHours(), date.getHours(), 'hours component is correct');
         assert.equal(newValue.getMinutes(), date.getMinutes(), 'minutes component is correct');
         assert.equal(newValue.getSeconds(), date.getSeconds(), 'seconds component is correct');
-
-        if(!browser.msie) {
-            assert.equal(newValue.getMilliseconds(), date.getMilliseconds(), 'milliseconds component is correct');
-        }
+        assert.equal(newValue.getMilliseconds(), date.getMilliseconds(), 'milliseconds component is correct');
     });
 
     [ 'date', 'datetime' ].forEach((type) => {

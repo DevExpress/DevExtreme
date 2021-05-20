@@ -127,6 +127,32 @@ describe('Button', () => {
       });
     });
 
+    it('should pass template data to the template function', () => {
+      const template = jest.fn(() => <div />);
+
+      mount(viewFunction({
+        props: {
+          template,
+          text: 'button',
+          icon: 'icon',
+          templateData: {
+            templateField1: 'field1',
+            templateField2: 'field2',
+          },
+        },
+      } as any) as any);
+
+      expect(template).toHaveBeenCalledTimes(1);
+      expect(template).toHaveBeenCalledWith({
+        data: {
+          icon: 'icon',
+          templateField1: 'field1',
+          templateField2: 'field2',
+          text: 'button',
+        },
+      }, {});
+    });
+
     it('should render template', () => {
       const template = ({ data: { text } }: {
         data: {
@@ -160,7 +186,6 @@ describe('Button', () => {
         height: 100,
         hint: 'hint',
         hoverStateEnabled: true,
-        onContentReady: () => null,
         rtlEnabled: true,
         tabIndex: -2,
         visible: true,
@@ -192,23 +217,6 @@ describe('Button', () => {
   describe('Behavior', () => {
     describe('Effects', () => {
       afterEach(clearEventHandlers);
-
-      describe('contentReadyEffect', () => {
-        it('should call "onContentReady" callback with the content node\'s parent', () => {
-          const onContentReady = jest.fn();
-          const button = new Button({ onContentReady });
-          const parentNode = {};
-          button.contentRef = { current: { parentNode } } as any;
-          button.contentReadyEffect();
-          expect(onContentReady).toHaveBeenCalledTimes(1);
-          expect(onContentReady).toHaveBeenCalledWith({ element: parentNode });
-        });
-
-        it('should not raise any error if "onContentReady" is not defined', () => {
-          const button = new Button({ onContentReady: undefined });
-          expect(button.contentReadyEffect.bind(button)).not.toThrow();
-        });
-      });
 
       describe('submitEffect', () => {
         it('should be ignored if the "useSubmitBehavior" is false', () => {

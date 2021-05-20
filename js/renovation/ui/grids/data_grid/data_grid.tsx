@@ -11,7 +11,7 @@ import '../../../../ui/data_grid/ui.data_grid';
 import { Widget } from '../../common/widget';
 import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
-import { GridInstance } from './common/types';
+import { GridInstance, DataGridForComponentWrapper } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
 import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
 import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
@@ -22,6 +22,27 @@ import type { OptionChangedEvent } from '../../../../ui/data_grid';
 const aria = { role: 'presentation' };
 
 const rowSelector = '.dx-row';
+
+// TODO without normalization all nested props defaults overwrite by undefined
+// https://trello.com/c/36qTw0cH/2560-a-nested-prop-has-an-undefined-value-if-it-not-used-in-component
+// For example, instance.option('editing') return undefined instead of editing default values
+// Specifically for React
+// result[key] = {
+//   ...props,
+//   columns: __getNestedColumns(),
+//   editing: __getNestedEditing()
+//   ...
+// }
+function normalizeProps(props: Record<string, unknown>): Record<string, unknown> {
+  const result = {};
+
+  Object.keys(props).forEach((key) => {
+    if (props[key] !== undefined) {
+      result[key] = props[key];
+    }
+  });
+  return result;
+}
 
 export const viewFunction = ({
   instance,
@@ -37,7 +58,6 @@ export const viewFunction = ({
     height,
     hint,
     hoverStateEnabled,
-    onContentReady,
     rtlEnabled,
     tabIndex,
     visible,
@@ -57,7 +77,6 @@ export const viewFunction = ({
     height={height}
     hint={hint}
     hoverStateEnabled={hoverStateEnabled}
-    onContentReady={onContentReady}
     rtlEnabled={rtlEnabled}
     tabIndex={tabIndex}
     visible={visible}
@@ -77,7 +96,7 @@ export const viewFunction = ({
   jQuery: { register: true, component: DataGridBaseComponent },
   view: viewFunction,
 })
-export class DataGrid extends JSXComponent(DataGridProps) {
+export class DataGrid extends JSXComponent(DataGridProps) implements DataGridForComponentWrapper {
   @Ref() widgetElementRef?: RefObject<HTMLDivElement>;
 
   @InternalState() instance!: GridInstance;
@@ -478,16 +497,6 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return () => { this.instance.dispose(); };
   }
 
-  @Effect({ run: 'once' })
-  initInstanceElement(): void {
-    this.instance = this.createInstance();
-  }
-
-  @Effect()
-  subscribeOptionChanged(): void {
-    this.instance?.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
-  }
-
   instanceOptionChangedHandler(e: OptionChangedEvent): void {
     try {
       this.isTwoWayPropUpdating = true;
@@ -550,37 +559,21 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     this.instance?.updateDimensions(true);
   }
 
-  // TODO without normalization all nested props defaults overwrite by undefined
-  // https://trello.com/c/36qTw0cH/2560-a-nested-prop-has-an-undefined-value-if-it-not-used-in-component
-  // For example, instance.option('editing') return undefined instead of editing default values
-  // Specifically for React
-  // result[key] = {
-  //   ...props,
-  //   columns: __getNestedColumns(),
-  //   editing: __getNestedEditing()
-  //   ...
-  // }
-  normalizeProps(props: Record<string, unknown>): Record<string, unknown> {
-    const result = {};
-
-    Object.keys(props).forEach((key) => {
-      if (this.props[key] !== undefined) {
-        result[key] = props[key];
-      }
-    });
-    return result;
-  }
-
-  createInstance(): GridInstance {
+  @Effect({ run: 'once' })
+  setupInstance(): void {
     const element = this.widgetElementRef?.current as HTMLElement;
     // TODO Vitik: Not only optionChanged should be rewrited.
     // All other events should be re-raised by renovated grid.
-    const { onOptionChanged, ...restProps } = this.props as unknown as Record<string, unknown>;
+    const { onOptionChanged, ...restProps } = {
+      ...this.props,
+      onContentReady: (this.restAttributes as unknown as Record<string, unknown>).onContentReady,
+    } as unknown as Record<string, unknown>;
     const instance: GridInstance = new DataGridComponent(
       element,
-      this.normalizeProps(restProps),
+      normalizeProps(restProps),
     ) as unknown as GridInstance;
     instance.getController('resizing').updateSize(element);
-    return instance as GridInstance;
+    instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+    this.instance = instance;
   }
 }

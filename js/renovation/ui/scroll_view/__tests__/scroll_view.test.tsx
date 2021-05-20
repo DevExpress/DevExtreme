@@ -16,6 +16,7 @@ import devices from '../../../../core/devices';
 import { touch } from '../../../../core/utils/support';
 import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
+import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
 interface Mock extends jest.Mock {}
 
@@ -53,7 +54,6 @@ describe('ScrollView', () => {
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
-      updateManually: false,
       useNative: true,
     });
   });
@@ -68,6 +68,7 @@ describe('ScrollView', () => {
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
       { name: 'scrollToElement', calledWith: ['arg1'] },
+      { name: 'scrollToElementTopLeft', calledWith: ['arg1'] },
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
@@ -111,16 +112,38 @@ describe('ScrollView', () => {
     describe('Getters', () => {
       describe('cssClasses', () => {
         each([false, true]).describe('useNative: %o', (useNative) => {
-          it('Check strategy branch', () => {
-            const scrollView = mount(viewFunction({ props: { useNative } } as any) as JSX.Element);
+          each(['onScroll', 'onHover', 'always', 'never']).describe('showScrollbar: %o', (showScrollbar) => {
+            it('strategy classes', () => {
+              const viewModel = mount(viewFunction({ props: { useNative, direction: 'vertical', showScrollbar } } as any) as JSX.Element);
 
-            if (useNative) {
-              expect(scrollView.find('.dx-scrollable-native').exists()).toBe(true);
-              expect(scrollView.find('.dx-scrollable-simulated').exists()).toBe(false);
-            } else {
-              expect(scrollView.find('.dx-scrollable-native').exists()).toBe(false);
-              expect(scrollView.find('.dx-scrollable-simulated').exists()).toBe(true);
-            }
+              const rootClasses = viewModel.getDOMNode().className;
+
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollview'));
+              expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
+
+              if (useNative) {
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
+
+                if (showScrollbar === 'never') {
+                  expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+                } else {
+                  expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
+                }
+              } else {
+                expect(rootClasses).toEqual(showScrollbar === 'always'
+                  ? expect.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE)
+                  : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE));
+
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+                expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
+              }
+            });
           });
         });
 
@@ -148,8 +171,7 @@ describe('ScrollView', () => {
             scrollableRef: { get() { return { current: 'scrollableRef' }; } },
           });
 
-          expect(viewModel.scrollable)
-            .toEqual('scrollableRef');
+          expect(viewModel.scrollable).toEqual('scrollableRef');
         });
       });
     });

@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay, Slot,
 } from '@devextreme-generator/declarations';
 import { addHeightToStyle } from '../utils';
-import { VirtualRow } from './virtual-row';
+import { VirtualRow } from './virtual_row';
 
 export const viewFunction = ({
   hasBottomVirtualRow,
@@ -17,6 +17,8 @@ export const viewFunction = ({
     bottomVirtualRowHeight,
     leftVirtualCellWidth,
     rightVirtualCellWidth,
+    leftVirtualCellCount,
+    rightVirtualCellCount,
   },
 }: Table): JSX.Element => (
   <table
@@ -32,6 +34,8 @@ export const viewFunction = ({
           cellsCount={virtualCellsCount}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
+          leftVirtualCellCount={leftVirtualCellCount}
+          rightVirtualCellCount={rightVirtualCellCount}
         />
       )}
       {children}
@@ -41,6 +45,8 @@ export const viewFunction = ({
           cellsCount={virtualCellsCount}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
+          leftVirtualCellCount={leftVirtualCellCount}
+          rightVirtualCellCount={rightVirtualCellCount}
         />
       )}
     </tbody>
@@ -58,6 +64,10 @@ export class TableProps {
   @OneWay() leftVirtualCellWidth = 0;
 
   @OneWay() rightVirtualCellWidth = 0;
+
+  @OneWay() leftVirtualCellCount?: number;
+
+  @OneWay() rightVirtualCellCount?: number;
 
   @OneWay() virtualCellsCount = 0;
 

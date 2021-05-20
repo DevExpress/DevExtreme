@@ -429,13 +429,13 @@ describe('Widget', () => {
           expect(onKeyDown).toHaveBeenCalledTimes(1);
         });
 
-        it('should subscribe without focusable', () => {
+        it('should not subscribe if focusStateEnabled is "false"', () => {
           const widget = new Widget({ focusStateEnabled: false, onKeyDown });
           widget.widgetRef = {} as any;
           widget.keyboardEffect();
 
           emitKeyboard(KEY.enter);
-          expect(onKeyDown).toHaveBeenCalledTimes(1);
+          expect(onKeyDown).toHaveBeenCalledTimes(0);
         });
 
         it('should return nothing if widget does not have event and is not focusable', () => {
@@ -668,51 +668,63 @@ describe('Widget', () => {
       });
 
       describe('cssClasses', () => {
+        it('should not add any classes', () => {
+          const widget = new Widget({ visible: true });
+
+          expect(widget.cssClasses).toEqual('');
+        });
+
+        it('should add widget class', () => {
+          const widget = new Widget({ addWidgetClass: true, visible: true });
+
+          expect(widget.cssClasses).toEqual('dx-widget');
+        });
+
         it('should add invisible class', () => {
           const widget = new Widget({ visible: false });
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-invisible');
+          expect(widget.cssClasses).toEqual('dx-state-invisible');
         });
 
         it('should add className property', () => {
           const widget = new Widget({ className: 'custom-class', visible: true });
 
-          expect(widget.cssClasses).toEqual('dx-widget custom-class');
+          expect(widget.cssClasses).toEqual('custom-class');
         });
 
         it('should add class from classes property', () => {
           const widget = new Widget({ classes: 'custom-classes', visible: true });
 
-          expect(widget.cssClasses).toEqual('dx-widget custom-classes');
+          expect(widget.cssClasses).toEqual('custom-classes');
         });
 
         it('should add disabled class', () => {
           const widget = new Widget({ disabled: true, visible: true });
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-disabled');
+          expect(widget.cssClasses).toEqual('dx-state-disabled');
         });
 
         it('should add focused class', () => {
           const widget = new Widget({ visible: true, focusStateEnabled: true, disabled: false });
 
-          expect(widget.cssClasses).toEqual('dx-widget');
+          expect(widget.cssClasses).toEqual('');
 
           widget.focused = true;
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-focused');
+          expect(widget.cssClasses).toEqual('dx-state-focused');
         });
 
         it('should add active class', () => {
           const widget = new Widget({ visible: true, activeStateEnabled: true });
           widget.active = true;
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-active');
+          expect(widget.cssClasses).toEqual('dx-state-active');
         });
 
         it('should not add active class if widget is disabled', () => {
           const widget = new Widget({ visible: true, activeStateEnabled: true, disabled: true });
           widget.active = true;
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-disabled');
+          expect(widget.cssClasses).toEqual('dx-state-disabled');
         });
 
         it('should add hovered class', () => {
@@ -720,21 +732,21 @@ describe('Widget', () => {
 
           widget.active = false;
           widget.hovered = true;
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-hover');
+          expect(widget.cssClasses).toEqual('dx-state-hover');
         });
 
         it('should add RTL class', () => {
           (resolveRtlEnabled as jest.Mock).mockReturnValue(true);
           const widget = new Widget({ visible: true });
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-rtl');
+          expect(widget.cssClasses).toEqual('dx-rtl');
           (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
         });
 
         it('should add visibility handler class', () => {
           const widget = new Widget({ visible: true, onVisibilityChange: () => undefined });
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-visibility-change-handler');
+          expect(widget.cssClasses).toEqual('dx-visibility-change-handler');
         });
       });
 
@@ -787,7 +799,7 @@ describe('Widget', () => {
       const defaultProps = new WidgetProps();
 
       expect(defaultProps).toEqual({
-        accessKey: undefined,
+        addWidgetClass: true,
         activeStateEnabled: false,
         disabled: false,
         focusStateEnabled: false,

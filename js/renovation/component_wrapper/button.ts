@@ -1,17 +1,43 @@
 /* eslint-disable */
 import ValidationEngine from '../../ui/validation_engine';
-import Component from './component';
+import Component from './common/component';
+import type { Button } from '../ui/button';
 
-export default class Button extends Component {
+export default class ButtonWrapper extends Component {
   _init() {
     super._init();
+    this.defaultKeyHandlers = {
+        enter: (e, opts) => (this.viewRef as Button).onWidgetKeyDown(opts),
+        space: (e, opts) => (this.viewRef as Button).onWidgetKeyDown(opts),
+    }
     this._addAction('onSubmit', this._getSubmitAction());
+  }
+
+  _initMarkup() {
+    super._initMarkup();
+
+    const $content = (this.$element() as any).find('.dx-button-content');
+    const $template = $content.children().filter('.dx-template-wrapper')
+
+    if ($template.length) {
+      $template.addClass('dx-button-content');
+      $content.replaceWith($template);
+    }
   }
 
   getProps() {
     const props = super.getProps();
     props.validationGroup = this._validationGroupConfig;
     return props;
+  }
+
+  getDefaultTemplateNames() {
+    return ['content'];
+  }
+
+  _patchOptionValues(options) {
+    options.templateData = options._templateData;
+    return super._patchOptionValues(options);
   }
 
   _getSubmitAction() {

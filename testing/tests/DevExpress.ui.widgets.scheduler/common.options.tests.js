@@ -100,12 +100,12 @@ QUnit.module('Options', {
         }
     });
 
-    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentModel', function(assert) {
+    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentDataProvider', function(assert) {
         const scheduler = createWrapper();
         const repaintStub = sinon.stub(scheduler.instance, 'repaint');
 
         try {
-            const appointmentModel = scheduler.instance.getAppointmentModel();
+            const appointmentDataProvider = scheduler.instance.getAppointmentDataProvider();
 
             scheduler.instance.option({
                 'startDateExpr': '_startDate',
@@ -121,9 +121,9 @@ QUnit.module('Options', {
 
             const dataAccessors = scheduler.instance._dataAccessors;
 
-            assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentModel._dataAccessors.getter, 'dataAccessors getters were passed to appointmentModel');
-            assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentModel._dataAccessors.setter, 'dataAccessors setters were passed to appointmentModel');
-            assert.deepEqual(dataAccessors.expr, appointmentModel._dataAccessors.expr, 'dataExpressions were passed to appointmentModel');
+            assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentDataProvider.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataProvider');
+            assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentDataProvider.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataProvider');
+            assert.deepEqual(dataAccessors.expr, appointmentDataProvider.dataAccessors.expr, 'dataExpressions were passed to appointmentDataProvider');
         } finally {
             repaintStub.restore();
         }
@@ -1108,5 +1108,30 @@ QUnit.module('Options', {
 
         assert.ok(initMarkupSpy.calledTwice, 'Init markup was called on the second and third option change');
         assert.ok(reloadDataSourceSpy.calledOnce, '_reloadDataSource was not called on init mark up');
+    });
+
+    QUnit.test('It should be possible to change views option when view names are specified (T995794)', function(assert) {
+        const baseViews = [{
+            type: 'day',
+            name: 'Custom Day',
+        }, {
+            type: 'week',
+            name: 'Custom Week',
+        }];
+        const timelineViews = [{
+            type: 'timelineDay',
+            name: 'Custom Timeline Day',
+        }, {
+            type: 'timelineWeek',
+            name: 'Custom Timeline Week',
+        }];
+        const scheduler = createWrapper({
+            views: baseViews,
+            currentView: 'Custom Week',
+        });
+
+        scheduler.instance.option('views', timelineViews);
+
+        assert.equal(scheduler.workSpace.getCells().length, 48, 'Everything is correct');
     });
 });
