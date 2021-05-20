@@ -191,8 +191,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxAccordion extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxAccordionOptions)
+export default class dxAccordion extends CollectionWidget<dxAccordionOptions> {
     /**
      * @docid
      * @publicName collapseItem(index)

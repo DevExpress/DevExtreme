@@ -28,7 +28,7 @@ import {
 } from './list';
 
 import {
-    dxPopupOptions
+    Properties as PopupProperties
 } from './popup';
 
 import Widget, {
@@ -107,8 +107,9 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxPopupOptions
      */
-    dropDownOptions?: dxPopupOptions;
+    dropDownOptions?: PopupProperties;
     /**
      * @docid
      * @default true
@@ -287,8 +288,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDropDownButton extends Widget {
-    constructor(element: UserDefinedElement, options?: dxDropDownButtonOptions)
+export default class dxDropDownButton extends Widget<dxDropDownButtonOptions> {
     /**
      * @docid
      * @publicName close()

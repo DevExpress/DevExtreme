@@ -22,7 +22,7 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
   }
 };
 
-export default class ComponentWrapper extends DOMComponent {
+export default class ComponentWrapper extends DOMComponent<Record<string, any>> {
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
     [name: string]: AbstractFunction;

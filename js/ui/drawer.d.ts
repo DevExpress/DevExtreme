@@ -138,8 +138,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDrawer extends Widget {
-    constructor(element: UserDefinedElement, options?: dxDrawerOptions)
+export default class dxDrawer extends Widget<dxDrawerOptions> {
     /**
      * @docid
      * @publicName content()

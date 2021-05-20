@@ -1011,8 +1011,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxGantt extends Widget {
-    constructor(element: UserDefinedElement, options?: dxGanttOptions)
+export default class dxGantt extends Widget<dxGanttOptions> {
     /**
      * @docid
      * @publicName getTaskData(key)

@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DataSource from '../data/data_source';
 
 import {
@@ -95,8 +91,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxRadioGroup extends Editor {
-    constructor(element: UserDefinedElement, options?: dxRadioGroupOptions)
+export default class dxRadioGroup extends Editor<dxRadioGroupOptions> {
     getDataSource(): DataSource;
 }
 

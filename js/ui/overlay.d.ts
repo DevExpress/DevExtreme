@@ -26,7 +26,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @namespace DevExpress.ui */
-export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
+export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid
      * @default { show: { type: "pop", duration: 300, from: { scale: 0.55 } }, hide: { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
@@ -128,7 +128,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: EventInfo<T>) => void);
+    onHidden?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -141,7 +141,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: Cancelable & EventInfo<T>) => void);
+    onHiding?: ((e: Cancelable & EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -153,7 +153,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: EventInfo<T>) => void);
+    onShowing?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -165,7 +165,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: EventInfo<T>) => void);
+    onShown?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }
@@ -238,8 +238,7 @@ export interface dxOverlayAnimation {
  * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  */
-export default class dxOverlay extends Widget {
-    constructor(element: UserDefinedElement, options?: dxOverlayOptions)
+export default class dxOverlay<TProperties> extends Widget<TProperties> {
     /**
      * @docid
      * @publicName content()
@@ -295,5 +294,7 @@ export default class dxOverlay extends Widget {
  */
 export function baseZIndex(zIndex: number): void;
 
-export type Options = dxOverlayOptions;
-export type IOptions = dxOverlayOptions;
+type Properties = dxOverlayOptions<dxOverlay<Properties>>;
+
+export type Options = Properties;
+export type IOptions = Properties;

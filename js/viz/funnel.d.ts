@@ -695,8 +695,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
  * @namespace DevExpress.viz
  * @public
  */
-export default class dxFunnel extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: dxFunnelOptions)
+export default class dxFunnel extends BaseWidget<dxFunnelOptions> {
     /**
      * @docid
      * @publicName clearSelection()

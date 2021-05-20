@@ -2,10 +2,6 @@ import {
     animationConfig
 } from '../../animation/fx';
 
-import {
-    UserDefinedElement
-} from '../../core/element';
-
 import DataSource, {
     DataSourceOptions
 } from '../../data/data_source';
@@ -19,7 +15,7 @@ import {
 } from '../menu';
 
 /** @namespace DevExpress.ui */
-export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectionWidgetOptions<T> {
+export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWidgetOptions<TComponent> {
     /**
      * @docid
      * @default true
@@ -126,8 +122,7 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
  * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  */
-export default class dxMenuBase extends HierarchicalCollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxMenuBaseOptions)
+export default class dxMenuBase<TProperties> extends HierarchicalCollectionWidget<TProperties> {
     /**
      * @docid
      * @publicName selectItem(itemElement)

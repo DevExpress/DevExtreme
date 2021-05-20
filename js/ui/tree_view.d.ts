@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -110,7 +109,7 @@ export type SelectionChangedEvent = EventInfo<dxTreeView>;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
+export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true
@@ -404,8 +403,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTreeView extends HierarchicalCollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxTreeViewOptions)
+export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewOptions> {
     /**
      * @docid
      * @publicName collapseAll()

@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -1240,8 +1239,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDiagram extends Widget {
-    constructor(element: UserDefinedElement, options?: dxDiagramOptions)
+export default class dxDiagram extends Widget<dxDiagramOptions> {
     /**
      * @docid
      * @publicName getNodeDataSource()

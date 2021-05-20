@@ -355,8 +355,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxSortable extends DOMComponent implements DraggableBase {
-    constructor(element: UserDefinedElement, options?: dxSortableOptions)
+export default class dxSortable extends DOMComponent<dxSortableOptions> implements DraggableBase {
     /**
      * @docid
      * @publicName update()

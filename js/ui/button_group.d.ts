@@ -155,9 +155,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxButtonGroup extends Widget {
-    constructor(element: UserDefinedElement, options?: dxButtonGroupOptions)
-}
+export default class dxButtonGroup extends Widget<dxButtonGroupOptions> { }
 
 /**
  * @docid

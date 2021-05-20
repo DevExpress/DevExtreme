@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -166,9 +162,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxResponsiveBox extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxResponsiveBoxOptions)
-}
+export default class dxResponsiveBox extends CollectionWidget<dxResponsiveBoxOptions> { }
 
 /**
  * @docid
