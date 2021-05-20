@@ -6,6 +6,7 @@ import config from 'core/config';
 import browser from 'core/utils/browser';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
+import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 
 import 'generic_light.css!';
 
@@ -708,7 +709,7 @@ class ScrollableTestHelper {
         const maxHorizontalOffset = containerElement.scrollWidth - containerElement.clientWidth;
 
         return {
-            vertical: this._useNative ? maxVerticalOffset : maxVerticalOffset,
+            vertical: maxVerticalOffset,
             horizontal: maxHorizontalOffset
         };
     }
@@ -732,8 +733,22 @@ class ScrollableTestHelper {
 
     checkScrollOffset({ left, top, maxScrollOffset, epsilon = 0.001 }, message) {
         const scrollOffset = getScrollOffset(this.$scrollable);
+
+        const { decreasing, positive } = getScrollRtlBehavior();
+
         QUnit.assert.roughEqual(this.getMaxScrollOffset().horizontal, maxScrollOffset, epsilon, 'horizontal maxScrollOffset');
-        QUnit.assert.roughEqual(-scrollOffset.left, left, epsilon, 'scrollOffset.left');
+
+        let expectedScrollOffsetLeft = left;
+
+        if(this._useNative && this._rtlEnabled && (decreasing ^ positive)) {
+            expectedScrollOffsetLeft = left - this.getMaxScrollOffset().horizontal;
+
+            if(positive) {
+                expectedScrollOffsetLeft = Math.abs(expectedScrollOffsetLeft);
+            }
+        }
+
+        QUnit.assert.roughEqual(-scrollOffset.left, expectedScrollOffsetLeft, epsilon, 'scrollOffset.left');
         QUnit.assert.roughEqual(-scrollOffset.top, top, epsilon, 'scrollOffset.top');
         QUnit.assert.roughEqual(this.scrollable.scrollLeft(), left, epsilon, message || 'scrollable.scrollLeft()');
         QUnit.assert.roughEqual(this.scrollable.scrollTop(), top, epsilon, 'scrollable.scrollTop()');
@@ -742,7 +757,9 @@ class ScrollableTestHelper {
     setContainerWidth(width) {
         this.$scrollable.css('width', width);
 
-        resizeCallbacks.fire();
+        if(!this._useNative) {
+            resizeCallbacks.fire();
+        }
     }
 }
 
@@ -974,10 +991,10 @@ class ScrollableTestHelper {
             helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
 
             helper.$scrollable.find('.content1').css('width', '200px');
-            helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 }); // left should be -150 (T848870)
+            helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
 
             helper.scrollable.update();
-            helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 });
+            helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
         });
     });
 
@@ -1106,7 +1123,7 @@ class ScrollableTestHelper {
 
         QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, rtlEnabled: true, scroll save the max right position when width of window was changed`, function(assert) {
             const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative, rtlEnabled: true });
-            assert.strictEqual(helper.scrollable.scrollLeft(), helper.scrollable.$content().width() - helper.$scrollable.width(), 'scrolled to max right position');
+            assert.strictEqual(helper.scrollable.scrollLeft(), 50, 'scrolled to max right position');
             helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 });
 
             helper.scrollable.scrollTo({ left: 25 });

@@ -193,7 +193,7 @@
   .dx-scrollable-container {
     direction: ltr;
 
-    @at-root #{selector-append(".dx-scrollable-renovated.dx-scrollable-native", &)} {
+    @at-root #{selector-append(".dx-scrollable-native", &)} {
       direction: rtl;
       float: right;
     }

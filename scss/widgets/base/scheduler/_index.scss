@@ -1656,6 +1656,10 @@ $scheduler-appointment-form-label-padding: 20px;
 
     .dx-scheduler-scrollable-appointments {
       top: 0;
+
+      &.dx-rtl {
+        left: 0;
+      }
     }
   }
 
@@ -1868,6 +1872,10 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-scrollable-appointments {
     position: absolute;
     top: 0;
+
+    &.dx-rtl {
+      left: 0;
+    }
   }
 
   .dx-scheduler-timeline .dx-scheduler-appointment,
