@@ -1470,7 +1470,6 @@
           {
             "Title": "Using Header Filter",
             "Name": "UsingHeaderFilter",
-            "DocUrl": "Guide/UI_Components/TreeList/Filtering_and_Searching/#Header_Filter",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",
