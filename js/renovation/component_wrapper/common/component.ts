@@ -171,7 +171,7 @@ export default class ComponentWrapper extends DOMComponent {
       parentNode.$V = containerNode.$V;
       render(null, parentNode);
       parentNode.appendChild(containerNode);
-      containerNode.replaceChildren();
+      containerNode.innerHTML = '';
 
       delete parentNode.$V;
     }
