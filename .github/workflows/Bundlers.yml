@@ -22,14 +22,14 @@ jobs:
     - name: Build
       run: npm run build
     
-    - name:  change the current working directory   
-      run: cd ./testing/test_bundlers    
-
     - name: Run npm insatall in test directory
+      working-directory: ./testing/test_bundlers  
       run: npm install
 
-    - name: Build test bundle by rollup
-      run: npm run build-rollup
-
     - name: Build test bundle by webpack
+      working-directory: ./testing/test_bundlers
       run: npm run build-webpack
+
+    - name: Build test bundle by rollup
+      working-directory: ./testing/test_bundlers
+      run: npm run build-rollup
