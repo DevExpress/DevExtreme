@@ -1208,10 +1208,10 @@ module('Integration: Appointment Day, Week views', {
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 
         assert.equal(appointments[0].position.top, 0, 'Correct top coordinate');
-        assert.roughEqual(appointments[0].position.left, 324, 1.1, 'Correct left coordinate');
+        assert.roughEqual(appointments[0].position.left, 324, 2, 'Correct left coordinate');
 
         assert.equal(appointments[1].position.top, 0, 'Correct top coordinate');
-        assert.roughEqual(appointments[1].position.left, 548, 1.1, 'Correct left coordinate');
+        assert.roughEqual(appointments[1].position.left, 548, 2, 'Correct left coordinate');
     });
 
     test('Appointments should be rendered correctly when groupByDate is true in Week view', function(assert) {
@@ -1255,9 +1255,9 @@ module('Integration: Appointment Day, Week views', {
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 
         assert.equal(appointments[0].position.top, 100, 'Correct top coordinate');
-        assert.roughEqual(appointments[0].position.left, 420, 1.1, 'Correct left coordinate');
+        assert.roughEqual(appointments[0].position.left, 420, 2, 'Correct left coordinate');
 
         assert.equal(appointments[1].position.top, 200, 'Correct top coordinate');
-        assert.roughEqual(appointments[1].position.left, 740, 1.1, 'Correct left coordinate');
+        assert.roughEqual(appointments[1].position.left, 740, 2, 'Correct left coordinate');
     });
 });
