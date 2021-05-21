@@ -243,9 +243,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTagBox extends dxSelectBox {
-    constructor(element: UserDefinedElement, options?: dxTagBoxOptions)
-}
+export default class dxTagBox extends dxSelectBox<dxTagBoxOptions> { }
 
 /** @public */
 export type Properties = dxTagBoxOptions;

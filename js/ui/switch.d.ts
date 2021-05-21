@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -94,9 +90,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxSwitch extends Editor {
-    constructor(element: UserDefinedElement, options?: dxSwitchOptions)
-}
+export default class dxSwitch extends Editor<dxSwitchOptions> { }
 
 /** @public */
 export type Properties = dxSwitchOptions;

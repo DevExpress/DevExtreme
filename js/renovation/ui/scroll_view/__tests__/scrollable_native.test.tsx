@@ -66,7 +66,6 @@ describe('Native > View', () => {
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
-      updateManually: false,
       useNative: true,
     });
   });
@@ -514,149 +513,118 @@ describe('Native > Effects', () => {
       expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(0);
     });
 
-  describe('updateHandler', () => {
-    it('updateHandler', () => {
-      const viewModel = new Scrollable({});
+  each([undefined, jest.fn()]).describe('handler: %o', (actionHandler) => {
+    it('Update() should call onUpdated action', () => {
+      const viewModel = new Scrollable({
+        onUpdated: actionHandler,
+      });
 
       viewModel.updateSizes = jest.fn();
-      viewModel.onUpdated = jest.fn();
-
-      viewModel.updateHandler();
-
-      expect(viewModel.updateSizes).toBeCalledTimes(1);
-      expect(viewModel.onUpdated).toBeCalledTimes(1);
-    });
-  });
-
-  describe('update()', () => {
-    test.each([true, false])('update(), updateManually: %o', (updateManually) => {
-      const viewModel = new Scrollable({ updateManually });
-
-      viewModel.updateSizes = jest.fn();
-      viewModel.onUpdated = jest.fn();
+      (viewModel as any).getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 3 } }));
 
       viewModel.update();
 
-      if (!updateManually) {
-        expect(viewModel.updateSizes).toBeCalledTimes(1);
-        expect(viewModel.onUpdated).toBeCalledTimes(1);
-      } else {
-        expect(viewModel.updateSizes).toBeCalledTimes(0);
-        expect(viewModel.onUpdated).toBeCalledTimes(0);
+      if (actionHandler) {
+        expect(actionHandler).toHaveBeenCalledTimes(1);
+        expect(actionHandler).toHaveBeenLastCalledWith({ fakeEventArg: { value: 3 } });
       }
+      expect(viewModel.updateSizes).toBeCalledTimes(1);
+    });
+
+    it('onReachBottom()', () => {
+      const viewModel = new Scrollable({
+        onReachBottom: actionHandler,
+      });
+
+      viewModel.onReachBottom();
+
+      if (actionHandler) {
+        expect(actionHandler).toHaveBeenCalledTimes(1);
+        expect(actionHandler).toHaveBeenLastCalledWith({});
+      }
+    });
+
+    test.each([true, false])('refresh(), loadingIndicatorEnabled: %o', (loadingIndicatorEnabled) => {
+      const helper = new ScrollableTestHelper({
+        onPullDown: actionHandler,
+      });
+
+      helper.viewModel.loadingIndicatorEnabled = loadingIndicatorEnabled;
+
+      helper.viewModel.refresh();
+
+      if (actionHandler) {
+        expect(actionHandler).toHaveBeenCalledTimes(1);
+        expect(actionHandler).toHaveBeenCalledWith({});
+      }
+
+      expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_READY);
+      expect(helper.viewModel.loadingIndicatorEnabled).toEqual(loadingIndicatorEnabled);
+      expect(helper.viewModel.isLoadPanelVisible).toEqual(loadingIndicatorEnabled);
+      expect(helper.viewModel.locked).toEqual(true);
+    });
+
+    test.each(getPermutations([
+      optionValues.pocketState,
+      optionValues.nativeRefreshStrategy,
+    ]))('refresh(), pocketState: %o, refreshStrategy: %o', (pocketState, refreshStrategy) => {
+      jest.clearAllTimers();
+      jest.useFakeTimers();
+
+      const viewModel = new Scrollable({});
+
+      viewModel.releaseTimer = 10;
+      viewModel.topPocketState = pocketState;
+      Object.defineProperties(viewModel, {
+        refreshStrategy: { get() { return refreshStrategy; } },
+      });
+      viewModel.contentTranslateTop = 50;
+      viewModel.pullDownOpacity = 0.5;
+      viewModel.loadingIndicatorEnabled = false;
+
+      viewModel.release();
+
+      let expectedTopPocketState = pocketState;
+      const expectedTimeout = refreshStrategy === 'swipeDown' ? 800 : 400;
+      let expectedContentTranslateTop = 50;
+      let expectedPullDownOpacity = 0.5;
+
+      if (refreshStrategy === 'pullDown') {
+        if (pocketState === TopPocketState.STATE_LOADING) {
+          expectedTopPocketState = TopPocketState.STATE_RELEASED;
+        }
+      }
+
+      expect(viewModel.releaseTimer).not.toBe(undefined);
+      expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
+      expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
+
+      expect(setTimeout).toHaveBeenCalledTimes(1);
+      expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), expectedTimeout);
+
+      jest.runOnlyPendingTimers();
+
+      if (refreshStrategy === 'pullDown') {
+        expectedContentTranslateTop = 0;
+      }
+
+      if (expectedTopPocketState !== TopPocketState.STATE_RELEASED) {
+        expectedTopPocketState = TopPocketState.STATE_RELEASED;
+        expectedPullDownOpacity = 0;
+      }
+
+      expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
+      expect(viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
+      expect(viewModel.loadingIndicatorEnabled).toEqual(true);
+      expect(viewModel.isLoadPanelVisible).toEqual(false);
+      expect(viewModel.locked).toEqual(false);
+
+      viewModel.disposeReleaseTimer()();
+      expect(viewModel.releaseTimer).toBe(undefined);
     });
   });
 
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
-    each([undefined, jest.fn()]).describe('handler: %o', (actionHandler) => {
-      it('onUpdated()', () => {
-        const viewModel = new Scrollable({
-          onUpdated: actionHandler,
-        });
-
-        (viewModel as any).getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 3 } }));
-
-        viewModel.onUpdated();
-
-        if (actionHandler) {
-          expect(actionHandler).toHaveBeenCalledTimes(1);
-          expect(actionHandler).toHaveBeenLastCalledWith({ fakeEventArg: { value: 3 } });
-        }
-      });
-
-      it('onReachBottom()', () => {
-        const viewModel = new Scrollable({
-          onReachBottom: actionHandler,
-        });
-
-        viewModel.onReachBottom();
-
-        if (actionHandler) {
-          expect(actionHandler).toHaveBeenCalledTimes(1);
-          expect(actionHandler).toHaveBeenLastCalledWith({});
-        }
-      });
-
-      test.each([true, false])('refresh(), loadingIndicatorEnabled: %o', (loadingIndicatorEnabled) => {
-        const helper = new ScrollableTestHelper({
-          onPullDown: actionHandler,
-        });
-
-        helper.viewModel.loadingIndicatorEnabled = loadingIndicatorEnabled;
-
-        helper.viewModel.refresh();
-
-        if (actionHandler) {
-          expect(actionHandler).toHaveBeenCalledTimes(1);
-          expect(actionHandler).toHaveBeenCalledWith({});
-        }
-
-        expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_READY);
-        expect(helper.viewModel.loadingIndicatorEnabled).toEqual(loadingIndicatorEnabled);
-        expect(helper.viewModel.isLoadPanelVisible).toEqual(loadingIndicatorEnabled);
-        expect(helper.viewModel.locked).toEqual(true);
-      });
-
-      test.each(getPermutations([
-        optionValues.pocketState,
-        optionValues.nativeRefreshStrategy,
-      ]))('refresh(), pocketState: %o, refreshStrategy: %o', (pocketState, refreshStrategy) => {
-        jest.clearAllTimers();
-        jest.useFakeTimers();
-
-        const viewModel = new Scrollable({});
-
-        viewModel.releaseTimer = 10;
-        viewModel.topPocketState = pocketState;
-        Object.defineProperties(viewModel, {
-          refreshStrategy: { get() { return refreshStrategy; } },
-        });
-        viewModel.contentTranslateTop = 50;
-        viewModel.pullDownOpacity = 0.5;
-        viewModel.loadingIndicatorEnabled = false;
-
-        viewModel.release();
-
-        let expectedTopPocketState = pocketState;
-        const expectedTimeout = refreshStrategy === 'swipeDown' ? 800 : 400;
-        let expectedContentTranslateTop = 50;
-        let expectedPullDownOpacity = 0.5;
-
-        if (refreshStrategy === 'pullDown') {
-          if (pocketState === TopPocketState.STATE_LOADING) {
-            expectedTopPocketState = TopPocketState.STATE_RELEASED;
-          }
-        }
-
-        expect(viewModel.releaseTimer).not.toBe(undefined);
-        expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
-        expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
-
-        expect(setTimeout).toHaveBeenCalledTimes(1);
-        expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), expectedTimeout);
-
-        jest.runOnlyPendingTimers();
-
-        if (refreshStrategy === 'pullDown') {
-          expectedContentTranslateTop = 0;
-        }
-
-        if (expectedTopPocketState !== TopPocketState.STATE_RELEASED) {
-          expectedTopPocketState = TopPocketState.STATE_RELEASED;
-          expectedPullDownOpacity = 0;
-        }
-
-        expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
-        expect(viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
-        expect(viewModel.loadingIndicatorEnabled).toEqual(true);
-        expect(viewModel.isLoadPanelVisible).toEqual(false);
-        expect(viewModel.locked).toEqual(false);
-
-        viewModel.disposeReleaseTimer()();
-        expect(viewModel.releaseTimer).toBe(undefined);
-      });
-    });
-
     it('effectResetInactiveState()', () => {
       const containerRef = {
         current: {
@@ -1098,7 +1066,6 @@ describe('Methods', () => {
 
           const actualValidateResult = scrollable.validate(e);
 
-          expect(scrollable.update).toHaveBeenCalledTimes(1);
           expect(scrollable.isScrollingOutOfBound).toHaveBeenCalledTimes(1);
           expect(actualValidateResult).toEqual(expectedValidateResult);
         });
@@ -1123,10 +1090,7 @@ describe('Methods', () => {
             expectedValidateResult = !!allowedDirection;
           }
 
-          const actualValidateResult = scrollable.validate(e);
-
-          expect(scrollable.update).toHaveBeenCalledTimes(1);
-          expect(actualValidateResult).toEqual(expectedValidateResult);
+          expect(scrollable.validate(e)).toEqual(expectedValidateResult);
         });
       });
     });

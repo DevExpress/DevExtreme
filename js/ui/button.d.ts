@@ -148,9 +148,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxButton extends Widget {
-    constructor(element: UserDefinedElement, options?: dxButtonOptions)
-}
+export default class dxButton extends Widget<dxButtonOptions> { }
 
 /** @public */
 export type Properties = dxButtonOptions;

@@ -1007,8 +1007,7 @@ export interface Selection extends SelectionBase {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxTreeList extends Widget implements GridBase {
-    constructor(element: UserDefinedElement, options?: dxTreeListOptions)
+export default class dxTreeList extends Widget<dxTreeListOptions> implements GridBase {
     /**
      * @docid
      * @publicName addColumn(columnOptions)

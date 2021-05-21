@@ -668,7 +668,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     if(!this.isRenovatedRender()) {
                         this._toggleAllDayVisibility(true);
                     } else {
-                        this.renderRWorkspace();
+                        this.renderWorkSpace();
                     }
                 }
                 break;
@@ -732,7 +732,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._cleanView();
         this._toggleGroupedClass();
         this._toggleWorkSpaceWithOddCells();
+
+        this.virtualScrollingDispatcher?.updateDimensions(true);
         this._renderView();
+        this.option('crossScrollingEnabled') && this._setTableSizes();
+        this.cache.clear();
     }
 
     _init() {
@@ -1217,15 +1221,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             );
         }
 
-        if(this.isRenovatedRender()) {
-            this.renderRWorkspace();
-        } else {
-            this._renderDateHeader();
-            this._renderTimePanel();
-            this._renderGroupAllDayPanel();
-            this._renderDateTable();
-            this._renderAllDayPanel();
-        }
+        this.renderWorkSpace();
 
         this._updateGroupTableHeight();
 
@@ -1243,7 +1239,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isShowAllDayPanel() && this._isVerticalGroupedWorkSpace();
     }
 
-    generateRenderOptions() {
+    generateRenderOptions(isProvideVirtualCellsWidth) {
         const groupCount = this._getGroupCount();
         const verticalGroupCount = !this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
         const horizontalGroupCount = this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
@@ -1279,6 +1275,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupsList: this._getAllGroups(),
             isHorizontalGrouping: this._isHorizontalGroupedWorkSpace(),
             isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
+            isProvideVirtualCellsWidth,
         };
 
         if(this.isVirtualScrolling()) {
@@ -1291,21 +1288,28 @@ class SchedulerWorkSpace extends WidgetObserver {
         return options;
     }
 
-    renovatedRenderSupported() { return false; }
+    renovatedRenderSupported() { return true; }
 
-    renderRWorkspace(isGenerateNewViewData = true) {
+    renderWorkSpace(isGenerateNewViewData = true) {
         this._cleanAllowedPositions();
-
         this.viewDataProvider.update(isGenerateNewViewData);
 
-        this.renderRHeaderPanel();
-        this.renderRTimeTable();
-        this.renderRDateTable();
-        this.renderRAllDayPanel();
+        if(this.isRenovatedRender()) {
+            this.renderRHeaderPanel();
+            this.renderRTimeTable();
+            this.renderRDateTable();
+            this.renderRAllDayPanel();
 
-        this.updateRSelection();
+            this.updateRSelection();
 
-        this.virtualScrollingDispatcher?.updateDimensions();
+            this.virtualScrollingDispatcher?.updateDimensions();
+        } else {
+            this._renderDateHeader();
+            this._renderTimePanel();
+            this._renderGroupAllDayPanel();
+            this._renderDateTable();
+            this._renderAllDayPanel();
+        }
     }
 
     renderRDateTable() {
@@ -2325,6 +2329,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _cleanView() {
         this.cache.clear();
+        this._cleanTableWidths();
         this._cleanAllowedPositions();
         this.virtualSelectionState?.releaseSelectedAndFocusedCells();
         if(!this.isRenovatedRender()) {
@@ -2348,6 +2353,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._disposeRenovatedComponents();
 
         super._clean();
+    }
+
+    _cleanTableWidths() {
+        this._$headerPanel.css('width', '');
+        this._$dateTable.css('width', '');
+        this._$allDayTable && this._$allDayTable.css('width', '');
     }
 
     _disposeRenovatedComponents() {
@@ -2821,12 +2832,12 @@ class SchedulerWorkSpace extends WidgetObserver {
             position = this.calculateCellPositionByView(date, groupIndex, inAllDayRow);
         }
 
-        const shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow);
-        const horizontalHMax = this._getHorizontalMax(groupIndex, date);
-
         if(!position) {
             throw errors.Error('E1039');
         }
+
+        const shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow);
+        const horizontalHMax = this._getHorizontalMax(groupIndex, date);
 
         return {
             cellPosition: position.left + shift.cellPosition,
@@ -3069,7 +3080,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(!this._maxAllowedPosition[groupIndex]) {
-            const { cellIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            const { cellIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
             getMaxPosition(cellIndex);
         }
 
@@ -3119,7 +3130,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(!this._maxAllowedVerticalPosition[groupIndex]) {
-            const { rowIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            const { rowIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
             getMaxPosition(rowIndex);
         }
 
@@ -3358,6 +3369,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getGroupWidth(groupIndex) {
         let result = this._getCellCount() * this.getCellWidth();
+        // TODO: refactor after deleting old render
+        if(this.isVirtualScrolling()) {
+            const groupedData = this.viewDataProvider.groupedDataMap.dateTableGroupedMap;
+            const groupLength = groupedData[groupIndex][0].length;
+
+            result = groupLength * this.getCellWidth();
+        }
+
         const position = this.getMaxAllowedPosition(groupIndex);
         const currentPosition = position[groupIndex];
 

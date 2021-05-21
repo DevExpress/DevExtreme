@@ -32,7 +32,7 @@ export interface TooltipInfo {
 }
 
 /** @namespace DevExpress.viz */
-export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
+export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
      * @type object
@@ -67,7 +67,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<T> & TooltipInfo) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
     /**
      * @docid
      * @default null
@@ -81,7 +81,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<T> & TooltipInfo) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
     /**
      * @docid
      * @type object
@@ -449,8 +449,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  * @namespace DevExpress.viz
  */
-export class BaseGauge extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: BaseGaugeOptions)
+export class BaseGauge<TProperties> extends BaseWidget<TProperties> {
     /**
      * @docid
      * @publicName subvalues()

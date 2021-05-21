@@ -498,8 +498,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxFileUploader extends Editor {
-    constructor(element: UserDefinedElement, options?: dxFileUploaderOptions)
+export default class dxFileUploader extends Editor<dxFileUploaderOptions> {
     /**
      * @docid
      * @publicName upload()

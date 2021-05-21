@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     DxEvent,
     EventInfo,
     InitializedEventInfo,
@@ -219,8 +215,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxPivotGridFieldChooser extends Widget {
-    constructor(element: UserDefinedElement, options?: dxPivotGridFieldChooserOptions)
+export default class dxPivotGridFieldChooser extends Widget<dxPivotGridFieldChooserOptions> {
     /**
      * @docid
      * @publicName applyChanges()

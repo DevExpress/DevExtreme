@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
@@ -129,8 +125,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxValidator extends DOMComponent {
-    constructor(element: UserDefinedElement, options?: dxValidatorOptions)
+export default class dxValidator extends DOMComponent<dxValidatorOptions> {
     /**
      * @docid
      * @publicName focus()

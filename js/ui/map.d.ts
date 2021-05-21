@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     DxPromise
 } from '../core/utils/deferred';
 
@@ -387,8 +383,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxMap extends Widget {
-    constructor(element: UserDefinedElement, options?: dxMapOptions)
+export default class dxMap extends Widget<dxMapOptions> {
     /**
      * @docid
      * @publicName addMarker(markerOptions)

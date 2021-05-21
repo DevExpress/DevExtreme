@@ -1,10 +1,15 @@
 /* eslint-disable */
 import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
+import type { Button } from '../ui/button';
 
-export default class Button extends Component {
+export default class ButtonWrapper extends Component {
   _init() {
     super._init();
+    this.defaultKeyHandlers = {
+        enter: (e, opts) => (this.viewRef as Button).onWidgetKeyDown(opts),
+        space: (e, opts) => (this.viewRef as Button).onWidgetKeyDown(opts),
+    }
     this._addAction('onSubmit', this._getSubmitAction());
   }
 

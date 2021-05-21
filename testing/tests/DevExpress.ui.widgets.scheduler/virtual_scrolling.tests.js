@@ -54,7 +54,7 @@ module('Virtual Scrolling', {
                 _insertAllDayRowsIntoDateTable: noop,
                 _allDayPanels: undefined,
                 isGroupedAllDayPanel: noop,
-                renderRWorkspace: noop,
+                renderWorkSpace: noop,
                 renderRAppointments: noop,
                 _createAction: () => { return () => 'action'; },
                 $element: () => {
@@ -77,6 +77,7 @@ module('Virtual Scrolling', {
                     return false;
                 },
                 updateAppointments: () => {},
+                getCellMinWidth: () => 1,
             }, workspaceSettings);
 
             this.scrollableMock = {
@@ -609,7 +610,7 @@ module('Virtual Scrolling', {
                     outlineSizeAfter: 0,
                     outlineSizeBefore: 0,
                     prevPosition: 400,
-                    startIndex: 0,
+                    startIndex: 196,
                     virtualItemCountAfter: 196,
                     virtualItemCountBefore: 0,
                     virtualItemSizeAfter: 0,
