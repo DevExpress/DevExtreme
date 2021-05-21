@@ -217,6 +217,10 @@ const clickByItemCheckbox = (wrapper, item) => wrapper.getElement()
     .find(`[aria-label="${item}"] .dx-checkbox`)
     .eq(0).trigger('dxclick');
 
+const clickBySelectAllCheckbox = (wrapper) => wrapper.getElement()
+    .find('.dx-treeview-select-all-item')
+    .eq(0).trigger('dxclick');
+
 ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
     ['multiple', 'single'].forEach((selectionMode) => {
         [false, true].forEach((selectNodesRecursive) => {
@@ -340,6 +344,24 @@ QUnit.module('T988756', () => {
         clickByItemCheckbox(wrapper, 'item1');
         assert.ok('no error is thrown');
         assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
+    });
+});
+
+QUnit.module('T996410', () => {
+    QUnit.test('showCheckBoxesMode=selectAll -> click by item -> click by selectAll', function() {
+        const wrapper = new TreeViewTestWrapper({
+            showCheckBoxesMode: 'selectAll',
+            items: [ { id: 0, text: 'item', selected: false } ],
+        });
+
+        clickByItemCheckbox(wrapper, 'item');
+        wrapper.checkSelection([0], [0], 'item is selected');
+
+        clickBySelectAllCheckbox(wrapper);
+        wrapper.checkSelection([], [], 'item is not selected after first click on selectAll');
+
+        clickBySelectAllCheckbox(wrapper);
+        wrapper.checkSelection([0], [0], 'item is selected after second click on selectAll');
     });
 });
 
