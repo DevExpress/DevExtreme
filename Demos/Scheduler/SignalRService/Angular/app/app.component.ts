@@ -60,7 +60,7 @@ connection
 export class AppComponent {
     store1: any;
     store2: any;
-    currentDate: Date = new Date(2021, 4, 25);
+    currentDate: Date = new Date(2021, 3, 27);
 
     constructor() {
         this.store1 = store1;

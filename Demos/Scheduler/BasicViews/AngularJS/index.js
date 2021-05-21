@@ -7,7 +7,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         views: ["day", "week", "workWeek", "month"],
         currentView: "day",
         startDayHour: 9,
-        currentDate: new Date(2021, 4, 27),
+        currentDate: new Date(2021, 3, 29),
         height: 600
     };
 });

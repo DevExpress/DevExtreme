@@ -31,7 +31,7 @@ $(function(){
             },
             "month"],
         currentView: "workWeek",
-        currentDate: new Date(2021, 4, 25),
+        currentDate: new Date(2021, 3, 27),
         startDayHour: 7,
         endDayHour: 23,
         resources: [{

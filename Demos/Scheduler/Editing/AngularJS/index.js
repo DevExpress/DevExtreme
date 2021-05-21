@@ -19,7 +19,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         dataSource: data,
         views: ["day", "week"],
         currentView: "week",
-        currentDate: new Date(2021, 4, 27),
+        currentDate: new Date(2021, 3, 29),
         startDayHour: 9,
         endDayHour: 19,
         bindingOptions: {

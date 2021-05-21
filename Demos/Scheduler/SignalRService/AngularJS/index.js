@@ -56,7 +56,7 @@ var createOptions = function(store) {
         remoteFiltering: true,
         views: ["day", "workWeek"],
         currentView: "day",
-        currentDate: new Date(2021, 4, 25),
+        currentDate: new Date(2021, 3, 27),
         startDayHour: 9,
         endDayHour: 19,
         height: 600,

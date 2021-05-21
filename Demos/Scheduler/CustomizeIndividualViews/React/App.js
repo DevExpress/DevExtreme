@@ -3,7 +3,7 @@ import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
 
 import { data, priorityData, typeData } from './data.js';
 
-const currentDate = new Date(2021, 4, 25);
+const currentDate = new Date(2021, 3, 27);
 const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const typeGroups = ['typeId'];
 const priorityGroups = ['priorityId'];

@@ -3,7 +3,7 @@ $(function () {
         dataSource: data,
         views: ["workWeek", "month"],
         currentView: "workWeek",
-        currentDate: new Date(2021, 4, 25),
+        currentDate: new Date(2021, 3, 27),
         firstDayOfWeek: 0,
         startDayHour: 9,
         endDayHour: 19,
@@ -75,8 +75,8 @@ $(function () {
 
 var dinnerTime = { from: 12, to: 13 };
 var holidays = [
-    new Date(2021, 4, 27),
-    new Date(2021, 6, 4)
+    new Date(2021, 3, 29),
+    new Date(2021, 5, 6)
 ];
 
 function notifyDisableDate() {

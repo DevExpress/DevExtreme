@@ -53,7 +53,7 @@ export default {
     return {
       views: ['workWeek', 'month'],
       currentView: 'workWeek',
-      currentDate: new Date(2021, 4, 25),
+      currentDate: new Date(2021, 3, 27),
       dataSource: data
     };
   },

@@ -19,7 +19,7 @@ export class AppComponent {
     draggingGroupName: string = "appointmentsGroup";
     tasks: Task[];
     appointments: Appointment[];
-    currentDate: Date = new Date(2021, 4, 24);
+    currentDate: Date = new Date(2021, 3, 26);
 
     constructor(service: Service) {
         this.tasks = service.getTasks();

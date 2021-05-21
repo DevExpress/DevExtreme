@@ -92,7 +92,7 @@ export default {
   data() {
     return {
       views: ['day', 'workWeek'],
-      currentDate: new Date(2021, 4, 25),
+      currentDate: new Date(2021, 3, 27),
       store1: store1,
       store2: store2
     };

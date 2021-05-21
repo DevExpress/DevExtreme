@@ -24,7 +24,7 @@ function createStore() {
 
 const store1 = createStore();
 const store2 = createStore();
-const currentDate = new Date(2021, 4, 25);
+const currentDate = new Date(2021, 3, 27);
 const views = ['day', 'workWeek'];
 
 var connection = new HubConnectionBuilder()

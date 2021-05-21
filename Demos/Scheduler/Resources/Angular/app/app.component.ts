@@ -21,7 +21,7 @@ export class AppComponent {
     rooms: Room[];
     priorities: Priority[];
     resourcesList: string[] = ["Owner", "Room", "Priority"];
-    currentDate: Date = new Date(2021, 4, 25);
+    currentDate: Date = new Date(2021, 3, 27);
     selectedResource: string = this.resourcesList[0];
 
     constructor(service: Service) {

@@ -15,7 +15,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     appointmentsData: any;
-    currentDate: Date = new Date(2021, 4, 25);
+    currentDate: Date = new Date(2021, 3, 27);
 
     constructor() {
         var url = "https://js.devexpress.com/Demos/Mvc/api/SchedulerData";

@@ -42,7 +42,7 @@ $(function () {
             type: "day",
             intervalCount: 3
         }],
-        currentDate: new Date(2021, 4, 24),
+        currentDate: new Date(2021, 3, 26),
         startDayHour: 9,
         height: 600,
         editing: true,

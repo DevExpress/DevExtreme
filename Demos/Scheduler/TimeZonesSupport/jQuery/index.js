@@ -1,5 +1,5 @@
 $(function () {
-    const currentDate = new Date(2021, 4, 25);
+    const currentDate = new Date(2021, 3, 27);
 
     const getLocations = function(date) {
         const timeZones = DevExpress.utils.getTimeZones(date);

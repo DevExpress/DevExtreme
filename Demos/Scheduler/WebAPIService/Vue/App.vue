@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       views: ['day', 'workWeek', 'month'],
-      currentDate: new Date(2021, 4, 25),
+      currentDate: new Date(2021, 3, 27),
       dataSource: AspNetData.createStore({
         key: 'AppointmentId',
         loadUrl: `${url }/Get`,

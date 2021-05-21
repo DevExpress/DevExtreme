@@ -59,7 +59,7 @@ export default {
     return {
       draggingGroupName: 'appointmentsGroup',
       views: [{ type: 'day', intervalCount: 3 }],
-      currentDate: new Date(2021, 4, 24),
+      currentDate: new Date(2021, 3, 26),
       tasks: tasks,
       appointments: appointments
     };

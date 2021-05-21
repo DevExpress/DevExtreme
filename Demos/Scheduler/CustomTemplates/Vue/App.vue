@@ -75,7 +75,7 @@ export default {
       views: ['day', 'week', 'timelineDay'],
       groups: ['theatreId'],
       scheduler: null,
-      currentDate: new Date(2021, 4, 25),
+      currentDate: new Date(2021, 3, 27),
       dataSource: data,
       moviesData: moviesData,
       theatreData: theatreData,
