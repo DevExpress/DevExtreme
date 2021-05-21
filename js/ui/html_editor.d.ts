@@ -495,7 +495,7 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid
      * @type Enums.HtmlEditorToolbarItem|string
-     * @deprecated
+     * @deprecated dxHtmlEditorToolbarItem.name
      */
     formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
     /**
@@ -505,7 +505,7 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     acceptedValues?: Array<string | number | boolean>;
     /**
      * @docid
-     * @deprecated
+     * @deprecated dxHtmlEditorToolbarItem.acceptedValues
      */
     formatValues?: Array<string | number | boolean>;
     /**
