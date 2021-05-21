@@ -83,7 +83,7 @@ export default CollectionWidget.inherit({
         return this._isItemEquals(item1, item2);
     },
 
-    _shouldChangeGroupStructure: function(changes, items) {
+    _shouldAddNewGroup: function(changes, items) {
         let result = false;
         if(this.option('grouped')) {
             each(changes, (i, change) => {
@@ -92,9 +92,9 @@ export default CollectionWidget.inherit({
                     each(items, (_, item) => {
                         if(change.data.key === item.key) {
                             result = false;
+                            return false;
                         }
                     });
-
                 }
             });
         }
@@ -111,7 +111,7 @@ export default CollectionWidget.inherit({
                 return this.keyOf(data);
             };
             const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemStrictEquals.bind(this));
-            if(result && this._itemsCache.length && !this._shouldChangeGroupStructure(result)) {
+            if(result && this._itemsCache.length && !this._shouldAddNewGroup(result, this._itemsCache)) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
                 return true;

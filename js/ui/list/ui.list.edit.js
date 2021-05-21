@@ -9,10 +9,6 @@ import { ListBase } from './ui.list.base';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';
 
-const LIST_GROUP_CLASS = 'dx-list-group';
-
-const LIST_GROUP_BODY_CLASS = 'dx-list-group-body';
-
 const ListEdit = ListBase.inherit({
     _supportedKeys() {
         const that = this;
@@ -244,12 +240,10 @@ const ListEdit = ListBase.inherit({
     _getItemContainer: function(changeData) {
         if(this.option('grouped')) {
             const groupIndex = this._editStrategy.getIndexByItemData(changeData)?.group;
-            return this._itemContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex).find('.' + LIST_GROUP_BODY_CLASS);
-
+            return this._getGroupContainerByIndex(groupIndex);
         } else {
             return this.callBase();
         }
-
     },
 
     _itemContextMenuHandler(e) {

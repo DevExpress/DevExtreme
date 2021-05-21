@@ -6,6 +6,7 @@ import ArrayStore from 'data/array_store';
 import 'ui/list';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_GROUP_CLASS = 'dx-list-group';
 
 QUnit.module('live update', {
     beforeEach: function() {
@@ -85,7 +86,7 @@ QUnit.module('live update', {
     });
 
 
-    QUnit.test('insert item should work correct if grouping and repaintChangesOnly', function(assert) {
+    QUnit.test('insert item should work correct if grouping and repaintChangesOnly (T993317)', function(assert) {
         const listInstance = this.createGroupedList();
 
         const store = listInstance.getDataSource().store();
@@ -97,16 +98,19 @@ QUnit.module('live update', {
         assert.strictEqual(listItems.length, 3, 'new item is added');
     });
 
-    QUnit.test('insert item should work correct if grouping and repaintChangesOnly (new group)', function(assert) {
+    QUnit.test('insert item should work correct if grouping and repaintChangesOnly (new group) (T993317)', function(assert) {
         const listInstance = this.createGroupedList();
 
         const store = listInstance.getDataSource().store();
         store.push([{ type: 'insert', data: { key: 'Item New', id: '2' } }]);
 
-        const listItems = $(listInstance.element()).find(`.${LIST_ITEM_CLASS}`);
+        const $list = $(listInstance.element());
+        const listGroups = $list.find(`.${LIST_GROUP_CLASS}`);
+        const listItems = $list.find(`.${LIST_ITEM_CLASS}`);
 
         assert.strictEqual(this.itemRenderedSpy.callCount, 3, 'all items is rerendered');
         assert.strictEqual(listItems.length, 3, 'new item is added');
+        assert.strictEqual(listGroups.length, 3, 'new group is added');
     });
 
     QUnit.test('insert item to specific position', function(assert) {
