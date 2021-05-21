@@ -574,7 +574,6 @@ module('CellTemplate tests', moduleConfig, () => {
                 const displayedCells = [];
 
                 createWrapper({
-                    dataSource: [],
                     views: [
                         {
                             type: view,
@@ -607,64 +606,33 @@ module('CellTemplate tests', moduleConfig, () => {
         [
             {
                 view: 'day',
-                groupOrientation: 'horizontal',
                 expectedCells: createHorizontalGroupedCells(dayCells),
             }, {
-                view: 'day',
-                groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(dayCells),
-            }, {
                 view: 'week',
-                groupOrientation: 'horizontal',
                 expectedCells: createHorizontalGroupedCells(weekCells),
             }, {
-                view: 'week',
-                groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(weekCells),
-            }, {
                 view: 'month',
-                groupOrientation: 'horizontal',
                 expectedCells: createHorizontalGroupedCells(monthCells),
             }, {
-                view: 'month',
-                groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(monthCells),
-            }, {
                 view: 'timelineDay',
-                groupOrientation: 'horizontal',
                 expectedCells: createHorizontalGroupedCells(dayCells),
             }, {
-                view: 'timelineDay',
-                groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(dayCells),
-            }, {
                 view: 'timelineWeek',
-                groupOrientation: 'horizontal',
                 expectedCells: createHorizontalGroupedCells(timelineWeekCells),
             }, {
-                view: 'timelineWeek',
-                groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(timelineWeekCells),
-            }, {
                 view: 'timelineMonth',
-                groupOrientation: 'horizontal',
                 expectedCells: createHorizontalGroupedCells(timelineMonthCells),
-            }, {
-                view: 'timelineMonth',
-                groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(timelineMonthCells),
             }
-        ].forEach(({ view, groupOrientation, expectedCells }) => {
+        ].forEach(({ view, expectedCells }) => {
             test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
-                    + ` with ${groupOrientation} groupping by date`, function(assert) {
+                    + ' with groupping by date', function(assert) {
                 const displayedCells = [];
 
                 createWrapper({
-                    dataSource: [],
                     views: [
                         {
                             type: view,
-                            groupOrientation,
+                            groupOrientation: 'horizontal',
                             groupByDate: true,
                         }
                     ],
