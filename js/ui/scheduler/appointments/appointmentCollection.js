@@ -509,9 +509,12 @@ class SchedulerAppointments extends CollectionWidget {
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
         if(settings.virtual) {
-            const deferredColor = this.invoke('getAppointmentColor', {
+            const { resourceManager } = getInstanceFactory();
+            const deferredColor = resourceManager.getAppointmentColor({
                 itemData: rawAppointment,
                 groupIndex: settings.groupIndex,
+                groups: this.option('groups'),
+                workspaceGroups: this.invoke('getWorkspaceOption', 'groups')
             });
             this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
         } else {

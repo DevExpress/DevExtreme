@@ -2128,7 +2128,7 @@ class Scheduler extends Widget {
         const groups = this._getCurrentViewOption('groups');
 
         if(groups?.length) {
-            const { resourceManager } = getInstanceFactory();
+            const { resourceManager, workspaceHelper } = getInstanceFactory();
             const resourcesSetter = resourceManager._dataAccessors.setter;
             const workSpace = this._workSpace;
             let getGroups;
@@ -2138,7 +2138,7 @@ class Scheduler extends Widget {
                 getGroups = function() {
                     const apptSettings = this.getLayoutManager()._positionMap[appointmentIndex];
 
-                    return resourceManager.getCellGroups(
+                    return workspaceHelper.getCellGroups(
                         apptSettings[0].groupIndex,
                         this.option('groups')
                     );
@@ -2196,10 +2196,13 @@ class Scheduler extends Widget {
     showAppointmentTooltip(appointment, element, targetedAppointment) {
         if(appointment) {
             const settings = utils.dataAccessors.getAppointmentSettings(element);
+            const { resourceManager } = getInstanceFactory();
 
-            const deferredColor = this.fire('getAppointmentColor', {
+            const deferredColor = resourceManager.getAppointmentColor({
                 itemData: targetedAppointment || appointment,
                 groupIndex: settings?.groupIndex,
+                groups: this.option('groups'),
+                workspaceGroups: this.getWorkSpace().option('groups')
             });
 
             const info = new AppointmentTooltipInfo(appointment, targetedAppointment, deferredColor);

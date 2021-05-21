@@ -1842,7 +1842,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
             groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
-            const groupsArray = getInstanceFactory().resourceManager.getCellGroups(
+            const groupsArray = getInstanceFactory().workspaceHelper.getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -1916,7 +1916,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: cellGroupIndex,
         };
 
-        const groupsArray = getInstanceFactory().resourceManager.getCellGroups(
+        const groupsArray = getInstanceFactory().workspaceHelper.getCellGroups(
             groupIndex,
             this.option('groups')
         );
@@ -1972,7 +1972,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const groupIndex = this._getGroupIndex(rowIndex, 0);
 
-            const groupsArray = getInstanceFactory().resourceManager.getCellGroups(
+            const groupsArray = getInstanceFactory().workspaceHelper.getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -2086,7 +2086,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex,
         };
 
-        const groupsArray = getInstanceFactory().resourceManager.getCellGroups(
+        const groupsArray = getInstanceFactory().workspaceHelper.getCellGroups(
             groupIndex,
             this.option('groups')
         );
@@ -2129,10 +2129,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getAllGroups() {
         const groupCount = this._getGroupCount();
-        const { resourceManager } = getInstanceFactory();
+        const { workspaceHelper } = getInstanceFactory();
 
         return [...(new Array(groupCount))].map((_, groupIndex) => {
-            const groupsArray = resourceManager.getCellGroups(
+            const groupsArray = workspaceHelper.getCellGroups(
                 groupIndex,
                 this.option('groups')
             );

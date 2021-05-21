@@ -10,6 +10,7 @@ import { when, Deferred } from '../../../core/utils/deferred';
 
 import { AgendaResourceProcessor } from './agendaResourceProcessor';
 import { getDisplayExpr, getFieldExpr, getValueExpr, getWrappedDataSource } from './utils';
+import { getInstanceFactory } from '../instanceFactory';
 
 export class ResourceManager {
     constructor(resources) {
@@ -445,45 +446,25 @@ export class ResourceManager {
         return result;
     }
 
-    getCellGroups(groupIndex, groups) {
-        const result = [];
-
-        if(this._getGroupCount()) {
-            if(groupIndex < 0) {
-                return;
-            }
-
-            const path = this._getPathToLeaf(groupIndex, groups);
-
-            for(let i = 0; i < groups.length; i++) {
-                result.push({
-                    name: groups[i].name,
-                    id: path[i]
-                });
-            }
-
-        }
-
-        return result;
-    }
-
-    getAppointmentColor(options, groups) {
+    getAppointmentColor(options) {
+        const { groups, workspaceGroups } = options;
         const resourceForPainting = this.getResourceForPainting(groups);
         let response = new Deferred().resolve().promise();
+        const { workspaceHelper } = getInstanceFactory();
 
         if(resourceForPainting) {
             const field = getFieldExpr(resourceForPainting);
             const groupIndex = options.groupIndex;
-            const groups = this.getCellGroups(groupIndex, groups);
+            const cellGroups = workspaceHelper.getCellGroups(groupIndex, workspaceGroups);
             const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(options.itemData));
 
             let groupId = resourceValues.length
                 ? resourceValues[0]
                 : undefined;
 
-            for(let i = 0; i < groups.length; i++) {
-                if(groups[i].name === field) {
-                    groupId = groups[i].id;
+            for(let i = 0; i < cellGroups.length; i++) {
+                if(cellGroups[i].name === field) {
+                    groupId = cellGroups[i].id;
                     break;
                 }
             }
@@ -637,5 +618,10 @@ export class ResourceManager {
         }, true);
 
         return result;
+    }
+
+    createReducedResourcesTree(resources) {
+        const tree = this.createResourcesTree(resources);
+        return this.reduceResourcesTree(tree, this.getFilteredItems());
     }
 }

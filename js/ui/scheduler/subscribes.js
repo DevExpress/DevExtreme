@@ -33,6 +33,10 @@ const subscribes = {
         return this.option(name);
     },
 
+    getWorkspaceOption: function(name) {
+        return this.getWorkSpace().option(name);
+    },
+
     isVirtualScrolling: function() {
         return this.isVirtualScrolling();
     },
