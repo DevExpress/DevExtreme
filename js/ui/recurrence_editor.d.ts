@@ -12,7 +12,6 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
      * @docid
      * @default null
      * @fires dxRecurrenceEditorOptions.onValueChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
@@ -23,7 +22,6 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
  * @inherits Editor
  * @module ui/recurrence_editor
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */

@@ -61,21 +61,18 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     /**
      * @docid
      * @default "Cancel"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelText?: string;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxActionSheetItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid
      * @fires dxActionSheetOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxActionSheetItem | any>;
@@ -88,34 +85,29 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onCancelClick?: ((e: CancelClickEvent) => void) | string;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showCancelButton?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showTitle?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     target?: string | UserDefinedElement;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     title?: string;
@@ -123,7 +115,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @docid
      * @default false
      * @default true [for](iPad)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     usePopover?: boolean;
@@ -131,7 +122,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @docid
      * @default false
      * @fires dxActionSheetOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
@@ -141,7 +131,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @inherits CollectionWidget
  * @module ui/action_sheet
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
@@ -151,7 +140,6 @@ export default class dxActionSheet extends CollectionWidget {
      * @docid
      * @publicName hide()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hide(): DxPromise<void>;
@@ -159,7 +147,6 @@ export default class dxActionSheet extends CollectionWidget {
      * @docid
      * @publicName show()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     show(): DxPromise<void>;
@@ -168,7 +155,6 @@ export default class dxActionSheet extends CollectionWidget {
      * @publicName toggle(showing)
      * @param1 showing:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     toggle(showing: boolean): DxPromise<void>;
@@ -183,7 +169,6 @@ export default class dxActionSheet extends CollectionWidget {
 export interface dxActionSheetItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
@@ -195,7 +180,6 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onClick?: ((e: { component?: dxActionSheet, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
@@ -203,7 +187,6 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @docid
      * @type Enums.ButtonType
      * @default 'normal'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';

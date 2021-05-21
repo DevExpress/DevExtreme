@@ -27,7 +27,6 @@ export interface CustomDialogOptions {
  * @module ui/dialog
  * @namespace DevExpress.ui.dialog
  * @export alert
- * @prevFileNamespace DevExpress.ui
  * @public
  */
 export function alert(messageHtml: string, title: string): DxPromise<void>;
@@ -42,7 +41,6 @@ export function alert(messageHtml: string, title: string): DxPromise<void>;
  * @module ui/dialog
  * @namespace DevExpress.ui.dialog
  * @export confirm
- * @prevFileNamespace DevExpress.ui
  * @public
  */
 export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
@@ -62,7 +60,6 @@ export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
  * @module ui/dialog
  * @namespace DevExpress.ui.dialog
  * @export custom
- * @prevFileNamespace DevExpress.ui
  * @public
  */
 export function custom(options: CustomDialogOptions): any;

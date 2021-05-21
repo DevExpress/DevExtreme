@@ -137,14 +137,12 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowDropInsideItem?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowReordering?: boolean;
@@ -157,7 +155,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
@@ -165,14 +162,12 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @type Enums.DropFeedbackMode
      * @default "push"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dropFeedbackMode?: 'push' | 'indicate';
     /**
      * @docid
      * @default "> *"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     filter?: string;
@@ -180,14 +175,12 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @docid
      * @type Enums.Orientation
      * @default "vertical"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemOrientation?: 'horizontal' | 'vertical';
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     moveItemOnDrop?: boolean;
@@ -209,7 +202,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field12 toData:any
      * @type_function_param1_field13 dropInsideItem:boolean
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onAdd?: ((e: AddEvent) => void);
@@ -232,7 +224,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field13 toData:any
      * @type_function_param1_field14 dropInsideItem:boolean
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onDragChange?: ((e: DragChangeEvent) => void);
@@ -255,7 +246,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field13 toData:any
      * @type_function_param1_field14 dropInsideItem:boolean
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onDragEnd?: ((e: DragEndEvent) => void);
@@ -278,7 +268,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field13 toData:any
      * @type_function_param1_field14 dropInsideItem:boolean
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onDragMove?: ((e: DragMoveEvent) => void);
@@ -296,7 +285,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field8 fromIndex:number
      * @type_function_param1_field9 fromData:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onDragStart?: ((e: DragStartEvent) => void);
@@ -317,7 +305,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field11 fromData:any
      * @type_function_param1_field12 toData:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onRemove?: ((e: RemoveEvent) => void);
@@ -340,7 +327,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field13 dropInsideItem:boolean
      * @type_function_param1_field14 promise:Promise<void>
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onReorder?: ((e: ReorderEvent) => void);
@@ -351,7 +337,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
  * @hasTranscludedContent
  * @module ui/sortable
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
@@ -360,7 +345,6 @@ export default class dxSortable extends DOMComponent implements DraggableBase {
     /**
      * @docid
      * @publicName update()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     update(): void;
