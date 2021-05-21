@@ -1,6 +1,6 @@
 import { getBoundingRect } from '../../../core/utils/position';
 import { cache } from './cache';
-import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../constants';
+import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 
 const VERTICAL_GROUPED_ATTR = 'dx-group-column-count';
 

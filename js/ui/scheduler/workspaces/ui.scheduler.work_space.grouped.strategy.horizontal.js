@@ -1,6 +1,6 @@
 
 import { getBoundingRect } from '../../../core/utils/position';
-import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../constants';
+import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 
 const HORIZONTAL_GROUPED_ATTR = 'dx-group-row-count';
 

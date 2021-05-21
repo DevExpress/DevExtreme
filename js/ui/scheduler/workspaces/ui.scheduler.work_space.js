@@ -29,8 +29,8 @@ import tableCreatorModule from '../table_creator';
 const { tableCreator } = tableCreatorModule;
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import {
-    APPOINTMENT_SETTINGS_KEY,
     FIXED_CONTAINER_CLASS,
     VIRTUAL_CELL_CLASS,
     TIME_PANEL_CLASS,
@@ -38,7 +38,7 @@ import {
     DATE_TABLE_ROW_CLASS,
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
-} from '../constants';
+} from '../classes';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';

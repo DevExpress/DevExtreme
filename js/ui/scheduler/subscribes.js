@@ -10,7 +10,7 @@ import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
-import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
+import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import utils from './utils';
 import { getFieldExpr as getResourceFieldExpr } from './resources/utils';
 

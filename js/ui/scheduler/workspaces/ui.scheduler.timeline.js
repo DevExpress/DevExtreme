@@ -13,7 +13,7 @@ import {
     DATE_TABLE_ROW_CLASS,
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
-} from '../constants';
+} from '../classes';
 
 import timeZoneUtils from '../utils.timeZone';
 
