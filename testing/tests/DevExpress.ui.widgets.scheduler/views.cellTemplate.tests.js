@@ -522,56 +522,56 @@ module('CellTemplate tests', moduleConfig, () => {
             {
                 view: 'day',
                 groupOrientation: 'horizontal',
-                expectedCells: createHorizontalGroupedCells(dayCells),
+                expectedDates: createHorizontalGroupedCells(dayCells),
             }, {
                 view: 'day',
                 groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(dayCells),
+                expectedDates: createVerticalGroupedCells(dayCells),
             }, {
                 view: 'week',
                 groupOrientation: 'horizontal',
-                expectedCells: createHorizontalGroupedCells(weekCells, 7),
+                expectedDates: createHorizontalGroupedCells(weekCells, 7),
             }, {
                 view: 'week',
                 groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(weekCells),
+                expectedDates: createVerticalGroupedCells(weekCells),
             }, {
                 view: 'month',
                 groupOrientation: 'horizontal',
-                expectedCells: createHorizontalGroupedCells(monthCells, 7),
+                expectedDates: createHorizontalGroupedCells(monthCells, 7),
             }, {
                 view: 'month',
                 groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(monthCells),
+                expectedDates: createVerticalGroupedCells(monthCells),
             }, {
                 view: 'timelineDay',
                 groupOrientation: 'horizontal',
-                expectedCells: createVerticalGroupedCells(dayCells),
+                expectedDates: createVerticalGroupedCells(dayCells),
             }, {
                 view: 'timelineDay',
                 groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(dayCells),
+                expectedDates: createVerticalGroupedCells(dayCells),
             }, {
                 view: 'timelineWeek',
                 groupOrientation: 'horizontal',
-                expectedCells: createVerticalGroupedCells(timelineWeekCells),
+                expectedDates: createVerticalGroupedCells(timelineWeekCells),
             }, {
                 view: 'timelineWeek',
                 groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(timelineWeekCells),
+                expectedDates: createVerticalGroupedCells(timelineWeekCells),
             }, {
                 view: 'timelineMonth',
                 groupOrientation: 'horizontal',
-                expectedCells: createVerticalGroupedCells(timelineMonthCells),
+                expectedDates: createVerticalGroupedCells(timelineMonthCells),
             }, {
                 view: 'timelineMonth',
                 groupOrientation: 'vertical',
-                expectedCells: createVerticalGroupedCells(timelineMonthCells),
+                expectedDates: createVerticalGroupedCells(timelineMonthCells),
             }
-        ].forEach(({ view, groupOrientation, expectedCells }) => {
+        ].forEach(({ view, groupOrientation, expectedDates }) => {
             test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
                     + ` with ${groupOrientation} groupping`, function(assert) {
-                const displayedCells = [];
+                const actualDates = [];
 
                 createWrapper({
                     views: [
@@ -589,7 +589,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     currentDate: new Date(2021, 7, 1),
                     renovateRender: true,
                     dataCellTemplate: (data) => {
-                        displayedCells.push(
+                        actualDates.push(
                             {
                                 startDate: data.startDate,
                                 endDate: data.endDate,
@@ -599,34 +599,34 @@ module('CellTemplate tests', moduleConfig, () => {
                     groups: ['ownerId'],
                     resources
                 });
-                assert.deepEqual(displayedCells, expectedCells, 'cells options should be correct');
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
             });
         });
 
         [
             {
                 view: 'day',
-                expectedCells: createHorizontalGroupedCells(dayCells),
+                expectedDates: createHorizontalGroupedCells(dayCells),
             }, {
                 view: 'week',
-                expectedCells: createHorizontalGroupedCells(weekCells),
+                expectedDates: createHorizontalGroupedCells(weekCells),
             }, {
                 view: 'month',
-                expectedCells: createHorizontalGroupedCells(monthCells),
+                expectedDates: createHorizontalGroupedCells(monthCells),
             }, {
                 view: 'timelineDay',
-                expectedCells: createHorizontalGroupedCells(dayCells),
+                expectedDates: createHorizontalGroupedCells(dayCells),
             }, {
                 view: 'timelineWeek',
-                expectedCells: createHorizontalGroupedCells(timelineWeekCells),
+                expectedDates: createHorizontalGroupedCells(timelineWeekCells),
             }, {
                 view: 'timelineMonth',
-                expectedCells: createHorizontalGroupedCells(timelineMonthCells),
+                expectedDates: createHorizontalGroupedCells(timelineMonthCells),
             }
-        ].forEach(({ view, expectedCells }) => {
+        ].forEach(({ view, expectedDates }) => {
             test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
                     + ' with groupping by date', function(assert) {
-                const displayedCells = [];
+                const actualDates = [];
 
                 createWrapper({
                     views: [
@@ -645,7 +645,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     currentDate: new Date(2021, 7, 1),
                     renovateRender: true,
                     dataCellTemplate: (data) => {
-                        displayedCells.push(
+                        actualDates.push(
                             {
                                 startDate: data.startDate,
                                 endDate: data.endDate,
@@ -655,7 +655,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     groups: ['ownerId'],
                     resources
                 });
-                assert.deepEqual(displayedCells, expectedCells, 'cells options should be correct');
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
             });
         });
 
