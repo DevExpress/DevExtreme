@@ -6265,8 +6265,13 @@ QUnit.module('Vertical headers', {
             assert.equal($(dataCells.get(3)).text(), '1');
         }
 
-        QUnit.test('PivotGrid. [col x row x data], remoteOperations = false. Resolve data as arguments list', function(assert) {
+        QUnit.test('PivotGrid. [col x row x data], remoteOperations = false. Resolve data as arguments list. JQuery promise', function(assert) {
+            const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkPivotGridCellsText(grid, assert);
+                    done();
+                },
                 dataSource: {
                     remoteOperations: false,
                     fields: [
@@ -6282,12 +6287,15 @@ QUnit.module('Vertical headers', {
                 }
             }).dxPivotGrid('instance');
             this.clock.tick();
-
-            checkPivotGridCellsText(grid, assert);
         });
 
-        QUnit.test('PivotGrid. [col x row x data], remoteOperations = false. Resolve data as object', function(assert) {
+        QUnit.test('PivotGrid. [col x row x data], remoteOperations = false. Resolve data as object. JQuery promise', function(assert) {
+            const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkPivotGridCellsText(grid, assert);
+                    done();
+                },
                 dataSource: {
                     remoteOperations: false,
                     fields: [
@@ -6303,12 +6311,44 @@ QUnit.module('Vertical headers', {
                 }
             }).dxPivotGrid('instance');
             this.clock.tick();
-
-            checkPivotGridCellsText(grid, assert);
         });
 
-        QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. Resolve data as arguments list', function(assert) {
+        QUnit.test('PivotGrid. [col x row x data], remoteOperations = false. Resolve data as object. Native promise', function(assert) {
+            if(browser.msie) {
+                assert.ok(true, 'IE not supports native promises');
+                return;
+            }
+
+            const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkPivotGridCellsText(grid, assert);
+                    done();
+                },
+                dataSource: {
+                    remoteOperations: false,
+                    fields: [
+                        { area: 'row', dataField: 'row', dataType: 'string' },
+                        { area: 'column', dataField: 'column', dataType: 'string' },
+                        { area: 'data', dataField: 'amount', dataType: 'number', summaryType: 'sum' }
+                    ],
+                    load: function() {
+                        return new Promise((resolve) => {
+                            resolve({ data: [{ row: 'row', column: 'col', amount: 1 }] });
+                        });
+                    }
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+        });
+
+        QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. Resolve data as arguments list. JQuery promise', function(assert) {
+            const done = assert.async();
+            const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkPivotGridCellsText(grid, assert);
+                    done();
+                },
                 dataSource: {
                     remoteOperations: true,
                     fields: [
@@ -6330,12 +6370,15 @@ QUnit.module('Vertical headers', {
                 }
             }).dxPivotGrid('instance');
             this.clock.tick();
-
-            checkPivotGridCellsText(grid, assert);
         });
 
-        QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. Resolve data as object', function(assert) {
+        QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. Resolve data as object. JQuery promise', function(assert) {
+            const done = assert.async();
             const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkPivotGridCellsText(grid, assert);
+                    done();
+                },
                 dataSource: {
                     remoteOperations: true,
                     fields: [
@@ -6357,8 +6400,41 @@ QUnit.module('Vertical headers', {
                 }
             }).dxPivotGrid('instance');
             this.clock.tick();
+        });
 
-            checkPivotGridCellsText(grid, assert);
+        QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. Resolve data as object. Native promise', function(assert) {
+            if(browser.msie) {
+                assert.ok(true, 'IE not supports native promises');
+                return;
+            }
+
+            const done = assert.async();
+            const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkPivotGridCellsText(grid, assert);
+                    done();
+                },
+                dataSource: {
+                    remoteOperations: true,
+                    fields: [
+                        { area: 'row', dataField: 'row', dataType: 'string' },
+                        { area: 'column', dataField: 'column', dataType: 'string' },
+                        { area: 'data', dataField: 'amount', dataType: 'number', summaryType: 'sum' }
+                    ],
+                    load: function(options) {
+                        return new Promise(resolve => {
+                            if(options.group === undefined) {
+                                resolve({ data: [] }); // retrieve fields
+                            } else if(options.group && options.group[0].selector === 'column') {
+                                resolve({ data: [{ key: 'col', summary: [1] }] });
+                            } else if(options.group && options.group[0].selector === 'row') {
+                                resolve({ data: [{ key: 'row', summary: [1], items: [ { key: 'col', summary: [1] } ] }], summary: [1] });
+                            }
+                        });
+                    }
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
         });
     });
 
