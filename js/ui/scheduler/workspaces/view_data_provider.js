@@ -1172,4 +1172,8 @@ export default class ViewDataProvider {
 
         return daysCount - includedDays - deltaDays;
     }
+
+    getColumnsCount() {
+        return this.viewDataMap.dateTableMap[0].length;
+    }
 }

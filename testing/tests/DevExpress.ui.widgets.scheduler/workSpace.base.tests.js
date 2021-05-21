@@ -113,20 +113,6 @@ module('Work Space Base', {
                     this.instance.option('width', 900);
                     assert.equal(this.instance.getWorkSpaceMinWidth(), 800, 'minWidth is ok');
                 });
-
-                test('Workspace should throw an error if target index is incorrect in getCoordinatesByDate method ', function(assert) {
-                    const instance = this.instance;
-
-                    assert.throws(
-                        function() {
-                            instance.getCoordinatesByDate(new Date(), 100, 0);
-                        },
-                        function(e) {
-                            return /E1039/.test(e.message);
-                        },
-                        'Exception messages should be correct'
-                    );
-                });
             }
 
             test('Tables should be rerendered if dimension was changed and horizontal scrolling is enabled', function(assert) {

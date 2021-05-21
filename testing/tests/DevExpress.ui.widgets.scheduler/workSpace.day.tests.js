@@ -120,21 +120,6 @@ module('Work Space Day', {
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(12).position().left, 'Cell coordinates are right');
     });
 
-    [true, false].forEach((renovateRender) => {
-        test(`Work space should return coordinates of first cell for dates before first view date when renovateRender is ${renovateRender}`, function(assert) {
-            this.instance.option({
-                currentDate: new Date(2015, 2, 4),
-                renovateRender,
-            });
-
-            const $element = this.instance.$element();
-            const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 3, 0, 0));
-
-            assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(0).position().top, 'Cell coordinates are right');
-            assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(0).position().left, 'Cell coordinates are right');
-        });
-    });
-
     test('getDataByDroppableCell should work right with the single group', function(assert) {
         this.instance.option('currentDate', new Date(2015, 1, 18));
         this.instance.option('groups', [
