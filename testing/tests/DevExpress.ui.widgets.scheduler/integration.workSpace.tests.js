@@ -217,8 +217,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             pointerMock(scheduler.instance.$element().find('.dx-scheduler-date-table-cell').eq(22)).start().click().click();
             assert.deepEqual(spy.getCall(0).args[0], {
                 startDate: new Date(2015, 1, 17),
-                endDate: new Date(2015, 1, 18),
-                allDay: false,
+                endDate: new Date(2015, 1, 18)
             }, 'showAppointmentPopup has a right arguments');
 
         } finally {
@@ -284,8 +283,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             assert.deepEqual(spy.getCall(0).args[0], {
                 startDate: new Date(2015, 1, 3),
                 endDate: new Date(2015, 1, 4),
-                ownerId: 2,
-                allDay: false,
+                ownerId: 2
             }, 'showAppointmentPopup has a right arguments');
 
         } finally {
@@ -1522,7 +1520,7 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
                     endDate: new Date(2018, 3, 2),
                     groups: undefined,
                     groupIndex: 0,
-                    allDay: false,
+                    allDay: undefined,
                 },
             },
             endCell: {
@@ -1532,7 +1530,7 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
                     endDate: new Date(2018, 3, 3),
                     groups: undefined,
                     groupIndex: 0,
-                    allDay: false,
+                    allDay: undefined,
                 },
             },
         }].forEach((config) => {
@@ -1721,14 +1719,14 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
         assert.deepEqual(selectedCellData[0], {
             startDate: new Date(2020, 10, 29, 0, 0),
             endDate: new Date(2020, 10, 30, 0, 0),
-            allDay: false,
+            allDay: undefined,
             groupIndex: 0,
             groups: undefined,
         }, 'Correct first cell');
         assert.deepEqual(selectedCellData[5], {
             startDate: new Date(2020, 11, 4, 0, 0),
             endDate: new Date(2020, 11, 5, 0, 0),
-            allDay: false,
+            allDay: undefined,
             groupIndex: 0,
             groups: undefined,
         }, 'Correct last cell');

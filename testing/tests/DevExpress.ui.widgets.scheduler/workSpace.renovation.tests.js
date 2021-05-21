@@ -745,7 +745,7 @@ module('Renovated Render', {
         const { dateTable } = viewData.groupedData[0];
 
         const firstExpectedCell = {
-            allDay: false,
+            allDay: undefined,
             startDate: new Date(2020, 5, 28, 0, 0),
             endDate: new Date(2020, 5, 28, 0, 0),
             firstDayOfMonth: false,
@@ -759,7 +759,7 @@ module('Renovated Render', {
             today: false,
         };
         const firstDayOfMonthCell = {
-            allDay: false,
+            allDay: undefined,
             startDate: new Date(2020, 6, 1, 0, 0),
             endDate: new Date(2020, 6, 1, 0, 0),
             firstDayOfMonth: false,
@@ -773,7 +773,7 @@ module('Renovated Render', {
             today: false,
         };
         const firstDayOfNextMonthCell = {
-            allDay: false,
+            allDay: undefined,
             startDate: new Date(2020, 7, 1, 0, 0),
             endDate: new Date(2020, 7, 1, 0, 0),
             firstDayOfMonth: false,

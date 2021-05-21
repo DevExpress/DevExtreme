@@ -2071,7 +2071,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = {
             startDate: startDate,
             endDate: endDate,
-            allDay: false,
+            allDay: this._getTableAllDay(),
             groupIndex,
         };
 
@@ -2086,6 +2086,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getGroupIndex(rowIndex, cellIndex) {
         return this._groupedStrategy.getGroupIndex(rowIndex, cellIndex);
+    }
+
+    _getTableAllDay() {
+        return false;
     }
 
     calculateEndDate(startDate) {
