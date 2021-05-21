@@ -10,7 +10,7 @@ export default {
         format: 'es'
     },
     plugins: [nodeResolve({
-        moduleDirectories: ['../../artifacts/npm', 'node_modules'],
+        moduleDirectories: ['node_modules'],
         preferBuiltins: false,
     }),
     commonjs()

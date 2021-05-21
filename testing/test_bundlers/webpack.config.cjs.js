@@ -9,12 +9,12 @@ module.exports = {
         path: path.resolve(__dirname, '../../artifacts/test_bundlers/dist_webpack/'),
     },
     resolve: {
-        modules: ['./artifacts/npm/devextreme', 'node_modules'],
+        modules: [ path.resolve(__dirname, 'node_modules/devextreme'), 'node_modules'],
         alias: {
-            globalize$: path.resolve(__dirname, '../../node_modules/globalize/dist/globalize.js'),
-            globalize: path.resolve(__dirname, '../../node_modules/globalize/dist/globalize'),
-            cldr$: path.resolve(__dirname, '../../node_modules/cldrjs/dist/cldr.js'),
-            cldr: path.resolve(__dirname, '../../node_modules/cldrjs/dist/cldr')
+            globalize$: path.resolve(__dirname, 'node_modules/globalize/dist/globalize.js'),
+            globalize: path.resolve(__dirname, 'node_modules/globalize/dist/globalize'),
+            cldr$: path.resolve(__dirname, 'node_modules/cldrjs/dist/cldr.js'),
+            cldr: path.resolve(__dirname, 'node_modules/cldrjs/dist/cldr')
         },
     },
 };

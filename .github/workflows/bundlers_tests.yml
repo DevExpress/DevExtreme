@@ -26,6 +26,10 @@ jobs:
       working-directory: ./testing/test_bundlers  
       run: npm install
 
+    - name: Install DevExtreme in test directory
+      working-directory:
+      run: npm install ../../artifacts/npm/devextreme/    
+
     - name: Build test cjs import bundle by webpack
       working-directory: ./testing/test_bundlers
       run: npm run build:webpack-cjs
