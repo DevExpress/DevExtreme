@@ -3,6 +3,7 @@ import fx from 'animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { dateToMilliseconds } from 'core/utils/date';
 
 const {
     module,
@@ -423,6 +424,270 @@ module('CellTemplate tests', moduleConfig, () => {
                         renovateRender,
                     });
                 });
+            });
+        });
+
+        const hourDurationInMS = dateToMilliseconds('hour');
+        const dayDurationInMS = dateToMilliseconds('day');
+
+        function createVerticalGroupedCells(cells) {
+            return [...cells, ...cells];
+        }
+
+        function createHorizontalGroupedCells(cells, rowLength = 1) {
+            const result = [];
+
+            for(let i = 0; i < cells.length; i += rowLength) {
+                const oneGroupCellLine = cells.slice(i, i + rowLength);
+                result.push(...oneGroupCellLine, ...oneGroupCellLine);
+            }
+
+            return result;
+        }
+
+        const dayCells = [
+            {
+                startDate: new Date(2021, 7, 1, 0),
+                endDate: new Date(2021, 7, 1, 1),
+            }, {
+                startDate: new Date(2021, 7, 1, 1),
+                endDate: new Date(2021, 7, 1, 2),
+            }, {
+                startDate: new Date(2021, 7, 1, 2),
+                endDate: new Date(2021, 7, 1, 3),
+            }, {
+                startDate: new Date(2021, 7, 1, 3),
+                endDate: new Date(2021, 7, 1, 4),
+            }
+        ];
+
+        function getWeekCells(dayCells, duration = 7) {
+            const result = [];
+
+            dayCells.forEach(({ startDate, endDate }) => {
+                for(let i = 0; i < duration; i++) {
+                    result.push(
+                        {
+                            startDate: new Date(startDate.getTime() + i * dayDurationInMS),
+                            endDate: new Date(endDate.getTime() + i * dayDurationInMS),
+                        }
+                    );
+                }
+            });
+
+            return result;
+        }
+
+        function getMonthCells(startDate, endDate, dayStartHour, dayEndHour) {
+            const result = [];
+
+            let currentDate = new Date(startDate);
+            while(currentDate.getTime() <= endDate.getTime()) {
+                result.push(
+                    {
+                        startDate: new Date(currentDate.getTime() + hourDurationInMS * dayStartHour),
+                        endDate: new Date(currentDate.getTime() + hourDurationInMS * dayEndHour),
+                    });
+                currentDate = new Date(currentDate.getTime() + dayDurationInMS);
+            }
+
+            return result;
+        }
+
+        function getTimelineCells(dayCells, duration) {
+            const result = [];
+
+            for(let i = 0; i < duration; i++) {
+                const nextDay = dayCells.map(({ startDate, endDate }) => {
+                    return (
+                        {
+                            startDate: new Date(startDate.getTime() + i * dayDurationInMS),
+                            endDate: new Date(endDate.getTime() + i * dayDurationInMS),
+                        }
+                    );
+                });
+
+                result.push(...nextDay);
+            }
+
+            return result;
+        }
+
+        const weekCells = getWeekCells(dayCells);
+        const monthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 8, 11), 0, 4);
+        const timelineWeekCells = getTimelineCells(dayCells, 7);
+        const timelineMonthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 7, 31), 0, 4);
+
+        [
+            {
+                view: 'day',
+                groupOrientation: 'horizontal',
+                expectedCells: createHorizontalGroupedCells(dayCells),
+            }, {
+                view: 'day',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(dayCells),
+            }, {
+                view: 'week',
+                groupOrientation: 'horizontal',
+                expectedCells: createHorizontalGroupedCells(weekCells, 7),
+            }, {
+                view: 'week',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(weekCells),
+            }, {
+                view: 'month',
+                groupOrientation: 'horizontal',
+                expectedCells: createHorizontalGroupedCells(monthCells, 7),
+            }, {
+                view: 'month',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(monthCells),
+            }, {
+                view: 'timelineDay',
+                groupOrientation: 'horizontal',
+                expectedCells: createVerticalGroupedCells(dayCells),
+            }, {
+                view: 'timelineDay',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(dayCells),
+            }, {
+                view: 'timelineWeek',
+                groupOrientation: 'horizontal',
+                expectedCells: createVerticalGroupedCells(timelineWeekCells),
+            }, {
+                view: 'timelineWeek',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(timelineWeekCells),
+            }, {
+                view: 'timelineMonth',
+                groupOrientation: 'horizontal',
+                expectedCells: createVerticalGroupedCells(timelineMonthCells),
+            }, {
+                view: 'timelineMonth',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(timelineMonthCells),
+            }
+        ].forEach(({ view, groupOrientation, expectedCells }) => {
+            test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
+                    + ` with ${groupOrientation} groupping`, function(assert) {
+                const displayedCells = [];
+
+                createWrapper({
+                    dataSource: [],
+                    views: [
+                        {
+                            type: view,
+                            groupOrientation,
+                        }
+                    ],
+                    currentView: view,
+                    showAllDayPanel: false,
+                    cellDuration: 60,
+                    startDayHour: 0,
+                    endDayHour: 4,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        displayedCells.push(
+                            {
+                                startDate: data.startDate,
+                                endDate: data.endDate,
+                            }
+                        );
+                    },
+                    groups: ['ownerId'],
+                    resources
+                });
+                assert.deepEqual(displayedCells, expectedCells, 'cells options should be correct');
+            });
+        });
+
+        [
+            {
+                view: 'day',
+                groupOrientation: 'horizontal',
+                expectedCells: createHorizontalGroupedCells(dayCells),
+            }, {
+                view: 'day',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(dayCells),
+            }, {
+                view: 'week',
+                groupOrientation: 'horizontal',
+                expectedCells: createHorizontalGroupedCells(weekCells),
+            }, {
+                view: 'week',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(weekCells),
+            }, {
+                view: 'month',
+                groupOrientation: 'horizontal',
+                expectedCells: createHorizontalGroupedCells(monthCells),
+            }, {
+                view: 'month',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(monthCells),
+            }, {
+                view: 'timelineDay',
+                groupOrientation: 'horizontal',
+                expectedCells: createHorizontalGroupedCells(dayCells),
+            }, {
+                view: 'timelineDay',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(dayCells),
+            }, {
+                view: 'timelineWeek',
+                groupOrientation: 'horizontal',
+                expectedCells: createHorizontalGroupedCells(timelineWeekCells),
+            }, {
+                view: 'timelineWeek',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(timelineWeekCells),
+            }, {
+                view: 'timelineMonth',
+                groupOrientation: 'horizontal',
+                expectedCells: createHorizontalGroupedCells(timelineMonthCells),
+            }, {
+                view: 'timelineMonth',
+                groupOrientation: 'vertical',
+                expectedCells: createVerticalGroupedCells(timelineMonthCells),
+            }
+        ].forEach(({ view, groupOrientation, expectedCells }) => {
+            test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
+                    + ` with ${groupOrientation} groupping by date`, function(assert) {
+                const displayedCells = [];
+
+                createWrapper({
+                    dataSource: [],
+                    views: [
+                        {
+                            type: view,
+                            groupOrientation,
+                            groupByDate: true,
+                        }
+                    ],
+                    currentView: view,
+                    showAllDayPanel: false,
+                    cellDuration: 60,
+                    startDayHour: 0,
+                    endDayHour: 4,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        displayedCells.push(
+                            {
+                                startDate: data.startDate,
+                                endDate: data.endDate,
+                            }
+                        );
+                    },
+                    groups: ['ownerId'],
+                    resources
+                });
+                assert.deepEqual(displayedCells, expectedCells, 'cells options should be correct');
             });
         });
 
