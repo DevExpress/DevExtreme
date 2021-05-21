@@ -11,9 +11,9 @@ import {
   RefObject,
   Mutable,
 } from '@devextreme-generator/declarations';
+import { isFunction } from '../../../core/utils/type';
 import type DomComponent from '../../../core/dom_component';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
-import { EventCallback } from './event_callback.d';
 import { renderTemplate } from '../../utils/render_template';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 
@@ -43,7 +43,7 @@ export class DomComponentWrapperProps {
   @OneWay() componentProps!: {
     className?: string;
     itemTemplate?: string;
-    valueChange?: EventCallback<any>;
+    valueChange?: (value) => void;
   };
 }
 
@@ -103,7 +103,8 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
       rtlEnabled: this.config?.rtlEnabled || false, // widget expects boolean
       ...restProps,
     }) as Record<string, unknown>;
-    if (valueChange) {
+
+    if (isFunction(valueChange)) {
       properties.onValueChanged = ({ value }): void => valueChange(value);
     }
     if (itemTemplate) {

@@ -13,7 +13,7 @@ describe('DateBox', () => {
       const rootElementRef = createTestRef();
       const componentProps = new DateBoxProps();
       const props = {
-        props: { rootElementRef, addWidgetClass: true },
+        props: { ...componentProps, rootElementRef },
         componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<DateBox>;
@@ -25,15 +25,6 @@ describe('DateBox', () => {
         componentType: LegacyDateBox,
         'rest-attributes': 'true',
       });
-    });
-  });
-
-  describe('Logic', () => {
-    it('componentProps', () => {
-      const props = new DateBoxProps();
-      const dateBox = new DateBox({ ...props });
-
-      expect(dateBox.componentProps).toMatchObject(props);
     });
   });
 });

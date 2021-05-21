@@ -1,7 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from '@devextreme-generator/declarations';
-import { WidgetProps } from './common/widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable import/named */
 import LegacyOverlay from '../../ui/overlay';
@@ -10,14 +9,14 @@ import { template } from '../../core/templates/template';
 import { animationConfig } from '../../animation/fx';
 /* eslint-enable import/named */
 import { DomComponentWrapper } from './common/dom_component_wrapper';
+import { BaseWidgetProps } from './common/base_props';
 
 export const viewFunction = ({
-  props: { rootElementRef },
-  componentProps,
+  props: { rootElementRef, ...componentProps },
   restAttributes,
 }: Overlay): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
+    rootElementRef={rootElementRef}
     componentType={LegacyOverlay}
     componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -26,7 +25,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class OverlayProps extends WidgetProps {
+export class OverlayProps extends BaseWidgetProps {
   @OneWay() integrationOptions? = {};
 
   @OneWay() templatesRenderAsynchronously? = false;
@@ -45,7 +44,7 @@ export class OverlayProps extends WidgetProps {
     type: 'pop', duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 },
   };
 
-  @OneWay() position?: any;
+  @OneWay() position?: unknown;
 
   @OneWay() visible?: boolean = false;
 
@@ -65,13 +64,4 @@ export class OverlayProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Overlay extends JSXComponent(OverlayProps) {
-  get componentProps(): WidgetProps {
-    const {
-      rootElementRef,
-      ...restProps
-    } = this.props;
-
-    return restProps;
-  }
-}
+export class Overlay extends JSXComponent(OverlayProps) { }

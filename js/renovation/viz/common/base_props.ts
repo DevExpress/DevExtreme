@@ -18,13 +18,13 @@ export class BaseWidgetProps {
 
   @OneWay() margin?: Margin;
 
-  @OneWay() disabled = false;
+  @OneWay() disabled? = false;
 
   @OneWay() rtlEnabled?: boolean;
 
   @OneWay() classes? = '';
 
-  @OneWay() className = '';
+  @OneWay() className? = '';
 
   @OneWay() defaultCanvas?: ClientRect;
 

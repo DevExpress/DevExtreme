@@ -1,7 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, Event, OneWay, TwoWay,
 } from '@devextreme-generator/declarations';
-import { WidgetProps } from './common/widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
@@ -9,13 +8,14 @@ import DataSource, { DataSourceOptions } from '../../data/data_source';
 import LegacySelectBox from '../../ui/select_box';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { EventCallback } from './common/event_callback.d';
+import { BaseWidgetProps } from './common/base_props';
 
 export const viewFunction = ({
   props: { rootElementRef, ...componentProps },
   restAttributes,
 }: SelectBox): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
+    rootElementRef={rootElementRef}
     componentType={LegacySelectBox}
     componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -24,8 +24,8 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class SelectBoxProps extends WidgetProps {
-  @OneWay() dataSource?: string | (string | any)[] | DataSource | DataSourceOptions;
+export class SelectBoxProps extends BaseWidgetProps {
+  @OneWay() dataSource?: string | (string | unknown)[] | DataSource | DataSourceOptions;
 
   @OneWay() displayExpr?: string;
 
@@ -33,7 +33,7 @@ export class SelectBoxProps extends WidgetProps {
 
   @OneWay() valueExpr?: string;
 
-  @Event() valueChange?: EventCallback<any>;
+  @Event() valueChange?: EventCallback<unknown>;
 
   @OneWay() focusStateEnabled?: boolean = true;
 

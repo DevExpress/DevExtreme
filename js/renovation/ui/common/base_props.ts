@@ -1,9 +1,14 @@
 import {
-  Event, OneWay, ComponentBindings,
+  Event, OneWay, ComponentBindings, ForwardRef, RefObject,
 } from '@devextreme-generator/declarations';
+import { EventCallback } from './event_callback';
 
 @ComponentBindings()
 export class BaseWidgetProps {
+  @ForwardRef() rootElementRef!: RefObject<HTMLDivElement>;
+
+  @OneWay() className?: string = '';
+
   @OneWay() accessKey?: string;
 
   @OneWay() activeStateEnabled?: boolean = false;
@@ -18,9 +23,9 @@ export class BaseWidgetProps {
 
   @OneWay() hoverStateEnabled?: boolean = false;
 
-  @Event() onClick?: (e: any) => void;
+  @Event() onClick?: EventCallback<Event>;
 
-  @Event() onKeyDown?: (e: any) => any;
+  @Event() onKeyDown?: EventCallback<Event>;
 
   @OneWay() rtlEnabled?: boolean;
 

@@ -4,15 +4,15 @@ import {
 
 /* eslint-disable-next-line import/named */
 import LegacyLoadIndicator from '../../ui/load_indicator';
-import { WidgetProps } from './common/widget';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
+import { BaseWidgetProps } from './common/base_props';
 
 export const viewFunction = ({
   props: { rootElementRef, ...componentProps },
   restAttributes,
 }: LoadIndicator): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
+    rootElementRef={rootElementRef}
     componentType={LegacyLoadIndicator}
     componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -21,7 +21,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class LoadIndicatorProps extends WidgetProps {
+export class LoadIndicatorProps extends BaseWidgetProps {
   // props was copied from js\ui\load_indicator.d.ts
 
   @OneWay() indicatorSrc?: string;

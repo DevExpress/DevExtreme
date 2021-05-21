@@ -10,7 +10,6 @@ import {
   Ref,
   Slot,
   Consumer,
-  ForwardRef,
   RefObject,
 } from '@devextreme-generator/declarations';
 import '../../../events/click';
@@ -68,8 +67,6 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
 
 @ComponentBindings()
 export class WidgetProps extends BaseWidgetProps {
-  @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
-
   @OneWay() _feedbackHideTimeout?: number = 400;
 
   @OneWay() _feedbackShowTimeout?: number = 30;
@@ -82,11 +79,9 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() classes?: string | undefined = '';
 
-  @OneWay() className?: string = '';
-
   @OneWay() name?: string = '';
 
-  @OneWay() addWidgetClass = true;
+  @OneWay() addWidgetClass? = true;
 
   @Event() onActive?: (e: Event) => void;
 
@@ -355,7 +350,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const isHoverable = !!hoverStateEnabled && !disabled;
     const canBeActive = !!activeStateEnabled && !disabled;
     const classesMap = {
-      'dx-widget': addWidgetClass,
+      'dx-widget': !!addWidgetClass,
       [String(classes)]: !!classes,
       [String(className)]: !!className,
       'dx-state-disabled': !!disabled,

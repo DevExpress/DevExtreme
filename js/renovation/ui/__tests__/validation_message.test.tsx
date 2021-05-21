@@ -14,8 +14,7 @@ describe('ValidationMessage', () => {
       const rootElementRef = createTestRef();
       const componentProps = new ValidationMessageProps();
       const props = {
-        props: { rootElementRef, addWidgetClass: true },
-        componentProps,
+        props: { ...componentProps, rootElementRef, addWidgetClass: true },
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<ValidationMessage>;
       const tree = shallow(<ValidationMessageView {...props as any} />);
@@ -26,15 +25,6 @@ describe('ValidationMessage', () => {
         componentType: LegacyValidationMessage,
         'rest-attributes': 'true',
       });
-    });
-  });
-
-  describe('Logic', () => {
-    it('componentProps', () => {
-      const props = new ValidationMessageProps();
-      const validationMessage = new ValidationMessage({ ...props });
-
-      expect(validationMessage.componentProps).toMatchObject(props);
     });
   });
 });

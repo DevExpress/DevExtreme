@@ -1,12 +1,10 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event,
+  Component, ComponentBindings, JSXComponent, OneWay,
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
-import { WidgetProps } from './common/widget';
+import { BaseWidgetProps } from './common/base_props';
 import LegacyList, { dxListItem } from '../../ui/list';
-import { DxElement } from '../../core/element';
-import { EventExtension, DxEvent } from '../../events/index';
 
 // import renderTemplate from '../utils/render_template';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
@@ -16,15 +14,16 @@ export const viewFunction = ({
   restAttributes,
 }: List): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
+    rootElementRef={rootElementRef}
     componentType={LegacyList}
     componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
 );
+
 @ComponentBindings()
-export class ListProps extends WidgetProps {
+export class ListProps extends BaseWidgetProps {
   // Properties have been copied from ../ui/list.d.ts
 
   @OneWay() activeStateEnabled?: boolean;
@@ -37,7 +36,8 @@ export class ListProps extends WidgetProps {
 
   //   @OneWay() collapsibleGroups?: boolean;
 
-  @OneWay() dataSource?: string | (string | dxListItem | any)[] | DataSource | DataSourceOptions;
+  @OneWay() dataSource?: string | (string | dxListItem | any)[] |
+  DataSource | DataSourceOptions;
 
   //   @OneWay() displayExpr?: string | ((item: any) => string);
 
@@ -70,16 +70,6 @@ export class ListProps extends WidgetProps {
   //   component?: dxList, element?: DxElement, model?: any, groupData?: any,
   //   groupElement?: DxElement, groupIndex?: number
   // }) => any);
-
-  @Event() onItemClick?: ((e: {
-    component?: LegacyList;
-    element?: DxElement;
-    model?: any;
-    itemData: any;
-    itemElement?: DxElement;
-    itemIndex?: number | any;
-    event?: DxEvent;
-  } & EventExtension) => any) | string;
 
   // @Event() onItemContextMenu?: ((e: {
   //   component?: dxList, element?: DxElement, model?: any, itemData?: any,
@@ -159,13 +149,12 @@ export class ListProps extends WidgetProps {
 
   // @OneWay()useNativeScrolling?: boolean;
 
-  @OneWay() itemTemplate?: any;
+  @OneWay() itemTemplate?: string;
 
 //   @Event() onItemClick?: (e: any) => any = (() => {});
 }
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class List extends JSXComponent(ListProps) {}
+export class List extends JSXComponent<ListProps>() {}

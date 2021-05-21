@@ -14,8 +14,7 @@ describe('Overlay', () => {
       const rootElementRef = createTestRef();
       const componentProps = new OverlayProps();
       const props = {
-        props: { rootElementRef, addWidgetClass: true },
-        componentProps,
+        props: { ...componentProps, rootElementRef },
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Overlay>;
       const tree = shallow(<OverlayView {...props as any} /> as any);
@@ -26,15 +25,6 @@ describe('Overlay', () => {
         componentType: LegacyOverlay,
         'rest-attributes': 'true',
       });
-    });
-  });
-
-  describe('Logic', () => {
-    it('componentProps', () => {
-      const props = new OverlayProps();
-      const validationMessage = new Overlay({ ...props });
-
-      expect(validationMessage.componentProps).toMatchObject(props);
     });
   });
 });

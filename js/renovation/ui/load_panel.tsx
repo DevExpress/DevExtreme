@@ -12,7 +12,7 @@ export const viewFunction = ({
   restAttributes,
 }: LoadPanel): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
+    rootElementRef={rootElementRef}
     componentType={LegacyLoadPanel}
     componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
