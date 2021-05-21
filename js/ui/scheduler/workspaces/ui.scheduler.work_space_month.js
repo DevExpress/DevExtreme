@@ -129,7 +129,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _renderTimePanel() { return noop(); }
     _renderAllDayPanel() { return noop(); }
-    _getTableAllDay() { return noop(); }
     _toggleAllDayVisibility() { return noop(); }
     _changeAllDayVisibility() { return noop(); }
 
@@ -287,10 +286,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     needApplyCollectorOffset() {
         return true;
-    }
-
-    _getDateTableBorderOffset() {
-        return this._getDateTableBorder();
     }
 
     _getCellPositionByIndex(index, groupIndex) {

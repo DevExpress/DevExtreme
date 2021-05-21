@@ -26,6 +26,13 @@ export const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current
 export const HORIZONTAL_GROUP_ORIENTATION = 'horizontal';
 
 export const VIRTUAL_CELL_CLASS = 'dx-scheduler-virtual-cell';
+export const TIME_PANEL_CLASS = 'dx-scheduler-time-panel';
+export const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
+export const DATE_TABLE_ROW_CLASS = 'dx-scheduler-date-table-row';
+export const GROUP_ROW_CLASS = 'dx-scheduler-group-row';
+export const GROUP_HEADER_CONTENT_CLASS = 'dx-scheduler-group-header-content';
+export const LAST_GROUP_CELL_CLASS = 'dx-scheduler-last-group-cell';
+export const FIRST_GROUP_CELL_CLASS = 'dx-scheduler-first-group-cell';
 
 export const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
