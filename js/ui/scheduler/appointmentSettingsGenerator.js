@@ -331,7 +331,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return appointments.filter(appointment => {
             const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
 
-            if(!firstViewDate) return false;
+            if(!firstViewDate) {
+                return false;
+            }
 
             const startDayHour = this._getViewStartDayHour(firstViewDate);
             const startDate = new Date(appointment.startDate);

@@ -1157,7 +1157,7 @@ module('Integration: Appointment Day, Week views', {
             }],
             width: 1000,
             height: 1000,
-        }, this.clock);
+        });
 
         const appointments = scheduler.appointmentList;
         assert.equal(appointments.length, 1, 'Correct number of appointments');
@@ -1201,7 +1201,7 @@ module('Integration: Appointment Day, Week views', {
                 startDate: new Date(2018, 4, 22, 9, 0),
                 priorityId: 1,
             }],
-        }, this.clock);
+        });
 
         const appointments = scheduler.appointmentList;
 
@@ -1248,7 +1248,7 @@ module('Integration: Appointment Day, Week views', {
                 startDate: new Date(2018, 4, 25, 11, 0),
                 priorityId: 1
             }],
-        }, this.clock);
+        });
 
         const appointments = scheduler.appointmentList;
 
