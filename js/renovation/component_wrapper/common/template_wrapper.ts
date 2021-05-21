@@ -32,7 +32,6 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     if (node) {
       const { parentNode } = node;
       if (parentNode) {
-        parentNode.removeChild(node);
         const $parent = $(parentNode as Element);
         const $children = $parent.contents();
 
@@ -52,11 +51,8 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
           ...(!this.props.transclude ? { model: data } : {}),
           ...(!this.props.transclude && Number.isFinite(index) ? { index } : {}),
         }));
-        const result = $result.get(0) as HTMLElement;
 
-        if (result && !result.parentNode) {
-          parentNode.appendChild(result);
-        }
+        $(node).replaceWith($result);
 
         return (): void => {
           // NOTE: order is important

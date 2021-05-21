@@ -39,7 +39,7 @@ export interface dxElementWrapper {
 
   eq(index: number): this;
 
-  filter(selector: string): this;
+  filter(selector: string | ((index: number, element: Element) => boolean)): this;
 
   find(selector_element: string | Element | dxElementWrapper): this;
 
