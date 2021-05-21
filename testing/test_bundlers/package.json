@@ -4,13 +4,19 @@
   "scripts": {
     "build:webpack-cjs": "webpack --config ./webpack.config.cjs.js",
     "build:webpack-esm": "webpack --config ./webpack.config.js",
-    "build:rollup-esm": "rollup -c"
+    "build:rollup-esm": "rollup -c",
+    "build:parcel-esm": "parcel build ./src/import_modules_esm.js --dist-dir ../../artifacts/test_bundlers/dist_parsel --no-cache",
+    "build:browserify-cjs": "browserify ./src/import_modules_cjs.js -o ../../artifacts/test_bundlers/dist_browserify/bundle.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
+    "browserify": "^17.0.0",
     "devextreme-cldr-data": "^1.0.3",
+    "fuse-box": "^4.0.0",
     "globalize": "^1.6.0",
+    "parcel": "^2.0.0-beta.2",
+    "require-main-filename": "^2.0.0",
     "rollup": "^2.46.0",
     "webpack": "^5.37.0",
     "webpack-cli": "^4.7.0"
