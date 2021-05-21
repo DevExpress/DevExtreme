@@ -73,14 +73,6 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         return cellClass;
     }
 
-    getHorizontalMax(groupIndex) {
-        if(this._workSpace.isRenovatedRender()) {
-            return this._workSpace.getMaxAllowedPosition(groupIndex);
-        }
-
-        return this._workSpace.getMaxAllowedPosition(0);
-    }
-
     getVerticalMax(groupIndex) {
         let maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition(groupIndex);
 
@@ -166,10 +158,6 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         });
     }
 
-    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        return this.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
-    }
-
     shiftIndicator($indicator, height, rtlOffset, i) {
         const offset = this._workSpace.getIndicatorOffset(0);
         const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
@@ -219,13 +207,6 @@ class VerticalGroupedStrategy extends GroupedStrategy {
 
     getScrollableScrollTop() {
         return this._workSpace.getScrollable().scrollTop();
-    }
-
-    getGroupIndexByCell($cell) {
-        const rowIndex = $cell.parent().index();
-        const rowCount = this._workSpace._getRowCountWithAllDayRows();
-
-        return Math.ceil((rowIndex + 1) / rowCount);
     }
 }
 
