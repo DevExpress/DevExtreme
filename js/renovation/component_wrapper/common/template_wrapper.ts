@@ -52,6 +52,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
           ...(!this.props.transclude && Number.isFinite(index) ? { index } : {}),
         }));
 
+        $result.detach();
         $(node).replaceWith($result);
 
         return (): void => {
