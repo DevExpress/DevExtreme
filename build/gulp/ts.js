@@ -40,12 +40,12 @@ function bundleTS(jqueryPartFile) {
 
 gulp.task('ts-bundle', gulp.series(
     function writeTsBundle() {
-        return bundleTS('./ts/dx.all-jquery.d.ts')
+        return bundleTS('./ts/dx.all-jquery-augmentations.d.ts')
             .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR)); // will be copied to the npm's /dist folder by another task
     },
 
     function writeTsBundleForNPM() {
-        return bundleTS('./ts/dx.all-jquery-cut.d.ts')
+        return bundleTS('./ts/dx.all-jquery-stubs.d.ts')
             .pipe(footer('\nexport default DevExpress;'))
             .pipe(replace('/*!', '/**'))
             .pipe(gulp.dest(packageBundlesPath));
