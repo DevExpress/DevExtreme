@@ -172,7 +172,7 @@ export default CollectionWidget.inherit({
         });
     },
 
-    _getItemContainer: function() {
+    _getItemContainer: function(changeData) {
         return this._itemContainer();
     },
 

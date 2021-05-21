@@ -368,7 +368,7 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _getGroupContainerByIndex: function(groupIndex) {
-        return this._itemContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex).find('.' + LIST_GROUP_BODY_CLASS);
+        return this._itemContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex).find(`.${LIST_GROUP_BODY_CLASS}`);
     },
 
     _dataSourceFromUrlLoadMode: function() {

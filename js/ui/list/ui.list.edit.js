@@ -242,7 +242,7 @@ const ListEdit = ListBase.inherit({
             const groupIndex = this._editStrategy.getIndexByItemData(changeData)?.group;
             return this._getGroupContainerByIndex(groupIndex);
         } else {
-            return this.callBase();
+            return this.callBase(changeData);
         }
     },
 
