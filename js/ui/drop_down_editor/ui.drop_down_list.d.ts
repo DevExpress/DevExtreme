@@ -32,7 +32,7 @@ import {
 } from '../collection/ui.collection_widget.base';
 
 /** @namespace DevExpress.ui */
-export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
+export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOptions<TComponent>, dxDropDownEditorOptions<TComponent> {
     /**
      * @docid
      * @readonly
@@ -89,7 +89,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemClick?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -102,7 +102,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default null
@@ -117,7 +117,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e:  NativeEventInfo<T> & ValueChangedInfo) => void);
+    onValueChanged?: ((e:  NativeEventInfo<TComponent> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
@@ -202,7 +202,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
  * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  */
-export default class dxDropDownList extends dxDropDownEditor {
-    constructor(element: UserDefinedElement, options?: dxDropDownListOptions)
+export default class dxDropDownList<TProperties> extends dxDropDownEditor<TProperties> {
     getDataSource(): DataSource;
 }

@@ -1,16 +1,17 @@
 import {
-    dxTextBoxOptions
+    Properties as TextBoxProperties
 } from '../text_box';
 
 /** @namespace DevExpress.ui */
-export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
+export interface SearchBoxMixinOptions {
     /**
      * @docid
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxTextBoxOptions
      */
-    searchEditorOptions?: dxTextBoxOptions;
+    searchEditorOptions?: TextBoxProperties;
     /**
      * @docid
      * @default false

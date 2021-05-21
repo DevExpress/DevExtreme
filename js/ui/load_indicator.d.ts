@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -46,9 +42,7 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxLoadIndicator extends Widget {
-    constructor(element: UserDefinedElement, options?: dxLoadIndicatorOptions)
-}
+export default class dxLoadIndicator extends Widget<dxLoadIndicatorOptions> { }
 
 /** @public */
 export type Properties = dxLoadIndicatorOptions;

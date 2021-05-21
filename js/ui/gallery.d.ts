@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     DxPromise
 } from '../core/utils/deferred';
 
@@ -177,8 +173,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxGallery extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxGalleryOptions)
+export default class dxGallery extends CollectionWidget<dxGalleryOptions> {
     /**
      * @docid
      * @publicName goToItem(itemIndex, animation)

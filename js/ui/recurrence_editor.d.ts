@@ -1,7 +1,3 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import Editor, {
     EditorOptions
 } from './editor/editor';
@@ -27,9 +23,12 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxRecurrenceEditor extends Editor {
-    constructor(element: UserDefinedElement, options?: dxRecurrenceEditorOptions)
-}
+export default class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions> { }
 
+export type Properties = dxRecurrenceEditorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxRecurrenceEditorOptions;
+
+/** @deprecated use Properties instead */
 export type IOptions = dxRecurrenceEditorOptions;

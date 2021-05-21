@@ -1,5 +1,4 @@
 import {
-    UserDefinedElement,
     DxElement
 } from '../core/element';
 
@@ -780,8 +779,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxPivotGrid extends Widget {
-    constructor(element: UserDefinedElement, options?: dxPivotGridOptions)
+export default class dxPivotGrid extends Widget<dxPivotGridOptions> {
     /**
      * @docid
      * @publicName bindChart(chart, integrationOptions)

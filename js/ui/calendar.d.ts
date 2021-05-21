@@ -177,9 +177,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxCalendar extends Editor {
-    constructor(element: UserDefinedElement, options?: dxCalendarOptions)
-}
+export default class dxCalendar extends Editor<dxCalendarOptions> { }
 
 /** @public */
 export type Properties = dxCalendarOptions;

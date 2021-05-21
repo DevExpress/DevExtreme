@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -103,9 +99,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxRangeSlider extends dxTrackBar {
-    constructor(element: UserDefinedElement, options?: dxRangeSliderOptions)
-}
+export default class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> { }
 
 /** @public */
 export type Properties = dxRangeSliderOptions;

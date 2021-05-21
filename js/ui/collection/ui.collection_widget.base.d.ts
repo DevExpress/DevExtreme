@@ -27,7 +27,7 @@ export interface SelectionChangedInfo<T = any> {
 }
 
 /** @namespace DevExpress.ui */
-export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
+export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid
      * @default null
@@ -89,7 +89,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void) | string;
     /**
      * @docid
      * @default null
@@ -105,7 +105,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -121,7 +121,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemHold?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -136,7 +136,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemRendered?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -150,7 +150,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default -1
@@ -192,8 +192,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
  * @namespace DevExpress.ui
  * @prevFileNamespace DevExpress.ui
  */
-export default class CollectionWidget extends Widget {
-    constructor(element: UserDefinedElement, options?: CollectionWidgetOptions)
+export default class CollectionWidget<TProperties> extends Widget<TProperties> {
     getDataSource(): DataSource;
 }
 

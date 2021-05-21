@@ -1100,8 +1100,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxScheduler extends Widget {
-    constructor(element: UserDefinedElement, options?: dxSchedulerOptions)
+export default class dxScheduler extends Widget<dxSchedulerOptions> {
     /**
      * @docid
      * @publicName addAppointment(appointment)

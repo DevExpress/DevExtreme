@@ -1,13 +1,9 @@
-import {
-    UserDefinedElement
-} from '../../core/element';
-
 import CollectionWidget, {
     CollectionWidgetOptions
 } from '../collection/ui.collection_widget.base';
 
 /** @namespace DevExpress.ui */
-export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
+export interface HierarchicalCollectionWidgetOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
     /**
      * @docid
      * @default 'disabled'
@@ -69,6 +65,4 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
  * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  */
-export default class HierarchicalCollectionWidget extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: HierarchicalCollectionWidgetOptions)
-}
+export default class HierarchicalCollectionWidget<TProperties> extends CollectionWidget<TProperties> { }

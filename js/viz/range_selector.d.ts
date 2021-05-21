@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     PaletteType,
     PaletteExtensionModeType
 } from './palette';
@@ -891,8 +887,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
  * @namespace DevExpress.viz
  * @public
  */
-export default class dxRangeSelector extends BaseWidget {
-    constructor(element: UserDefinedElement, options?: dxRangeSelectorOptions)
+export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
     getDataSource(): DataSource;
     /**
      * @docid
