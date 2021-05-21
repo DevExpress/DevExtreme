@@ -3,9 +3,9 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    entry: path.resolve(__dirname, '../../testing/test_bundlers/src/index_esm.js'),
+    entry: path.resolve(__dirname, '../../testing/test_bundlers/src/import_modules_esm.js'),
     output: {
-        filename: 'main_esm.js',
+        filename: 'modules_esm.js',
         path: path.resolve(__dirname, '../../artifacts/test_bundlers/dist_webpack/'),
     },
     resolve: {
