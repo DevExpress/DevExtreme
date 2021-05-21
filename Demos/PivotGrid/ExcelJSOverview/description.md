@@ -2,5 +2,6 @@ Our PivotGrid allows you to easily and accurately export its contents to Microso
 
 Once you've referenced/imported both files and set **export**.**enabled** to **true**, use the [exportPivotGrid(options)](/Documentation/ApiReference/Common/Utils/excelExporter/#exportPivotGridoptions) method to export PivotGrid content to an Excel <a href="https://github.com/exceljs/exceljs#create-a-workbook" target="_blank">workbook</a>.
 
-
 Please review the [onExporting](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/#onExporting) handler and its data export code to learn more. In this example, PivotGrid content is exported as is to a single <a href="https://github.com/exceljs/exceljs#add-a-worksheet" target="_blank">worksheet</a>.
+
+You can export PivotGrid to CSV. Implement the **exportPivotGrid(options)** method as shown in the following ticket: <a href="https://supportcenter.devexpress.com/ticket/details/t920593/pivotgrid-exceljs-export-to-export-pivotgrid-into-csv-file" target="_blank">Export PivotGrid into CSV file</a>.
