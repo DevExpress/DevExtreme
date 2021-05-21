@@ -49,8 +49,6 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
   _viewComponent!: any;
 
-  _disposeMethodCalled = false;
-
   _shouldRaiseContentReady = false;
 
   _componentTemplates!: Record<string, any>;
@@ -165,24 +163,16 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
   _render(): void { } // NOTE: Inherited from DOM_Component
 
-  dispose(): void {
-    this._disposeMethodCalled = true;
-    super.dispose();
-  }
-
   _dispose(): void {
     const containerNode = this.$element()[0];
     const { parentNode } = containerNode;
 
     if (parentNode) {
       parentNode.$V = containerNode.$V;
-      render(
-        this._disposeMethodCalled ? createElement(
-          containerNode.tagName,
-          this.elementAttr,
-        ) : null,
-        parentNode,
-      );
+      render(null, parentNode);
+      parentNode.appendChild(containerNode);
+      containerNode.innerHTML = '';
+
       delete parentNode.$V;
     }
     delete containerNode.$V;

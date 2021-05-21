@@ -539,6 +539,8 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     renovatedRenderSupported() { return false; }
+
+    _setSelectedCellsByCellData() {}
 }
 
 registerComponent('dxSchedulerAgenda', SchedulerAgenda);

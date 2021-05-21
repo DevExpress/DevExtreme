@@ -11,9 +11,9 @@ import Overlay from 'ui/overlay';
 import { isRenderer } from 'core/utils/type';
 import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import { logger } from 'core/utils/console';
+import dxButton from 'ui/button';
 
 import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup =
         `<div id="dropDownEditorLazy"></div>
@@ -1137,23 +1137,28 @@ QUnit.module('Templates', () => {
         assert.strictEqual($buttons.text(), 'test button', 'correct text');
     });
 
-    ['readOnly', 'disabled'].forEach((prop) => {
-        [false, true].forEach((propValue) => {
-            QUnit.test(`Drop button template should be rendered once after change the "${prop}" option value to ${!propValue}`, function(assert) {
-                const dropDownButtonTemplate = sinon.spy(() => {
-                    return '<div>Template</div>';
+    const isRenovation = !!dxButton.IS_RENOVATED_WIDGET;
+
+    // NOTE: Renovated button rerenders on each property changing
+    if(!isRenovation) {
+        ['readOnly', 'disabled'].forEach((prop) => {
+            [false, true].forEach((propValue) => {
+                QUnit.test(`Drop button template should be rendered once after change the "${prop}" option value to ${!propValue}`, function(assert) {
+                    const dropDownButtonTemplate = sinon.spy(() => {
+                        return '<div>Template</div>';
+                    });
+
+                    const editor = $('#dropDownEditorLazy').dxDropDownEditor({
+                        dropDownButtonTemplate,
+                        [prop]: propValue
+                    }).dxDropDownEditor('instance');
+
+                    editor.option(prop, !propValue);
+                    assert.ok(dropDownButtonTemplate.calledOnce, 'dropDownButton template rendered once');
                 });
-
-                const editor = $('#dropDownEditorLazy').dxDropDownEditor({
-                    dropDownButtonTemplate,
-                    [prop]: propValue
-                }).dxDropDownEditor('instance');
-
-                editor.option(prop, !propValue);
-                assert.ok(dropDownButtonTemplate.calledOnce, 'dropDownButton template rendered once');
             });
         });
-    });
+    }
 });
 
 QUnit.module('options', () => {
