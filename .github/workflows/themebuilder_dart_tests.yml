@@ -26,7 +26,7 @@ jobs:
       run: npx gulp style-compiler-themes-ci
 
     - name: Install dart
-      uses: dart-lang/setup-dart@v2
+      uses: dart-lang/setup-dart@v1
 
     - name: Install dart packages
       run: pub get
