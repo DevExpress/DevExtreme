@@ -166,7 +166,8 @@ module('Workspace navigation', () => {
 
                     assert.deepEqual(updateSpy.getCall(0).args[1], {
                         startDate: new Date(2015, 2, 30),
-                        endDate: new Date(2015, 2, 31)
+                        endDate: new Date(2015, 2, 31),
+                        allDay: false,
                     }, 'Arguments are OK');
 
                     keyboard.keyDown('right');
@@ -174,7 +175,8 @@ module('Workspace navigation', () => {
                     assert.equal(updateSpy.getCall(1).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
                     assert.deepEqual(updateSpy.getCall(1).args[1], {
                         startDate: new Date(2015, 2, 31),
-                        endDate: new Date(2015, 3, 1)
+                        endDate: new Date(2015, 3, 1),
+                        allDay: false,
                     }, 'Arguments are OK');
                 });
 
@@ -484,7 +486,8 @@ module('Workspace navigation', () => {
 
                     assert.deepEqual(updateSpy.getCall(0).args[1], {
                         startDate: new Date(2015, 2, 30),
-                        endDate: new Date(2015, 3, 7)
+                        endDate: new Date(2015, 3, 7),
+                        allDay: false,
                     }, 'Arguments are OK');
 
                     keyboard.keyDown('right', { shiftKey: true });
@@ -492,7 +495,8 @@ module('Workspace navigation', () => {
                     assert.equal(updateSpy.getCall(1).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
                     assert.deepEqual(updateSpy.getCall(1).args[1], {
                         startDate: new Date(2015, 2, 30),
-                        endDate: new Date(2015, 3, 8)
+                        endDate: new Date(2015, 3, 8),
+                        allDay: false,
                     }, 'Arguments are OK');
                 });
 
@@ -1210,7 +1214,12 @@ module('Workspace navigation', () => {
                             assert.deepEqual($(e.cellElement)[0], $cell[0], 'cell is clicked');
                             assert.deepEqual(
                                 e.cellData,
-                                { startDate: new Date(2015, 8, 27), endDate: new Date(2015, 8, 28), groupIndex: 0 },
+                                {
+                                    startDate: new Date(2015, 8, 27),
+                                    endDate: new Date(2015, 8, 28),
+                                    groupIndex: 0,
+                                    allDay: false,
+                                },
                                 'correct cell data',
                             );
                         }
@@ -1268,7 +1277,12 @@ module('Workspace navigation', () => {
                             assert.deepEqual($(e.cellElement)[0], $cell[0], 'cell is correct');
                             assert.deepEqual(
                                 e.cellData,
-                                { startDate: new Date(2018, 1, 26), endDate: new Date(2018, 1, 27), groupIndex: 0, },
+                                {
+                                    startDate: new Date(2018, 1, 26),
+                                    endDate: new Date(2018, 1, 27),
+                                    groupIndex: 0,
+                                    allDay: false,
+                                },
                                 'cell is correct',
                             );
                         }
