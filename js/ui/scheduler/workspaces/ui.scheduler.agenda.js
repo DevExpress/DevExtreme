@@ -279,7 +279,7 @@ class SchedulerAgenda extends WorkSpace {
         });
 
         return {
-            elements: $(table).find(`${GROUP_ROW_CLASS}`),
+            elements: $(table).find(`.${GROUP_ROW_CLASS}`),
             cellTemplates: cellTemplates
         };
     }
