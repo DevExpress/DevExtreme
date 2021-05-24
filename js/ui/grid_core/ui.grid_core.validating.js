@@ -15,7 +15,7 @@ import ValidationEngine from '../validation_engine';
 import Validator from '../validator';
 import Overlay from '../overlay';
 import errors from '../widget/ui.errors';
-import { Deferred, when } from '../../core/utils/deferred';
+import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import { encodeHtml } from '../../core/utils/string';
 import browser from '../../core/utils/browser';
@@ -120,7 +120,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             this.executeAction('onRowValidating', parameters);
 
-            when(parameters.promise).always(function() {
+            when(fromPromise(parameters.promise)).always(function() {
                 validationData.isValid = parameters.isValid;
                 validationData.errorText = parameters.errorText;
                 deferred.resolve(parameters);
