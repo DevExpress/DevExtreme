@@ -2431,7 +2431,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         let firstViewDate = this.getStartViewDate();
 
-        if(firstViewDate.getHours() !== this.option('startDayHour')) {
+        const isFirstViewDateDuringDST = firstViewDate.getHours() !== Math.floor(this.option('startDayHour'));
+
+        if(isFirstViewDateDuringDST) {
             const dateWithCorrectHours = this._getValidFirstViewDateWithoutDST();
 
             firstViewDate = new Date(dateWithCorrectHours - toMs('day'));
@@ -2445,7 +2447,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         let timeZoneDifference = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
         // It means that first view date is during DST and actually does not exist
-        if(firstViewDate.getHours() !== this.option('startDayHour')) {
+        if(isFirstViewDateDuringDST) {
             timeZoneDifference = 0;
         }
 
