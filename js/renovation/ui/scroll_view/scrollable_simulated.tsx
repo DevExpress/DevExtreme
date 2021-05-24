@@ -907,8 +907,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const locatedNotAtBound = !reachedMin && !reachedMax;
 
     const { delta } = e as any;
-    const scrollFromMin = (reachedMin && delta > 0);
-    const scrollFromMax = (reachedMax && delta < 0);
+    const scrollFromMin = reachedMin && delta > 0;
+    const scrollFromMax = reachedMax && delta < 0;
 
     let validated = contentGreaterThanContainer
       && (locatedNotAtBound || scrollFromMin || scrollFromMax);
