@@ -172,7 +172,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   get pages(): PageType[] {
     const { pageIndex } = this.props;
     const createPage = (index: PageIndex): PageType => {
-      const pagerProps = (index === 'low' || index === 'high') ? null
+      const pagerProps = index === 'low' || index === 'high' ? null
         : {
           index,
           onClick: (): void => this.onPageClick(index),

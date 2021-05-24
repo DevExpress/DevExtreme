@@ -230,7 +230,7 @@ export class Button extends JSXComponent(ButtonProps) {
 
     return {
       role: 'button',
-      ...(label ? { label } : {}),
+      ...label ? { label } : {},
     };
   }
 
@@ -241,12 +241,12 @@ export class Button extends JSXComponent(ButtonProps) {
   get iconSource(): string {
     const { icon, type } = this.props;
 
-    return (icon || type === 'back') ? (icon || 'back') : '';
+    return icon || type === 'back' ? icon || 'back' : '';
   }
 
   get inkRippleConfig(): InkRippleConfig {
     const { text, icon, type } = this.props;
-    return ((!text && icon) || (type === 'back')) ? {
+    return (!text && icon) || (type === 'back') ? {
       isCentered: true,
       useHoldAnimation: false,
       waveSizeCoefficient: 1,

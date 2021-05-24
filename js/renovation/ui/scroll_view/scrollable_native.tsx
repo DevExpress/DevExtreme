@@ -290,13 +290,13 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       }
     }
 
-    this.releaseTimer = setTimeout((() => {
+    this.releaseTimer = setTimeout(() => {
       if (this.isPullDownStrategy) {
         this.contentTranslateTop = 0;
       }
       this.stateReleased();
       this.onRelease();
-    }), this.isSwipeDownStrategy ? 800 : 400);
+    }, this.isSwipeDownStrategy ? 800 : 400);
   }
 
   clearReleaseTimer(): void {
@@ -757,9 +757,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     if (this.topPocketState === TopPocketState.STATE_READY) {
       this.contentTranslateTop = this.topPocketHeight;
       this.clearRefreshTimer();
-      this.refreshTimer = setTimeout((() => {
+      this.refreshTimer = setTimeout(() => {
         this.pullDownRefreshing();
-      }), 400);
+      }, 400);
     }
   }
 

@@ -18,11 +18,10 @@ export const sizeIsValid = (value: number | undefined): boolean => !!(value && (
 export const pickPositiveValue = (
   values: (number | undefined)[],
 // eslint-disable-next-line max-len
-): number => values.reduce((result: number, value) => ((value && value > 0 && !result) ? value : result), 0);
+): number => values.reduce((result: number, value) => (value && value > 0 && !result ? value : result), 0);
 
-export const pointInCanvas = (canvas: ClientRect, x: number, y: number): boolean => (
-  x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom
-);
+export const pointInCanvas = (canvas: ClientRect, x: number, y: number):
+boolean => x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom;
 
 export function getFormatValue(value: number|Date|string, specialFormat: string|undefined,
   { argumentFormat, format }: { argumentFormat?: Format; format?: Format }): string {

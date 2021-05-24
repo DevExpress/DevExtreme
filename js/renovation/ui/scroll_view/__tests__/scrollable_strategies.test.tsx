@@ -193,7 +193,7 @@ each([{
 
         Object.defineProperties(viewModel, {
           cssClasses: {
-            get() { return (cssClasses); },
+            get() { return cssClasses; },
           },
         });
 
