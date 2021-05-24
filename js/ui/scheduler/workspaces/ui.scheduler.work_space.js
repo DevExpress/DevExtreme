@@ -2446,7 +2446,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         const currentDate = new Date(firstViewDateTime + millisecondsOffset + offsetByCount);
 
         let timeZoneDifference = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
-        // It means that first view date is during DST and actually does not exist
         if(isFirstViewDateDuringDST) {
             timeZoneDifference = 0;
         }
