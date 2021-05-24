@@ -2429,16 +2429,28 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getDateByCellIndexes(rowIndex, cellIndex, patchedIndexes) {
         cellIndex = !patchedIndexes ? this._patchCellIndex(cellIndex) : cellIndex;
 
-        const firstViewDate = this.getStartViewDate();
+        let firstViewDate = this.getStartViewDate();
+
+        if(firstViewDate.getHours() !== this.option('startDayHour')) {
+            const dateWithCorrectHours = this._getValidFirstViewDateWithoutDST();
+
+            firstViewDate = new Date(dateWithCorrectHours - toMs('day'));
+        }
 
         const firstViewDateTime = firstViewDate.getTime();
         const millisecondsOffset = this._getMillisecondsOffset(rowIndex, cellIndex);
         const offsetByCount = this._getOffsetByCount(cellIndex);
-        const startViewDateOffset = this._getTimeOffsetForStartViewDate();
 
-        const currentDate = new Date(firstViewDateTime + millisecondsOffset + offsetByCount - startViewDateOffset);
+        const currentDate = new Date(firstViewDateTime + millisecondsOffset + offsetByCount);
 
-        currentDate.setTime(currentDate.getTime() + dateUtils.getTimezonesDifference(firstViewDate, currentDate));
+        let timeZoneDifference = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
+        // It means that first view date is during DST and actually does not exist
+        if(firstViewDate.getHours() !== this.option('startDayHour')) {
+            timeZoneDifference = 0;
+        }
+
+        currentDate.setTime(currentDate.getTime() + timeZoneDifference);
+
         return currentDate;
     }
 
@@ -3522,6 +3534,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         return 0;
+    }
+
+    _getValidFirstViewDateWithoutDST() {
+        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
+        newFirstViewDate.setHours(this.option('startDayHour'));
+
+        return newFirstViewDate;
     }
 }
 

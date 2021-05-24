@@ -111,13 +111,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return result;
     }
 
-    _getValidFirstViewDateWithoutDST() {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
-        newFirstViewDate.setHours(this.option('startDayHour'));
-
-        return newFirstViewDate;
-    }
-
     _getFormat() {
         return 'shorttime';
     }
