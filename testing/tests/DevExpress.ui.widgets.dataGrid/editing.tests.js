@@ -12022,6 +12022,40 @@ QUnit.module('Editing with validation', {
         assert.equal($errorRow.find('.dx-error-message').text(), errorText, 'errorText is correct');
     });
 
+    QUnit.test('rowValidating should not throw errors when a native promise is used (T999928)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'row'
+            },
+            columns: ['name'],
+            onRowValidating: function(options) {
+                options.promise = new Promise(resolve => {
+                    resolve();
+                });
+            }
+        });
+
+        // act
+        this.addRow();
+
+        try {
+            this.saveEditData();
+            this.clock.tick();
+
+            // assert
+            assert.ok(true, 'no errors');
+        } catch(error) {
+            // assert
+            assert.ok(false, `error is thrown: ${error.message}`);
+        }
+    });
+
     // T241920
     QUnit.testInActiveWindow('Cell editor invalid value don\'t miss focus on saveEditData', function(assert) {
         // arrange
