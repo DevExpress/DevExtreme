@@ -468,7 +468,6 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             });
         });
 
-        // TODO: use previous hour for DST in the dateTable
         [{
             view: 'day',
             left: 100,
