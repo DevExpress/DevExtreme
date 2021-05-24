@@ -10,11 +10,16 @@ import { when, Deferred } from '../../../core/utils/deferred';
 
 import { AgendaResourceProcessor } from './agendaResourceProcessor';
 import { getDisplayExpr, getFieldExpr, getValueExpr, getWrappedDataSource } from './utils';
-import { getInstanceFactory } from '../instanceFactory';
+import { getWorkspaceHelper } from '../instanceFactory';
 
-export class ResourceManager {
+export default class ResourceManager {
     constructor(resources) {
+        this.loadedResources = [];
         this._resourceLoader = {};
+        this._dataAccessors = {
+            getter: {},
+            setter: {}
+        };
         this.agendaProcessor = new AgendaResourceProcessor();
 
         this.setResources(resources);
@@ -196,6 +201,18 @@ export class ResourceManager {
     }
 
     loadResources(groups) {
+        const result = new Deferred();
+
+        this.loadResourcesCore(groups).done((resources) => {
+
+            this.loadedResources = resources;
+
+            result.resolve(resources);
+        });
+
+        return result.promise();
+    }
+    loadResourcesCore(groups) {
         const result = new Deferred();
         const that = this;
         const deferreds = [];
@@ -396,16 +413,16 @@ export class ResourceManager {
         return result;
     }
 
-    groupAppointmentsByResources(appointments, groups, loadedResources) {
+    groupAppointmentsByResources(appointments, groups) {
         let result = { '0': appointments };
 
         if(groups && groups.length && this.getResourcesData().length) {
-            result = this.groupAppointmentsByResourcesCore(appointments, loadedResources);
+            result = this.groupAppointmentsByResourcesCore(appointments, this.loadedResources);
         }
 
         let totalResourceCount = 0;
 
-        each(loadedResources, function(i, resource) {
+        each(this.loadedResources, function(i, resource) {
             if(!i) {
                 totalResourceCount = resource.items.length;
             } else {
@@ -447,15 +464,17 @@ export class ResourceManager {
     }
 
     getAppointmentColor(options) {
-        const { groups, workspaceGroups } = options;
+        const {
+            groups,
+            workspaceGroups
+        } = options;
         const resourceForPainting = this.getResourceForPainting(groups);
         let response = new Deferred().resolve().promise();
-        const { workspaceHelper } = getInstanceFactory();
 
         if(resourceForPainting) {
             const field = getFieldExpr(resourceForPainting);
             const groupIndex = options.groupIndex;
-            const cellGroups = workspaceHelper.getCellGroups(groupIndex, workspaceGroups);
+            const cellGroups = getWorkspaceHelper().getCellGroups(groupIndex, workspaceGroups);
             const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(options.itemData));
 
             let groupId = resourceValues.length
@@ -620,8 +639,8 @@ export class ResourceManager {
         return result;
     }
 
-    createReducedResourcesTree(resources) {
-        const tree = this.createResourcesTree(resources);
-        return this.reduceResourcesTree(tree, this.getFilteredItems());
+    createReducedResourcesTree(filteredItems) {
+        const tree = this.createResourcesTree(this.loadedResources);
+        return this.reduceResourcesTree(tree, filteredItems);
     }
 }

@@ -21,7 +21,7 @@ import timeZoneUtils from '../utils.timeZone.js';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS } from '../classes';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
-import { getInstanceFactory } from '../instanceFactory';
+import { getAppointmentDataProvider, getInstanceFactory } from '../instanceFactory';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -957,7 +957,7 @@ class SchedulerAppointments extends CollectionWidget {
         const maxAllowedDate = this.invoke('getEndViewDate');
         const startDayHour = this.invoke('getStartDayHour');
         const endDayHour = this.invoke('getEndDayHour');
-        const appointmentIsLong = this.invoke('appointmentTakesSeveralDays', appointment);
+        const appointmentIsLong = getAppointmentDataProvider().appointmentTakesSeveralDays(appointment);
         const result = [];
 
         const timeZoneCalculator = this.invoke('getTimeZoneCalculator');

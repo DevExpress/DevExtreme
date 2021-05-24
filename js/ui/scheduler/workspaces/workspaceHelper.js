@@ -1,6 +1,6 @@
 import { getInstanceFactory } from '../instanceFactory';
 
-export class WorkspaceHelper { // TODO extract by viewModels
+export default class WorkspaceHelper { // TODO extract by viewModels
     getCellGroups(groupIndex, groups) {
         const result = [];
 

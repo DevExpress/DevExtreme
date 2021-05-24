@@ -241,7 +241,7 @@ class SchedulerAgenda extends WorkSpace {
     _makeGroupRows() {
         const { resourceManager } = getInstanceFactory();
 
-        const tree = resourceManager.createReducedResourcesTree(this.instance._loadedResources); // TODO refactoring
+        const tree = resourceManager.createReducedResourcesTree(); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
         const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
         const cellTemplates = [];

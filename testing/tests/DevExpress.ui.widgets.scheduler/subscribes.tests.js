@@ -5,6 +5,7 @@ import {
     AppointmentSettingsGeneratorBaseStrategy,
     AppointmentSettingsGeneratorVirtualStrategy
 } from 'ui/scheduler/appointmentSettingsGenerator';
+import { getAppointmentDataProvider, getResourceManager } from 'ui/scheduler/instanceFactory';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
@@ -37,7 +38,7 @@ module('Subscribes', {
         this.clock.restore();
     }
 }, function() {
-    test('\'replaceWrongEndDate\' should process endDate correctly', function(assert) {
+    test('"replaceWrongEndDate" should process endDate correctly', function(assert) {
         this.createInstance({
             currentView: 'week'
         });
@@ -66,7 +67,7 @@ module('Subscribes', {
                 expectedEndDate: new Date(2019, 4, 3, 23, 59)
             }
         ].forEach(testCase => {
-            this.instance.fire('replaceWrongEndDate', testCase.data, new Date(2019, 4, 3, 12), testCase.data.endDate);
+            getAppointmentDataProvider().replaceWrongEndDate(testCase.data, new Date(2019, 4, 3, 12), testCase.data.endDate);
             assert.equal(testCase.data.endDate.getHours(), testCase.expectedEndDate.getHours(), 'replaced endDate is ok');
             assert.equal(testCase.data.endDate.getMinutes(), testCase.expectedEndDate.getMinutes(), 'replaced endDate is ok');
         });
@@ -567,8 +568,8 @@ module('Subscribes', {
             }
         ];
 
-        assert.ok(this.instance.fire('appointmentTakesSeveralDays', appointments[0]), 'appointmentTakesSeveralDays works correctly');
-        assert.notOk(this.instance.fire('appointmentTakesSeveralDays', appointments[1]), 'appointmentTakesSeveralDays works correctly');
+        assert.ok(getAppointmentDataProvider().appointmentTakesSeveralDays(appointments[0]), 'appointmentTakesSeveralDays works correctly');
+        assert.notOk(getAppointmentDataProvider().appointmentTakesSeveralDays(appointments[1]), 'appointmentTakesSeveralDays works correctly');
     });
 
     test('UpdateAppointmentStartDate should return corrected startDate for long appointments', function(assert) {
@@ -776,7 +777,7 @@ module('Subscribes', {
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '\'getAppointmentDurationInMs\' works fine');
     });
 
-    test('\'getAppointmentColor\' by certain group', function(assert) {
+    test('"getAppointmentColor" by certain group', function(assert) {
         let appointmentColor;
 
         this.createInstance({
@@ -797,13 +798,18 @@ module('Subscribes', {
             ]
         });
 
-        const result = this.instance.fire('getAppointmentColor', {
+        const groups = this.instance._getCurrentViewOption('groups');
+        const workspaceGroups = this.instance.getWorkSpace().option('groups');
+        const result = getResourceManager().getAppointmentColor({
             itemData: {
                 typeId: 1,
                 priorityId: 1
             },
             groupIndex: 0,
+            groups,
+            workspaceGroups
         });
+
         result.done(function(color) {
             appointmentColor = color;
         });
@@ -811,7 +817,7 @@ module('Subscribes', {
         assert.strictEqual(appointmentColor, 'red', 'appointment color');
     });
 
-    test('\'getAppointmentColor\' with fieldExpr for complex resource', function(assert) {
+    test('"getAppointmentColor" with fieldExpr for complex resource', function(assert) {
         let appointmentColor;
 
         this.createInstance({
@@ -844,7 +850,9 @@ module('Subscribes', {
             }]
         });
 
-        const result = this.instance.fire('getAppointmentColor', {
+        const groups = this.instance._getCurrentViewOption('groups');
+        const workspaceGroups = this.instance.getWorkSpace().option('groups');
+        const result = getResourceManager().getAppointmentColor({
             itemData: {
                 'Price': 10,
                 'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
@@ -855,6 +863,8 @@ module('Subscribes', {
                 'TheatreId': 1
             },
             groupIndex: 0,
+            groups,
+            workspaceGroups
         });
 
         result.done(function(color) {

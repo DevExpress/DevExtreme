@@ -132,10 +132,6 @@ const subscribes = {
         return this._header._$element && parseInt(this._header._$element.outerHeight(), 10);
     },
 
-    appointmentTakesSeveralDays: function(appointment) {
-        return this.appointmentDataProvider.appointmentTakesSeveralDays(appointment);
-    },
-
     getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
         const appointmentAdapter = this.createAppointmentAdapter(appointmentRaw);
         const targetedAdapter = this.createAppointmentAdapter(targetedAppointmentRaw || appointmentRaw);
@@ -532,14 +528,6 @@ const subscribes = {
             result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
         }
         return result;
-    },
-
-    replaceWrongEndDate: function(appointment, startDate, endDate) {
-        this.appointmentDataProvider.replaceWrongEndDate(appointment, startDate, endDate);
-    },
-
-    calculateAppointmentEndDate: function(isAllDay, startDate) {
-        return this.appointmentDataProvider.calculateAppointmentEndDate(isAllDay, startDate);
     },
 
     getEndDayHour: function() {

@@ -3,6 +3,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
+import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
 import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
@@ -84,9 +85,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     getAppointmentDurationInMs: function(options) {
         return options.endDate.getTime() - options.startDate.getTime();
     },
-    getResourcesFromItem: () => {
-        return { someId: ['with space'] };
-    },
     getAppointmentGeometry: (settings) => {
         return {
             width: settings.width || 0,
@@ -133,6 +131,13 @@ const createInstance = (options, subscribesConfig) => {
 
             return callback && callback.apply(this, args.slice(1));
         }
+    };
+
+    getInstanceFactory().create({ resources: options.resources });
+    const { resourceManager } = getInstanceFactory();
+
+    resourceManager.getResourcesFromItem = () => {
+        return { someId: ['with space'] };
     };
 
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
@@ -697,6 +702,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             currentDate: new Date(2015, 10, 3),
             items: [item],
         }, testConfig);
+
 
         const $appointment = $('.dx-scheduler-appointment').eq(0);
         assert.equal($appointment.filter('[data-someid-with__32__space]').length, 1, 'attr is right');

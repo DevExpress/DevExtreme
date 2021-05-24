@@ -52,7 +52,7 @@ import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
-import { getInstanceFactory } from '../instanceFactory';
+import { getInstanceFactory, getWorkspaceHelper } from '../instanceFactory';
 
 import { cache } from './cache';
 
@@ -1842,7 +1842,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
             groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
-            const groupsArray = getInstanceFactory().workspaceHelper.getCellGroups(
+            const groupsArray = getWorkspaceHelper().getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -1916,8 +1916,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: cellGroupIndex,
         };
 
-        const groupsArray = getInstanceFactory().workspaceHelper.getCellGroups(
-            groupIndex,
+        const groupsArray = getWorkspaceHelper().getCellGroups(
+            cellGroupIndex,
             this.option('groups')
         );
 
@@ -1972,7 +1972,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const groupIndex = this._getGroupIndex(rowIndex, 0);
 
-            const groupsArray = getInstanceFactory().workspaceHelper.getCellGroups(
+            const groupsArray = getWorkspaceHelper().getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -2086,7 +2086,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex,
         };
 
-        const groupsArray = getInstanceFactory().workspaceHelper.getCellGroups(
+        const groupsArray = getWorkspaceHelper().getCellGroups(
             groupIndex,
             this.option('groups')
         );
@@ -2129,10 +2129,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getAllGroups() {
         const groupCount = this._getGroupCount();
-        const { workspaceHelper } = getInstanceFactory();
 
         return [...(new Array(groupCount))].map((_, groupIndex) => {
-            const groupsArray = workspaceHelper.getCellGroups(
+            const groupsArray = getWorkspaceHelper().getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
