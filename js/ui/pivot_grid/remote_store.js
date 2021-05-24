@@ -10,6 +10,7 @@ import { getFiltersByPath,
     discoverObjectFields,
     setDefaultFieldValueFormatting } from './ui.pivot_grid.utils';
 import { deserializeDate } from '../../core/utils/date_serialization';
+import { normalizeLoadResult } from '../../data/data_source/utils';
 
 function createGroupingOptions(dimensionOptions, useSortOrder) {
     const groupingOptions = [];
@@ -521,7 +522,8 @@ module.exports = Class.inherit((function() {
                 const args = deferreds.length > 1 ? arguments : [arguments];
 
                 each(args, function(index, argument) {
-                    parseResult(argument[0], argument[1], requestsData[index], result);
+                    const normalizedArguments = normalizeLoadResult(argument[0], argument[1]);
+                    parseResult(normalizedArguments.data, normalizedArguments.extra, requestsData[index], result);
                 });
 
                 d.resolve({
