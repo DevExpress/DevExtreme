@@ -57,6 +57,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
       aria={viewModel.aria}
+      className={viewModel.props.className}
       classes={viewModel.cssClasses}
       disabled={viewModel.props.disabled}
       focusStateEnabled={viewModel.props.focusStateEnabled}

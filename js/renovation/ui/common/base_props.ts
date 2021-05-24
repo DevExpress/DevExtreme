@@ -1,11 +1,14 @@
 import {
-  Event, OneWay, ComponentBindings, ForwardRef, RefObject,
+  Event, OneWay, ComponentBindings, ForwardRef,
 } from '@devextreme-generator/declarations';
-import { EventCallback } from './event_callback';
 
 @ComponentBindings()
 export class BaseWidgetProps {
-  @ForwardRef() rootElementRef!: RefObject<HTMLDivElement>;
+  // TODO Vitik workaround for: https://trello.com/c/0RkuDnxC/2752-renovation-unable-to-import-refobject-for-componentbinding-only
+  @ForwardRef() rootElementRef?: {
+    (instance: (HTMLDivElement) | null): void;
+    current: HTMLDivElement | null;
+  };// RefObject<HTMLDivElement>;
 
   @OneWay() className?: string = '';
 
@@ -23,9 +26,9 @@ export class BaseWidgetProps {
 
   @OneWay() hoverStateEnabled?: boolean = false;
 
-  @Event() onClick?: EventCallback<Event>;
+  @Event() onClick?: (e: any) => void;
 
-  @Event() onKeyDown?: EventCallback<Event>;
+  @Event() onKeyDown?: (e: any) => any;
 
   @OneWay() rtlEnabled?: boolean;
 

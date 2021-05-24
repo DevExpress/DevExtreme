@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
@@ -8,6 +8,7 @@ import LegacyList, { dxListItem } from '../../ui/list';
 
 // import renderTemplate from '../utils/render_template';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
+import { EventCallback } from './common/event_callback';
 
 export const viewFunction = ({
   props: { rootElementRef, ...componentProps },
@@ -149,9 +150,9 @@ export class ListProps extends BaseWidgetProps {
 
   // @OneWay()useNativeScrolling?: boolean;
 
-  @OneWay() itemTemplate?: string;
+  @OneWay() itemTemplate?: ((data) => JSX.Element) | string;
 
-//   @Event() onItemClick?: (e: any) => any = (() => {});
+  @Event() onItemClick?: EventCallback<{ itemData }>;
 }
 @Component({
   defaultOptionRules: null,

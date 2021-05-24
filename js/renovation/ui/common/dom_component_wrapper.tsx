@@ -42,7 +42,7 @@ export class DomComponentWrapperProps {
 
   @OneWay() componentProps!: {
     className?: string;
-    itemTemplate?: string;
+    itemTemplate?: ((data) => JSX.Element) | string;
     valueChange?: (value) => void;
   };
 }
@@ -109,7 +109,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     }
     if (itemTemplate) {
       properties.itemTemplate = (item, index, container): void => {
-        renderTemplate(itemTemplate, { item, index, container }, container);
+        renderTemplate(itemTemplate as string, { item, index, container }, container);
       };
     }
     return properties;
