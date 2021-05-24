@@ -2434,7 +2434,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const isFirstViewDateDuringDST = firstViewDate.getHours() !== Math.floor(this.option('startDayHour'));
 
         if(isFirstViewDateDuringDST) {
-            const dateWithCorrectHours = this._getValidFirstViewDateWithoutDST();
+            const dateWithCorrectHours = this._getFirstViewDateWithoutDST();
 
             firstViewDate = new Date(dateWithCorrectHours - toMs('day'));
         }
@@ -3537,7 +3537,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return 0;
     }
 
-    _getValidFirstViewDateWithoutDST() {
+    _getFirstViewDateWithoutDST() {
         const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
         newFirstViewDate.setHours(this.option('startDayHour'));
 
