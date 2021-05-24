@@ -37,7 +37,6 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
     /**
      * @docid
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationGroup?: string;
@@ -47,7 +46,6 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
  * @inherits CollectionWidget
  * @module ui/validation_summary
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */

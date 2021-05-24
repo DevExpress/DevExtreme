@@ -49,7 +49,6 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @hasTranscludedContent
  * @module ui/validation_group
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
@@ -58,7 +57,6 @@ export default class dxValidationGroup extends DOMComponent {
     /**
      * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
@@ -66,7 +64,6 @@ export default class dxValidationGroup extends DOMComponent {
      * @docid
      * @publicName validate()
      * @return dxValidationGroupResult
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validate(): dxValidationGroupResult;
@@ -80,33 +77,28 @@ export default class dxValidationGroup extends DOMComponent {
 export interface dxValidationGroupResult {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
      * @docid
      * @type Promise<dxValidationGroupResult>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     complete?: DxPromise<dxValidationGroupResult>;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     isValid?: boolean;
     /**
      * @docid
      * @type Enums.ValidationStatus
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     status?: 'valid' | 'invalid' | 'pending';
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validators?: Array<any>;

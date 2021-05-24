@@ -53,34 +53,29 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @type_function_param1 buttonData:object
      * @type_function_param2 buttonContent:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     buttonTemplate?: template | ((buttonData: any, buttonContent: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxButtonGroupItem>;
     /**
      * @docid
      * @default 'text'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string | Function;
@@ -96,7 +91,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onItemClick?: ((e: ItemClickEvent) => void);
@@ -111,21 +105,18 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItemKeys?: Array<any>;
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<any>;
@@ -133,7 +124,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @type Enums.ButtonGroupSelectionMode
      * @default 'single'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectionMode?: 'multiple' | 'single';
@@ -141,7 +131,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @type Enums.ButtonStylingMode
      * @default 'contained'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     stylingMode?: 'text' | 'outlined' | 'contained';
@@ -151,7 +140,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
  * @inherits Widget
  * @module ui/button_group
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
@@ -168,13 +156,11 @@ export default class dxButtonGroup extends Widget {
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hint?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
@@ -182,7 +168,6 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
      * @docid
      * @type Enums.ButtonType
      * @default 'normal'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';

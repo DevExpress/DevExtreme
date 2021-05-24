@@ -6,7 +6,6 @@
  * @module utils
  * @namespace DevExpress.data.utils
  * @export compileGetter
- * @prevFileNamespace DevExpress
  * @public
  */
 export function compileGetter(expr: string | Array<string>): Function;
@@ -19,7 +18,6 @@ export function compileGetter(expr: string | Array<string>): Function;
  * @module utils
  * @namespace DevExpress.data.utils
  * @export compileSetter
- * @prevFileNamespace DevExpress
  * @public
  */
 export function compileSetter(expr: string | Array<string>): Function;

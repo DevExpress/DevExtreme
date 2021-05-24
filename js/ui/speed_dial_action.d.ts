@@ -41,21 +41,18 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     index?: number;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     label?: string;
@@ -67,7 +64,6 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @type_function_param1_field3 element:DxElement
      * @type_function_param1_field4 actionElement:DxElement
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onClick?: ((e: ClickEvent) => void);
@@ -80,13 +76,11 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @type_function_param1_field3 model:any
      * @type_function_param1_field4 actionElement:DxElement
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onContentReady?: ((e: ContentReadyEvent) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
@@ -96,7 +90,6 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @inherits Widget
  * @module ui/speed_dial_action
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
