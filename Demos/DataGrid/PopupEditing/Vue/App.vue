@@ -8,6 +8,8 @@
       <DxPaging :enabled="false"/>
       <DxEditing
         :allow-updating="true"
+        :allow-adding="true"
+        :allow-deleting="true"
         mode="popup"
       >
         <DxPopup

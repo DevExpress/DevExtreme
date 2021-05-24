@@ -8,7 +8,9 @@ $(function(){
         },
         editing: {
             mode: "form",
-            allowUpdating: true
+            allowUpdating: true,
+            allowAdding: true,
+            allowDeleting: true
         },
         columns: [
             {

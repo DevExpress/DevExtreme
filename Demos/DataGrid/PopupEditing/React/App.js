@@ -26,7 +26,9 @@ class App extends React.Component {
           <Paging enabled={false} />
           <Editing
             mode="popup"
-            allowUpdating={true}>
+            allowUpdating={true}
+            allowAdding={true}
+            allowDeleting={true}>
             <Popup title="Employee Info" showTitle={true} width={700} height={525} />
             <Form>
               <Item itemType="group" colCount={2} colSpan={2}>

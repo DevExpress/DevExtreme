@@ -7,6 +7,8 @@
     >
       <DxEditing
         :allow-updating="true"
+        :allow-adding="true"
+        :allow-deleting="true"
         mode="form"
       />
       <DxPaging :enabled="false"/>

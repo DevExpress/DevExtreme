@@ -50,7 +50,9 @@ class App extends React.Component {
           <Paging enabled={false} />
           <Editing
             mode="cell"
-            allowUpdating={true} />
+            allowUpdating={true}
+            allowAdding={true}
+            allowDeleting={true} />
 
           <Column dataField="Prefix" caption="Title" width={55} />
           <Column dataField="FirstName" />

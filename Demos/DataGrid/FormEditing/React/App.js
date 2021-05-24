@@ -25,7 +25,9 @@ class App extends React.Component {
           <Paging enabled={false} />
           <Editing
             mode="form"
-            allowUpdating={true} />
+            allowUpdating={true}
+            allowAdding={true}
+            allowDeleting={true} />
           <Column dataField="Prefix" caption="Title" width={70} />
           <Column dataField="FirstName" />
           <Column dataField="LastName" />

@@ -16,6 +16,8 @@
     >
       <DxEditing
         :allow-updating="true"
+        :allow-adding="true"
+        :allow-deleting="true"
         mode="cell"
       />
       <DxPaging :enabled="false"/>

@@ -10,7 +10,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         },
         editing: {
             mode: "form",
-            allowUpdating: true
+            allowUpdating: true,
+            allowAdding: true,
+            allowDeleting: true
         },
         columns: [
             {

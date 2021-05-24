@@ -6,6 +6,8 @@ $(function(){
         editing: {
             mode: "popup",
             allowUpdating: true,
+            allowAdding: true,
+            allowDeleting: true,
             popup: {
                 title: "Employee Info",
                 showTitle: true,

@@ -9,6 +9,8 @@ $(function(){
         editing: {
             mode: "batch",
             allowUpdating: true,
+            allowAdding: true,
+            allowDeleting: true,
             selectTextOnEditStart: true,
             startEditAction: "click"
         },

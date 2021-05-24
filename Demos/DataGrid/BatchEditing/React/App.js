@@ -42,6 +42,8 @@ class App extends React.Component {
           <Editing
             mode="batch"
             allowUpdating={true}
+            allowAdding={true}
+            allowDeleting={true}
             selectTextOnEditStart={this.state.selectTextOnEditStart}
             startEditAction={this.state.startEditAction} />
           <Column dataField="Prefix" caption="Title" width={70} />

@@ -24,7 +24,9 @@ $(function(){
         },
         editing: {
             mode: "cell",
-            allowUpdating: true
+            allowUpdating: true,
+            allowAdding: true,
+            allowDeleting: true
         },
         selection: {
             mode: "multiple"

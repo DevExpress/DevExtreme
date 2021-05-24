@@ -13,7 +13,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         },
         editing: {
             mode: "batch",
-            allowUpdating: true
+            allowUpdating: true,
+            allowAdding: true,
+            allowDeleting: true
         },
         bindingOptions: {
             "editing.startEditAction": "startEditAction",

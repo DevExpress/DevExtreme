@@ -7,6 +7,8 @@
     >
       <DxEditing
         :allow-updating="true"
+        :allow-adding="true"
+        :allow-deleting="true"
         :select-text-on-edit-start="selectTextOnEditStart"
         :start-edit-action="startEditAction"
         mode="batch"
