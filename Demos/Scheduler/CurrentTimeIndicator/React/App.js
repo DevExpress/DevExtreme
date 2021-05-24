@@ -96,8 +96,7 @@ class App extends React.Component {
   }
 
   onContentReady(e) {
-    const currentHour = new Date().getHours() - 1;
-    e.component.scrollToTime(currentHour, 30, new Date());
+    e.component.scrollTo(new Date());
   }
 
   onAppointmentClick(e) {

@@ -27,9 +27,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         }],
         appointmentTemplate: "appointment-template",
         onContentReady: function(e) {
-            var currentHour = new Date().getHours() - 1;
-
-            e.component.scrollToTime(currentHour, 30, new Date());
+            e.component.scrollTo(new Date());
         },
         onAppointmentClick: function(e) {
             e.cancel = true;

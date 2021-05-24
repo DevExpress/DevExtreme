@@ -6,9 +6,9 @@
       :views="views"
       :show-current-time-indicator="showCurrentTimeIndicator"
       :shade-until-current-time="shadeUntilCurrentTime"
-      :on-content-ready="onContentReady"
-      :on-appointment-click="onAppointmentClick"
-      :on-appointment-dbl-click="onAppointmentDblClick"
+      @content-ready="onContentReady"
+      @appointment-click="onAppointmentClick"
+      @appointment-dbl-click="onAppointmentDblClick"
       :editing="false"
       :show-all-day-panel="false"
       appointment-template="AppointmentTemplateSlot"
@@ -93,8 +93,7 @@ export default {
   },
   methods: {
     onContentReady: function(e) {
-      const currentHour = new Date().getHours() - 1;
-      e.component.scrollToTime(currentHour, 30, new Date());
+      e.component.scrollTo(new Date());
     },
 
     onAppointmentClick: function(e) {
@@ -103,18 +102,6 @@ export default {
 
     onAppointmentDblClick: function(e) {
       e.cancel = true;
-    },
-
-    onShowCurrentTimeIndicatorChanged: function(e) {
-      this.setState({ showCurrentTimeIndicator: e.value });
-    },
-
-    onShadeUntilCurrentTimeChanged: function(e) {
-      this.setState({ shadeUntilCurrentTime: e.value });
-    },
-
-    onUpdateIntervalChanged: function(args) {
-      this.setState({ updateInterval: args.value });
     }
   }
 };

@@ -30,6 +30,7 @@ export class AppComponent {
     showCurrentTimeIndicator = true;
     shadeUntilCurrentTime = true;
     intervalValue = 10;
+    indicatorUpdateInterval = 10000;
 
     constructor(service: Service) {
         this.appointmentsData = service.getAppointments();
@@ -37,9 +38,7 @@ export class AppComponent {
     }
 
     onContentReady(e) {
-        var currentHour = new Date().getHours() - 1;
-
-        e.component.scrollToTime(currentHour, 30, new Date());
+        e.component.scrollTo(new Date());
     }
 
     onAppointmentClick(e) {
@@ -51,7 +50,7 @@ export class AppComponent {
     }
 
     changeIndicatorUpdateInterval(e) {
-        this.scheduler.instance.option("indicatorUpdateInterval", e.value * 1000);
+        this.indicatorUpdateInterval = e.value * 1000;
     }
 
     getMovieById(id) {
