@@ -109,9 +109,9 @@ import { currentTheme, refreshTheme, registerTheme, } from 'devextreme/viz/theme
 import { refreshPaths } from 'devextreme/viz/utils';
 import { projection } from 'devextreme/viz/vector_map/projection';
 
-// // import Globalize from 'globalize';
+import Globalize from 'globalize';
 
-// import 'devextreme/localization/globalize/currency';
-// import 'devextreme/localization/globalize/date';
-// import 'devextreme/localization/globalize/message';
-// import 'devextreme/localization/globalize/number';
+import 'devextreme/localization/globalize/currency';
+import 'devextreme/localization/globalize/date';
+import 'devextreme/localization/globalize/message';
+import 'devextreme/localization/globalize/number';

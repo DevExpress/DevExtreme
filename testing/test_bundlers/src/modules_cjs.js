@@ -15,7 +15,6 @@ require('devextreme/data/array_store');
 require('devextreme/data/custom_store');
 require('devextreme/data/data_source');
 require('devextreme/data/endpoint_selector');
-require('devextreme/data/errors').errorHandler;
 require('devextreme/data/local_store');
 require('devextreme/data/odata/context');
 require('devextreme/data/odata/store');
@@ -157,9 +156,11 @@ require('devextreme/viz/utils').refreshPaths;
 require('devextreme/viz/vector_map');
 require('devextreme/viz/vector_map/projection').add;
 
-// require('localization/globalize/currency');
-// require('localization/globalize/date');
-// require('localization/globalize/message');
-// require('localization/globalize/number');
+const Globalize = require('globalize');
 
-// const Globalize = require('globalize');
+require('devextreme/localization/globalize/currency');
+require('devextreme/localization/globalize/date');
+require('devextreme/localization/globalize/message');
+require('devextreme/localization/globalize/number');
+
+const errorHandler = require('devextreme/data/errors').errorHandler;
