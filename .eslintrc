@@ -197,7 +197,8 @@
                     "allowAliases": "in-unions-and-intersections",
                     "allowCallbacks": "always"
                 }
-            ]
+            ],
+            "@typescript-eslint/member-ordering": "error"
             /*
             "@typescript-eslint/prefer-includes": "error",
             "@typescript-eslint/prefer-nullish-coalescing": "error",
@@ -212,7 +213,7 @@
             "@typescript-eslint/no-unused-vars-experimental": "error",
             "@typescript-eslint/no-base-to-string": "error",
             "@typescript-eslint/init-declarations": "error",
-            "@typescript-eslint/member-ordering": "error",
+
             "@typescript-eslint/no-extraneous-class": "error",
             "@typescript-eslint/no-unsafe-return": "error",
             "@typescript-eslint/no-misused-promises": "error",

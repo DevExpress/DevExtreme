@@ -220,10 +220,6 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.clientWidth();
   }
 
-  validate(e: Event): boolean {
-    return this.scrollableRef.validate(e);
-  }
-
   @Method()
   // TODO: it uses for DataGrid only
   getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
@@ -233,6 +229,10 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   @Method()
   scrollToElementTopLeft(element: HTMLElement): void {
     this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
+  }
+
+  validate(e: Event): boolean {
+    return this.scrollableRef.validate(e);
   }
 
   get scrollableRef(): any {

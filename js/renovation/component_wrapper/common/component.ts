@@ -23,6 +23,8 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
 };
 
 export default class ComponentWrapper extends DOMComponent<Record<string, any>> {
+  static IS_RENOVATED_WIDGET = false;
+
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
     [name: string]: AbstractFunction;
@@ -35,8 +37,8 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
   _documentFragment!: DocumentFragment;
 
   _elementAttr!: {
-    class?: string;
     [name: string]: unknown;
+    class?: string;
   };
 
   _isNodeReplaced!: boolean;
@@ -459,8 +461,6 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       '"setAria" method is deprecated, use "aria" property instead',
     );
   }
-
-  static IS_RENOVATED_WIDGET = false;
 }
 
 /// #DEBUG
