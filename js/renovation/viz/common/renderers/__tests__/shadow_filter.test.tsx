@@ -19,7 +19,7 @@ describe('ShadowFilter', () => {
           opacity: 0.8,
         } as ShadowFilterProps,
       };
-      const filter = shallow(<ShadowFilterComponent {...vm as ShadowFilter} /> as JSX.Element);
+      const filter = shallow(<ShadowFilterComponent {...vm as ShadowFilter} />);
 
       expect(filter.children()).toHaveLength(5);
       expect(filter.props()).toMatchObject({

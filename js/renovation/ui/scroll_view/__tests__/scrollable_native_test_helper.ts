@@ -78,7 +78,7 @@ class ScrollableTestHelper {
     this.isHorizontal = isHorizontal;
     this.isBoth = isBoth;
 
-    this.scrollable = mount(viewFunction(this.viewModel) as JSX.Element);
+    this.scrollable = mount(viewFunction(this.viewModel));
 
     this.viewModel.scrollableRef.current = this.scrollable.getDOMNode();
     this.viewModel.containerRef.current = this.getContainerElement();

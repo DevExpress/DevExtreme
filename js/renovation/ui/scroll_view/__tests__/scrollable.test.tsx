@@ -85,7 +85,7 @@ describe('Scrollable', () => {
     describe('cssClasses', () => {
       each([false, true]).describe('useNative: %o', (useNative) => {
         it('Check strategy branch', () => {
-          const scrollable = mount(viewFunction({ props: { useNative } } as any) as JSX.Element);
+          const scrollable = mount(viewFunction({ props: { useNative } } as any));
 
           if (useNative) {
             expect(scrollable.find('.dx-scrollable-native').exists()).toBe(true);
@@ -101,7 +101,7 @@ describe('Scrollable', () => {
     describe('Integration with form', () => {
       each([false, true]).describe('useNative: %o', (useNative) => {
         it('aria property', () => {
-          const scrollable = mount(viewFunction({ props: { useNative, aria: { role: 'form' } } } as any) as JSX.Element);
+          const scrollable = mount(viewFunction({ props: { useNative, aria: { role: 'form' } } } as any));
 
           expect(scrollable.find('.dx-scrollable').prop('role')).toEqual('form');
         });

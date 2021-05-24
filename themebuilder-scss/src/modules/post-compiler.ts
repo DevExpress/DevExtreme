@@ -1,4 +1,4 @@
-import CleanCSS, { Options } from 'clean-css';
+import CleanCSS, { Options, OptionsPromise } from 'clean-css';
 import AutoPrefix from 'autoprefixer';
 import PostCss from 'postcss';
 import commonOptions from '../data/clean-css-options.json';
@@ -30,7 +30,7 @@ export function addInfoHeader(
 
 export async function cleanCss(css: string): Promise<string> {
   const promiseOptions: Options = { returnPromise: true };
-  const options: Options = { ...(commonOptions as Options), ...promiseOptions };
+  const options: OptionsPromise = { ...commonOptions as Options, ...promiseOptions };
   const cleaner = new CleanCSS(options);
   return (await cleaner.minify(css)).styles;
 }
