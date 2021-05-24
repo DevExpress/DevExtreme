@@ -1,7 +1,7 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridModule, DxDataGridComponent } from 'devextreme-angular';
 import { Order, Service } from './app.service';
 
 if(!/localhost/.test(document.location.host)) {
@@ -15,10 +15,20 @@ if(!/localhost/.test(document.location.host)) {
     providers: [Service]
 })
 export class AppComponent {
+    @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent
+
     orders: Order[];
 
     constructor(private service: Service) {
         this.orders = service.getOrders()
+    }
+
+    onStateResetClick() {
+        this.dataGrid.instance.state(null);
+    }
+
+    onRefreshClick() {
+        window.location.reload();
     }
 }
 

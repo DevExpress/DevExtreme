@@ -1,5 +1,5 @@
 $(function(){
-    $("#employees").dxTreeList({
+    const treeList = $("#employees").dxTreeList({
         dataSource: employees,
         keyExpr: "ID",
         parentIdExpr: "Head_ID",
@@ -30,5 +30,9 @@ $(function(){
                 width: 160
             }
         ]
+    }).dxTreeList("instance");
+
+    $("#state-reset-link").on("click", function() {
+        treeList.state(null);
     });
 });

@@ -1,7 +1,7 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTreeListModule } from 'devextreme-angular';
+import { DxTreeListModule, DxTreeListComponent } from 'devextreme-angular';
 import { Employee, Service } from './app.service';
 
 if(!/localhost/.test(document.location.host)) {
@@ -15,10 +15,20 @@ if(!/localhost/.test(document.location.host)) {
     providers: [Service]
 })
 export class AppComponent {
+    @ViewChild(DxTreeListComponent, { static: false }) treeList: DxTreeListComponent
+
     employees: Employee[];
 
     constructor(private service: Service) {
         this.employees = service.getEmployees()
+    }
+
+    onStateResetClick() {
+        this.treeList.instance.state(null)
+    }
+
+    onRefreshClick() {
+        window.location.reload();
     }
 }
 

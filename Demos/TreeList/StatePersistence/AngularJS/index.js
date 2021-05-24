@@ -4,6 +4,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.treeListOptions = {
         dataSource: employees,
         keyExpr: "ID",
+        onInitialized: function (e) {
+            $scope.treeList = e.component;    
+        },
         parentIdExpr: "Head_ID",
         allowColumnReordering: true,
         allowColumnResizing: true,
@@ -32,5 +35,13 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 width: 160
             }
         ]
-    };    
+    };
+
+    $scope.onStateResetClick = function() {
+        $scope.treeList.state(null);
+    };
+
+    $scope.onRefreshClick = function() {
+        window.location.reload();
+    };
 });

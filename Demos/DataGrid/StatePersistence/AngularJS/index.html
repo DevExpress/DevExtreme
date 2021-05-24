@@ -16,7 +16,7 @@
 </head>
 <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
-        <div id="descContainer">Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, <a onclick="window.location.reload()">refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped.</div>
+        <div id="descContainer">Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, <a ng-click="onRefreshClick()">refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped or you can <a ng-click="onStateResetClick()">reset</a> the grid to its initial state.</div>
         <div id="gridContainer" dx-data-grid="gridOptions"> </div>
     </div>
 </body>

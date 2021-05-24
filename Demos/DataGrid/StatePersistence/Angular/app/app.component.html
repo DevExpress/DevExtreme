@@ -1,5 +1,5 @@
-<div id="descContainer">Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, <a onclick="window.location.reload()">refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped.</div>
-<dx-data-grid id="gridContainer"
+<div id="descContainer">Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, <a (click)="onRefreshClick()">refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped or you can <a (click)="onStateResetClick()">reset</a> the grid to its initial state.</div>
+<dx-data-grid id="gridContainer" #dataGrid
     [dataSource]="orders"
     [allowColumnResizing]="true"
     [allowColumnReordering]="true"

@@ -4,6 +4,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.gridOptions = {
         dataSource: orders,
         keyExpr: "ID",
+        onInitialized: function (e) {
+            $scope.dataGrid = e.component;    
+        },
         allowColumnReordering: true,
         allowColumnResizing: true,
         showBorders: true,
@@ -46,6 +49,14 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             dataField: "CustomerStoreState",
             groupIndex: 0
         }]
+    };
+
+    $scope.onStateResetClick = function() {
+        $scope.dataGrid.state(null);
+    };
+
+    $scope.onRefreshClick = function() {
+        window.location.reload();
     };
     
 });

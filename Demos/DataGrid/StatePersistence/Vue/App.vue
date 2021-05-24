@@ -1,8 +1,9 @@
 <template>
   <div>
-    <div id="descContainer">Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, <a @click="onRefreshClick">refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped.</div>
+    <div id="descContainer">Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, <a @click="onRefreshClick">refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped or you can <a @click="onStateResetClick">reset</a> the grid to its initial state.</div>
     <DxDataGrid
       id="gridContainer"
+      ref="dataGrid"
       :data-source="orders"
       :allow-column-resizing="true"
       :allow-column-reordering="true"
@@ -65,6 +66,9 @@ export default {
   methods: {
     onRefreshClick() {
       window.location.reload();
+    },
+    onStateResetClick() {
+      this.$refs['dataGrid'].instance.state(null);
     }
   }
 };
