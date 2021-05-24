@@ -16,7 +16,6 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     isValid?: boolean;
@@ -31,14 +30,12 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onValueChanged?: ((e: NativeEventInfo<TComponent> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readOnly?: boolean;
@@ -46,14 +43,12 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @docid
      * @ref
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationError?: any;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationErrors?: Array<any>;
@@ -61,7 +56,6 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @docid
      * @type Enums.ValidationMessageMode
      * @default "auto"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationMessageMode?: 'always' | 'auto';
@@ -69,7 +63,6 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @docid
      * @type Enums.ValidationStatus
      * @default "valid"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationStatus?: 'valid' | 'invalid' | 'pending';
@@ -77,7 +70,6 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @docid
      * @default null
      * @fires EditorOptions.onValueChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
@@ -85,7 +77,6 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @docid
      * @type Enums.EditorStylingMode
      * @default 'outlined'
-     * @prevFileNamespace DevExpress.ui
      * @hidden
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';
@@ -96,14 +87,12 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
  * @module ui/editor/editor
  * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  */
 export default class Editor<TProperties = Properties> extends Widget<TProperties> {
     /**
      * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
