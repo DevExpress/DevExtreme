@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var path = require('path');
 var typescript = require('gulp-typescript');
 var replace = require('gulp-replace');
-var shell = require('gulp-shell');
 var sourcemaps = require('gulp-sourcemaps');
 var del = require('del');
 var karmaServer = require('karma').Server;
@@ -10,6 +9,11 @@ var karmaConfig = require('karma').config;
 var buildConfig = require('./build.config');
 var header = require('gulp-header');
 var ngPackagr = require('ng-packagr');
+var exec = require('child_process').exec;
+
+const argv = require('yargs')
+    .default('with-descriptions', false)
+    .argv;
 
 //------------Components------------
 
@@ -137,8 +141,10 @@ gulp.task('npm.content', gulp.series('build.components', function() {
 
 gulp.task('npm.pack', gulp.series(
     'npm.content',
-    shell.task('npm run inject-descriptions'),
-    shell.task(['npm pack'], { cwd: buildConfig.npm.distPath })
+    (cb) => {
+        argv.withDescriptions ? exec('npm run inject-descriptions', (err) => cb(err)) : cb();
+    },
+    (cb) => { exec('npm pack', { cwd: buildConfig.npm.distPath }, (err) => cb(err)) }
 ));
 
 //------------Main------------

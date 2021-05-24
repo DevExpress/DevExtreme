@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var path = require('path');
 var typescript = require('gulp-typescript');
-var shell = require('gulp-shell');
+var exec = require('child_process').exec;
 var sourcemaps = require('gulp-sourcemaps');
 var jasmine = require('gulp-jasmine');
 var jasmineReporters = require('jasmine-reporters');
@@ -14,7 +14,7 @@ const DIST_PATH = './dist';
 //------------npm------------
 
 gulp.task('npm.pack', gulp.series(
-    shell.task(['npm pack']),
+    (cb) => { exec('npm pack', (err) => cb(err)); },
     () => gulp.src('./*.tgz').pipe(gulp.dest(DIST_PATH)),
     (c) => del('./*.tgz', c)
 ));
