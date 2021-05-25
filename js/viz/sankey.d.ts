@@ -825,7 +825,7 @@ export interface dxSankeyNode {
     showTooltip(): void;
     /**
      * @docid
-     * @deprecated
+     * @deprecated dxSankeyNode.label
      * @prevFileNamespace DevExpress.viz
      * @public
      */
