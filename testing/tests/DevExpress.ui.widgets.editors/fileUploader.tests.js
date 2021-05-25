@@ -2252,6 +2252,26 @@ QUnit.module('file uploading', moduleConfig, () => {
         assert.strictEqual(onUploadedSpy.callCount, 1, 'onUploaded event raised');
         assert.ok($fileUploader.empty(), 'widget container empty');
     });
+
+    test('whole file instantly upload can be cancelled with abortUpload (T990523)', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'instantly',
+            onUploadStarted: function({ component, file }) {
+                if(component.option('value').length > 2) {
+                    component.abortUpload(file);
+                }
+            }
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        simulateFileChoose($fileUploader, [fakeFile, fakeFile1, fakeFile2]);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        $($fileUploader.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS)).each(function(i, message) {
+            assert.equal($(message).text(), instance.option('uploadAbortedMessage'), 'has uploadAbortedMessage');
+        });
+    });
 });
 
 QUnit.module('uploading progress', moduleConfig, () => {

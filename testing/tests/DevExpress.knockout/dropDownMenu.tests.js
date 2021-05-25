@@ -70,7 +70,7 @@ QUnit.test('custom item template', function(assert) {
         ],
         onContentReady: function() {
             const instance = element.dxDropDownMenu('instance');
-            const popupElement = instance._popup._wrapper();
+            const popupElement = instance._popup.$wrapper();
 
             instance.close();
 
@@ -113,8 +113,8 @@ QUnit.test('custom template name', function(assert) {
 
     $element.trigger('dxclick');
 
-    assert.equal(instance._popup._wrapper().find('.my-icon').length, 3);
-    assert.equal(instance._popup._wrapper().find('.my-text').length, 3);
+    assert.equal(instance._popup.$wrapper().find('.my-icon').length, 3);
+    assert.equal(instance._popup.$wrapper().find('.my-text').length, 3);
 });
 
 

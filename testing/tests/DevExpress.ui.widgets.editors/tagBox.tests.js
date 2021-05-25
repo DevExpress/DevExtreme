@@ -2502,7 +2502,7 @@ QUnit.module('keyboard navigation', {
             .focus()
             .press('tab');
 
-        const $applyButton = this.instance._popup._wrapper().find('.dx-button.dx-popup-done');
+        const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
         assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
 });
@@ -4340,6 +4340,27 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         assert.strictEqual(loadSpy.callCount, 4, 'no unnecessary loadings');
+    });
+
+    QUnit.test('Changing the data source should not cause an error when the search is active', function(assert) {
+        let isOk = true;
+
+        const tagBox = $('#tagBox')
+            .dxTagBox({
+                dataSource: null,
+                searchEnabled: true,
+                minSearchLength: 2,
+                opened: true
+            })
+            .dxTagBox('instance');
+
+        try {
+            tagBox.option('dataSource', []);
+        } catch(e) {
+            isOk = false;
+        }
+
+        assert.ok(isOk, 'dataSource updated without errors');
     });
 });
 

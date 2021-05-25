@@ -92,15 +92,13 @@ core.registerModule('focus', extend(true, {}, focusModule, {
 
                     that.expandAscendants(key).done(function() {
                         dataSource.load({
-                            filter: that.getCombinedFilter(),
-                            sort: that.getController('columns').getSortDataSourceParameters(!dataSource.remoteOperations().sorting),
                             parentIds: []
                         }).done(function(nodes) {
                             const offset = findIndex(nodes, function(node) {
                                 return that.keyOf(node.data) === key;
                             });
 
-                            let pageIndex = that.pageIndex();
+                            let pageIndex = -1;
 
                             if(offset >= 0) {
                                 pageIndex = Math.floor(offset / that.pageSize());

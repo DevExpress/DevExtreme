@@ -96,6 +96,7 @@ const RowDraggingExtender = {
                 }
             }));
 
+            $content.toggleClass('dx-scrollable-container', isFixedTableRendering);
             $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, allowReordering && !rowDragging.showDragIcons);
         }
 

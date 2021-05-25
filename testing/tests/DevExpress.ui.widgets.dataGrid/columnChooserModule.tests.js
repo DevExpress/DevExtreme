@@ -101,7 +101,7 @@ QUnit.module('Column chooser', {
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
         this.clock.tick();
-        const $overlayWrapper = this.columnChooserView._popupContainer._wrapper();
+        const $overlayWrapper = this.columnChooserView._popupContainer.$wrapper();
 
         // assert
         assert.ok($overlayWrapper.hasClass('dx-datagrid-column-chooser'), 'has column chooser');
@@ -122,7 +122,7 @@ QUnit.module('Column chooser', {
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
         this.clock.tick();
-        const $overlayWrapper = this.columnChooserView._popupContainer._wrapper();
+        const $overlayWrapper = this.columnChooserView._popupContainer.$wrapper();
 
         // assert
         assert.ok($overlayWrapper.hasClass('dx-datagrid-column-chooser'), 'has column chooser');
@@ -527,7 +527,7 @@ QUnit.module('Column chooser', {
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
         this.clock.tick();
-        const $overlayWrapper = this.columnChooserView._popupContainer._wrapper();
+        const $overlayWrapper = this.columnChooserView._popupContainer.$wrapper();
 
         // assert
         const treeView = $overlayWrapper.find('.dx-treeview').dxTreeView('instance');
