@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import HtmlEditor from 'ui/html_editor';
+import browser from 'core/utils/browser';
 import markupTests from './markup.tests.js';
 import valueRenderingTests from './valueRendering.tests.js';
 import toolbarIntegrationTests from './toolbarIntegration.tests.js';
@@ -92,6 +93,11 @@ export default function() {
                 }
             ].forEach(({ name, value, expected }) => {
                 test(name, function(assert) {
+                    if(browser.msie) {
+                        assert.ok(true, 'IE does not support KeyboardEvent constructor');
+                        return;
+                    }
+
                     const done = assert.async();
                     const $element = $('#htmlEditor');
                     const instance = $element.dxHtmlEditor({
