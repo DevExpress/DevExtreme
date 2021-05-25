@@ -43,35 +43,34 @@ export type ItemRenderedEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxResponsiveBox> & ChangedOptionInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cols?: Array<{
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @type number | Enums.Mode
        * @default 0
        */
       baseSize?: number | 'auto',
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default 1
        */
       ratio?: number,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
       screen?: string,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default 1
        */
       shrink?: number
@@ -79,7 +78,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxResponsiveBoxItem | any> | DataSource | DataSourceOptions;
@@ -87,45 +85,38 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      * @docid
      * @type_function_return number|string
      * @default '100%'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @fires dxResponsiveBoxOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxResponsiveBoxItem | any>;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     rows?: Array<{
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @type number | Enums.Mode
        * @default 0
        */
       baseSize?: number | 'auto',
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default 1
        */
       ratio?: number,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
       screen?: string,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default 1
        */
       shrink?: number
@@ -133,14 +124,12 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     screenByWidth?: Function;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     singleColumnScreen?: string;
@@ -148,7 +137,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      * @docid
      * @type_function_return number|string
      * @default '100%'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
@@ -158,7 +146,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
  * @inherits CollectionWidget
  * @module ui/responsive_box
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxResponsiveBox extends CollectionWidget {
@@ -169,39 +157,34 @@ export default class dxResponsiveBox extends CollectionWidget {
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxResponsiveBoxItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     location?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        */
       col?: number,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
       colspan?: number,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        */
       row?: number,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
       rowspan?: number,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
       screen?: string

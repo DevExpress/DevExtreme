@@ -59,40 +59,39 @@ export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
 
+/** 
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**
      * @docid
      * @default 300
      * @default 200 [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationDuration?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     collapsible?: boolean;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxAccordionItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
      * @docid
      * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
@@ -100,14 +99,12 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @docid
      * @default undefined
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
@@ -118,7 +115,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
@@ -129,21 +125,18 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires dxAccordionOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxAccordionItem | any>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     multiple?: boolean;
@@ -159,21 +152,18 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onItemTitleClick?: ((e: ItemTitleClickEvent) => void) | string;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
@@ -183,7 +173,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @inherits CollectionWidget
  * @module ui/accordion
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxAccordion extends CollectionWidget {
@@ -193,7 +183,6 @@ export default class dxAccordion extends CollectionWidget {
      * @publicName collapseItem(index)
      * @param1 index:numeric
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     collapseItem(index: number): DxPromise<void>;
@@ -202,7 +191,6 @@ export default class dxAccordion extends CollectionWidget {
      * @publicName expandItem(index)
      * @param1 index:numeric
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandItem(index: number): DxPromise<void>;
@@ -210,7 +198,6 @@ export default class dxAccordion extends CollectionWidget {
      * @docid
      * @publicName updateDimensions()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     updateDimensions(): DxPromise<void>;
@@ -219,18 +206,17 @@ export default class dxAccordion extends CollectionWidget {
 /**
  * @docid
  * @inherits CollectionWidgetItem
+ * @namespace DevExpress.ui
  * @type object
  */
 export interface dxAccordionItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     title?: string;

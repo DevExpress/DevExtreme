@@ -47,11 +47,14 @@ export type ShowingEvent = EventInfo<dxLoadPanel>;
 /** @public */
 export type ShownEvent = EventInfo<dxLoadPanel>;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
@@ -59,21 +62,18 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     container?: string | UserDefinedElement;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     delay?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
@@ -82,14 +82,12 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @type_function_return number|string
      * @default 90
      * @default 60 [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     indicatorSrc?: string;
@@ -97,7 +95,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @default 60 [for](Material)
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxHeight?: number | string | (() => number | string);
@@ -105,7 +102,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @default 60 [for](Material)
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxWidth?: number | string | (() => number | string);
@@ -113,14 +109,12 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @default "Loading ..."
      * @default "" [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
@@ -128,21 +122,18 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @default 'transparent'
      * @default '' [for](Android|iOS)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     shadingColor?: string;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showIndicator?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showPane?: boolean;
@@ -151,23 +142,21 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @default 222
      * @default 60 [for](Material)
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.ui */
 export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     /**
      * @docid dxLoadPanelOptions.animation.hide
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hide?: animationConfig;
     /**
      * @docid dxLoadPanelOptions.animation.show
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     show?: animationConfig;
@@ -177,7 +166,7 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
  * @inherits dxOverlay
  * @module ui/load_panel
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxLoadPanel extends dxOverlay {

@@ -41,47 +41,43 @@ export type ValidatedEvent = {
     status?: 'valid' | 'invalid' | 'pending'
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     adapter?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        */
       applyValidationResults?: Function,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        */
       bypass?: Function,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        */
       focus?: Function,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        */
       getValue?: Function,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        */
       reset?: Function,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        */
       validationRequestsCallbacks?: Array<Function>
     };
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
@@ -96,21 +92,18 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
      * @type_function_param1_field6 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @type_function_param1_field7 status:Enums.ValidationStatus
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onValidated?: ((validatedInfo: ValidatedEvent) => void);
     /**
      * @docid
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationGroup?: string;
     /**
      * @docid
      * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationRules?: Array<ValidationRule>;
@@ -121,7 +114,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @extension
  * @module ui/validator
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxValidator extends DOMComponent {
@@ -129,14 +122,12 @@ export default class dxValidator extends DOMComponent {
     /**
      * @docid
      * @publicName focus()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focus(): void;
     /**
      * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
@@ -144,7 +135,6 @@ export default class dxValidator extends DOMComponent {
      * @docid
      * @publicName validate()
      * @return dxValidatorResult
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validate(): dxValidatorResult;
@@ -153,58 +143,51 @@ export default class dxValidator extends DOMComponent {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxValidatorResult {
     /**
      * @docid
      * @type RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     brokenRule?: ValidationRule;
     /**
      * @docid
      * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     brokenRules?: Array<ValidationRule>;
     /**
      * @docid
      * @type Promise<dxValidatorResult>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     complete?: DxPromise<dxValidatorResult>;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     isValid?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pendingRules?: Array<AsyncRule>;
     /**
      * @docid
      * @type Enums.ValidationStatus
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     status?: 'valid' | 'invalid' | 'pending';
     /**
      * @docid
      * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationRules?: Array<ValidationRule>;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;

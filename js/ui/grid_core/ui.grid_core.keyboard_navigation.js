@@ -6,7 +6,7 @@ import gridCoreUtils from './ui.grid_core.utils';
 import { isDefined, isEmptyObject } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { focused } from '../widget/selectors';
-import { addNamespace, createEvent } from '../../events/utils/index';
+import { addNamespace, createEvent, isCommandKeyPressed } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import { name as clickEventName } from '../../events/click';
 import { noop } from '../../core/utils/common';
@@ -41,7 +41,7 @@ const REVERT_BUTTON_CLASS = 'dx-revert-button';
 
 const FAST_EDITING_DELETE_KEY = 'delete';
 
-const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex]';
+const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-dropdowneditor-icon';
 
 const EDIT_MODE_ROW = 'row';
 const EDIT_MODE_FORM = 'form';
@@ -314,7 +314,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     break;
 
                 case 'A':
-                    if(e.ctrl) {
+                    if(isCommandKeyPressed(e.originalEvent)) {
                         this._ctrlAKeyHandler(e, isEditing);
                     } else {
                         this._beginFastEditing(e.originalEvent);
@@ -334,7 +334,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     break;
 
                 case 'F':
-                    if(e.ctrl) {
+                    if(isCommandKeyPressed(e.originalEvent)) {
                         this._ctrlFKeyHandler(e);
                     } else {
                         this._beginFastEditing(e.originalEvent);
@@ -471,7 +471,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
     _ctrlAKeyHandler: function(eventArgs, isEditing) {
-        if(!isEditing && eventArgs.ctrl && !eventArgs.alt && this.option('selection.mode') === 'multiple' && this.option('selection.allowSelectAll')) {
+        if(!isEditing && !eventArgs.alt && this.option('selection.mode') === 'multiple' && this.option('selection.allowSelectAll')) {
             this._selectionController.selectAll();
             eventArgs.originalEvent.preventDefault();
         }
