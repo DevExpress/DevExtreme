@@ -15,7 +15,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { getInstanceFactory } from '../instanceFactory';
+import { getResourceManager, getAppointmentDataProvider } from '../instanceFactory';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -239,9 +239,8 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _makeGroupRows() {
-        const { resourceManager } = getInstanceFactory();
-
-        const tree = resourceManager.createReducedResourcesTree(); // TODO refactoring
+        const { filteredItems } = getAppointmentDataProvider(); // TODO refactoring
+        const tree = getResourceManager().createReducedResourcesTree(filteredItems); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
         const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
         const cellTemplates = [];
@@ -337,7 +336,7 @@ class SchedulerAgenda extends WorkSpace {
         const groupsOpt = this.option('groups');
         const groups = {};
         const isGroupedView = !!groupsOpt.length;
-        const path = isGroupedView && this._getPathToLeaf(rowIndex) || [];
+        const path = isGroupedView && getResourceManager()._getPathToLeaf(rowIndex, groupsOpt) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;

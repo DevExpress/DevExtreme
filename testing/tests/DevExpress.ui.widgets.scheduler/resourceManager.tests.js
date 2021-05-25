@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import ResourceManager from 'ui/scheduler/resources/resourceManager';
 import { getWrappedDataSource } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';

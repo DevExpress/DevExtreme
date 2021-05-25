@@ -52,7 +52,7 @@ import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
-import { getInstanceFactory, getWorkspaceHelper } from '../instanceFactory';
+import { getAppointmentDataProvider, getInstanceFactory, getWorkspaceHelper } from '../instanceFactory';
 
 import { cache } from './cache';
 
@@ -2851,7 +2851,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellData = this.getCellData($(this._getDroppableCell()));
         const allDay = cellData.allDay;
         const startDate = cellData.startDate;
-        const endDate = startDate && this.invoke('calculateAppointmentEndDate', allDay, startDate);
+        const endDate = startDate && getAppointmentDataProvider().calculateAppointmentEndDate(allDay, startDate);
 
         return {
             startDate: startDate,

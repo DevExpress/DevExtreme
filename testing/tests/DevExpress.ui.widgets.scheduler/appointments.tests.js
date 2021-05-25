@@ -133,7 +133,13 @@ const createInstance = (options, subscribesConfig) => {
         }
     };
 
-    getInstanceFactory().create({ resources: options.resources });
+    getInstanceFactory().create({
+        resources: options.resources,
+        scheduler: {
+            isVirtualScrolling: () => false
+        },
+        appointmentDataAccessors: dataAccessors
+    });
     const { resourceManager } = getInstanceFactory();
 
     resourceManager.getResourcesFromItem = () => {

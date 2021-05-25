@@ -200,6 +200,10 @@ export default class ResourceManager {
         return result;
     }
 
+    isLoaded() {
+        return isDefined(this.loadedResources);
+    }
+
     loadResources(groups) {
         const result = new Deferred();
 
@@ -639,8 +643,8 @@ export default class ResourceManager {
         return result;
     }
 
-    createReducedResourcesTree(filteredItems) {
+    createReducedResourcesTree(appointments) {
         const tree = this.createResourcesTree(this.loadedResources);
-        return this.reduceResourcesTree(tree, filteredItems);
+        return this.reduceResourcesTree(tree, appointments);
     }
 }

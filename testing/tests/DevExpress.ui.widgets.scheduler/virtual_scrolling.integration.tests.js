@@ -2611,7 +2611,7 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const filteredItems = getAppointmentDataProvider();
+                                    const { filteredItems } = getAppointmentDataProvider();
 
                                     assert.equal(
                                         filteredItems.length,

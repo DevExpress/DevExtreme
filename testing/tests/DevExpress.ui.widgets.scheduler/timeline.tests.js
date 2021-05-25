@@ -38,11 +38,15 @@ QUnit.module('Timeline Base', {
                 delete this.instance;
             }
 
-            this.instance = $('#scheduler-timeline').dxSchedulerTimeline().dxSchedulerTimeline('instance');
-
             const resources = options && options.resources || {};
+            getInstanceFactory().create({
+                resources,
+                scheduler: {
+                    isVirtualScrolling: () => true
+                }
+            });
 
-            getInstanceFactory().create({ resources });
+            this.instance = $('#scheduler-timeline').dxSchedulerTimeline().dxSchedulerTimeline('instance');
         };
 
         this.createInstance();

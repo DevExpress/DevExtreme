@@ -73,8 +73,14 @@ const createObserver = (renderingStrategy) => ({
     }
 });
 
+const schedulerMock = {
+    isVirtualScrolling: () => false
+};
+
 const createInstance = (options = {}) => {
-    getInstanceFactory().create({});
+    getInstanceFactory().create({
+        scheduler: schedulerMock
+    });
     return $('#scheduler-appointments').dxSchedulerAppointments({
         observer: createObserver(options.renderingStrategy),
         ...options,

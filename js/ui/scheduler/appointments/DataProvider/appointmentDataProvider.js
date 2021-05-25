@@ -48,18 +48,20 @@ export default class AppointmentDataProvider {
         this.appointmentDataSource.setDataSource(this.dataSource);
     }
 
-    updateDataAccessors(schedulerDataAccessors) {
-        this.dataAccessors = this.combineDataAccessors(schedulerDataAccessors);
+    updateDataAccessors(appointmentDataAccessors) {
+        this.dataAccessors = this.combineDataAccessors(appointmentDataAccessors);
         this.initStrategy();
     }
 
-    combineDataAccessors(schedulerDataAccessors) { // TODO move to utils or get rid of it
-        const result = extend(true, {}, schedulerDataAccessors);
+    combineDataAccessors(appointmentDataAccessors) { // TODO move to utils or get rid of it
+        const result = extend(true, {}, appointmentDataAccessors);
         const { resourceManager } = getInstanceFactory();
 
-        each(resourceManager._dataAccessors, (type, accessor) => {
-            result[type].resources = accessor;
-        });
+        if(appointmentDataAccessors && resourceManager) {
+            each(resourceManager._dataAccessors, (type, accessor) => {
+                result[type].resources = accessor;
+            });
+        }
 
         return result;
     }

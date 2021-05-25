@@ -2,7 +2,7 @@ import dateUtils from '../../../core/utils/date';
 import { each } from '../../../core/utils/iterator';
 import { merge } from '../../../core/utils/array';
 import BaseRenderingStrategy from './ui.scheduler.appointments.strategy.base';
-import { getInstanceFactory, getAppointmentDataProvider } from '../instanceFactory';
+import { getAppointmentDataProvider, getResourceManager } from '../instanceFactory';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getAppointmentMinSize() {
@@ -20,9 +20,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     }
 
     groupAppointmentByResources(appointments) {
-        const { resourceManager } = getInstanceFactory();
-
-        return resourceManager.groupAppointmentsByResources(
+        return getResourceManager().groupAppointmentsByResources(
             appointments,
             this.instance._getCurrentViewOption('groups')
         );
@@ -31,12 +29,11 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     createTaskPositionMap(appointments) {
         let height;
         let appointmentsByResources;
-        const { resourceManager } = getInstanceFactory();
 
         if(appointments.length) {
             height = this.instance.fire('getAgendaVerticalStepHeight');
 
-            appointmentsByResources = resourceManager.groupAppointmentsByResources(appointments);
+            appointmentsByResources = this.groupAppointmentByResources(appointments);
 
             let groupedAppts = [];
 

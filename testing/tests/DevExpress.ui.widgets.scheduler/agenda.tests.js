@@ -45,8 +45,13 @@ module('Agenda', {}, () => {
                 }
             }
         };
+
+        const schedulerMock = { isVirtualScrolling: () => false };
         const resources = options && options.groups || { };
-        getInstanceFactory().create({ resources });
+        getInstanceFactory().create({
+            scheduler: schedulerMock,
+            resources
+        });
 
         const { resourceManager } = getInstanceFactory();
         resourceManager.createReducedResourcesTree = () => resourceManager.createResourcesTree(options.groups);

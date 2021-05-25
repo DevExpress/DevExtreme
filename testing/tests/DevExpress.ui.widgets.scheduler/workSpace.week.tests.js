@@ -7,6 +7,8 @@ import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
+import ResourceManager from 'ui/scheduler/resources/resourceManager';
+import { getInstanceFactory, getResourceManager } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
@@ -25,6 +27,21 @@ testStart(function() {
 module('Work Space Week', () => {
     module('Default', {
         beforeEach: function() {
+            getInstanceFactory().create({
+                scheduler: {
+                    isVirtualScrolling: () => false
+                }
+            });
+
+            getResourceManager().createResourcesTree = (groups) => {
+                return new ResourceManager({}).createResourcesTree(groups);
+            };
+
+            getResourceManager().getResourceTreeLeaves = (tree, appointmentResources) => {
+                const resources = this.instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
+                return new ResourceManager(resources).getResourceTreeLeaves(tree, appointmentResources);
+            };
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
                 showCurrentTimeIndicator: false
             }).dxSchedulerWorkSpaceWeek('instance');

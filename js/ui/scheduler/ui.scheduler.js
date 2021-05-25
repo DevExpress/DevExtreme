@@ -1313,11 +1313,7 @@ class Scheduler extends Widget {
     }
 
     _isLoaded() {
-        return this._isResourcesLoaded() && this._isDataSourceLoaded();
-    }
-
-    _isResourcesLoaded() {
-        return isDefined(this._loadedResources);
+        return getResourceManager().isLoaded() && this._isDataSourceLoaded();
     }
 
     _isDataSourceLoaded() {

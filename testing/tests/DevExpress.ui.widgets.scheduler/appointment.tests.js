@@ -33,8 +33,14 @@ const observer = {
     }
 };
 
+const schedulerMock = {
+    isVirtualScrolling: () => false
+};
+
 const createInstance = () => {
-    getInstanceFactory().create({ });
+    getInstanceFactory().create({
+        scheduler: schedulerMock
+    });
     return $('#scheduler-appointment').dxSchedulerAppointment({ observer }).dxSchedulerAppointment('instance');
 };
 

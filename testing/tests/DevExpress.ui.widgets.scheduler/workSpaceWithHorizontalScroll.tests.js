@@ -3,14 +3,34 @@ import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'event
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/scheduler/ui.scheduler';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import ResourceManager from 'ui/scheduler/resources/resourceManager';
+import { getInstanceFactory, getResourceManager } from 'ui/scheduler/instanceFactory';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
 });
 
+const initFactoryInstance = () => {
+    getInstanceFactory().create({
+        scheduler: {
+            isVirtualScrolling: () => false
+        }
+    });
+
+    getResourceManager().createResourcesTree = (groups) => {
+        return new ResourceManager({}).createResourcesTree(groups);
+    };
+
+    getResourceManager().getResourceTreeLeaves = (tree, appointmentResources) => {
+        const resources = this.instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
+        return new ResourceManager(resources).getResourceTreeLeaves(tree, appointmentResources);
+    };
+};
+
 QUnit.module('Vertical Workspace with horizontal scrollbar', {
     beforeEach: function() {
+        initFactoryInstance();
+
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             crossScrollingEnabled: true,
             width: 100
@@ -211,13 +231,6 @@ const stubInvokeMethod = function(instance, options) {
     options = options || {};
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
-        if(subscribe === 'createResourcesTree') {
-            return new ResourceManager().createResourcesTree(arguments[1]);
-        }
-        if(subscribe === 'getResourceTreeLeaves') {
-            const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
-        }
         if(subscribe === 'getTimezone') {
             return options.tz || 3;
         }
@@ -243,6 +256,8 @@ const stubInvokeMethod = function(instance, options) {
 
 QUnit.module('Vertical Workspace with horizontal scrollbar, groupOrientation = vertical', {
     beforeEach: function() {
+        initFactoryInstance();
+
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             groupOrientation: 'vertical',
             crossScrollingEnabled: true,
