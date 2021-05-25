@@ -42,7 +42,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     restAttributes,
   } = viewModel;
 
-  return (useNative
+  return useNative
     ? (
       <ScrollableNative
         ref={scrollableNativeRef}
@@ -115,8 +115,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       >
         {children}
       </ScrollableSimulated>
-    )
-  );
+    );
 };
 
 type ScrollablePropsType = ScrollableProps
@@ -126,7 +125,7 @@ type ScrollablePropsType = ScrollableProps
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
-  device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
+  device: (device): boolean => !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic',
   options: {
     bounceEnabled: false,
     scrollByContent: touch,

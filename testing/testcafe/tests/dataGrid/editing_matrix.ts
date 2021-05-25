@@ -221,7 +221,7 @@ const checkEditCell = async (
 
 const getEditorValue = async (dataField: string, editor: Selector): Promise<string> => {
   if (dataField === 'boolean') {
-    return (await editor.hasClass('dx-checkbox-checked')) ? 'true' : 'false';
+    return await editor.hasClass('dx-checkbox-checked') ? 'true' : 'false';
   }
 
   return editor.value;

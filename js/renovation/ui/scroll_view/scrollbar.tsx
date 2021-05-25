@@ -137,7 +137,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   validateEvent(e): boolean {
     const { target } = e.originalEvent;
 
-    return (this.isThumb(target) || this.isScrollbar(target));
+    return this.isThumb(target) || this.isScrollbar(target);
   }
 
   @Method()
@@ -354,7 +354,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     const { target } = e.originalEvent;
-    const scrollbarClicked = (this.props.scrollByThumb && this.isScrollbar(target));
+    const scrollbarClicked = this.props.scrollByThumb && this.isScrollbar(target);
 
     if (scrollbarClicked) {
       this.moveToMouseLocation(e);
