@@ -21,7 +21,7 @@ import {
     DIRECTION_APPOINTMENT_CLASSES,
     APPOINTMENT_DRAG_SOURCE_CLASS,
     APPOINTMENT_CONTENT_CLASSES
-} from '../constants';
+} from '../classes';
 import { Deferred } from '../../../core/utils/deferred';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
