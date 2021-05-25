@@ -72,7 +72,7 @@ const attachEvent = function(that, name) {
     const shouldIgnoreHideEvent = shading && name === 'hide';
     const event = shouldIgnoreHideEvent ? null : getEventName(that, `${name}Event`);
 
-    if(shouldIgnoreHideEvent) {
+    if(shouldIgnoreHideEvent && that.option('hideEvent')) {
         errors.log('W1020');
     }
 
