@@ -484,7 +484,7 @@
         }
         function notifyIsAlive(){
             var url = @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive")));
-            $post(url);
+            $.post(url);
         }
 
         function roundTime(time) {

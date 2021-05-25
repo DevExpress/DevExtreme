@@ -129,12 +129,13 @@ namespace Runner.Controllers
         }
 
         static readonly object IOLock = new object();
+
         [HttpPost]
         public void NotifyIsAlive() {
-            lock (IOLock) {
-                if (_runFlags.IsContinuousIntegration)
+            if (_runFlags.IsContinuousIntegration)
+                lock (IOLock) {
                     IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
-            }
+                }
         }
 
         [HttpPost]
