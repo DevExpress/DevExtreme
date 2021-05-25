@@ -16,6 +16,7 @@ import type DomComponent from '../../../core/dom_component';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { renderTemplate } from '../../utils/render_template';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { EventCallback } from './event_callback';
 
 export const viewFunction = ({
   widgetRef,
@@ -43,7 +44,7 @@ export class DomComponentWrapperProps {
   @OneWay() componentProps!: {
     className?: string;
     itemTemplate?: ((data) => JSX.Element) | string;
-    valueChange?: (value) => void;
+    valueChange?: EventCallback<any>;
   };
 }
 
@@ -105,7 +106,9 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     }) as Record<string, unknown>;
 
     if (isFunction(valueChange)) {
-      properties.onValueChanged = ({ value }): void => valueChange(value);
+      properties.onValueChanged = ({ value }): void => {
+        valueChange(value);
+      };
     }
     if (itemTemplate) {
       properties.itemTemplate = (item, index, container): void => {

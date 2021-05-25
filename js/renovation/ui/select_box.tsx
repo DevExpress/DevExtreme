@@ -29,11 +29,11 @@ export class SelectBoxProps extends BaseWidgetProps {
 
   @OneWay() displayExpr?: string;
 
-  @TwoWay() value: number | null = null;
+  @TwoWay() value: any = null;
 
   @OneWay() valueExpr?: string;
 
-  @Event() valueChange?: EventCallback<unknown>;
+  @Event() valueChange?: EventCallback<any>;
 
   @OneWay() focusStateEnabled?: boolean = true;
 
