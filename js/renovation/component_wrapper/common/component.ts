@@ -386,7 +386,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
     const template = this._getTemplate(templateOption);
 
-    if (template.toString() === 'dx-renovation-template-mock') {
+    if (String(template) === 'dx-renovation-template-mock') {
       return undefined;
     }
     const templateWrapper = (model: TemplateModel): VNode => createElement(
@@ -460,7 +460,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
   // NOTE: this method will be deprecated
   //       aria changes should be defined in declaration or passed through property
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setAria(name: string, value: string): void {
+  setAria(_name: string, _value: string): void {
     throw new Error(
       '"setAria" method is deprecated, use "aria" property instead',
     );

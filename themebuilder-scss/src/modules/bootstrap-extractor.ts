@@ -51,7 +51,7 @@ export default class BootstrapExtractor {
 
   static convertRemToPx(cssValue: string): string {
     const remValueRegex = /(\d*?\.?\d+?)rem([;\s])?/g;
-    const replaceHandler = (match: string, value: string, separator: string): string => {
+    const replaceHandler = (_match: string, value: string, separator: string): string => {
       const pixelsInRem = 16;
       const pxValue = Math.round(parseFloat(value) * pixelsInRem);
       return `${pxValue}px${separator || ''}`;
