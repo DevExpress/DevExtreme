@@ -353,10 +353,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             return;
         }
 
-        let $correctedCell = $cell;
-        if(isMultiSelection) {
-            $correctedCell = this._correctCellForGroup($cell);
-        }
+        const $correctedCell = isMultiSelection
+            ? this._correctCellForGroup($cell)
+            : $cell;
+
         if($correctedCell.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
             return;
         }
