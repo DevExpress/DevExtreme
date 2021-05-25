@@ -571,6 +571,10 @@ export const AreaItem = Class.inherit({
         return this.groupElement().data('dxScrollable');
     },
 
+    _getMaxLeftOffset(scrollable) {
+        return scrollable._container().get(0).scrollWidth - scrollable._container().get(0).clientWidth;
+    },
+
     on: function(eventName, handler) {
         const that = this;
         const scrollable = that._getScrollable();
@@ -578,7 +582,7 @@ export const AreaItem = Class.inherit({
         if(scrollable) {
             scrollable.on(eventName, function(e) {
                 if(that.option('rtlEnabled') && isDefined(e.scrollOffset.left)) {
-                    e.scrollOffset.left = scrollable.$content().width() - scrollable._container().width() - e.scrollOffset.left;
+                    e.scrollOffset.left = this._getMaxLeftOffset(scrollable) - e.scrollOffset.left;
                 }
                 handler(e);
             });
@@ -600,9 +604,9 @@ export const AreaItem = Class.inherit({
         if(scrollable) {
             if(this.option('rtlEnabled')) {
                 if(this._getAreaName() === 'column') {
-                    scrollablePos = scrollable.$content().width() - scrollable._container().width() - pos;
+                    scrollablePos = this._getMaxLeftOffset(scrollable) - pos;
                 } else if(this._getAreaName() === 'data') {
-                    scrollablePos = { x: scrollable.$content().width() - scrollable._container().width() - pos.x, y: pos.y };
+                    scrollablePos = { x: this._getMaxLeftOffset(scrollable) - pos.x, y: pos.y };
                 }
             }
             scrollable.scrollTo(scrollablePos);
