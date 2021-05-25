@@ -34,14 +34,12 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     acceptCustomValue?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
@@ -49,14 +47,12 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @docid
      * @type Enums.EditorApplyValueMode
      * @default "instantly"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyValueMode?: 'instantly' | 'useButtons';
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dropDownOptions?: dxPopupOptions;
@@ -64,14 +60,12 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @docid
      * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     buttons?: Array<'clear' | 'dropDown' | dxTextEditorButton>;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
@@ -83,7 +77,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @type_function_param1_field2 icon:string
      * @type_function_param2 contentElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: DxElement) => string | UserDefinedElement);
@@ -95,7 +88,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onClosed?: ((e: EventInfo<T>) => void);
@@ -107,14 +99,12 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onOpened?: ((e: EventInfo<T>) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     openOnFieldClick?: boolean;
@@ -123,21 +113,18 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @default false
      * @fires dxDropDownEditorOptions.onOpened
      * @fires dxDropDownEditorOptions.onClosed
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     opened?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
@@ -148,7 +135,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
  * @module ui/drop_down_editor/ui.drop_down_editor
  * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  */
 export default class dxDropDownEditor extends dxTextBox {
@@ -156,7 +142,6 @@ export default class dxDropDownEditor extends dxTextBox {
     /**
      * @docid
      * @publicName close()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     close(): void;
@@ -164,7 +149,6 @@ export default class dxDropDownEditor extends dxTextBox {
      * @docid
      * @publicName content()
      * @return DxElement
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     content(): DxElement;
@@ -172,14 +156,12 @@ export default class dxDropDownEditor extends dxTextBox {
      * @docid
      * @publicName field()
      * @return DxElement
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     field(): DxElement;
     /**
      * @docid
      * @publicName open()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     open(): void;
