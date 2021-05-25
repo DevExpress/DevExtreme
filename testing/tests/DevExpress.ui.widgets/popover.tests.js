@@ -1532,7 +1532,7 @@ QUnit.module('behavior', () => {
         },
         afterEach: function() {
             fixtures.simple.drop();
-            this.stub.reset();
+            this.stub.restore();
         }
     }, () => {
         QUnit.test('on init', function(assert) {
