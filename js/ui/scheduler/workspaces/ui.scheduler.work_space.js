@@ -367,7 +367,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _setFocusedCell($cell) {
         this._releaseFocusedCell();
-        let $correctedCell = $cell;
 
         const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
         const isAllDayCell = this._hasAllDayClass($cell);
@@ -378,7 +377,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { cellData, coordinates } = focusedCell;
         const { allDay } = cellData;
 
-        $correctedCell = allDay && !this._isVerticalGroupedWorkSpace()
+        const $correctedCell = allDay && !this._isVerticalGroupedWorkSpace()
             ? this._dom_getAllDayPanelCell(coordinates.cellIndex)
             : this._dom_getDateCell(coordinates);
 
