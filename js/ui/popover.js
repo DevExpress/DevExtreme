@@ -67,12 +67,12 @@ const getEventDelay = function(that, optionName) {
     return isObject(optionValue) && optionValue.delay;
 };
 const attachEvent = function(that, name) {
-    const { target, shading, disabled } = that.option();
+    const { target, shading, disabled, hideEvent } = that.option();
     const isSelector = isString(target);
     const shouldIgnoreHideEvent = shading && name === 'hide';
     const event = shouldIgnoreHideEvent ? null : getEventName(that, `${name}Event`);
 
-    if(shouldIgnoreHideEvent && that.option('hideEvent')) {
+    if(shouldIgnoreHideEvent && hideEvent) {
         errors.log('W1020');
     }
 
