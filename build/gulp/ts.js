@@ -32,22 +32,24 @@ gulp.task('ts-vendor', function() {
         .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR));
 });
 
-function bundleTS(jqueryPartFile) {
-    return gulp.src([jqueryPartFile].concat(TS_BUNDLE_SOURCES))
+function bundleTS() {
+    return gulp.src(TS_BUNDLE_SOURCES)
         .pipe(concat('dx.all.d.ts'))
         .pipe(headerPipes.bangLicense());
 }
 
 gulp.task('ts-bundle', gulp.series(
     function writeTsBundle() {
-        return bundleTS('./ts/dx.all-jquery-augmentations.d.ts')
+        return bundleTS()
+            .pipe(replace(/^declare global\s*{([\s\S]*?)^}/gm, '$1'))
             .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR)); // will be copied to the npm's /dist folder by another task
     },
 
     function writeTsBundleForNPM() {
-        return bundleTS('./ts/dx.all-jquery-stubs.d.ts')
+        return bundleTS()
             .pipe(footer('\nexport default DevExpress;'))
             .pipe(replace('/*!', '/**'))
+            .pipe(replace(/(interface JQuery\b[\s\S]*?{)[\s\S]+?(})/gm, '$1$2'))
             .pipe(gulp.dest(packageBundlesPath));
     },
 
