@@ -3,29 +3,11 @@ import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'event
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/scheduler/ui.scheduler';
-import ResourceManager from 'ui/scheduler/resources/resourceManager';
-import { getInstanceFactory, getResourceManager } from 'ui/scheduler/instanceFactory';
+import { initFactoryInstance } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
 });
-
-const initFactoryInstance = () => {
-    getInstanceFactory().create({
-        scheduler: {
-            isVirtualScrolling: () => false
-        }
-    });
-
-    getResourceManager().createResourcesTree = (groups) => {
-        return new ResourceManager({}).createResourcesTree(groups);
-    };
-
-    getResourceManager().getResourceTreeLeaves = (tree, appointmentResources) => {
-        const resources = this.instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-        return new ResourceManager(resources).getResourceTreeLeaves(tree, appointmentResources);
-    };
-};
 
 QUnit.module('Vertical Workspace with horizontal scrollbar', {
     beforeEach: function() {

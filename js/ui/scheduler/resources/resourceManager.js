@@ -12,7 +12,7 @@ import { AgendaResourceProcessor } from './agendaResourceProcessor';
 import { getDisplayExpr, getFieldExpr, getValueExpr, getWrappedDataSource } from './utils';
 import { getWorkspaceHelper } from '../instanceFactory';
 
-export default class ResourceManager {
+export class ResourceManager {
     constructor(resources) {
         this.loadedResources = [];
         this._resourceLoader = {};

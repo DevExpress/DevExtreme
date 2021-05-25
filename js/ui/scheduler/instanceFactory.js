@@ -1,4 +1,4 @@
-import ResourceManager from './resources/resourceManager';
+import { ResourceManager } from './resources/resourceManager';
 import WorkspaceHelper from './workspaces/workspaceHelper';
 import AppointmentDataProvider from './appointments/DataProvider/appointmentDataProvider';
 

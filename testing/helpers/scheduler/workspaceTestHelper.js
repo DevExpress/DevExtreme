@@ -1,3 +1,26 @@
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getInstanceFactory, getResourceManager } from 'ui/scheduler/instanceFactory';
+
+export const initFactoryInstance = (resourceGetter) => {
+    getInstanceFactory().create({
+        scheduler: {
+            isVirtualScrolling: () => false
+        }
+    });
+
+    getResourceManager().createResourcesTree = (groups) => {
+        return new ResourceManager({}).createResourcesTree(groups);
+    };
+
+    getResourceManager().getResourceTreeLeaves = (tree, appointmentResources) => {
+        const resources = typeof resourceGetter === 'function'
+            ? resourceGetter()
+            : resourceGetter;
+        const resultResources = resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
+        return new ResourceManager(resultResources).getResourceTreeLeaves(tree, appointmentResources);
+    };
+};
+
 export const stubInvokeMethod = function(instance, options) {
     options = options || {};
     sinon.stub(instance, 'invoke', function() {
