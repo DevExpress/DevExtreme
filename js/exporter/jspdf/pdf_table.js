@@ -14,6 +14,14 @@ export class PdfTable {
         this.rows = [];
     }
 
+    getGroupRowHorizontalIndent() {
+        return 10; // TODO;
+    }
+
+    getGroupLevelIndent(groupLevel) {
+        return groupLevel * this.getGroupRowHorizontalIndent();
+    }
+
     getCellX(cellIndex) {
         return this.rect.x + this.columnWidths.slice(0, cellIndex).reduce((a, b) => a + b, 0);
     }
@@ -22,7 +30,7 @@ export class PdfTable {
         return this.rect.y + this.rowHeights.slice(0, rowIndex).reduce((a, b) => a + b, 0);
     }
 
-    addRow(cells, rowHeight) {
+    addRow(cells, rowHeight, groupLevel) {
         if(!isDefined(cells)) {
             throw 'cells is required';
         }
@@ -67,6 +75,12 @@ export class PdfTable {
                 w: columnWidth,
                 h: rowHeight
             };
+
+            if(isDefined(groupLevel) && i === 0) {
+                const indent = this.getGroupLevelIndent(groupLevel);
+                cells[i]._rect.x += indent;
+                cells[i]._rect.w -= indent;
+            }
         }
     }
 
