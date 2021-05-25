@@ -236,7 +236,9 @@ const FocusController = core.ViewController.inherit((function() {
                 this._triggerUpdateFocusedRow(key, deferred);
             } else {
                 const focusedRowIndex = this.getFocusedRowIndexByKey(key);
-                this.getView('rowsView').scrollToRowElement(key, deferred).done(() => deferred.resolve(focusedRowIndex));
+                this.getView('rowsView').scrollToRowElement(key, deferred).done(function() {
+                    deferred.resolve(focusedRowIndex);
+                });
             }
         },
         _navigateToVirtualRow: function(key, deferred, needFocusRow) {

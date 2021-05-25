@@ -1548,6 +1548,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList navigateTo', function(assert) {
         // arrange
         const treeList = createTreeList({
+            loadingTimeout: null,
             dataSource: generateData(10),
             paging: {
                 pageSize: 4
@@ -1556,8 +1557,6 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         const callback = sinon.spy();
 
         // act
-        this.clock.tick();
-
         const d = treeList.navigateToRow(12);
         d.done(callback);
 
@@ -1575,6 +1574,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList navigateTo to the same page with expand', function(assert) {
         // arrange
         const treeList = createTreeList({
+            loadingTimeout: null,
             dataSource: generateData(10),
             paging: {
                 pageSize: 4
@@ -1603,6 +1603,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList navigateTo to the collapsed child row when scrolling is standard', function(assert) {
         // arrange
         const treeList = createTreeList({
+            loadingTimeout: null,
             height: 100,
             dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, {
                 id: 5,
@@ -1611,17 +1612,19 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             scrolling: {
                 mode: 'standard',
             },
+            paging: {
+                enabled: true
+            },
             keyExpr: 'id',
             parentIdExpr: 'parent_id',
             columns: ['id']
         });
         const callback = sinon.spy();
 
-        this.clock.tick();
-
         const d = treeList.navigateToRow(5);
         d.done(callback);
 
+        $(treeList.getScrollable()._container()).trigger('scroll');
         this.clock.tick();
 
         // assert

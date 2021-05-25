@@ -3432,7 +3432,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getScrollable()._container()).trigger('scroll');
-        this.clock.tick(500);
+        this.clock.tick();
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'row is navigated');

@@ -199,7 +199,7 @@ export interface RowDraggingTemplateDataModel {
   readonly itemElement: DxElement;
 }
 
-export interface FilterPanelCustomizeTextArg<T> { 
+export interface FilterPanelCustomizeTextArg<T> {
   readonly component: T,
   readonly filterValue: any,
   readonly text: string
@@ -2427,8 +2427,9 @@ export interface GridBase {
      * @param1 key:any
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @return Promise<number>
      */
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DxPromise<number>;
     /**
      * @docid
      * @publicName pageCount()
@@ -3407,7 +3408,7 @@ export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxDataGrid>;
 /** @public */
 export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReorderInfo;
 
-/** @public */ 
+/** @public */
 export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
   row?: RowObject;
   column?: Column;
@@ -4844,7 +4845,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DxPromise<number>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DxPromise<void>;
