@@ -19,13 +19,14 @@ function exportDataGrid(doc, dataGrid, options) {
             let groupLevel;
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const currentRow = [];
+                let rowType;
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
                     const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
                     const pdfCell = {
                         text: cellData.value
                     };
 
-                    const rowType = cellData.cellSourceData.rowType;
+                    rowType = cellData.cellSourceData.rowType;
                     if(rowType !== 'header') {
                         groupLevel = dataProvider.getGroupLevel(rowIndex);
                     }
@@ -77,7 +78,7 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
                 }
 
-                pdfGrid.addRow(currentRow, rowHeight, groupLevel);
+                pdfGrid.addRow(currentRow, rowHeight, rowType, groupLevel);
             }
 
             pdfGrid.mergeCellsBySpanAttributes();

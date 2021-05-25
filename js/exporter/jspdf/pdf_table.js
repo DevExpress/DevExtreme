@@ -14,6 +14,10 @@ export class PdfTable {
         this.rows = [];
     }
 
+    getGroupRowBackgroundColor() {
+        return '#D3D3D3';
+    }
+
     getGroupRowHorizontalIndent() {
         return 10; // TODO;
     }
@@ -30,7 +34,7 @@ export class PdfTable {
         return this.rect.y + this.rowHeights.slice(0, rowIndex).reduce((a, b) => a + b, 0);
     }
 
-    addRow(cells, rowHeight, groupLevel) {
+    addRow(cells, rowHeight, rowType, groupLevel) {
         if(!isDefined(cells)) {
             throw 'cells is required';
         }
@@ -69,7 +73,7 @@ export class PdfTable {
                 throw 'column width is required'; // TODO
             }
 
-            cells[i]._rect = {
+            currentCell._rect = {
                 x: this.getCellX(i),
                 y: this.getCellY(this.rows.length - 1),
                 w: columnWidth,
@@ -78,8 +82,12 @@ export class PdfTable {
 
             if(isDefined(groupLevel) && i === 0) {
                 const indent = this.getGroupLevelIndent(groupLevel);
-                cells[i]._rect.x += indent;
-                cells[i]._rect.w -= indent;
+                currentCell._rect.x += indent;
+                currentCell._rect.w -= indent;
+            }
+
+            if(rowType === 'group') {
+                currentCell.backgroundColor = this.getGroupRowBackgroundColor();
             }
         }
     }

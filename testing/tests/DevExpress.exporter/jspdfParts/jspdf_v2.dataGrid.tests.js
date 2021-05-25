@@ -51,6 +51,12 @@ function createMockPdfDoc() {
     const result = _jsPDF({ unit: 'pt' });
     result.__log = [];
 
+    result.__setFillColor = result.setFillColor;
+    result.setFillColor = function() {
+        this.__log.push('setFillColor,' + argumentsToString.apply(null, arguments));
+        this.__setFillColor.apply(this, arguments);
+    };
+
     result.__rect = result.rect;
     result.rect = function() {
         this.__log.push('rect,' + argumentsToString.apply(null, arguments));

@@ -44,20 +44,20 @@ export class PdfGrid {
         this._tables.push(...this._currentHorizontalTables);
     }
 
-    addRow(cells, rowHeight, groupLevel) {
+    addRow(cells, rowHeight, rowType, groupLevel) {
         let currentTableIndex = 0;
         let currentTableCells = [];
         for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             const isNewTableColumn = this._splitByColumns.filter((splitByColumn) => splitByColumn.columnIndex === cellIndex)[0];
             if(isNewTableColumn) {
-                this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight, groupLevel);
+                this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight, rowType, groupLevel);
                 this._trySplitColSpanArea(cells, cellIndex);
                 currentTableIndex++;
                 currentTableCells = [];
             }
             currentTableCells.push(cells[cellIndex]);
         }
-        this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight, groupLevel);
+        this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight, rowType, groupLevel);
     }
 
     _trySplitColSpanArea(cells, splitIndex) {
