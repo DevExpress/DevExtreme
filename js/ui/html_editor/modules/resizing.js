@@ -52,7 +52,12 @@ export default class ResizingModule extends BaseModule {
                 return;
             }
 
-            this._$target = e.target;
+            if(this._isTableElement(e.target)) {
+                this._$target = this._findTableRoot(e.target);
+            } else {
+                this._$target = e.target;
+            }
+
 
             this.updateFramePosition();
             this.showFrame();
@@ -81,7 +86,22 @@ export default class ResizingModule extends BaseModule {
     }
 
     _isImage(targetElement) {
-        return this.allowedTargets.indexOf('image') !== -1 && targetElement.tagName.toUpperCase() === 'IMG';
+        return this.allowedTargets.indexOf('image') !== -1 && targetElement.tagName.toUpperCase() === 'IMG' || this._isTableElement(targetElement);
+    }
+
+    _isTableElement(targetElement) {
+        let result = false;
+        ['TABLE', 'TBODY', 'THEAD', 'TFOOT', 'TD', 'TR'].forEach((tagName) => {
+            if(targetElement.tagName.toUpperCase() === tagName) {
+                result = true;
+            }
+        });
+
+        return result;
+    }
+
+    _findTableRoot(targetElement) {
+        return $(targetElement).parents('table').get(0);
     }
 
     showFrame() {
@@ -149,7 +169,7 @@ export default class ResizingModule extends BaseModule {
 
                 const correction = 2 * (FRAME_PADDING + this._getBorderWidth());
 
-                $(this._$target).attr({
+                $(this._$target).css({
                     height: e.height - correction,
                     width: e.width - correction
                 });
