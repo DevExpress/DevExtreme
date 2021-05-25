@@ -163,6 +163,22 @@ export class Button extends JSXComponent(ButtonProps) {
     this.widgetRef.current!.focus();
   }
 
+  @Effect()
+  submitEffect(): EffectReturn {
+    const namespace = 'UIFeedback';
+    const { useSubmitBehavior, onSubmit } = this.props;
+
+    if (useSubmitBehavior && onSubmit) {
+      click.on(this.submitInputRef.current,
+        (event) => onSubmit({ event, submitInput: this.submitInputRef.current }),
+        { namespace });
+
+      return (): void => click.off(this.submitInputRef.current, { namespace });
+    }
+
+    return undefined;
+  }
+
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
 
@@ -198,22 +214,6 @@ export class Button extends JSXComponent(ButtonProps) {
     if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
       originalEvent.preventDefault();
       this.onWidgetClick(originalEvent);
-    }
-
-    return undefined;
-  }
-
-  @Effect()
-  submitEffect(): EffectReturn {
-    const namespace = 'UIFeedback';
-    const { useSubmitBehavior, onSubmit } = this.props;
-
-    if (useSubmitBehavior && onSubmit) {
-      click.on(this.submitInputRef.current,
-        (event) => onSubmit({ event, submitInput: this.submitInputRef.current }),
-        { namespace });
-
-      return (): void => click.off(this.submitInputRef.current, { namespace });
     }
 
     return undefined;
