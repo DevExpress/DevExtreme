@@ -94,7 +94,7 @@ describe('ScrollView', () => {
         const funcHandler = jest.fn();
         Object.defineProperties(viewModel, {
           scrollable: {
-            get() { return ({ refresh: funcHandler }); },
+            get() { return { refresh: funcHandler }; },
           },
         });
 

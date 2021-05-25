@@ -15,10 +15,10 @@ import { generateCustomizeTooltipCallback } from '../utils';
 jest.mock('../../../utils/resolve_rtl');
 jest.mock('../utils', () => {
   const originalUtils = jest.requireActual('../utils');
-  return ({
+  return {
     ...originalUtils,
     generateCustomizeTooltipCallback: jest.fn(),
-  });
+  };
 });
 
 const pointerAction = {

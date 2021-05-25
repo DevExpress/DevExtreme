@@ -50,7 +50,7 @@ describe('DateHeaderLayout', () => {
       <LayoutView
         {...viewModel}
         props={{
-          ...(new DateHeaderLayoutProps()),
+          ...new DateHeaderLayoutProps(),
           dateHeaderData,
           ...viewModel.props,
         }}

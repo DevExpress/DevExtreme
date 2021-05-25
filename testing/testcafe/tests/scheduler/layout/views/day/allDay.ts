@@ -51,7 +51,7 @@ const enableNativeScroll = ClientFunction(() => {
           groupOrientation,
         }],
         currentView: 'dayView',
-        currentDate: new Date(2021, 4, 25),
+        currentDate: new Date(2021, 2, 25),
         height: 600,
         groups: ['roomId'],
         showAllDayPanel,
