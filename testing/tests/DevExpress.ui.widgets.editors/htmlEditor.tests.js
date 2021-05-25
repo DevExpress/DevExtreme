@@ -20,10 +20,11 @@ import './htmlEditorParts/resizingIntegration.tests.js';
 import './htmlEditorParts/mentionModule.tests.js';
 import mentionIntegrationTests from './htmlEditorParts/mentionIntegration.tests.js';
 import './htmlEditorParts/scrolling.tests.js';
-import './htmlEditorParts/multilineIntegration.tests.js';
+import multilineIntegrationTests from './htmlEditorParts/multilineIntegration.tests.js';
 
 markupTests();
 valueRenderingTests();
 toolbarIntegrationTests();
 pasteTests();
 mentionIntegrationTests();
+multilineIntegrationTests();
