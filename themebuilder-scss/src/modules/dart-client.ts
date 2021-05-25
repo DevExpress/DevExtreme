@@ -10,24 +10,6 @@ export default class DartClient {
 
   private readonly eventListeners: SocketEventListener[] = [];
 
-  private addClientEventListener(name: string, handler: (e?: Error) => void): void {
-    this.eventListeners.push({ name, handler });
-    this.client.on(name, handler);
-  }
-
-  private setClientErrorHandlers(handler: (e?: Error) => void): void {
-    this.addClientEventListener('timeout', handler);
-    this.addClientEventListener('error', handler);
-  }
-
-  private removeClientEventListeners(): void {
-    this.eventListeners.forEach((listener) => {
-      this.client.off(listener.name, listener.handler);
-    });
-
-    this.eventListeners.length = 0;
-  }
-
   dispose(): Promise<void> {
     if (this.client.destroyed) return Promise.resolve();
     this.isServerAvailable = false;
@@ -97,5 +79,23 @@ export default class DartClient {
       this.client.write(JSON.stringify(message));
       this.client.end();
     });
+  }
+
+  private addClientEventListener(name: string, handler: (e?: Error) => void): void {
+    this.eventListeners.push({ name, handler });
+    this.client.on(name, handler);
+  }
+
+  private setClientErrorHandlers(handler: (e?: Error) => void): void {
+    this.addClientEventListener('timeout', handler);
+    this.addClientEventListener('error', handler);
+  }
+
+  private removeClientEventListeners(): void {
+    this.eventListeners.forEach((listener) => {
+      this.client.off(listener.name, listener.handler);
+    });
+
+    this.eventListeners.length = 0;
   }
 }

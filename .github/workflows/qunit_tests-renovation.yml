@@ -1,4 +1,4 @@
-name: QUnit tests
+name: QUnit tests for renovation
 
 on: [push, pull_request]
 
@@ -14,16 +14,12 @@ jobs:
     timeout-minutes: 60
 
     steps:
-
-    - name: Get sources
-      uses: actions/checkout@v2
-
-    - run: |
-        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
-
     - name: Setup utils
       run: |
         sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+
+    - name: Get sources
+      uses: actions/checkout@v2
 
     - name: Use Node.js
       uses: actions/setup-node@v2
@@ -51,7 +47,7 @@ jobs:
     - name: Run QUnit tests
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
-        NORENOVATION: "true"
+        NORENOVATION: "false"
         GITHUBACTION: "true"
         TARGET: "test"
       run: |

@@ -48,8 +48,8 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
         const $result = $(this.props.template.render({
           container: getPublicElement($parent),
           transclude: this.props.transclude,
-          ...(!this.props.transclude ? { model: data } : {}),
-          ...(!this.props.transclude && Number.isFinite(index) ? { index } : {}),
+          ...!this.props.transclude ? { model: data } : {},
+          ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
         }));
 
         $result.detach();

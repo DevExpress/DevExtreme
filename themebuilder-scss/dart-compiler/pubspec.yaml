@@ -2,5 +2,5 @@ name: my_project
 environment:
   sdk: '>=2.10.0 <3.0.0'
 dev_dependencies:
-  sass: ^1.26.10
+  sass: 1.32.13
   path: ^1.7.0
