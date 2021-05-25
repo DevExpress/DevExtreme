@@ -124,6 +124,14 @@ namespace Runner.Controllers
                 TimeSpan runSpan = TimeSpan.FromMilliseconds(runtime);
                 Console.WriteLine($"] {name} in {Math.Round(runSpan.TotalSeconds, 3)}s");
 
+                NotifyIsAlive();
+            }
+        }
+
+        static readonly object IOLock = new object();
+        [HttpPost]
+        public void NotifyIsAlive() {
+            lock (IOLock) {
                 if (_runFlags.IsContinuousIntegration)
                     IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
             }
