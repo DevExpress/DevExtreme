@@ -1,10 +1,14 @@
 
 import { getBoundingRect } from '../../../core/utils/position';
-import GroupedStrategy from './ui.scheduler.work_space.grouped.strategy';
+import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 
 const HORIZONTAL_GROUPED_ATTR = 'dx-group-row-count';
 
-class HorizontalGroupedStrategy extends GroupedStrategy {
+class HorizontalGroupedStrategy {
+    constructor(workSpace) {
+        this._workSpace = workSpace;
+    }
+
     prepareCellIndexes(cellCoordinates, groupIndex, inAllDay) {
         const groupByDay = this._workSpace.isGroupedByDate();
 
@@ -64,18 +68,18 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
 
     _addLastGroupCellClass(cellClass, index, applyUnconditionally) {
         if(applyUnconditionally) {
-            return `${cellClass} ${this.getLastGroupCellClass()}`;
+            return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
         }
 
         const groupByDate = this._workSpace.isGroupedByDate();
 
         if(groupByDate) {
             if(index % this._workSpace._getGroupCount() === 0) {
-                return `${cellClass} ${this.getLastGroupCellClass()}`;
+                return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
             }
         } else {
             if(index % this._workSpace._getCellCount() === 0) {
-                return `${cellClass} ${this.getLastGroupCellClass()}`;
+                return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
             }
         }
 
@@ -84,18 +88,18 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
 
     _addFirstGroupCellClass(cellClass, index, applyUnconditionally) {
         if(applyUnconditionally) {
-            return `${cellClass} ${this.getFirstGroupCellClass()}`;
+            return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
         }
 
         const groupByDate = this._workSpace.isGroupedByDate();
 
         if(groupByDate) {
             if((index - 1) % this._workSpace._getGroupCount() === 0) {
-                return `${cellClass} ${this.getFirstGroupCellClass()}`;
+                return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
             }
         } else {
             if((index - 1) % this._workSpace._getCellCount() === 0) {
-                return `${cellClass} ${this.getFirstGroupCellClass()}`;
+                return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
             }
         }
 
@@ -236,6 +240,14 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
 
     getScrollableScrollTop(allDay) {
         return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
+    }
+
+    _getOffsetByAllDayPanel() {
+        return 0;
+    }
+
+    _getGroupTop() {
+        return 0;
     }
 }
 

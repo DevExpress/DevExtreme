@@ -223,7 +223,7 @@ export const compensateSegments = (oldSegments: Segment[], newSegments: Segment[
   const oldLength = oldSegments.length;
   const newLength = newSegments.length;
   let originalNewSegments: Segment[] = [];
-  const makeEqualSegments = (type.indexOf('area') !== -1) ? makeEqualAreaSegments : makeEqualLineSegments;
+  const makeEqualSegments = type.indexOf('area') !== -1 ? makeEqualAreaSegments : makeEqualLineSegments;
 
   if (oldLength === 0) {
     for (let i = 0; i < newLength; i++) {
@@ -324,7 +324,7 @@ export const removeExtraAttrs = (html: string): string => {
   const findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
 
   return html.replace(findTagAttrs, (_, p1, p2, p3) => {
-    p2 = ((p2?.match(findStyleAndClassAttrs)) || []).map((str: string) => str).join(' ');
+    p2 = (p2?.match(findStyleAndClassAttrs) || []).map((str: string) => str).join(' ');
     return p1 + p2 + p3;
   });
 };
@@ -359,7 +359,7 @@ export const setTextNodeAttribute = (item: TextItem, name: string, value: any): 
 };
 
 export const getItemLineHeight = (item: TextItem, defaultValue: number): number => (
-  item.inherits ? maxLengthFontSize(item.height, defaultValue) : (item.height || defaultValue)
+  item.inherits ? maxLengthFontSize(item.height, defaultValue) : item.height || defaultValue
 );
 
 export const getLineHeight = (styles: { [key: string]: any } | undefined): number => (
@@ -370,7 +370,7 @@ export const getLineHeight = (styles: { [key: string]: any } | undefined): numbe
 export const textsAreEqual = (newItems: TextItem[], renderedItems?: TextItem[]): boolean => {
   if (!renderedItems || renderedItems.length !== newItems.length) return false;
 
-  return renderedItems.every((item, index) => (item.value === newItems[index].value));
+  return renderedItems.every((item, index) => item.value === newItems[index].value);
 };
 
 export const convertAlignmentToAnchor = (value?: LabelAlignment, rtl = false): string | undefined => (
@@ -393,21 +393,21 @@ function getTransformation(props: SvgGraphicsProps, x?: number, y?: number): str
   const transformations: string[] = [];
   const transDir = sharpDirection === 'backward' ? -1 : 1;
   const strokeOdd = (strokeWidth || 0) % 2;
-  const correctionX = (strokeOdd && (sharp === 'h' || sharp === true)) ? SHARPING_CORRECTION * transDir : 0;
-  const correctionY = (strokeOdd && (sharp === 'v' || sharp === true)) ? SHARPING_CORRECTION * transDir : 0;
+  const correctionX = strokeOdd && (sharp === 'h' || sharp === true) ? SHARPING_CORRECTION * transDir : 0;
+  const correctionY = strokeOdd && (sharp === 'v' || sharp === true) ? SHARPING_CORRECTION * transDir : 0;
 
   if (translateX || translateY || correctionX || correctionY) {
-    transformations.push(`translate(${((translateX || 0) + correctionX)},${((translateY || 0) + correctionY)})`);
+    transformations.push(`translate(${(translateX || 0) + correctionX},${(translateY || 0) + correctionY})`);
   }
 
   if (rotate) {
-    transformations.push(`rotate(${rotate},${(rotateX || x || 0)},${(rotateY || y || 0)})`);
+    transformations.push(`rotate(${rotate},${rotateX || x || 0},${rotateY || y || 0})`);
   }
 
   const scaleXDefined = isDefined(scaleX);
   const scaleYDefined = isDefined(scaleY);
   if (scaleXDefined || scaleYDefined) {
-    transformations.push(`scale(${(scaleXDefined ? scaleX : 1)},${(scaleYDefined ? scaleY : 1)})`);
+    transformations.push(`scale(${scaleXDefined ? scaleX : 1},${scaleYDefined ? scaleY : 1})`);
   }
 
   return transformations.length ? transformations.join(' ') : undefined;
@@ -427,7 +427,7 @@ function getDashStyle(props: SvgGraphicsProps): string | undefined {
     .split(',');
   let i = dashArray.length;
   while (i--) {
-    dashArray[i] = parseInt((dashArray[i] as string), 10) * sw;
+    dashArray[i] = parseInt(dashArray[i] as string, 10) * sw;
   }
   return dashArray.join(',');
 }

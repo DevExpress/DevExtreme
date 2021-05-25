@@ -120,7 +120,7 @@ describe('Simulated > Render', () => {
 
           Object.defineProperties(helper.viewModel, {
             allowedDirections: {
-              get() { return ({ vertical: allowVertical, horizontal: allowHorizontal }); },
+              get() { return { vertical: allowVertical, horizontal: allowHorizontal }; },
             },
           });
 
@@ -654,7 +654,7 @@ describe('Simulated > Behavior', () => {
           helper.viewModel.containerClientHeight = containerSize;
           helper.viewModel.containerClientWidth = containerSize;
 
-          let expectedDirectionResult = (containerSize < contentSize || bounceEnabled)
+          let expectedDirectionResult = containerSize < contentSize || bounceEnabled
             ? direction
             : undefined;
 
@@ -786,7 +786,7 @@ describe('Simulated > Behavior', () => {
           expect(e.originalEvent.preventDefault).toBeCalled();
           expect(e.originalEvent.stopPropagation).toBeCalled();
           expect(helper.viewModel.scrollByLine).toBeCalledTimes(1);
-          expect(helper.viewModel.scrollByLine).toBeCalledWith({ [`${(keyName === 'upArrow' || keyName === 'downArrow') ? 'y' : 'x'}`]: (keyName === 'upArrow' || keyName === 'leftArrow') ? -1 : 1 });
+          expect(helper.viewModel.scrollByLine).toBeCalledWith({ [`${keyName === 'upArrow' || keyName === 'downArrow' ? 'y' : 'x'}`]: keyName === 'upArrow' || keyName === 'leftArrow' ? -1 : 1 });
         });
 
         each([1, 2, undefined]).describe('devicePixelRatio: %o', (pixelRatio) => {

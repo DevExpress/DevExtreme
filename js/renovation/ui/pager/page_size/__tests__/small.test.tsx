@@ -40,7 +40,7 @@ describe('Pager size selector', () => {
       const component = new PageSizeSmall({ parentRef, pageSizes: [...pageSizes, { text: '1000', value: 1000 }] } as any);
       component.updateWidth();
       expect(component.width).toBe(42 + 10 * 4);
-      expect((getElementComputedStyle as jest.Mock)).toBeCalledWith(parentRef.current);
+      expect(getElementComputedStyle as jest.Mock).toBeCalledWith(parentRef.current);
     });
 
     it('Effect updateWidth, default width', () => {

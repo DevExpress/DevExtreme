@@ -27,7 +27,16 @@ import tableCreatorModule from '../table_creator';
 const { tableCreator } = tableCreatorModule;
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
-import { APPOINTMENT_SETTINGS_KEY, FIXED_CONTAINER_CLASS, VIRTUAL_CELL_CLASS } from '../constants';
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
+import {
+    FIXED_CONTAINER_CLASS,
+    VIRTUAL_CELL_CLASS,
+    TIME_PANEL_CLASS,
+    DATE_TABLE_CLASS,
+    DATE_TABLE_ROW_CLASS,
+    GROUP_ROW_CLASS,
+    GROUP_HEADER_CONTENT_CLASS,
+} from '../classes';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
@@ -58,7 +67,6 @@ const WORKSPACE_WITH_COUNT_CLASS = 'dx-scheduler-work-space-count';
 const WORKSPACE_WITH_GROUP_BY_DATE_CLASS = 'dx-scheduler-work-space-group-by-date';
 const WORKSPACE_WITH_ODD_CELLS_CLASS = 'dx-scheduler-work-space-odd-cells';
 
-const TIME_PANEL_CLASS = 'dx-scheduler-time-panel';
 const TIME_PANEL_CELL_CLASS = 'dx-scheduler-time-panel-cell';
 const TIME_PANEL_ROW_CLASS = 'dx-scheduler-time-panel-row';
 
@@ -80,13 +88,9 @@ const VERTICAL_SIZES_CLASS = 'dx-scheduler-cell-sizes-vertical';
 const HEADER_PANEL_CLASS = 'dx-scheduler-header-panel';
 const HEADER_PANEL_CELL_CLASS = 'dx-scheduler-header-panel-cell';
 const HEADER_ROW_CLASS = 'dx-scheduler-header-row';
-const GROUP_ROW_CLASS = 'dx-scheduler-group-row';
 const GROUP_HEADER_CLASS = 'dx-scheduler-group-header';
-const GROUP_HEADER_CONTENT_CLASS = 'dx-scheduler-group-header-content';
 
-const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
-const DATE_TABLE_ROW_CLASS = 'dx-scheduler-date-table-row';
 const DATE_TABLE_FOCUSED_CELL_CLASS = 'dx-scheduler-focused-cell';
 const VIRTUAL_ROW_CLASS = 'dx-scheduler-virtual-row';
 
@@ -112,8 +116,6 @@ const SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dx
 const SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME = addNamespace(pointerEvents.move, 'dxSchedulerDateTable');
 
 const CELL_DATA = 'dxCellData';
-
-const DATE_TABLE_CELL_BORDER = 1;
 
 const DATE_TABLE_MIN_CELL_WIDTH = 75;
 
@@ -738,40 +740,17 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isVerticalGroupedWorkSpace() ? 'vertical' : 'horizontal';
     }
 
-    _getTimePanelClass() {
-        return TIME_PANEL_CLASS;
-    }
-
-    _getDateTableClass() {
-        return DATE_TABLE_CLASS;
-    }
-
-    _getDateTableRowClass() {
-        return DATE_TABLE_ROW_CLASS;
-    }
-
-    _getDateTableCellClass(i, j) {
+    _getDateTableCellClass(rowIndex, columnIndex) {
         const cellClass = DATE_TABLE_CELL_CLASS + ' ' + HORIZONTAL_SIZES_CLASS + ' ' + VERTICAL_SIZES_CLASS;
 
-        return this._needApplyLastGroupCellClass() ? this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1, i, j) : cellClass;
-    }
-
-    _needApplyLastGroupCellClass() {
-        return true;
-    }
-
-    _getGroupRowClass() {
-        return GROUP_ROW_CLASS;
+        return this._groupedStrategy
+            .addAdditionalGroupCellClasses(cellClass, columnIndex + 1, rowIndex, columnIndex);
     }
 
     _getGroupHeaderClass(i) {
         const cellClass = GROUP_HEADER_CLASS;
 
         return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1);
-    }
-
-    _getGroupHeaderContentClass() {
-        return GROUP_HEADER_CONTENT_CLASS;
     }
 
     _initWorkSpaceUnits() {
@@ -791,7 +770,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._createAllDayPanelElements();
         }
 
-        this._$timePanel = $('<table>').addClass(this._getTimePanelClass());
+        this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS);
 
         this._$dateTable = $('<table>');
 
@@ -983,7 +962,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _attachTableClasses() {
-        this._addTableClass(this._$dateTable, this._getDateTableClass());
+        this._addTableClass(this._$dateTable, DATE_TABLE_CLASS);
 
         if(this._isVerticalGroupedWorkSpace()) {
             const groupCount = this._getGroupCount();
@@ -1694,10 +1673,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         return tableCreator.makeGroupedTable(tableCreatorStrategy,
             groups, {
-                groupHeaderRowClass: this._getGroupRowClass(),
-                groupRowClass: this._getGroupRowClass(),
+                groupHeaderRowClass: GROUP_ROW_CLASS,
+                groupRowClass: GROUP_ROW_CLASS,
                 groupHeaderClass: this._getGroupHeaderClass.bind(this),
-                groupHeaderContentClass: this._getGroupHeaderContentClass()
+                groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
             },
             this._getCellCount() || 1,
             this.option('resourceCellTemplate'),
@@ -1963,7 +1942,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             rowCount: this._getTotalRowCount(groupCount),
             cellCount: this._getTotalCellCount(groupCount),
             cellClass: this._getDateTableCellClass.bind(this),
-            rowClass: this._getDateTableRowClass(),
+            rowClass: DATE_TABLE_ROW_CLASS,
             cellTemplate: this.option('dataCellTemplate'),
             getCellData: this._getCellData.bind(this),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
@@ -2185,10 +2164,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getDateTable() {
         return this._$dateTable;
-    }
-
-    _getAllDayTable() {
-        return this._$allDayTable;
     }
 
     _getInterval() {
@@ -2522,18 +2497,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._$groupTable.outerHeight(height);
     }
 
-    _getDateTableBorder() {
-        return DATE_TABLE_CELL_BORDER;
-    }
-
-    _getDateTableBorderOffset() {
-        return this._getDateTableBorder() * 2;
-    }
-
-    _getGroupHeaderCellsContent() {
-        return this.$element().find('.' + GROUP_HEADER_CONTENT_CLASS);
-    }
-
     _getGroupHeaderCells() {
         return this.$element().find('.' + GROUP_HEADER_CLASS);
     }
@@ -2850,7 +2813,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             return 0;
         }
 
-        const $row = this.$element().find('.' + this._getDateTableRowClass()).eq(0);
+        const $row = this.$element().find(`.${DATE_TABLE_ROW_CLASS}`).eq(0);
         let width = 0;
         const $cells = $row.find('.' + DATE_TABLE_CELL_CLASS);
         const totalCellCount = this._getCellCount() * groupIndex;
@@ -3267,23 +3230,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return true;
     }
 
-    getDistanceBetweenCells(startIndex, endIndex) {
-        let result = 0;
-
-        this.$element()
-            .find('.' + this._getDateTableRowClass())
-            .first()
-            .find('.' + DATE_TABLE_CELL_CLASS).each(function(index) {
-                if(index < startIndex || index > endIndex) {
-                    return true;
-                }
-
-                result += getBoundingRect(this).width;
-            });
-
-        return result;
-    }
-
     needApplyCollectorOffset() {
         return false;
     }
@@ -3328,20 +3274,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             getItemSettings,
             options)
         );
-    }
-
-    _createDragAppointment(itemData, settings, appointments) {
-        const appointmentIndex = appointments.option('items').length;
-
-        settings.isCompact = false;
-        settings.virtual = false;
-
-        const items = appointments._renderItem(appointmentIndex, {
-            itemData,
-            settings: [settings]
-        });
-
-        return items[0];
     }
 
     _isApplyCompactAppointmentOffset() {

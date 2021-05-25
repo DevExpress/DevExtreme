@@ -27,7 +27,7 @@ describe('HeaderPanelLayoutLayout', () => {
       isHorizontalGrouping: false,
       ...viewModel,
       props: {
-        ...(new HeaderPanelLayoutProps()),
+        ...new HeaderPanelLayoutProps(),
         dateHeaderData,
         groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
         groups: [],
