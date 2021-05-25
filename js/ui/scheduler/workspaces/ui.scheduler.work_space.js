@@ -243,11 +243,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$dateTable.find('.' + DATE_TABLE_CELL_CLASS).eq(0);
     }
 
-    _getAllFocusedCells() {
-        return this._selectedCells ||
-            this._$dateTable.find('.' + DATE_TABLE_CELL_CLASS).eq(0);
-    }
-
     _getCellFromNextRow(direction) {
         const $currentCell = this._$focusedCell;
 
@@ -460,18 +455,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _hasAllDayClass($cell) {
         return $cell.hasClass(ALL_DAY_TABLE_CELL_CLASS);
-    }
-
-    _getGroupIndexByCell($cell) {
-        const {
-            rowIndex,
-            columnIndex,
-        } = this._getCoordinatesByCell($cell);
-        const isAllDayCell = $cell.hasClass(ALL_DAY_TABLE_CELL_CLASS);
-
-        return this.viewDataProvider.getCellData(
-            rowIndex, columnIndex, isAllDayCell,
-        ).groupIndex;
     }
 
     _toggleFocusedCellClass(isFocused, $element) {
@@ -2650,16 +2633,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getSelectedCellData() {
         return this.cellsSelectionState.getSelectedCells();
-    }
-
-    _getMultipleCellsData($cells) {
-        const data = [];
-
-        for(let i = 0; i < $cells.length; i++) {
-            data.push(this.getCellData($($cells[i])));
-        }
-
-        return data;
     }
 
     getCellData($cell) {
