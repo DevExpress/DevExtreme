@@ -867,7 +867,7 @@ export const focusModule = {
                         const scrollHandler = () => {
                             scrollable.off('scroll', scrollHandler);
                             d.resolve();
-                        }
+                        };
 
                         if(scrollTop !== currentScrollTop) {
                             scrollable.on('scroll', scrollHandler);
