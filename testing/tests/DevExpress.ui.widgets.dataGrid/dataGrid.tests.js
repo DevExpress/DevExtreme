@@ -3301,7 +3301,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
         d.done(callback);
 
-        assert.strictEqual(d.state(), "resolved", 'row is navigated');
+        assert.strictEqual(d.state(), 'resolved', 'row is navigated');
 
         // promise value should be an index of row in this page
         // for row with id `3` it is `1`
@@ -3318,8 +3318,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
             loadingTimeout: null,
             remoteOperations: true,
             dataSource: {
-                key: "id",
-                load: function (loadOptions) {
+                key: 'id',
+                load: function(loadOptions) {
                     deferred = $.Deferred();
 
                     dataStore.load(loadOptions).done(function(data) {
@@ -3349,7 +3349,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(d.state(), 'pending', 'page isn\'t resolved yet');
 
         // act
-        deferred.resolve(items);                    // search for item's index
+        deferred.resolve(items); // search for item's index
         deferred.resolve(items, { totalCount: 3 }); // search for item's page
         deferred.resolve(items, { totalCount: 4 }); // resolve second page
 
@@ -3363,7 +3363,13 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     QUnit.test('navigateToRow should return promise: one large page', function(assert) {
         // arrange
-        const data = [...Array(20).keys()].map(i => ({id: i}));
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({
+                id: i
+            });
+        }
 
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -3383,18 +3389,24 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // assert
         assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
-        assert.strictEqual(d.state(), "pending", 'row is not navigated');
+        assert.strictEqual(d.state(), 'pending', 'row is not navigated');
 
         // act
         $(dataGrid.getScrollable()._container()).trigger('scroll'); // need to trigger scroll manually to resolve deffered
 
         // assert
-        assert.strictEqual(d.state(), "resolved", 'row is navigated');
+        assert.strictEqual(d.state(), 'resolved', 'row is navigated');
     });
 
     QUnit.test('navigateToRow should return promise: virtual scrolling', function(assert) {
         // arrange
-        const data = [...Array(20).keys()].map(i => ({ id: i }));
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({
+                id: i
+            });
+        }
 
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -3405,8 +3417,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
             },
             scrolling: {
                 useNative: true,
-                mode: "virtual",
-                rowRenderingMode: "virtual"
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
             },
             height: 100
         });
@@ -3416,14 +3428,14 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // assert
         assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
-        assert.strictEqual(d.state(), "pending", 'row is not navigated');
+        assert.strictEqual(d.state(), 'pending', 'row is not navigated');
 
         // act
         $(dataGrid.getScrollable()._container()).trigger('scroll');
         this.clock.tick(500);
 
         // assert
-        assert.strictEqual(d.state(), "resolved", 'row is navigated');
+        assert.strictEqual(d.state(), 'resolved', 'row is navigated');
     });
 });
 
