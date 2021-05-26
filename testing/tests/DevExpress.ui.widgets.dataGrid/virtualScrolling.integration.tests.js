@@ -4361,7 +4361,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
                 sorting: true
             },
             scrolling: {
-                mode: 'virtual',
+                mode: 'infinite',
                 rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
@@ -4487,7 +4487,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
                 sorting: true
             },
             scrolling: {
-                mode: 'virtual',
+                mode: 'infinite',
                 rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
