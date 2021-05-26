@@ -255,7 +255,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     twoWay.forEach(([name, defaultValue]) => {
-      setDefaultOptionValue(options, () => defaultProps[convertToDefaultName(name)])(name);
+      setDefaultOptionValue(widgetProps, () => defaultProps[convertToDefaultName(name)])(name);
     });
 
     elements.forEach((name: string) => {
