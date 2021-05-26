@@ -79,35 +79,30 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @docid
      * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     format?: format;
     /**
      * @docid
      * @default "Value must be a number"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     invalidValueMessage?: string;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: number;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: number;
@@ -116,21 +111,18 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @type Enums.NumberBoxMode
      * @default "text"
      * @default 'number' [for](mobile_devices)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     mode?: 'number' | 'text' | 'tel';
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showSpinButtons?: boolean;
     /**
      * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     step?: number;
@@ -138,14 +130,12 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @docid
      * @default true
      * @default false [for](desktop)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     useLargeSpinButtons?: boolean;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: number;
@@ -156,7 +146,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
  * @inherits dxTextEditor
  * @module ui/number_box
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */

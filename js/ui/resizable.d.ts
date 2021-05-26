@@ -51,7 +51,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @docid
      * @type Enums.ResizeHandle | string
      * @default "all"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
@@ -59,35 +58,30 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @docid
      * @type_function_return number|string
      * @fires dxResizableOptions.onResize
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @default Infinity
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxHeight?: number;
     /**
      * @docid
      * @default Infinity
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxWidth?: number;
     /**
      * @docid
      * @default 30
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minHeight?: number;
     /**
      * @docid
      * @default 30
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minWidth?: number;
@@ -102,7 +96,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onResize?: ((e: ResizeEvent) => void);
@@ -117,7 +110,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onResizeEnd?: ((e: ResizeEndEvent) => void);
@@ -132,7 +124,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onResizeStart?: ((e: ResizeStartEvent) => void);
@@ -140,7 +131,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @docid
      * @type_function_return number|string
      * @fires dxResizableOptions.onResize
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
@@ -151,7 +141,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @hasTranscludedContent
  * @module ui/resizable
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */

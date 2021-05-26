@@ -53,7 +53,6 @@ export type SelectionChangedEvent = EventInfo<dxNavBar> & SelectionChangedInfo;
 export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByContent?: boolean;
@@ -63,7 +62,6 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @inherits dxTabs
  * @module ui/nav_bar
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
@@ -80,7 +78,6 @@ export default class dxNavBar extends dxTabs {
 export interface dxNavBarItem extends dxTabsItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
