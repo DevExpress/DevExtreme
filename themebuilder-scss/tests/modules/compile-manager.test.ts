@@ -29,7 +29,7 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
 }));
 
 jest.mock('../../src/modules/post-compiler', () => ({
-  ...jest.requireActual('../../src/modules/post-compiler'),
+  ...jest.requireActual('../../src/modules/post-compiler') as Record<string, unknown>,
   addInfoHeader: (css: string): string => css,
 }));
 

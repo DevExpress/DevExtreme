@@ -9,7 +9,7 @@ import domAdapter from '../../../core/dom_adapter';
 import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
-import { isDefined, isRenderer } from '../../../core/utils/type';
+import { isDefined, isRenderer, isString } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update-props-immutable';
@@ -386,7 +386,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
     const template = this._getTemplate(templateOption);
 
-    if (String(template) === 'dx-renovation-template-mock') {
+    if (isString(template) && template === 'dx-renovation-template-mock') {
       return undefined;
     }
     const templateWrapper = (model: TemplateModel): VNode => createElement(
