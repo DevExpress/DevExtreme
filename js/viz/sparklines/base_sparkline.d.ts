@@ -24,14 +24,12 @@ export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TCom
     /**
      * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @hidden
      */
     export?: BaseWidgetExport;
     /**
      * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @hidden
      */
     loadingIndicator?: BaseWidgetLoadingIndicator;
@@ -44,7 +42,6 @@ export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TCom
      * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     onTooltipHidden?: ((e: EventInfo<TComponent>) => void);
@@ -57,27 +54,23 @@ export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TCom
      * @type_function_param1_field3 model:any
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     onTooltipShown?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @hidden
      */
     redrawOnResize?: boolean;
     /**
      * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @hidden
      */
     title?: BaseWidgetTitle | string;
     /**
      * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     tooltip?: BaseSparklineTooltip;
@@ -90,7 +83,6 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     contentTemplate?: template | ((pointsInfo: any, element: DxElement) => string | UserDefinedElement);
@@ -100,21 +92,18 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     customizeTooltip?: ((pointsInfo: any) => any);
     /**
      * @docid BaseSparklineOptions.tooltip.enabled
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     enabled?: boolean;
     /**
      * @docid BaseSparklineOptions.tooltip.interactive
      * @default false
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     interactive?: boolean;
@@ -123,21 +112,18 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
  * @docid
  * @hidden
  * @inherits BaseWidget
- * @prevFileNamespace DevExpress.viz
  * @namespace DevExpress.viz
  */
 export default class BaseSparkline<TProperties> extends BaseWidget<TProperties> {
     /**
      * @docid
      * @publicName hideLoadingIndicator()
-     * @prevFileNamespace DevExpress.viz
      * @hidden
      */
     hideLoadingIndicator(): void;
     /**
      * @docid
      * @publicName showLoadingIndicator()
-     * @prevFileNamespace DevExpress.viz
      * @hidden
      */
     showLoadingIndicator(): void;
