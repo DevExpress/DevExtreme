@@ -646,9 +646,8 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _updateBottomLoading: function() {
             const that = this;
-            const scrollingMode = that.option('scrolling.mode');
-            const virtualMode = scrollingMode === SCROLLING_MODE_VIRTUAL;
-            const appendMode = scrollingMode === SCROLLING_MODE_INFINITE;
+            const virtualMode = isVirtualMode(this);
+            const appendMode = isAppendMode(this);
             const showBottomLoading = !that._dataController.hasKnownLastPage() && that._dataController.isLoaded() && (virtualMode || appendMode);
             const $contentElement = that._findContentElement();
             const bottomLoadPanelElement = that._findBottomLoadPanel($contentElement);
@@ -1089,6 +1088,9 @@ export const virtualScrollingModule = {
                         let offset = 0;
                         const dataSource = this.dataSource();
                         const rowsScrollController = this._rowsScrollController;
+                        const virtualMode = isVirtualMode(this);
+                        const appendMode = isAppendMode(this);
+                        const newMode = this.option(NEW_SCROLLING_MODE);
 
                         if(rowsScrollController && !byLoadedRows) {
                             if(this.option(NEW_SCROLLING_MODE) && isDefined(this._loadViewportParams)) {
@@ -1097,7 +1099,7 @@ export const virtualScrollingModule = {
                             } else {
                                 offset = rowsScrollController.beginPageIndex() * rowsScrollController.pageSize();
                             }
-                        } else if(this.option('scrolling.mode') === 'virtual' && dataSource) {
+                        } else if((virtualMode || (appendMode && newMode)) && dataSource) {
                             offset = dataSource.beginPageIndex() * dataSource.pageSize();
                         }
 
