@@ -10,7 +10,6 @@ export interface ComponentOptions<TComponent> {
    * @type_function_param1_field1 component:this
    * @default null
    * @action
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   onDisposing?: ((e: { component: TComponent }) => void);
@@ -20,7 +19,6 @@ export interface ComponentOptions<TComponent> {
    * @type_function_param1_field1 component:this
    * @type_function_param1_field2 element:DxElement
    * @default null
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   onInitialized?: ((e: { component?: TComponent, element?: DxElement }) => void);
@@ -33,7 +31,6 @@ export interface ComponentOptions<TComponent> {
    * @type_function_param1_field4 value:any
    * @default null
    * @action
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   onOptionChanged?: ((e: { component?: TComponent, name?: string, fullName?: string, value?: any }) => void);
@@ -45,21 +42,18 @@ export interface ComponentOptions<TComponent> {
  * @namespace DevExpress
  * @hidden
  * @wrappable
- * @prevFileNamespace DevExpress.core
  */
 export default class Component<TProperties> {
   constructor(options?: TProperties);
   /**
    * @docid
    * @publicName beginUpdate()
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   beginUpdate(): void;
   /**
    * @docid
    * @publicName endUpdate()
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   endUpdate(): void;
@@ -67,7 +61,6 @@ export default class Component<TProperties> {
    * @docid
    * @publicName instance()
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   instance(): this;
@@ -76,7 +69,6 @@ export default class Component<TProperties> {
    * @publicName off(eventName)
    * @param1 eventName:string
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   off(eventName: string): this;
@@ -86,7 +78,6 @@ export default class Component<TProperties> {
    * @param1 eventName:string
    * @param2 eventHandler:function
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   off(eventName: string, eventHandler: Function): this;
@@ -96,7 +87,6 @@ export default class Component<TProperties> {
    * @param1 eventName:string
    * @param2 eventHandler:function
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   on(eventName: string, eventHandler: Function): this;
@@ -105,7 +95,6 @@ export default class Component<TProperties> {
    * @publicName on(events)
    * @param1 events:object
    * @return this
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   on(events: any): this;
@@ -113,7 +102,6 @@ export default class Component<TProperties> {
    * @docid
    * @publicName option()
    * @return object
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   option(): TProperties;
@@ -122,7 +110,6 @@ export default class Component<TProperties> {
    * @publicName option(optionName)
    * @param1 optionName:string
    * @return any
-   * @prevFileNamespace DevExpress.core
    * @public
    */
    option<TPropertyName extends string>(optionName: TPropertyName): TPropertyName extends (keyof TProperties) ? TProperties[TPropertyName] : unknown;
@@ -131,7 +118,6 @@ export default class Component<TProperties> {
    * @publicName option(optionName, optionValue)
    * @param1 optionName:string
    * @param2 optionValue:any
-   * @prevFileNamespace DevExpress.core
    * @public
    */
    option<TPropertyName extends string>(optionName: TPropertyName, optionValue: TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : unknown): void;
@@ -139,7 +125,6 @@ export default class Component<TProperties> {
    * @docid
    * @publicName option(options)
    * @param1 options:object
-   * @prevFileNamespace DevExpress.core
    * @public
    */
    option(options: Partial<TProperties>): void;
@@ -147,7 +132,6 @@ export default class Component<TProperties> {
    * @docid
    * @publicName resetOption(optionName)
    * @param1 optionName:string
-   * @prevFileNamespace DevExpress.core
    * @public
    */
   resetOption(optionName: string): void;

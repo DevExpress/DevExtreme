@@ -19,14 +19,12 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
     bindingOptions?: any;
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     elementAttr?: any;
@@ -34,7 +32,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @docid
      * @default undefined
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     height?: number | string | (() => number | string);
@@ -43,7 +40,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @action
      * @default null
      * @type_function_param1_field1 component:<DOMComponent>
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     onDisposing?: ((e: { component?: TComponent, element?: DxElement, model?: any }) => void);
@@ -52,14 +48,12 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @action
      * @default null
      * @type_function_param1_field1 component:<DOMComponent>
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     onOptionChanged?: ((e: { component?: TComponent, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     rtlEnabled?: boolean;
@@ -67,7 +61,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @docid
      * @default undefined
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     width?: number | string | (() => number | string);
@@ -80,7 +73,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
  * @module core/dom_component
  * @export default
  * @hidden
- * @prevFileNamespace DevExpress.core
  */
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
     constructor(element: UserDefinedElement, options?: TProperties);
@@ -92,14 +84,12 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @param1 rule:Object
      * @param1_field1 device:Device|Array<Device>|function
      * @param1_field2 options:Object
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
     /**
      * @docid
      * @publicName dispose()
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     dispose(): void;
@@ -107,7 +97,6 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @docid
      * @publicName element()
      * @return DxElement
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     element(): DxElement;
@@ -118,7 +107,6 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @publicName getInstance(element)
      * @param1 element:Element|JQuery
      * @return DOMComponent
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
