@@ -386,7 +386,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
     const template = this._getTemplate(templateOption);
 
-    if (String(template) === 'dx-renovation-template-mock') {
+    if (template === 'dx-renovation-template-mock') {
       return undefined;
     }
     const templateWrapper = (model: TemplateModel): VNode => createElement(

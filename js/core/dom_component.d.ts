@@ -112,7 +112,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
     static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
 
     $element(): UserDefinedElement;
-    _getTemplate(template: unknown): FunctionTemplate;
+    _getTemplate(template: unknown): FunctionTemplate | string;
     _invalidate(): void;
     _refresh(): void;
     _templateManager: TemplateManager;
