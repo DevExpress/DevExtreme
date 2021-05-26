@@ -86,7 +86,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateForHeaderText(index) {
-        const firstViewDate = this._getValidFirstViewDateWithoutDST();
+        const firstViewDate = this._getFirstViewDateWithoutDST();
 
         return this._getDateByIndexCore(firstViewDate, index);
     }
@@ -100,7 +100,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateByIndex(index) {
-        const firstViewDate = this._getValidFirstViewDateWithoutDST();
+        const firstViewDate = this._getFirstViewDateWithoutDST();
 
         const result = this._getDateByIndexCore(firstViewDate, index);
 
@@ -109,13 +109,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
 
         return result;
-    }
-
-    _getValidFirstViewDateWithoutDST() {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
-        newFirstViewDate.setHours(this.option('startDayHour'));
-
-        return newFirstViewDate;
     }
 
     _getFormat() {
