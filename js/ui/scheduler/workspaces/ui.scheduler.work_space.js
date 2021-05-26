@@ -50,7 +50,6 @@ import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/bas
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-import VirtualSelectionState from './virtual_selection_state';
 import { getAppointmentDataProvider, getInstanceFactory, getWorkspaceHelper } from '../instanceFactory';
 import CellsSelectionState from './cells_selection_state';
 
