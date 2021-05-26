@@ -353,7 +353,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const isHoverable = !!hoverStateEnabled && !disabled;
     const canBeActive = !!activeStateEnabled && !disabled;
     const classesMap = {
-      'dx-widget': addWidgetClass,
+      'dx-widget': !!addWidgetClass,
       [String(classes)]: !!classes,
       [String(className)]: !!className,
       'dx-state-disabled': !!disabled,
