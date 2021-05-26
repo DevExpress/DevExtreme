@@ -6,8 +6,8 @@ import {
 export class BaseWidgetProps {
   // TODO Vitik workaround for: https://trello.com/c/0RkuDnxC/2752-renovation-unable-to-import-refobject-for-componentbinding-only
   @ForwardRef() rootElementRef?: {
-    (instance: (HTMLDivElement) | null): void;
     current: HTMLDivElement | null;
+    (instance: (HTMLDivElement) | null): void;
   };// RefObject<HTMLDivElement>;
 
   @OneWay() className?: string = '';
