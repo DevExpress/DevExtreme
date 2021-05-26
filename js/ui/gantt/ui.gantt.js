@@ -536,6 +536,7 @@ class Gantt extends Widget {
                     setTimeout(() => {
                         this._updateGanttRowHeights();
                     }, 300);
+                    dataOption._reloadDataSource();
                 }
                 this._raiseInsertedAction(optionName, data, insertedId);
             });
@@ -547,6 +548,7 @@ class Gantt extends Widget {
             dataOption.remove(key, () => {
                 if(optionName === GANTT_TASKS) {
                     this._updateTreeListDataSource();
+                    dataOption._reloadDataSource();
                 }
 
                 this._raiseDeletedAction(optionName, key, this._convertCoreToMappedData(optionName, data));
@@ -1141,10 +1143,12 @@ class Gantt extends Widget {
             const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
             const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === key)[0];
             const customFields = this._getTaskCustomFields();
-            for(let i = 0; i < customFields.length; i++) {
-                const field = customFields[i];
-                if(Object.prototype.hasOwnProperty.call(modelItem, field)) {
-                    data[field] = modelItem[field];
+            if(modelItem) {
+                for(let i = 0; i < customFields.length; i++) {
+                    const field = customFields[i];
+                    if(Object.prototype.hasOwnProperty.call(modelItem, field)) {
+                        data[field] = modelItem[field];
+                    }
                 }
             }
         }

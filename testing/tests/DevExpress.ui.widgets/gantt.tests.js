@@ -3051,6 +3051,98 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
     });
+
+    test('check ds load after insert (T991742)', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+
+        let lastInsertedKey;
+        const tasks = [
+            {
+                'my_id': 1,
+                'parentId': 0,
+                'title': 'Software Development',
+                'start': new Date('2019-02-21'),
+                'end': new Date('2019-02-22'),
+                'progress': 0,
+                'custom': 'some text'
+            },
+            {
+                'my_id': 2,
+                'parentId': 1,
+                'title': 'Scope',
+                'start': new Date('2019-02-20'),
+                'end': new Date('2019-02-20'),
+                'progress': 0,
+                'custom': 'some text'
+            },
+            {
+                'my_id': 3,
+                'parentId': 2,
+                'title': 'Determine project scope',
+                'start': start,
+                'end': end,
+                'progress': 50,
+                'custom': 'some text'
+            }
+        ];
+
+        const ds = new CustomStore({
+            keyExpr: 'my_id',
+            load: function(loadOptions) {
+                return tasks.slice();
+            },
+            insert: function(values) {
+                lastInsertedKey = tasks.length + 1;
+
+                const newTask = {
+                    'my_id': lastInsertedKey,
+                    'parentId': values.parentId,
+                    'title': values.title,
+                    'start': values.start,
+                    'end': values.end,
+                    'progress': values.progress,
+                    'custom': values.custom
+                };
+                tasks.push(newTask);
+                return newTask;
+            }
+        });
+
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: ds
+            },
+            columns: [
+                { dataField: 'custom', caption: 'Some' }
+            ],
+            editing: { enabled: true },
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const data = {
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New',
+            progress: 0,
+            parentId: '0',
+            custom: 'new text'
+        };
+
+        this.instance.insertTask(data);
+        this.clock.tick();
+
+        const insertedData = this.instance.getTaskData(lastInsertedKey);
+        assert.ok(insertedData);
+        assert.equal(insertedData.custom, data.custom, 'task cust field');
+        assert.equal(insertedData.start, data.start, 'start');
+        assert.equal(insertedData.end, data.end, 'end');
+        assert.equal(insertedData.title, data.title, 'title');
+        assert.equal(insertedData.progress, data.progress, 'progress');
+        assert.equal(insertedData.parentId, data.parentId, 'parentId');
+    });
 });
 
 QUnit.module('First day of week', moduleConfig, () => {
