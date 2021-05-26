@@ -18,6 +18,10 @@ export class PdfTable {
         return '#D3D3D3';
     }
 
+    getGroupFooterRowBackgroundColor() {
+        return '#FFFFE0';
+    }
+
     getGroupRowHorizontalIndent() {
         return 10; // TODO;
     }
@@ -89,6 +93,8 @@ export class PdfTable {
             if(!isDefined(currentCell.backgroundColor)) {
                 if(rowType === 'group') {
                     currentCell.backgroundColor = this.getGroupRowBackgroundColor();
+                } else if(rowType === 'groupFooter' || rowType === 'totalFooter') {
+                    currentCell.backgroundColor = this.getGroupFooterRowBackgroundColor();
                 }
             }
         }

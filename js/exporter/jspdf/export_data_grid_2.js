@@ -16,9 +16,9 @@ function exportDataGrid(doc, dataGrid, options) {
 
             const dataRowsCount = dataProvider.getRowsCount();
 
-            let groupLevel;
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const currentRow = [];
+                let groupLevel;
                 let rowType;
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
                     const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -27,8 +27,8 @@ function exportDataGrid(doc, dataGrid, options) {
                     };
 
                     rowType = cellData.cellSourceData.rowType;
-                    if(rowType !== 'header') {
-                        groupLevel = dataProvider.getGroupLevel(rowIndex);
+                    if(rowType !== 'header' && !isDefined(groupLevel)) {
+                        groupLevel = dataProvider.getGroupLevel(rowIndex, true);
                     }
 
                     if(rowType === 'header') {

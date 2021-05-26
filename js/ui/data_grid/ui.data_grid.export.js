@@ -164,10 +164,22 @@ export const DataProvider = Class.inherit({
         return rowIndex < this._options.items.length && this._options.items[rowIndex].rowType === 'group';
     },
 
-    getGroupLevel: function(rowIndex) {
+    getGroupLevel: function(rowIndex, isPdf) {
         const item = this._options.items[rowIndex - this.getHeaderRowCount()];
         const groupIndex = item && item.groupIndex;
 
+        if(item && item.rowType === 'groupFooter' && isPdf) {
+            const prevItemsStack = this._options.items.slice(0, rowIndex - this.getHeaderRowCount()).reverse();
+            let groupFooterRows = 0;
+            for(let i = 0; i < prevItemsStack.length; i++) {
+                if(prevItemsStack[i].rowType === 'groupFooter') {
+                    groupFooterRows += 1;
+                } else {
+                    break;
+                }
+            }
+            return this._options.groupColumns.length - groupFooterRows;
+        }
         if(item && item.rowType === 'totalFooter') {
             return 0;
         }
