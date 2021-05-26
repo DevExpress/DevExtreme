@@ -13,7 +13,6 @@ import translator from 'animation/translator';
 import dataCoreUtils from 'core/utils/data';
 import commonUtils from 'core/utils/common';
 import typeUtils, { isRenderer } from 'core/utils/type';
-import dateUtils from 'core/utils/date';
 import config from 'core/config';
 import Resizable from 'ui/resizable';
 import fx from 'animation/fx';
@@ -97,15 +96,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     getCellWidth: () => cellWidth,
     getStartDayHour: () => 8,
     getEndDayHour: () => 20,
-    appointmentTakesSeveralDays: (appointment) => {
-        const startDate = new Date(appointment.startDate);
-        const endDate = new Date(appointment.endDate);
-
-        const startDateCopy = dateUtils.trimTime(new Date(startDate));
-        const endDateCopy = dateUtils.trimTime(new Date(endDate));
-
-        return startDateCopy.getTime() !== endDateCopy.getTime();
-    },
     mapAppointmentFields: (config) => {
         const result = {
             appointmentData: config.itemData,
