@@ -15,7 +15,7 @@ export interface TemplateModel {
 }
 
 interface TemplateWrapperProps {
-  template: FunctionTemplate | string;
+  template: FunctionTemplate;
   model?: TemplateModel;
   transclude?: boolean;
 }
