@@ -635,8 +635,11 @@ export const validatingModule = {
                     let result = this.callBase.apply(this, arguments);
                     const { key, pageIndex } = change;
                     const validationData = this.getController('validating')._getValidationData(key);
+                    const scrollingMode = this.option('scrolling.mode');
+                    const virtualMode = scrollingMode === 'virtual';
+                    const appendMode = scrollingMode === 'infinite';
 
-                    if(result && !validationData?.isValid && this.option('scrolling.mode') !== 'virtual') {
+                    if(result && !validationData?.isValid && !virtualMode && !appendMode) {
                         result = pageIndex === this._pageIndex;
                     }
 
