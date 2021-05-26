@@ -182,7 +182,9 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             this._virtualScrollController.handleDataChanged(callBase, e);
         },
         _customizeRemoteOperations: function(options, operationTypes) {
-            if((isVirtualMode(this) || isAppendMode(this)) && !operationTypes.reload && (operationTypes.skip || this.option(NEW_SCROLLING_MODE)) && this._renderTime < this.option('scrolling.renderingThreshold')) {
+            const newMode = this.option(NEW_SCROLLING_MODE);
+
+            if((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && this._renderTime < this.option('scrolling.renderingThreshold')) {
                 options.delay = undefined;
             }
 
