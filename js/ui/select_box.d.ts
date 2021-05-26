@@ -31,6 +31,10 @@ import {
     ValueChangedInfo
 } from './editor/editor';
 
+import {
+    Properties as PopupProperties
+} from './popup';
+
 export interface CustomItemCreatingInfo {
     readonly text?: string;
     customItem?: string | any | PromiseLike<any>;
@@ -105,11 +109,10 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptions<T> {
+export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TComponent> {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     acceptCustomValue?: boolean;
@@ -119,7 +122,6 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @type_function_param1 selectedItem:object
      * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
@@ -134,44 +136,44 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @type_function_param1_field3 model:any
      * @action
      * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     openOnFieldClick?: boolean;
     /**
      * @docid
      * @default "Select"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     placeholder?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showSelectionControls?: boolean;
     /**
      * @docid
      * @default "change"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     valueChangeEvent?: string;
+
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
+    dropDownOptions?: PopupProperties;
 }
 /**
  * @docid
@@ -179,19 +181,16 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
  * @inherits dxDropDownList
  * @module ui/select_box
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxSelectBox extends dxDropDownList {
-    constructor(element: UserDefinedElement, options?: dxSelectBoxOptions)
-}
+export default class dxSelectBox<TProperties = Properties> extends dxDropDownList<TProperties> { }
 
 /** @public */
-export type Properties = dxSelectBoxOptions;
+export type Properties = dxSelectBoxOptions<dxSelectBox<Properties>>;
 
 /** @deprecated use Properties instead */
-export type Options = dxSelectBoxOptions;
+export type Options = Properties;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxSelectBoxOptions;
+export type IOptions = Properties;

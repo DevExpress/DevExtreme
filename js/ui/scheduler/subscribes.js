@@ -10,7 +10,7 @@ import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
-import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
+import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import utils from './utils';
 import { getFieldExpr as getResourceFieldExpr } from './resources/utils';
 
@@ -159,7 +159,7 @@ const subscribes = {
     },
 
     appointmentTakesSeveralDays: function(appointment) {
-        return this._appointmentModel.appointmentTakesSeveralDays(appointment);
+        return this.appointmentDataProvider.appointmentTakesSeveralDays(appointment);
     },
 
     getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
@@ -606,11 +606,11 @@ const subscribes = {
     },
 
     replaceWrongEndDate: function(appointment, startDate, endDate) {
-        this._appointmentModel.replaceWrongEndDate(appointment, startDate, endDate);
+        this.appointmentDataProvider.replaceWrongEndDate(appointment, startDate, endDate);
     },
 
     calculateAppointmentEndDate: function(isAllDay, startDate) {
-        return this._appointmentModel._calculateAppointmentEndDate(isAllDay, startDate);
+        return this.appointmentDataProvider.calculateAppointmentEndDate(isAllDay, startDate);
     },
 
     getEndDayHour: function() {

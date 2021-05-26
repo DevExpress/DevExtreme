@@ -60,7 +60,7 @@ export const viewFunction = ({
       {texts.length ? texts.map(({ style, className, value }, index) => (
         <tspan key={index} style={style} className={className}>{value}</tspan>
       )) : null}
-      {!(texts.length) && text}
+      {!texts.length && text}
     </text>
   );
 };

@@ -11,17 +11,6 @@ export default class MetadataGenerator {
       .join('');
   }
 
-  clean(): void {
-    this.metadata = {
-      generic: [],
-      material: [],
-    };
-  }
-
-  getMetadata(): ThemesMetadata {
-    return this.metadata;
-  }
-
   static executor(str: string, regex: RegExp, handler: (matches: any) => void): void {
     let matches = regex.exec(str);
     while (matches !== null) {
@@ -89,6 +78,17 @@ export default class MetadataGenerator {
 
   static getMainColorsFileContent(content: string, theme: string): string {
     return content.replace(/\.\/variables/g, `tb_${theme}`);
+  }
+
+  clean(): void {
+    this.metadata = {
+      generic: [],
+      material: [],
+    };
+  }
+
+  getMetadata(): ThemesMetadata {
+    return this.metadata;
   }
 
   fillMetaData(item: MetaItem, filePath: string): void {

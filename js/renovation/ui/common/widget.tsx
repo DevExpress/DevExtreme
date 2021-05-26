@@ -34,7 +34,7 @@ const getAria = (args: Record<string, unknown>):
   if (args[key]) {
     return {
       ...r,
-      [(key === 'role' || key === 'id') ? key : `aria-${key}`]: String(args[key]),
+      [key === 'role' || key === 'id' ? key : `aria-${key}`]: String(args[key]),
     };
   }
   return r;
@@ -247,9 +247,9 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   keyboardEffect(): EffectReturn {
-    const { onKeyDown } = this.props;
+    const { onKeyDown, focusStateEnabled } = this.props;
 
-    if (onKeyDown) {
+    if (focusStateEnabled && onKeyDown) {
       const id = keyboard.on(
         this.widgetRef.current,
         this.widgetRef.current,

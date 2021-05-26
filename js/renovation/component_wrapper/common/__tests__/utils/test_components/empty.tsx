@@ -4,8 +4,6 @@ import {
   JSXComponent,
 } from '@devextreme-generator/declarations';
 
-// import * as Declarations from '@devextreme-generator/declarations';
-
 export const view = (): JSX.Element => <div />;
 
 @ComponentBindings()

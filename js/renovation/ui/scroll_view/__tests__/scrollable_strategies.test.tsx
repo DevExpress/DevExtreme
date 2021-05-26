@@ -15,7 +15,7 @@ import {
 } from './utils';
 
 import {
-  SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_DISABLED_CLASS, SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
 } from '../common/consts';
 
 import { titleize } from '../../../../core/utils/inflector';
@@ -193,7 +193,7 @@ each([{
 
         Object.defineProperties(viewModel, {
           cssClasses: {
-            get() { return (cssClasses); },
+            get() { return cssClasses; },
           },
         });
 
@@ -253,6 +253,16 @@ each([{
     describe('Behavior', () => {
       describe('Effects', () => {
         beforeEach(clearEventHandlers);
+
+        it('UpdateHandler() should call update() method', () => {
+          const viewModel = new Scrollable({ });
+
+          viewModel.update = jest.fn();
+
+          viewModel.updateHandler();
+
+          expect(viewModel.update).toHaveBeenCalledTimes(1);
+        });
 
         each([optionValues.direction]).describe('ScrollEffect params. Direction: %o', (direction) => {
           each([
@@ -573,7 +583,7 @@ each([{
         viewModel.update = jest.fn();
 
         expect((viewModel as any).validate(e)).toEqual(false);
-        expect(viewModel.update).toHaveBeenCalledTimes(1);
+        expect(viewModel.update).toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
       });
 
       it('validate(e), locked: true, disabled: false', () => {
@@ -601,16 +611,22 @@ each([{
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
               expect(rootClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
-              if (showScrollbar === 'never') {
-                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
-              } else {
-                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
-              }
 
               if (Scrollable === ScrollableNative) {
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
+
+                if (showScrollbar === 'never') {
+                  expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+                } else {
+                  expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
+                }
               } else {
+                expect(rootClasses).toEqual(showScrollbar === 'always'
+                  ? expect.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE)
+                  : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE));
+
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));

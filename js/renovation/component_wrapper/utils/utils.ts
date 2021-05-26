@@ -11,7 +11,7 @@ export const addAttributes = ($element, attributes): void => {
 };
 
 export function getAriaName(name: string): string {
-  return (name === 'role' || name === 'id')
+  return name === 'role' || name === 'id'
     ? name
     : `aria-${name}`;
 }

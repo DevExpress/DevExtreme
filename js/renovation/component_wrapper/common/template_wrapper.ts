@@ -49,8 +49,8 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
         const $result = $(this.props.template.render({
           container: getPublicElement($parent),
           transclude: this.props.transclude,
-          ...(!this.props.transclude ? { model: data } : {}),
-          ...(!this.props.transclude && Number.isFinite(index) ? { index } : {}),
+          ...!this.props.transclude ? { model: data } : {},
+          ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
         }));
         const result = $result.get(0) as HTMLElement;
 
@@ -70,12 +70,12 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   createEffects(): InfernoEffect[] {
-    return [new InfernoEffect(this.renderTemplate, [this.props.template])];
+    return [new InfernoEffect(this.renderTemplate, [this.props.template, this.props.model])];
   }
 
   updateEffects(): void {
     // eslint-disable-next-line no-underscore-dangle
-    this._effects[0].update([this.props.template]);
+    this._effects[0].update([this.props.template, this.props.model]);
   }
 
   render(): JSX.Element | null {

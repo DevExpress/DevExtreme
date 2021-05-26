@@ -22,6 +22,12 @@ export default class Compiler {
 
   dartClient = new DartClient();
 
+  static getImportType(url: string): ImportType {
+    if (url.endsWith('tb_index')) return ImportType.Index;
+    if (url.startsWith('tb_')) return ImportType.Color;
+    return ImportType.Unknown;
+  }
+
   async compile(
     items: ConfigMetaItem[],
     options: sass.Options,
@@ -99,12 +105,6 @@ export default class Compiler {
         });
       }
     });
-  }
-
-  static getImportType(url: string): ImportType {
-    if (url.endsWith('tb_index')) return ImportType.Index;
-    if (url.startsWith('tb_')) return ImportType.Color;
-    return ImportType.Unknown;
   }
 
   getMatchingUserItemsAsString(theme: string): string {

@@ -61,12 +61,11 @@ describe('Scrollbar', () => {
                   ? containerSize * (containerSize / contentSize)
                   : containerSize * containerSize, 15);
                 const expectedScrollTranslate = -scrollLocation
-                * ((contentSize - containerSize)
+                * (contentSize - containerSize
                   ? (containerSize - expectedScrollSize) / (contentSize - containerSize)
                   : 1
                 );
 
-                // TODO: test with bottom & top
                 expect(viewModel.scrollStyles).toEqual({
                   [direction === 'vertical' ? 'height' : 'width']: expectedScrollSize,
                   transform: direction === DIRECTION_VERTICAL ? `translate(0px, ${expectedScrollTranslate}px)` : `translate(${expectedScrollTranslate}px, 0px)`,
@@ -354,7 +353,7 @@ describe('Scrollbar', () => {
               });
 
               viewModel.moveToMouseLocation(clickLocation.eventData);
-              // TODO
+
               expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
               expect(viewModel.moveTo).toHaveBeenCalledWith(clickLocation.expected);
             });
@@ -964,7 +963,7 @@ describe('Scrollbar', () => {
 
           viewModel.initHandler(e, crossThumbScrolling);
 
-          const isScrollbarClicked = (targetClass !== 'dx-scrollable-scroll' && scrollByThumb);
+          const isScrollbarClicked = targetClass !== 'dx-scrollable-scroll' && scrollByThumb;
 
           let expectedShowOnScrollByWheel;
           let expectedThumbScrolling = false;

@@ -49,6 +49,16 @@ export default class BootstrapExtractor {
     });
   }
 
+  static convertRemToPx(cssValue: string): string {
+    const remValueRegex = /(\d*?\.?\d+?)rem([;\s])?/g;
+    const replaceHandler = (match: string, value: string, separator: string): string => {
+      const pixelsInRem = 16;
+      const pxValue = Math.round(parseFloat(value) * pixelsInRem);
+      return `${pxValue}px${separator || ''}`;
+    };
+    return cssValue.replace(remValueRegex, replaceHandler);
+  }
+
   async sassProcessor(): Promise<string> {
     const functions = await BootstrapExtractor.readSassFile('_functions.scss');
     const variables = await BootstrapExtractor.readSassFile('_variables.scss');
@@ -79,16 +89,6 @@ export default class BootstrapExtractor {
       .join('');
 
     return `dx-varibles-collector {${variables}}`;
-  }
-
-  static convertRemToPx(cssValue: string): string {
-    const remValueRegex = /(\d*?\.?\d+?)rem([;\s])?/g;
-    const replaceHandler = (match: string, value: string, separator: string): string => {
-      const pixelsInRem = 16;
-      const pxValue = Math.round(parseFloat(value) * pixelsInRem);
-      return `${pxValue}px${separator || ''}`;
-    };
-    return cssValue.replace(remValueRegex, replaceHandler);
   }
 
   async extract(): Promise<ConfigMetaItem[]> {

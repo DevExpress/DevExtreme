@@ -130,8 +130,8 @@ describe('TextSvgElement', () => {
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
-            { setAttribute: jest.fn(), getSubStringLength: () => (100) },
-            { setAttribute: jest.fn(), getSubStringLength: () => (40) },
+            { setAttribute: jest.fn(), getSubStringLength: () => 100 },
+            { setAttribute: jest.fn(), getSubStringLength: () => 40 },
           ],
         } as any;
         text.effectUpdateText();
@@ -149,8 +149,8 @@ describe('TextSvgElement', () => {
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
-            { setAttribute: jest.fn(), getSubStringLength: () => (100) },
-            { setAttribute: jest.fn(), getSubStringLength: () => (40) },
+            { setAttribute: jest.fn(), getSubStringLength: () => 100 },
+            { setAttribute: jest.fn(), getSubStringLength: () => 40 },
           ],
         } as any;
         text.effectUpdateText();
@@ -169,8 +169,8 @@ describe('TextSvgElement', () => {
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
-            { setAttribute: jest.fn(), getSubStringLength: () => (100) },
-            { setAttribute: jest.fn(), getSubStringLength: () => (40) },
+            { setAttribute: jest.fn(), getSubStringLength: () => 100 },
+            { setAttribute: jest.fn(), getSubStringLength: () => 40 },
           ],
         } as any;
         text.effectUpdateText();

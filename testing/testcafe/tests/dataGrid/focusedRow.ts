@@ -578,7 +578,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     masterDetail: {
       enabled: true,
       template: (container): any => {
-        (container.append($('<div>') as any).dxDataGrid({
+        container.append($('<div>') as any).dxDataGrid({
           height: 500,
           keyExpr: 'id',
           dataSource: data,
@@ -587,7 +587,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
             allowUpdating: true,
             mode: 'batch',
           },
-        }));
+        });
       },
     },
     columns: [

@@ -22,17 +22,23 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
   }
 };
 
-export default class ComponentWrapper extends DOMComponent {
+export default class ComponentWrapper extends DOMComponent<Record<string, any>> {
+  static IS_RENOVATED_WIDGET = false;
+
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
     [name: string]: AbstractFunction;
   };
 
+  customKeyHandlers!: Record<string, AbstractFunction>;
+
+  defaultKeyHandlers!: Record<string, AbstractFunction>;
+
   _documentFragment!: DocumentFragment;
 
   _elementAttr!: {
-    class?: string;
     [name: string]: unknown;
+    class?: string;
   };
 
   _isNodeReplaced!: boolean;
@@ -41,17 +47,13 @@ export default class ComponentWrapper extends DOMComponent {
 
   _storedClasses?: string;
 
-  _supportedKeys!: () => {
-    [name: string]: AbstractFunction;
-  };
-
   _viewRef!: RefObject<unknown>;
 
   _viewComponent!: any;
 
-  _disposeMethodCalled = false;
-
   _shouldRaiseContentReady = false;
+
+  _componentTemplates!: Record<string, any>;
 
   get _propsInfo(): {
     allowNull: string[];
@@ -163,24 +165,16 @@ export default class ComponentWrapper extends DOMComponent {
 
   _render(): void { } // NOTE: Inherited from DOM_Component
 
-  dispose(): void {
-    this._disposeMethodCalled = true;
-    super.dispose();
-  }
-
   _dispose(): void {
     const containerNode = this.$element()[0];
     const { parentNode } = containerNode;
 
     if (parentNode) {
       parentNode.$V = containerNode.$V;
-      render(
-        this._disposeMethodCalled ? createElement(
-          containerNode.tagName,
-          this.elementAttr,
-        ) : null,
-        parentNode,
-      );
+      render(null, parentNode);
+      parentNode.appendChild(containerNode);
+      containerNode.innerHTML = '';
+
       delete parentNode.$V;
     }
     delete containerNode.$V;
@@ -273,6 +267,9 @@ export default class ComponentWrapper extends DOMComponent {
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
     });
+    this._propsInfo.templates.forEach((template) => {
+      options[template] = this._componentTemplates[template];
+    });
 
     return {
       ...options,
@@ -311,15 +308,22 @@ export default class ComponentWrapper extends DOMComponent {
 
   _init(): void {
     super._init();
-    this._templateManager.addDefaultTemplates(this.getDefaultTemplates());
+
+    this.customKeyHandlers = {};
+    this.defaultKeyHandlers = {};
+    this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
     this._props = { ...this.option() };
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
+    this._componentTemplates = {};
+    this._propsInfo.templates.forEach((template) => {
+      this._componentTemplates[template] = this._createTemplateComponent(this._props[template]);
+    });
+
     Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
 
     this._viewRef = createRef();
-    this._supportedKeys = (): Record<string, AbstractFunction> => ({});
   }
 
   _addAction(event: string, actionToAdd?: AbstractFunction): void {
@@ -344,11 +348,17 @@ export default class ComponentWrapper extends DOMComponent {
   }
 
   _optionChanged(option: Option): void {
-    const { name, fullName } = option;
+    const { name, fullName, value } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);
+
+    if (this._propsInfo.templates.indexOf(name) > -1) {
+      this._componentTemplates[name] = this._createTemplateComponent(value);
+    }
+
     if (name && this._getActionConfigs()[name]) {
       this._addAction(name);
     }
+
     this._shouldRaiseContentReady = this._shouldRaiseContentReady
       || this._checkContentReadyOption(fullName);
     super._optionChanged(option);
@@ -365,10 +375,7 @@ export default class ComponentWrapper extends DOMComponent {
     return null;
   }
 
-  _createTemplateComponent(
-    props: unknown,
-    templateOption: unknown,
-  ): ((model: TemplateModel) => VNode) | undefined {
+  _createTemplateComponent(templateOption: unknown): ((model: TemplateModel) => VNode) | undefined {
     if (!templateOption) {
       return undefined;
     }
@@ -389,10 +396,10 @@ export default class ComponentWrapper extends DOMComponent {
     return templateWrapper;
   }
 
-  _wrapKeyDownHandler(initialHandler: AbstractFunction) {
-    return (options): void => {
+  _wrapKeyDownHandler(initialHandler: AbstractFunction): AbstractFunction {
+    return (options: { originalEvent: Event; keyName: string; which: string }): Event => {
       const { originalEvent, keyName, which } = options;
-      const keys = this._supportedKeys();
+      const keys = this.customKeyHandlers;
       const func = keys[keyName] || keys[which];
 
       // NOTE: registered handler has more priority
@@ -401,7 +408,7 @@ export default class ComponentWrapper extends DOMComponent {
         const result = handler(originalEvent, options);
 
         if (!result) {
-          originalEvent.cancel = true;
+          (originalEvent as any).cancel = true;
           return originalEvent;
         }
       }
@@ -435,12 +442,15 @@ export default class ComponentWrapper extends DOMComponent {
     this._refresh();
   }
 
+  _supportedKeys(): Record<string, AbstractFunction> {
+    return {
+      ...this.defaultKeyHandlers,
+      ...this.customKeyHandlers,
+    };
+  }
+
   registerKeyHandler(key: string, handler: AbstractFunction): void {
-    const currentKeys = this._supportedKeys();
-    this._supportedKeys = (): Record<string, AbstractFunction> => ({
-      ...currentKeys,
-      [key]: handler,
-    });
+    this.customKeyHandlers[key] = handler;
   }
 
   // NOTE: this method will be deprecated
@@ -451,8 +461,6 @@ export default class ComponentWrapper extends DOMComponent {
       '"setAria" method is deprecated, use "aria" property instead',
     );
   }
-
-  static IS_RENOVATED_WIDGET = false;
 }
 
 /// #DEBUG
