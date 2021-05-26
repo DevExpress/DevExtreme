@@ -13,7 +13,7 @@ import { isDefined, isRenderer } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update-props-immutable';
-import { AbstractFunction, Option } from './types.ts';
+import { AbstractFunction, Option } from './types';
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
   if (Object.prototype.hasOwnProperty.call(options, name) && options[name] === undefined) {
