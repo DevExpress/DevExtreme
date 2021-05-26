@@ -279,7 +279,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  navigateToRow(key: any): void {
+  navigateToRow(key: any): DxPromise<number> {
     return this.instance?.navigateToRow(key);
   }
 
