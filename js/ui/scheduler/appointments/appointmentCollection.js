@@ -21,7 +21,7 @@ import timeZoneUtils from '../utils.timeZone.js';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS } from '../classes';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
-
+import { getAppointmentDataProvider, getInstanceFactory } from '../instanceFactory';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -36,10 +36,6 @@ class SchedulerAppointments extends CollectionWidget {
 
     get isVirtualScrolling() {
         return this.invoke('isVirtualScrolling');
-    }
-
-    get resourceManager() {
-        return this.option('observer')._resourcesManager;
     }
 
     constructor(element, options) {
@@ -513,9 +509,12 @@ class SchedulerAppointments extends CollectionWidget {
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
         if(settings.virtual) {
-            const deferredColor = this.invoke('getAppointmentColor', {
+            const { resourceManager } = getInstanceFactory();
+            const deferredColor = resourceManager.getAppointmentColor({
                 itemData: rawAppointment,
                 groupIndex: settings.groupIndex,
+                groups: this.option('groups'),
+                workspaceGroups: this.invoke('getWorkspaceOption', 'groups')
             });
             this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
         } else {
@@ -538,7 +537,7 @@ class SchedulerAppointments extends CollectionWidget {
             };
 
             if(this.isAgendaView) {
-                config.createPlainResourceListAsync = rawAppointment => this.resourceManager._createPlainResourcesByAppointmentAsync(rawAppointment);
+                config.createPlainResourceListAsync = rawAppointment => getInstanceFactory().resourceManager._createPlainResourcesByAppointmentAsync(rawAppointment);
             }
             this._createComponent(
                 element,
@@ -549,7 +548,8 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyResourceDataAttr($appointment) {
-        const resources = this.invoke('getResourcesFromItem', this._getItemData($appointment));
+        const { resourceManager } = getInstanceFactory();
+        const resources = resourceManager.getResourcesFromItem(this._getItemData($appointment));
         if(resources) {
             each(resources, function(name, values) {
                 const attr = 'data-' + normalizeKey(name.toLowerCase()) + '-';
@@ -957,7 +957,7 @@ class SchedulerAppointments extends CollectionWidget {
         const maxAllowedDate = this.invoke('getEndViewDate');
         const startDayHour = this.invoke('getStartDayHour');
         const endDayHour = this.invoke('getEndDayHour');
-        const appointmentIsLong = this.invoke('appointmentTakesSeveralDays', appointment);
+        const appointmentIsLong = getAppointmentDataProvider().appointmentTakesSeveralDays(appointment);
         const result = [];
 
         const timeZoneCalculator = this.invoke('getTimeZoneCalculator');

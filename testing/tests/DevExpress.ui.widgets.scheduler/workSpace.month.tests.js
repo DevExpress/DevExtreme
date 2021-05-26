@@ -5,6 +5,7 @@ import $ from 'jquery';
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
+import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
@@ -21,6 +22,12 @@ testStart(function() {
 module('Work Space Month', () => {
     module('Default', {
         beforeEach: function() {
+            getInstanceFactory().create({
+                scheduler: {
+                    isVirtualScrolling: () => false
+                }
+            });
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth().dxSchedulerWorkSpaceMonth('instance');
             stubInvokeMethod(this.instance);
         }

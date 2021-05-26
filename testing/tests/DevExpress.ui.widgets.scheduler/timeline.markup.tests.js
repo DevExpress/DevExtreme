@@ -9,6 +9,7 @@ import dateLocalization from 'localization/date';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
 import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
 import 'ui/scheduler/ui.scheduler';
 
 QUnit.testStart(() => {
@@ -60,6 +61,11 @@ const stubInvokeMethod = (instance) => {
 const moduleConfig = {
     beforeEach: function() {
         this.createInstance = function(options) {
+            getInstanceFactory().create({
+                scheduler: {
+                    isVirtualScrolling: () => false
+                }
+            });
             this.instance = $('#scheduler-timeline').dxSchedulerTimeline().dxSchedulerTimeline('instance');
             stubInvokeMethod(this.instance, options);
         };
