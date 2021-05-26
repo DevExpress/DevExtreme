@@ -82,11 +82,9 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() classes?: string | undefined = '';
 
-  @OneWay() className?: string = '';
-
   @OneWay() name?: string = '';
 
-  @OneWay() addWidgetClass = true;
+  @OneWay() addWidgetClass? = true;
 
   @Event() onActive?: (e: Event) => void;
 

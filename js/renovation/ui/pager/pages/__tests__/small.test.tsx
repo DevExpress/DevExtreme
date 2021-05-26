@@ -15,12 +15,14 @@ jest.mock('../../../../../localization/message', () => ({
 describe('Small pager pages', () => {
   const render = (props) => {
     const tree = mount<Element>(<PagesSmallComponent {...props} /> as any).childAt(0);
-    const pageIndexNumberBox = tree.childAt(0);
+    const pageIndexDiv = tree.childAt(0);
+    const pageIndexNumberBox = pageIndexDiv.childAt(0);
     const span = tree.childAt(1);
     const maxPage = tree.childAt(2);
 
     return {
       tree,
+      pageIndexDiv,
       pageIndexNumberBox,
       span,
       maxPage,
@@ -40,12 +42,12 @@ describe('Small pager pages', () => {
       props,
     } as Partial<PagesSmall>;
     const {
-      tree, pageIndexNumberBox, span, maxPage,
+      tree, pageIndexDiv, pageIndexNumberBox, span, maxPage,
     } = render(viewProps);
     expect(tree.props().className).toBe('dx-light-pages');
-
+    expect(pageIndexDiv.instance()).toEqual(pageIndexRef.current);
     expect(pageIndexNumberBox.props()).toMatchObject({
-      className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40, rootElementRef: pageIndexRef,
+      className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40,
     });
     expect(span.html()).toBe('<span class="dx-info  dx-info-text">of</span>');
     expect(maxPage.props()).toMatchObject({
