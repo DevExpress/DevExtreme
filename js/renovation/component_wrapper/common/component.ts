@@ -22,10 +22,6 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
   }
 };
 
-function convertToDefaultName(name): string {
-  return `default${name[0].toUpperCase()}${name.slice(1)}`;
-}
-
 export default class ComponentWrapper extends DOMComponent<Record<string, any>> {
   static IS_RENOVATED_WIDGET = false;
 
@@ -61,7 +57,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
   get _propsInfo(): {
     allowNull: string[];
-    twoWay: [string, boolean, string][];
+    twoWay: [string, string, string][];
     elements: string[];
     templates: string[];
     props: string[];
@@ -106,11 +102,10 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       this._propsInfo.twoWay.reduce(
         (
           options: { [name: string]: unknown },
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          [name, defaultValue, eventName],
+          [name, defaultName, eventName],
         ) => ({
           ...options,
-          [name]: this._viewComponent.defaultProps[convertToDefaultName(name)],
+          [name]: this._viewComponent.defaultProps[defaultName],
           [eventName]: (value: unknown): void => this.option(name, value),
         }),
         {},
@@ -252,10 +247,8 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
         (name: string) => defaultProps[name],
       ),
     );
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    twoWay.forEach(([name, defaultValue]) => {
-      setDefaultOptionValue(widgetProps, () => defaultProps[convertToDefaultName(name)])(name);
+    twoWay.forEach(([name, defaultName]) => {
+      setDefaultOptionValue(widgetProps, () => defaultProps[defaultName])(name);
     });
 
     elements.forEach((name: string) => {
