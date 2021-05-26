@@ -1,3 +1,6 @@
+import { VNode } from 'inferno';
+import { TemplateModel } from './template_wrapper';
+
 export type AbstractFunction = (...args: any) => any;
 
 export interface Option {
@@ -6,3 +9,5 @@ export interface Option {
   value: unknown;
   previousValue: unknown;
 }
+
+export type TemplateComponent = (model: TemplateModel) => VNode;

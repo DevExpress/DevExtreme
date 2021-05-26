@@ -74,7 +74,6 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   updateEffects(): void {
-    // eslint-disable-next-line no-underscore-dangle
     this._effects[0].update([this.props.template, this.props.model]);
   }
 

@@ -77,7 +77,7 @@ export default class DataGridWrapper extends Component {
 
     _initializeComponent(): void {
         const options = this.option();
-        this._onInitialized = options.onInitialized;
+        this._onInitialized = options.onInitialized as Function;
         options.onInitialized = null;
         super._initializeComponent();
     }

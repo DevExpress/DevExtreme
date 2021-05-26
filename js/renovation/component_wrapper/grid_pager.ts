@@ -1,19 +1,18 @@
-/* eslint-disable no-underscore-dangle */
 import Component from './common/component';
-import { Option } from './common/types';
+import { AbstractFunction, Option } from './common/types';
 
 export class GridPagerWrapper extends Component {
   _optionChanged(args: Option): void {
     switch (args.name) {
       case 'pageIndex': {
-        const pageIndexChanged = this.option('pageIndexChanged');
+        const pageIndexChanged = this.option('pageIndexChanged') as AbstractFunction;
         if (pageIndexChanged) {
           pageIndexChanged(args.value);
         }
         break;
       }
       case 'pageSize': {
-        const pageSizeChanged = this.option('pageSizeChanged');
+        const pageSizeChanged = this.option('pageSizeChanged') as AbstractFunction;
         if (pageSizeChanged) {
           pageSizeChanged(args.value);
         }

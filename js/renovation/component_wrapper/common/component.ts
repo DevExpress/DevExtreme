@@ -1,8 +1,9 @@
 import {
-  render, createRef, RefObject, VNode,
+  render, createRef, RefObject, VNode, Component,
 } from 'inferno';
 import { createElement } from 'inferno-create-element';
 import { InfernoEffectHost, hydrate } from '@devextreme/vdom';
+// For some reason `dxElementWrapper` not found by lint
 // eslint-disable-next-line import/named
 import $, { dxElementWrapper } from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
@@ -13,7 +14,9 @@ import { isDefined, isRenderer } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update-props-immutable';
-import { AbstractFunction, Option } from './types';
+import {
+  AbstractFunction, Option, TemplateComponent,
+} from './types';
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
   if (Object.prototype.hasOwnProperty.call(options, name) && options[name] === undefined) {
@@ -22,7 +25,16 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
   }
 };
 
-export default class ComponentWrapper extends DOMComponent<Record<string, any>> {
+interface ElementAttributes extends Record<string, unknown> {
+  class: string;
+}
+
+interface ComponentWrapperProps extends Record<string, unknown> {
+  onContentReady?: (e: Record<string, unknown>) => void;
+  elementAttr?: ElementAttributes;
+}
+
+export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
   static IS_RENOVATED_WIDGET = false;
 
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
@@ -49,11 +61,11 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
   _viewRef!: RefObject<unknown>;
 
-  _viewComponent!: any;
+  _viewComponent!: typeof Component;
 
   _shouldRaiseContentReady = false;
 
-  _componentTemplates!: Record<string, any>;
+  _componentTemplates!: Record<string, TemplateComponent | undefined>;
 
   get _propsInfo(): {
     allowNull: string[];
@@ -71,7 +83,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     };
   }
 
-  get viewRef(): any {
+  public get viewRef(): unknown {
     return this._viewRef?.current;
   }
 
@@ -277,7 +289,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       ...elementAttr,
       className: [
         ...(this.elementAttr.class || '').split(' '),
-        ...(elementAttr.class || '').split(' '),
+        ...(elementAttr?.class || '').split(' '),
       ]
         .filter((c, i, a) => c && a.indexOf(c) === i)
         .join(' ')
@@ -375,7 +387,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     return null;
   }
 
-  _createTemplateComponent(templateOption: unknown): ((model: TemplateModel) => VNode) | undefined {
+  _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
     if (!templateOption) {
       return undefined;
     }
@@ -397,7 +409,11 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
   }
 
   _wrapKeyDownHandler(initialHandler: AbstractFunction): AbstractFunction {
-    return (options: { originalEvent: Event; keyName: string; which: string }): Event => {
+    return (options: {
+      originalEvent: Event & { cancel: boolean };
+      keyName: string;
+      which: string;
+    }): Event => {
       const { originalEvent, keyName, which } = options;
       const keys = this.customKeyHandlers;
       const func = keys[keyName] || keys[which];
@@ -408,7 +424,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
         const result = handler(originalEvent, options);
 
         if (!result) {
-          (originalEvent as any).cancel = true;
+          originalEvent.cancel = true;
           return originalEvent;
         }
       }

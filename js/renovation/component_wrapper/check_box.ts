@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import Editor from './common/editor';
 import { addAttributes, getAriaName } from './utils/utils';
 

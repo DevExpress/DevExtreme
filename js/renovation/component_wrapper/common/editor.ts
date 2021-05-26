@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import Component from './component';
 import ValidationEngine from '../../../ui/validation_engine';
 import { extend } from '../../../core/utils/extend';
