@@ -367,14 +367,6 @@ module('Work Space Week', () => {
 
         });
 
-        test('the getDistanceBetweenCells method', function(assert) {
-            this.instance.option('width', 700);
-            this.instance.$element().find('.dx-scheduler-date-table-cell').css('width', 100);
-
-            const distance = this.instance.getDistanceBetweenCells(2, 4);
-            assert.equal(distance, 300, 'distance is OK');
-        });
-
         test('Cells of week after the DST switch should have right date', function(assert) {
             const spy = sinon.spy(dateUtils, 'getTimezonesDifference');
 

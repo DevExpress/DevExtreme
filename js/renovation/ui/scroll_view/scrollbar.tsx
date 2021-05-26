@@ -137,7 +137,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   validateEvent(e): boolean {
     const { target } = e.originalEvent;
 
-    return (this.isThumb(target) || this.isScrollbar(target));
+    return this.isThumb(target) || this.isScrollbar(target);
   }
 
   @Method()
@@ -148,10 +148,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   reachedMax(): boolean {
     return this.props.scrollLocation >= this.maxOffset;
-  }
-
-  inRange(): boolean {
-    return inRange(this.props.scrollLocation, this.minOffset, this.maxOffset);
   }
 
   @Method()
@@ -167,26 +163,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   getMaxOffset(): number {
     return this.maxOffset;
-  }
-
-  get axis(): 'x' | 'y' {
-    return this.isHorizontal ? 'x' : 'y';
-  }
-
-  get scrollProp(): 'left' | 'top' {
-    return this.isHorizontal ? 'left' : 'top';
-  }
-
-  get fullScrollProp(): 'scrollLeft' | 'scrollTop' {
-    return this.isHorizontal ? 'scrollLeft' : 'scrollTop';
-  }
-
-  get dimension(): 'width' | 'height' {
-    return this.isHorizontal ? 'width' : 'height';
-  }
-
-  get isHorizontal(): boolean {
-    return this.props.direction === DIRECTION_HORIZONTAL;
   }
 
   @Method()
@@ -216,21 +192,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.scrollBy(distance);
   }
 
-  hide(): void {
-    this.visibility = false;
-
-    if (isDefined(this.showOnScrollByWheel) && this.props.showScrollbar === 'onScroll') {
-      this.hideScrollbarTimer = setTimeout(() => {
-        this.showOnScrollByWheel = undefined;
-      }, HIDE_SCROLLBAR_TIMEOUT);
-    }
-  }
-
-  clearHideScrollbarTimer(): void {
-    clearTimeout(this.hideScrollbarTimer);
-    this.hideScrollbarTimer = undefined;
-  }
-
   @Effect({ run: 'once' })
   disposeHideScrollbarTimer(): DisposeEffectReturn {
     return (): void => this.clearHideScrollbarTimer();
@@ -240,14 +201,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   endHandler(velocity: { x: number; y: number }): void {
     this.onInertiaAnimatorStart(velocity[this.axis]);
     this.resetThumbScrolling();
-  }
-
-  onInertiaAnimatorStart(velocity: number): void {
-    this.props.onAnimatorStart?.('inertia', velocity, this.thumbScrolling, this.crossThumbScrolling);
-  }
-
-  onBounceAnimatorStart(): void {
-    this.props.onAnimatorStart?.('bounce');
   }
 
   @Method()
@@ -289,6 +242,124 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     this.scrollToBounds();
+  }
+
+  @Method()
+  scrollStep(delta: number): void {
+    if (this.props.bounceEnabled) {
+      this.moveTo(this.props.scrollLocation + delta);
+    } else {
+      this.moveTo(this.getLocationWithinRange(this.props.scrollLocation + delta));
+    }
+  }
+
+  @Effect()
+  updateContentTranslate(): void {
+    if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
+      if (this.initialTopPocketSize !== this.topPocketSize) {
+        this.updateContent(this.props.scrollLocation);
+        this.initialTopPocketSize = this.topPocketSize;
+      }
+    }
+  }
+
+  @Method()
+  moveTo(location: number): void {
+    const scrollDelta = Math.abs(this.prevScrollLocation - location);
+    // there is an issue https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
+    this.props.scrollLocationChange?.(this.fullScrollProp, location);
+    this.updateContent(location);
+    if (scrollDelta >= 1) {
+      this.props.onScroll?.();
+    }
+
+    this.prevScrollLocation = location;
+    this.rightScrollLocation = this.minOffset - location;
+
+    if (this.props.forceGeneratePockets) {
+      if (this.isPullDown) {
+        if (this.props.pocketState !== TopPocketState.STATE_READY) {
+          this.setPocketState(TopPocketState.STATE_READY);
+        }
+      } else if (this.isReachBottom()) {
+        if (this.props.pocketState !== TopPocketState.STATE_LOADING) {
+          this.setPocketState(TopPocketState.STATE_LOADING);
+        }
+      } else if (this.props.pocketState !== TopPocketState.STATE_RELEASED) {
+        this.stateReleased();
+      }
+    }
+  }
+
+  @Method()
+  releaseHandler(): void {
+    this.release();
+  }
+
+  @Effect()
+  moveToBoundaryOnSizeChange(): void {
+    if (this.props.forceUpdateScrollbarLocation) {
+      if (this.props.scrollLocation <= this.maxOffset) {
+        let newScrollLocation = this.getLocationWithinRange(this.props.scrollLocation);
+
+        if (this.isHorizontal && this.props.rtlEnabled) {
+          newScrollLocation = this.minOffset - this.rightScrollLocation;
+
+          if (newScrollLocation >= 0) {
+            newScrollLocation = 0;
+          }
+        }
+
+        this.moveTo(newScrollLocation);
+      }
+    }
+  }
+
+  hide(): void {
+    this.visibility = false;
+
+    if (isDefined(this.showOnScrollByWheel) && this.props.showScrollbar === 'onScroll') {
+      this.hideScrollbarTimer = setTimeout(() => {
+        this.showOnScrollByWheel = undefined;
+      }, HIDE_SCROLLBAR_TIMEOUT);
+    }
+  }
+
+  inRange(): boolean {
+    return inRange(this.props.scrollLocation, this.minOffset, this.maxOffset);
+  }
+
+  get axis(): 'x' | 'y' {
+    return this.isHorizontal ? 'x' : 'y';
+  }
+
+  get scrollProp(): 'left' | 'top' {
+    return this.isHorizontal ? 'left' : 'top';
+  }
+
+  get fullScrollProp(): 'scrollLeft' | 'scrollTop' {
+    return this.isHorizontal ? 'scrollLeft' : 'scrollTop';
+  }
+
+  get dimension(): 'width' | 'height' {
+    return this.isHorizontal ? 'width' : 'height';
+  }
+
+  get isHorizontal(): boolean {
+    return this.props.direction === DIRECTION_HORIZONTAL;
+  }
+
+  clearHideScrollbarTimer(): void {
+    clearTimeout(this.hideScrollbarTimer);
+    this.hideScrollbarTimer = undefined;
+  }
+
+  onInertiaAnimatorStart(velocity: number): void {
+    this.props.onAnimatorStart?.('inertia', velocity, this.thumbScrolling, this.crossThumbScrolling);
+  }
+
+  onBounceAnimatorStart(): void {
+    this.props.onAnimatorStart?.('bounce');
   }
 
   pullDownRefreshing(): void {
@@ -354,7 +425,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     const { target } = e.originalEvent;
-    const scrollbarClicked = (this.props.scrollByThumb && this.isScrollbar(target));
+    const scrollbarClicked = this.props.scrollByThumb && this.isScrollbar(target);
 
     if (scrollbarClicked) {
       this.moveToMouseLocation(e);
@@ -380,34 +451,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.scrollStep(-Math.round(delta));
   }
 
-  @Method()
-  scrollStep(delta: number): void {
-    if (this.props.bounceEnabled) {
-      this.moveTo(this.props.scrollLocation + delta);
-    } else {
-      this.moveTo(this.getLocationWithinRange(this.props.scrollLocation + delta));
-    }
-  }
-
-  @Effect()
-  moveToBoundaryOnSizeChange(): void {
-    if (this.props.forceUpdateScrollbarLocation) {
-      if (this.props.scrollLocation <= this.maxOffset) {
-        let newScrollLocation = this.getLocationWithinRange(this.props.scrollLocation);
-
-        if (this.isHorizontal && this.props.rtlEnabled) {
-          newScrollLocation = this.minOffset - this.rightScrollLocation;
-
-          if (newScrollLocation >= 0) {
-            newScrollLocation = 0;
-          }
-        }
-
-        this.moveTo(newScrollLocation);
-      }
-    }
-  }
-
   updateContent(location: number): void {
     let contentTranslateOffset: number;
 
@@ -426,16 +469,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.props.contentTranslateOffsetChange?.(this.scrollProp, contentTranslateOffset);
   }
 
-  @Effect()
-  updateContentTranslate(): void {
-    if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
-      if (this.initialTopPocketSize !== this.topPocketSize) {
-        this.updateContent(this.props.scrollLocation);
-        this.initialTopPocketSize = this.topPocketSize;
-      }
-    }
-  }
-
   get maxOffset(): number {
     if (this.props.forceGeneratePockets) {
       if (this.isPullDown && this.pendingPullDown) {
@@ -444,39 +477,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     return 0;
-  }
-
-  @Method()
-  moveTo(location: number): void {
-    const scrollDelta = Math.abs(this.prevScrollLocation - location);
-    // there is an issue https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
-    this.props.scrollLocationChange?.(this.fullScrollProp, location);
-    this.updateContent(location);
-    if (scrollDelta >= 1) {
-      this.props.onScroll?.();
-    }
-
-    this.prevScrollLocation = location;
-    this.rightScrollLocation = this.minOffset - location;
-
-    if (this.props.forceGeneratePockets) {
-      if (this.isPullDown) {
-        if (this.props.pocketState !== TopPocketState.STATE_READY) {
-          this.setPocketState(TopPocketState.STATE_READY);
-        }
-      } else if (this.isReachBottom()) {
-        if (this.props.pocketState !== TopPocketState.STATE_LOADING) {
-          this.setPocketState(TopPocketState.STATE_LOADING);
-        }
-      } else if (this.props.pocketState !== TopPocketState.STATE_RELEASED) {
-        this.stateReleased();
-      }
-    }
-  }
-
-  @Method()
-  releaseHandler(): void {
-    this.release();
   }
 
   release(): void {

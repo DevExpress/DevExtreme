@@ -113,7 +113,6 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     acceptCustomValue?: boolean;
@@ -123,7 +122,6 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @type_function_param1 selectedItem:object
      * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
@@ -138,41 +136,35 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @type_function_param1_field3 model:any
      * @action
      * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     openOnFieldClick?: boolean;
     /**
      * @docid
      * @default "Select"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     placeholder?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showSelectionControls?: boolean;
     /**
      * @docid
      * @default "change"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     valueChangeEvent?: string;
@@ -189,7 +181,6 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
  * @inherits dxDropDownList
  * @module ui/select_box
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */

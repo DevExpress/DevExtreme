@@ -163,6 +163,22 @@ export class Button extends JSXComponent(ButtonProps) {
     this.widgetRef.current!.focus();
   }
 
+  @Effect()
+  submitEffect(): EffectReturn {
+    const namespace = 'UIFeedback';
+    const { useSubmitBehavior, onSubmit } = this.props;
+
+    if (useSubmitBehavior && onSubmit) {
+      click.on(this.submitInputRef.current,
+        (event) => onSubmit({ event, submitInput: this.submitInputRef.current }),
+        { namespace });
+
+      return (): void => click.off(this.submitInputRef.current, { namespace });
+    }
+
+    return undefined;
+  }
+
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
 
@@ -203,22 +219,6 @@ export class Button extends JSXComponent(ButtonProps) {
     return undefined;
   }
 
-  @Effect()
-  submitEffect(): EffectReturn {
-    const namespace = 'UIFeedback';
-    const { useSubmitBehavior, onSubmit } = this.props;
-
-    if (useSubmitBehavior && onSubmit) {
-      click.on(this.submitInputRef.current,
-        (event) => onSubmit({ event, submitInput: this.submitInputRef.current }),
-        { namespace });
-
-      return (): void => click.off(this.submitInputRef.current, { namespace });
-    }
-
-    return undefined;
-  }
-
   get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
@@ -230,7 +230,7 @@ export class Button extends JSXComponent(ButtonProps) {
 
     return {
       role: 'button',
-      ...(label ? { label } : {}),
+      ...label ? { label } : {},
     };
   }
 
@@ -241,12 +241,12 @@ export class Button extends JSXComponent(ButtonProps) {
   get iconSource(): string {
     const { icon, type } = this.props;
 
-    return (icon || type === 'back') ? (icon || 'back') : '';
+    return icon || type === 'back' ? icon || 'back' : '';
   }
 
   get inkRippleConfig(): InkRippleConfig {
     const { text, icon, type } = this.props;
-    return ((!text && icon) || (type === 'back')) ? {
+    return (!text && icon) || (type === 'back') ? {
       isCentered: true,
       useHoldAnimation: false,
       waveSizeCoefficient: 1,

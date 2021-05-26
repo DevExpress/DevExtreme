@@ -26,7 +26,7 @@ export class Box extends JSXComponent<BoxProps>() {
 
   get cssStyles(): { [key: string]: string } {
     const DIRECTION_MAP = { row: 'row', col: 'column' };
-    const tryGetFromMap = (prop, map): string => ((prop in map) ? map[prop] : prop);
+    const tryGetFromMap = (prop, map): string => (prop in map ? map[prop] : prop);
     return {
       display: 'flex',
       flexDirection: DIRECTION_MAP[this.props.direction],

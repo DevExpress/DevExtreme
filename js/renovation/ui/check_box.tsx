@@ -152,8 +152,6 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 })
 
 export class CheckBox extends JSXComponent(CheckBoxProps) {
-  showValidationMessage = false;
-
   @Ref() iconRef!: RefObject<HTMLDivElement>;
 
   @Ref() inkRippleRef!: RefObject<InkRipple>;
@@ -163,6 +161,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Ref() widgetRef!: RefObject<Widget>;
 
   @ForwardRef() target!: RefObject<HTMLDivElement>;
+
+  showValidationMessage = false;
 
   @Effect()
   updateValidationMessageVisibility(): EffectReturn {

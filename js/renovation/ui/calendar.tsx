@@ -34,13 +34,13 @@ export class CalendarProps extends WidgetProps {
 
   @Event() valueChange?: EventCallback<Date|number|string>;
 
-  @OneWay() _todayDate: () => Date = () => new Date();
-
   @OneWay() focusStateEnabled?: boolean;
 
-  @OneWay() hasFocus: ((e: DxElement) => boolean) = () => true;
-
   @OneWay() tabIndex?: number;
+
+  @OneWay() _todayDate: () => Date = () => new Date();
+
+  @OneWay() hasFocus: ((e: DxElement) => boolean) = () => true;
 }
 @Component({
   defaultOptionRules: null,

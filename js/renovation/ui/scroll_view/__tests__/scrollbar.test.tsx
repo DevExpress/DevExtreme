@@ -61,7 +61,7 @@ describe('Scrollbar', () => {
                   ? containerSize * (containerSize / contentSize)
                   : containerSize * containerSize, 15);
                 const expectedScrollTranslate = -scrollLocation
-                * ((contentSize - containerSize)
+                * (contentSize - containerSize
                   ? (containerSize - expectedScrollSize) / (contentSize - containerSize)
                   : 1
                 );
@@ -963,7 +963,7 @@ describe('Scrollbar', () => {
 
           viewModel.initHandler(e, crossThumbScrolling);
 
-          const isScrollbarClicked = (targetClass !== 'dx-scrollable-scroll' && scrollByThumb);
+          const isScrollbarClicked = targetClass !== 'dx-scrollable-scroll' && scrollByThumb;
 
           let expectedShowOnScrollByWheel;
           let expectedThumbScrolling = false;

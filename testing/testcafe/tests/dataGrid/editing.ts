@@ -19,7 +19,7 @@ const getGridConfig = (config): Record<string, unknown> => {
     legacyRendering: false,
   };
 
-  return config ? ({ ...defaultConfig, ...config }) : defaultConfig;
+  return config ? { ...defaultConfig, ...config } : defaultConfig;
 };
 
 const getElementCount = (gridInstance: DataGrid, elementSelector: string): Promise<number> => {
