@@ -71,7 +71,7 @@ export default class Editor extends Component {
     );
   }
 
-  _bindInnerWidgetOptions(innerWidget: Component, optionsContainer: unknown): void {
+  _bindInnerWidgetOptions(innerWidget: Component, optionsContainer: string): void {
     const innerWidgetOptions = extend({}, innerWidget.option());
     const syncOptions = (): void => this._silent(optionsContainer, innerWidgetOptions);
 
