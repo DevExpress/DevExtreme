@@ -21,6 +21,6 @@ class InstanceFactory {
 const instanceFactory = new InstanceFactory();
 
 export const getInstanceFactory = () => instanceFactory;
-export const getResourceManager = () => instanceFactory.resourceManager;
-export const getWorkspaceHelper = () => instanceFactory.workspaceHelper;
-export const getAppointmentDataProvider = () => instanceFactory.appointmentDataProvider;
+export const getResourceManager = () => getInstanceFactory().resourceManager;
+export const getWorkspaceHelper = () => getInstanceFactory().workspaceHelper;
+export const getAppointmentDataProvider = () => getInstanceFactory().appointmentDataProvider;

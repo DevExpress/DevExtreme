@@ -3,8 +3,8 @@ import { DataSource } from 'data/data_source/data_source';
 
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
+import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import AppointmentDataProvider from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
-import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
@@ -42,10 +42,8 @@ QUnit.module('Initialization', {
 
         createWrapper({ dataSource: data });
 
-        const { appointmentDataProvider } = getInstanceFactory();
-
-        assert.ok(appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(getAppointmentDataProvider() instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
+        assert.ok(getAppointmentDataProvider().dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should work correctly when wrong timeZone was set', function(assert) {
@@ -56,9 +54,7 @@ QUnit.module('Initialization', {
     QUnit.test('Scheduler shouldn\'t have paginate in default DataSource', function(assert) {
         createWrapper({ dataSource: this.tasks });
 
-        const { appointmentDataProvider } = getInstanceFactory();
-
-        assert.notOk(appointmentDataProvider.dataSource.paginate(), 'Paginate is false');
+        assert.notOk(getAppointmentDataProvider().dataSource.paginate(), 'Paginate is false');
     });
 
     QUnit.test('Rendering inside invisible element', function(assert) {
