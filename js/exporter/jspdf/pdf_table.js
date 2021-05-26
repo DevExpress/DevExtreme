@@ -86,8 +86,10 @@ export class PdfTable {
                 currentCell._rect.w -= indent;
             }
 
-            if(rowType === 'group') {
-                currentCell.backgroundColor = this.getGroupRowBackgroundColor();
+            if(!isDefined(currentCell.backgroundColor)) {
+                if(rowType === 'group') {
+                    currentCell.backgroundColor = this.getGroupRowBackgroundColor();
+                }
             }
         }
     }
