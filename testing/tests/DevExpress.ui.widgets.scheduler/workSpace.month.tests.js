@@ -237,7 +237,7 @@ module('Work Space Month', () => {
             const origGetFirstViewDate = this.instance.getStartViewDate;
 
             this.instance.getStartViewDate = function() {
-                return new Date(2016, 1, 29, 6, 0);
+                return new Date(2016, 1, 29, 5, 0);
             };
 
             try {
