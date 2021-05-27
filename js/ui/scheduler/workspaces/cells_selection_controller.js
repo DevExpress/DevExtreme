@@ -40,10 +40,9 @@ export class CellsSelectionController {
         } = edgeIndices;
 
         const step = isGroupedByDate && isMultiSelection ? groupCount : 1;
-
         const sign = isRTL ? -1 : 1;
-        const deltaPosition = direction === 'next' ? sign * step : -1 * sign * step;
-        const nextCellIndex = cellIndex + deltaPosition;
+        const deltaCellIndex = direction === 'next' ? sign * step : -1 * sign * step;
+        const nextCellIndex = cellIndex + deltaCellIndex;
 
         const isValidCellIndex = nextCellIndex >= firstCellIndex
             && nextCellIndex <= lastCellIndex;
@@ -55,26 +54,52 @@ export class CellsSelectionController {
             };
         }
 
+        return this._processEdgeCell({
+            nextCellIndex,
+            rowIndex,
+            cellIndex,
+            firstCellIndex,
+            lastCellIndex,
+            firstRowIndex,
+            lastRowIndex,
+            step,
+        });
+    }
+
+    _processEdgeCell(options) {
+        const {
+            nextCellIndex,
+            rowIndex,
+            cellIndex,
+            firstCellIndex,
+            lastCellIndex,
+            firstRowIndex,
+            lastRowIndex,
+            step,
+        } = options;
+
         let validCellIndex = nextCellIndex;
         let validRowIndex = rowIndex;
         const isLeftEdgeCell = nextCellIndex < firstCellIndex;
         const isRightEdgeCell = nextCellIndex > lastCellIndex;
 
         if(isLeftEdgeCell) {
-            const anotherCellIndex = lastCellIndex - (step - cellIndex % step - 1);
+            const cellIndexInNextRow = lastCellIndex - (step - cellIndex % step - 1);
             const nextRowIndex = rowIndex - 1;
+            const isValidRowIndex = nextRowIndex >= firstRowIndex;
 
-            validRowIndex = nextRowIndex >= firstRowIndex ? nextRowIndex : rowIndex;
-            validCellIndex = nextRowIndex >= firstRowIndex ? anotherCellIndex : cellIndex;
+            validRowIndex = isValidRowIndex ? nextRowIndex : rowIndex;
+            validCellIndex = isValidRowIndex ? cellIndexInNextRow : cellIndex;
         }
+
         if(isRightEdgeCell) {
-            const anotherCellIndex = firstCellIndex + cellIndex % step;
+            const cellIndexInNextRow = firstCellIndex + cellIndex % step;
             const nextRowIndex = rowIndex + 1;
+            const isValidRowIndex = nextRowIndex <= lastRowIndex;
 
-            validRowIndex = nextRowIndex <= lastRowIndex ? nextRowIndex : rowIndex;
-            validCellIndex = nextRowIndex <= lastRowIndex ? anotherCellIndex : cellIndex;
+            validRowIndex = isValidRowIndex ? nextRowIndex : rowIndex;
+            validCellIndex = isValidRowIndex ? cellIndexInNextRow : cellIndex;
         }
-
 
         return {
             cellIndex: validCellIndex,
