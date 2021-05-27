@@ -23,6 +23,7 @@ import {
     APPOINTMENT_CONTENT_CLASSES
 } from '../classes';
 import { Deferred } from '../../../core/utils/deferred';
+import { getInstanceFactory } from '../instanceFactory';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -143,9 +144,12 @@ export class Appointment extends DOMComponent {
     }
 
     _setResourceColor() {
-        const deferredColor = this.invoke('getAppointmentColor', {
+        const { resourceManager } = getInstanceFactory();
+        const deferredColor = resourceManager.getAppointmentColor({
             itemData: this.rawAppointment,
             groupIndex: this.option('groupIndex'),
+            groups: this.invoke('getOption', 'groups'),
+            workspaceGroups: this.invoke('getWorkspaceOption', 'groups')
         });
 
         deferredColor.done(color => color && this.coloredElement.css('backgroundColor', color));

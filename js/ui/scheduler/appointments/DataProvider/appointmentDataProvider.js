@@ -1,5 +1,8 @@
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
+import { getInstanceFactory } from '../../instanceFactory';
+import { extend } from '../../../../core/utils/extend';
+import { each } from '../../../../core/utils/iterator';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -7,10 +10,11 @@ const FilterStrategies = {
 };
 
 export default class AppointmentDataProvider {
-    constructor(scheduler, dataSource, dataAccessors) {
+    constructor(scheduler, dataSource, appointmentDataAccessors) {
         this.scheduler = scheduler;
         this.dataSource = dataSource;
-        this.dataAccessors = dataAccessors;
+        this.dataAccessors = this.combineDataAccessors(appointmentDataAccessors);
+        this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
         this.initStrategy();
@@ -44,14 +48,27 @@ export default class AppointmentDataProvider {
         this.appointmentDataSource.setDataSource(this.dataSource);
     }
 
-    setDataAccessors(dataAccessors) {
-        this.dataAccessors = dataAccessors;
+    updateDataAccessors(appointmentDataAccessors) {
+        this.dataAccessors = this.combineDataAccessors(appointmentDataAccessors);
         this.initStrategy();
+    }
+
+    combineDataAccessors(appointmentDataAccessors) { // TODO move to utils or get rid of it
+        const result = extend(true, {}, appointmentDataAccessors);
+        const { resourceManager } = getInstanceFactory();
+
+        if(appointmentDataAccessors && resourceManager) {
+            each(resourceManager._dataAccessors, (type, accessor) => {
+                result[type].resources = accessor;
+            });
+        }
+
+        return result;
     }
 
     // Filter mapping
     filter() {
-        return this.getFilterStrategy().filter();
+        this.filteredItems = this.getFilterStrategy().filter();
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {

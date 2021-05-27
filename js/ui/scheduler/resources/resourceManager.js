@@ -10,10 +10,16 @@ import { when, Deferred } from '../../../core/utils/deferred';
 
 import { AgendaResourceProcessor } from './agendaResourceProcessor';
 import { getDisplayExpr, getFieldExpr, getValueExpr, getWrappedDataSource } from './utils';
+import { getWorkspaceHelper } from '../instanceFactory';
 
 export class ResourceManager {
     constructor(resources) {
+        this.loadedResources = [];
         this._resourceLoader = {};
+        this._dataAccessors = {
+            getter: {},
+            setter: {}
+        };
         this.agendaProcessor = new AgendaResourceProcessor();
 
         this.setResources(resources);
@@ -194,7 +200,23 @@ export class ResourceManager {
         return result;
     }
 
+    isLoaded() {
+        return isDefined(this.loadedResources);
+    }
+
     loadResources(groups) {
+        const result = new Deferred();
+
+        this.loadResourcesCore(groups).done((resources) => {
+
+            this.loadedResources = resources;
+
+            result.resolve(resources);
+        });
+
+        return result.promise();
+    }
+    loadResourcesCore(groups) {
         const result = new Deferred();
         const that = this;
         const deferreds = [];
@@ -262,7 +284,6 @@ export class ResourceManager {
         const resourceData = this._getResourceDataByField(field);
         const resourceDataLength = resourceData.length;
         let color;
-
 
         if(resourceDataLength) {
             for(let i = 0; i < resourceDataLength; i++) {
@@ -396,7 +417,36 @@ export class ResourceManager {
         return result;
     }
 
-    groupAppointmentsByResources(appointments, resources) {
+    groupAppointmentsByResources(appointments, groups) {
+        let result = { '0': appointments };
+
+        if(groups && groups.length && this.getResourcesData().length) {
+            result = this.groupAppointmentsByResourcesCore(appointments, this.loadedResources);
+        }
+
+        let totalResourceCount = 0;
+
+        each(this.loadedResources, function(i, resource) {
+            if(!i) {
+                totalResourceCount = resource.items.length;
+            } else {
+                totalResourceCount *= resource.items.length;
+            }
+        });
+
+        for(let j = 0; j < totalResourceCount; j++) {
+            const index = j.toString();
+
+            if(result[index]) {
+                continue;
+            }
+
+            result[index] = [];
+        }
+
+        return result;
+    }
+    groupAppointmentsByResourcesCore(appointments, resources) {
         const tree = this.createResourcesTree(resources);
         const result = {};
 
@@ -415,6 +465,69 @@ export class ResourceManager {
         }).bind(this));
 
         return result;
+    }
+
+    getAppointmentColor(options) {
+        const {
+            groups,
+            workspaceGroups
+        } = options;
+        const resourceForPainting = this.getResourceForPainting(groups);
+        let response = new Deferred().resolve().promise();
+
+        if(resourceForPainting) {
+            const field = getFieldExpr(resourceForPainting);
+            const groupIndex = options.groupIndex;
+            const cellGroups = getWorkspaceHelper().getCellGroups(groupIndex, workspaceGroups);
+            const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(options.itemData));
+
+            let groupId = resourceValues.length
+                ? resourceValues[0]
+                : undefined;
+
+            for(let i = 0; i < cellGroups.length; i++) {
+                if(cellGroups[i].name === field) {
+                    groupId = cellGroups[i].id;
+                    break;
+                }
+            }
+
+            response = this.getResourceColor(field, groupId);
+        }
+
+        return response;
+    }
+
+    _getPathToLeaf(leafIndex, groups) {
+        const tree = this.createResourcesTree(groups);
+
+        function findLeafByIndex(data, index) {
+            for(let i = 0; i < data.length; i++) {
+                if(data[i].leafIndex === index) {
+                    return data[i];
+                } else {
+                    const leaf = findLeafByIndex(data[i].children, index);
+                    if(leaf) {
+                        return leaf;
+                    }
+                }
+            }
+        }
+
+        function makeBranch(leaf, result) {
+            result = result || [];
+            result.push(leaf.value);
+
+            if(leaf.parent) {
+                makeBranch(leaf.parent, result);
+            }
+
+            return result;
+        }
+
+        const leaf = findLeafByIndex(tree, leafIndex);
+
+        return makeBranch(leaf).reverse();
     }
 
     reduceResourcesTree(tree, existingAppointments, _result) {
@@ -528,5 +641,10 @@ export class ResourceManager {
         }, true);
 
         return result;
+    }
+
+    createReducedResourcesTree(appointments) {
+        const tree = this.createResourcesTree(this.loadedResources);
+        return this.reduceResourcesTree(tree, appointments);
     }
 }

@@ -8,6 +8,7 @@ import { extend } from '../../../../core/utils/extend';
 import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
+import { getInstanceFactory } from '../../instanceFactory';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
@@ -161,7 +162,7 @@ export class AppointmentFilterBaseStrategy {
     // TODO - Use DI to get appropriate services
     get workspace() { return this.scheduler.getWorkSpace(); }
     get viewDataProvider() { return this.workspace.viewDataProvider; }
-    get resourcesManager() { return this.scheduler._resourcesManager; }
+    get resourceManager() { return getInstanceFactory().resourceManager; }
     get timeZoneCalculator() { return this.scheduler.timeZoneCalculator; }
 
     get viewStartDayHour() { return this.scheduler._getCurrentViewOption('startDayHour'); }
@@ -178,7 +179,7 @@ export class AppointmentFilterBaseStrategy {
 
     filter() {
         const dateRange = this.workspace.getDateRange();
-        const resources = this.resourcesManager.getResourcesData();
+        const resources = this.resourceManager.getResourcesData();
 
         let allDay;
 
@@ -739,6 +740,6 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
     _getPrerenderFilterResources(groupIndex) {
         const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
 
-        return this.resourcesManager.getResourcesDataByGroups([cellGroup]);
+        return this.resourceManager.getResourcesDataByGroups([cellGroup]);
     }
 }

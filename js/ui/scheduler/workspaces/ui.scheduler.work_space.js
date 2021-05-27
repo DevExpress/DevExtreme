@@ -42,7 +42,7 @@ import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
 
 import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
-import ViewDataProvider from './view_data_provider';
+import ViewDataProvider from './view_model/view_data_provider';
 
 import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
 import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
@@ -50,6 +50,7 @@ import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/bas
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
+import { getAppointmentDataProvider, getInstanceFactory, getWorkspaceHelper } from '../instanceFactory';
 import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
@@ -1371,7 +1372,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getGroupIndexByResourceId(id) {
         const groups = this.option('groups');
-        const resourceTree = this.invoke('createResourcesTree', groups);
+        const resourceTree = getInstanceFactory().resourceManager.createResourcesTree(groups);
 
         if(!resourceTree.length) return 0;
 
@@ -1722,7 +1723,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
             groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
-            const groupsArray = this._getCellGroups(groupIndex);
+            const groupsArray = getWorkspaceHelper().getCellGroups(
+                groupIndex,
+                this.option('groups')
+            );
 
             groups = this._getGroupsObjectFromGroupsArray(groupsArray);
         }
@@ -1793,7 +1797,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: cellGroupIndex,
         };
 
-        const groupsArray = this._getCellGroups(cellGroupIndex);
+        const groupsArray = getWorkspaceHelper().getCellGroups(
+            cellGroupIndex,
+            this.option('groups')
+        );
 
         if(groupsArray.length) {
             data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
@@ -1845,7 +1852,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             }
 
             const groupIndex = this._getGroupIndex(rowIndex, 0);
-            const groupsArray = this._getCellGroups(groupIndex);
+
+            const groupsArray = getWorkspaceHelper().getCellGroups(
+                groupIndex,
+                this.option('groups')
+            );
 
             const groups = this._getGroupsObjectFromGroupsArray(groupsArray);
 
@@ -1956,7 +1967,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex,
         };
 
-        const groupsArray = this._getCellGroups(groupIndex);
+        const groupsArray = getWorkspaceHelper().getCellGroups(
+            groupIndex,
+            this.option('groups')
+        );
 
         if(groupsArray.length) {
             data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
@@ -1994,71 +2008,17 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
 
-    // move to resource manager
-    _getPathToLeaf(leafIndex) {
-        const tree = this.invoke('createResourcesTree', this.option('groups'));
-
-        function findLeafByIndex(data, index) {
-            for(let i = 0; i < data.length; i++) {
-                if(data[i].leafIndex === index) {
-                    return data[i];
-                } else {
-                    const leaf = findLeafByIndex(data[i].children, index);
-                    if(leaf) {
-                        return leaf;
-                    }
-                }
-            }
-
-        }
-
-        function makeBranch(leaf, result) {
-            result = result || [];
-            result.push(leaf.value);
-
-            if(leaf.parent) {
-                makeBranch(leaf.parent, result);
-            }
-
-            return result;
-        }
-
-        const leaf = findLeafByIndex(tree, leafIndex);
-        return makeBranch(leaf).reverse();
-    }
-
     _getAllGroups() {
         const groupCount = this._getGroupCount();
 
         return [...(new Array(groupCount))].map((_, groupIndex) => {
-            const groupsArray = this._getCellGroups(groupIndex);
+            const groupsArray = getWorkspaceHelper().getCellGroups(
+                groupIndex,
+                this.option('groups')
+            );
 
             return this._getGroupsObjectFromGroupsArray(groupsArray);
         });
-    }
-
-    _getCellGroups(groupIndex) {
-        const result = [];
-
-        if(this._getGroupCount()) {
-            const groups = this.option('groups');
-
-            if(groupIndex < 0) {
-                return;
-            }
-
-            const path = this._getPathToLeaf(groupIndex);
-
-            for(let i = 0; i < groups.length; i++) {
-                result.push({
-                    name: groups[i].name,
-                    id: path[i]
-                });
-            }
-
-        }
-
-        return result;
     }
 
     _getGroupsObjectFromGroupsArray(groupsArray) {
@@ -2368,8 +2328,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getGroupIndexes(appointmentResources) {
         let result = [];
         if(this._isGroupsSpecified(appointmentResources)) {
-            const tree = this.invoke('createResourcesTree', this.option('groups'));
-            result = this.invoke('getResourceTreeLeaves', tree, appointmentResources);
+            const { resourceManager } = getInstanceFactory();
+            const tree = resourceManager.createResourcesTree(this.option('groups'));
+            result = resourceManager.getResourceTreeLeaves(tree, appointmentResources);
         }
 
         return result;
@@ -2760,7 +2721,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellData = this.getCellData($(this._getDroppableCell()));
         const allDay = cellData.allDay;
         const startDate = cellData.startDate;
-        const endDate = startDate && this.invoke('calculateAppointmentEndDate', allDay, startDate);
+        const endDate = startDate && getAppointmentDataProvider().calculateAppointmentEndDate(allDay, startDate);
 
         return {
             startDate: startDate,

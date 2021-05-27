@@ -7,6 +7,7 @@ import dateLocalization from 'localization/date';
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
+import { getInstanceFactory } from 'ui/scheduler/instanceFactory.js';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -28,6 +29,13 @@ module('Work Space Day', {
                 this.instance.invoke.restore();
                 delete this.instance;
             }
+
+            getInstanceFactory().create({
+                scheduler: {
+                    isVirtualScrolling: () => false,
+                    getAppointmentDurationInMinutes: () => 60
+                }
+            });
 
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay('instance');
             this.instance.initDragBehavior();
@@ -137,7 +145,7 @@ module('Work Space Day', {
         assert.deepEqual(data, {
             allDay: false,
             startDate: new Date(2015, 1, 18, 1),
-            endDate: undefined,
+            endDate: new Date(2015, 1, 18, 2),
             groups: {
                 res: 2
             }
@@ -172,7 +180,7 @@ module('Work Space Day', {
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             startDate: new Date(2015, 1, 18, 0, 30),
-            endDate: undefined,
+            endDate: new Date(2015, 1, 18, 1, 30),
             allDay: false,
             groups: {
                 one: 2,

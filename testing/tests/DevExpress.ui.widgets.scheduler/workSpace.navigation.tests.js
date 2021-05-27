@@ -9,6 +9,7 @@ import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
+import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
@@ -41,6 +42,12 @@ module('Workspace navigation', () => {
             module(`${scrollingMode} scrolling`, {
                 beforeEach: function() {
                     this.createInstance = (options, workSpaceName) => {
+                        getInstanceFactory().create({
+                            scheduler: {
+                                isVirtualScrolling: () => false
+                            }
+                        });
+
                         return $('#scheduler-work-space')[workSpaceName]({
                             currentDate: new Date(2021, 0, 10),
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
