@@ -945,7 +945,7 @@ describe('Scrollbar', () => {
           const onAnimatorCancel = jest.fn();
           const event = { ...defaultEvent, originalEvent: {} } as any;
           if (isDxWheelEvent) {
-            (event as any).originalEvent.type = 'dxmousewheel';
+            event.originalEvent.type = 'dxmousewheel';
           }
 
           const viewModel = new Scrollbar({
@@ -958,7 +958,7 @@ describe('Scrollbar', () => {
           const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
 
           viewModel.moveToMouseLocation = jest.fn();
-          (event.originalEvent as any).target = scrollbar.find(`.${targetClass}`).getDOMNode();
+          event.originalEvent.target = scrollbar.find(`.${targetClass}`).getDOMNode();
           (viewModel as any).scrollbarRef = { current: scrollbar.getDOMNode() };
 
           viewModel.initHandler(event, crossThumbScrolling);
