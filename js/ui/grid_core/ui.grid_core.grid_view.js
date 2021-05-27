@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 import { deferRender, deferUpdate } from '../../core/utils/common';
-import { hasWindow } from '../../core/utils/window';
+import { hasWindow, getWindow } from '../../core/utils/window';
 import { each } from '../../core/utils/iterator';
 import { isString, isDefined, isNumeric } from '../../core/utils/type';
 import { getBoundingRect } from '../../core/utils/position';
@@ -277,7 +277,7 @@ const ResizingController = modules.ViewController.inherit({
             resetBestFitMode = true;
         }
 
-        deferUpdate(function() {
+        deferUpdate(() => {
             if(needBestFit) {
                 resultWidths = that._getBestFitWidths();
 
@@ -391,11 +391,6 @@ const ResizingController = modules.ViewController.inherit({
             if(isPercentWidth(column.width)) {
                 hasPercentWidth = true;
             }
-        }
-
-        if($element && that._maxWidth) {
-            delete that._maxWidth;
-            $element.css('maxWidth', '');
         }
 
         if(!hasAutoWidth && resultWidths.length) {
@@ -580,7 +575,12 @@ const ResizingController = modules.ViewController.inherit({
     _checkSize: function(checkSize) {
         const $rootElement = this.component.$element();
 
-        if(checkSize && (this._lastWidth === $rootElement.width() && this._lastHeight === $rootElement.height() || !$rootElement.is(':visible'))) {
+        if(checkSize && (
+            this._lastWidth === $rootElement.width() &&
+            this._lastHeight === $rootElement.height() &&
+            this._devicePixelRatio === getWindow().devicePixelRatio ||
+            !$rootElement.is(':visible')
+        )) {
             return false;
         }
         return true;
@@ -661,6 +661,7 @@ const ResizingController = modules.ViewController.inherit({
     _updateLastSizes: function($rootElement) {
         this._lastWidth = $rootElement.width();
         this._lastHeight = $rootElement.height();
+        this._devicePixelRatio = getWindow().devicePixelRatio;
     },
 
     optionChanged: function(args) {
