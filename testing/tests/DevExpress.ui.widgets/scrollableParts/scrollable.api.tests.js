@@ -769,7 +769,7 @@ class ScrollableTestHelper {
                 }
             };
 
-            if(this._useSimulatedScrollbar && this._useNative) {
+            if(this._useNative && this._useSimulatedScrollbar) {
                 this.scrollable.update();
                 this._getScrollableContainer().trigger('scroll');
             }
@@ -781,9 +781,7 @@ class ScrollableTestHelper {
     setContainerWidth(width) {
         this.$scrollable.css('width', width);
 
-        // if(!this._useNative) {
         resizeCallbacks.fire();
-        // }
     }
 }
 
