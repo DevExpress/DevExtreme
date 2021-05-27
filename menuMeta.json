@@ -1732,7 +1732,6 @@
           {
             "Title": "Recurring Appointments",
             "Name": "RecurringAppointments",
-            "DocUrl": "Guide/UI_Components/Scheduler/Appointments/Appointment_Types/#Recurring_Appointments",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Models/RecurringAppointment.cs",
