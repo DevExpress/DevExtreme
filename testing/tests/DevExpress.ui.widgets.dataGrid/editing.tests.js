@@ -4192,7 +4192,7 @@ QUnit.module('Editing with real dataController', {
         assert.ok(testElement.find('td:contains(modifiedValue)').length);
     });
 
-    QUnit.testInActiveWindow('Insert Row after scrolling', function(assert) {
+    QUnit.skip('Insert Row after scrolling', function(assert) {
         // arrange
         const that = this;
         const done = assert.async();
@@ -12161,7 +12161,8 @@ QUnit.module('Editing with validation', {
             }
         });
 
-        rowsView.scrollChanged.add(function() {
+        const scrollHandler = function() {
+            rowsView.scrollChanged.remove(scrollHandler);
             // act
             that.addRow();
 
@@ -12178,8 +12179,12 @@ QUnit.module('Editing with validation', {
             assert.ok(that.gridContainer.find('tbody > tr').eq(1).hasClass('dx-row-inserted'), 'has inserted row');
             assert.ok(that.gridContainer.find('tbody > tr').eq(2).hasClass('dx-error-row'), 'has error row');
             assert.strictEqual(that.gridContainer.find('tbody > tr').eq(2).text(), 'Test');
+
             done();
-        });
+        };
+
+        rowsView.scrollChanged.add(scrollHandler);
+
 
         rowsView.element().dxScrollable('instance').scrollTo(45);
     });
