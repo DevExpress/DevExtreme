@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: npm run build
     
-    - name: Run npm insatall in test directory
+    - name: Run npm install in test directory
       working-directory: ./testing/test_bundlers  
       run: npm install
 
