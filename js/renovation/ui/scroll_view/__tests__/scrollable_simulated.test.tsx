@@ -552,7 +552,7 @@ describe('Simulated > Behavior', () => {
             originalEvent: {
               type: isDxWheelEvent ? 'dxmousewheel' : undefined,
             },
-          };
+          } as any;
 
           const viewModel = new Scrollable({ direction });
 

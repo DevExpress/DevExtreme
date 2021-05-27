@@ -571,7 +571,7 @@ describe('Native > Effects', () => {
 
       const viewModel = new Scrollable({});
 
-      viewModel.releaseTimer = 10;
+      (viewModel.releaseTimer as unknown as number) = 10;
       viewModel.topPocketState = pocketState;
       Object.defineProperties(viewModel, {
         refreshStrategy: { get() { return refreshStrategy; } },

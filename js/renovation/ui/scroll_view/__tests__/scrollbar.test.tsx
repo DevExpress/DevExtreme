@@ -943,7 +943,7 @@ describe('Scrollbar', () => {
       ]))('initHandler(event, crossThumbScrolling), isDxWheelEvent: %o, crossThumbScrolling: %o, scrollByThumb: %o, targetClass: %, showScrollbar: %o',
         (isDxWheelEvent, crossThumbScrolling, scrollByThumb, targetClass, showScrollbar) => {
           const onAnimatorCancel = jest.fn();
-          const event = { ...defaultEvent, originalEvent: {} };
+          const event = { ...defaultEvent, originalEvent: {} } as any;
           if (isDxWheelEvent) {
             (event as any).originalEvent.type = 'dxmousewheel';
           }
