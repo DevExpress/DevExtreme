@@ -1,58 +1,15 @@
 /* eslint-disable spellcheck/spell-checker */
-// import rollupConfig from './rollup.config';
-/* eslint-disable spellcheck/spell-checker */
-/* global  __dirname */
 
-import path from 'path';
+import rollupConfig from './rollup.config';
 
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import alias from '@rollup/plugin-alias';
+const output = rollupConfig.output.file;
+delete rollupConfig.output.file;
 
 module.exports = {
     // root: './src',
-
-
     build: {
-        output: './dist/dist_rollup/bundle_esm.js',
-        rollupOptions: {
-            input: './src/modules_esm.js',
-            output: {
-                // file: './dist/dist_rollup/bundle_esm.js',
-                // exports: 'auto',
-                format: 'es'
-            },
-            external: [ 'rrule' ],
-            plugins: [
-                alias({
-                    jszip: path.join(__dirname, './node_modules/jszip/dist/jszip.min.js'),
-                    globalize$: path.join(__dirname, './node_modules/globalize/dist/globalize.js'),
-                    globalize: path.join(__dirname, './node_modules/globalize/dist/globalize'),
-                    cldr$: path.join(__dirname, './node_modules/cldrjs/dist/cldr.js'),
-                    cldr: path.join(__dirname, './node_modules/cldrjs/dist/cldr')
-                }),
-                nodeResolve({
-                // mainFields: ['jsnext:main', 'module'],
-                    moduleDirectories: ['./node_modules/', './node_modules/globalize/dist'],
-                    browser: true
-                }),
-                // nodeResolve(),
-                commonjs({
-                    include: [
-                        './node_modules/rxjs/**',
-                        './node_modules/jszip/**',
-                        './node_modules/devexpress-gantt/**',
-                        './node_modules/devextreme-quill/**',
-                        './node_modules/globalize/**',
-                        // './node_modules/devextreme/**',
-                        // './node_modules/devextreme-angular/**',
-                        './node_modules/luxon/**'
-                    ],
-                    dynamicRequireTargets: [
-                        './node_modules/rrule/dist/esm/src/rrule.js'
-                    ]
-                }),
-
-            ] }
+        // output: './dist/dist_rollup/bundle_esm.js',
+        output: output,
+        rollupOptions: rollupConfig
     }
 };

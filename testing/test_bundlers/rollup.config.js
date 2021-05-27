@@ -6,8 +6,6 @@ import path from 'path';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import alias from '@rollup/plugin-alias';
-// import replace from '@rollup/plugin-replace';
-
 
 export default {
     input: './src/modules_esm.js',
@@ -26,11 +24,9 @@ export default {
             cldr: path.join(__dirname, './node_modules/cldrjs/dist/cldr')
         }),
         nodeResolve({
-            // mainFields: ['jsnext:main', 'module'],
             moduleDirectories: ['./node_modules/', './node_modules/globalize/dist'],
             browser: true
         }),
-        // nodeResolve(),
         commonjs({
             include: [
                 './node_modules/rxjs/**',
@@ -38,8 +34,6 @@ export default {
                 './node_modules/devexpress-gantt/**',
                 './node_modules/devextreme-quill/**',
                 './node_modules/globalize/**',
-                // './node_modules/devextreme/**',
-                // './node_modules/devextreme-angular/**',
                 './node_modules/luxon/**'
             ],
             dynamicRequireTargets: [

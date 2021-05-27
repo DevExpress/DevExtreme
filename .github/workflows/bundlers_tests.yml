@@ -30,22 +30,26 @@ jobs:
       working-directory: ./testing/test_bundlers  
       run: npm install
 
-    - name: Create js bundle with webpack (CJS import)
+    - name: Create bundle with webpack (CJS import)
       working-directory: ./testing/test_bundlers
       run: npm run build:webpack-cjs
 
-    - name: Create js bundle with webpack
+    - name: Create bundle with webpack
       working-directory: ./testing/test_bundlers
       run: npm run build:webpack-esm
 
-    - name: Create js bundle with rollup
+    - name: Create bundle with rollup
       working-directory: ./testing/test_bundlers
       run: npm run build:rollup-esm
 
-    - name: Create js bundle with parcel
+    - name: Create bundle with parcel
       working-directory: ./testing/test_bundlers
       run: npm run build:parcel-esm
 
-    - name: Create js bundle with browserify
+    - name: Create bundle with browserify
       working-directory: ./testing/test_bundlers
       run: npm run build:browserify-cjs
+
+    - name: Create bundle with vite
+      working-directory: ./testing/test_bundlers
+      run: npm run build:vite-esm

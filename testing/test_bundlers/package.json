@@ -7,7 +7,7 @@
     "build:rollup-esm": "rollup -c",
     "build:parcel-esm": "parcel build ./src/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel",
     "build:browserify-cjs": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./src/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js",
-    "build:vite": "vite build"
+    "build:vite-esm": "vite build"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.2",
