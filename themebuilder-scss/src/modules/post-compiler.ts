@@ -30,7 +30,7 @@ export function addInfoHeader(
 
 export async function cleanCss(css: string): Promise<string> {
   const promiseOptions: Options = { returnPromise: true };
-  const options = { ...commonOptions as Options, ...promiseOptions };
+  const options = { ...commonOptions, ...promiseOptions };
   const cleaner = new CleanCSS(options);
   return (await cleaner.minify(css)).styles;
 }
