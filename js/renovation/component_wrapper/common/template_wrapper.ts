@@ -1,6 +1,7 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/vdom';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
+import { replaceWith } from '../../../core/utils/dom';
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import { getPublicElement } from '../../../core/element';
@@ -52,10 +53,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
           ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
         }));
 
-        const result = $result.get(0);
-        if (this.props.transclude || (result && result !== parentNode)) {
-          $(node).replaceWith($result);
-        }
+        replaceWith($(node), $result);
 
         return (): void => {
           // NOTE: order is important

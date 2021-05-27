@@ -787,11 +787,23 @@ describe('templates and slots', () => {
   it('should render content in right order if children placed between other nodes', () => {
     const slotContent = $('<span>').html('Default slot');
     $('#component').append(slotContent);
+    const slotBefore = $('<span>').html('Additional slot before').insertBefore(slotContent);
+    const slotAfter = $('<span>').html('Additional slot after').insertAfter(slotContent);
     $('#component').dxChildrenTestWidget({});
 
     const children = $('#component')[0].childNodes;
-    expect(children.length).toBe(3);
-    expect(children[1]).toBe(slotContent[0]);
+    expect(children.length).toBe(5);
+    expect(children[1]).toBe(slotBefore[0]);
+    expect(children[2]).toBe(slotContent[0]);
+    expect(children[3]).toBe(slotAfter[0]);
+  });
+
+  it('should not fail if template returned parent node', () => {
+    const template = (data, element) => $(element)
+      .append($('<span>').text('text'))
+      .addClass('modified_container');
+
+    expect(() => $('#component').dxTemplatedTestWidget({ template })).not.toThrowError();
   });
 });
 
