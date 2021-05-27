@@ -284,12 +284,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const isAllDayPanelCell = this._hasAllDayClass($currentCell) && !this._isVerticalGroupedWorkSpace();
         const isRTL = this._isRTL();
-
         const groupCount = this._getGroupCount();
         const isGroupedByDate = this.isGroupedByDate();
         const isHorizontalGrouping = this._isHorizontalGroupedWorkSpace();
-
-        const step = isGroupedByDate && isMultiSelection ? groupCount : 1;
 
         const leftVirtualCellsCount = this.virtualScrollingDispatcher?.leftVirtualCellsCount || 0;
         const topVirtualRowsCount = this.virtualScrollingDispatcher?.topVirtualRowsCount || 0;
@@ -305,18 +302,19 @@ class SchedulerWorkSpace extends WidgetObserver {
             isAllDayPanelCell,
         );
 
-        const indices = isHorizontalGrouping && isMultiSelection && !isGroupedByDate
+        const edgeIndices = isHorizontalGrouping && isMultiSelection && !isGroupedByDate
             ? this.viewDataProvider.getGroupEdgeIndices(groupIndex, isAllDayPanelCell)
             : this.viewDataProvider.getViewEdgeIndices(isAllDayPanelCell);
 
-        const nextCellPosition = this.cellsSelectionController.getCellFromNextColumnPosition(
+        const nextCellPosition = this.cellsSelectionController.getCellFromNextColumnPosition({
             currentCellPosition,
             direction,
-            indices,
-            step,
+            edgeIndices,
             isRTL,
-            isAllDayPanelCell,
-        );
+            isGroupedByDate,
+            groupCount,
+            isMultiSelection,
+        });
 
         const $nextCell = isAllDayPanelCell
             ? this._dom_getAllDayPanelCell(nextCellPosition.cellIndex)

@@ -18,7 +18,16 @@ export class CellsSelectionController {
         };
     }
 
-    getCellFromNextColumnPosition(currentCellPosition, direction, edgeIndices, step, isRTL) {
+    getCellFromNextColumnPosition(options) {
+        const {
+            currentCellPosition,
+            direction,
+            edgeIndices,
+            isRTL,
+            isGroupedByDate,
+            groupCount,
+            isMultiSelection,
+        } = options;
         const {
             cellIndex,
             rowIndex,
@@ -29,6 +38,8 @@ export class CellsSelectionController {
             firstRowIndex,
             lastRowIndex,
         } = edgeIndices;
+
+        const step = isGroupedByDate && isMultiSelection ? groupCount : 1;
 
         const sign = isRTL ? -1 : 1;
         const deltaPosition = direction === 'next' ? sign * step : -1 * sign * step;
