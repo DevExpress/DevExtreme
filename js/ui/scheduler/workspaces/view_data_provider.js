@@ -1176,4 +1176,18 @@ export default class ViewDataProvider {
     getColumnsCount() {
         return this.viewDataMap.dateTableMap[0].length;
     }
+
+    getViewDimensions(isAllDayPanel) {
+        if(isAllDayPanel) {
+            return {
+                columnsCount: this.viewDataMap.allDayPanelMap.length,
+                rowCount: 1,
+            };
+        }
+
+        return {
+            columnsCount: this.viewDataMap.dateTableMap[0].length,
+            rowsCount: this.viewDataMap.dateTableMap.length,
+        };
+    }
 }
