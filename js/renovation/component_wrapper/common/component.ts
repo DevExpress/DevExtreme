@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import {
   render, createRef, RefObject, VNode, Component,
 } from 'inferno';
 import { createElement } from 'inferno-create-element';
 import { InfernoEffectHost, hydrate } from '@devextreme/vdom';
-// For some reason `dxElementWrapper` not found by lint
+// NOTE: For some reason `dxElementWrapper` not found by lint
 // eslint-disable-next-line import/named
 import $, { dxElementWrapper } from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
@@ -14,9 +15,7 @@ import { isDefined, isRenderer } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update-props-immutable';
-import {
-  AbstractFunction, Option, TemplateComponent,
-} from './types';
+import { Option, TemplateComponent } from './types';
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
   if (Object.prototype.hasOwnProperty.call(options, name) && options[name] === undefined) {
@@ -39,12 +38,12 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
-    [name: string]: AbstractFunction;
+    [name: string]: Function;
   };
 
-  customKeyHandlers!: Record<string, AbstractFunction>;
+  customKeyHandlers!: Record<string, Function>;
 
-  defaultKeyHandlers!: Record<string, AbstractFunction>;
+  defaultKeyHandlers!: Record<string, Function>;
 
   _documentFragment!: DocumentFragment;
 
@@ -338,7 +337,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     this._viewRef = createRef();
   }
 
-  _addAction(event: string, actionToAdd?: AbstractFunction): void {
+  _addAction(event: string, actionToAdd?: Function): void {
     let action = actionToAdd;
     if (!action) {
       const actionByOption = this._createActionByOption(
@@ -408,7 +407,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return templateWrapper;
   }
 
-  _wrapKeyDownHandler(initialHandler: AbstractFunction): AbstractFunction {
+  _wrapKeyDownHandler(initialHandler: Function): Function {
     return (options: {
       originalEvent: Event & { cancel: boolean };
       keyName: string;
@@ -458,14 +457,14 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     this._refresh();
   }
 
-  _supportedKeys(): Record<string, AbstractFunction> {
+  _supportedKeys(): Record<string, Function> {
     return {
       ...this.defaultKeyHandlers,
       ...this.customKeyHandlers,
     };
   }
 
-  registerKeyHandler(key: string, handler: AbstractFunction): void {
+  registerKeyHandler(key: string, handler: Function): void {
     this.customKeyHandlers[key] = handler;
   }
 
