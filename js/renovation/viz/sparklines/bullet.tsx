@@ -15,7 +15,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../utils/combine_classes';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
-import getElementOffset from '../../utils/get_element_offset';
+import { getElementOffset } from '../../utils/get_element_offset';
 import { BaseWidgetProps } from '../common/base_props';
 import { BaseWidget } from '../common/base_widget';
 import {

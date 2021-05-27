@@ -36,7 +36,7 @@ import '../../../events/gesture/emitter.gesture.scroll';
 
 import {
   ScrollEventArgs,
-  ScrollOffset, ScrollableDirection, RefreshStrategy,
+  ScrollOffset, ScrollableDirection, RefreshStrategy, DxMouseEvent,
 } from './types.d';
 
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
@@ -213,13 +213,13 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Mutable() loadingIndicatorEnabled = true;
 
-  @Mutable() hideScrollbarTimer?: any;
+  @Mutable() hideScrollbarTimer?: ReturnType<typeof setTimeout>;
 
-  @Mutable() releaseTimer?: any;
+  @Mutable() releaseTimer?: ReturnType<typeof setTimeout>;
 
-  @Mutable() refreshTimer?: any;
+  @Mutable() refreshTimer?: ReturnType<typeof setTimeout>;
 
-  @Mutable() eventForUserAction?: Event;
+  @Mutable() eventForUserAction?: DxMouseEvent;
 
   @Mutable() initPageY = 0;
 
@@ -421,8 +421,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Effect() scrollEffect(): EffectReturn {
     return subscribeToScrollEvent(this.containerElement,
-      (e: Event) => {
-        this.handleScroll(e);
+      (event: DxMouseEvent) => {
+        this.handleScroll(event);
       });
   }
 
@@ -457,8 +457,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const namespace = 'dxScrollable';
 
     dxScrollInit.on(this.wrapperRef.current,
-      (e: Event) => {
-        this.handleInit(e);
+      (event: DxMouseEvent) => {
+        this.handleInit(event);
       }, this.getInitEventData(), { namespace });
 
     return (): void => dxScrollInit.off(this.wrapperRef.current, { namespace });
@@ -469,8 +469,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const namespace = 'dxScrollable';
 
     dxScrollMove.on(this.wrapperRef.current,
-      (e: Event) => {
-        this.handleMove(e);
+      (event: DxMouseEvent) => {
+        this.handleMove(event);
       }, { namespace });
 
     return (): void => dxScrollMove.off(this.wrapperRef.current, { namespace });
@@ -506,14 +506,14 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Method()
-  validate(e: Event): boolean {
+  validate(event: DxMouseEvent): boolean {
     const { disabled } = this.props;
 
     if (this.isLocked()) {
       return false;
     }
 
-    if (disabled || (isDxMouseWheelEvent(e) && this.isScrollingOutOfBound(e))) {
+    if (disabled || (isDxMouseWheelEvent(event) && this.isScrollingOutOfBound(event))) {
       return false;
     }
 
@@ -521,7 +521,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   clearReleaseTimer(): void {
-    clearTimeout(this.releaseTimer);
+    clearTimeout(this.releaseTimer as unknown as number);
     this.releaseTimer = undefined;
   }
 
@@ -551,8 +551,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.topPocketState = state;
   }
 
-  handleScroll(e: Event): void {
-    this.eventForUserAction = e;
+  handleScroll(event: DxMouseEvent): void {
+    this.eventForUserAction = event;
     if (this.useSimulatedScrollbar) {
       this.moveScrollbars();
     }
@@ -679,7 +679,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   clearHideScrollbarTimer(): void {
-    clearTimeout(this.hideScrollbarTimer);
+    clearTimeout(this.hideScrollbarTimer as unknown as number);
     this.hideScrollbarTimer = undefined;
   }
 
@@ -691,8 +691,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   getInitEventData(): {
-    getDirection: (e: Event) => string | undefined;
-    validate: (e: Event) => boolean;
+    getDirection: () => string | undefined;
+    validate: (event: DxMouseEvent) => boolean;
     isNative: boolean;
     scrollTarget: HTMLDivElement | null;
   } {
@@ -704,17 +704,17 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     };
   }
 
-  handleInit(e): void {
+  handleInit(event: DxMouseEvent): void {
     if (this.props.forceGeneratePockets && this.isSwipeDownStrategy) {
       if (this.topPocketState === TopPocketState.STATE_RELEASED
         && this.scrollLocation().top === 0) {
-        this.initPageY = e.originalEvent.pageY;
+        this.initPageY = event.originalEvent.pageY;
         this.setPocketState(TopPocketState.STATE_TOUCHED);
       }
     }
   }
 
-  handleMove(e): void {
+  handleMove(e: DxMouseEvent): void {
     if (this.locked) {
       e.cancel = true;
       return;
@@ -781,7 +781,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   clearRefreshTimer(): void {
-    clearTimeout(this.refreshTimer);
+    clearTimeout(this.refreshTimer as unknown as number);
     this.refreshTimer = undefined;
   }
 
@@ -894,8 +894,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return this.locked;
   }
 
-  isScrollingOutOfBound(e: Event): boolean {
-    const { delta, shiftKey } = e as any;
+  isScrollingOutOfBound(event: DxMouseEvent): boolean {
+    const { delta, shiftKey } = event;
     const {
       scrollLeft, scrollTop, scrollWidth, clientWidth, scrollHeight, clientHeight,
     } = this.containerElement;

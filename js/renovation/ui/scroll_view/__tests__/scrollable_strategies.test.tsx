@@ -272,7 +272,7 @@ each([{
             { eventName: 'dxscrollend', effectName: 'end' },
           ]).describe('Event: %o', (eventInfo) => {
             it(`should subscribe to ${eventInfo.eventName} event`, () => {
-              const e = { ...defaultEvent };
+              const event = { ...defaultEvent };
               const viewModel = new Scrollable({ direction });
 
               const { eventName, effectName, passEvent } = eventInfo;
@@ -282,12 +282,12 @@ each([{
               viewModel.containerRef = React.createRef();
 
               viewModel[`${effectName}Effect`]();
-              emit(eventName, e);
+              emit(eventName, event);
 
               expect(viewModel[eventHandlerName]).toHaveBeenCalledTimes(1);
 
               if (passEvent) {
-                expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(e);
+                expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(event);
               }
             });
           });
@@ -321,7 +321,7 @@ each([{
               { eventName: 'dxscrollcancel', effectName: 'cancel', passEvent: true },
             ]).describe('Event: %o', (eventInfo) => {
               it(`should subscribe to ${eventInfo.eventName} event`, () => {
-                const e = { ...defaultEvent };
+                const event = { ...defaultEvent };
                 const viewModel = new Scrollable({ direction });
 
                 const { eventName, effectName, passEvent } = eventInfo;
@@ -331,12 +331,12 @@ each([{
                 viewModel.containerRef = React.createRef();
 
                 viewModel[`${effectName}Effect`]();
-                emit(eventName, e);
+                emit(eventName, event);
 
                 expect(viewModel[eventHandlerName]).toHaveBeenCalledTimes(1);
 
                 if (passEvent) {
-                  expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(e);
+                  expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(event);
                 }
               });
             });
@@ -465,7 +465,7 @@ each([{
                         (getScrollRtlBehavior as jest.Mock)
                           .mockReturnValue(rtlBehavior);
 
-                        const e = { ...defaultEvent };
+                        const event = { ...defaultEvent };
                         const helper = new ScrollableTestHelper({
                           direction,
                           pullDownEnabled,
@@ -474,7 +474,7 @@ each([{
                           rtlEnabled,
                         });
 
-                        helper.viewModel.eventForUserAction = e;
+                        helper.viewModel.eventForUserAction = event;
                         helper.initContainerPosition(scrollOffset);
                         helper.viewModel.handlePocketState = jest.fn();
 
@@ -575,25 +575,25 @@ each([{
     });
 
     describe('Methods', () => {
-      it('validate(e), locked: false, disabled: true', () => {
-        const e = { ...defaultEvent } as any;
+      it('validate(event), locked: false, disabled: true', () => {
+        const event = { ...defaultEvent } as any;
         const viewModel = new Scrollable({ disabled: true });
 
         viewModel.locked = false;
         viewModel.update = jest.fn();
 
-        expect((viewModel as any).validate(e)).toEqual(false);
+        expect((viewModel as any).validate(event)).toEqual(false);
         expect(viewModel.update).toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
       });
 
-      it('validate(e), locked: true, disabled: false', () => {
-        const e = { ...defaultEvent } as any;
+      it('validate(event), locked: true, disabled: false', () => {
+        const event = { ...defaultEvent } as any;
         const viewModel = new Scrollable({});
 
         viewModel.locked = true;
         viewModel.update = jest.fn();
 
-        expect((viewModel as any).validate(e)).toEqual(false);
+        expect((viewModel as any).validate(event)).toEqual(false);
         expect(viewModel.update).toHaveBeenCalledTimes(0);
       });
     });

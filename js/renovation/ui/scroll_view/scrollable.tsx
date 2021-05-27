@@ -231,10 +231,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
   }
 
-  validate(e: Event): boolean {
-    return this.scrollableRef.validate(e);
+  validate(event: Event): boolean {
+    return this.scrollableRef.validate(event);
   }
 
+  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
   get scrollableRef(): any {
     if (this.props.useNative) {
       return this.scrollableNativeRef.current!;
