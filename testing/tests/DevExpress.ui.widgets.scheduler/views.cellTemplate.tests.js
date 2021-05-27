@@ -659,6 +659,142 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
+        function duplicateWithDateShift(cells, shift) {
+            const result = [...cells];
+
+            dayCells.forEach(({ startDate, endDate }) => {
+                result.push({
+                    startDate: new Date(startDate.getTime() + shift),
+                    endDate: new Date(endDate.getTime() + shift),
+                });
+            });
+
+            return result;
+        }
+
+        const twoDayCells = getWeekCells(dayCells, 2);
+        const twoWeekCells = getWeekCells(dayCells, 14);
+        const twoMonthCells = getMonthCells(new Date(2021, 5, 27), new Date(2021, 8, 4), 0, 4);
+        const twoTimelineDayCells = duplicateWithDateShift(dayCells, dayDurationInMS);
+        const twoTimelineWeekCells = getTimelineCells(dayCells, 14);
+        const twoTimelineMonthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 8, 30), 0, 4);
+
+        [
+            {
+                view: 'day',
+                expectedDates: twoDayCells,
+            }, {
+                view: 'week',
+                expectedDates: twoWeekCells,
+            }, {
+                view: 'month',
+                expectedDates: twoMonthCells,
+                currentDate: new Date(2021, 6, 1),
+            }, {
+                view: 'timelineDay',
+                expectedDates: twoTimelineDayCells,
+            }, {
+                view: 'timelineWeek',
+                expectedDates: twoTimelineWeekCells,
+            }, {
+                view: 'timelineMonth',
+                expectedDates: twoTimelineMonthCells,
+            },
+        ].forEach(({ view, expectedDates, currentDate }) => {
+            test(`dataCellTemplate should provide correct options in ${view} view`
+                    + ' with intervalCount: 2', function(assert) {
+                const actualDates = [];
+
+                createWrapper({
+                    views: [
+                        {
+                            type: view,
+                            intervalCount: 2,
+                        }
+                    ],
+                    currentView: view,
+                    showAllDayPanel: false,
+                    cellDuration: 60,
+                    startDayHour: 0,
+                    endDayHour: 4,
+                    firstDayOfWeek: 0,
+                    currentDate: currentDate || new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        actualDates.push(
+                            {
+                                startDate: data.startDate,
+                                endDate: data.endDate,
+                            }
+                        );
+                    },
+                });
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
+            });
+        });
+
+        const twoWeekAllDayCells = [
+            new Date(2021, 7, 1),
+            new Date(2021, 7, 2),
+            new Date(2021, 7, 3),
+            new Date(2021, 7, 4),
+            new Date(2021, 7, 5),
+            new Date(2021, 7, 6),
+            new Date(2021, 7, 7),
+            new Date(2021, 7, 8),
+            new Date(2021, 7, 9),
+            new Date(2021, 7, 10),
+            new Date(2021, 7, 11),
+            new Date(2021, 7, 12),
+            new Date(2021, 7, 13),
+            new Date(2021, 7, 14),
+        ];
+
+        [
+            {
+                view: 'day',
+                expectedDates: [twoWeekAllDayCells[0], twoWeekAllDayCells[1]]
+            }, {
+                view: 'week',
+                expectedDates: twoWeekAllDayCells,
+            }, {
+                view: 'workWeek',
+                expectedDates: [...twoWeekAllDayCells.slice(1, 6), ...twoWeekAllDayCells.slice(8, 13)],
+            },
+        ].forEach(({ view, expectedDates }) => {
+            test(`allDay cells should have correct options in ${view} view`
+                + 'with intervalCount: 2', function(assert) {
+                const actualDates = [];
+
+                createWrapper({
+                    views: [
+                        {
+                            type: view,
+                            intervalCount: 2,
+                        }
+                    ],
+                    currentView: view,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        if(data.allDay) {
+                            assert.equal(
+                                data.startDate.getTime(),
+                                data.endDate.getTime(),
+                                'startDate and endDate of allDay cell should be equal'
+                            );
+
+                            actualDates.push(data.startDate);
+                        }
+                    }
+                });
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
+            });
+        });
+
         [{
             viewType: 'day',
             expectedTemplateOptions: [dataCells[0]],
