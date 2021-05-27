@@ -2,11 +2,12 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Event,
 } from '@devextreme-generator/declarations';
 import LegacyCalendar from '../../ui/calendar';
-/* eslint-disable import/named */
-import { DxElement } from '../../core/element';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { EventCallback } from './common/event_callback.d';
 import { BaseWidgetProps } from './common/base_props';
+
+function today(): Date { return new Date(); }
+function TruePredicate(): boolean { return true; }
 
 export const viewFunction = ({
   props,
@@ -36,9 +37,10 @@ export class CalendarProps extends BaseWidgetProps {
 
   @OneWay() tabIndex?: number;
 
-  @OneWay() _todayDate: () => Date = () => new Date();
+  // Scheduler private API
+  @OneWay() _todayDate? = today;
 
-  @OneWay() hasFocus: ((e: DxElement) => boolean) = () => true;
+  @OneWay() hasFocus?: (e: HTMLElement) => boolean = TruePredicate;
 }
 @Component({
   defaultOptionRules: null,

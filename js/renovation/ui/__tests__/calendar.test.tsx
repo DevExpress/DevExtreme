@@ -23,4 +23,14 @@ describe('Calendar', () => {
       });
     });
   });
+
+  describe('Logic', () => {
+    it('props defaults', () => {
+      const props = new CalendarProps();
+
+      expect(props.hasFocus?.({} as any)).toEqual(true);
+      // eslint-disable-next-line no-underscore-dangle
+      expect(props._todayDate?.() instanceof Date).toEqual(true);
+    });
+  });
 });
