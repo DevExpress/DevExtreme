@@ -1511,7 +1511,6 @@
           {
             "Title": "Column Reordering",
             "Name": "Reordering",
-            "DocUrl": "Guide/UI_Components/TreeList/Columns/Column_Reordering/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",
