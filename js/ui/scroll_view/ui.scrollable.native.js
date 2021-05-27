@@ -136,7 +136,6 @@ const NativeStrategy = Class.inherit({
         this._eventForUserAction = e;
         this._moveScrollbars();
         this._scrollAction(this._createActionArgs());
-        this._lastLocation = this.location();
     },
 
     _moveScrollbars: function() {
