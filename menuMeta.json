@@ -1532,7 +1532,6 @@
             "Title": "Column Fixing",
             "Name": "ColumnFixing",
             "Equivalents": "fixed column, frozen column, pinned column",
-            "DocUrl": "Guide/UI_Components/TreeList/Columns/Column_Fixing/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",
