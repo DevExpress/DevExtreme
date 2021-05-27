@@ -789,7 +789,7 @@ class ScrollableTestHelper {
 
 
 [true, false].forEach((useNative) => {
-    [false].forEach((useSimulatedScrollbar) => {
+    [true, false].forEach((useSimulatedScrollbar) => {
         // T947463
         QUnit.module(`ScrollToElement, native: ${useNative}, useSimulateScrollbar: ${useSimulatedScrollbar}`, moduleConfig, () => {
             const elementHeight = 20;
@@ -1038,12 +1038,12 @@ class ScrollableTestHelper {
                 helper.checkScrollTranslateValues(assert, { vertical: 0, horizontal: 25 });
 
                 helper.$scrollable.find('.content1').css('width', '200px');
-                helper.checkScrollOffset({ left: useNative && useSimulatedScrollbar ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues(assert, { vertical: 0, horizontal: useNative ? 35 : 25 });
+                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues(assert, { vertical: 0, horizontal: useNative && useSimulatedScrollbar ? 12 : 25 });
 
                 helper.scrollable.update();
-                helper.checkScrollOffset({ left: useNative && useSimulatedScrollbar ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues(assert, { vertical: 0, horizontal: useNative ? 35 : 12 });
+                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues(assert, { vertical: 0, horizontal: !useNative || (useNative && useSimulatedScrollbar) ? 12 : 35 });
             });
         });
 
