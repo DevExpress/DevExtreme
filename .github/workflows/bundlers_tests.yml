@@ -21,14 +21,14 @@ jobs:
 
     - name: Build
       run: npm run build
+
+    - name: Create DevExtreme package
+      working-directory: ./testing/test_bundlers  
+      run: npm pack ../../artifacts/npm/devextreme
     
-    - name: Run npm install in test directory
+    - name: Install packages in test directory
       working-directory: ./testing/test_bundlers  
       run: npm install
-
-    - name: Install DevExtreme in test directory
-      working-directory: ./testing/test_bundlers
-      run: npm install ../../artifacts/npm/devextreme/    
 
     - name: Create js bundle with webpack (CJS import)
       working-directory: ./testing/test_bundlers

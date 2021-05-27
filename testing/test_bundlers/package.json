@@ -5,8 +5,8 @@
     "build:webpack-cjs": "webpack --config ./webpack.config.cjs.js",
     "build:webpack-esm": "webpack --config ./webpack.config.js",
     "build:rollup-esm": "rollup -c",
-    "build:parcel-esm": "parcel build ./src/modules_esm.js --no-cache --dist-dir ../../testing/test_bundlers/dist/dist_parsel",
-    "build:browserify-cjs": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./src/modules_cjs.js -o ../../testing/test_bundlers/dist/dist_browserify/bundle_cjs.js",
+    "build:parcel-esm": "parcel build ./src/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel",
+    "build:browserify-cjs": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./src/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js",
     "build:vite": "vite build"
   },
   "devDependencies": {
