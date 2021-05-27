@@ -1522,7 +1522,6 @@
           {
             "Title": "Column Resizing",
             "Name": "Resizing",
-            "DocUrl": "Guide/UI_Components/TreeList/Columns/Column_Sizing/",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",
