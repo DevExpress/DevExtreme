@@ -183,7 +183,7 @@ export class Button extends JSXComponent(ButtonProps) {
     const { useInkRipple } = this.props;
 
     useInkRipple && this.inkRippleRef.current!.showWave({
-      element: this.contentRef.current, event,
+      element: this.contentRef.current!, event,
     });
   }
 
@@ -191,7 +191,7 @@ export class Button extends JSXComponent(ButtonProps) {
     const { useInkRipple } = this.props;
 
     useInkRipple && this.inkRippleRef.current!.hideWave({
-      element: this.contentRef.current, event,
+      element: this.contentRef.current!, event,
     });
   }
 

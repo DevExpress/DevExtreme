@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-export function log(message: string, data: any = undefined): void {
+export function log(message: string, data: unknown = undefined): void {
   const debugEnvVariableName = 'THEMEBUILDER_DEBUG';
   const needLog = process.env[debugEnvVariableName] !== undefined;
   if (!needLog) return;
