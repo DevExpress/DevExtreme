@@ -278,8 +278,6 @@ const Overlay = Widget.inherit({
 
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
 
-        // NOTE: hack to fix B251087
-        eventsEngine.on(this._$wrapper, 'MSPointerDown', noop);
         // NOTE: bootstrap integration T342292
         eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
 
