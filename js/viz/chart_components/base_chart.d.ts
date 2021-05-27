@@ -53,6 +53,7 @@ export interface TooltipInfo {
     target?: basePointObject | dxChartAnnotationConfig | any;
 }
 
+/** @namespace DevExpress.viz */
 export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     /**
      * @docid
@@ -245,6 +246,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      */
     tooltip?: BaseChartTooltip;
 }
+/** @namespace DevExpress.viz */
 export interface BaseChartAdaptiveLayout {
     /**
      * @docid BaseChartOptions.adaptiveLayout.height
@@ -268,6 +270,7 @@ export interface BaseChartAdaptiveLayout {
      */
     width?: number;
 }
+/** @namespace DevExpress.viz */
 export interface BaseChartLegend extends BaseLegend {
     /**
      * @docid BaseChartOptions.legend.customizeItems
@@ -288,6 +291,7 @@ export interface BaseChartLegend extends BaseLegend {
      */
     markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
 }
+/** @namespace DevExpress.viz */
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.argumentFormat
@@ -336,6 +340,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
  * @hidden
  * @inherits BaseWidget, DataHelperMixin
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  */
 export class BaseChart extends BaseWidget {
     constructor(element: UserDefinedElement, options?: BaseChartOptions)
@@ -402,6 +407,7 @@ export class BaseChart extends BaseWidget {
  * @docid
  * @type object
  * @inherits BaseLegendItem
+ * @namespace DevExpress.viz
  */
 export interface BaseChartLegendItem extends BaseLegendItem {
     /**
@@ -416,6 +422,7 @@ export interface BaseChartLegendItem extends BaseLegendItem {
  * @docid
  * @type object
  * @inherits BaseWidgetAnnotationConfig
+ * @namespace DevExpress.viz
  */
 export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**

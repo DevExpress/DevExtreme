@@ -65,7 +65,10 @@ export type PasteEvent = NativeEventInfo<dxTextBox>;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxTextBox> & ValueChangedInfo;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
     /**
      * @docid
@@ -97,6 +100,7 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
  * @module ui/text_box
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxTextBox extends dxTextEditor {

@@ -54,7 +54,10 @@ export interface MentionTemplateData {
     readonly id?: string | number;
     readonly value?: any;
 }
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
@@ -163,6 +166,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
  * @module ui/html_editor
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxHtmlEditor extends Editor {
@@ -397,6 +401,7 @@ export default class dxHtmlEditor extends Editor {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorMediaResizing {
     /**
@@ -418,6 +423,7 @@ export interface dxHtmlEditorMediaResizing {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorMention {
     /**
@@ -501,6 +507,7 @@ export interface dxHtmlEditorMention {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorToolbar {
     /**
@@ -528,6 +535,7 @@ export interface dxHtmlEditorToolbar {
 /**
  * @docid
  * @inherits dxToolbarItem
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
@@ -539,10 +547,23 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     name?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
     /**
      * @docid
+     * @type Enums.HtmlEditorToolbarItem|string
+     * @prevFileNamespace DevExpress.ui
+     * @deprecated
+     */
+    formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
+    /**
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     acceptedValues?: Array<string | number | boolean>;
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @deprecated
+     */
+    formatValues?: Array<string | number | boolean>;
     /**
      * @docid
      * @default "before"
@@ -556,6 +577,7 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorVariables {
     /**

@@ -187,7 +187,10 @@ export type DateNavigatorTextInfo = {
   readonly text: string;
 }
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
@@ -1094,6 +1097,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
  * @module ui/scheduler
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxScheduler extends Widget {
@@ -1202,6 +1206,7 @@ export default class dxScheduler extends Widget {
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxSchedulerAppointment extends CollectionWidgetItem {
     /**
@@ -1295,6 +1300,7 @@ export type Options = dxSchedulerOptions;
 /**
  * @docid
  * @public
+ * @namespace DevExpress.ui
  */
 export interface dxSchedulerScrolling {
   /**

@@ -53,7 +53,10 @@ export type ItemRenderedEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxActionSheet> & ChangedOptionInfo;
 
-/** @deprecated use Properties instead */
+/** 
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**
      * @docid
@@ -139,6 +142,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @module ui/action_sheet
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxActionSheet extends CollectionWidget {
@@ -173,6 +177,7 @@ export default class dxActionSheet extends CollectionWidget {
 /**
  * @docid
  * @inherits CollectionWidgetItem
+ * @namespace DevExpress.ui
  * @type object
  */
 export interface dxActionSheetItem extends CollectionWidgetItem {

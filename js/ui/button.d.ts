@@ -41,7 +41,10 @@ export type TemplateData = {
     readonly icon?: string;
 }
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
      * @docid
@@ -142,6 +145,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
  * @module ui/button
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxButton extends Widget {

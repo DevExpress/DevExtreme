@@ -85,7 +85,10 @@ export type SimpleItemTemplateData = {
     readonly name?: string;
 }
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
@@ -268,6 +271,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
  * @module ui/form
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxForm extends Widget {
@@ -365,6 +369,7 @@ export default class dxForm extends Widget {
  * @publicName ButtonItem
  * @section FormItems
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFormButtonItem {
     /**
@@ -440,6 +445,7 @@ export interface dxFormButtonItem {
  * @publicName EmptyItem
  * @section FormItems
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFormEmptyItem {
     /**
@@ -492,6 +498,7 @@ export interface dxFormEmptyItem {
  * @publicName GroupItem
  * @section FormItems
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFormGroupItem {
     /**
@@ -592,6 +599,7 @@ export interface dxFormGroupItem {
  * @publicName SimpleItem
  * @section FormItems
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFormSimpleItem {
     /**
@@ -740,6 +748,7 @@ export interface dxFormSimpleItem {
  * @publicName TabbedItem
  * @section FormItems
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxFormTabbedItem {
     /**

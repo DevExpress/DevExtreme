@@ -91,7 +91,10 @@ export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
     readonly previousValue?: Array<File>;
 }
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
@@ -492,6 +495,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
  * @module ui/file_uploader
  * @export default
  * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxFileUploader extends Editor {

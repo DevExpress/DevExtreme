@@ -105,11 +105,11 @@ export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
 
-
 /**
  * @docid
  * @type object
  * @inherits BaseLegendItem
+ * @namespace DevExpress.viz
  */
 export interface PieChartLegendItem extends BaseLegendItem {
     /**
@@ -143,6 +143,7 @@ export interface PieChartLegendItem extends BaseLegendItem {
  * @type object
  * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
  * @hidden
+ * @namespace DevExpress.viz
  */
 export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
     /**
@@ -160,7 +161,10 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
      */
     tag?: any;
 }
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid
@@ -339,6 +343,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
  * @docid
  * @type object
  * @inherits dxPieChartCommonAnnotationConfig
+ * @namespace DevExpress.viz
  */
 export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationConfig {
     /**
@@ -354,6 +359,7 @@ export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationCo
  * @docid
  * @type object
  * @inherits BaseWidgetAnnotationConfig
+ * @namespace DevExpress.viz
  */
 export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
@@ -409,6 +415,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      */
     tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
+/** @namespace DevExpress.viz */
 export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
      * @docid dxPieChartOptions.adaptiveLayout.keepLabels
@@ -418,6 +425,7 @@ export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
      */
     keepLabels?: boolean;
 }
+/** @namespace DevExpress.viz */
 export interface dxPieChartLegend extends BaseChartLegend {
     /**
      * @docid dxPieChartOptions.legend.customizeHint
@@ -475,6 +483,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
  * @module viz/pie_chart
  * @export default
  * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
 export default class dxPieChart extends BaseChart {
@@ -492,6 +501,7 @@ export default class dxPieChart extends BaseChart {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.viz
  */
 export interface dxPieChartSeriesTypes {
     /**
@@ -516,6 +526,7 @@ export interface dxPieChartSeriesTypes {
      */
     PieSeries?: any;
 }
+/** @namespace DevExpress.viz */
 export interface dxPieChartSeriesTypesCommonPieChartSeries {
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.argumentField
@@ -938,6 +949,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
  * @publicName Point
  * @type object
  * @inherits basePointObject
+ * @namespace DevExpress.viz
  */
 export interface piePointObject extends basePointObject {
     /**
@@ -975,6 +987,7 @@ export interface piePointObject extends basePointObject {
  * @publicName Series
  * @type object
  * @inherits baseSeriesObject
+ * @namespace DevExpress.viz
  */
 export interface pieChartSeriesObject extends baseSeriesObject {
   /**
