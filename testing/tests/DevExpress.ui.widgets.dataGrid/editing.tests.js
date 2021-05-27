@@ -4192,7 +4192,7 @@ QUnit.module('Editing with real dataController', {
         assert.ok(testElement.find('td:contains(modifiedValue)').length);
     });
 
-    QUnit.testInActiveWindow('Insert Row after scrolling', function(assert) {
+    QUnit.skip('Insert Row after scrolling', function(assert) {
         // arrange
         const that = this;
         const done = assert.async();
