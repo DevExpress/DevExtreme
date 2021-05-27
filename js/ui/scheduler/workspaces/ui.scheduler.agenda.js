@@ -15,7 +15,8 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { getResourceManager, getAppointmentDataProvider } from '../instanceFactory';
+import { getResourceManager } from '../resources/resourceManager';
+import { getAppointmentDataProvider } from '../appointments/DataProvider/appointmentDataProvider';
 
 const { tableCreator } = tableCreatorModule;
 

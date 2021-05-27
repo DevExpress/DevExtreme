@@ -1,7 +1,8 @@
 import $ from 'jquery';
 import SchedulerAgenda from 'ui/scheduler/workspaces/ui.scheduler.agenda';
 import dateLocalization from 'localization/date';
-import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
+import { createInstances } from 'ui/scheduler/instanceFactory';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';
@@ -48,12 +49,12 @@ module('Agenda', {}, () => {
 
         const schedulerMock = { isVirtualScrolling: () => false };
         const resources = options && options.groups || { };
-        getInstanceFactory().create({
+        createInstances({
             scheduler: schedulerMock,
             resources
         });
 
-        const { resourceManager } = getInstanceFactory();
+        const resourceManager = getResourceManager();
         resourceManager.createReducedResourcesTree = () => resourceManager.createResourcesTree(options.groups);
 
         const $element = $('#scheduler-agenda').dxSchedulerAgenda({ ...options, ...config });

@@ -3,7 +3,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
+import { createInstances } from 'ui/scheduler/instanceFactory';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
@@ -39,7 +39,7 @@ QUnit.module('Timeline Base', {
             }
 
             const resources = options && options.resources || {};
-            getInstanceFactory().create({
+            createInstances({
                 resources,
                 scheduler: {
                     isVirtualScrolling: () => true

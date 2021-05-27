@@ -10,7 +10,6 @@ import { when, Deferred } from '../../../core/utils/deferred';
 
 import { AgendaResourceProcessor } from './agendaResourceProcessor';
 import { getDisplayExpr, getFieldExpr, getValueExpr, getWrappedDataSource } from './utils';
-import { getWorkspaceHelper } from '../instanceFactory';
 
 export class ResourceManager {
     constructor(resources) {
@@ -478,7 +477,7 @@ export class ResourceManager {
         if(resourceForPainting) {
             const field = getFieldExpr(resourceForPainting);
             const groupIndex = options.groupIndex;
-            const cellGroups = getWorkspaceHelper().getCellGroups(groupIndex, workspaceGroups);
+            const cellGroups = this.getCellGroups(groupIndex, workspaceGroups);
             const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(options.itemData));
 
             let groupId = resourceValues.length
@@ -647,4 +646,47 @@ export class ResourceManager {
         const tree = this.createResourcesTree(this.loadedResources);
         return this.reduceResourcesTree(tree, appointments);
     }
+
+    // TODO rework
+    getCellGroups(groupIndex, groups) {
+        const result = [];
+
+        if(this.getGroupCount(groups)) {
+            if(groupIndex < 0) {
+                return;
+            }
+
+            const path = this._getPathToLeaf(groupIndex, groups);
+
+            for(let i = 0; i < groups.length; i++) {
+                result.push({
+                    name: groups[i].name,
+                    id: path[i]
+                });
+            }
+
+        }
+
+        return result;
+    }
+
+    getGroupCount(groups) { // TODO replace with viewDataProvider method
+        let result = 0;
+
+        for(let i = 0, len = groups.length; i < len; i++) {
+            if(!i) {
+                result = groups[i].items.length;
+            } else {
+                result *= groups[i].items.length;
+            }
+        }
+
+        return result;
+    }
 }
+
+let resourceManager;
+export const createResourceManager = (resources) => {
+    resourceManager = new ResourceManager(resources);
+};
+export const getResourceManager = () => resourceManager;

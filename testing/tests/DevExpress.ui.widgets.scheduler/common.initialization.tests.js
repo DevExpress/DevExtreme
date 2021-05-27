@@ -3,8 +3,7 @@ import { DataSource } from 'data/data_source/data_source';
 
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
-import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
-import AppointmentDataProvider from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getAppointmentDataProvider, AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
