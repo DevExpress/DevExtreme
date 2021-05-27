@@ -114,7 +114,7 @@ QUnit.test('should render submit input with custom template', function(assert) {
     assert.strictEqual(element.find('.dx-button-submit-input').length, 1, 'render submit input');
 });
 
-QUnit.test('should not fall if template returned parent node', function(assert) {
+QUnit.test('should not fail if template returned parent node', function(assert) {
     const template = (data, element) => $(element)
         .append($('<span>').text('text'))
         .addClass('modified_container');
