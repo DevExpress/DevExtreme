@@ -11,6 +11,7 @@ import BaseModule from './base';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
 const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';
+const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-column-resize-frame';
 const MODULE_NAMESPACE = 'dxHtmlResizingModule';
 
 const KEYDOWN_EVENT = addNamespace('keydown', MODULE_NAMESPACE);
@@ -30,6 +31,7 @@ export default class ResizingModule extends BaseModule {
         if(this.enabled) {
             this._attachEvents();
             this._createResizeFrame();
+            this._createColumnResizeFrame();
         }
     }
 
@@ -58,19 +60,23 @@ export default class ResizingModule extends BaseModule {
                 this._$target = e.target;
             }
 
+            this.updateFramePosition(this._$resizeFrame);
+            this._updateColumnResizeFrame();
 
-            this.updateFramePosition();
             this.showFrame();
+
+            this._$columnResizeFrame.show();
             this._adjustSelection();
         } else if(this._$target) {
             this.hideFrame();
+            // this._$columnResizeFrame.hide();
         }
     }
 
     _prepareFramePositionChangedHandler(e) {
         return () => {
             if(this._$target) {
-                this.updateFramePosition();
+                this.updateFramePosition(this._$resizeFrame);
             }
         };
     }
@@ -82,18 +88,19 @@ export default class ResizingModule extends BaseModule {
     }
 
     _isAllowedTarget(targetElement) {
-        return this._isImage(targetElement);
+        return this._isImage(targetElement) || this._isTableElement(targetElement);
     }
 
     _isImage(targetElement) {
-        return this.allowedTargets.indexOf('image') !== -1 && targetElement.tagName.toUpperCase() === 'IMG' || this._isTableElement(targetElement);
+        return this.allowedTargets.indexOf('image') !== -1 && targetElement.tagName.toUpperCase() === 'IMG';
     }
 
     _isTableElement(targetElement) {
         let result = false;
-        ['TABLE', 'TBODY', 'THEAD', 'TFOOT', 'TD', 'TR'].forEach((tagName) => {
+        ['TABLE', 'TBODY', 'THEAD', 'TFOOT', 'TD', 'TR', 'TH'].forEach((tagName) => {
             if(targetElement.tagName.toUpperCase() === tagName) {
                 result = true;
+                return false;
             }
         });
 
@@ -123,12 +130,12 @@ export default class ResizingModule extends BaseModule {
         eventsEngine.off(this.quill.root, KEYDOWN_EVENT);
     }
 
-    updateFramePosition() {
+    updateFramePosition($frame) {
         const { height, width, top: targetTop, left: targetLeft } = getBoundingRect(this._$target);
         const { top: containerTop, left: containerLeft } = getBoundingRect(this.quill.root);
         const borderWidth = this._getBorderWidth();
 
-        this._$resizeFrame
+        $frame
             .css({
                 height: height,
                 width: width,
@@ -136,7 +143,7 @@ export default class ResizingModule extends BaseModule {
                 top: targetTop - containerTop - borderWidth - FRAME_PADDING,
                 left: targetLeft - containerLeft - borderWidth - FRAME_PADDING
             });
-        move(this._$resizeFrame, { left: 0, top: 0 });
+        move($frame, { left: 0, top: 0 });
     }
 
     _getBorderWidth() {
@@ -173,9 +180,59 @@ export default class ResizingModule extends BaseModule {
                     height: e.height - correction,
                     width: e.width - correction
                 });
-                this.updateFramePosition();
+                this.updateFramePosition(this._$resizeFrame);
             }
         });
+    }
+
+    _createColumnResizeFrame(target) {
+        this._$columnResizeFrame = $('<div>')
+            .addClass(DX_COLUMN_RESIZE_FRAME_CLASS)
+            .appendTo(this.editorInstance._getQuillContainer())
+            .hide();
+
+    }
+
+    _updateColumnResizeFrame() {
+        const $columns = $(this._$target).find('tr').eq(0).find('td');
+        const columnsCount = $columns.length;
+        const columnsResizingElementsCount = columnsCount - 2;
+        // const controlledElements = this._getControlledElements(); // th or td
+        const $columnSeparators = [];
+
+        this.updateFramePosition(this._$columnResizeFrame);
+
+        let leftPosition = 0;
+        for(let i = 0; i <= columnsResizingElementsCount; i++) { //  headers
+            leftPosition += $columns.eq(0).outerWidth();
+            $columnSeparators[i] = $('<div>')
+                .addClass('dx-table-column-resizer')
+                .css('left', leftPosition)
+                .appendTo(this._$columnResizeFrame);
+        }
+
+        // for(let i = 0; i <= columnsResizingElementsCount; i++) { //  headers
+        //     $columnSeparators[i] = $('<div>')
+        //         .addClass('dx-table-column-resizer')
+        //         .appendTo(this._$columnResizeFrame);
+        // }
+
+        // eventsEngine.on(this.quill.root, SCROLL_EVENT, this._framePositionChangedHandler);
+
+        // this._createComponent(this._$alphaChannelHandle, Draggable, {
+        //     contentTemplate: null,
+        //     boundary: $parent,
+        //     allowMoveByClick: true,
+        //     dragDirection: 'horizontal',
+        //     onDragMove: ({ event }) => {
+        //         this._updateByDrag = true;
+        //         const $alphaChannelHandle = this._$alphaChannelHandle;
+        //         const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
+        //         this._saveValueChangeEvent(event);
+        //         this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
+        //     }
+        // });
+
     }
 
     _deleteImage() {

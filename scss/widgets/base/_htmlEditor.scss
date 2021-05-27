@@ -524,3 +524,17 @@ $transparent-border: 1px solid transparent;
     margin: 0 2px;
   }
 }
+
+.dx-column-resize-frame {
+  position: absolute;
+  pointer-events: none;
+
+  .dx-table-column-resizer {
+    width: 5px;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    cursor: col-resize;
+    pointer-events: auto;
+  }
+}
