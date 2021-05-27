@@ -267,7 +267,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             };
 
             const nextCellPosition = this.cellsSelectionController.getCellFromNextRowPosition(
-                currentCellPosition, direction, this.viewDataProvider.getViewDimensions(),
+                currentCellPosition, direction, this.viewDataProvider.getViewEdgeIndices(),
             );
 
             const $cell = this._dom_getDateCell(nextCellPosition);
@@ -306,8 +306,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         );
 
         const indices = isHorizontalGrouping && isMultiSelection && !isGroupedByDate
-            ? this.viewDataProvider.getHorizontalGroupDimensions(groupIndex, isAllDayPanelCell)
-            : this.viewDataProvider.getViewDimensions(isAllDayPanelCell);
+            ? this.viewDataProvider.getGroupEdgeIndices(groupIndex, isAllDayPanelCell)
+            : this.viewDataProvider.getViewEdgeIndices(isAllDayPanelCell);
 
         const nextCellPosition = this.cellsSelectionController.getCellFromNextColumnPosition(
             currentCellPosition,

@@ -1,5 +1,5 @@
 export class CellsSelectionController {
-    getCellFromNextRowPosition(currentCellPosition, direction, viewDimensions) {
+    getCellFromNextRowPosition(currentCellPosition, direction, edgeIndices) {
         const {
             cellIndex,
             rowIndex,
@@ -8,7 +8,7 @@ export class CellsSelectionController {
         const deltaPosition = direction === 'next' ? 1 : -1;
         const nextRowIndex = rowIndex + deltaPosition;
 
-        const validRowIndex = nextRowIndex >= 0 && nextRowIndex <= viewDimensions.lastRowIndex
+        const validRowIndex = nextRowIndex >= 0 && nextRowIndex <= edgeIndices.lastRowIndex
             ? nextRowIndex
             : rowIndex;
 
@@ -18,40 +18,50 @@ export class CellsSelectionController {
         };
     }
 
-    getCellFromNextColumnPosition(currentCellPosition, direction, viewDimensions, step, isRTL) {
+    getCellFromNextColumnPosition(currentCellPosition, direction, edgeIndices, step, isRTL) {
         const {
             cellIndex,
             rowIndex,
         } = currentCellPosition;
+        const {
+            firstCellIndex,
+            lastCellIndex,
+            firstRowIndex,
+            lastRowIndex,
+        } = edgeIndices;
 
         const sign = isRTL ? -1 : 1;
         const deltaPosition = direction === 'next' ? sign * step : -1 * sign * step;
         const nextCellIndex = cellIndex + deltaPosition;
 
-        const isValidCellIndex = nextCellIndex >= viewDimensions.firstCellIndex
-            && nextCellIndex <= viewDimensions.lastCellIndex;
+        const isValidCellIndex = nextCellIndex >= firstCellIndex
+            && nextCellIndex <= lastCellIndex;
+
+        if(isValidCellIndex) {
+            return {
+                cellIndex: nextCellIndex,
+                rowIndex,
+            };
+        }
 
         let validCellIndex = nextCellIndex;
         let validRowIndex = rowIndex;
+        const isLeftEdgeCell = nextCellIndex < firstCellIndex;
+        const isRightEdgeCell = nextCellIndex > lastCellIndex;
 
-        if(!isValidCellIndex) {
-            const isLeftEdgeCell = nextCellIndex < viewDimensions.firstCellIndex;
-            const isRightEdgeCell = nextCellIndex > viewDimensions.lastCellIndex;
+        if(isLeftEdgeCell) {
+            const anotherCellIndex = lastCellIndex - (step - cellIndex % step - 1);
+            const nextRowIndex = rowIndex - 1;
 
-            if(isLeftEdgeCell) {
-                const anotherCellIndex = viewDimensions.lastCellIndex - (step - cellIndex % step - 1);
-                const nextRowIndex = rowIndex - 1;
+            validRowIndex = nextRowIndex >= firstRowIndex ? nextRowIndex : rowIndex;
+            validCellIndex = nextRowIndex >= firstRowIndex ? anotherCellIndex : cellIndex;
+        }
+        if(isRightEdgeCell) {
+            const anotherCellIndex = firstCellIndex + cellIndex % step;
+            const nextRowIndex = rowIndex + 1;
 
-                validRowIndex = nextRowIndex >= 0 ? nextRowIndex : rowIndex;
-                validCellIndex = nextRowIndex >= 0 ? anotherCellIndex : cellIndex;
-            }
-            if(isRightEdgeCell) {
-                const anotherCellIndex = viewDimensions.firstCellIndex + cellIndex % step;
-                const nextRowIndex = rowIndex + 1;
-
-                validRowIndex = nextRowIndex <= viewDimensions.lastRowIndex ? nextRowIndex : rowIndex;
-                validCellIndex = nextRowIndex <= viewDimensions.lastRowIndex ? anotherCellIndex : cellIndex;
-            }
+            validRowIndex = nextRowIndex <= lastRowIndex ? nextRowIndex : rowIndex;
+            validCellIndex = nextRowIndex <= lastRowIndex ? anotherCellIndex : cellIndex;
         }
 
 

@@ -277,7 +277,7 @@ export default class ViewDataProvider {
         return this.viewDataMap.dateTableMap[0].length;
     }
 
-    getViewDimensions(isAllDayPanel) {
+    getViewEdgeIndices(isAllDayPanel) {
         if(isAllDayPanel) {
             return {
                 firstCellIndex: 0,
@@ -295,7 +295,7 @@ export default class ViewDataProvider {
         };
     }
 
-    getHorizontalGroupDimensions(groupIndex, isAllDay) {
+    getGroupEdgeIndices(groupIndex, isAllDay) {
         const groupedDataMap = this.groupedDataMap.dateTableGroupedMap[groupIndex];
         const cellsCount = groupedDataMap[0].length;
         const rowsCount = groupedDataMap.length;
