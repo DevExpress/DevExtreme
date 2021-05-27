@@ -10,7 +10,7 @@ import Color from 'color';
 import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';
-import { getResourceManager } from 'ui/scheduler/resources/ResourceManager';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
