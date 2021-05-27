@@ -1,4 +1,6 @@
+import { dxElementWrapper } from '../../core/renderer.d';
 import Editor from './common/editor';
+import { Option } from './common/types';
 import { addAttributes, getAriaName } from './utils/utils';
 
 export default class CheckBox extends Editor {
@@ -7,7 +9,7 @@ export default class CheckBox extends Editor {
     return false;
   }
 
-  _optionChanged(option): void {
+  _optionChanged(option: Option): void {
     const { name, value, previousValue } = option || {};
 
     switch (name) {
@@ -34,6 +36,9 @@ export default class CheckBox extends Editor {
 
   setAria(name: string, value: string): void {
     const attrName = getAriaName(name);
-    addAttributes(this.$element(), [{ name: attrName, value }]);
+    addAttributes(
+      this.$element() as unknown as dxElementWrapper,
+      [{ name: attrName, value }],
+    );
   }
 }

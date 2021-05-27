@@ -4,9 +4,8 @@ import {
 } from 'inferno';
 import { createElement } from 'inferno-create-element';
 import { InfernoEffectHost, hydrate } from '@devextreme/vdom';
-// NOTE: For some reason `dxElementWrapper` not found by lint
-// eslint-disable-next-line import/named
-import $, { dxElementWrapper } from '../../../core/renderer';
+import $ from '../../../core/renderer';
+import { dxElementWrapper } from '../../../core/renderer.d';
 import domAdapter from '../../../core/dom_adapter';
 import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
@@ -17,7 +16,10 @@ import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update-props-immutable';
 import { Option, TemplateComponent } from './types';
 
-const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
+const setDefaultOptionValue = (
+  options: Record<string, unknown>,
+  defaultValueGetter: (name: string) => unknown,
+) => (name: string): void => {
   if (Object.prototype.hasOwnProperty.call(options, name) && options[name] === undefined) {
     // eslint-disable-next-line no-param-reassign
     options[name] = defaultValueGetter(name);
@@ -471,7 +473,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   // NOTE: this method will be deprecated
   //       aria changes should be defined in declaration or passed through property
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setAria(name: string, value: string): void {
+  setAria(_name: string, _value: string): void {
     throw new Error(
       '"setAria" method is deprecated, use "aria" property instead',
     );
