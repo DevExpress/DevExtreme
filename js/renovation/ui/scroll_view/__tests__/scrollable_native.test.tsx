@@ -138,7 +138,6 @@ describe('Native > Effects', () => {
       viewModel.wrapperRef = { current: {} } as RefObject;
       viewModel.containerRef = { current: {} } as RefObject;
       viewModel.topPocketRef = { current: { clientHeight: 80 } } as RefObject;
-      viewModel.lastLocation = { top: -1, left: -1 };
       viewModel.scrollLocation = jest.fn(() => scrollLocation);
       viewModel.moveScrollbars = jest.fn();
       viewModel.onReachBottom = jest.fn();
@@ -154,7 +153,6 @@ describe('Native > Effects', () => {
 
       expect(e.stopImmediatePropagation).not.toBeCalled();
       expect(viewModel.eventForUserAction).toEqual(e);
-      expect(viewModel.lastLocation).toEqual(scrollLocation);
 
       if (useSimulatedScrollbar) {
         expect(viewModel.moveScrollbars).toHaveBeenCalledTimes(1);
