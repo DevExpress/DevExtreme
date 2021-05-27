@@ -3,8 +3,7 @@ import fx from 'animation/fx';
 import dxScheduler from 'ui/scheduler/ui.scheduler';
 import { DataSource } from 'data/data_source/data_source';
 import dateUtils from 'core/utils/date';
-import AppointmentDataProvider from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
-import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import { getAppointmentDataProvider, AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(() => {

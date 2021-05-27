@@ -6,7 +6,7 @@ import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
-import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
+import { createInstances } from 'ui/scheduler/instanceFactory';
 
 QUnit.testStart(() => {
     const markup =
@@ -132,7 +132,7 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 }].forEach(({ viewName, view, baseColSpan }) => {
     const moduleConfig = {
         beforeEach: function() {
-            getInstanceFactory().create({
+            createInstances({
                 scheduler: {
                     isVirtualScrolling: () => false
                 }
