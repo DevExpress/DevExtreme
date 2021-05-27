@@ -8,6 +8,7 @@ import Resizable from '../../resizable';
 import { getBoundingRect } from '../../../core/utils/position';
 import Quill from 'devextreme-quill';
 import BaseModule from './base';
+import Draggable from '../../draggable';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
 const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';
@@ -54,14 +55,18 @@ export default class ResizingModule extends BaseModule {
                 return;
             }
 
-            if(this._isTableElement(e.target)) {
+            const isTableElement = this._isTableElement(e.target);
+            if(isTableElement) {
                 this._$target = this._findTableRoot(e.target);
             } else {
                 this._$target = e.target;
             }
 
             this.updateFramePosition(this._$resizeFrame);
-            this._updateColumnResizeFrame();
+
+            if(isTableElement) {
+                this._updateColumnResizeFrame();
+            }
 
             this.showFrame();
 
@@ -69,7 +74,7 @@ export default class ResizingModule extends BaseModule {
             this._adjustSelection();
         } else if(this._$target) {
             this.hideFrame();
-            // this._$columnResizeFrame.hide();
+            this._$columnResizeFrame.hide();
         }
     }
 
@@ -218,21 +223,38 @@ export default class ResizingModule extends BaseModule {
         // }
 
         // eventsEngine.on(this.quill.root, SCROLL_EVENT, this._framePositionChangedHandler);
+        if(this._columnResizer) {
+            this._columnResizer.dispose();
+        }
 
-        // this._createComponent(this._$alphaChannelHandle, Draggable, {
-        //     contentTemplate: null,
-        //     boundary: $parent,
-        //     allowMoveByClick: true,
-        //     dragDirection: 'horizontal',
-        //     onDragMove: ({ event }) => {
-        //         this._updateByDrag = true;
-        //         const $alphaChannelHandle = this._$alphaChannelHandle;
-        //         const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
-        //         this._saveValueChangeEvent(event);
-        //         this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
-        //     }
-        // });
+        this._createDraggableElement($columnSeparators[0], $columns, 0);
 
+    }
+
+    _createDraggableElement($columnSeparator, $columns, index) {
+        this._columnResizer = this.editorInstance._createComponent($columnSeparator.get(0), Draggable, {
+            contentTemplate: null,
+            boundary: this._$columnResizeFrame,
+            allowMoveByClick: false,
+            dragDirection: 'horizontal',
+            onDragMove: ({ event }) => {
+                // debugger;
+                const newPosition = this._startDragPosition + event.offset.x;
+                // console.log('move ' + newPosition);
+
+                $columns.eq(0).css('width', /* $columns.eq(0).outerWidth() + */newPosition);
+                $columnSeparator.css('left', newPosition /* + $columnSeparators[0].css('left').replace('px', '')*/);
+                // this._updateByDrag = true;
+                // const $alphaChannelHandle = this._$alphaChannelHandle;
+                // const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
+                // this._saveValueChangeEvent(event);
+                // this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
+            },
+            onDragStart: ({ event }) => {
+                this._startDragPosition = parseInt($columnSeparator.css('left').replace('px', ''));
+                // console.log('start ' + this._startDragPosition);
+            }
+        });
     }
 
     _deleteImage() {
