@@ -8,7 +8,7 @@ export class CellsSelectionController {
         const deltaPosition = direction === 'next' ? 1 : -1;
         const nextRowIndex = rowIndex + deltaPosition;
 
-        const validRowIndex = nextRowIndex >= 0 && nextRowIndex < viewDimensions.rowsCount
+        const validRowIndex = nextRowIndex >= 0 && nextRowIndex <= viewDimensions.lastRowIndex
             ? nextRowIndex
             : rowIndex;
 
@@ -28,28 +28,29 @@ export class CellsSelectionController {
         const deltaPosition = direction === 'next' ? sign * step : -1 * sign * step;
         const nextCellIndex = cellIndex + deltaPosition;
 
-        const isValidCellIndex = nextCellIndex >= 0 && nextCellIndex < viewDimensions.columnsCount;
+        const isValidCellIndex = nextCellIndex >= viewDimensions.firstCellIndex
+            && nextCellIndex <= viewDimensions.lastCellIndex;
 
         let validCellIndex = nextCellIndex;
         let validRowIndex = rowIndex;
 
         if(!isValidCellIndex) {
-            const isLeftEdgeCell = nextCellIndex < 0;
-            const isRightEdgeCell = nextCellIndex === viewDimensions.columnsCount;
+            const isLeftEdgeCell = nextCellIndex < viewDimensions.firstCellIndex;
+            const isRightEdgeCell = nextCellIndex > viewDimensions.lastCellIndex;
 
             if(isLeftEdgeCell) {
-                const anotherCellIndex = viewDimensions.columnsCount - 1;
+                const anotherCellIndex = viewDimensions.lastCellIndex - (step - cellIndex % step - 1);
                 const nextRowIndex = rowIndex - 1;
 
                 validRowIndex = nextRowIndex >= 0 ? nextRowIndex : rowIndex;
                 validCellIndex = nextRowIndex >= 0 ? anotherCellIndex : cellIndex;
             }
             if(isRightEdgeCell) {
-                const anotherCellIndex = 0;
+                const anotherCellIndex = viewDimensions.firstCellIndex + cellIndex % step;
                 const nextRowIndex = rowIndex + 1;
 
-                validRowIndex = nextRowIndex < viewDimensions.rowsCount ? nextRowIndex : rowIndex;
-                validCellIndex = nextRowIndex < viewDimensions.rowsCount ? anotherCellIndex : cellIndex;
+                validRowIndex = nextRowIndex <= viewDimensions.lastRowIndex ? nextRowIndex : rowIndex;
+                validCellIndex = nextRowIndex <= viewDimensions.lastRowIndex ? anotherCellIndex : cellIndex;
             }
         }
 

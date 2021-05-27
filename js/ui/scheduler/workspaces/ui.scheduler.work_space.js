@@ -228,13 +228,13 @@ class SchedulerWorkSpace extends WidgetObserver {
             },
 
             rightArrow: function(e) {
-                const $rightCell = this._getCellFromNextColumn('next');
+                const $rightCell = this._getCellFromNextColumn('next', e.shiftKey);
 
                 arrowPressHandler.call(this, e, $rightCell);
             },
 
             leftArrow: function(e) {
-                const $leftCell = this._getCellFromNextColumn('prev');
+                const $leftCell = this._getCellFromNextColumn('prev', e.shiftKey);
 
                 arrowPressHandler.call(this, e, $leftCell);
             }
@@ -287,18 +287,32 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const groupCount = this._getGroupCount();
         const isGroupedByDate = this.isGroupedByDate();
+        const isHorizontalGrouping = this._isHorizontalGroupedWorkSpace();
 
         const step = isGroupedByDate && isMultiSelection ? groupCount : 1;
 
+        const leftVirtualCellsCount = this.virtualScrollingDispatcher?.leftVirtualCellsCount || 0;
+        const topVirtualRowsCount = this.virtualScrollingDispatcher?.topVirtualRowsCount || 0;
+
         const currentCellPosition = {
-            cellIndex: $currentCell.index(),
-            rowIndex: $currentCell.parent().index(),
+            cellIndex: $currentCell.index() - leftVirtualCellsCount,
+            rowIndex: $currentCell.parent().index() - topVirtualRowsCount,
         };
+
+        const { groupIndex } = this.viewDataProvider.getCellData(
+            currentCellPosition.rowIndex,
+            currentCellPosition.cellIndex,
+            isAllDayPanelCell,
+        );
+
+        const indices = isHorizontalGrouping && isMultiSelection && !isGroupedByDate
+            ? this.viewDataProvider.getHorizontalGroupDimensions(groupIndex, isAllDayPanelCell)
+            : this.viewDataProvider.getViewDimensions(isAllDayPanelCell);
 
         const nextCellPosition = this.cellsSelectionController.getCellFromNextColumnPosition(
             currentCellPosition,
             direction,
-            this.viewDataProvider.getViewDimensions(isAllDayPanelCell),
+            indices,
             step,
             isRTL,
             isAllDayPanelCell,
