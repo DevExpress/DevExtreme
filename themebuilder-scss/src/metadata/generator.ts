@@ -11,7 +11,7 @@ export default class MetadataGenerator {
       .join('');
   }
 
-  static executor(str: string, regex: RegExp, handler: (matches: any) => void): void {
+  static executor(str: string, regex: RegExp, handler: (matches: RegExpExecArray) => void): void {
     let matches = regex.exec(str);
     while (matches !== null) {
       handler(matches);

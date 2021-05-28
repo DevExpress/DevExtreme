@@ -1508,7 +1508,7 @@ test('Horizontal moving by keydown if scrolling.columnRenderingMode: virtual', a
     await t.expect(cell.isFocused).ok(`Cell[0, ${columnIndex}] is focused`);
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+  const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
@@ -1560,7 +1560,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
     await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, 0] is focused`);
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+  const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
@@ -1621,7 +1621,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
       }
     }
   }).before(() => {
-    const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+    const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
       const items: Record<string, unknown>[] = [];
 
       for (let i = 0; i < rowCount; i += 1) {
@@ -1712,7 +1712,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     }
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+  const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
@@ -1807,7 +1807,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     }
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+  const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
@@ -2544,7 +2544,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     .expect(dataGrid.apiOption('focusedColumnIndex'))
     .eql(0);
 }).before(async () => {
-  const getData = function (): Record<string, unknown>[] {
+  const getData = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
     for (let i = 0; i < 100; i += 1) {
       items.push({
