@@ -3358,7 +3358,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const columnsCount = this.viewDataProvider.getColumnsCount();
 
         const dateTable = this._getDateTable();
-        const dateTableCoordinates = dateTable.get(0).getBoundingClientRect();
+
+        // We should use getBoundingClientRect in renovation
+        const dateTableCoordinates = getBoundingRect(dateTable.get(0));
 
         const dateTableCellsMeta = [];
         const allDayPanelCellsMeta = [];
@@ -3370,7 +3372,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 dateTableCellsMeta.push([]);
             }
 
-            const cellCoordinates = cell.getBoundingClientRect();
+            const cellCoordinates = getBoundingRect(cell);
 
             dateTableCellsMeta[rowIndex].push({
                 left: cellCoordinates.left - dateTableCoordinates.left,
@@ -3383,10 +3385,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             const allDayCells = this._getAllCells(true);
 
             const allDayAppointmentContainer = this.getAllDayContainer();
-            const allDayPanelCoordinates = allDayAppointmentContainer.get(0).getBoundingClientRect();
+            const allDayPanelCoordinates = getBoundingRect(allDayAppointmentContainer.get(0));
 
             allDayCells.each((_, cell) => {
-                const cellCoordinates = cell.getBoundingClientRect();
+                const cellCoordinates = getBoundingRect(cell);
 
                 allDayPanelCellsMeta.push({
                     left: cellCoordinates.left - allDayPanelCoordinates.left,
