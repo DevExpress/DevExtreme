@@ -57,7 +57,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
   get _propsInfo(): {
     allowNull: string[];
-    twoWay: [string, boolean, string][];
+    twoWay: [string, string, string][];
     elements: string[];
     templates: string[];
     props: string[];
@@ -102,10 +102,10 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       this._propsInfo.twoWay.reduce(
         (
           options: { [name: string]: unknown },
-          [name, defaultValue, eventName],
+          [name, defaultName, eventName],
         ) => ({
           ...options,
-          [name]: defaultValue,
+          [name]: this._viewComponent.defaultProps[defaultName],
           [eventName]: (value: unknown): void => this.option(name, value),
         }),
         {},
@@ -161,6 +161,11 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       this._fireContentReady();
       this._shouldRaiseContentReady = false;
     }
+  }
+
+  _silent(name: string, value: any): void {
+    (this as unknown as { _options })
+      ._options.silent(name, value);
   }
 
   _render(): void { } // NOTE: Inherited from DOM_Component
@@ -242,9 +247,8 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
         (name: string) => defaultProps[name],
       ),
     );
-
-    twoWay.forEach(([name, defaultValue]) => {
-      setDefaultOptionValue(widgetProps, () => defaultValue)(name);
+    twoWay.forEach(([name, defaultName]) => {
+      setDefaultOptionValue(widgetProps, () => defaultProps[defaultName])(name);
     });
 
     elements.forEach((name: string) => {

@@ -2,7 +2,8 @@ import dateUtils from '../../../core/utils/date';
 import { each } from '../../../core/utils/iterator';
 import { merge } from '../../../core/utils/array';
 import BaseRenderingStrategy from './ui.scheduler.appointments.strategy.base';
-import { getAppointmentDataProvider, getResourceManager } from '../instanceFactory';
+import { getResourceManager } from '../resources/resourceManager';
+import { getAppointmentDataProvider } from '../appointments/DataProvider/appointmentDataProvider';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getAppointmentMinSize() {

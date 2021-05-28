@@ -3,7 +3,7 @@ import dataCoreUtils from 'core/utils/data';
 import typeUtils from 'core/utils/type';
 import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
-import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
+import { createInstances } from 'ui/scheduler/instanceFactory';
 
 const { testStart, module, test } = QUnit;
 
@@ -78,7 +78,7 @@ const schedulerMock = {
 };
 
 const createInstance = (options = {}) => {
-    getInstanceFactory().create({
+    createInstances({
         scheduler: schedulerMock
     });
     return $('#scheduler-appointments').dxSchedulerAppointments({

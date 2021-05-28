@@ -60,12 +60,9 @@ import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
 import utils from './utils';
 
-import {
-    getInstanceFactory,
-    getResourceManager,
-    getAppointmentDataProvider,
-    getWorkspaceHelper
-} from './instanceFactory';
+import { createInstances } from './instanceFactory';
+import { getResourceManager } from './resources/resourceManager';
+import { getAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -960,9 +957,9 @@ class Scheduler extends Widget {
 
         this._initEditing();
 
-        getInstanceFactory().create({
-            resources: this.option('resources'),
+        createInstances({
             scheduler: this,
+            resources: this.option('resources'),
             dataSource: this._dataSource,
             appointmentDataAccessors: this._dataAccessors
         });
@@ -2099,7 +2096,7 @@ class Scheduler extends Widget {
                 getGroups = function() {
                     const apptSettings = this.getLayoutManager()._positionMap[appointmentIndex];
 
-                    return getWorkspaceHelper().getCellGroups(
+                    return getResourceManager().getCellGroups(
                         apptSettings[0].groupIndex,
                         this.getWorkSpace().option('groups')
                     );

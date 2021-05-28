@@ -103,6 +103,7 @@ declare module '../events/index' {
 declare global {
     interface JQueryPromise<T> { }
     interface JQueryEventObject { }
+    interface JQuery<TElement = HTMLElement> { }
     interface JQuery<TElement = HTMLElement> {
 
         dxAccordion(): JQuery;
