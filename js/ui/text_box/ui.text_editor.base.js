@@ -277,6 +277,13 @@ const TextEditorBase = Editor.inherit({
         this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this._$buttonsContainer);
     },
 
+    _reRenderButtonContainers: function() {
+        this._$beforeButtonsContainer && this._$beforeButtonsContainer.remove();
+        this._$afterButtonsContainer && this._$afterButtonsContainer.remove();
+        this._buttonCollection.clean();
+        this._renderButtonContainers();
+    },
+
     _clean() {
         this._buttonCollection.clean();
         this._disposePendingIndicator();
@@ -327,7 +334,7 @@ const TextEditorBase = Editor.inherit({
 
     _updateButtonsStyling: function(editorStylingMode) {
         each(this.option('buttons'), (_, buttonOptions) => {
-            if(buttonOptions.options && !buttonOptions.options.stylingMode) {
+            if(buttonOptions.options && !buttonOptions.options.stylingMode && this.option('visible')) {
                 const buttonInstance = this.getButton(buttonOptions.name);
                 buttonInstance.option && buttonInstance.option('stylingMode', editorStylingMode === 'underlined' ? 'text' : 'contained');
             }
@@ -719,11 +726,15 @@ const TextEditorBase = Editor.inherit({
                 if(fullName === name) {
                     checkButtonsOptionType(value);
                 }
-                this._$beforeButtonsContainer && this._$beforeButtonsContainer.remove();
-                this._$afterButtonsContainer && this._$afterButtonsContainer.remove();
-                this._buttonCollection.clean();
-                this._renderButtonContainers();
+                this._reRenderButtonContainers();
                 this._updateButtonsStyling(this.option('stylingMode'));
+                break;
+            case 'visible':
+                this.callBase(args);
+                if(args.value && this.option('buttons')) {
+                    this._reRenderButtonContainers();
+                    this._updateButtonsStyling(this.option('stylingMode'));
+                }
                 break;
             case 'displayValueFormatter':
                 this._invalidate();

@@ -77,6 +77,25 @@ QUnit.module('common', {}, () => {
         assert.ok(!instance.option('showClearButton'), 'the \'showClearButton\' options is correct');
         assert.equal($(`.${CLEAR_BUTTON_AREA_CLASS}`).length, 0, 'clear button is not rendered');
     });
+
+    QUnit.test('should have no errors if textBox has custom buttons and "visible" option is false (T998843)', function(assert) {
+        try {
+            $('#textbox').dxTextBox({
+                visible: false,
+                buttons: [
+                    {
+                        name: 'password',
+                        options: {
+                            type: 'default',
+                        },
+                    },
+                ],
+            });
+            assert.ok(true);
+        } catch(e) {
+            assert.ok(false, 'the error is thrown');
+        }
+    });
 });
 
 QUnit.module('options changing', {
