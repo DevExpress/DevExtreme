@@ -1071,6 +1071,8 @@ module('Renovated Render', {
             this.instance.renderWorkSpace();
 
             assert.ok(cacheClearSpy.calledOnce, 'Cache has been cleared');
+
+            cacheClearSpy.restore();
         });
     });
 });
