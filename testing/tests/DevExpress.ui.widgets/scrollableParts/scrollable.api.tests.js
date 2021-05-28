@@ -744,6 +744,12 @@ class ScrollableTestHelper {
         QUnit.assert.roughEqual(this.scrollable.scrollTop(), top, epsilon, 'scrollable.scrollTop()');
     }
 
+    setContainerWidth(width) {
+        this.$scrollable.css('width', width);
+
+        resizeCallbacks.fire();
+    }
+
     checkScrollTranslateValues(assert, { vertical, horizontal }) {
         if(!this._useNative || (this._useNative && this._useSimulatedScrollbar)) {
 
@@ -776,12 +782,6 @@ class ScrollableTestHelper {
 
             checkTranslateValues({ vertical, horizontal });
         }
-    }
-
-    setContainerWidth(width) {
-        this.$scrollable.css('width', width);
-
-        resizeCallbacks.fire();
     }
 }
 
