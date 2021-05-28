@@ -2783,7 +2783,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(0, 1);
         this.triggerKeyDown('A');
-        this.clock.tick();
+        this.clock.tick(200);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
