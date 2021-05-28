@@ -424,12 +424,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default true
        */
       allowUpdating?: boolean,
-      /**
-       * @docid
-       * @default false
-       * @deprecated dxSchedulerOptions.editing.allowTimeZoneEditing
-       */
-      allowEditingTimeZones?: boolean
     };
     /**
      * @docid

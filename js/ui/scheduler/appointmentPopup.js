@@ -184,7 +184,7 @@ export default class AppointmentPopup {
 
     _getAllowTimeZoneEditing() {
         const scheduler = this.scheduler;
-        return scheduler.option('editing.allowTimeZoneEditing') || scheduler.option('editing.allowEditingTimeZones');
+        return scheduler.option('editing.allowTimeZoneEditing');
     }
 
     _isReadOnly(rawAppointment) {
