@@ -120,13 +120,12 @@ export class TooltipStrategyBase {
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
-        const isEmptyDropDownAppointmentTemplate = this._isEmptyDropDownAppointmentTemplate();
         return new FunctionTemplate(options => {
             return template.render({
-                model: isEmptyDropDownAppointmentTemplate ? {
+                model: {
                     appointmentData: data,
                     targetedAppointmentData: targetData
-                } : data,
+                },
                 container: options.container,
                 index: index
             });
