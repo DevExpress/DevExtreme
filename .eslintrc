@@ -198,6 +198,7 @@
                     "allowCallbacks": "always"
                 }
             ],
+            "@typescript-eslint/no-extraneous-class": "error",
             "@typescript-eslint/member-ordering": "error"
             /*
             "@typescript-eslint/prefer-includes": "error",
