@@ -20,7 +20,7 @@ export default abstract class Widget {
     return `dx-${widgetName.slice(2).toLowerCase() + (className ? `-${className}` : '')}`;
   }
 
-  option(option: string, value?: unknown): Promise<any> {
+  async option(option: string, value?: unknown): Promise<any> {
     const { element, name } = this;
     const get = (): any => $(element())[name]('instance').option(option);
     const set = (): any => $(element())[name]('instance').option(option, value);

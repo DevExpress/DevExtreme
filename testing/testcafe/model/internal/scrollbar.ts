@@ -17,7 +17,7 @@ export default class Scrollbar {
     return this.element.find(`.${CLASS.scrollableScroll}`);
   }
 
-  isScrollVisible(): Promise<boolean> {
+  async isScrollVisible(): Promise<boolean> {
     const scroll = this.getScroll();
     const invisibleStateClass = CLASS.stateInvisible;
 

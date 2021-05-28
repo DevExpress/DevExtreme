@@ -29,7 +29,7 @@ export default class DateBox extends Widget {
     return `.dx-dateviewroller-${viewName}`;
   }
 
-  static getRollerScrollTop(viewName: string): Promise<number> {
+  static async getRollerScrollTop(viewName: string): Promise<number> {
     const rollerClass: string = DateBox.getDateViewRollerClass(viewName);
     return ClientFunction(() => $(`${rollerClass} .dx-scrollable-container`).scrollTop(),
       {

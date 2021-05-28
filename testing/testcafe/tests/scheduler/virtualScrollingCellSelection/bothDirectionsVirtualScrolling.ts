@@ -34,7 +34,7 @@ test('Selected cells shouldn\'t disapppear on scroll', async (t) => {
 
   await scrollTo(0, 0);
   await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   ...baseConfig,
 }));
 
@@ -49,7 +49,7 @@ test('Selected cells shouldn\'t disapppear on scroll when horizontal grouping is
 
   await scrollTo(0, 0);
   await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   groups: ['resourceId0'],
   resources: [{
     fieldExpr: 'resourceId0',
@@ -69,7 +69,7 @@ test('Selected cells shouldn\'t disapppear on scroll when appointments are group
 
   await scrollTo(0, 0);
   await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 2);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   ...baseConfig,
   groups: ['resourceId0'],
   views: [{
@@ -90,7 +90,7 @@ test('Selected cells shouldn\'t disapppear on scroll when appointments are group
 
   await scrollTo(0, 0);
   await checkSelectionWhenFocusedInViewport(t, scheduler, 7, 5, 1);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   ...baseConfig,
   groups: ['resourceId0'],
   views: [{
@@ -111,7 +111,7 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horiz
 
   await scrollTo(0, 0);
   await checkAllDayCellsWhenInViewport(t, scheduler);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   ...baseConfig,
   showAllDayPanel: true,
 }));
@@ -127,7 +127,7 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when verti
 
   await scrollTo(0, 0);
   await checkAllDayCellsWhenInViewport(t, scheduler);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   ...baseConfig,
   showAllDayPanel: true,
   groups: ['resourceId0'],
@@ -150,7 +150,7 @@ test('Selection should work in month view', async (t) => {
 
   await scrollTo(0, 0);
   await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   ...baseConfig,
   views: [{
     type: 'month',
@@ -189,7 +189,7 @@ test('Selection should work in timeline views', async (t) => {
 
   await scheduler.option('currentView', 'timelineMonth');
   await checkSelection();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   ...baseConfig,
   views: ['timelineDay', 'timelineWeek', 'timelineMonth'],
   currentView: 'timelineDay',

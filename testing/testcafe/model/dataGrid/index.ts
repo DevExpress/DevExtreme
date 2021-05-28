@@ -93,7 +93,7 @@ export default class DataGrid extends Widget {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
 
-  scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
+  async scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -102,7 +102,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  getScrollLeft(): Promise<number> {
+  async getScrollLeft(): Promise<number> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -111,7 +111,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  getScrollWidth(): Promise<number> {
+  async getScrollWidth(): Promise<number> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -120,7 +120,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  getScrollTop(): Promise<number> {
+  async getScrollTop(): Promise<number> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -129,7 +129,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  getScrollbarWidth(isHorizontal: boolean): Promise<number> {
+  async getScrollbarWidth(isHorizontal: boolean): Promise<number> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -161,7 +161,7 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${CLASS.revertButton}`);
   }
 
-  apiOption(name: string, value = 'undefined'): Promise<any> {
+  async apiOption(name: string, value = 'undefined'): Promise<any> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -173,7 +173,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiAddRow(): Promise<void> {
+  async apiAddRow(): Promise<void> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -182,7 +182,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiEditRow(rowIndex: number): Promise<void> {
+  async apiEditRow(rowIndex: number): Promise<void> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -191,7 +191,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiCancelEditData(): Promise<void> {
+  async apiCancelEditData(): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).cancelEditData(),
@@ -199,7 +199,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiSaveEditData(): Promise<void> {
+  async apiSaveEditData(): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).saveEditData(),
@@ -207,7 +207,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiEditCell(rowIndex: number, columnIndex: number): Promise<void> {
+  async apiEditCell(rowIndex: number, columnIndex: number): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).editCell(rowIndex, columnIndex),
@@ -215,7 +215,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiCellValue(rowIndex: number, columnIndex: number, value: string): Promise<void> {
+  async apiCellValue(rowIndex: number, columnIndex: number, value: string): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).cellValue(rowIndex, columnIndex, value),
@@ -227,7 +227,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiGetCellValue(rowIndex: number, columnIndex: number): Promise<string> {
+  async apiGetCellValue(rowIndex: number, columnIndex: number): Promise<string> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).cellValue(rowIndex, columnIndex),
@@ -235,7 +235,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiGetCellValidationStatus(rowIndex: number, columnIndex: number): Promise<any> {
+  async apiGetCellValidationStatus(rowIndex: number, columnIndex: number): Promise<any> {
     const { getGridInstance } = this;
     return ClientFunction(() => {
       const dataGrid = getGridInstance() as any;
@@ -244,7 +244,7 @@ export default class DataGrid extends Widget {
     }, { dependencies: { getGridInstance, rowIndex, columnIndex } })();
   }
 
-  apiGetVisibleRows(): Promise<any> {
+  async apiGetVisibleRows(): Promise<any> {
     const { getGridInstance } = this;
     return ClientFunction(() => {
       const dataGrid = getGridInstance() as any;

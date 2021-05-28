@@ -12,7 +12,7 @@ export default class OverlayWrapper {
     this.element = Selector(`.${CLASS.overlayWrapper}`);
   }
 
-  getVisibility(): Promise<string> {
+  async getVisibility(): Promise<string> {
     const { element } = this;
     const contextMenuClass = CLASS.contextMenu;
 

@@ -53,7 +53,7 @@ export default class DataRow extends FocusableElement {
     return this.element.find(`.${CLASS.selectCheckBox}`);
   }
 
-  getOffset(): Promise<any> {
+  async getOffset(): Promise<any> {
     const { element } = this;
 
     return ClientFunction(

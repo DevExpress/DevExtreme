@@ -7,7 +7,7 @@ import EditForm from '../../model/dataGrid/editForm';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const editingModes = [
   'cell',
@@ -52,7 +52,7 @@ const dataGrid = new DataGrid('#container');
 
 const createDataGrid = ({
   repaintChangesOnly, isAdding, mode, useMask,
-}) => (): Promise<void> => createWidget('dxDataGrid', {
+}) => async (): Promise<void> => createWidget('dxDataGrid', {
   keyExpr: 'id',
   dataSource: [
     {
@@ -227,7 +227,7 @@ const getEditorValue = async (dataField: string, editor: Selector): Promise<stri
   return editor.value;
 };
 
-const getCellText = (dataField: string, cell: DataCell): Promise<string | undefined> => {
+const getCellText = async (dataField: string, cell: DataCell): Promise<string | undefined> => {
   if (dataField === 'boolean') {
     return getEditorValue(dataField, cell.getEditor().element);
   }

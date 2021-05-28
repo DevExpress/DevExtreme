@@ -32,7 +32,7 @@ export default class AppointmentTooltip {
     return new AppointmentTooltipListItem(this.wrapper, title, index);
   }
 
-  isVisible(): Promise<boolean> {
+  async isVisible(): Promise<boolean> {
     const { element } = this;
     const invisibleStateClass = CLASS.stateInvisible;
 

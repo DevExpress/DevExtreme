@@ -6,7 +6,7 @@ import CommandCell from '../../model/dataGrid/command-cell';
 
 fixture.disablePageReloads`Keyboard Navigation`
   .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -40,7 +40,7 @@ test('Cell should not highlighted after editing another cell when startEditActio
     .notOk()
     .expect(dataGrid.getDataCell(1, 1).isFocused)
     .notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { name: 'Alex', phone: '555555', room: 1 },
     { name: 'Dan', phone: '553355', room: 2 },
@@ -87,7 +87,7 @@ test('Cell should highlighted after editing another cell when startEditAction is
     .ok()
     .expect(dataGrid.getDataCell(1, 1).isFocused)
     .notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { name: 'Alex', phone: '555555', room: 1 },
     { name: 'Dan', phone: '553355', room: 2 },
@@ -123,7 +123,7 @@ test('Cell should be focused after Enter key press if enterKeyDirection is "none
     .ok()
     .expect(dataGrid.getDataRow(0).isRemoved)
     .ok();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   height: 200,
   width: 200,
   dataSource: [
@@ -155,7 +155,7 @@ test('TextArea should be focused on editing start', async (t) => {
     .ok()
     .expect(getTextArea().focused)
     .ok();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 0, name: 'Alex' },
     { id: 1, name: 'Bob' },
@@ -1075,7 +1075,7 @@ test('Row should not be focused by "focusedRowIndex" after change "pageIndex" by
     .ok()
     .expect(dataGrid.getFocusedRow().exists)
     .notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 0, c0: 'c0_0' },
     { id: 1, c0: 'c0_1' },
@@ -1113,7 +1113,7 @@ test('Cell should be highlighted after editing another cell when startEditAction
     .notOk()
     .expect(cell0.isEditCell)
     .notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { name: 'Alex', phone: '555555', room: 1 },
     { name: 'Dan', phone: '553355', room: 2 },
@@ -1141,7 +1141,7 @@ test('Previous navigation elements should not have "tabindex" if navigation acti
         .eql('111', `cell[${rowIndex}, ${colIndex}] has tabindex`);
     }
   }
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 4, c0: 'c0_4', c1: 'c1_4' },
     { id: 5, c0: 'c0_5', c1: 'c1_5' },
@@ -1166,7 +1166,7 @@ test('Previous navigation elements should not have "tabindex" if navigation acti
         .pressKey('tab');
     }
   }
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 4, c0: 'c0_4', c1: 'c1_4' },
     { id: 5, c0: 'c0_5', c1: 'c1_5' },
@@ -1197,7 +1197,7 @@ test('The first group row should be expanded when the Enter key is pressed (T869
     .ok()
     .expect(firstGroupRow.isExpanded)
     .ok();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { name: 'Alex', phone: '555555' },
   ],
@@ -1301,7 +1301,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
 
     .expect(Selector('BODY').focused)
     .ok();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   showBorders: true,
   keyExpr: 'id',
   dataSource: [{ id: 1 }, { id: 2 }],
@@ -1345,7 +1345,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .notOk()
       .expect(dataGrid.apiGetCellValue(0, 1))
       .eql('2');
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [],
     editing: {
       mode: editMode.toLowerCase(),
@@ -1389,7 +1389,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .notOk()
       .expect(dataGrid.apiGetCellValue(0, 0))
       .eql('1');
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [],
     editing: {
       mode: editMode.toLowerCase(),
@@ -1431,7 +1431,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .notOk()
       .expect(dataGrid.apiGetCellValue(0, 1))
       .eql('22');
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [{ a: '1', b: '2' }],
     editing: {
       mode: editMode.toLowerCase(),
@@ -1473,7 +1473,7 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
       .notOk()
       .expect(dataGrid.apiGetCellValue(0, 0))
       .eql('11');
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [{ a: '1', b: '2' }],
     editing: {
       mode: editMode.toLowerCase(),
@@ -1507,7 +1507,7 @@ test('Horizontal moving by keydown if scrolling.columnRenderingMode: virtual', a
     cell = dataGrid.getDataCell(0, columnIndex);
     await t.expect(cell.isFocused).ok(`Cell[0, ${columnIndex}] is focused`);
   }
-}).before(() => {
+}).before(async () => {
   const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
@@ -1559,7 +1559,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
     cell = dataGrid.getDataCell(rowIndex, 0);
     await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, 0] is focused`);
   }
-}).before(() => {
+}).before(async () => {
   const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
@@ -1620,7 +1620,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
         await t.pressKey('shift+tab');
       }
     }
-  }).before(() => {
+  }).before(async () => {
     const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
       const items: Record<string, unknown>[] = [];
 
@@ -1705,7 +1705,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       }
     }
   }
-}).before(() => {
+}).before(async () => {
   const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
@@ -1794,7 +1794,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       }
     }
   }
-}).before(() => {
+}).before(async () => {
   const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 

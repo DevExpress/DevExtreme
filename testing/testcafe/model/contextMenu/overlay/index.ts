@@ -19,7 +19,7 @@ export default class Overlay {
     );
   }
 
-  getOverlayOffset(): Promise<any> {
+  async getOverlayOffset(): Promise<any> {
     const { getOverlayInstance } = this;
     return ClientFunction(
       () => {

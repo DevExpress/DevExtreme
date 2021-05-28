@@ -43,7 +43,7 @@ const resources = [{
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(() => createScheduler(view, resourcesValue));
+    }).before(async () => createScheduler(view, resourcesValue));
   });
 });
 
@@ -56,6 +56,6 @@ const resources = [{
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
       await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(() => createScheduler(view, resourcesValue));
+    }).before(async () => createScheduler(view, resourcesValue));
   });
 });
