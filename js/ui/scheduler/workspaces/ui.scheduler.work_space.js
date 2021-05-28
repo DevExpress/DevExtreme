@@ -3352,42 +3352,44 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     // Must replace all DOM manipulations
     getDOMElementsMetaData() {
-        const dateTableCells = this._getAllCells(false);
-        const columnsCount = this.viewDataProvider.getColumnsCount();
+        return this.cache.get('cellElementsMeta', () => {
+            const dateTableCells = this._getAllCells(false);
+            const columnsCount = this.viewDataProvider.getColumnsCount();
 
-        const dateTable = this._getDateTable();
+            const dateTable = this._getDateTable();
 
-        // We should use getBoundingClientRect in renovation
-        const dateTableRect = getBoundingRect(dateTable.get(0));
+            // We should use getBoundingClientRect in renovation
+            const dateTableRect = getBoundingRect(dateTable.get(0));
 
-        const dateTableCellsMeta = [];
-        const allDayPanelCellsMeta = [];
+            const dateTableCellsMeta = [];
+            const allDayPanelCellsMeta = [];
 
-        dateTableCells.each((index, cell) => {
-            const rowIndex = Math.floor(index / columnsCount);
+            dateTableCells.each((index, cell) => {
+                const rowIndex = Math.floor(index / columnsCount);
 
-            if(dateTableCellsMeta.length === rowIndex) {
-                dateTableCellsMeta.push([]);
+                if(dateTableCellsMeta.length === rowIndex) {
+                    dateTableCellsMeta.push([]);
+                }
+
+                this._addCellMetaData(dateTableCellsMeta[rowIndex], cell, dateTableRect);
+            });
+
+            if(this.isAllDayPanelVisible && !this._isVerticalGroupedWorkSpace()) {
+                const allDayCells = this._getAllCells(true);
+
+                const allDayAppointmentContainer = this.getAllDayContainer();
+                const allDayPanelRect = getBoundingRect(allDayAppointmentContainer.get(0));
+
+                allDayCells.each((_, cell) => {
+                    this._addCellMetaData(allDayPanelCellsMeta, cell, allDayPanelRect);
+                });
             }
 
-            this._addCellMetaData(dateTableCellsMeta[rowIndex], cell, dateTableRect);
+            return {
+                dateTableCellsMeta,
+                allDayPanelCellsMeta,
+            };
         });
-
-        if(this.isAllDayPanelVisible && !this._isVerticalGroupedWorkSpace()) {
-            const allDayCells = this._getAllCells(true);
-
-            const allDayAppointmentContainer = this.getAllDayContainer();
-            const allDayPanelRect = getBoundingRect(allDayAppointmentContainer.get(0));
-
-            allDayCells.each((_, cell) => {
-                this._addCellMetaData(allDayPanelCellsMeta, cell, allDayPanelRect);
-            });
-        }
-
-        return {
-            dateTableCellsMeta,
-            allDayPanelCellsMeta,
-        };
     }
 
     _addCellMetaData(cellMetaDataArray, cell, parentRect) {
