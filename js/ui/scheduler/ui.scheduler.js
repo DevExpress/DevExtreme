@@ -253,8 +253,6 @@ class Scheduler extends Widget {
 
             appointmentTemplate: 'item',
 
-            dropDownAppointmentTemplate: 'dropDownAppointment',
-
             appointmentCollectorTemplate: 'appointmentCollector',
 
             dataCellTemplate: null,
@@ -471,7 +469,6 @@ class Scheduler extends Widget {
         super._setDeprecatedOptions();
 
         extend(this._deprecatedOptions, {
-            dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' },
             allowEditingTimeZones: { since: '20.1', alias: 'allowTimeZoneEditing' }
         });
     }
@@ -712,7 +709,6 @@ class Scheduler extends Widget {
             case 'recurrenceEditMode':
             case 'remoteFiltering':
             case 'timeZone':
-            case 'dropDownAppointmentTemplate':
             case 'appointmentCollectorTemplate':
             case '_appointmentTooltipOffset':
             case '_appointmentTooltipButtonsPosition':
