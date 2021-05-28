@@ -162,10 +162,10 @@ const verticalWorkSpaceMock = {
         isStandaloneAllDayPanel: false,
         isGroupedAllDayPanel: true,
         isAllDayPanelVisible: true,
+        isDateAndTimeView: true,
     }),
     _isVerticalGroupedWorkSpace: () => true,
     isAllDayPanelVisible: true,
-    isDateAndTimeView: true
 };
 const horizontalWorkSpaceMock = {
     generateRenderOptions: () => ({
@@ -183,10 +183,10 @@ const horizontalWorkSpaceMock = {
         isAllDayPanelVisible: true,
         isGroupedAllDayPanel: false,
         isStandaloneAllDayPanel: true,
+        isDateAndTimeView: true,
     }),
     _isVerticalGroupedWorkSpace: () => false,
     isAllDayPanelVisible: true,
-    isDateAndTimeView: true
 };
 
 const createViewDataProvider = ({
@@ -626,7 +626,10 @@ module('View Data Provider', {
             module('Date views', () => {
                 const workSpaceMock = {
                     ...verticalWorkSpaceMock,
-                    isDateAndTimeView: false
+                    generateRenderOptions: () => ({
+                        ...verticalWorkSpaceMock.generateRenderOptions(),
+                        isDateAndTimeView: false,
+                    }),
                 };
 
                 test('it should return correct cell start date', function(assert) {
@@ -905,7 +908,10 @@ module('View Data Provider', {
                 module('Vertical Grouping', function() {
                     const workSpaceMock = {
                         ...verticalWorkSpaceMock,
-                        isDateAndTimeView: false
+                        generateRenderOptions: () => ({
+                            ...verticalWorkSpaceMock.generateRenderOptions(),
+                            isDateAndTimeView: false,
+                        }),
                     };
 
                     test('Should return correct cell position for the allDay cell date', function(assert) {
@@ -964,7 +970,10 @@ module('View Data Provider', {
                 module('Horizontal Grouping', function() {
                     const workSpaceMock = {
                         ...horizontalWorkSpaceMock,
-                        isDateAndTimeView: false
+                        generateRenderOptions: () => ({
+                            ...horizontalWorkSpaceMock.generateRenderOptions(),
+                            isDateAndTimeView: false,
+                        }),
                     };
 
                     test('Should return correct cell position for the allDay cell date', function(assert) {
@@ -1801,7 +1810,6 @@ module('View Data Provider', {
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: () => true,
             };
             const horizontalGroupedWorkspaceMock = {
                 generateRenderOptions: () => ({
@@ -1823,7 +1831,6 @@ module('View Data Provider', {
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: () => false,
             };
             const horizontalDataMap = [[
                 {
@@ -2177,7 +2184,6 @@ module('View Data Provider', {
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: () => true,
             };
 
             const horizontalGroupedWorkspaceMock = {
@@ -2202,7 +2208,6 @@ module('View Data Provider', {
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: () => false,
             };
             const horizontalDataMap = [[
                 {
