@@ -877,8 +877,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 expectedDates: horizontalDoubledWorkWeekAllDayCells,
             },
         ].forEach(({ view, expectedDates }) => {
-            test(`allDay cells should have correct options in ${view} view`
-                + ' with grouping by date', function(assert) {
+            test(`allDay cells should have correct options in ${view} view with grouping by date`, function(assert) {
                 const actualDates = [];
 
                 createWrapper({
