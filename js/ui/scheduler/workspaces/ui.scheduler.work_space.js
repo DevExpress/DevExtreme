@@ -1209,8 +1209,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._renderDateTable();
             this._renderAllDayPanel();
         }
-
-        this.getDOMElementsMetaData();
     }
 
     renderRDateTable() {
@@ -3360,7 +3358,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const dateTable = this._getDateTable();
 
         // We should use getBoundingClientRect in renovation
-        const dateTableCoordinates = getBoundingRect(dateTable.get(0));
+        const dateTableRect = getBoundingRect(dateTable.get(0));
 
         const dateTableCellsMeta = [];
         const allDayPanelCellsMeta = [];
@@ -3372,29 +3370,17 @@ class SchedulerWorkSpace extends WidgetObserver {
                 dateTableCellsMeta.push([]);
             }
 
-            const cellCoordinates = getBoundingRect(cell);
-
-            dateTableCellsMeta[rowIndex].push({
-                left: cellCoordinates.left - dateTableCoordinates.left,
-                top: cellCoordinates.top - dateTableCoordinates.top,
-                width: cellCoordinates.width,
-            });
+            this._addCellMetaData(dateTableCellsMeta[rowIndex], cell, dateTableRect);
         });
 
         if(this.isAllDayPanelVisible && !this._isVerticalGroupedWorkSpace()) {
             const allDayCells = this._getAllCells(true);
 
             const allDayAppointmentContainer = this.getAllDayContainer();
-            const allDayPanelCoordinates = getBoundingRect(allDayAppointmentContainer.get(0));
+            const allDayPanelRect = getBoundingRect(allDayAppointmentContainer.get(0));
 
             allDayCells.each((_, cell) => {
-                const cellCoordinates = getBoundingRect(cell);
-
-                allDayPanelCellsMeta.push({
-                    left: cellCoordinates.left - allDayPanelCoordinates.left,
-                    top: cellCoordinates.top - allDayPanelCoordinates.top,
-                    width: cellCoordinates.width,
-                });
+                this._addCellMetaData(allDayPanelCellsMeta, cell, allDayPanelRect);
             });
         }
 
@@ -3402,6 +3388,17 @@ class SchedulerWorkSpace extends WidgetObserver {
             dateTableCellsMeta,
             allDayPanelCellsMeta,
         };
+    }
+
+    _addCellMetaData(cellMetaDataArray, cell, parentRect) {
+        const cellRect = getBoundingRect(cell);
+
+        cellMetaDataArray.push({
+            left: cellRect.left - parentRect.left,
+            top: cellRect.top - parentRect.top,
+            width: cellRect.width,
+            height: cellRect.height,
+        });
     }
 }
 
