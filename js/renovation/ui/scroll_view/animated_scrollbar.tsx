@@ -18,6 +18,7 @@ import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 import { EventCallback } from '../common/event_callback.d';
 import { ScrollableProps } from './scrollable_props';
 import { inRange } from '../../../core/utils/math';
+import { DxMouseEvent } from './types';
 
 export const OUT_BOUNDS_ACCELERATION = 0.5;
 
@@ -121,12 +122,12 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  validateEvent(e: Event): boolean {
-    return this.scrollbar.validateEvent(e);
+  validateEvent(event: DxMouseEvent): boolean {
+    return this.scrollbar.validateEvent(event);
   }
 
   @Method()
-  isThumb(element: HTMLDivElement): boolean {
+  isThumb(element: EventTarget | null): boolean {
     return this.scrollbar.isThumb(element);
   }
 
@@ -141,8 +142,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  initHandler(e: Event, crossThumbScrolling: boolean): void {
-    this.scrollbar.initHandler(e, crossThumbScrolling);
+  initHandler(event: DxMouseEvent, crossThumbScrolling: boolean): void {
+    this.scrollbar.initHandler(event, crossThumbScrolling);
   }
 
   @Method()

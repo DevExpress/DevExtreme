@@ -334,7 +334,7 @@ describe('Scrollbar', () => {
             { eventData: { pageX: 150, pageY: 150 }, expected: -340 },
             { eventData: { pageX: 250, pageY: 250 }, expected: bounceEnabled ? -740 : -590 },
           ]).describe('ClickLocation: %o', (clickLocation) => {
-            it('moveToMouseLocation(e)', () => {
+            it('moveToMouseLocation(event)', () => {
               const viewModel = new Scrollbar({
                 showScrollbar,
                 direction,
@@ -919,13 +919,13 @@ describe('Scrollbar', () => {
         it('should start inertia animator on end', () => {
           const onAnimatorStart = jest.fn();
           const velocity = { x: 10, y: 20 };
-          const e = { ...defaultEvent, velocity };
+          const event = { ...defaultEvent, velocity };
           const viewModel = new Scrollbar({ direction, onAnimatorStart });
 
           viewModel.thumbScrolling = thumbScrolling;
           viewModel.crossThumbScrolling = true;
 
-          viewModel.endHandler(e.velocity);
+          viewModel.endHandler(event.velocity);
 
           expect(onAnimatorStart).toHaveBeenCalledTimes(1);
           expect(onAnimatorStart).toHaveBeenCalledWith('inertia', velocity[viewModel.axis], thumbScrolling, true);
@@ -940,12 +940,12 @@ describe('Scrollbar', () => {
         optionValues.scrollByThumb,
         ['dx-scrollable-scroll', 'dx-scrollable-scrollbar'],
         optionValues.showScrollbar,
-      ]))('initHandler(e, crossThumbScrolling), isDxWheelEvent: %o, crossThumbScrolling: %o, scrollByThumb: %o, targetClass: %, showScrollbar: %o',
+      ]))('initHandler(event, crossThumbScrolling), isDxWheelEvent: %o, crossThumbScrolling: %o, scrollByThumb: %o, targetClass: %, showScrollbar: %o',
         (isDxWheelEvent, crossThumbScrolling, scrollByThumb, targetClass, showScrollbar) => {
           const onAnimatorCancel = jest.fn();
-          const e = { ...defaultEvent, originalEvent: {} };
+          const event = { ...defaultEvent, originalEvent: {} } as any;
           if (isDxWheelEvent) {
-            (e as any).originalEvent.type = 'dxmousewheel';
+            event.originalEvent.type = 'dxmousewheel';
           }
 
           const viewModel = new Scrollbar({
@@ -958,10 +958,10 @@ describe('Scrollbar', () => {
           const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
 
           viewModel.moveToMouseLocation = jest.fn();
-          (e.originalEvent as any).target = scrollbar.find(`.${targetClass}`).getDOMNode();
+          event.originalEvent.target = scrollbar.find(`.${targetClass}`).getDOMNode();
           (viewModel as any).scrollbarRef = { current: scrollbar.getDOMNode() };
 
-          viewModel.initHandler(e, crossThumbScrolling);
+          viewModel.initHandler(event, crossThumbScrolling);
 
           const isScrollbarClicked = targetClass !== 'dx-scrollable-scroll' && scrollByThumb;
 
@@ -973,7 +973,7 @@ describe('Scrollbar', () => {
             expect(viewModel.moveToMouseLocation).toBeCalledTimes(0);
           } else {
             expect(viewModel.moveToMouseLocation).toBeCalledTimes(1);
-            expect(viewModel.moveToMouseLocation).toHaveBeenCalledWith(e);
+            expect(viewModel.moveToMouseLocation).toHaveBeenCalledWith(event);
           }
 
           if (isDxWheelEvent) {
@@ -1123,7 +1123,7 @@ describe('Scrollbar', () => {
           each([true, false]).describe('ScrollByThumb: %o', (scrollByThumb) => {
             each([{ x: 30, y: 35 }, { x: 10, y: 40 }]).describe('Event.Delta: %o', (delta) => {
               each([0, 0.2, 0.5, 1]).describe('containerToContentRatio: %o', (containerToContentRatio) => {
-                it('moveHandler(e.delta)', () => {
+                it('moveHandler(event.delta)', () => {
                   const viewModel = new Scrollbar({
                     direction,
                     scrollByThumb,
