@@ -317,7 +317,7 @@ export class DataGridColumn {
     newData: any,
     value: any,
     currentRowData: any,
-  ) => void | DxPromise;
+  ) => undefined | DxPromise;
 
   @OneWay()
   showEditorAlways?: boolean;

@@ -203,15 +203,16 @@
             "@typescript-eslint/no-base-to-string": "error",
             "@typescript-eslint/no-unused-vars-experimental": "error",
             "@typescript-eslint/member-ordering": "error",
+            "@typescript-eslint/return-await": "error",
+            "@typescript-eslint/no-invalid-void-type": "error",
             "@typescript-eslint/no-unnecessary-type-assertion": "error"
             /*
             "@typescript-eslint/prefer-includes": "error",
             "@typescript-eslint/prefer-nullish-coalescing": "error",
             "@typescript-eslint/explicit-function-return-type": "error",
-            "@typescript-eslint/return-await": "error",
+
             "no-return-await": "off",
-            "@typescript-eslint/no-invalid-void-type": "error",
-            "@typescript-eslint/no-dynamic-delete": "error",
+
             "@typescript-eslint/no-invalid-this": "error",
 
 

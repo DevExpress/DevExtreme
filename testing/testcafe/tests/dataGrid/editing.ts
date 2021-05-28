@@ -599,7 +599,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData): string | void => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | undefined => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
@@ -635,7 +635,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData): string | void => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | undefined => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
