@@ -3,7 +3,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
+import { createInstances } from 'ui/scheduler/instanceFactory';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
@@ -123,16 +124,15 @@ const createInstance = (options, subscribesConfig) => {
         }
     };
 
-    getInstanceFactory().create({
+    createInstances({
         resources: options.resources,
         scheduler: {
             isVirtualScrolling: () => false
         },
         appointmentDataAccessors: dataAccessors
     });
-    const { resourceManager } = getInstanceFactory();
 
-    resourceManager.getResourcesFromItem = () => {
+    getResourceManager().getResourcesFromItem = () => {
         return { someId: ['with space'] };
     };
 

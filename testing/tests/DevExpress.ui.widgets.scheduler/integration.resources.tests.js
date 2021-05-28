@@ -10,7 +10,7 @@ import Color from 'color';
 import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';
-import { getInstanceFactory } from 'ui/scheduler/instanceFactory';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
@@ -378,7 +378,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         const done = assert.async();
 
-        getInstanceFactory().resourceManager.getResourceDataByValue('ownerId', 1).done(function(resource) {
+        getResourceManager().getResourceDataByValue('ownerId', 1).done(function(resource) {
             assert.deepEqual(resource, {
                 text: 'Jack',
                 id: 1,
@@ -551,7 +551,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             });
 
             scheduler.instance.option('resources[0].dataSource', resourceData);
-            const resources = getInstanceFactory().resourceManager.getResources();
+            const resources = getResourceManager().getResources();
 
             assert.deepEqual(resources, [{
                 fieldExpr: 'ownerId',

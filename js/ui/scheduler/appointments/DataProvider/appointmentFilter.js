@@ -8,7 +8,7 @@ import { extend } from '../../../../core/utils/extend';
 import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
-import { getInstanceFactory } from '../../instanceFactory';
+import { getResourceManager } from '../../resources/resourceManager';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
@@ -162,7 +162,7 @@ export class AppointmentFilterBaseStrategy {
     // TODO - Use DI to get appropriate services
     get workspace() { return this.scheduler.getWorkSpace(); }
     get viewDataProvider() { return this.workspace.viewDataProvider; }
-    get resourceManager() { return getInstanceFactory().resourceManager; }
+    get resourceManager() { return getResourceManager(); }
     get timeZoneCalculator() { return this.scheduler.timeZoneCalculator; }
 
     get viewStartDayHour() { return this.scheduler._getCurrentViewOption('startDayHour'); }

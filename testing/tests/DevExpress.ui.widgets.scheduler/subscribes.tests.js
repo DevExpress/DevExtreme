@@ -5,7 +5,8 @@ import {
     AppointmentSettingsGeneratorBaseStrategy,
     AppointmentSettingsGeneratorVirtualStrategy
 } from 'ui/scheduler/appointmentSettingsGenerator';
-import { getAppointmentDataProvider, getResourceManager } from 'ui/scheduler/instanceFactory';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 
 import $ from 'jquery';
 import fx from 'animation/fx';

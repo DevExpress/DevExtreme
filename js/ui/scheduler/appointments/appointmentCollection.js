@@ -21,7 +21,8 @@ import timeZoneUtils from '../utils.timeZone.js';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS } from '../classes';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
-import { getAppointmentDataProvider, getInstanceFactory } from '../instanceFactory';
+import { getAppointmentDataProvider } from '../appointments/DataProvider/appointmentDataProvider';
+import { getResourceManager } from '../resources/resourceManager';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -509,8 +510,7 @@ class SchedulerAppointments extends CollectionWidget {
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
         if(settings.virtual) {
-            const { resourceManager } = getInstanceFactory();
-            const deferredColor = resourceManager.getAppointmentColor({
+            const deferredColor = getResourceManager().getAppointmentColor({
                 itemData: rawAppointment,
                 groupIndex: settings.groupIndex,
                 groups: this.option('groups'),
@@ -537,7 +537,7 @@ class SchedulerAppointments extends CollectionWidget {
             };
 
             if(this.isAgendaView) {
-                config.createPlainResourceListAsync = rawAppointment => getInstanceFactory().resourceManager._createPlainResourcesByAppointmentAsync(rawAppointment);
+                config.createPlainResourceListAsync = rawAppointment => getResourceManager()._createPlainResourcesByAppointmentAsync(rawAppointment);
             }
             this._createComponent(
                 element,
@@ -548,8 +548,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyResourceDataAttr($appointment) {
-        const { resourceManager } = getInstanceFactory();
-        const resources = resourceManager.getResourcesFromItem(this._getItemData($appointment));
+        const resources = getResourceManager().getResourcesFromItem(this._getItemData($appointment));
         if(resources) {
             each(resources, function(name, values) {
                 const attr = 'data-' + normalizeKey(name.toLowerCase()) + '-';

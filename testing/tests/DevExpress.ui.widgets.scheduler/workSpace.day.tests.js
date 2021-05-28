@@ -7,7 +7,7 @@ import dateLocalization from 'localization/date';
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
-import { getInstanceFactory } from 'ui/scheduler/instanceFactory.js';
+import { createInstances } from 'ui/scheduler/instanceFactory.js';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -30,7 +30,7 @@ module('Work Space Day', {
                 delete this.instance;
             }
 
-            getInstanceFactory().create({
+            createInstances({
                 scheduler: {
                     isVirtualScrolling: () => false,
                     getAppointmentDurationInMinutes: () => 60
