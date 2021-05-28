@@ -16746,17 +16746,6 @@ declare module DevExpress.ui {
      */
     descriptionExpr?: string;
     /**
-     * [descr:dxSchedulerOptions.dropDownAppointmentTemplate]
-     * @deprecated [depNote:dxSchedulerOptions.dropDownAppointmentTemplate]
-     */
-    dropDownAppointmentTemplate?:
-      | DevExpress.core.template
-      | ((
-          itemData: any,
-          itemIndex: number,
-          contentElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
      * [descr:dxSchedulerOptions.editing]
      */
     editing?:
@@ -16786,11 +16775,6 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.editing.allowUpdating]
            */
           allowUpdating?: boolean;
-          /**
-           * [descr:dxSchedulerOptions.editing.allowEditingTimeZones]
-           * @deprecated [depNote:dxSchedulerOptions.editing.allowEditingTimeZones]
-           */
-          allowEditingTimeZones?: boolean;
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
@@ -17109,17 +17093,6 @@ declare module DevExpress.ui {
                 itemData: any,
                 itemIndex: number,
                 itemElement: DevExpress.core.DxElement
-              ) => string | DevExpress.core.UserDefinedElement);
-          /**
-           * [descr:dxSchedulerOptions.views.dropDownAppointmentTemplate]
-           * @deprecated [depNote:dxSchedulerOptions.views.dropDownAppointmentTemplate]
-           */
-          dropDownAppointmentTemplate?:
-            | DevExpress.core.template
-            | ((
-                itemData: any,
-                itemIndex: number,
-                contentElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);
           /**
            * [descr:dxSchedulerOptions.views.endDayHour]
