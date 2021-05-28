@@ -1,10 +1,12 @@
 import {
   Component,
+  // Effect,
   InternalState,
   JSXComponent,
   Method,
 } from '@devextreme-generator/declarations';
 
+// import { DisposeEffectReturn } from '../../utils/effect_return';
 import dxScheduler from '../../../ui/scheduler';
 import { SchedulerProps } from './props';
 
@@ -105,4 +107,9 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   updateAppointment(target: any, appointment: any): void {
     this.instance.updateAppointment(target, appointment);
   }
+
+  // @Effect({ run: 'once' })
+  // dispose(): DisposeEffectReturn {
+  //   return () => { this.instance.dispose(); };
+  // }
 }
