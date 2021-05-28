@@ -950,6 +950,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('dimensions should be updated on browser zoom (T998665)', function(assert) {
+        if(browser.msie) {
+            assert.ok(true, 'It is not possible to modify devicePixelRatio in IE 11');
+            return;
+        }
         const window = getWindow();
         const originalDevicePixelRatio = window.devicePixelRatio;
 
