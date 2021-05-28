@@ -194,8 +194,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             currentDate: currentDate,
             currentView: 'month',
             views: ['month'],
-            appointmentTooltipTemplate(itemData) {
-                assert.ok(dataSource.indexOf(itemData) > -1, 'appointment data contains in the data source');
+            appointmentTooltipTemplate({ appointmentData }) {
+                assert.ok(dataSource.indexOf(appointmentData) > -1, 'appointment data contains in the data source');
             }
         });
 
@@ -613,9 +613,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             textExpr: 'Text',
             height: 490,
             maxAppointmentsPerCell: 'auto',
-            appointmentTooltipTemplate(data) {
-                return `<div class='custom-title'>${data.Text}</div>`;
-            }
+            appointmentTooltipTemplate: ({ appointmentData }) => `<div class='custom-title'>${appointmentData.Text}</div>`
         });
 
         scheduler.appointments.compact.click();

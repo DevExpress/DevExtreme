@@ -362,6 +362,6 @@ QUnit.test('appointmentTooltipTemplate equal to custom template', function(asser
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
     stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
 
-    assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['dropDownAppointment'] instanceof FunctionTemplate);
+    assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['appointmentTooltip'] instanceof FunctionTemplate);
     assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
 });
