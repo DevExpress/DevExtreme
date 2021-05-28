@@ -869,38 +869,23 @@ module('CellTemplate tests', moduleConfig, () => {
             {
                 view: 'day',
                 expectedDates: doubledDayAllDayCells,
-                groupOrientation: 'vertical',
-            }, {
-                view: 'day',
-                expectedDates: doubledDayAllDayCells,
-                groupOrientation: 'horizontal',
-            }, {
-                view: 'week',
-                expectedDates: doubledWeekAllDayCells,
-                groupOrientation: 'vertical',
             }, {
                 view: 'week',
                 expectedDates: horizontalDoubledWeekAllDayCells,
-                groupOrientation: 'horizontal',
-            }, {
-                view: 'workWeek',
-                expectedDates: doubledWorkWeekAllDayCells,
-                groupOrientation: 'vertical',
             }, {
                 view: 'workWeek',
                 expectedDates: horizontalDoubledWorkWeekAllDayCells,
-                groupOrientation: 'horizontal',
             },
-        ].forEach(({ view, expectedDates, groupOrientation }) => {
+        ].forEach(({ view, expectedDates }) => {
             test(`allDay cells should have correct options in ${view} view`
-                + ` with ${groupOrientation} grouping by date`, function(assert) {
+                + ' with grouping by date', function(assert) {
                 const actualDates = [];
 
                 createWrapper({
                     views: [
                         {
                             type: view,
-                            groupOrientation,
+                            groupOrientation: 'horizontal',
                             groupByDate: true,
                         }
                     ],
