@@ -12,6 +12,7 @@ import {
   Mutable,
 } from '@devextreme-generator/declarations';
 import type DomComponent from '../../../core/dom_component';
+import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-line import/named
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { EventCallback } from './event_callback.d';
 import { renderTemplate } from '../../utils/render_template';
@@ -30,15 +31,11 @@ export const viewFunction = ({
   />
 );
 
-interface WidgetInstanceType { option: (properties: Record<string, unknown>) => void }
-
 @ComponentBindings()
 export class DomComponentWrapperProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
-  @OneWay() componentType!: typeof DomComponent & {
-    getInstance: (widgetRef: HTMLDivElement) => WidgetInstanceType;
-  };
+  @OneWay() componentType!: ComponentClass<Record<string, any>>;
 
   @OneWay() componentProps!: {
     className?: string;
@@ -57,6 +54,9 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
 
   @Mutable()
   instance!: DomComponent | null;
+
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
 
   @Method()
   getInstance(): DomComponent | null {
@@ -88,9 +88,6 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   updateWidget(): void {
     this.getInstance()?.option(this.properties);
   }
-
-  @Consumer(ConfigContext)
-  config?: ConfigContextValue;
 
   get properties(): Record<string, unknown> {
     const {

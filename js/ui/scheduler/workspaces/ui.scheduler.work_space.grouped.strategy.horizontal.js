@@ -1,10 +1,14 @@
 
 import { getBoundingRect } from '../../../core/utils/position';
-import GroupedStrategy from './ui.scheduler.work_space.grouped.strategy';
+import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 
 const HORIZONTAL_GROUPED_ATTR = 'dx-group-row-count';
 
-class HorizontalGroupedStrategy extends GroupedStrategy {
+class HorizontalGroupedStrategy {
+    constructor(workSpace) {
+        this._workSpace = workSpace;
+    }
+
     prepareCellIndexes(cellCoordinates, groupIndex, inAllDay) {
         const groupByDay = this._workSpace.isGroupedByDate();
 
@@ -64,18 +68,18 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
 
     _addLastGroupCellClass(cellClass, index, applyUnconditionally) {
         if(applyUnconditionally) {
-            return `${cellClass} ${this.getLastGroupCellClass()}`;
+            return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
         }
 
         const groupByDate = this._workSpace.isGroupedByDate();
 
         if(groupByDate) {
             if(index % this._workSpace._getGroupCount() === 0) {
-                return `${cellClass} ${this.getLastGroupCellClass()}`;
+                return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
             }
         } else {
             if(index % this._workSpace._getCellCount() === 0) {
-                return `${cellClass} ${this.getLastGroupCellClass()}`;
+                return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
             }
         }
 
@@ -84,26 +88,22 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
 
     _addFirstGroupCellClass(cellClass, index, applyUnconditionally) {
         if(applyUnconditionally) {
-            return `${cellClass} ${this.getFirstGroupCellClass()}`;
+            return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
         }
 
         const groupByDate = this._workSpace.isGroupedByDate();
 
         if(groupByDate) {
             if((index - 1) % this._workSpace._getGroupCount() === 0) {
-                return `${cellClass} ${this.getFirstGroupCellClass()}`;
+                return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
             }
         } else {
             if((index - 1) % this._workSpace._getCellCount() === 0) {
-                return `${cellClass} ${this.getFirstGroupCellClass()}`;
+                return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
             }
         }
 
         return cellClass;
-    }
-
-    getHorizontalMax(groupIndex) {
-        return this._workSpace.getMaxAllowedPosition(groupIndex);
     }
 
     getVerticalMax(groupIndex) {
@@ -166,21 +166,7 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return this._createGroupBoundOffset(startCell, endCell, cellWidth);
     }
 
-    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        if(this._workSpace.isGroupedByDate()) {
-            return this._getGroupedByDateBoundOffset($cells, cellWidth);
-        }
-
-        const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
-        const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
-        const startCellIndex = groupIndex * cellCount;
-
-        const startCell = $cells.eq(startCellIndex);
-        const endCell = $cells.eq(startCellIndex + cellCount - 1);
-        return this._createGroupBoundOffset(startCell, endCell, cellWidth);
-    }
-
-    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap) {
+    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap) {
         if(this._workSpace.isGroupedByDate()) {
             return this._getGroupedByDateBoundOffset($cells, cellWidth);
         }
@@ -256,11 +242,12 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
     }
 
-    getGroupIndexByCell($cell) {
-        const rowIndex = $cell.parent().index();
-        const cellIndex = $cell.index();
+    _getOffsetByAllDayPanel() {
+        return 0;
+    }
 
-        return this.getGroupIndex(rowIndex, cellIndex);
+    _getGroupTop() {
+        return 0;
     }
 }
 

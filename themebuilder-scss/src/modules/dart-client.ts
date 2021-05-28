@@ -1,5 +1,5 @@
 import net from 'net';
-import Logger from './logger';
+import { log } from './logger';
 
 export default class DartClient {
   serverPort = 22000;
@@ -9,24 +9,6 @@ export default class DartClient {
   private readonly client = new net.Socket();
 
   private readonly eventListeners: SocketEventListener[] = [];
-
-  private addClientEventListener(name: string, handler: (e?: Error) => void): void {
-    this.eventListeners.push({ name, handler });
-    this.client.on(name, handler);
-  }
-
-  private setClientErrorHandlers(handler: (e?: Error) => void): void {
-    this.addClientEventListener('timeout', handler);
-    this.addClientEventListener('error', handler);
-  }
-
-  private removeClientEventListeners(): void {
-    this.eventListeners.forEach((listener) => {
-      this.client.off(listener.name, listener.handler);
-    });
-
-    this.eventListeners.length = 0;
-  }
 
   dispose(): Promise<void> {
     if (this.client.destroyed) return Promise.resolve();
@@ -68,7 +50,7 @@ export default class DartClient {
       });
 
       this.addClientEventListener('end', () => {
-        Logger.log('DartClient received', data);
+        log('DartClient received', data);
         let parsedData;
         try {
           parsedData = JSON.parse(data);
@@ -79,7 +61,7 @@ export default class DartClient {
       });
 
       const errorHandler = (e?: Error): void => {
-        Logger.log('Dart client error on write', e);
+        log('Dart client error on write', e);
         this.client.end();
         this.dispose();
         resolve({
@@ -93,9 +75,27 @@ export default class DartClient {
 
       this.setClientErrorHandlers(errorHandler);
 
-      Logger.log('DartClient send', message);
+      log('DartClient send', message);
       this.client.write(JSON.stringify(message));
       this.client.end();
     });
+  }
+
+  private addClientEventListener(name: string, handler: (e?: Error) => void): void {
+    this.eventListeners.push({ name, handler });
+    this.client.on(name, handler);
+  }
+
+  private setClientErrorHandlers(handler: (e?: Error) => void): void {
+    this.addClientEventListener('timeout', handler);
+    this.addClientEventListener('error', handler);
+  }
+
+  private removeClientEventListeners(): void {
+    this.eventListeners.forEach((listener) => {
+      this.client.off(listener.name, listener.handler);
+    });
+
+    this.eventListeners.length = 0;
   }
 }

@@ -161,16 +161,9 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     return this.instance?.columnCount();
   }
 
-  // TODO remove this after fix https://trello.com/c/I8ManehQ/2674-renovation-generated-jquery-methods-pass-all-aguments-even-it-is-optional
-  callMethod(funcName: string, args: unknown): void {
-    const normalizedArgs = [...args as unknown[]].filter((arg) => arg !== undefined);
-
-    return this.instance?.[funcName](...normalizedArgs);
-  }
-
   @Method()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  columnOption(id: number | string, optionName: any, optionValue?: any): void {
+  columnOption(_id: number | string, _optionName: any, _optionValue?: any): void {
     // eslint-disable-next-line prefer-rest-params
     return this.callMethod('columnOption', arguments);
   }
@@ -497,6 +490,24 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     return () => { this.instance.dispose(); };
   }
 
+  @Effect({ run: 'once' })
+  setupInstance(): void {
+    const element = this.widgetElementRef?.current as HTMLElement;
+    // TODO Vitik: Not only optionChanged should be rewrited.
+    // All other events should be re-raised by renovated grid.
+    const { onOptionChanged, ...restProps } = {
+      ...this.props,
+      onContentReady: (this.restAttributes as unknown as Record<string, unknown>).onContentReady,
+    } as unknown as Record<string, unknown>;
+    const instance: GridInstance = new DataGridComponent(
+      element,
+      normalizeProps(restProps),
+    ) as unknown as GridInstance;
+    instance.getController('resizing').updateSize(element);
+    instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+    this.instance = instance;
+  }
+
   instanceOptionChangedHandler(e: OptionChangedEvent): void {
     try {
       this.isTwoWayPropUpdating = true;
@@ -504,6 +515,13 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     } finally {
       this.isTwoWayPropUpdating = false;
     }
+  }
+
+  // TODO remove this after fix https://trello.com/c/I8ManehQ/2674-renovation-generated-jquery-methods-pass-all-aguments-even-it-is-optional
+  callMethod(funcName: string, args: unknown): void {
+    const normalizedArgs = [...args as unknown[]].filter((arg) => arg !== undefined);
+
+    return this.instance?.[funcName](...normalizedArgs);
   }
 
   updateTwoWayValue(e: OptionChangedEvent): void {
@@ -557,23 +575,5 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   onDimensionChanged(): void {
     this.instance?.updateDimensions(true);
-  }
-
-  @Effect({ run: 'once' })
-  setupInstance(): void {
-    const element = this.widgetElementRef?.current as HTMLElement;
-    // TODO Vitik: Not only optionChanged should be rewrited.
-    // All other events should be re-raised by renovated grid.
-    const { onOptionChanged, ...restProps } = {
-      ...this.props,
-      onContentReady: (this.restAttributes as unknown as Record<string, unknown>).onContentReady,
-    } as unknown as Record<string, unknown>;
-    const instance: GridInstance = new DataGridComponent(
-      element,
-      normalizeProps(restProps),
-    ) as unknown as GridInstance;
-    instance.getController('resizing').updateSize(element);
-    instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
-    this.instance = instance;
   }
 }

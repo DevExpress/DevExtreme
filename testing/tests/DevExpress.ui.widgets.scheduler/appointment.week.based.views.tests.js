@@ -1145,4 +1145,119 @@ module('Integration: Appointment Day, Week views', {
             });
         });
     });
+
+    test('Scheduler should render correct amount of appointments when startDateExpr is provided', function(assert) {
+        const scheduler = createWrapper({
+            currentView: 'week',
+            currentDate: new Date(2015, 2, 2, 0),
+            firstDayOfWeek: 1,
+            startDateExpr: 'Start',
+            dataSource: [{
+                Start: new Date(2015, 2, 2, 0)
+            }],
+            width: 1000,
+            height: 1000,
+        });
+
+        const appointments = scheduler.appointmentList;
+        assert.equal(appointments.length, 1, 'Correct number of appointments');
+    });
+
+    test('Appointments should be rendered correctly when groupByDate is true in Day view', function(assert) {
+        const priorityData = [
+            {
+                text: 'Low Priority',
+                id: 1,
+                color: '#1e90ff'
+            }, {
+                text: 'High Priority',
+                id: 2,
+                color: '#ff9747'
+            }
+        ];
+        const scheduler = createWrapper({
+            currentView: 'day',
+            views: [{
+                type: 'day',
+                name: 'day',
+                intervalCount: 2
+            }],
+            currentDate: new Date(2018, 4, 21, 9, 0),
+            groupByDate: true,
+            startDayHour: 9,
+            groups: ['priorityId'],
+            resources: [
+                {
+                    fieldExpr: 'priorityId',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority'
+                }
+            ],
+            dataSource: [{
+                startDate: new Date(2018, 4, 21, 9, 0),
+                priorityId: 2,
+            }, {
+                startDate: new Date(2018, 4, 22, 9, 0),
+                priorityId: 1,
+            }],
+        });
+
+        const appointments = scheduler.appointmentList;
+
+        assert.equal(appointments.length, 2, 'Correct number of appointments');
+
+        assert.equal(appointments[0].position.top, 0, 'Correct top coordinate');
+        assert.roughEqual(appointments[0].position.left, 324, 2, 'Correct left coordinate');
+
+        assert.equal(appointments[1].position.top, 0, 'Correct top coordinate');
+        assert.roughEqual(appointments[1].position.left, 548, 2, 'Correct left coordinate');
+    });
+
+    test('Appointments should be rendered correctly when groupByDate is true in Week view', function(assert) {
+        const priorityData = [
+            {
+                text: 'Low Priority',
+                id: 1,
+                color: '#1e90ff'
+            }, {
+                text: 'High Priority',
+                id: 2,
+                color: '#ff9747'
+            }
+        ];
+        const scheduler = createWrapper({
+            currentView: 'week',
+            views: ['week'],
+            currentDate: new Date(2018, 4, 21, 9, 0),
+            groupByDate: true,
+            startDayHour: 9,
+            groups: ['priorityId'],
+            resources: [
+                {
+                    fieldExpr: 'priorityId',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority'
+                }
+            ],
+            dataSource: [{
+                startDate: new Date(2018, 4, 22, 10, 0),
+                priorityId: 2
+            }, {
+                startDate: new Date(2018, 4, 25, 11, 0),
+                priorityId: 1
+            }],
+        });
+
+        const appointments = scheduler.appointmentList;
+
+        assert.equal(appointments.length, 2, 'Correct number of appointments');
+
+        assert.equal(appointments[0].position.top, 100, 'Correct top coordinate');
+        assert.roughEqual(appointments[0].position.left, 420, 2, 'Correct left coordinate');
+
+        assert.equal(appointments[1].position.top, 200, 'Correct top coordinate');
+        assert.roughEqual(appointments[1].position.left, 740, 2, 'Correct left coordinate');
+    });
 });

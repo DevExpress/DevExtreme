@@ -32,18 +32,24 @@ gulp.task('ts-vendor', function() {
         .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR));
 });
 
-gulp.task('ts-bundle', gulp.series(
+function bundleTS() {
+    return gulp.src(TS_BUNDLE_SOURCES)
+        .pipe(concat('dx.all.d.ts'))
+        .pipe(headerPipes.bangLicense());
+}
 
+gulp.task('ts-bundle', gulp.series(
     function writeTsBundle() {
-        return gulp.src(TS_BUNDLE_SOURCES)
-            .pipe(concat('dx.all.d.ts'))
-            .pipe(headerPipes.bangLicense())
-            .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR)) // will be copied to the npm's /dist folder by another task
-            .pipe(replace('/*!', '/**'))
-            .pipe(replace(/\/\*\s*#StartGlobalDeclaration\s*\*\//g, 'declare global {'))
-            .pipe(replace(/\/\*\s*#EndGlobalDeclaration\s*\*\//g, '}'))
-            .pipe(replace(/\/\*\s*#StartJQueryAugmentation\s*\*\/[\s\S]*\/\*\s*#EndJQueryAugmentation\s*\*\//g, ''))
+        return bundleTS()
+            .pipe(replace(/^declare global\s*{([\s\S]*?)^}/gm, '$1'))
+            .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR)); // will be copied to the npm's /dist folder by another task
+    },
+
+    function writeTsBundleForNPM() {
+        return bundleTS()
             .pipe(footer('\nexport default DevExpress;'))
+            .pipe(replace('/*!', '/**'))
+            .pipe(replace(/(interface JQuery\b[\s\S]*?{)[\s\S]+?(})/gm, '$1$2'))
             .pipe(gulp.dest(packageBundlesPath));
     },
 
@@ -54,7 +60,7 @@ gulp.task('ts-bundle', gulp.series(
     }
 ));
 
-gulp.task('ts-jquery-check', gulp.series('ts-bundle', function checkJQueryAugmentations() {
+gulp.task('ts-jquery-check', function checkJQueryAugmentations() {
     let content = `/// <reference path='${TS_BUNDLE_FILE}' />\n`;
     content += 'import * as $ from \'jquery\';';
 
@@ -78,10 +84,10 @@ gulp.task('ts-jquery-check', gulp.series('ts-bundle', function checkJQueryAugmen
 
     return file('artifacts/globals.ts', content, { src: true })
         .pipe(ts(COMMON_TS_COMPILER_OPTIONS, ts.reporter.fullReporter()));
-}));
+});
 
 gulp.task('ts-compilation-check', function() {
-    return gulp.src(TS_BUNDLE_FILE)
+    return gulp.src(path.join(OUTPUT_ARTIFACTS_DIR, 'dx.all.d.ts'))
         .pipe(ts(COMMON_TS_COMPILER_OPTIONS, ts.reporter.fullReporter()));
 });
 
@@ -144,6 +150,13 @@ gulp.task('ts-modules-check', gulp.series('ts-modules', function checkModules() 
             })
         ), ts.reporter.fullReporter());
 }));
+
+gulp.task('validate-ts', gulp.series(
+    'ts-bundle',
+    'ts-compilation-check',
+    'ts-jquery-check',
+    'ts-modules-check'
+));
 
 gulp.task('ts', gulp.series(
     'ts-vendor',

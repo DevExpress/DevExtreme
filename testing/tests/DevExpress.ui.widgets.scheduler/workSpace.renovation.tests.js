@@ -11,6 +11,7 @@ import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
+import { createInstances } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
@@ -37,6 +38,13 @@ module('Renovated Render', {
     },
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
+            createInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false,
+                    getAppointmentDurationInMinutes: () => 60
+                }
+            });
+
             this.instance = $('#scheduler-work-space')[workSpace](extend({
                 renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
@@ -939,7 +947,7 @@ module('Renovated Render', {
         assert.deepEqual(data, {
             allDay: false,
             startDate: new Date(2020, 6, 29, 0, 30),
-            endDate: undefined,
+            endDate: new Date(2020, 6, 29, 1, 30),
             groups: undefined,
         }, 'Cell Data is correct');
     });

@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -25,6 +21,10 @@ import {
 import {
     ValueChangedInfo
 } from './editor/editor';
+
+import {
+    Properties as PopupProperties
+} from './popup';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxAutocomplete>;
@@ -97,31 +97,33 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
     /**
      * @docid
      * @default 10
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxItemCount?: number;
     /**
      * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minSearchLength?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
+
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
+    dropDownOptions?: PopupProperties;
 }
 /**
  * @docid
@@ -129,13 +131,10 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @inherits dxDropDownList
  * @module ui/autocomplete
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxAutocomplete extends dxDropDownList {
-    constructor(element: UserDefinedElement, options?: dxAutocompleteOptions)
-}
+export default class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions> { }
 
 /** @public */
 export type Properties = dxAutocompleteOptions;

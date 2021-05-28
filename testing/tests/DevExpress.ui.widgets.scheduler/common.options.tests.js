@@ -6,6 +6,7 @@ import { DataSource } from 'data/data_source/data_source';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -105,7 +106,7 @@ QUnit.module('Options', {
         const repaintStub = sinon.stub(scheduler.instance, 'repaint');
 
         try {
-            const appointmentDataProvider = scheduler.instance.getAppointmentDataProvider();
+            const appointmentDataProvider = getAppointmentDataProvider();
 
             scheduler.instance.option({
                 'startDateExpr': '_startDate',
@@ -892,7 +893,7 @@ QUnit.module('Options', {
         }));
         assert.equal(counter, 1, 'Data source was reloaded after dataSource option changing');
         scheduler.instance.repaint();
-        assert.equal(counter, 1, 'Data source wasn\'t reloaded after repaint');
+        assert.equal(counter, 1, 'Data source was not reloaded after repaint');
     });
 
     QUnit.test('Multiple reloading should be avoided after some currentView options changing (T656320)', function(assert) {

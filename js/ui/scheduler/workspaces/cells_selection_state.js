@@ -1,6 +1,6 @@
 import dateUtils from '../../../core/utils/date';
 
-export default class VirtualSelectionState {
+export default class CellsSelectionState {
     constructor(viewDataProvider) {
         this._viewDataProvider = viewDataProvider;
 

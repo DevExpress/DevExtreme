@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
 const SCHEDULER_DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
@@ -17,24 +16,11 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
 
+import { initFactoryInstance } from '../../helpers/scheduler/workspaceTestHelper.js';
+
 QUnit.testStart(function() {
     $('#qunit-fixture').html('</div><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space">');
 });
-
-const stubInvokeMethod = function(instance, options) {
-    options = options || {};
-    sinon.stub(instance, 'invoke', function() {
-        const subscribe = arguments[0];
-        if(subscribe === 'createResourcesTree') {
-            return new ResourceManager().createResourcesTree(arguments[1]);
-        }
-        if(subscribe === 'getResourceTreeLeaves') {
-            const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
-        }
-    });
-};
-
 
 QUnit.module('DateTime indicator on Day View', {
     beforeEach: function() {
@@ -45,13 +31,14 @@ QUnit.module('DateTime indicator on Day View', {
     }
 }, () => {
     const createInstance = (options) => {
+        initFactoryInstance(options.resources);
+
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             ...options,
         }).dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };
@@ -449,6 +436,8 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
     }
 }, () => {
     const createInstance = (options) => {
+        initFactoryInstance(options.resources);
+
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
             showCurrentTimeIndicator: true,
             groupOrientation: 'vertical',
@@ -457,7 +446,6 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
             endDayHour: 14,
             ...options,
         }).dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };
@@ -598,13 +586,14 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
 
 QUnit.module('DateTime indicator on Week View', () => {
     const createInstance = (options) => {
+        initFactoryInstance(options.resources);
+
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             ...options,
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };
@@ -828,13 +817,14 @@ QUnit.module('DateTime indicator on Week View', () => {
 
 QUnit.module('DateTime indicator on grouped Week View', () => {
     const createInstance = (options) => {
+        initFactoryInstance(options.resources);
+
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             ...options,
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };
@@ -1027,6 +1017,8 @@ QUnit.module('DateTime indicator on TimelineDay View', () => {
 
 QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () => {
     const createInstance = (options) => {
+        initFactoryInstance(options.resources);
+
         const instance = $('#scheduler-work-space').dxSchedulerTimelineDay({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
@@ -1037,7 +1029,6 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
             height: 307,
             ...options,
         }).dxSchedulerTimelineDay('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };

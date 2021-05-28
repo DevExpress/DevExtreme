@@ -34,6 +34,11 @@ export default class DependencyCollector {
     return [...new Set(fullArray)];
   }
 
+  static isArraysEqual(array1: string[], array2: string[]): boolean {
+    return array1.length === array2.length
+    && array1.every((value, index) => value === array2[index]);
+  }
+
   treeProcessor(node: ScriptsDependencyTree): string[] {
     let result: string[] = [];
     const { widget, dependencies } = node;
@@ -92,16 +97,11 @@ export default class DependencyCollector {
     return cacheItem;
   }
 
-  static isArraysEqual(array1: string[], array2: string[]): boolean {
-    return array1.length === array2.length
-    && array1.every((value, index) => value === array2[index]);
-  }
-
   validate(): void {
     this.themes.forEach((theme) => {
       const indexFileName = `../scss/widgets/${theme}/_index.scss`;
       const indexContent = readFileSync(indexFileName, 'utf8');
-      const indexPublicWidgetsList = (new WidgetsHandler([], '', {}))
+      const indexPublicWidgetsList = new WidgetsHandler([], '', {})
         .getIndexWidgetItems(indexContent)
         .map((item: WidgetItem): string => item.widgetName.toLowerCase())
         .sort();

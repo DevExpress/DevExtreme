@@ -3,6 +3,7 @@ import { isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone.js';
+import { getResourceManager } from './resources/resourceManager';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -35,7 +36,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     create(rawAppointment) {
         const { scheduler } = this;
         const appointment = scheduler.createAppointmentAdapter(rawAppointment);
-        const itemResources = scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
+
+        const itemResources = getResourceManager().getResourcesFromItem(rawAppointment);
+
         const isAllDay = this._isAllDayAppointment(rawAppointment);
 
         let appointmentList = this._createAppointments(appointment, itemResources);
@@ -328,10 +331,15 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _cropAppointmentsByStartDayHour(appointments, rawAppointment, isAllDay) {
-        return appointments.map(appointment => {
-            const startDate = new Date(appointment.startDate);
+        return appointments.filter(appointment => {
             const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
+
+            if(!firstViewDate) {
+                return false;
+            }
+
             const startDayHour = this._getViewStartDayHour(firstViewDate);
+            const startDate = new Date(appointment.startDate);
 
             appointment.startDate = this._getAppointmentResultDate({
                 appointment,
@@ -341,12 +349,12 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 firstViewDate
             });
 
-            return appointment;
+            return !isAllDay
+                ? appointment.endDate > appointment.startDate
+                : true;
         });
     }
-    _getAppointmentFirstViewDate() {
-        return this.scheduler.getStartViewDate();
-    }
+
     _getViewStartDayHour() {
         return this.scheduler._getCurrentViewOption('startDayHour');
     }
@@ -408,6 +416,19 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         } = options;
 
         return this.workspace.getCoordinatesByDateInGroup(appointment.startDate, resources, isAllDay);
+    }
+
+    _getAppointmentFirstViewDate(appointment, rawAppointment) {
+        const { viewDataProvider } = this.scheduler.getWorkSpace();
+        const groupIndex = appointment.source.groupIndex || 0;
+        const {
+            startDate,
+            endDate
+        } = appointment;
+
+        const isAllDay = this._isAllDayAppointment(rawAppointment);
+
+        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay);
     }
 }
 
@@ -476,29 +497,6 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         return result;
     }
 
-    _cropAppointmentsByStartDayHour(appointments, rawAppointment, isAllDay) {
-        return appointments.filter(appointment => {
-            const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
-
-            if(!firstViewDate) return false;
-
-            const startDayHour = this._getViewStartDayHour(firstViewDate);
-            const startDate = new Date(appointment.startDate);
-
-            appointment.startDate = this._getAppointmentResultDate({
-                appointment,
-                rawAppointment,
-                startDate,
-                startDayHour,
-                firstViewDate
-            });
-
-            return !isAllDay
-                ? appointment.endDate > appointment.startDate
-                : true;
-        });
-    }
-
     _createRecurrenceAppointments(appointment, resources) {
         const { duration } = appointment;
         const result = [];
@@ -531,19 +529,6 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
 
     _getViewStartDayHour(firstViewDate) {
         return firstViewDate.getHours();
-    }
-
-    _getAppointmentFirstViewDate(appointment, rawAppointment) {
-        const { viewDataProvider } = this.scheduler.getWorkSpace();
-        const { groupIndex } = appointment.source;
-        const {
-            startDate,
-            endDate
-        } = appointment;
-
-        const isAllDay = this._isAllDayAppointment(rawAppointment);
-
-        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay);
     }
 
     _updateGroupIndices(appointments, itemResources) {

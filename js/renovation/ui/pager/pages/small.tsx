@@ -41,7 +41,7 @@ export const viewFunction = ({
     <Page
       className={PAGER_PAGES_COUNT_CLASS}
       selected={false}
-      index={(pageCount as number) - 1}
+      index={pageCount - 1}
       onClick={selectLastPageIndex}
     />
   </div>
@@ -58,7 +58,7 @@ export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   }
 
   get width(): number {
-    const pageCount = this.props.pageCount as number;
+    const { pageCount } = this.props;
     return calculateValuesFittedWidth(this.minWidth, [pageCount]);
   }
 

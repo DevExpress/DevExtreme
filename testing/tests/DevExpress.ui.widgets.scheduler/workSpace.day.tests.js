@@ -7,6 +7,7 @@ import dateLocalization from 'localization/date';
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
+import { createInstances } from 'ui/scheduler/instanceFactory.js';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -28,6 +29,13 @@ module('Work Space Day', {
                 this.instance.invoke.restore();
                 delete this.instance;
             }
+
+            createInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false,
+                    getAppointmentDurationInMinutes: () => 60
+                }
+            });
 
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay('instance');
             this.instance.initDragBehavior();
@@ -120,21 +128,6 @@ module('Work Space Day', {
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(12).position().left, 'Cell coordinates are right');
     });
 
-    [true, false].forEach((renovateRender) => {
-        test(`Work space should return coordinates of first cell for dates before first view date when renovateRender is ${renovateRender}`, function(assert) {
-            this.instance.option({
-                currentDate: new Date(2015, 2, 4),
-                renovateRender,
-            });
-
-            const $element = this.instance.$element();
-            const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 3, 0, 0));
-
-            assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(0).position().top, 'Cell coordinates are right');
-            assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(0).position().left, 'Cell coordinates are right');
-        });
-    });
-
     test('getDataByDroppableCell should work right with the single group', function(assert) {
         this.instance.option('currentDate', new Date(2015, 1, 18));
         this.instance.option('groups', [
@@ -152,7 +145,7 @@ module('Work Space Day', {
         assert.deepEqual(data, {
             allDay: false,
             startDate: new Date(2015, 1, 18, 1),
-            endDate: undefined,
+            endDate: new Date(2015, 1, 18, 2),
             groups: {
                 res: 2
             }
@@ -187,7 +180,7 @@ module('Work Space Day', {
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             startDate: new Date(2015, 1, 18, 0, 30),
-            endDate: undefined,
+            endDate: new Date(2015, 1, 18, 1, 30),
             allDay: false,
             groups: {
                 one: 2,

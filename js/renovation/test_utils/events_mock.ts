@@ -69,7 +69,7 @@ export const emit = (event, e = defaultEvent, element = null): void => {
 
 let keyboardSubscriberId = 0;
 
-keyboard.on = (el, focusTarget, handler): string => {
+keyboard.on = (_el, _focusTarget, handler): string => {
   keyboardSubscriberId += 1;
   keyboardHandlers[keyboardSubscriberId] = keyboardHandlers[keyboardSubscriberId] || [];
   keyboardHandlers[keyboardSubscriberId].push(handler);
@@ -77,7 +77,7 @@ keyboard.on = (el, focusTarget, handler): string => {
   return keyboardSubscriberId.toString();
 };
 
-keyboard.off = (id): boolean => delete keyboardHandlers[id];
+keyboard.off = (id) => { keyboardHandlers[id] = []; };
 
 jest.mock('../../events/core/events_engine', () => {
   const originalEventsEngine = jest.requireActual('../../events/core/events_engine').default;

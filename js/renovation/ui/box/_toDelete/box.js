@@ -27,23 +27,6 @@ const MAXSIZE_MAP = {
 const SHRINK = 1;
 
 // NEW FLEXBOX STRATEGY
-const FLEX_JUSTIFY_CONTENT_MAP = {
-    'start': 'flex-start',
-    'end': 'flex-end',
-    'center': 'center',
-    'space-between': 'space-between',
-    'space-around': 'space-around'
-};
-const FLEX_ALIGN_ITEMS_MAP = {
-    'start': 'flex-start',
-    'end': 'flex-end',
-    'center': 'center',
-    'stretch': 'stretch'
-};
-const FLEX_DIRECTION_MAP = {
-    'row': 'row',
-    'col': 'column'
-};
 
 // FALLBACK STRATEGY FOR IE
 const setFlexProp = (element, prop, value) => {
@@ -90,32 +73,7 @@ class FlexLayoutStrategy {
     }
 
     renderBox() {
-        this._$element.css({
-            display: stylePropPrefix('flexDirection') + 'flex'
-        });
-        setFlexProp(this._$element.get(0), 'flexDirection', FLEX_DIRECTION_MAP[this._option('direction')]);
-    }
 
-    renderAlign() {
-        this._$element.css({
-            justifyContent: this._normalizedAlign()
-        });
-    }
-
-    _normalizedAlign() {
-        const align = this._option('align');
-        return (align in FLEX_JUSTIFY_CONTENT_MAP) ? FLEX_JUSTIFY_CONTENT_MAP[align] : align;
-    }
-
-    renderCrossAlign() {
-        this._$element.css({
-            alignItems: this._normalizedCrossAlign()
-        });
-    }
-
-    _normalizedCrossAlign() {
-        const crossAlign = this._option('crossAlign');
-        return (crossAlign in FLEX_ALIGN_ITEMS_MAP) ? FLEX_ALIGN_ITEMS_MAP[crossAlign] : crossAlign;
     }
 
     renderItems($items) {
@@ -152,12 +110,6 @@ class FlexLayoutStrategy {
 class Box extends CollectionWidget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            direction: 'row',
-
-            align: 'start',
-
-            crossAlign: 'stretch',
-
             /**
             * @name dxBoxOptions.activeStateEnabled
             * @hidden
@@ -276,17 +228,11 @@ class Box extends CollectionWidget {
     _initMarkup() {
         this._layout.renderBox();
         super._initMarkup();
-        this._renderAlign();
         this._renderActions();
     }
 
     _renderActions() {
         this._onItemStateChanged = this._createActionByOption('onItemStateChanged');
-    }
-
-    _renderAlign() {
-        this._layout.renderAlign();
-        this._layout.renderCrossAlign();
     }
 
     _renderItems(items) {

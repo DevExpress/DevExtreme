@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -49,14 +45,12 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onComplete?: ((e: CompleteEvent) => void);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showStatus?: boolean;
@@ -66,14 +60,12 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @type_function_param1 ratio:number
      * @type_function_param2 value:number
      * @type_function_return string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     statusFormat?: string | ((ratio: number, value: number) => string);
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: number;
@@ -83,13 +75,10 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
  * @inherits dxTrackBar
  * @module ui/progress_bar
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxProgressBar extends dxTrackBar {
-    constructor(element: UserDefinedElement, options?: dxProgressBarOptions)
-}
+export default class dxProgressBar extends dxTrackBar<dxProgressBarOptions> { }
 
 /** @public */
 export type Properties = dxProgressBarOptions;

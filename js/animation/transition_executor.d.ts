@@ -15,7 +15,6 @@ import {
  * @namespace DevExpress
  * @module animation/transition_executor
  * @export default
- * @prevFileNamespace DevExpress.animation
  * @public
  */
 export default class TransitionExecutor {
@@ -24,7 +23,6 @@ export default class TransitionExecutor {
      * @publicName enter(elements, animation)
      * @param1 elements:jQuery
      * @param2 animation:animationConfig|string
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     enter(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
@@ -33,14 +31,12 @@ export default class TransitionExecutor {
      * @publicName leave(elements, animation)
      * @param1 elements:jQuery
      * @param2 animation:animationConfig|string
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     leave(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     reset(): void;
@@ -48,14 +44,12 @@ export default class TransitionExecutor {
      * @docid
      * @publicName start()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     start(): DxPromise<void>;
     /**
      * @docid
      * @publicName stop()
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     stop(): void;
