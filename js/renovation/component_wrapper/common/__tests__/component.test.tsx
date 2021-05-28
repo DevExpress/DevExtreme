@@ -741,7 +741,7 @@ describe('templates and slots', () => {
 
   it('insert template content to templates root', () => {
     $('#component').dxTemplatedTestWidget({
-      template(data, element) {
+      template(_data, element) {
         $(element).html('<span>Template content</span>');
       },
     });

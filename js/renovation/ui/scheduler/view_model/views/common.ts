@@ -22,7 +22,7 @@ export const getFirstDayOfWeek = (
 };
 
 export const getStartViewDate = (
-  startDayHour: number,
-  firstDayOfWeek: number,
+  _startDayHour: number,
+  _firstDayOfWeek: number,
   currentDate: Date,
 ): Date => currentDate;
