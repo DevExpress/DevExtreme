@@ -195,6 +195,11 @@
 
     @at-root #{selector-append(".dx-scrollable-native", &)} {
       direction: rtl;
+    }
+  }
+
+  .dx-scrollable-content {
+    @at-root #{selector-append(".dx-scrollable-native", &)} {
       float: right;
     }
   }

@@ -622,6 +622,12 @@ $pivotgrid-expand-icon-text-offset: 0;
     }
 
     .dx-pivotgrid-area-data {
+      &.dx-scrollable-native {
+        .dx-scrollable-content {
+          float: none;
+        }
+      }
+
       tbody td {
         border-left: 0;
         border-right: $pivotgrid-border;

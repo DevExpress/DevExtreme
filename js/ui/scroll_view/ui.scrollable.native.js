@@ -58,7 +58,13 @@ const NativeStrategy = Class.inherit({
         }
     },
 
-    updateRtlPosition: noop,
+    updateRtlPosition: function(isFirstRender) {
+        if(isFirstRender && this.option('rtlEnabled')) {
+            if(this._showScrollbar && this._useSimulatedScrollbar) {
+                this._moveScrollbars();
+            }
+        }
+    },
 
     _renderScrollbars: function() {
         this._scrollbars = {};
