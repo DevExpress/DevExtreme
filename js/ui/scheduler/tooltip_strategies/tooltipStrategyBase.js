@@ -134,11 +134,7 @@ export class TooltipStrategyBase {
     }
 
     _getItemListTemplateName() {
-        return this._isEmptyDropDownAppointmentTemplate() ? 'appointmentTooltip' : 'dropDownAppointment';
-    }
-
-    _isEmptyDropDownAppointmentTemplate() {
-        return !this._extraOptions.dropDownAppointmentTemplate || this._extraOptions.dropDownAppointmentTemplate === 'dropDownAppointment';
+        return 'appointmentTooltip';
     }
 
     _onListItemClick(e) {
