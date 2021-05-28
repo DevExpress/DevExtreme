@@ -1228,6 +1228,28 @@ QUnit.module('dxPivotGrid', {
         assert.ok(!pivotGrid.$element().hasClass('dx-rtl'), 'dx-rtl class removed from PivotGrid element');
     });
 
+    [true, false].forEach((useNativeScrolling) => {
+        [true, false].forEach((rtlEnabled) => {
+            QUnit.test(`aria data with scrollable in rtl mode, scrolling: { useNative: ${useNativeScrolling}}, rtlEnabled: ${rtlEnabled}`, function(assert) {
+                const pivotGrid = createPivotGrid({
+                    scrolling: {
+                        useNative: useNativeScrolling,
+                    },
+                    rtlEnabled
+                });
+
+                const $scrollable = pivotGrid.$element().find('.dx-pivotgrid-area-data');
+
+                assert.strictEqual($scrollable.hasClass('dx-rtl'), rtlEnabled ? true : false, 'dx-rtl class');
+
+                pivotGrid.option('rtlEnabled', !rtlEnabled);
+
+                assert.strictEqual($scrollable.hasClass('dx-rtl'), rtlEnabled ? false : true, 'dx-rtl class');
+
+            });
+        });
+    });
+
     QUnit.test('onCellPrepared event', function(assert) {
         const cellPreparedArgs = { length: 0 };
 
