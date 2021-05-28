@@ -225,8 +225,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Mutable() deltaY = 0;
 
-  @Mutable() lastLocation: { top: number; left: number } = { top: 0, left: 0 };
-
   @Mutable() locationTop = 0;
 
   @InternalState() containerClientWidth = 0;
@@ -560,7 +558,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
 
     this.props.onScroll?.(this.getEventArgs());
-    this.lastLocation = this.scrollLocation();
 
     this.handlePocketState();
   }

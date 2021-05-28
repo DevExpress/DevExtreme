@@ -31,7 +31,7 @@ function run_ts {
         echo "TS is up-to-date"
     fi
 
-    npx gulp ts-compilation-check ts-jquery-check ts-modules-check
+    npm run validate-ts
 }
 
 function run_test {

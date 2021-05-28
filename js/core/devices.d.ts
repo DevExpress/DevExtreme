@@ -9,7 +9,6 @@
 export interface Device {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     android?: boolean;
@@ -17,13 +16,11 @@ export interface Device {
      * @docid
      * @type string
      * @acceptValues 'phone'|'tablet'|'desktop'
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     deviceType?: 'phone' | 'tablet' | 'desktop';
     /**
      * @docid
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     generic?: boolean;
@@ -31,19 +28,16 @@ export interface Device {
      * @docid
      * @type string
      * @acceptValues 'A'|'B'|'C'
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     grade?: 'A' | 'B' | 'C';
     /**
      * @docid
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     ios?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     phone?: boolean;
@@ -51,19 +45,16 @@ export interface Device {
      * @docid
      * @type string
      * @acceptValues 'android'|'ios'|'generic'
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     platform?: 'android' | 'ios' | 'generic';
     /**
      * @docid
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     tablet?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     version?: Array<number>;
@@ -76,7 +67,6 @@ export interface Device {
  * @namespace DevExpress
  * @module core/devices
  * @export default
- * @prevFileNamespace DevExpress.core
  * @public
  */
 declare class DevicesObject {
@@ -85,7 +75,6 @@ declare class DevicesObject {
      * @docid
      * @publicName current()
      * @return Device
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     current(): Device;
@@ -93,7 +82,6 @@ declare class DevicesObject {
      * @docid
      * @publicName current(deviceName)
      * @param1 deviceName:string|Device
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     current(deviceName: string | Device): void;
@@ -102,7 +90,6 @@ declare class DevicesObject {
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     off(eventName: string): this;
@@ -112,7 +99,6 @@ declare class DevicesObject {
      * @param1 eventName:string
      * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     off(eventName: string, eventHandler: Function): this;
@@ -122,7 +108,6 @@ declare class DevicesObject {
      * @param1 eventName:string
      * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     on(eventName: string, eventHandler: Function): this;
@@ -131,7 +116,6 @@ declare class DevicesObject {
      * @publicName on(events)
      * @param1 events:object
      * @return this
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     on(events: any): this;
@@ -139,7 +123,6 @@ declare class DevicesObject {
      * @docid
      * @publicName orientation()
      * @return String
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     orientation(): string;
@@ -147,7 +130,6 @@ declare class DevicesObject {
      * @docid
      * @publicName real()
      * @return Device
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     real(): Device;
@@ -158,7 +140,6 @@ declare class DevicesObject {
  * @const devices
  * @namespace DevExpress
  * @hidden
- * @prevFileNamespace DevExpress.core
  */
 
 declare const devices: DevicesObject;
